@@ -62,12 +62,10 @@ module org-openroadm-alarm {
     container resource {
       description
         "Resource under alarm";
-      uses org-openroadm-resource:resource;
     }
     container probableCause {
       description
         "Probable cause of alarm";
-      uses org-openroadm-probable-cause:probable-cause;
     }
     leaf type {
       description
@@ -94,14 +92,12 @@ module org-openroadm-alarm {
     leaf raiseTime {
       description
         "Time alarm was raised";
-      type yang:date-and-time;
       mandatory true;
     }
     leaf severity {
       description
         "Severity of alarm. Based on X.733 perceived severity.";
       mandatory true;
-      type org-openroadm-common-types:severity;
     }
     leaf circuit-id {
       description
