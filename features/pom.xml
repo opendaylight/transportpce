@@ -27,6 +27,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <restconf.version>1.5.0-SNAPSHOT</restconf.version>
     <yangtools.version>1.1.0-SNAPSHOT</yangtools.version>
     <dlux.version>0.5.0-SNAPSHOT</dlux.version>
+    <netconf.version>1.2.0-SNAPSHOT</netconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
@@ -92,6 +93,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <artifactId>features-dlux</artifactId>
       <classifier>features</classifier>
       <version>${dlux.version}</version>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>features-netconf</artifactId>
+      <classifier>features</classifier>
+      <version>${netconf.version}</version>
       <type>xml</type>
       <scope>runtime</scope>
     </dependency>
