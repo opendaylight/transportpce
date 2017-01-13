@@ -8,6 +8,8 @@
 package org.opendaylight.transportpce.impl;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.MountPointService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +19,11 @@ public class TransportpceProvider {
 
     private final DataBroker dataBroker;
 
-    public TransportpceProvider(final DataBroker dataBroker) {
+    private final MountPointService mountPointService;
+
+    public TransportpceProvider(final DataBroker dataBroker, final MountPointService mountPointService) {
         this.dataBroker = dataBroker;
+        this.mountPointService = mountPointService;
     }
 
     /**
