@@ -6,6 +6,7 @@ dist
 *~
 target
 target-ide
+.checkstyle
 .classpath
 .project
 .settings
