@@ -21,11 +21,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <bundle>mvn:org.opendaylight.transportpce/transportpce-api/{{VERSION}}</bundle>
   </feature>
+  <feature name='odl-transportpce-ordmodels' version='${project.version}' description='OpenDaylight :: transportpce :: ordmodels'>
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <bundle>mvn:org.opendaylight.transportpce/transportpce-ordmodels/{{VERSION}}</bundle>
+  </feature>
   <feature name='odl-transportpce' version='${project.version}' description='OpenDaylight :: transportpce'>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <feature version='${netconf.version}'>odl-netconf-all</feature>
     <feature version='${netconf.version}'>odl-netconf-connector-all</feature>
     <feature version='${project.version}'>odl-transportpce-api</feature>
+    <feature version='${project.version}'>odl-transportpce-ordmodels</feature>
     <bundle>mvn:org.opendaylight.transportpce/transportpce-impl/{{VERSION}}</bundle>
     <bundle>mvn:org.opendaylight.transportpce/transportpce-renderer/{{VERSION}}</bundle>
   </feature>

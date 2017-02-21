@@ -30,6 +30,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <modules>
     <module>api</module>
+    <module>ordmodels</module>
     <module>impl</module>
     <module>renderer</module>
     <module>karaf</module>
