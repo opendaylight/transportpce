@@ -1,0 +1,43 @@
+module portmapping {
+  yang-version 1;
+  namespace "urn:opendaylight:params:xml:ns:yang:portmapping";
+  prefix "portmapping";
+
+  revision "2017-2-28" {
+    description "Initial revision of port mapping model";
+  }
+  container network{
+    list nodes{
+      key node-id;
+      leaf node-id{
+        type string;
+        description
+          "Unique identifier for node in the network";
+      }
+      list mapping{
+        description
+          "Mapping for Physical circuit pack/port/parent interfaces
+          corresponding to each logical connection point present in the node.";
+        key logical-connection-point;
+        leaf logical-connection-point{
+          type string;
+        }
+        leaf supporting-circuit-pack-name{
+          type string;
+          description
+          "Circuit pack where the logical connection point is located";
+        }
+        leaf supporting-port{
+          type string;
+          description
+          "Port where the logical connection point is located";
+        }
+        leaf supporting-oms{
+          type string;
+          description
+          "OMS interface provisioned on the port";
+        }
+      }
+    }
+  }
+}

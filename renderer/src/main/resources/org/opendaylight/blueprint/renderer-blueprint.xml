@@ -16,12 +16,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     odl:type="default" />
   <reference id="mountPointService"
     interface="org.opendaylight.controller.md.sal.binding.api.MountPointService" />
-
+  <reference id="rpcProviderRegistry"
+    interface="org.opendaylight.controller.sal.binding.api.RpcProviderRegistry" />
   <bean id="provider"
     class="org.opendaylight.transportpce.renderer.RendererProvider"
     init-method="init" destroy-method="close">
     <argument ref="dataBroker" />
     <argument ref="mountPointService" />
+    <argument ref="rpcProviderRegistry" />
   </bean>
 
 </blueprint>

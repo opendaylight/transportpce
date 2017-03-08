@@ -1,0 +1,47 @@
+module renderer {
+  yang-version 1;
+  namespace "urn:opendaylight:params:xml:ns:yang:renderer";
+  prefix "renderer";
+
+  revision "2017-2-28" {
+    description "Initial revision of renderer model";
+  }
+  rpc service-path{
+    input{
+      leaf wave-number{
+        type uint32;
+      }
+      leaf operation{
+        type enumeration{
+          enum "create"{
+            value 1;
+          }
+          enum "delete"{
+            value 2;
+          }
+        }
+      }
+      list nodes{
+        key "node-id";
+        leaf node-id{
+          type string;
+        }
+        leaf src-tp{
+          type string;
+          description "Source termination point ";
+          mandatory true;
+        }
+        leaf dest-tp{
+          type string;
+          description "Destination termination point ";
+           mandatory true;
+        }
+      }
+    }
+    output{
+      leaf result{
+        type string;
+      }
+    }
+  }
+}
