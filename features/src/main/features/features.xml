@@ -29,6 +29,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <feature version='${netconf.version}'>odl-netconf-all</feature>
     <feature version='${netconf.version}'>odl-netconf-connector-all</feature>
+    <feature version='${netconf.version}'>odl-netconf-console</feature>
     <feature version='${project.version}'>odl-transportpce-api</feature>
     <feature version='${project.version}'>odl-transportpce-ordmodels</feature>
     <bundle>mvn:org.opendaylight.transportpce/transportpce-impl/{{VERSION}}</bundle>

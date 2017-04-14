@@ -8,9 +8,9 @@
 package org.opendaylight.transportpce.cli.impl;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.transportpce.cli.api.TransportpceCliCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.opendaylight.transportpce.cli.api.TransportpceCliCommands;
 
 public class TransportpceCliCommandsImpl implements TransportpceCliCommands {
 

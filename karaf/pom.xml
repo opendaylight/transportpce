@@ -12,12 +12,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>karaf-parent</artifactId>
     <version>1.8.0-SNAPSHOT</version>
+    <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.transportpce</groupId>
   <artifactId>transportpce-karaf</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <name>${project.artifactId}</name>
+  <packaging>pom</packaging>
 
   <properties>
     <karaf.localFeature>odl-transportpce-ui</karaf.localFeature>
