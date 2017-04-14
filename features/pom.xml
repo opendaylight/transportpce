@@ -55,6 +55,62 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+          <groupId>org.opendaylight.dluxapps</groupId>
+          <artifactId>yangui-bundle</artifactId>
+          <version>${dlux.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+       </dependency>
+       <dependency>
+          <groupId>org.opendaylight.dluxapps</groupId>
+          <artifactId>yangui-module</artifactId>
+          <version>${dlux.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+       </dependency>
+       <dependency>
+          <groupId>org.opendaylight.dluxapps</groupId>
+          <artifactId>odl-dluxapps-yangutils</artifactId>
+          <version>${dlux.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+       </dependency>
+       <dependency>
+          <groupId>org.opendaylight.dluxapps</groupId>
+          <artifactId>odl-dluxapps-yangvisualizer</artifactId>
+          <version>${dlux.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+       </dependency>
+       <dependency>
+          <groupId>org.opendaylight.dluxapps</groupId>
+          <artifactId>odl-dluxapps-yangman</artifactId>
+          <version>${dlux.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+       </dependency>
+       <dependency>
+          <groupId>org.opendaylight.dluxapps</groupId>
+          <artifactId>odl-dluxapps-topology</artifactId>
+          <version>${dlux.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+       </dependency>
+       <dependency>
+          <groupId>org.opendaylight.dluxapps</groupId>
+          <artifactId>odl-dluxapps-applications</artifactId>
+          <version>${dlux.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+       </dependency>
+       <dependency>
+         <groupId>org.opendaylight.dluxapps</groupId>
+          <artifactId>odl-dluxapps-nodes</artifactId>
+          <version>${dlux.version}</version>
+          <type>pom</type>
+          <scope>import</scope>
+       </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -91,6 +147,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <dependency>
       <groupId>org.opendaylight.dlux</groupId>
       <artifactId>features-dlux</artifactId>
+      <classifier>features</classifier>
+      <version>${dlux.version}</version>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.dluxapps</groupId>
+      <artifactId>features-dluxapps</artifactId>
       <classifier>features</classifier>
       <version>${dlux.version}</version>
       <type>xml</type>
