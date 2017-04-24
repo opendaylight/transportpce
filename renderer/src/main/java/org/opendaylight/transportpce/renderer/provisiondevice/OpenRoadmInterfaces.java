@@ -21,15 +21,15 @@ import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.transportpce.renderer.mapping.PortMapping;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.circuit.pack.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.circuit.pack.PortsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.circuit.packs.CircuitPacks;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.circuit.packs.CircuitPacksKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.interfaces.grp.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.interfaces.grp.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.interfaces.grp.InterfaceKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.port.Interfaces;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpticalChannel;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder;
@@ -41,6 +41,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapp
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.nodes.MappingKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -37,6 +37,11 @@ module portmapping {
           description
           "OMS interface provisioned on the port";
         }
+        leaf supporting-ots{
+          type string;
+          description
+          "OTS interface provisioned on the port";
+        }
       }
     }
   }
