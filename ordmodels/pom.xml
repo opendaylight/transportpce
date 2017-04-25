@@ -29,7 +29,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>iana-afn-safi</artifactId>
-      <version>2013.07.04.9.3-SNAPSHOT</version>
+      <version>2013.07.04.9.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
@@ -38,7 +38,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>iana-if-type-2014-05-08</artifactId>
-      <version>2014.05.08.9.3-SNAPSHOT</version>
+      <version>2014.05.08.9.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
@@ -47,7 +47,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
     <groupId>org.opendaylight.mdsal.model</groupId>
     <artifactId>ietf-interfaces</artifactId>
-    <version>2014.05.08.9.3-SNAPSHOT</version>
+      <version>2014.05.08.9.4-SNAPSHOT</version>
     </dependency>
     <dependency>
     <groupId>org.opendaylight.mdsal.model</groupId>
