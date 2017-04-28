@@ -8,9 +8,9 @@
 
 package org.opendaylight.transportpce.renderer.listeners;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.ChangeNotification;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.OrgOpenroadmDeviceListener;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.OtdrScanResult;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.ChangeNotification;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceListener;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OtdrScanResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
