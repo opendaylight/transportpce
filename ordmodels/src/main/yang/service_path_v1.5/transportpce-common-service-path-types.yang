@@ -1,0 +1,217 @@
+module transportpce-common-service-path-types {
+  namespace "http://org/transportpce/B-C-interface/service/types";
+  prefix transportpce-common-service-path-types;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import transportpce-routing-constraints {
+    prefix transportpce-routing-constraints;
+  }
+  import transportpce-pathDescription {
+    prefix transportpce-pathDescription;
+  }
+  import org-openroadm-common-types {
+    prefix org-openroadm-common-types;
+  }
+  import org-openroadm-resource-types {
+    prefix org-openroadm-resource-types;
+  }
+  import org-openroadm-common-service-types {
+    prefix org-openroadm-common-service-types;
+  }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions of B & C interfaces (transportPCE). Adapted from service definition (openroadm).
+     Copyright © 2017 Orange, Inc. and others.  All rights reserved.
+
+     This model is derived from the OpenROADM service definition that includes the following notice:
+
+    openroadm copyright:
+      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
+      AT&T Intellectual Property.  All other rights reserved.
+
+      Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
+      * Redistributions of source code must retain the above copyright notice, this
+        list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation and/or
+        other materials provided with the distribution.
+      * Neither the Members of the Open ROADM MSA Agreement nor the names of its
+        contributors may be used to endorse or promote products derived from this software
+        without specific prior written permission.
+
+      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
+      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
+      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+      POSSIBILITY OF SUCH DAMAGE";
+
+  revision 2017-04-26 {
+    description
+      "Version 1.5";
+  }
+  typedef service-path-notification-types {
+    type enumeration {
+      enum "path-computation-request" {
+        value 1;
+      }
+      enum "cancel-resource-reserve" {
+        value 2;
+      }
+      enum "service-implementation-request" {
+        value 3;
+      }
+      enum "service-delete" {
+        value 4;
+      }
+    }
+  }
+
+  typedef rpc-status-ex {
+    description
+      "extended status of RPC ";
+    type enumeration {
+      enum "Successful" {
+        value 1;
+      }
+      enum "Failed" {
+        value 2;
+      }
+      enum "Pending" {
+          value 3;
+      }
+    }
+  }
+
+  grouping rpc-response-status-ex {
+    leaf status {
+      type rpc-status-ex;
+      mandatory true;
+      description
+        "Successful, Failed or Pending";
+
+        }
+     leaf status-message {
+      type string;
+      description
+        "Gives a more detailed reason for failure";
+      }
+  }
+
+  grouping response-parameters-sp {
+    container response-parameters {
+      uses transportpce-routing-constraints:routing-constraints-sp;
+      container path-description {
+          uses transportpce-pathDescription:path-description;
+      }
+    }
+  }
+
+  grouping service-endpoint-sp {
+    leaf service-format {
+      type org-openroadm-common-service-types:service-format;
+      mandatory true;
+      description
+        "Format of the requested service: Ethernet, OTU, etc.";
+    }
+    leaf service-rate {
+      when "../service-format!='OMS'"{
+        description "service rate not applicable when service
+        format is roadmline";
+      }
+      type uint32;
+      mandatory true;
+      description
+        "Rate of the requested service in GBps";
+    }
+    leaf clli {
+      type string;
+      mandatory true;
+      description
+        "CLLI";
+    }
+    leaf node-id {
+        type string;
+    }
+    container tx-direction {
+      uses org-openroadm-common-service-types:service-port;
+ //     uses service-lgx;
+ //     uses service-tail;
+    }
+    container rx-direction {
+      uses org-openroadm-common-service-types:service-port;
+ //     uses service-lgx;
+ //     uses service-tail;
+    }
+  }
+
+  grouping service-handler-header {
+    container service-handler-header {
+      leaf request-id {
+        type string;
+        mandatory true;
+      }
+    }
+  }
+
+  grouping service-path {
+    leaf service-path-name {
+      type string;
+      description
+        "Identifier for the service-path to be calculated by
+         the PCE";
+      mandatory true;
+    }
+    uses service-handler-header;
+
+    container service-a-end {
+      uses service-endpoint-sp;
+    }
+    container service-z-end {
+      uses service-endpoint-sp;
+    }
+    uses transportpce-routing-constraints:routing-constraints-sp;
+
+    leaf latency {
+      type uint32;
+      description
+        "Latency on service";
+    }
+    leaf-list fiber-span-srlgs {
+      type string;
+      description
+        "Shared risk link group identifiers";
+    }
+    list equipment-srgs {
+      key "srg-number";
+      uses org-openroadm-resource-types:srg-number;
+    }
+    leaf-list supporting-service-name {
+      description
+        "The service name that this runs over top. If connection-type is service, then this is the related
+         connection-type = infrastructure service, for example.";
+      type string;
+    }
+    container path-description {
+      uses transportpce-pathDescription:path-description;
+    }
+  }
+
+
+
+}

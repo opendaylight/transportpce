@@ -211,5 +211,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <artifactId>transportpce-cli</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-stubrenderer</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+	<dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-stubpce</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+	<dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-servicehandler</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

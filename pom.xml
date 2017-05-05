@@ -34,6 +34,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>impl</module>
     <module>renderer</module>
     <module>olm</module>
+    <module>stubrenderer</module>
+    <module>stubpce</module>
+    <module>servicehandler</module>
     <module>karaf</module>
     <module>features</module>
     <module>artifacts</module>
