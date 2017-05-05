@@ -22,13 +22,12 @@ import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPorts;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Degree;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.DegreeKey;
@@ -101,13 +100,17 @@ public class PortMapping {
      */
     public boolean createMappingData() {
 
-        LOG.info(" Create Mapping Data for node " + nodeId);
+        LOG.info("Create Mapping Data for node " + nodeId);
         DataBroker deviceDb = getDeviceDataBroker(nodeId, mps);
-        Info deviceInfo = getDeviceInfo(deviceDb);
         List<Mapping> portMapList = new ArrayList<>();
-
+        Info deviceInfo;
         if (deviceDb != null) {
+            deviceInfo = getDeviceInfo(deviceDb);
             if (deviceInfo != null) {
+                if (deviceInfo.getNodeType() == null) {
+                    LOG.info("Node type mandatory field is missing");
+                    return false;
+                }
                 Integer nodeType = deviceInfo.getNodeType().getIntValue();
                 // Create Mapping for Roadm Node
                 if (nodeType == 1) {
@@ -133,12 +136,12 @@ public class PortMapping {
                     }
                 }
             } else {
-                LOG.info(" Device info subtree is absent for " + nodeId);
+                LOG.info("Device info subtree is absent for " + nodeId);
                 return false;
             }
 
         } else {
-            LOG.info(" Unable to get Data broker for node " + nodeId);
+            LOG.info("Unable to get Data broker for node " + nodeId);
             return false;
         }
         return postPortMapping(deviceInfo, portMapList);
@@ -191,7 +194,7 @@ public class PortMapping {
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 LOG.warn("Read failed for Logical Connection Point value missing for " + circuitPackName + " "
-                    + portName);
+                    + portName,ex);
                 return false;
             }
         }
@@ -273,7 +276,7 @@ public class PortMapping {
 
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                LOG.warn("Read failed for " + circuitPackName);
+                LOG.warn("Read failed for " + circuitPackName,ex);
                 return false;
             }
         }
@@ -338,7 +341,7 @@ public class PortMapping {
             }
 
         } catch (InterruptedException | ExecutionException ex) {
-            LOG.warn("Read failed for CircuitPacks of " + nodeId);
+            LOG.warn("Read failed for CircuitPacks of " + nodeId,ex);
             return false;
         }
         return true;
@@ -370,8 +373,8 @@ public class PortMapping {
         // Get OMS and OTS interface provisioned on the TTP's
         if (logicalConnectionPoint.contains("TTP") && port.getInterfaces() != null) {
             for (Interfaces interfaces : port.getInterfaces()) {
-                Class<? extends InterfaceType> interfaceType = getInterfaceType(deviceDb, interfaces
-                    .getInterfaceName());
+                Class<? extends InterfaceType> interfaceType = new OpenRoadmInterfaces(db, mps, nodeId,
+                    logicalConnectionPoint).getInterface(interfaces.getInterfaceName()).getType();
                 // Check if interface type is OMS or OTS
                 if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
                     String omsInterfaceName = interfaces.getInterfaceName();
@@ -384,37 +387,6 @@ public class PortMapping {
             }
         }
         return mpBldr.build();
-    }
-
-    /**
-     * This private does a get on the interface subtree of the device with the
-     * interface name as the key and return the class corresponding to the
-     * interface type.
-     *
-     * @param interfaceName
-     *            Name of the interface
-     * @param deviceDb
-     *            Reference to device's databroker.
-     *
-     * @return true/false based on status of operation
-     */
-
-    private Class<? extends InterfaceType> getInterfaceType(DataBroker deviceDb, String interfaceName) {
-        ReadOnlyTransaction rtx = deviceDb.newReadOnlyTransaction();
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-            Interface.class, new InterfaceKey(interfaceName));
-        try {
-            Optional<Interface> interfaceObject = rtx.read(LogicalDatastoreType.OPERATIONAL, interfacesIID).get();
-            if (interfaceObject.isPresent()) {
-                return interfaceObject.get().getType();
-            } else {
-                LOG.info("Interface subtree is not present for " + interfaceName);
-            }
-        } catch (InterruptedException | ExecutionException ex) {
-            LOG.info("Read failed on interface subtree for");
-            return null;
-        }
-        return null;
     }
 
     /**
@@ -438,7 +410,7 @@ public class PortMapping {
                 LOG.info("Info subtree is not present");
             }
         } catch (InterruptedException | ExecutionException ex) {
-            LOG.info("Read failed on info subtree for");
+            LOG.info("Read failed on info subtree ",ex);
             return null;
         }
         return null;
@@ -485,7 +457,7 @@ public class PortMapping {
                     break;
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                LOG.info("Failed to read degree " + degreeCounter);
+                LOG.info("Failed to read degree " + degreeCounter,ex);
                 break;
 
             }
@@ -535,14 +507,14 @@ public class PortMapping {
 
                     srgCps.addAll(
                         new ArrayList<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg
-                        .CircuitPacks>(ordmSrgObject.get().getCircuitPacks()));
+                            .CircuitPacks>(ordmSrgObject.get().getCircuitPacks()));
 
                 } else {
                     LOG.info("Device has " + (srgCounter - 1) + " Srg");
                     break;
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                LOG.warn("Failed to read Srg " + srgCounter);
+                LOG.warn("Failed to read Srg " + srgCounter,ex);
                 break;
             }
             srgCounter++;
@@ -635,7 +607,7 @@ public class PortMapping {
             }
         } catch (InterruptedException | ExecutionException ex) {
             LOG.info("Unable to read mapping for logical connection point : " + logicalConnPoint + " for nodeId "
-                + nodeId);
+                + nodeId,ex);
         }
         return null;
     }
@@ -650,20 +622,31 @@ public class PortMapping {
      * @return Databroker for the given device
      */
     public static DataBroker getDeviceDataBroker(String nodeId, MountPointService mps) {
-        InstanceIdentifier<Node> netconfNodeIID = InstanceIdentifier.builder(NetworkTopology.class).child(
-            Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName()))).child(Node.class,
-                new NodeKey(new NodeId(nodeId))).build();
-
-        // Get the mount point for the specified node
-        final Optional<MountPoint> netconfNodeOptional = mps.getMountPoint(netconfNodeIID);
-        if (netconfNodeOptional.isPresent()) {
-            MountPoint netconfNode = netconfNodeOptional.get();
-            // Get the DataBroker for the mounted node
+        MountPoint netconfNode = getDeviceMountPoint(nodeId, mps);
+        if (netconfNode != null) {
             DataBroker netconfNodeDataBroker = netconfNode.getService(DataBroker.class).get();
             return netconfNodeDataBroker;
         } else {
             LOG.info("Device Data broker not found for :" + nodeId);
+            return null;
         }
-        return null;
     }
+
+    public static MountPoint getDeviceMountPoint(String nodeId, MountPointService mps) {
+        InstanceIdentifier<Node> netconfNodeIID = InstanceIdentifier.builder(NetworkTopology.class).child(
+            Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName()))).child(Node.class,
+                new NodeKey(new NodeId(nodeId))).build();
+
+        // Get mount point for specified device
+        final Optional<MountPoint> netconfNodeOptional = mps.getMountPoint(netconfNodeIID);
+        if (netconfNodeOptional.isPresent()) {
+            MountPoint netconfNode = netconfNodeOptional.get();
+            return netconfNode;
+        } else {
+            LOG.info("Mount Point not found for :" + nodeId);
+            return null;
+        }
+
+    }
+
 }

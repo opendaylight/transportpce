@@ -16,7 +16,6 @@ import com.google.common.cache.LoadingCache;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -60,7 +59,6 @@ import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,19 +97,11 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
     }
 
     private void registerNotificationListener(final NodeId nodeId) {
-        final Optional<MountPoint> mountPoint;
-        try {
-            // Get mount point for specified device
-            mountPoint = mountService.getMountPoint(mountIds.get(nodeId.getValue()));
-            if (!mountPoint.isPresent()) {
-                LOG.error("Mount point for node {} doesn't exist", nodeId.getValue());
-            }
-        } catch (ExecutionException e) {
-            throw new IllegalArgumentException(e);
-        }
+
+        MountPoint mountPoint = PortMapping.getDeviceMountPoint(nodeId.getValue(), mountService);
 
         // Register notification service
-        final Optional<NotificationService> notificationService = mountPoint.get().getService(
+        final Optional<NotificationService> notificationService = mountPoint.getService(
             NotificationService.class);
         if (!notificationService.isPresent()) {
             LOG.error("Failed to get RpcService for node {}", nodeId.getValue());
@@ -157,10 +147,11 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
 
         // Listening to NETCONF datastream
         final String streamName = "NETCONF";
-        final Optional<RpcConsumerRegistry> service = mountPoint.get().getService(RpcConsumerRegistry.class);
+        final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
         if (!service.isPresent()) {
             LOG.error("Failed to get RpcService for node {}", nodeId.getValue());
         }
+
         final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
         final CreateSubscriptionInputBuilder createSubscriptionInputBuilder = new CreateSubscriptionInputBuilder();
         createSubscriptionInputBuilder.setStream(new StreamNameType(streamName));
@@ -183,11 +174,14 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
         for (DataTreeModification<Node> change : changes) {
 
             DataObjectModification<Node> rootNode = change.getRootNode();
-            String nodeId = rootNode.getDataAfter().getKey().getNodeId().getValue();
-            NetconfNode nnode = Preconditions.checkNotNull(rootNode.getDataAfter().getAugmentation(NetconfNode.class),
-                "Node not connected via Netconf protocol");
+            NetconfNode nnode = null;
+            String nodeId = new String();
+            if (rootNode.getDataAfter() != null) {
+                nnode = Preconditions.checkNotNull(rootNode.getDataAfter().getAugmentation(NetconfNode.class),
+                    "Node not connected via Netconf protocol");
+                nodeId = rootNode.getDataAfter().getKey().getNodeId().getValue();
+            }
             if (nnode != null) {
-
                 if (rootNode.getModificationType() == ModificationType.WRITE) {
                     LOG.info("Node added " + nodeId);
 
