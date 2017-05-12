@@ -35,7 +35,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-transportpce-ordmodels</feature>
     <bundle>mvn:org.opendaylight.transportpce/transportpce-impl/{{VERSION}}</bundle>
     <bundle>mvn:org.opendaylight.transportpce/transportpce-renderer/{{VERSION}}</bundle>
-    <bundle>mvn:org.opendaylight.transportpce/transportpce-olm/{{VERSION}}</bundle>
   </feature>
   <feature name='odl-transportpce-rest' version='${project.version}' description='OpenDaylight :: transportpce :: REST'>
     <feature version="${project.version}">odl-transportpce</feature>
