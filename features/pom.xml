@@ -191,6 +191,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <artifactId>transportpce-renderer</artifactId>
       <version>${project.version}</version>
     </dependency>
+   <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-olm</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
