@@ -47,7 +47,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-transportpce-ui' version='${project.version}' description='OpenDaylight :: transportpce :: UI'>
     <feature version="${project.version}">odl-transportpce-rest</feature>
     <feature version="${restconf.version}">odl-mdsal-apidocs</feature>
-    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
     <feature version="${dlux.version}">odl-dlux-core</feature>
   </feature>
   <feature name='odl-transportpce-cli' version='${project.version}' description='OpenDaylight :: transportpce :: CLI'>
