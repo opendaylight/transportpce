@@ -11,7 +11,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent</artifactId>
-    <version>1.9.0</version>
+    <version>2.0.2</version>
     <relativePath/>
   </parent>
 
@@ -29,6 +29,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </scm>
 
   <modules>
+    <module>artifacts</module>
     <module>api</module>
     <module>ordmodels</module>
     <module>impl</module>
@@ -37,10 +38,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>stubrenderer</module>
     <module>stubpce</module>
     <module>servicehandler</module>
-    <module>karaf</module>
-    <module>features</module>
-    <module>artifacts</module>
     <module>cli</module>
+    <module>features</module>
+    <module>karaf</module>
     <module>it</module>
   </modules>
 

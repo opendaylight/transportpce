@@ -21,8 +21,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <service ref="cliCommandsImpl" odl:type="default"
     interface="org.opendaylight.transportpce.cli.api.TransportpceCliCommands" />
 
-    <command-bundle xmlns="http://karaf.apache.org/xmlns/shell/v1.0.0">
-        <command name="test-command">
+    <command-bundle xmlns="http://karaf.apache.org/xmlns/shell/v1.1.0">
+        <command>
             <action class="org.opendaylight.transportpce.cli.commands.TransportpceCliTestCommand">
                 <argument ref="cliCommandsImpl"/>
             </action>

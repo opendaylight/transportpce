@@ -23,8 +23,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <dependencies>
     <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>ietf-netconf</artifactId>
+      <version>1.3.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>ietf-inet-types-2013-07-15</artifactId>
+      <version>1.3.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
@@ -34,6 +40,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>ietf-access-control-list</artifactId>
+      <version>0.9.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
@@ -43,16 +50,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>ietf-yang-types-20130715</artifactId>
+      <version>2013.07.15.11.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-    <groupId>org.opendaylight.mdsal.model</groupId>
-    <artifactId>ietf-interfaces</artifactId>
+      <groupId>org.opendaylight.mdsal.model</groupId>
+      <artifactId>ietf-interfaces</artifactId>
       <version>2014.05.08.11.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-    <groupId>org.opendaylight.mdsal.model</groupId>
-    <artifactId>ietf-packet-fields</artifactId>
+      <groupId>org.opendaylight.mdsal.model</groupId>
+      <artifactId>ietf-packet-fields</artifactId>
+      <version>0.9.0-SNAPSHOT</version>
     </dependency>
+
   </dependencies>
   <!--
 	Private references
