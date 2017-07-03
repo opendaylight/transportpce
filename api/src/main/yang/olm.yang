@@ -3,7 +3,7 @@ module olm {
   namespace "urn:opendaylight:params:xml:ns:yang:olm";
   prefix "olm";
 
-  revision "2017-4-18" {
+  revision "2017-04-18" {
     description "Initial revision of olm model";
   }
   rpc get-pm {
