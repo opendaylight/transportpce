@@ -226,7 +226,7 @@ public class CrossConnect {
                 try {
                     submit.checkedGet();
                     LOG.info("Roadm connection power level successfully set ");
-                    return false;
+                    return true;
                 } catch (TransactionCommitFailedException ex) {
                     LOG.info("Failed to post {} ", rdmConnBldr.build(), ex);
                     return false;

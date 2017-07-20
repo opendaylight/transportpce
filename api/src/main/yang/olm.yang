@@ -3,6 +3,16 @@ module olm {
   namespace "urn:opendaylight:params:xml:ns:yang:olm";
   prefix "olm";
 
+ organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions of RPCs supported by OLM.
+     Copyright © 2017 AT&T and others.  All rights reserved.
+     authors: Dhruv Bhardwaj ( db929a@att.com )
+              Shweta Vachhani ( sv111y@att.com )";
+
   revision "2017-04-18" {
     description "Initial revision of olm model";
   }
@@ -46,8 +56,39 @@ module olm {
   }
   rpc service-power-setup{
     input{
+      leaf wave-number{
+        type uint32;
+      }
       list nodes{
-        key "node-id";
+        ordered-by user;
+        leaf node-id{
+          type string;
+        }
+        leaf src-tp{
+          type string;
+          description "Source termination point ";
+          mandatory true;
+        }
+        leaf dest-tp{
+          type string;
+          description "Destination termination point ";
+           mandatory true;
+        }
+      }
+    }
+    output{
+      leaf result{
+        type string;
+      }
+    }
+  }
+  rpc service-power-turndown{
+    input{
+      leaf wave-number{
+        type uint32;
+      }
+      list nodes{
+        ordered-by user;
         leaf node-id{
           type string;
         }

@@ -133,7 +133,7 @@ public class OpenRoadmInterfaces {
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
             Interface.class, new InterfaceKey(interfaceName));
         try {
-            Optional<Interface> interfaceObject = rtx.read(LogicalDatastoreType.OPERATIONAL, interfacesIID).get();
+            Optional<Interface> interfaceObject = rtx.read(LogicalDatastoreType.CONFIGURATION, interfacesIID).get();
             if (interfaceObject.isPresent()) {
                 return interfaceObject.get();
             } else {

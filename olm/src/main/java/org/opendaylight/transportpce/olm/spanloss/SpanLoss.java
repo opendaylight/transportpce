@@ -73,6 +73,8 @@ public class SpanLoss {
      *            Node-id of the NE.
      * @param tpID
      *            Termination point Name.
+     * @param pmName
+     *            PM name which need to be retrieved
      * @return reference to OtsPmHolder
      */
     public OtsPmHolder getPmMeasurements(String nodeId, String tpID, String pmName) {

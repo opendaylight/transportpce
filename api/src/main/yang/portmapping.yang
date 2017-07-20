@@ -3,7 +3,21 @@ module portmapping {
   namespace "urn:opendaylight:params:xml:ns:yang:portmapping";
   prefix "portmapping";
 
-  revision "2017-02-28" {
+  import org-openroadm-common-types {
+    prefix org-openroadm-common-types;
+  }
+
+ organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions of RPCs supported by OLM.
+     Copyright © 2017 AT&T and others.  All rights reserved.
+     authors: Dhruv Bhardwaj ( db929a@att.com )
+              Shweta Vachhani ( sv111y@att.com )";
+
+  revision "2017-2-28" {
     description "Initial revision of port mapping model";
   }
   container network{
@@ -13,6 +27,11 @@ module portmapping {
         type string;
         description
           "Unique identifier for node in the network";
+      }
+      leaf node-type{
+        type org-openroadm-common-types:node-types;
+        description
+          "Identifier for node-type e.g Roadm, xponder";
       }
       list mapping{
         description

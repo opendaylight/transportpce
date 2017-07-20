@@ -23,6 +23,7 @@ import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaces;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
@@ -104,6 +105,7 @@ public class PortMapping {
         DataBroker deviceDb = getDeviceDataBroker(nodeId, mps);
         List<Mapping> portMapList = new ArrayList<>();
         Info deviceInfo;
+        Integer nodeType = 1;
         if (deviceDb != null) {
             deviceInfo = getDeviceInfo(deviceDb);
             if (deviceInfo != null) {
@@ -111,7 +113,7 @@ public class PortMapping {
                     LOG.info("Node type mandatory field is missing");
                     return false;
                 }
-                Integer nodeType = deviceInfo.getNodeType().getIntValue();
+                nodeType = deviceInfo.getNodeType().getIntValue();
                 // Create Mapping for Roadm Node
                 if (nodeType == 1) {
                     // Get TTP port mapping
@@ -144,7 +146,7 @@ public class PortMapping {
             LOG.info("Unable to get Data broker for node " + nodeId);
             return false;
         }
-        return postPortMapping(deviceInfo, portMapList);
+        return postPortMapping(deviceInfo, portMapList, nodeType);
     }
 
     /**
@@ -539,12 +541,13 @@ public class PortMapping {
      *
      * @return Result true/false based on status of operation.
      */
-    private boolean postPortMapping(Info deviceInfo, List<Mapping> portMapList) {
+    private boolean postPortMapping(Info deviceInfo, List<Mapping> portMapList, Integer nodeType) {
 
-        List<Nodes> nodesList = new ArrayList<>();
         NodesBuilder nodesBldr = new NodesBuilder();
         nodesBldr.setKey(new NodesKey(deviceInfo.getNodeId())).setNodeId(deviceInfo.getNodeId());
+        nodesBldr.setNodeType(NodeTypes.forValue(nodeType));
         nodesBldr.setMapping(portMapList);
+        List<Nodes> nodesList = new ArrayList<>();
         nodesList.add(nodesBldr.build());
         NetworkBuilder nwBldr = new NetworkBuilder();
         nwBldr.setNodes(nodesList);
