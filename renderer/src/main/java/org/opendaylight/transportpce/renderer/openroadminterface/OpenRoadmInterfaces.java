@@ -35,25 +35,48 @@ public class OpenRoadmInterfaces {
     protected final DataBroker db;
     protected final DataBroker netconfNodeDataBroker;
     protected final String nodeId;
+    protected final MountPointService mps;
     protected final Mapping portMap;
     protected final String logicalConnPoint;
+    private final String serviceName;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfaces.class);
 
     public OpenRoadmInterfaces(DataBroker db, MountPointService mps, String nodeId, String logicalConnPoint) {
         this.db = db;
+        this.mps = mps;
         this.logicalConnPoint = logicalConnPoint;
         this.nodeId = nodeId;
-        this.portMap = PortMapping.getMapping(nodeId, logicalConnPoint, db);
+        if (logicalConnPoint != null) {
+            this.portMap = PortMapping.getMapping(nodeId, logicalConnPoint, db);
+        } else {
+            this.portMap = null;
+        }
+        this.serviceName = null;
+        netconfNodeDataBroker = PortMapping.getDeviceDataBroker(nodeId, mps);
+    }
+
+    public OpenRoadmInterfaces(DataBroker db, MountPointService mps, String nodeId, String logicalConnPoint,
+            String serviceName) {
+        this.db = db;
+        this.mps = mps;
+        this.logicalConnPoint = logicalConnPoint;
+        this.nodeId = nodeId;
+        if (logicalConnPoint != null) {
+            this.portMap = PortMapping.getMapping(nodeId, logicalConnPoint, db);
+        } else {
+            this.portMap = null;
+        }
+        this.serviceName = serviceName;
         netconfNodeDataBroker = PortMapping.getDeviceDataBroker(nodeId, mps);
     }
 
     /**
-     * This methods creates a generic interface builder object to set the value
-     * that are common irrespective of the interface type.
+     * This methods creates a generic interface builder object to set the value that
+     * are common irrespective of the interface type.
      *
      * @param portMap
-     *            Mapping object containing attributes required to create
-     *            interface on the device.
+     *            Mapping object containing attributes required to create interface
+     *            on the device.
      *
      * @return InterfaceBuilder object with the data.
      */
@@ -69,8 +92,8 @@ public class OpenRoadmInterfaces {
     }
 
     /**
-     * This methods does an edit-config operation on the openROADM device in
-     * order to create the given interface.
+     * This methods does an edit-config operation on the openROADM device in order
+     * to create the given interface.
      *
      * <p>
      * Before posting the interface it checks if:
@@ -87,28 +110,27 @@ public class OpenRoadmInterfaces {
      * @return Result of operation true/false based on success/failure.
      */
     public boolean postInterface(InterfaceBuilder ifBuilder) {
-
         String intf2Post = ifBuilder.getName();
         Interface intf2PostCheck = getInterface(intf2Post);
         if (intf2PostCheck != null) {
             if (intf2PostCheck.getAdministrativeState() == AdminStates.InService) {
-                LOG.info("Interface with same name in service already exists");
+                LOG.info("Interface with same name in service already exists on node " + nodeId);
                 return true;
             }
         }
         // Post interface with its specific augmentation to the device
         if (netconfNodeDataBroker != null) {
-            InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-                Interface.class, new InterfaceKey(ifBuilder.getName()));
+            InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                    .child(Interface.class, new InterfaceKey(ifBuilder.getName()));
             final WriteTransaction writeTransaction = netconfNodeDataBroker.newWriteOnlyTransaction();
             writeTransaction.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
             final CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
             try {
                 submit.checkedGet();
-                LOG.info("Successfully posted interface " + ifBuilder.getName());
+                LOG.info("Successfully posted interface " + ifBuilder.getName() + " on node " + nodeId);
                 return true;
             } catch (TransactionCommitFailedException ex) {
-                LOG.warn("Failed to post {} ", ifBuilder.getName(),ex);
+                LOG.warn("Failed to post {} ", ifBuilder.getName() + " on node " + nodeId, ex);
                 return false;
             }
 
@@ -119,8 +141,8 @@ public class OpenRoadmInterfaces {
 
     /**
      * This private does a get on the interface subtree of the device with the
-     * interface name as the key and return the class corresponding to the
-     * interface type.
+     * interface name as the key and return the class corresponding to the interface
+     * type.
      *
      * @param interfaceName
      *            Name of the interface
@@ -130,25 +152,25 @@ public class OpenRoadmInterfaces {
 
     public Interface getInterface(String interfaceName) {
         ReadOnlyTransaction rtx = netconfNodeDataBroker.newReadOnlyTransaction();
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-            Interface.class, new InterfaceKey(interfaceName));
+        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(Interface.class, new InterfaceKey(interfaceName));
         try {
             Optional<Interface> interfaceObject = rtx.read(LogicalDatastoreType.CONFIGURATION, interfacesIID).get();
             if (interfaceObject.isPresent()) {
                 return interfaceObject.get();
             } else {
-                LOG.info("Interface subtree is not present for " + interfaceName);
+                LOG.info("Interface subtree is not present for " + interfaceName + " on node " + nodeId);
             }
         } catch (InterruptedException | ExecutionException ex) {
-            LOG.info("Read failed on interface subtree for",ex);
+            LOG.info("Read failed on interface subtree for" + interfaceName + " on node " + nodeId, ex);
             return null;
         }
         return null;
     }
 
     /**
-     * This methods does an edit-config operation on the openROADM device in
-     * order to delete the given interface.
+     * This methods does an edit-config operation on the openROADM device in order
+     * to delete the given interface.
      *
      * <p>
      * Before deleting the method:
@@ -175,34 +197,34 @@ public class OpenRoadmInterfaces {
                 // post interface with updated admin state
                 if (postInterface(ifBuilder)) {
                     InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                        .child(Interface.class, new InterfaceKey(interfaceName));
+                            .child(Interface.class, new InterfaceKey(interfaceName));
                     final WriteTransaction writeTransaction = netconfNodeDataBroker.newWriteOnlyTransaction();
                     writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, interfacesIID);
                     final CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
 
                     try {
                         submit.checkedGet();
-                        LOG.info("Successfully deleted " + interfaceName);
+                        LOG.info("Successfully deleted " + interfaceName + " on node " + nodeId);
                         return true;
 
                     } catch (TransactionCommitFailedException ex) {
-                        LOG.error("Failed to delete interface {} ", interfaceName, ex);
+                        LOG.error("Failed to delete interface " + interfaceName + " on node " + nodeId);
                         return false;
                     }
 
                 } else {
 
-                    LOG.error("Error changing the state of interface " + interfaceName);
+                    LOG.error("Error changing the state of interface " + interfaceName + " on node " + nodeId);
                     return false;
                 }
             } else {
-                LOG.info("Interface does not exist, cannot delete");
+                LOG.info("Interface does not exist, cannot delete on node " + nodeId);
                 return false;
             }
 
         } else {
 
-            LOG.info("Device databroker not found");
+            LOG.info("Device databroker not found on node " + nodeId);
             return false;
         }
     }

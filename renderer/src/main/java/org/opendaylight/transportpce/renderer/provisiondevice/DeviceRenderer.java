@@ -18,6 +18,9 @@ import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.transportpce.renderer.mapping.PortMapping;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOchInterface;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmXponderInterface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes.ModulationFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.R100G;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.ServicePathInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.ServicePathOutput;
@@ -101,11 +104,14 @@ public class DeviceRenderer implements RendererService {
      */
     public ServicePathOutputBuilder setupServicePath(ServicePathInput input) {
 
+        String serviceName = input.getServiceName();
         List<Nodes> nodes = input.getNodes();
         ServicePathOutputBuilder setServBldr = new ServicePathOutputBuilder();
         LOG.info(currentMountedDevice.toString());
+        int crossConnectFlag;
         for (Nodes n : nodes) {
             LOG.info("Starting provisioning for node : " + n.getNodeId());
+            crossConnectFlag = 0;
             String nodeId = n.getNodeId();
             // if the node is currently mounted then proceed
             if (currentMountedDevice.contains(n.getNodeId())) {
@@ -113,30 +119,52 @@ public class DeviceRenderer implements RendererService {
                 String destTp = n.getDestTp();
 
                 Long waveNumber = input.getWaveNumber();
-                String srcIf = new OpenRoadmOchInterface(db, mps, nodeId, srcTp).createInterface(waveNumber);
-                // if source interface creation was successful then proceed
-                // otherwise return.
-                if (srcIf == null) {
-                    LOG.warn("Unable to create OCH interface on " + nodeId + " at " + srcTp);
-                    return setServBldr.setResult("Unable to create OCH interface on " + nodeId + " at " + srcTp);
-                }
-                // if destination interface creation was then proceed otherwise
-                // return.
-                String dstIf = new OpenRoadmOchInterface(db, mps, nodeId, destTp).createInterface(waveNumber);
-                if (dstIf == null) {
-                    LOG.warn("Unable to create OCH interface on " + nodeId + " at " + destTp);
-                    return setServBldr.setResult("Unable to create OCH interface on " + nodeId + " at " + destTp);
-                }
-                LOG.info("Creating cross connect between source :" + srcTp + " destination " + destTp + " for node " + n
-                    .getNodeId());
-                DataBroker netconfNodeDataBroker = PortMapping.getDeviceDataBroker(nodeId, mps);
-                CrossConnect roadmConnections = new CrossConnect(netconfNodeDataBroker);
-                if (roadmConnections.postCrossConnect(waveNumber, srcTp, destTp) == true) {
-                    nodesProvisioned.add(nodeId);
-                    roadmConnections.getConnectionPortTrail(nodeId, mps, waveNumber, srcTp, destTp);
+                if (destTp.contains("NETWORK")) {
+                    crossConnectFlag++;
+                    if (!new OpenRoadmXponderInterface(db, mps, nodeId, destTp, serviceName)
+                            .createLineInterfaces(waveNumber, R100G.class, ModulationFormat.Qpsk)) {
 
-                } else {
-                    return setServBldr.setResult("Unable to post Roadm-connection for node " + nodeId);
+                        return setServBldr.setResult("Unable to LINE interface on " + nodeId + " at " + destTp);
+                    }
+                }
+                if (srcTp.contains("CLIENT")) {
+                    crossConnectFlag++;
+                    if (!new OpenRoadmXponderInterface(db, mps, nodeId, srcTp, serviceName).createClientInterfaces()) {
+                        return setServBldr.setResult("Unable to Client interface on " + nodeId + " at " + srcTp);
+                    }
+                }
+                String srcIf;
+                String dstIf;
+                if (srcTp.contains("TTP") || srcTp.contains("PP")) {
+                    srcIf = new OpenRoadmOchInterface(db, mps, nodeId, srcTp, serviceName).createInterface(waveNumber);
+                    // if source interface creation was successful then proceed
+                    // otherwise return.
+                    if (srcIf == null) {
+                        LOG.warn("Unable to create OCH interface on " + nodeId + " at " + srcTp);
+                        return setServBldr.setResult("Unable to create OCH interface on " + nodeId + " at " + srcTp);
+                    }
+                }
+                if (destTp.contains("TTP") || destTp.contains("PP")) {
+                    dstIf = new OpenRoadmOchInterface(db, mps, nodeId, destTp, serviceName).createInterface(waveNumber);
+                    // if destination interface creation was successful then proceed
+                    // otherwise return.
+                    if (dstIf == null) {
+                        LOG.warn("Unable to create OCH interface on " + nodeId + " at " + destTp);
+                        return setServBldr.setResult("Unable to create OCH interface on " + nodeId + " at " + destTp);
+                    }
+                }
+                if (crossConnectFlag < 1) {
+                    LOG.info("Creating cross connect between source :" + srcTp + " destination " + destTp + " for node "
+                            + n.getNodeId());
+                    DataBroker netconfNodeDataBroker = PortMapping.getDeviceDataBroker(nodeId, mps);
+                    String crossConnectName = srcTp + "-" + destTp + "-" + waveNumber;
+                    CrossConnect roadmConnections = new CrossConnect(netconfNodeDataBroker);
+                    if (roadmConnections.postCrossConnect(waveNumber, srcTp, destTp) == true) {
+                        nodesProvisioned.add(nodeId);
+                        roadmConnections.getConnectionPortTrail(nodeId, mps, waveNumber, srcTp, destTp);
+                    } else {
+                        return setServBldr.setResult("Unable to post Roadm-connection for node " + nodeId);
+                    }
                 }
             } else {
                 LOG.warn(nodeId + " is not mounted on the controller");
@@ -145,6 +173,7 @@ public class DeviceRenderer implements RendererService {
         }
         return setServBldr.setResult("Roadm-connection successfully created for nodes " + nodesProvisioned.toString());
     }
+
 
     /**
      * This method removes wavelength path based on following steps: For each
@@ -178,22 +207,45 @@ public class DeviceRenderer implements RendererService {
 
             // if the node is currently mounted then proceed.
             if (currentMountedDevice.contains(nodeId)) {
+
+                if (destTp.contains("NETWORK")) {
+                    if (new OpenRoadmInterfaces(db, mps, nodeId, destTp)
+                             .deleteInterface(destTp + "-ODU") == false) {
+                        LOG.error("Failed to delete interface " + destTp + "-ODU");
+                    }
+                    if (new OpenRoadmInterfaces(db, mps, nodeId, destTp)
+                             .deleteInterface(destTp + "-OTU") == false) {
+                        LOG.error("Failed to delete interface " + destTp + "-OTU");
+                    }
+                    if (new OpenRoadmInterfaces(db, mps, nodeId, destTp)
+                             .deleteInterface(destTp + "-" + waveNumber) == false) {
+                        LOG.error("Failed to delete interface " + destTp + "-" + waveNumber);
+                    }
+                }
+                if (srcTp.contains("CLIENT")) {
+                    // Deleting interface on source termination point
+                    if (new OpenRoadmInterfaces(db, mps, nodeId, srcTp)
+                            .deleteInterface(srcTp + "-ETHERNET") == false) {
+                        LOG.error("Failed to delete Ethernet interface  on " + srcTp);
+                    }
+                    continue;
+                }
                 String connectionNumber = srcTp + "-" + destTp + "-" + waveNumber;
                 CrossConnect roadmConnection = new CrossConnect(PortMapping.getDeviceDataBroker(nodeId, mps),
-                    connectionNumber);
+                        connectionNumber);
                 if (!roadmConnection.deleteCrossConnect()) {
                     LOG.error("Failed to delete {} ", srcTp + "-" + destTp + "-" + waveNumber);
                 }
                 // Deleting interface on source termination point
-                if (new OpenRoadmInterfaces(db, mps, nodeId, srcTp).deleteInterface(srcTp + "-" + waveNumber
-                    .toString()) == false) {
+                if (new OpenRoadmInterfaces(db, mps, nodeId, srcTp)
+                        .deleteInterface(srcTp + "-" + waveNumber.toString()) == false) {
                     LOG.error("Failed to delete interface " + srcTp + "-" + waveNumber.toString());
                 }
 
                 // Deleting interface on destination termination point
-                if (new OpenRoadmInterfaces(db, mps, nodeId, srcTp).deleteInterface(destTp + "-" + waveNumber
-                    .toString()) == false) {
-                    LOG.error("Failed to delete interface " + srcTp + "-" + waveNumber.toString());
+                if (new OpenRoadmInterfaces(db, mps, nodeId, destTp)
+                        .deleteInterface(destTp + "-" + waveNumber.toString()) == false) {
+                    LOG.error("Failed to delete interface " + destTp + "-" + waveNumber.toString());
                 }
             } else {
                 LOG.warn(nodeId + " is not mounted on the controller");
