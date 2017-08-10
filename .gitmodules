@@ -1,0 +1,6 @@
+[submodule "tests/netconf"]
+	path = tests/netconf
+	url = https://git.opendaylight.org/gerrit/p/netconf.git
+[submodule "tests/mdsal"]
+	path = tests/mdsal
+	url = https://git.opendaylight.org/gerrit/p/mdsal.git

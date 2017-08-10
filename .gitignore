@@ -18,3 +18,5 @@ classes
 .DS_STORE
 .metadata
 ordmodels/src/main/java
+tests/config.xml
+tests/models
