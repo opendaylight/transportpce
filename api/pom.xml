@@ -29,4 +29,29 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
   </dependencies>
 
+  <!--
+    Private references
+  -->
+  <build>
+     <plugins>
+       <plugin>
+	 <groupId>org.apache.felix</groupId>
+	 <artifactId>maven-bundle-plugin</artifactId>
+	 <version>3.0.1</version>
+	 <extensions>true</extensions>
+	 <configuration>
+	   <instructions>
+	     <Include-Resource>{maven-resources},target/classes/LICENSE,META-INF/git.properties=-target/classes/META-INF/git.properties</Include-Resource>
+	     <_exportcontents>
+	       org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.transportpce.stubrenderer.rev170403.service.implementation.request.input,
+	       org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.rev170120.service.implementation.request.input,
+	       org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.internal.link,
+	       org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev161014.internal.links,*
+	     </_exportcontents>
+	   </instructions>
+	 </configuration>
+       </plugin>
+     </plugins>
+  </build>
+
 </project>
