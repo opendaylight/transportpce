@@ -407,12 +407,16 @@ public class PortMapping {
         try {
             Optional<Info> ordmInfoObject = rtx.read(LogicalDatastoreType.OPERATIONAL, infoIID).get();
             if (ordmInfoObject.isPresent()) {
+                LOG.info("Info subtree is present {}", ordmInfoObject.get());
                 return ordmInfoObject.get();
             } else {
-                LOG.info("Info subtree is not present");
+                LOG.error("Info subtree is not present");
             }
+        } catch (NullPointerException ex) {
+            LOG.warn("Try to get Info from a non Open ROADM device {}", deviceDb);
+            return null;
         } catch (InterruptedException | ExecutionException ex) {
-            LOG.info("Read failed on info subtree ",ex);
+            LOG.error("Read failed on info subtree ", ex);
             return null;
         }
         return null;
@@ -452,14 +456,14 @@ public class PortMapping {
                 Optional<Degree> ordmDegreeObject = rtx.read(LogicalDatastoreType.CONFIGURATION, deviceIID).get();
 
                 if (ordmDegreeObject.isPresent()) {
-                    degreeConPorts.addAll(new ArrayList<ConnectionPorts>(ordmDegreeObject.get().getConnectionPorts()));
+                    degreeConPorts.addAll(new ArrayList<>(ordmDegreeObject.get().getConnectionPorts()));
 
                 } else {
                     LOG.info("Device has " + (degreeCounter - 1) + " degree");
                     break;
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                LOG.info("Failed to read degree " + degreeCounter,ex);
+                LOG.error("Failed to read degree " + degreeCounter,ex);
                 break;
 
             }
@@ -508,8 +512,7 @@ public class PortMapping {
                 if (ordmSrgObject.isPresent()) {
 
                     srgCps.addAll(
-                        new ArrayList<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg
-                            .CircuitPacks>(ordmSrgObject.get().getCircuitPacks()));
+                        new ArrayList<>(ordmSrgObject.get().getCircuitPacks()));
 
                 } else {
                     LOG.info("Device has " + (srgCounter - 1) + " Srg");
@@ -609,7 +612,7 @@ public class PortMapping {
                 return null;
             }
         } catch (InterruptedException | ExecutionException ex) {
-            LOG.info("Unable to read mapping for logical connection point : " + logicalConnPoint + " for nodeId "
+            LOG.error("Unable to read mapping for logical connection point : " + logicalConnPoint + " for nodeId "
                 + nodeId,ex);
         }
         return null;
@@ -630,7 +633,7 @@ public class PortMapping {
             DataBroker netconfNodeDataBroker = netconfNode.getService(DataBroker.class).get();
             return netconfNodeDataBroker;
         } else {
-            LOG.info("Device Data broker not found for :" + nodeId);
+            LOG.error("Device Data broker not found for :" + nodeId);
             return null;
         }
     }
@@ -646,10 +649,9 @@ public class PortMapping {
             MountPoint netconfNode = netconfNodeOptional.get();
             return netconfNode;
         } else {
-            LOG.info("Mount Point not found for :" + nodeId);
+            LOG.error("Mount Point not found for :" + nodeId);
             return null;
         }
 
     }
-
 }
