@@ -16,7 +16,6 @@ import com.google.common.cache.LoadingCache;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -58,7 +57,6 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
-import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,39 +109,31 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
         alarmListener = new AlarmNotificationListener();
         LOG.info("Registering notification listener on {} for node: {}", AlarmNotification.QNAME, nodeId);
         // Register notification listener
-        final ListenerRegistration<OrgOpenroadmAlarmListener>
-            accessAlarmNotificationListenerRegistration =
-                notificationService.get().registerNotificationListener(alarmListener);
+
 
         final OrgOpenroadmDeOperationsListener deOperationsListener;
         deOperationsListener = new DeOperationsListener();
         LOG.info("Registering notification listener on OrgOpenroadmDeOperationsListener for node: {}", nodeId);
         // Register notification listener
-        final ListenerRegistration<OrgOpenroadmDeOperationsListener>
-            accessDeOperationasNotificationListenerRegistration =
-                notificationService.get().registerNotificationListener(deOperationsListener);
+
 
         final OrgOpenroadmDeviceListener deviceListener;
         deviceListener = new DeviceListener();
         LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
         // Register notification listener
-        final ListenerRegistration<OrgOpenroadmDeviceListener>
-            accessDeviceNotificationListenerRegistration = notificationService.get()
-                .registerNotificationListener(deviceListener);
+
 
         final OrgOpenroadmLldpListener lldpListener;
         lldpListener = new LldpListener();
         LOG.info("Registering notification listener on OrgOpenroadmLldpListener for node: {}", nodeId);
         // Register notification listener
-        final ListenerRegistration<OrgOpenroadmLldpListener> accessLldpNotificationListenerRegistration =
-            notificationService.get().registerNotificationListener(lldpListener);
+
 
         final OrgOpenroadmTcaListener tcaListener;
         tcaListener = new TcaListener();
         LOG.info("Registering notification listener on OrgOpenroadmTcaListener for node: {}", nodeId);
         // Register notification listener
-        final ListenerRegistration<OrgOpenroadmTcaListener> accessTcaNotificationListenerRegistration =
-            notificationService.get().registerNotificationListener(tcaListener);
+
 
         // Listening to NETCONF datastream
         final String streamName = "NETCONF";
@@ -156,8 +146,7 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
         final CreateSubscriptionInputBuilder createSubscriptionInputBuilder = new CreateSubscriptionInputBuilder();
         createSubscriptionInputBuilder.setStream(new StreamNameType(streamName));
         LOG.info("Triggering notification stream {} for node {}", streamName, nodeId);
-        final Future<RpcResult<Void>> subscription = rpcService.createSubscription(createSubscriptionInputBuilder
-            .build());
+
     }
 
     public void close() {
@@ -199,9 +188,8 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                             /*
                              * TODO: check for required
                              * capabilities to listen for notifications
-                             * registerNotificationListener(rootNode.
-                             * getDataAfter(). getNodeId());
                              */
+                            registerNotificationListener(rootNode.getDataAfter(). getNodeId());
                             currentMountedDevice.add(nodeId);
                             new PortMapping(dataBroker, mountService, nodeId).createMappingData();
                             break;

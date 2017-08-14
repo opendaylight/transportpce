@@ -159,7 +159,7 @@ public class DeviceRenderer implements RendererService {
                     DataBroker netconfNodeDataBroker = PortMapping.getDeviceDataBroker(nodeId, mps);
                     String crossConnectName = srcTp + "-" + destTp + "-" + waveNumber;
                     CrossConnect roadmConnections = new CrossConnect(netconfNodeDataBroker);
-                    if (roadmConnections.postCrossConnect(waveNumber, srcTp, destTp) == true) {
+                    if (roadmConnections.postCrossConnect(waveNumber, srcTp, destTp)) {
                         nodesProvisioned.add(nodeId);
                         roadmConnections.getConnectionPortTrail(nodeId, mps, waveNumber, srcTp, destTp);
                     } else {
@@ -237,14 +237,14 @@ public class DeviceRenderer implements RendererService {
                     LOG.error("Failed to delete {} ", srcTp + "-" + destTp + "-" + waveNumber);
                 }
                 // Deleting interface on source termination point
-                if (new OpenRoadmInterfaces(db, mps, nodeId, srcTp)
-                        .deleteInterface(srcTp + "-" + waveNumber.toString()) == false) {
+                if (!new OpenRoadmInterfaces(db, mps, nodeId, srcTp)
+                        .deleteInterface(srcTp + "-" + waveNumber.toString())) {
                     LOG.error("Failed to delete interface " + srcTp + "-" + waveNumber.toString());
                 }
 
                 // Deleting interface on destination termination point
-                if (new OpenRoadmInterfaces(db, mps, nodeId, destTp)
-                        .deleteInterface(destTp + "-" + waveNumber.toString()) == false) {
+                if (!new OpenRoadmInterfaces(db, mps, nodeId, destTp)
+                        .deleteInterface(destTp + "-" + waveNumber.toString())) {
                     LOG.error("Failed to delete interface " + destTp + "-" + waveNumber.toString());
                 }
             } else {

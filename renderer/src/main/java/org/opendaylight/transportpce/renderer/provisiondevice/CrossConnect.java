@@ -64,16 +64,11 @@ public class CrossConnect {
      * This method return the RoadmConnection subtree for a given connection
      * number.
      *
-     * @param connectionNumber
-     *            Name of the cross connect.
-     *
      * @return Roadm connection subtree from the device.
      */
-    public RoadmConnections getCrossConnect(String connectionNumber) {
-        if (connectionNumber == null && this.connectionNumber != null) {
-            connectionNumber = this.connectionNumber;
-        }
-        if (deviceDb != null) {
+    public RoadmConnections getCrossConnect() {
+
+        if (deviceDb != null && connectionNumber != null) {
             ReadOnlyTransaction rtx = deviceDb.newReadOnlyTransaction();
             Optional<RoadmConnections> roadmConnectionsObject;
             try {
@@ -131,21 +126,7 @@ public class CrossConnect {
         }
     }
 
-    /**
-     * This method does a delete(edit-config) on roadm connection subtree for a
-     * given connection number.
-     *
-     * @param connectionNumber
-     *            Name of the cross connect.
-     * @return true/false based on status of operation.
-     */
 
-    public boolean deleteCrossConnect(String connectionNumber) {
-        if (connectionNumber == null && this.connectionNumber != null) {
-            connectionNumber = this.connectionNumber;
-        }
-        return deleteCrossConnect();
-    }
 
     /**
      * This method does a delete(edit-config) on roadm connection subtree for a
@@ -157,7 +138,7 @@ public class CrossConnect {
     public boolean deleteCrossConnect() {
 
         //Check if cross connect exists before delete
-        if (getCrossConnect(connectionNumber) == null) {
+        if (getCrossConnect() == null) {
             LOG.info("Cross connect does not exist, halting delete");
             return false;
         }
@@ -180,25 +161,7 @@ public class CrossConnect {
         }
     }
 
-    /**
-     * This method does an edit-config on roadm connection subtree for a given
-     * connection number in order to set power level for use by the optical
-     * power control.
-     *
-     * @param mode
-     *            Optical control modelcan be off, power or gainLoss.
-     * @param value
-     *            Power value in DBm.
-     * @param connectionNumber
-     *            Name of the cross connect.
-     * @return true/false based on status of operation.
-     */
-    public boolean setPowerLevel(OpticalControlMode mode, PowerDBm value, String connectionNumber) {
-        if (connectionNumber == null && this.connectionNumber != null) {
-            connectionNumber = this.connectionNumber;
-        }
-        return setPowerLevel(mode, value);
-    }
+
 
     /**
      * This method does an edit-config on roadm connection subtree for a given
@@ -213,7 +176,7 @@ public class CrossConnect {
      */
     public boolean setPowerLevel(OpticalControlMode mode, PowerDBm value) {
 
-        RoadmConnections rdmConn = getCrossConnect(connectionNumber);
+        RoadmConnections rdmConn = getCrossConnect();
         if (rdmConn != null) {
             RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConn);
             rdmConnBldr.setOpticalControlMode(mode);

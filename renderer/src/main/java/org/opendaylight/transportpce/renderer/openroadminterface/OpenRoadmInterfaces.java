@@ -112,12 +112,11 @@ public class OpenRoadmInterfaces {
     public boolean postInterface(InterfaceBuilder ifBuilder) {
         String intf2Post = ifBuilder.getName();
         Interface intf2PostCheck = getInterface(intf2Post);
-        if (intf2PostCheck != null) {
-            if (intf2PostCheck.getAdministrativeState() == AdminStates.InService) {
-                LOG.info("Interface with same name in service already exists on node " + nodeId);
-                return true;
-            }
+        if (intf2PostCheck != null && intf2PostCheck.getAdministrativeState() == AdminStates.InService) {
+            LOG.info("Interface with same name in service already exists on node " + nodeId);
+            return true;
         }
+
         // Post interface with its specific augmentation to the device
         if (netconfNodeDataBroker != null) {
             InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
