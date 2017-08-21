@@ -8,16 +8,14 @@ module org-openroadm-common-service-types {
   import ietf-inet-types {
     prefix inet;
   }
-  import org-openroadm-routing-constraints { 
-	  prefix org-openroadm-routing-constraints; 
-	  revision-date 2016-10-14; 
+  import org-openroadm-routing-constraints {
+    prefix org-openroadm-routing-constraints;
   }
   import org-openroadm-topology {
     prefix org-openroadm-topology;
   }
-  import org-openroadm-common-types { 
-	  prefix org-openroadm-common-types; 
-	  revision-date 2016-10-14; 
+  import org-openroadm-common-types {
+    prefix org-openroadm-common-types;
   }
   import org-openroadm-resource-types {
     prefix org-openroadm-resource-types;
@@ -471,10 +469,6 @@ module org-openroadm-common-service-types {
       enum "service-restoration-result" {
         value 7;
       }
-      //Add Martial
-      enum "service-feasibility-check-result" {
-        value 8;
-      } 
     }
   }
 
