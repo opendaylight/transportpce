@@ -8,8 +8,14 @@ module renderer {
   }
   rpc service-path{
     input{
+      leaf service-name{
+          type string;
+      }
       leaf wave-number{
         type uint32;
+      }
+      leaf modulation-format {
+          type string;
       }
       leaf operation{
         type enumeration{
