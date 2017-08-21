@@ -12,6 +12,12 @@ public interface TransportpceCliCommands {
     /**
      * Define the Karaf command method signatures and the Javadoc for each.
      * Below method is just an example
+     *
+     * @param testArgument
+     *           testArgument
+     *
+     * @return
+     *           returns nothing
      */
     Object testCommand(Object testArgument);
 }

@@ -17,7 +17,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
+/**
  * Class for checking missing info on Tx/Rx for A/Z end.
  *
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
@@ -32,7 +32,7 @@ public class ServicehandlerTxRxCheck {
     /* type serviceEndpoint : serviceAEnd / serviceZEnd. */
     private String service = null;
 
-    /*
+    /**
      * ServicehandlerTxRxCheck class constructor.
      *
      * @param endPoint
@@ -48,7 +48,7 @@ public class ServicehandlerTxRxCheck {
         }
     }
 
-    /*
+    /**
      * Check if a String is not null and not equal to ''.
      *
      * @param value
@@ -64,7 +64,7 @@ public class ServicehandlerTxRxCheck {
 
     }
 
-    /*
+    /**
      * check if Port info is compliant.
      *
      * @param port
@@ -89,7 +89,7 @@ public class ServicehandlerTxRxCheck {
 
     }
 
-    /*
+    /**
      * Check if lgx info is compliant.
      *
      * @param lgx
@@ -111,7 +111,7 @@ public class ServicehandlerTxRxCheck {
         return result;
     }
 
-    /*
+    /**
      * Check if Tx/Rx Direction complaincy info.
      *
      * @param txDirection
@@ -149,7 +149,7 @@ public class ServicehandlerTxRxCheck {
         return result;
     }
 
-    /*
+    /**
      * Check Compliancy of Service TxRx info.
      *
      * @return true if String ok false if not

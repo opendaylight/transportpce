@@ -589,6 +589,8 @@ public class PortMapping {
      *            Unique Identifier for the node of interest.
      * @param logicalConnPoint
      *            Name of the logical point
+     * @param db
+     *            Databroker / MD-SAL data store
      *
      * @return Result Mapping object if success otherwise null.
      */

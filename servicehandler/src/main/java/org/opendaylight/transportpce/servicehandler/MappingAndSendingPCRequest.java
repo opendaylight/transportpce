@@ -43,9 +43,10 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
- * class for Mapping and Sending PCE requests : - path-computation-request -
- * cancel-resource-reserve.
+/**
+ * Class for Mapping and Sending PCE requests :
+ * - path-computation-request
+ * - cancelCresource-reserve.
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
@@ -66,7 +67,7 @@ public class MappingAndSendingPCRequest {
     private String error;
     private final ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
 
-    /*
+    /**
      * MappingAndSendingPCRequest Class constructor for RPC serviceReconfigure.
      *
      * @param rpcRegistry
@@ -97,7 +98,7 @@ public class MappingAndSendingPCRequest {
         setError("");
     }
 
-    /*
+    /**
      * MappingAndSendingPCRequest Class constructor for RPC
      * serviceFeasibilityCheck.
      *
@@ -123,7 +124,7 @@ public class MappingAndSendingPCRequest {
         setError("");
     }
 
-    /*
+    /**
      * MappingAndSendingPCRequest Class constructor for RPC serviceCreate.
      *
      * @param rpcRegistry
@@ -148,7 +149,7 @@ public class MappingAndSendingPCRequest {
         setError("");
     }
 
-    /*
+    /**
      * MappingAndSendingPCRequest Class constructor for modify Service in ODL
      * Datastore.
      *
@@ -172,7 +173,7 @@ public class MappingAndSendingPCRequest {
         setError("");
     }
 
-    /*
+    /**
      * Build pathComputationRequestInput or cancelResourceReserveInput with
      * input parameters (serviceReconfigureInput or serviceFeasibilityCheckInput.
      *
@@ -223,7 +224,8 @@ public class MappingAndSendingPCRequest {
                 .setServiceHandlerHeader(serviceHandlerHeader.build()).build();
     }
 
-    /* Send cancelResourceReserve request to PCE.
+    /**
+     * Send cancelResourceReserve request to PCE.
      *
      * @return CancelResourceReserveOutput data response from PCE
      */
@@ -281,7 +283,8 @@ public class MappingAndSendingPCRequest {
         this.error = error;
     }
 
-    /*Send pathComputationRequest request to PCE.
+    /**
+     * Send pathComputationRequest request to PCE.
      *
      * @return PathComputationRequestOutput data response from PCE
      */

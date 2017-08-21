@@ -21,6 +21,33 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <version>0.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <sourcepath>*/target/generated-sources/mdsal-binding/*</sourcepath>
+          <excludePackageNames>*</excludePackageNames>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <sourcepath>*/target/generated-sources/mdsal-binding/*</sourcepath>
+          <excludePackageNames>*</excludePackageNames>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
+
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>

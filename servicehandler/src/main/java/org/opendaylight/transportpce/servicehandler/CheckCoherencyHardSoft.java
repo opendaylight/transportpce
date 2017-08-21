@@ -13,7 +13,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/* Class to check coherency between hard & sof constraints.
+/**
+ * Class to check coherency between hard and soft constraints.
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
@@ -30,7 +31,8 @@ public class CheckCoherencyHardSoft {
         this.soft = soft;
     }
 
-    /*function to check coherency between hard & soft constraints.
+    /**
+     * function to check coherency between hard and soft constraints.
      * @return  <code> true </code>  if coherent
      *          <code> false </code> else
      */

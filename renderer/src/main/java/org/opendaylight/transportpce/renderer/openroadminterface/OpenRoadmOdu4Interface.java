@@ -30,6 +30,8 @@ public class OpenRoadmOdu4Interface extends OpenRoadmInterfaces {
     /**
      * This methods creates an ODU interface on the given termination point.
      *
+     * @param supportingOtuInterface
+     *          supporting Otu Interface
      *
      * @return Name of the interface if successful, otherwise return null.
      */

@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/*
+/**
  * Class to check RPCs Compliancy.
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
