@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.servicehandler;
 
 import java.util.Map;
 
-/*
+/**
  * Enum class to identify ServiceAEnd / serviceZEnd.
  *
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
@@ -37,7 +37,7 @@ enum MyEndpoint {
         VALUE_MAP = b.build();
     }
 
-    /*
+    /**
      * Get integer value.
      *
      * @return integer value.
@@ -46,7 +46,7 @@ enum MyEndpoint {
         return value;
     }
 
-    /*
+    /**
      * Get Endpoint value.
      *
      * @param valueArg

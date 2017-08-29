@@ -17,9 +17,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topolo
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
- *Class for Sending
- * Renderer requests :
+/**
+ * Class for Sending Renderer requests :
  * - Service-implementation-request
  * - Service-delete-request.
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange

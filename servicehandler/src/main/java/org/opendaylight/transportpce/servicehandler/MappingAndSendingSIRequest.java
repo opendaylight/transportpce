@@ -65,7 +65,7 @@ import org.slf4j.LoggerFactory;
 
 
 
-/*
+/**
  * Class for Mapping and Sending
  * Service Implemention requests :
  * - service implementation
@@ -90,7 +90,7 @@ public class MappingAndSendingSIRequest {
     private final ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
 
 
-    /*
+    /**
      * MappingAndSendingSIRequest class constructor
      * for RPC serviceCreate.
      *
@@ -242,7 +242,7 @@ public class MappingAndSendingSIRequest {
         .build();
     }
 
-    /*
+    /**
      * MappingAndSendingSIRequest class constructor
      * for RPC serviceReconfigure.
      *
@@ -393,7 +393,7 @@ public class MappingAndSendingSIRequest {
     }
 
 
-    /*
+    /**
      * MappingAndSendingSIRequest class constructor
      * for RPC serviceDelete.
      *
@@ -543,7 +543,7 @@ public class MappingAndSendingSIRequest {
         LOG.info("ServiceImplementationRequestInput : " + serviceImplementationRequestInput.toString());
     }
 
-    /*
+    /**
      * Create RxDirection with Port
      * information.
      *
@@ -595,7 +595,7 @@ public class MappingAndSendingSIRequest {
         return result;
     }
 
-    /*
+    /**
      * Send serviceImplementation request to Render.
      *
      * @return ServiceImplementationRequestOutput data response from Renderer
@@ -639,7 +639,7 @@ public class MappingAndSendingSIRequest {
 
     }
 
-    /*
+    /**
      * Send serviceDelete request to Render.
      *
      * @return ServiceDeleteOutput data response from Renderer

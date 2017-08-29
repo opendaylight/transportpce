@@ -11,8 +11,8 @@ package org.opendaylight.transportpce.servicehandler;
 import com.google.common.util.concurrent.FutureCallback;
 import org.slf4j.Logger;
 
-/*
- * Class to log future logging from datastore actions (write & modify & delete..).
+/**
+ * Class to log future logging from datastore actions (write, modify and delete..).
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  */
 

@@ -14,7 +14,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
+/**
  * Class for checking service sdnc-request-header compliancy.
  *
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
@@ -34,7 +34,7 @@ public class ServicehandlerCompliancyCheck {
     /* Response message from procedure. */
     private String message;
 
-    /*
+    /**
      * ServicehandlerCompliancyCheck class constructor.
      *
      * @param sdncRequestHeader
@@ -55,7 +55,7 @@ public class ServicehandlerCompliancyCheck {
         this.setMessage("");
     }
 
-    /*
+    /**
      * ServicehandlerCompliancyCheck class constructor.
      *
      * @param sdncRequestHeader
@@ -72,7 +72,7 @@ public class ServicehandlerCompliancyCheck {
         this.setMessage("");
     }
 
-    /*
+    /**
      * ServicehandlerCompliancyCheck class constructor.
      *
      * @param serviceName
@@ -89,7 +89,7 @@ public class ServicehandlerCompliancyCheck {
         this.setMessage("");
     }
 
-    /*
+    /**
      * ServicehandlerCompliancyCheck class constructor.
      *
      * @param serviceName
@@ -103,7 +103,7 @@ public class ServicehandlerCompliancyCheck {
         this.setMessage("");
     }
 
-    /*
+    /**
      * Check if a String is not null and not equal to void.
      *
      * @param value
@@ -119,7 +119,7 @@ public class ServicehandlerCompliancyCheck {
 
     }
 
-    /*
+    /**
      * Check Compliancy of Service request.
      *
      * @param contype

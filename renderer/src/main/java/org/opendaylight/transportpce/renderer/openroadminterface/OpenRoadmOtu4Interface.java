@@ -31,6 +31,8 @@ public class OpenRoadmOtu4Interface extends OpenRoadmInterfaces {
     /**
      * This methods creates an OTU interface on the given termination point.
      *
+     * @param supportOchInterface
+     *          support Och Interface
      *
      * @return Name of the interface if successful, otherwise return null.
      */

@@ -19,9 +19,9 @@ import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
+/**
  * Class to register
- * Stubpce Service & Notification.
+ * Stubpce Service and Notification.
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
@@ -41,7 +41,7 @@ public class StubpceProvider {
         this.notificationPublishService = notificationPublishService;
     }
 
-    /*
+    /**
      * Method called when the blueprint container is created.
      */
     public void init() {
@@ -50,7 +50,7 @@ public class StubpceProvider {
         rpcRegistration = rpcRegistry.addRpcImplementation(StubpceService.class, consumer);
     }
 
-    /*
+    /**
      * Method called when the blueprint container is destroyed.
      */
     public void close() {

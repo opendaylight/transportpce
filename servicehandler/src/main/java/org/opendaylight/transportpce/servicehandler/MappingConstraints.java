@@ -29,7 +29,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
+/**
  * Class for mapping
  * Hard/soft constraint from Service 1.2
  * to servicePath 1.4.
@@ -46,8 +46,7 @@ public class MappingConstraints {
     private org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
         .routing.constraints.rev170426.routing.constraints.sp.SoftConstraints servicePathSoftConstraints;
 
-
-    /*
+    /**
      * MappingConstraints class constructor
      * for hard/soft from service 1.2.
      *
@@ -59,7 +58,7 @@ public class MappingConstraints {
         setServiceSoftConstraints(soft);
     }
 
-    /*
+    /**
      * MappingConstraints class constructor
      * for hard/soft from servicePath 1.4.
      *
@@ -74,7 +73,7 @@ public class MappingConstraints {
         setServicePathSoftConstraints(soft);
     }
 
-    /*
+    /**
      * map hard/soft constraints from Service 1.2
      * to ServicePath 1.4.
      */

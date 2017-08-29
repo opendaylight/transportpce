@@ -19,8 +19,8 @@ import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
- *Class to register Stubrenderer Service & Notification.
+/**
+ * Class to register Stubrenderer Service and Notification.
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
@@ -40,7 +40,7 @@ public class StubrendererProvider {
         this.notificationPublishService = notificationPublishService;
     }
 
-    /*
+    /**
      * Method called when the blueprint container is created.
      */
     public void init() {
@@ -49,7 +49,7 @@ public class StubrendererProvider {
         rpcRegistration = rpcRegistry.addRpcImplementation(StubrendererService.class, consumer);
     }
 
-    /*
+    /**
      * Method called when the blueprint container is destroyed.
      */
     public void close() {

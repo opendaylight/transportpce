@@ -20,7 +20,7 @@ import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
+/**
  * Class to register
  * Servicehandler Service and Notification.
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
@@ -51,7 +51,7 @@ public class ServicehandlerProvider {
         this.notificationPublishService = notificationPublishService;
     }
 
-    /*
+    /**
      * Method called when the blueprint container is created.
      */
     public void init() {
@@ -62,7 +62,7 @@ public class ServicehandlerProvider {
         rpcRegistration = rpcRegistry.addRpcImplementation(ServicehandlerService.class, consumer);
     }
 
-    /*
+    /**
      * Method called when the blueprint container is destroyed.
      */
     public void close() {

@@ -130,8 +130,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/*
- * Class to implement ServicehandlerService & ServicehandlerListener.
+/**
+ * Class to implement ServicehandlerService and ServicehandlerListener.
  *
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
@@ -194,8 +194,9 @@ public class ServicehandlerImpl implements ServicehandlerService, StubpceListene
 
         LOG.info("checking Service Compliancy ...");
         /*
-         * Upon receipt of service-create RPC, service header and sdnc-request
-         * header compliancy are verified.
+         * Upon receipt of service
+         * -create RPC, service header and sdnc
+         * -request header compliancy are verified.
          */
         compliancyCheck = new ServicehandlerCompliancyCheck(input.getSdncRequestHeader(), input.getServiceName(),
                 input.getConnectionType(), RpcActions.ServiceCreate);
