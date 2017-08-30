@@ -12,6 +12,9 @@ netconf/netconf/models/ietf-netconf/src/main/yang/ietf-netconf@2011-06-01.yang \
 netconf/netconf/models/ietf-netconf-notifications/src/main/yang/ietf-netconf-notifications@2012-02-06.yang \
 netconf/netconf/models/ietf-netconf-notifications/src/main/yang/notifications@2008-07-14.yang"
 
+rm -rf netconf mdsal && git submodule update --init
+(cd netconf && patch -p1 < ../netconf.patch)
+
 (cd netconf/netconf/tools/netconf-testtool && mvn clean install -DskipTests)
 rm -rf schemas; mkdir -p schemas && cp -r ../ordmodels/src/main/yang/org-openroadm-* schemas
 cp ${yang} schemas

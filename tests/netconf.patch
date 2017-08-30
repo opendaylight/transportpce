@@ -1,0 +1,77 @@
+diff --git a/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/SimulatedOperationProvider.java b/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/SimulatedOperationProvider.java
+index 3847ce9b..eeae4434 100644
+--- a/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/SimulatedOperationProvider.java
++++ b/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/SimulatedOperationProvider.java
+@@ -79,7 +79,8 @@ class SimulatedOperationProvider implements NetconfOperationServiceFactory {
+         @Override
+         public Set<NetconfOperation> getNetconfOperations() {
+             final DataList storage = new DataList();
+-            final SimulatedGet sGet = new SimulatedGet(String.valueOf(currentSessionId), storage);
++            final SimulatedGet sGet = new SimulatedGet(
++                String.valueOf(currentSessionId), storage, initialConfigXMLFile);
+             final SimulatedEditConfig sEditConfig = new SimulatedEditConfig(String.valueOf(currentSessionId), storage);
+             final SimulatedGetConfig sGetConfig = new SimulatedGetConfig(
+                 String.valueOf(currentSessionId), storage, initialConfigXMLFile);
+diff --git a/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/rpc/SimulatedGet.java b/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/rpc/SimulatedGet.java
+index 0f19b117..3aafa005 100644
+--- a/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/rpc/SimulatedGet.java
++++ b/netconf/tools/netconf-testtool/src/main/java/org/opendaylight/netconf/test/tool/rpc/SimulatedGet.java
+@@ -9,21 +9,56 @@
+ package org.opendaylight.netconf.test.tool.rpc;
+ 
+ import com.google.common.base.Optional;
++import java.io.File;
++import java.io.IOException;
++import java.util.Collections;
++import java.util.List;
+ import org.opendaylight.controller.config.util.xml.DocumentedException;
+ import org.opendaylight.controller.config.util.xml.XmlElement;
+ import org.opendaylight.controller.config.util.xml.XmlUtil;
+ import org.opendaylight.netconf.api.xml.XmlNetconfConstants;
+ import org.opendaylight.netconf.confignetconfconnector.operations.AbstractConfigNetconfOperation;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
+ import org.w3c.dom.Document;
+ import org.w3c.dom.Element;
++import org.xml.sax.SAXException;
+ 
+ public class SimulatedGet extends AbstractConfigNetconfOperation {
+ 
+     private final DataList storage;
++    private static final Logger LOG = LoggerFactory
++            .getLogger(SimulatedGet.class);
+ 
+-    public SimulatedGet(final String netconfSessionIdForReporting, final DataList storage) {
++    public SimulatedGet(final String netconfSessionIdForReporting, final DataList storage,
++                              final Optional<File> initialConfigXMLFile) {
+         super(null, netconfSessionIdForReporting);
+-        this.storage = storage;
++
++        if (initialConfigXMLFile.isPresent()) {
++            LOG.info("File is present: {}", initialConfigXMLFile.get()
++                    .getName());
++            this.storage = loadInitialConfigXMLFile(initialConfigXMLFile.get());
++        } else {
++            this.storage = storage;
++        }
++    }
++
++    private DataList loadInitialConfigXMLFile(final File file) {
++        LOG.info("Loading initial config xml file: {}", file.getName());
++        DataList configData = new DataList();
++        List<XmlElement> xmlElementList = Collections.emptyList();
++        try {
++            Element element = XmlUtil.readXmlToElement(file);
++            XmlElement xmlElement = XmlElement.fromDomElement(element);
++            xmlElementList = xmlElement.getChildElements();
++            configData.setConfigList(xmlElementList);
++        } catch (IOException e) {
++            LOG.info("IO exception loading xml file: {} ", e.getMessage());
++
++        } catch (SAXException e) {
++            LOG.info("SAXException {}", e.getMessage());
++        }
++        return configData;
+     }
+ 
+     @Override
