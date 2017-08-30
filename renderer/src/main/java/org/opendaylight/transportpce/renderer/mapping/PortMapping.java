@@ -237,7 +237,9 @@ public class PortMapping {
 
                 if (circuitPackObject.isPresent()) {
                     CircuitPacks cp = circuitPackObject.get();
-                    if (!cp.getPorts().isEmpty()) {
+                    if (cp.getPorts() == null) {
+                        LOG.warn("No port found for {} {}: {}", deviceInfo.getNodeId(), circuitPackName, cp);
+                    } else if (!cp.getPorts().isEmpty()) {
                         for (Ports port : cp.getPorts()) {
 
                             if (port.getLogicalConnectionPoint() != null && port.getPortQual().getIntValue() == 2) {
