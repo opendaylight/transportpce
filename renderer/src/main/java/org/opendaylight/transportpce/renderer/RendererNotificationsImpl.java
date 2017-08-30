@@ -182,6 +182,11 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                 nodeId = rootNode.getDataAfter().getKey().getNodeId().getValue();
             }
             if (nnode != null) {
+                if (nodeId.equals("controller-config")) {
+                    // We shouldn't process controller-config as an OpenROAM device
+                    LOG.info("{} ignored: org-openroadm-device advertised but not a real ROADM device", nodeId);
+                    return;
+                }
                 if (rootNode.getModificationType() == ModificationType.WRITE) {
                     LOG.info("Node added " + nodeId);
 
