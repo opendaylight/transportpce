@@ -13,6 +13,9 @@ import zipfile
 
 class TransportPCEtesting(unittest.TestCase):
 
+    testtools_process = None
+    odl_process = None
+
     @classmethod
     def __start_testtools(cls):
         executable = ("./netconf/netconf/tools/netconf-testtool/target/"
@@ -53,7 +56,7 @@ class TransportPCEtesting(unittest.TestCase):
         cls.odl_process.kill()
 
     def setUp(self):
-        time.sleep(10)
+        time.sleep(1)
 
     def test_connect_device(self):
         url = ("http://127.0.0.1:8181/restconf/config/network-topology:"
@@ -71,6 +74,7 @@ class TransportPCEtesting(unittest.TestCase):
             "PUT", url, data=json.dumps(data), headers=headers,
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.created)
+        time.sleep(10)
 
     def test_device_connected(self):
         url = ("http://127.0.0.1:8181/restconf/operational/network-topology:"
@@ -83,10 +87,11 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(
             res['node'][0]['netconf-node-topology:connection-status'],
             'connected')
+        time.sleep(2)
 
-    def test_portmapping(self):
+    def test_portmapping_SRG1_PP3_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA")
+               "nodes/ROADMA/mapping/SRG1-PP3-TXRX")
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -95,82 +100,252 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn(
             {'supporting-port': 'C3', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP3-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP6_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP6-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C6', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP6-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_DEG1_TTP_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/DEG1-TTP-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '2/0',
              'logical-connection-point': 'DEG1-TTP-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP9_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP9-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C9', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP9-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP16_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP16-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C16', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP16-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP4_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP4-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C4', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP4-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP2_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP2-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C2', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP2-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP14_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP14-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C14', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP14-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP11_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP11-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C11', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP11-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP7_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP7-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C7', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP7-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_DEG2_TTP_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/DEG2-TTP-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '3/0',
              'logical-connection-point': 'DEG2-TTP-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_DEG2_TTP_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/DEG2-TTP-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'L1', 'supporting-circuit-pack-name': '3/0',
              'logical-connection-point': 'DEG2-TTP-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP12_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP12-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C12', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP12-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP8_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP8-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C8', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP8-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP5_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP5-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C5', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP5-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP13_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP13-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C13', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP13-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP15_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP15-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C15', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP15-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
+
+    def test_portmapping_SRG1_PP10_TXRX(self):
+        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP10-TXRX")
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
         self.assertIn(
             {'supporting-port': 'C10', 'supporting-circuit-pack-name': '4/0',
              'logical-connection-point': 'SRG1-PP10-TXRX'},
-            res['nodes'][0]['mapping'])
+            res['mapping'])
 
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(TransportPCEtesting('test_connect_device'))
     suite.addTest(TransportPCEtesting('test_device_connected'))
-    suite.addTest(TransportPCEtesting('test_portmapping'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP3_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP6_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_DEG1_TTP_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP9_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP16_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP4_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP2_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP14_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP11_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP7_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_DEG2_TTP_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_DEG2_TTP_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP12_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP8_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP5_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP13_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP15_TXRX'))
+    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP10_TXRX'))
     return suite
 
 if __name__ == "__main__":
