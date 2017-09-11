@@ -323,6 +323,46 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP10-TXRX'},
             res['mapping'])
 
+    def test_cross_connection_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
+        url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
+        data = {"renderer:input": {
+            "renderer:service-name": "service_32",
+            "renderer:wave-number": "32",
+            "renderer:operation": "create",
+            "renderer:nodes": [
+                {"renderer:node-id": "ROADMA",
+                 "renderer:src-tp": "DEG1-TTP-TXRX",
+                 "renderer:dest-tp": "SRG1-PP3-TXRX"}]}}
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertEqual(response.json(), {
+            'output': {
+                'result':
+                'Roadm-connection successfully created for nodes [ROADMA]'}})
+
+    def test_cross_connection_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
+        url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
+        data = {"renderer:input": {
+            "renderer:service-name": "service_32",
+            "renderer:wave-number": "32",
+            "renderer:operation": "create",
+            "renderer:nodes": [
+                {"renderer:node-id": "ROADMA",
+                 "renderer:src-tp": "SRG1-PP3-TXRX",
+                 "renderer:dest-tp": "DEG1-TTP-TXRX"}]}}
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertEqual(response.json(), {
+            'output': {
+                'result':
+                'Roadm-connection successfully created for nodes [ROADMA]'}})
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -346,6 +386,10 @@ def test_suite():
     suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP13_TXRX'))
     suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP15_TXRX'))
     suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP10_TXRX'))
+    suite.addTest(TransportPCEtesting(
+        'test_cross_connection_DEG1_TTP_TXRX_SRG1_PP3_TXRX'))
+    suite.addTest(TransportPCEtesting(
+        'test_cross_connection_SRG1_PP3_TXRX_DEG1_TTP_TXRX'))
     return suite
 
 if __name__ == "__main__":
