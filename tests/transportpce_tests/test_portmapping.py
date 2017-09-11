@@ -4,6 +4,7 @@ import json
 import os
 import psutil
 import requests
+import signal
 import shutil
 import subprocess
 import time
@@ -40,7 +41,8 @@ class TransportPCEtesting(unittest.TestCase):
             zipobj.extractall()
             with open('odl.log', 'w') as outfile:
                 cls.odl_process = subprocess.Popen(
-                    ["bash", executable], stdout=outfile)
+                    ["bash", executable], stdout=outfile,
+                    stdin=open(os.devnull))
 
     @classmethod
     def setUpClass(cls):
@@ -50,10 +52,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.testtools_process.kill()
+        cls.testtools_process.send_signal(signal.SIGINT)
+        cls.testtools_process.wait()
         for child in psutil.Process(cls.odl_process.pid).children():
-            child.kill()
-        cls.odl_process.kill()
+            child.send_signal(signal.SIGINT)
+            child.wait()
+        cls.odl_process.send_signal(signal.SIGINT)
+        cls.odl_process.wait()
 
     def setUp(self):
         time.sleep(1)
