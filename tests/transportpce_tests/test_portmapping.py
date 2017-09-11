@@ -368,6 +368,42 @@ class TransportPCEtesting(unittest.TestCase):
                 'result':
                 'Roadm-connection successfully created for nodes [ROADMA]'}})
 
+    def test_delete_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
+        url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
+        data = {"renderer:input": {
+            "renderer:service-name": "service_32",
+            "renderer:wave-number": "32",
+            "renderer:operation": "delete",
+            "renderer:nodes": [
+                {"renderer:node-id": "ROADMA",
+                 "renderer:src-tp": "DEG1-TTP-TXRX",
+                 "renderer:dest-tp": "SRG1-PP3-TXRX"}]}}
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertEqual(response.json(), {
+            'output': {'result': 'Request processed'}})
+
+    def test_delete_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
+        url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
+        data = {"renderer:input": {
+            "renderer:service-name": "service_32",
+            "renderer:wave-number": "32",
+            "renderer:operation": "delete",
+            "renderer:nodes": [
+                {"renderer:node-id": "ROADMA",
+                 "renderer:src-tp": "SRG1-PP3-TXRX",
+                 "renderer:dest-tp": "DEG1-TTP-TXRX"}]}}
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertEqual(response.json(), {
+            'output': {'result': 'Request processed'}})
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -395,6 +431,10 @@ def test_suite():
         'test_cross_connection_DEG1_TTP_TXRX_SRG1_PP3_TXRX'))
     suite.addTest(TransportPCEtesting(
         'test_cross_connection_SRG1_PP3_TXRX_DEG1_TTP_TXRX'))
+    suite.addTest(TransportPCEtesting(
+        'test_delete_DEG1_TTP_TXRX_SRG1_PP3_TXRX'))
+    suite.addTest(TransportPCEtesting(
+        'test_delete_SRG1_PP3_TXRX_DEG1_TTP_TXRX'))
     return suite
 
 if __name__ == "__main__":
