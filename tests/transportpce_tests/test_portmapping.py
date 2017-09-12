@@ -9,7 +9,6 @@ import shutil
 import subprocess
 import time
 import unittest
-import zipfile
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -30,19 +29,11 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def __start_odl(cls):
-        zfile = "../karaf/target/transportpce-karaf-0.2.0-SNAPSHOT.zip"
-        executable = "transportpce-karaf-0.2.0-SNAPSHOT/bin/karaf"
-        if os.path.isfile(zfile):
-            try:
-                shutil.rmtree("transportpce-karaf-0.2.0-SNAPSHOT")
-            except OSError:
-                pass
-            zipobj = zipfile.ZipFile(zfile)
-            zipobj.extractall()
-            with open('odl.log', 'w') as outfile:
-                cls.odl_process = subprocess.Popen(
-                    ["bash", executable], stdout=outfile,
-                    stdin=open(os.devnull))
+        executable = "../karaf/target/assembly/bin/karaf"
+        with open('odl.log', 'w') as outfile:
+            cls.odl_process = subprocess.Popen(
+                ["bash", executable], stdout=outfile,
+                stdin=open(os.devnull))
 
     @classmethod
     def setUpClass(cls):
