@@ -54,7 +54,7 @@ class TransportPCEtesting(unittest.TestCase):
     def setUp(self):
         time.sleep(1)
 
-    def test_connect_device(self):
+    def test_01_connect_device(self):
         url = ("http://127.0.0.1:8181/restconf/config/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADMA")
         data = {"node": [{
@@ -72,7 +72,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(10)
 
-    def test_device_connected(self):
+    def test_02_device_connected(self):
         url = ("http://127.0.0.1:8181/restconf/operational/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADMA")
         headers = {'content-type': 'application/json'}
@@ -85,7 +85,7 @@ class TransportPCEtesting(unittest.TestCase):
             'connected')
         time.sleep(2)
 
-    def test_portmapping_SRG1_PP3_TXRX(self):
+    def test_03_portmapping_SRG1_PP3_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP3-TXRX")
         headers = {'content-type': 'application/json'}
@@ -98,7 +98,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP3-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP6_TXRX(self):
+    def test_04_portmapping_SRG1_PP6_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP6-TXRX")
         headers = {'content-type': 'application/json'}
@@ -111,7 +111,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP6-TXRX'},
             res['mapping'])
 
-    def test_portmapping_DEG1_TTP_TXRX(self):
+    def test_05_portmapping_DEG1_TTP_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/DEG1-TTP-TXRX")
         headers = {'content-type': 'application/json'}
@@ -124,7 +124,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'DEG1-TTP-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP9_TXRX(self):
+    def test_06_portmapping_SRG1_PP9_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP9-TXRX")
         headers = {'content-type': 'application/json'}
@@ -137,7 +137,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP9-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP16_TXRX(self):
+    def test_07_portmapping_SRG1_PP16_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP16-TXRX")
         headers = {'content-type': 'application/json'}
@@ -150,7 +150,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP16-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP4_TXRX(self):
+    def test_08_portmapping_SRG1_PP4_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP4-TXRX")
         headers = {'content-type': 'application/json'}
@@ -163,7 +163,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP4-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP2_TXRX(self):
+    def test_09_portmapping_SRG1_PP2_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP2-TXRX")
         headers = {'content-type': 'application/json'}
@@ -176,7 +176,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP2-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP14_TXRX(self):
+    def test_10_portmapping_SRG1_PP14_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP14-TXRX")
         headers = {'content-type': 'application/json'}
@@ -189,7 +189,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP14-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP11_TXRX(self):
+    def test_11_portmapping_SRG1_PP11_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP11-TXRX")
         headers = {'content-type': 'application/json'}
@@ -202,7 +202,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP11-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP7_TXRX(self):
+    def test_12_portmapping_SRG1_PP7_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP7-TXRX")
         headers = {'content-type': 'application/json'}
@@ -215,7 +215,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP7-TXRX'},
             res['mapping'])
 
-    def test_portmapping_DEG2_TTP_TXRX(self):
+    def test_13_portmapping_DEG2_TTP_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/DEG2-TTP-TXRX")
         headers = {'content-type': 'application/json'}
@@ -228,7 +228,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'DEG2-TTP-TXRX'},
             res['mapping'])
 
-    def test_portmapping_DEG2_TTP_TXRX(self):
+    def test_14_portmapping_DEG2_TTP_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/DEG2-TTP-TXRX")
         headers = {'content-type': 'application/json'}
@@ -241,7 +241,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'DEG2-TTP-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP12_TXRX(self):
+    def test_15_portmapping_SRG1_PP12_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP12-TXRX")
         headers = {'content-type': 'application/json'}
@@ -254,7 +254,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP12-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP8_TXRX(self):
+    def test_16_portmapping_SRG1_PP8_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP8-TXRX")
         headers = {'content-type': 'application/json'}
@@ -267,7 +267,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP8-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP5_TXRX(self):
+    def test_17_portmapping_SRG1_PP5_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP5-TXRX")
         headers = {'content-type': 'application/json'}
@@ -280,7 +280,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP5-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP13_TXRX(self):
+    def test_18_portmapping_SRG1_PP13_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP13-TXRX")
         headers = {'content-type': 'application/json'}
@@ -293,7 +293,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP13-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP15_TXRX(self):
+    def test_19_portmapping_SRG1_PP15_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP15-TXRX")
         headers = {'content-type': 'application/json'}
@@ -306,7 +306,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP15-TXRX'},
             res['mapping'])
 
-    def test_portmapping_SRG1_PP10_TXRX(self):
+    def test_20_portmapping_SRG1_PP10_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP10-TXRX")
         headers = {'content-type': 'application/json'}
@@ -319,7 +319,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP10-TXRX'},
             res['mapping'])
 
-    def test_cross_connection_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
+    def test_21_cross_connection_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
         url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
         data = {"renderer:input": {
             "renderer:service-name": "service_32",
@@ -339,7 +339,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'result':
                 'Roadm-connection successfully created for nodes [ROADMA]'}})
 
-    def test_cross_connection_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
+    def test_22_cross_connection_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
         url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
         data = {"renderer:input": {
             "renderer:service-name": "service_32",
@@ -359,7 +359,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'result':
                 'Roadm-connection successfully created for nodes [ROADMA]'}})
 
-    def test_delete_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
+    def test_23_delete_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
         url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
         data = {"renderer:input": {
             "renderer:service-name": "service_32",
@@ -377,7 +377,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.json(), {
             'output': {'result': 'Request processed'}})
 
-    def test_delete_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
+    def test_24_delete_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
         url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
         data = {"renderer:input": {
             "renderer:service-name": "service_32",
@@ -395,39 +395,6 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.json(), {
             'output': {'result': 'Request processed'}})
 
-
-def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(TransportPCEtesting('test_connect_device'))
-    suite.addTest(TransportPCEtesting('test_device_connected'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP3_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP6_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_DEG1_TTP_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP9_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP16_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP4_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP2_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP14_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP11_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP7_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_DEG2_TTP_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_DEG2_TTP_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP12_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP8_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP5_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP13_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP15_TXRX'))
-    suite.addTest(TransportPCEtesting('test_portmapping_SRG1_PP10_TXRX'))
-    suite.addTest(TransportPCEtesting(
-        'test_cross_connection_DEG1_TTP_TXRX_SRG1_PP3_TXRX'))
-    suite.addTest(TransportPCEtesting(
-        'test_cross_connection_SRG1_PP3_TXRX_DEG1_TTP_TXRX'))
-    suite.addTest(TransportPCEtesting(
-        'test_delete_DEG1_TTP_TXRX_SRG1_PP3_TXRX'))
-    suite.addTest(TransportPCEtesting(
-        'test_delete_SRG1_PP3_TXRX_DEG1_TTP_TXRX'))
-    return suite
 
 if __name__ == "__main__":
-    RUNNER = unittest.TextTestRunner(verbosity=2)
-    RUNNER.run(test_suite())
+    unittest.main(verbosity=2)
