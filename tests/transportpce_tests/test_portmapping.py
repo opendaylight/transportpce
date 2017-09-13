@@ -1,4 +1,12 @@
 #!/usr/bin/env python
+##############################################################################
+#Copyright (c) 2017 Orange, Inc. and others.  All rights reserved.
+#
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License, Version 2.0
+# which accompanies this distribution, and is available at
+# http://www.apache.org/licenses/LICENSE-2.0
+##############################################################################
 
 import json
 import os
@@ -15,6 +23,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     testtools_process = None
     odl_process = None
+    restconf_baseurl = "http://127.0.0.1:8181/restconf"
 
     @classmethod
     def __start_testtools(cls):
@@ -55,8 +64,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
     def test_01_connect_device(self):
-        url = ("http://127.0.0.1:8181/restconf/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADMA")
+        url = ("{}/config/network-topology:"
+               "network-topology/topology/topology-netconf/node/ROADMA"
+              .format(self.restconf_baseurl))
         data = {"node": [{
             "node-id": "ROADMA",
             "netconf-node-topology:username": "admin",
@@ -73,8 +83,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(10)
 
     def test_02_device_connected(self):
-        url = ("http://127.0.0.1:8181/restconf/operational/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADMA")
+        url = ("{}/operational/network-topology:"
+               "network-topology/topology/topology-netconf/node/ROADMA"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -86,8 +97,9 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     def test_03_portmapping_SRG1_PP3_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP3-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP3-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -99,8 +111,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_04_portmapping_SRG1_PP6_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP6-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP6-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -112,8 +125,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_05_portmapping_DEG1_TTP_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/DEG1-TTP-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/DEG1-TTP-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -125,8 +139,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_06_portmapping_SRG1_PP9_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP9-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP9-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -138,8 +153,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_07_portmapping_SRG1_PP16_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP16-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP16-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -151,8 +167,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_08_portmapping_SRG1_PP4_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP4-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP4-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -164,8 +181,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_09_portmapping_SRG1_PP2_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP2-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP2-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -177,8 +195,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_10_portmapping_SRG1_PP14_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP14-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP14-TXRX"
+              .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -190,8 +209,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_11_portmapping_SRG1_PP11_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP11-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP11-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -203,8 +223,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_12_portmapping_SRG1_PP7_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP7-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP7-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -216,8 +237,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_13_portmapping_DEG2_TTP_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/DEG2-TTP-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/DEG2-TTP-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -229,8 +251,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_14_portmapping_DEG2_TTP_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/DEG2-TTP-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/DEG2-TTP-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -242,8 +265,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_15_portmapping_SRG1_PP12_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP12-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP12-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -255,8 +279,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_16_portmapping_SRG1_PP8_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP8-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP8-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -268,8 +293,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_17_portmapping_SRG1_PP5_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP5-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP5-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -281,8 +307,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_18_portmapping_SRG1_PP13_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP13-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP13-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -294,8 +321,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_19_portmapping_SRG1_PP15_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP15-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP15-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -307,8 +335,9 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_20_portmapping_SRG1_PP10_TXRX(self):
-        url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP10-TXRX")
+        url = ("{}/config/portmapping:network/"
+               "nodes/ROADMA/mapping/SRG1-PP10-TXRX"
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -320,7 +349,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_21_cross_connection_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
-        url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
+        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
         data = {"renderer:input": {
             "renderer:service-name": "service_32",
             "renderer:wave-number": "32",
@@ -340,7 +369,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'Roadm-connection successfully created for nodes [ROADMA]'}})
 
     def test_22_cross_connection_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
-        url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
+        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
         data = {"renderer:input": {
             "renderer:service-name": "service_32",
             "renderer:wave-number": "32",
@@ -360,7 +389,7 @@ class TransportPCEtesting(unittest.TestCase):
                 'Roadm-connection successfully created for nodes [ROADMA]'}})
 
     def test_23_delete_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
-        url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
+        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
         data = {"renderer:input": {
             "renderer:service-name": "service_32",
             "renderer:wave-number": "32",
@@ -378,7 +407,7 @@ class TransportPCEtesting(unittest.TestCase):
             'output': {'result': 'Request processed'}})
 
     def test_24_delete_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
-        url = "http://127.0.0.1:8181/restconf/operations/renderer:service-path"
+        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
         data = {"renderer:input": {
             "renderer:service-name": "service_32",
             "renderer:wave-number": "32",
