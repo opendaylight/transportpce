@@ -39,7 +39,7 @@ class TransportPCEtesting(unittest.TestCase):
     def setUpClass(cls):
         cls.__start_testtools()
         cls.__start_odl()
-        time.sleep(30)
+        time.sleep(60)
 
     @classmethod
     def tearDownClass(cls):
@@ -70,7 +70,7 @@ class TransportPCEtesting(unittest.TestCase):
             "PUT", url, data=json.dumps(data), headers=headers,
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.created)
-        time.sleep(10)
+        time.sleep(20)
 
     def test_02_device_connected(self):
         url = ("http://127.0.0.1:8181/restconf/operational/network-topology:"
@@ -83,7 +83,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(
             res['node'][0]['netconf-node-topology:connection-status'],
             'connected')
-        time.sleep(2)
+        time.sleep(10)
 
     def test_03_portmapping_SRG1_PP3_TXRX(self):
         url = ("http://127.0.0.1:8181/restconf/config/portmapping:network/"
