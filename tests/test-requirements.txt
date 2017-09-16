@@ -1,1 +1,1 @@
-nose # LGPL
+nose # LGPL v2 or later
