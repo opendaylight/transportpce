@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>2.0.4</version>
+    <version>2.0.5</version>
     <relativePath/>
   </parent>
 
@@ -22,8 +22,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <packaging>feature</packaging>
 
   <properties>
-    <mdsal.version>1.6.0-SNAPSHOT</mdsal.version>
-    <dlux.version>0.6.0-SNAPSHOT</dlux.version>
+    <mdsal.version>1.7.0-SNAPSHOT</mdsal.version>
+    <dlux.version>0.7.0-SNAPSHOT</dlux.version>
   </properties>
 
   <name>OpenDaylight :: transportpce :: UI</name>
