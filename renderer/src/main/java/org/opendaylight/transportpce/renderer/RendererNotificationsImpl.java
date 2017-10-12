@@ -12,12 +12,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification.ModificationType;
@@ -110,30 +108,25 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
         LOG.info("Registering notification listener on {} for node: {}", AlarmNotification.QNAME, nodeId);
         // Register notification listener
 
-
         final OrgOpenroadmDeOperationsListener deOperationsListener;
         deOperationsListener = new DeOperationsListener();
         LOG.info("Registering notification listener on OrgOpenroadmDeOperationsListener for node: {}", nodeId);
         // Register notification listener
-
 
         final OrgOpenroadmDeviceListener deviceListener;
         deviceListener = new DeviceListener();
         LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
         // Register notification listener
 
-
         final OrgOpenroadmLldpListener lldpListener;
         lldpListener = new LldpListener();
         LOG.info("Registering notification listener on OrgOpenroadmLldpListener for node: {}", nodeId);
         // Register notification listener
 
-
         final OrgOpenroadmTcaListener tcaListener;
         tcaListener = new TcaListener();
         LOG.info("Registering notification listener on OrgOpenroadmTcaListener for node: {}", nodeId);
         // Register notification listener
-
 
         // Listening to NETCONF datastream
         final String streamName = "NETCONF";
@@ -170,6 +163,14 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                     "Node not connected via Netconf protocol");
                 nodeId = rootNode.getDataAfter().getKey().getNodeId().getValue();
             }
+
+            if (rootNode.getModificationType() == ModificationType.DELETE) {
+                String nodeid = rootNode.getDataBefore().getKey().getNodeId().getValue();
+                LOG.info("Node " + nodeid + " removed...");
+                currentMountedDevice.remove(nodeid);
+                new PortMapping(dataBroker, mountService, nodeid).deleteMappingData();
+            }
+
             if (nnode != null) {
                 if (nodeId.equals("controller-config")) {
                     // We shouldn't process controller-config as an OpenROAM device
@@ -191,10 +192,10 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                                 .stream().map(cp -> cp.getCapability()).collect(Collectors.toList());
                             LOG.info("Capabilities: {}", capabilities);
                             /*
-                             * TODO: check for required
-                             * capabilities to listen for notifications
+                             * TODO: check for required capabilities to listen
+                             * for notifications
                              */
-                            registerNotificationListener(rootNode.getDataAfter(). getNodeId());
+                            registerNotificationListener(rootNode.getDataAfter().getNodeId());
                             currentMountedDevice.add(nodeId);
                             new PortMapping(dataBroker, mountService, nodeId).createMappingData();
                             break;
@@ -210,11 +211,9 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                         default:
                             LOG.warn("Unexpected connection status " + csts.getName());
                     }
-                } else if (rootNode.getModificationType() ==  ModificationType.DELETE) {
-                    LOG.info("Node removed " + nodeId);
-                    currentMountedDevice.remove(nodeId);
                 }
             }
         }
+        LOG.info("Netconf devices currently mounted are : " + currentMountedDevice.toString());
     }
 }

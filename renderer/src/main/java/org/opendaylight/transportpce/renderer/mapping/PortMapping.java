@@ -10,11 +10,11 @@ package org.opendaylight.transportpce.renderer.mapping;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
@@ -150,6 +150,24 @@ public class PortMapping {
     }
 
     /**
+     * This method removes mapping data from the datastore after disconnecting
+     * ODL from a Netconf device.
+     */
+    public void deleteMappingData() {
+        LOG.info("Deleting Mapping Data corresponding at node " + nodeId);
+        WriteTransaction rw = db.newWriteOnlyTransaction();
+        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId));
+        rw.delete(LogicalDatastoreType.CONFIGURATION, nodesIID);
+        try {
+            rw.submit().get(1, TimeUnit.SECONDS);
+            LOG.info("Port mapping removal for node " + nodeId);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.error("Error for removing port mapping infos for node " + nodeId);
+        }
+    }
+
+    /**
      * This private method gets the list of external ports on a degree. For each
      * port in the degree, it does a get on port subtree with
      * circuit-pack-name/port-name as key in order to get the logical connection
@@ -196,7 +214,7 @@ public class PortMapping {
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 LOG.warn("Read failed for Logical Connection Point value missing for " + circuitPackName + " "
-                    + portName,ex);
+                    + portName, ex);
                 return false;
             }
         }
@@ -280,7 +298,7 @@ public class PortMapping {
 
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                LOG.warn("Read failed for " + circuitPackName,ex);
+                LOG.warn("Read failed for " + circuitPackName, ex);
                 return false;
             }
         }
@@ -345,7 +363,7 @@ public class PortMapping {
             }
 
         } catch (InterruptedException | ExecutionException ex) {
-            LOG.warn("Read failed for CircuitPacks of " + nodeId,ex);
+            LOG.warn("Read failed for CircuitPacks of " + nodeId, ex);
             return false;
         }
         return true;
@@ -465,7 +483,7 @@ public class PortMapping {
                     break;
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                LOG.error("Failed to read degree " + degreeCounter,ex);
+                LOG.error("Failed to read degree " + degreeCounter, ex);
                 break;
 
             }
@@ -521,7 +539,7 @@ public class PortMapping {
                     break;
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                LOG.warn("Failed to read Srg " + srgCounter,ex);
+                LOG.warn("Failed to read Srg " + srgCounter, ex);
                 break;
             }
             srgCounter++;
@@ -617,7 +635,7 @@ public class PortMapping {
             }
         } catch (InterruptedException | ExecutionException ex) {
             LOG.error("Unable to read mapping for logical connection point : " + logicalConnPoint + " for nodeId "
-                + nodeId,ex);
+                + nodeId, ex);
         }
         return null;
     }
