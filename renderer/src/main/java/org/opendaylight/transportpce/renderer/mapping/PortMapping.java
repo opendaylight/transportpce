@@ -344,26 +344,41 @@ public class PortMapping {
             if (deviceObject.isPresent()) {
                 for (CircuitPacks cp : deviceObject.get().getCircuitPacks()) {
                     String circuitPackName = cp.getCircuitPackName();
-                    for (Ports port : cp.getPorts()) {
-                        if (port.getPortQual().getIntValue() == 3) {
-                            // Port is xpdr-network
-                            portMapList.add(createMappingObject(port, circuitPackName, "LINE" + line, deviceDb));
-                            line++;
-                        }
-                        if (port.getPortQual().getIntValue() == 4) {
-                            // port is xpdr-client
-                            portMapList.add(createMappingObject(port, circuitPackName, "CLNT" + client, deviceDb));
-                            client++;
+                    if (cp.getPorts() == null) {
+                        LOG.warn("No port found for {}, circuit pack {}", deviceInfo.getNodeId(), circuitPackName);
+                    } else {
+                        for (Ports port : cp.getPorts()) {
+                            if (port.getPortQual() != null) {
+                                if (port.getPortQual().getIntValue() == 3) {
+                                    // Port is xpdr-network
+                                    portMapList.add(createMappingObject(port, circuitPackName, "XPDR-LINE"
+                                        + line, deviceDb));
+                                    LOG.info("Logical Connection Point for {} {} is XPDR-LINE{}", circuitPackName, port
+                                        .getPortName(), line);
+                                    line++;
+                                }
+                                if (port.getPortQual().getIntValue() == 4) {
+                                    // port is xpdr-client
+                                    portMapList.add(createMappingObject(port, circuitPackName, "XPDR-CLNT"
+                                        + client, deviceDb));
+                                    LOG.info("Logical Connection Point for {} {} is XPDR-CLNT{}", circuitPackName, port
+                                        .getPortName(), client);
+                                    client++;
+                                }
+                            } else {
+                                LOG.info("no PortQual for port {} of circuit pack {}", port.getPortName(), cp
+                                    .getCircuitPackName());
+                            }
                         }
                     }
                 }
             } else {
-                LOG.info("Circuit Packs are not present for " + nodeId);
+                LOG.info("No deviceObject present for {}", nodeId);
                 return false;
             }
 
         } catch (InterruptedException | ExecutionException ex) {
-            LOG.warn("Read failed for CircuitPacks of " + nodeId, ex);
+            LOG.warn("Read failed for CircuitPacks of {}", nodeId, ex);
             return false;
         }
         return true;
