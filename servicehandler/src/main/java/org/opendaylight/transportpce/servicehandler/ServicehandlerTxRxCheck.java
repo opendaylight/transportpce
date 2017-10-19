@@ -23,13 +23,13 @@ import org.slf4j.LoggerFactory;
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  */
 public class ServicehandlerTxRxCheck {
-    /* Logging. */
+    /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerTxRxCheck.class);
-    /* ServiceEndpoint. */
+    /** ServiceEndpoint. */
     private ServiceEndpoint serviceEnd;
-    /* Response message from procedure. */
+    /** Response message from procedure. */
     private String message;
-    /* type serviceEndpoint : serviceAEnd / serviceZEnd. */
+    /** type serviceEndpoint : serviceAEnd / serviceZEnd. */
     private String service = null;
 
     /**

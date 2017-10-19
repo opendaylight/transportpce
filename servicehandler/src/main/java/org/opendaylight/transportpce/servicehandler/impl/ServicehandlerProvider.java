@@ -13,9 +13,9 @@ import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService
 import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev161014.ServicehandlerService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.StubpceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererListener;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.OrgOpenroadmServiceService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Class to register
  * Servicehandler Service and Notification.
- * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
+ *
+ * @author <a href="mailto:martial.coulibaly@gfi.com">Martial Coulibaly</a> on behalf of Orange
  *
  */
 public class ServicehandlerProvider {
@@ -35,12 +36,10 @@ public class ServicehandlerProvider {
     private final NotificationService notificationService;
     private final NotificationPublishService notificationPublishService;
 
-    //private ListenerRegistration<ServicehandlerListener> ServicehandlerlistenerRegistration;
-    /* Listener register for StubPce Notification. */
-    private ListenerRegistration<StubpceListener> stubPcelistenerRegistration;
-    /* Listener register for StubRender Notification. */
-    private ListenerRegistration<StubrendererListener> stubRendererlistenerRegistration;
-    private RpcRegistration<ServicehandlerService> rpcRegistration;
+    /** Listener register for TransportpceService Notification. */
+    private ListenerRegistration<StubpceListener> stubpcelistenerRegistration;
+    private ListenerRegistration<StubrendererListener> stubrendererlistenerRegistration;
+    private RpcRegistration<OrgOpenroadmServiceService> rpcRegistration;
 
 
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderRegistry rpcProviderRegistry,
@@ -57,9 +56,9 @@ public class ServicehandlerProvider {
     public void init() {
         LOG.info("ServicehandlerProvider Session Initiated");
         final ServicehandlerImpl consumer = new ServicehandlerImpl(dataBroker, rpcRegistry, notificationPublishService);
-        stubPcelistenerRegistration = notificationService.registerNotificationListener(consumer);
-        stubRendererlistenerRegistration = notificationService.registerNotificationListener(consumer);
-        rpcRegistration = rpcRegistry.addRpcImplementation(ServicehandlerService.class, consumer);
+        stubpcelistenerRegistration = notificationService.registerNotificationListener(consumer);
+        stubrendererlistenerRegistration = notificationService.registerNotificationListener(consumer);
+        rpcRegistration = rpcRegistry.addRpcImplementation(OrgOpenroadmServiceService.class, consumer);
     }
 
     /**
@@ -67,8 +66,8 @@ public class ServicehandlerProvider {
      */
     public void close() {
         LOG.info("ServicehandlerProvider Closed");
-        stubPcelistenerRegistration.close();
-        stubRendererlistenerRegistration.close();
+        stubpcelistenerRegistration.close();
+        stubrendererlistenerRegistration.close();
         rpcRegistration.close();
     }
 }

@@ -14,16 +14,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class to check coherency between hard and soft constraints.
- * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
+ * Class to check coherency between hard and  soft constraints.
+ *
+ * @author <a href="mailto:martial.coulibaly@gfi.com">Martial Coulibaly</a> on behalf of Orange
  *
  */
 public class CheckCoherencyHardSoft {
-    /* Logging. */
+    /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(CheckCoherencyHardSoft.class);
-    /* Hard Constraints. */
+    /** Hard Constraints. */
     private HardConstraints hard;
-    /* Soft Constraints. */
+    /** Soft Constraints. */
     private SoftConstraints soft;
 
     public CheckCoherencyHardSoft(HardConstraints hard, SoftConstraints soft) {
@@ -39,7 +40,7 @@ public class CheckCoherencyHardSoft {
     public boolean check() {
         boolean result = false;
         if (hard != null && soft != null) {
-            /*
+            /**
              * Check coherency with hard/soft constraints
              * hard/soft include/exclude coherency
              *

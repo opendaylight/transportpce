@@ -20,6 +20,9 @@ module transportpce-pce {
     prefix transportpce-pathDescription;
     revision-date 2017-10-17;
   }
+  import transportpce-pathDescription {
+    prefix transportpce-pathDescription;
+  }
 
   organization
     "transportPCE";
@@ -116,7 +119,7 @@ notification service-path-rpc-result {
     uses transportpce-common-service-path-types:rpc-response-status-ex;
     uses org-openroadm-common-service-types:service-notification-result;
   }
-  
+
   grouping stubpce-path-description {
       leaf path-name {
           type string;
@@ -136,5 +139,4 @@ notification service-path-rpc-result {
       uses stubpce-path-description;
     }
   }
-
 }

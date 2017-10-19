@@ -21,17 +21,17 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ServicehandlerCompliancyCheck {
-    /* Logging. */
+    /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerCompliancyCheck.class);
-    /* SdncRequestHeader. */
+    /** SdncRequestHeader. */
     private SdncRequestHeader sndcRequestHeader;
-    /* Service Name. */
+    /** Service Name. */
     private String serviceName;
-    /* Type of connection : service / infrastructure / roadm-line. */
+    /** Type of connection : service / infrastructure / roadm-line. */
     private ConnectionType conType;
-    /* type of service : service-create / service-delete ... */
+    /** type of service : service-create / service-delete ... */
     private RpcActions action;
-    /* Response message from procedure. */
+    /** Response message from procedure. */
     private String message;
 
     /**
