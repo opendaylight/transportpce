@@ -11,8 +11,6 @@ package org.opendaylight.transportpce.servicehandler;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -20,40 +18,23 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev161014.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev161014.ServiceReconfigureInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev161014.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.port.Port;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.port.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ZToADirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ztoa.direction.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ztoa.direction.ZToABuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ztoa.direction.ZToAKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.Resource;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.endpoint.sp.RxDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.endpoint.sp.RxDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.endpoint.sp.TxDirection;
@@ -74,15 +55,15 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class MappingAndSendingSIRequest {
-    /* Logging. */
+    /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(MappingAndSendingSIRequest.class);
-    /* Permit to call Renderer RPCs. */
+    /** Permit to call Renderer RPCs. */
     private StubrendererService service;
-    /* define procedure success (or not ). */
+    /** define procedure success (or not ). */
     private Boolean success = false;
-    /* permit to call bundle service (PCE, Renderer, Servicehandler. */
+    /** permit to call bundle service (PCE, Renderer, Servicehandler. */
     private RpcProviderRegistry rpcRegistry;
-    /* store all error messages. */
+    /** store all error messages. */
     private String error;
     ServiceImplementationRequestInput serviceImplementationRequestInput = null;
     ServiceDeleteInput serviceDeleteInput = null;
@@ -100,21 +81,22 @@ public class MappingAndSendingSIRequest {
      */
     public MappingAndSendingSIRequest(RpcProviderRegistry rpcRegistry,
             ServiceCreateInput serviceCreateInput,PathComputationRequestOutput pathComputationOutput) {
-        this.rpcRegistry = rpcRegistry;
+        this.setRpcRegistry(rpcRegistry);
         if (rpcRegistry != null) {
             service = rpcRegistry.getRpcService(StubrendererService.class);
         }
         setSuccess(false);
         setError("");
 
-        /* Building ServiceImplementationRequestInput  / ServiceDeleteInput serviceDeleteInput. */
+        /** Building ServiceImplementationRequestInput  / ServiceDeleteInput serviceDeleteInput. */
         ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder();
         if (serviceCreateInput.getSdncRequestHeader() != null) {
             serviceHandlerHeader.setRequestId(serviceCreateInput.getSdncRequestHeader().getRequestId());
         }
-        //.build();
+        mappingSIRequest(pathComputationOutput, serviceHandlerHeader, serviceCreateInput.getServiceAEnd(),
+                serviceCreateInput.getServiceZEnd(), serviceCreateInput.getServiceName());
+        /*
 
-        /*ServiceAEnd Build */
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev161014
             .service.create.input.ServiceAEnd tempA = serviceCreateInput.getServiceAEnd();
 
@@ -125,34 +107,6 @@ public class MappingAndSendingSIRequest {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common
             .service.types.rev161014.service.port.Port tempAPortTx =
             serviceCreateInput.getServiceAEnd().getTxDirection().getPort();
-
-        /*Port portARx = new PortBuilder()
-        .setPortDeviceName(tempAPortRx.getPortDeviceName())
-        .setPortName(tempAPortRx.getPortName())
-        .setPortRack(tempAPortRx.getPortRack())
-        .setPortShelf(tempAPortRx.getPortShelf())
-        .setPortSlot(tempAPortRx.getPortSlot())
-        .setPortSubSlot(tempAPortRx.getPortSubSlot())
-        .setPortType(tempAPortRx.getPortType())
-        .build();
-
-        Port portATx = new PortBuilder()
-        .setPortDeviceName(tempAPortTx.getPortDeviceName())
-        .setPortName(tempAPortTx.getPortName())
-        .setPortRack(tempAPortTx.getPortRack())
-        .setPortShelf(tempAPortTx.getPortShelf())
-        .setPortSlot(tempAPortTx.getPortSlot())
-        .setPortSubSlot(tempAPortTx.getPortSubSlot())
-        .setPortType(tempAPortTx.getPortType())
-        .build();
-
-        RxDirection rxDirectionAEnd = new RxDirectionBuilder()
-        .setPort(portARx )
-        .build();
-
-        TxDirection txDirectionAEnd = new TxDirectionBuilder()
-        .setPort(portATx )
-        .build();*/
 
         RxDirection rxDirectionAEnd = getRxDirection(tempAPortRx);
 
@@ -167,7 +121,6 @@ public class MappingAndSendingSIRequest {
             .setTxDirection(txDirectionAEnd)
             .build();
 
-        /* ServiceZEnd Build */
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev161014
             .service.create.input.ServiceZEnd tempZ = serviceCreateInput.getServiceZEnd();
 
@@ -178,34 +131,6 @@ public class MappingAndSendingSIRequest {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common
             .service.types.rev161014.service.port.Port tempZPortTx =
             serviceCreateInput.getServiceZEnd().getTxDirection().getPort();
-
-        /*Port portZRx = new PortBuilder()
-        .setPortDeviceName(tempZPortRx.getPortDeviceName())
-        .setPortName(tempZPortRx.getPortName())
-        .setPortRack(tempZPortRx.getPortRack())
-        .setPortShelf(tempZPortRx.getPortShelf())
-        .setPortSlot(tempZPortRx.getPortSlot())
-        .setPortSubSlot(tempZPortRx.getPortSubSlot())
-        .setPortType(tempZPortRx.getPortType())
-        .build();
-
-        Port portZTx = new PortBuilder()
-        .setPortDeviceName(tempZPortTx.getPortDeviceName())
-        .setPortName(tempZPortTx.getPortName())
-        .setPortRack(tempZPortTx.getPortRack())
-        .setPortShelf(tempZPortTx.getPortShelf())
-        .setPortSlot(tempZPortTx.getPortSlot())
-        .setPortSubSlot(tempZPortTx.getPortSubSlot())
-        .setPortType(tempZPortTx.getPortType())
-        .build();
-
-        RxDirection rxDirectionZEnd = new RxDirectionBuilder()
-        .setPort(portZRx )
-        .build();
-
-        TxDirection txDirectionZEnd = new TxDirectionBuilder()
-        .setPort(portZTx )
-        .build();*/
 
         RxDirection rxDirectionZEnd = getRxDirection(tempZPortRx);
 
@@ -220,8 +145,6 @@ public class MappingAndSendingSIRequest {
             .setTxDirection(txDirectionZEnd)
             .build();
 
-
-        /* ServiceImplementationRequestInput  Build*/
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types
             .rev170426.response.parameters.sp.response.parameters.PathDescription tmp = null;
         try {
@@ -239,7 +162,10 @@ public class MappingAndSendingSIRequest {
         .setServiceName(serviceCreateInput.getServiceName())
         .setServiceAEnd(serviceAEnd)
         .setServiceZEnd(serviceZEnd)
-        .build();
+        .build();*/
+
+        mappingSIRequest(pathComputationOutput, serviceHandlerHeader, serviceCreateInput.getServiceAEnd(),
+                serviceCreateInput.getServiceZEnd(), serviceCreateInput.getServiceName());
     }
 
     /**
@@ -253,17 +179,20 @@ public class MappingAndSendingSIRequest {
 
     public MappingAndSendingSIRequest(RpcProviderRegistry rpcRegistry,
             ServiceReconfigureInput serviceReconfigureInput,PathComputationRequestOutput pathComputationOutput) {
-        this.rpcRegistry = rpcRegistry;
+        this.setRpcRegistry(rpcRegistry);
         if (rpcRegistry != null) {
             service = rpcRegistry.getRpcService(StubrendererService.class);
         }
         setSuccess(false);
         setError("");
 
-        /* Building ServiceImplementationRequestInput  / ServiceDeleteInput serviceDeleteInput .*/
-        ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder();
+        /** Building ServiceImplementationRequestInput  / ServiceDeleteInput serviceDeleteInput .*/
+        ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
+                .setRequestId("reconfigure_" + serviceReconfigureInput.getNewServiceName());
+        mappingSIRequest(pathComputationOutput, serviceHandlerHeader, serviceReconfigureInput.getServiceAEnd(),
+                serviceReconfigureInput.getServiceZEnd(), serviceReconfigureInput.getNewServiceName());
 
-        /*ServiceAEnd Build .*/
+        /*
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev161014
             .service.reconfigure.input.ServiceAEnd tempA = serviceReconfigureInput.getServiceAEnd();
 
@@ -274,34 +203,6 @@ public class MappingAndSendingSIRequest {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common
             .service.types.rev161014.service.port.Port tempAPortTx =
             serviceReconfigureInput.getServiceAEnd().getTxDirection().getPort();
-
-        /*Port portARx = new PortBuilder()
-        .setPortDeviceName(tempAPortRx.getPortDeviceName())
-        .setPortName(tempAPortRx.getPortName())
-        .setPortRack(tempAPortRx.getPortRack())
-        .setPortShelf(tempAPortRx.getPortShelf())
-        .setPortSlot(tempAPortRx.getPortSlot())
-        .setPortSubSlot(tempAPortRx.getPortSubSlot())
-        .setPortType(tempAPortRx.getPortType())
-        .build();
-
-        Port portATx = new PortBuilder()
-        .setPortDeviceName(tempAPortTx.getPortDeviceName())
-        .setPortName(tempAPortTx.getPortName())
-        .setPortRack(tempAPortTx.getPortRack())
-        .setPortShelf(tempAPortTx.getPortShelf())
-        .setPortSlot(tempAPortTx.getPortSlot())
-        .setPortSubSlot(tempAPortTx.getPortSubSlot())
-        .setPortType(tempAPortTx.getPortType())
-        .build();
-
-        RxDirection rxDirectionAEnd = new RxDirectionBuilder()
-        .setPort(portARx )
-        .build();
-
-        TxDirection txDirectionAEnd = new TxDirectionBuilder()
-        .setPort(portATx )
-        .build();*/
 
         RxDirection rxDirectionAEnd = getRxDirection(tempAPortRx);
 
@@ -316,7 +217,6 @@ public class MappingAndSendingSIRequest {
             .setTxDirection(txDirectionAEnd)
             .build();
 
-        /* ServiceZEnd Build .*/
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev161014
             .service.reconfigure.input.ServiceZEnd tempZ = serviceReconfigureInput.getServiceZEnd();
 
@@ -328,33 +228,6 @@ public class MappingAndSendingSIRequest {
             .service.types.rev161014.service.port.Port tempZPortTx =
             serviceReconfigureInput.getServiceZEnd().getTxDirection().getPort();
 
-        /*Port portZRx = new PortBuilder()
-        .setPortDeviceName(tempZPortRx.getPortDeviceName())
-        .setPortName(tempZPortRx.getPortName())
-        .setPortRack(tempZPortRx.getPortRack())
-        .setPortShelf(tempZPortRx.getPortShelf())
-        .setPortSlot(tempZPortRx.getPortSlot())
-        .setPortSubSlot(tempZPortRx.getPortSubSlot())
-        .setPortType(tempZPortRx.getPortType())
-        .build();
-
-        Port portZTx = new PortBuilder()
-        .setPortDeviceName(tempZPortTx.getPortDeviceName())
-        .setPortName(tempZPortTx.getPortName())
-        .setPortRack(tempZPortTx.getPortRack())
-        .setPortShelf(tempZPortTx.getPortShelf())
-        .setPortSlot(tempZPortTx.getPortSlot())
-        .setPortSubSlot(tempZPortTx.getPortSubSlot())
-        .setPortType(tempZPortTx.getPortType())
-        .build();
-
-        RxDirection rxDirectionZEnd = new RxDirectionBuilder()
-        .setPort(portZRx )
-        .build();
-
-        TxDirection txDirectionZEnd = new TxDirectionBuilder()
-        .setPort(portZTx )
-        .build();*/
 
         RxDirection rxDirectionZEnd = getRxDirection(tempZPortRx);
         TxDirection txDirectionZEnd = getTxDirection(tempZPortTx);
@@ -367,9 +240,6 @@ public class MappingAndSendingSIRequest {
             .setRxDirection(rxDirectionZEnd)
             .setTxDirection(txDirectionZEnd)
             .build();
-
-
-        /* ServiceImplementationRequestInput  Build.*/
 
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types
             .rev170426.response.parameters.sp.response.parameters.PathDescription tmp = null;
@@ -389,7 +259,7 @@ public class MappingAndSendingSIRequest {
         .setServiceAEnd(serviceAEnd)
         .setServiceZEnd(serviceZEnd)
         .build();
-        LOG.info("ServiceImplementationRequestInput : " + serviceImplementationRequestInput.toString());
+        LOG.info("ServiceImplementationRequestInput : " + serviceImplementationRequestInput.toString());*/
     }
 
 
@@ -402,45 +272,47 @@ public class MappingAndSendingSIRequest {
      * @param serviceName Service name
      */
     public MappingAndSendingSIRequest(RpcProviderRegistry rpcRegistry,String requestId, String serviceName) {
-        this.rpcRegistry = rpcRegistry;
+        this.setRpcRegistry(rpcRegistry);
         if (rpcRegistry != null) {
             service = rpcRegistry.getRpcService(StubrendererService.class);
         }
         setSuccess(false);
         setError("");
 
-        /* ServiceDeleteInput Build .*/
+        /** ServiceDeleteInput Build .*/
         ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder();
         if (requestId != null) {
             serviceHandlerHeader.setRequestId(requestId);
         }
 
         serviceDeleteInput = new ServiceDeleteInputBuilder()
-        .setServiceHandlerHeader(serviceHandlerHeader.build())
-        .setServiceName(serviceName)
-        .build();
+                .setServiceHandlerHeader(serviceHandlerHeader.build())
+                .setServiceName(serviceName)
+                .build();
     }
 
-    /*
+    /**
      * MappingAndSendingSIRequest Class constructor
      * for modify Service in ODL Datastore.
      *
      * @param rpcRegistry RpcProviderRegistry
      * @param services Services
+     * @param pathComputationOutput PathComputationRequestOutput
      */
-    public MappingAndSendingSIRequest(RpcProviderRegistry rpcRegistry,Services services) {
-        this.rpcRegistry = rpcRegistry;
+    public MappingAndSendingSIRequest(RpcProviderRegistry rpcRegistry,Services services,
+            PathComputationRequestOutput pathComputationOutput) {
+        this.setRpcRegistry(rpcRegistry);
         if (rpcRegistry != null) {
             service = rpcRegistry.getRpcService(StubrendererService.class);
         }
         setSuccess(false);
         setError("");
 
-        /* Building ServiceImplementationRequestInput  / ServiceDeleteInput serviceDeleteInput .*/
+        /** Building ServiceImplementationRequestInput  / ServiceDeleteInput serviceDeleteInput .*/
         ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder();
-
-        /*ServiceAEnd Build .*/
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service
+        mappingSIRequest(pathComputationOutput, serviceHandlerHeader, services.getServiceAEnd(),
+                services.getServiceZEnd(), services.getServiceName());
+        /*org.opendaylight.yang.gen.v1.http.org.openroadm.common.service
             .types.rev161014.service.ServiceAEnd tempA = services.getServiceAEnd();
 
         org.opendaylight.yang.gen.v1.http.org.openroadm.common
@@ -462,8 +334,6 @@ public class MappingAndSendingSIRequest {
             .setRxDirection(rxDirectionAEnd)
             .setTxDirection(txDirectionAEnd)
             .build();
-
-        /* ServiceZEnd Build .*/
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service
             .types.rev161014.service.ServiceZEnd tempZ = services.getServiceZEnd();
 
@@ -484,115 +354,100 @@ public class MappingAndSendingSIRequest {
             .setRxDirection(rxDirectionZEnd)
             .setTxDirection(txDirectionZEnd)
             .build();
-
-
-        /* ServiceImplementationRequestInput  Build.*/
-
-
-        List<AToZ> atozList = new ArrayList<AToZ>();
-        List<ZToA> ztoaList = new ArrayList<ZToA>();
-
-        for (org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.AToZ
-                    tmp : services.getTopology().getAToZ()) {
-
-            AToZKey key = new AToZKey(tmp.getKey().getId());
-            Resource atozresource = new ResourceBuilder()
-                    .build();
-            AToZ atoz = new AToZBuilder()
-                .setId(tmp.getId())
-                .setKey(key)
-                .setResource(atozresource)
-                .build();
-            atozList.add(atoz);
+        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types
+        .rev170426.response.parameters.sp.response.parameters.PathDescription tmp = null;
+        try {
+            tmp = pathComputationOutput.getResponseParameters().getPathDescription();
+        } catch (NullPointerException e) {
+            LOG.error("PathDescription is null : " + e.toString());
         }
-
-        for (org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.ZToA
-                    tmp : services.getTopology().getZToA()) {
-            ZToAKey key = new ZToAKey(tmp.getKey().getId());
-            Resource ztoaresource = new ResourceBuilder()
-                    .build();
-            ZToA ztoa = new ZToABuilder()
-                .setId(tmp.getId())
-                .setKey(key)
-                .setResource(ztoaresource)
-                .build();
-            ztoaList.add(ztoa);
+        PathDescriptionBuilder pathDescription = new PathDescriptionBuilder();
+        if (tmp != null) {
+            pathDescription = new PathDescriptionBuilder(tmp);
         }
-
-        AToZDirection atozdirection = new AToZDirectionBuilder()
-            .setAToZ(atozList)
-            .build();
-
-        ZToADirection ztoadirection = new ZToADirectionBuilder()
-            .setZToA(ztoaList)
-            .build();
-
-
-        PathDescription pathDescription = new PathDescriptionBuilder()
-            .setAToZDirection(atozdirection)
-            .setZToADirection(ztoadirection)
-            .build();
 
         serviceImplementationRequestInput  = new ServiceImplementationRequestInputBuilder()
-        .setPathDescription(pathDescription)
+        .setPathDescription(pathDescription.build())
         .setServiceHandlerHeader(serviceHandlerHeader.build())
         .setServiceName(services.getServiceName())
         .setServiceAEnd(serviceAEnd)
         .setServiceZEnd(serviceZEnd)
         .build();
-        LOG.info("ServiceImplementationRequestInput : " + serviceImplementationRequestInput.toString());
+        LOG.info("ServiceImplementationRequestInput : " + serviceImplementationRequestInput.toString());*/
     }
 
     /**
-     * Create RxDirection with Port
-     * information.
+     *Build serviceImplementationRequestInput with
+     *input parameters from ServiceCreateInput or
+     *Services or serviceReconfigureInput.
      *
-     * @param tempPort Port
-     * @return RxDirection
+     * @param pathComputationOutput PathComputationRequestOutput
+     * @param serviceHandlerHeader ServiceHandlerHeaderBuilder
+     * @param aend Beginning ServiceEndpoint
+     * @param zend Ending ServiceEndpoint
+     * @param serviceName Service Name
      */
-    public RxDirection getRxDirection(org.opendaylight.yang.gen.v1.http.org.openroadm.common
-            .service.types.rev161014.service.port.Port tempPort) {
-        Port port = new PortBuilder()
-            .setPortDeviceName(tempPort.getPortDeviceName())
-            .setPortName(tempPort.getPortName())
-            .setPortRack(tempPort.getPortRack())
-            .setPortShelf(tempPort.getPortShelf())
-            .setPortSlot(tempPort.getPortSlot())
-            .setPortSubSlot(tempPort.getPortSubSlot())
-            .setPortType(tempPort.getPortType())
-            .build();
+    private void mappingSIRequest(PathComputationRequestOutput pathComputationOutput,
+            ServiceHandlerHeaderBuilder serviceHandlerHeader, org.opendaylight.yang.gen .v1.http.org.openroadm.common
+            .service.types.rev161014.ServiceEndpoint aend , org.opendaylight.yang.gen.v1.http.org.openroadm.common
+            .service.types.rev161014.ServiceEndpoint zend, String serviceName) {
+        LOG.info("Mapping ServiceCreateInput or Services or serviceReconfigureInput to SIR requests");
+        /** ServiceAEnd Build. */
+        RxDirection rxDirectionAEnd = new RxDirectionBuilder()
+                .setPort(aend.getRxDirection().getPort())
+                .build();
+        TxDirection txDirectionAEnd = new TxDirectionBuilder()
+                .setPort(aend.getTxDirection().getPort())
+                .build();
 
-        RxDirection result = new RxDirectionBuilder()
-            .setPort(port)
-            .build();
+        ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
+                .setClli(aend.getClli())
+                .setNodeId(aend.getNodeId())
+                .setServiceFormat(ServiceFormat.valueOf(aend.getServiceFormat().getName()))
+                .setServiceRate(aend.getServiceRate())
+                .setRxDirection(rxDirectionAEnd)
+                .setTxDirection(txDirectionAEnd)
+                .build();
 
-        return result;
-    }
+        /** ServiceZEnd Build. */
+        RxDirection rxDirectionZEnd = new RxDirectionBuilder()
+                .setPort(zend.getRxDirection().getPort())
+                .build();
 
-    /*
-     * Create TxDirection with Port
-     * information.
-     *
-     * @param tempPort Port
-     * @return TxDirection TxDirection
-     */
-    public TxDirection getTxDirection(org.opendaylight.yang.gen.v1.http.org.openroadm.common
-            .service.types.rev161014.service.port.Port tempPort) {
-        Port port = new PortBuilder()
-            .setPortDeviceName(tempPort.getPortDeviceName())
-            .setPortName(tempPort.getPortName())
-            .setPortRack(tempPort.getPortRack())
-            .setPortShelf(tempPort.getPortShelf())
-            .setPortSlot(tempPort.getPortSlot())
-            .setPortSubSlot(tempPort.getPortSubSlot())
-            .setPortType(tempPort.getPortType())
-            .build();
+        TxDirection txDirectionZEnd = new TxDirectionBuilder()
+                .setPort(zend.getTxDirection().getPort())
+                .build();
 
-        TxDirection result = new TxDirectionBuilder()
-            .setPort(port)
-            .build();
+        ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
+                .setClli(zend.getClli())
+                .setNodeId(zend.getNodeId())
+                .setServiceFormat(ServiceFormat.valueOf(zend.getServiceFormat().getName()))
+                .setServiceRate(zend.getServiceRate())
+                .setRxDirection(rxDirectionZEnd)
+                .setTxDirection(txDirectionZEnd)
+                .build();
 
-        return result;
+
+        /** ServiceImplementationRequestInput  Build. */
+        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types
+            .rev170426.response.parameters.sp.response.parameters.PathDescription tmp = null;
+        try {
+            tmp = pathComputationOutput.getResponseParameters().getPathDescription();
+        } catch (NullPointerException e) {
+            LOG.error("PathDescription is null : " + e.toString());
+        }
+        PathDescriptionBuilder pathDescription = new PathDescriptionBuilder();
+        if (tmp != null) {
+            pathDescription = new PathDescriptionBuilder(tmp);
+        }
+        serviceImplementationRequestInput  = new ServiceImplementationRequestInputBuilder()
+                .setPathDescription(pathDescription.build())
+                .setServiceHandlerHeader(serviceHandlerHeader.build())
+                .setServiceName(serviceName)
+                .setServiceAEnd(serviceAEnd)
+                .setServiceZEnd(serviceZEnd)
+                .build();
+
     }
 
     /**
@@ -600,13 +455,12 @@ public class MappingAndSendingSIRequest {
      *
      * @return ServiceImplementationRequestOutput data response from Renderer
      */
-    public ListenableFuture<ServiceImplementationRequestOutput> serviceImplementation() {
+    public ListenableFuture<Boolean> serviceImplementation() {
         setSuccess(false);
-        return executor.submit(new Callable<ServiceImplementationRequestOutput>() {
-
+        return executor.submit(new Callable<Boolean>() {
             @Override
-            public ServiceImplementationRequestOutput call() throws Exception {
-                ServiceImplementationRequestOutput output = null;
+            public Boolean call() throws Exception {
+                Boolean output = null;
                 if (serviceImplementationRequestInput != null) {
                     RpcResult<ServiceImplementationRequestOutput> rendererOutputResult = null;
                     Future<RpcResult<ServiceImplementationRequestOutput>> rendererOutputFuture =
@@ -623,10 +477,7 @@ public class MappingAndSendingSIRequest {
                     if (rendererOutputResult != null && rendererOutputResult.isSuccessful()) {
                         LOG.info("Renderer replied to serviceImplementation Request !");
                         setSuccess(true);
-                        ServiceImplementationRequestOutput rendererOutput = rendererOutputResult.getResult();
-                        output = new ServiceImplementationRequestOutputBuilder()
-                        .setConfigurationResponseCommon(rendererOutput.getConfigurationResponseCommon())
-                        .build();
+                        output = true;
                         setSuccess(true);
                     }
                 } else {
@@ -644,18 +495,16 @@ public class MappingAndSendingSIRequest {
      *
      * @return ServiceDeleteOutput data response from Renderer
      */
-    public ListenableFuture<ServiceDeleteOutput> serviceDelete() {
+    public ListenableFuture<Boolean> serviceDelete() {
         setSuccess(false);
-        return executor.submit(new Callable<ServiceDeleteOutput>() {
-
+        return executor.submit(new Callable<Boolean>() {
             @Override
-            public ServiceDeleteOutput call() throws Exception {
-                ServiceDeleteOutput output = null;
+            public Boolean call() throws Exception {
+                Boolean output = null;
                 if (serviceDeleteInput != null) {
                     RpcResult<ServiceDeleteOutput> rendererOutputResult = null;
                     Future<RpcResult<ServiceDeleteOutput>> rendererOutputFuture =
                             service.serviceDelete(serviceDeleteInput);
-
                     try {
                         rendererOutputResult = rendererOutputFuture.get();//wait to get  the result
                     } catch (InterruptedException | CancellationException | ExecutionException e) {
@@ -668,11 +517,7 @@ public class MappingAndSendingSIRequest {
                     if (rendererOutputResult != null && rendererOutputResult.isSuccessful()) {
                         LOG.info("Renderer replied to serviceDelete Request!");
                         setSuccess(true);
-                        ServiceDeleteOutput rendererOutput = rendererOutputResult.getResult();
-                        output = new ServiceDeleteOutputBuilder()
-                        .setConfigurationResponseCommon(rendererOutput.getConfigurationResponseCommon())
-                        .build();
-                        setSuccess(true);
+                        output = true;
                     }
                 }
                 return output;
@@ -696,6 +541,14 @@ public class MappingAndSendingSIRequest {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public RpcProviderRegistry getRpcRegistry() {
+        return rpcRegistry;
+    }
+
+    public void setRpcRegistry(RpcProviderRegistry rpcRegistry) {
+        this.rpcRegistry = rpcRegistry;
     }
 
 }

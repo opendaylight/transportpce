@@ -9,6 +9,7 @@
 
 package org.opendaylight.transportpce.servicehandler;
 
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.Constraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.CoRoutingOrGeneral;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.co.routing.or.general.CoRouting;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.co.routing.or.general.General;
@@ -18,6 +19,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.co.routing.or.general.general.Latency;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.ConstraintsSp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.DiversityBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.ExcludeBuilder;
@@ -37,7 +39,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class MappingConstraints {
-    /* Logging. */
+    /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(MappingConstraints.class);
     private HardConstraints serviceHardConstraints;
     private SoftConstraints serviceSoftConstraints;
@@ -74,14 +76,115 @@ public class MappingConstraints {
     }
 
     /**
+     *get all constraints informations
+     *from service constraints to map to
+     *servicePath constraints.
+     *
+     * @param input HardConstraints or SoftConstraints
+     * @return ConstraintsSp HardConstraintsSp or HardConstraintsSp
+     */
+    private <T> ConstraintsSp getConstraints(T input) {
+        CoRoutingOrGeneral coRoutingOrGeneral = null;
+        HardConstraintsBuilder tempHard = new HardConstraintsBuilder();
+        SoftConstraintsBuilder tempSoft = new SoftConstraintsBuilder();
+        if (input  !=  null && input instanceof Constraints) {
+            Constraints constraints = (Constraints)input;
+            coRoutingOrGeneral = constraints.getCoRoutingOrGeneral();
+            General tmpGeneral = null;
+            CoRouting tmpCoRouting = null;
+            if (coRoutingOrGeneral  !=  null) {
+                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+                    .rev170426.constraints.sp.co.routing.or.general.GeneralBuilder finalGeneral =
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+                    .rev170426.constraints.sp.co.routing.or.general.GeneralBuilder();
+                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+                    .rev170426.constraints.sp.co.routing.or.general.CoRoutingBuilder finalCoRouting =
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+                    .rev170426.constraints.sp.co.routing.or.general.CoRoutingBuilder();
+                if (coRoutingOrGeneral instanceof General) {
+                    tmpGeneral = (General) coRoutingOrGeneral;
+                    if (tmpGeneral  !=  null) {
+                        Diversity tmpDiversity =  tmpGeneral.getDiversity();
+                        if (tmpDiversity  !=  null) {
+                            finalGeneral.setDiversity(
+                                    new DiversityBuilder()
+                                    .setExistingService(tmpDiversity.getExistingService())
+                                    .setExistingServiceApplicability(
+                                            new ExistingServiceApplicabilityBuilder()
+                                            .setClli(tmpDiversity.getExistingServiceApplicability().isSite())
+                                            .setNode(tmpDiversity.getExistingServiceApplicability().isNode())
+                                            .setSrlg(tmpDiversity.getExistingServiceApplicability().isSrlg())
+                                            .build())
+                                    .build());
+                        }
+                        Exclude tmpExclude = tmpGeneral.getExclude();
+                        if (tmpExclude  !=  null) {
+                            finalGeneral.setExclude(
+                                    new ExcludeBuilder()
+                                    .setSupportingServiceName(tmpExclude.getSupportingServiceName())
+                                    .setClli(tmpExclude.getSite())
+                                    .setNodeId(tmpExclude.getNodeId())
+                                    //.setAffinity(value)
+                                    //.setSRLG(value)
+                                    .build());
+                        }
+                        Include tmpInclude = tmpGeneral.getInclude();
+                        if (tmpInclude  !=  null) {
+                            finalGeneral.setInclude(
+                                    new IncludeBuilder()
+                                    //.setOrderedHops()
+                                    .build());
+                        }
+                        Latency tmpLatency = tmpGeneral.getLatency();
+                        if (tmpLatency != null) {
+                            finalGeneral.setLatency(
+                                    new LatencyBuilder()
+                                    .setMaxLatency(tmpLatency.getMaxLatency())
+                                    .build());
+                        }
+                    }
+                    tempHard.setCoRoutingOrGeneral(finalGeneral.build())
+                        .setCustomerCode(constraints.getCustomerCode());
+                    tempSoft.setCoRoutingOrGeneral(finalGeneral.build())
+                        .setCustomerCode(constraints.getCustomerCode());
+                } else if (coRoutingOrGeneral instanceof CoRouting) {
+                    tmpCoRouting = (CoRouting)coRoutingOrGeneral;
+                    if (tmpCoRouting  !=  null) {
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014
+                            .constraints.co.routing.or.general.co.routing.CoRouting tmpCoRoutingCoRouting =
+                            tmpCoRouting.getCoRouting();
+                        if (tmpCoRoutingCoRouting  !=  null) {
+                            finalCoRouting.setCoRouting(
+                                    new CoRoutingBuilder()
+                                    .setExistingService(tmpCoRoutingCoRouting.getExistingService())
+                                    .build());
+                        }
+                    }
+                    tempHard.setCoRoutingOrGeneral(finalCoRouting.build())
+                        .setCustomerCode(constraints.getCustomerCode());
+                    tempSoft.setCoRoutingOrGeneral(finalCoRouting.build())
+                        .setCustomerCode(constraints.getCustomerCode());
+                }
+            }
+        }
+        if (input instanceof HardConstraints) {
+            return tempHard.build();
+        } else if (input instanceof SoftConstraints) {
+            return tempSoft.build();
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * map hard/soft constraints from Service 1.2
      * to ServicePath 1.4.
      */
     public void serviceToServicePathConstarints() {
         LOG.info("Mapping Service Constraints to ServicePath Constraints");
-        CoRoutingOrGeneral coRoutingOrGeneral = null;
+        //CoRoutingOrGeneral coRoutingOrGeneral = null;
         if (serviceHardConstraints  !=  null) {
-            HardConstraintsBuilder tempHard = new HardConstraintsBuilder();
+            /*HardConstraintsBuilder tempHard = new HardConstraintsBuilder();
             coRoutingOrGeneral = serviceHardConstraints.getCoRoutingOrGeneral();
             General tmpGeneral = null;
             CoRouting tmpCoRouting = null;
@@ -158,9 +261,17 @@ public class MappingConstraints {
 
                 }
             }
-            servicePathHardConstraints = tempHard.build();
+            servicePathHardConstraints = tempHard.build();*/
+
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+                .rev170426.routing.constraints.sp.HardConstraints tempHard = (org.opendaylight.yang.gen
+                    .v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing
+                    .constraints.sp.HardConstraints) getConstraints(serviceHardConstraints);
+            if (tempHard != null) {
+                servicePathHardConstraints = tempHard;
+            }
         } else if (serviceSoftConstraints  !=  null) {
-            SoftConstraintsBuilder tempSoft = new SoftConstraintsBuilder();
+            /*oftConstraintsBuilder tempSoft = new SoftConstraintsBuilder();
             coRoutingOrGeneral = serviceSoftConstraints.getCoRoutingOrGeneral();
             General tmpGeneral = null;
             CoRouting tmpCoRouting = null;
@@ -237,7 +348,14 @@ public class MappingConstraints {
 
                 }
             }
-            servicePathSoftConstraints = tempSoft.build();
+            servicePathSoftConstraints = tempSoft.build();*/
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+                .rev170426.routing.constraints.sp.SoftConstraints tempSoft = (org.opendaylight.yang.gen
+                    .v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing
+                    .constraints.sp.SoftConstraints) getConstraints(serviceSoftConstraints);
+            if (tempSoft != null) {
+                servicePathSoftConstraints = tempSoft;
+            }
         }
     }
 

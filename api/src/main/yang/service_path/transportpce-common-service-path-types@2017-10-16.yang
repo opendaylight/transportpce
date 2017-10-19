@@ -10,11 +10,11 @@ module transportpce-common-service-path-types {
   }
   import transportpce-routing-constraints {
     prefix transportpce-routing-constraints;
-    revision-date 2017-10-17; 
+    revision-date 2017-10-17;
   }
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
-    revision-date 2017-10-17; 
+    revision-date 2017-10-17;
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
@@ -61,16 +61,17 @@ module transportpce-common-service-path-types {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-  
+
   revision 2017-04-26 {
       description
         "Version 1.5";
   }
+
   revision 2017-10-16 {
     description
       "Version 1.6";
   }
-  
+
   typedef service-path-notification-types {
     type enumeration {
       enum "path-computation-request" {
@@ -112,11 +113,13 @@ module transportpce-common-service-path-types {
         "Successful, Failed or Pending";
 
         }
+
     leaf status-message {
         type string;
         description
           "Gives a more detailed reason for failure";
         }
+
    }
 
   grouping response-parameters-sp {

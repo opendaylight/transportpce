@@ -1,23 +1,30 @@
-module transportpce-servicepath {
-  namespace "http://org/transportpce/B-C-interface/servicepath";
-  prefix transportpce-servicepath;
+module servicehandler {
+  namespace "http://org/opendaylight/transportpce/servicehandler";
+  prefix "org-opendaylight-transportpce-servicehandler";
 
-  import ietf-yang-types {
-    prefix yang;
+  import org-openroadm-common-types {
+      prefix org-openroadm-common-types;
+      revision-date 2016-10-14;
+  }
+  import org-openroadm-common-service-types {
+    prefix org-openroadm-common-service-types;
   }
   import transportpce-common-service-path-types {
-    prefix transportpce-common-service-path-types;
-  }
+    prefix org-openroadm-common-service-path-types;
+    revision-date 2017-04-26;
+ }
 
   organization
-    "transportPCE";
+    "Open ROADM MSA";
   contact
-    "transportPCE committers - ODL";
+    "OpenROADM.org";
   description
-    "YANG definitions for service-path (transportPCE). Adapted from service definition (openroadm)
+    "YANG definitions of services.
      Copyright © 2017 Orange, Inc. and others.  All rights reserved.
 
-     openroadm copyright:
+     This model is derived from the OpenROADM service definition that includes the following notice:
+
+
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
       AT&T Intellectual Property.  All other rights reserved.
 
@@ -44,23 +51,18 @@ module transportpce-servicepath {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-  revision 2017-04-26 {
-      description
-        "Version 1.5";
+  revision 2017-09-30 {
+    description
+      "Version 1.2";
   }
 
-  revision 2017-10-17 {
+  notification service-rpc-result-sh{
     description
-      "Version 1.6";
-  }
-
-  container service-path-list {
-    description
-      "List of service paths. Can only be created, deleted, modified, etc. using special RPCs.";
-    list service-paths {
-      key "service-path-name";
-      uses transportpce-common-service-path-types:service-path;
+      "This Notification indicates result of service RPC";
+    leaf notification-type {
+      type org-openroadm-common-service-types:service-notification-types;
     }
+    uses org-openroadm-common-service-path-types:rpc-response-status-ex;
+    uses org-openroadm-common-service-types:service-notification-result;
   }
-
 }

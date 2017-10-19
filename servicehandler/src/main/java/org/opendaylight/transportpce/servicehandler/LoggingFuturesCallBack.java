@@ -12,8 +12,9 @@ import com.google.common.util.concurrent.FutureCallback;
 import org.slf4j.Logger;
 
 /**
- * Class to log future logging from datastore actions (write, modify and delete..).
- * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
+ * Class to log future logging from datastore actions (write,modify and  delete..).
+ *
+ * @author <a href="mailto:martial.coulibaly@gfi.com">Martial Coulibaly</a> on behalf of Orange
  */
 
 public class LoggingFuturesCallBack<V> implements FutureCallback<V> {
