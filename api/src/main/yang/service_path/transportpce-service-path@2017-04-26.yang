@@ -140,6 +140,27 @@ module transportpce-servicepath {
       uses transportpce-common-service-path-types:service-path;
     }
   }
+
+  grouping stubpce-path-description {
+      leaf path-name {
+          type string;
+          description
+            "Identifier for the pathDescription to be created in
+             the ROADM network, e.g., CLFI, CLCI, etc.";
+          mandatory true;
+        }
+      uses transportpce-pathDescription:path-description;
+  }
+
+  container path-description-list {
+    description
+      "List of pathDescription. Can only be created, deleted, modified, etc. using special RPCs.";
+    list pathDescriptions {
+      key "path-name";
+      uses stubpce-path-description;
+    }
+  }
+
 notification service-path-rpc-result {
     description
       "This Notification indicates result of  service RPC";

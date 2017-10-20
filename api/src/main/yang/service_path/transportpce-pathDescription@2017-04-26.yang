@@ -60,7 +60,7 @@ module transportpce-pathDescription {
           leaf tp-id {
               type string; //to be clarified with topology model
           }
-          leaf node-id {
+          leaf tp-node-id {
               type string; //to be clarified with topology model
           }
         }
