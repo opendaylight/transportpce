@@ -9,20 +9,21 @@
 
 package org.opendaylight.transportpce.stubpce;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 /**
  * Class to check RPCs Compliancy.
+ *
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
 public class CompliancyCheck {
-    /* Logging. */
+    /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(CompliancyCheck.class);
-    /* Response message from procedure. */
+    /** Response message from procedure. */
     private String message;
 
     private PathComputationRequestInput input;
@@ -31,7 +32,7 @@ public class CompliancyCheck {
         input = prcInput;
     }
 
-    /*
+    /**
      * Check if a String is not
      * null and not equal to ''.
      *
@@ -48,6 +49,14 @@ public class CompliancyCheck {
 
     }
 
+    /**
+     * check if service name
+     * or ServiceHandlerHeader
+     * is set in RPC request.
+     *
+     * @return true  if  settings is ok,
+     *          false if not
+     */
     public Boolean check() {
         Boolean result = true;
         if (input != null) {
