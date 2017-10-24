@@ -10,11 +10,13 @@ package org.opendaylight.transportpce.renderer.mapping;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
@@ -56,6 +58,7 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -194,21 +197,20 @@ public class PortMapping {
             InstanceIdentifier<Ports> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
                 CircuitPacks.class, new CircuitPacksKey(circuitPackName)).child(Ports.class, new PortsKey(portName));
             try {
-                LOG.info("Fetching logical Connection Point value for port " + portName + " at circuit pack "
-                    + circuitPackName);
+                LOG.info("Fetching logical Connection Point value for port {} at circuit pack {}", portName,
+                    circuitPackName);
                 ReadOnlyTransaction rtx = deviceDb.newReadOnlyTransaction();
                 Optional<Ports> portObject = rtx.read(LogicalDatastoreType.OPERATIONAL, portIID).get();
                 if (portObject.isPresent()) {
                     Ports port = portObject.get();
                     if (port.getLogicalConnectionPoint() != null) {
-
-                        LOG.info("Logical Connection Point for " + circuitPackName + " " + portName + " is " + port
+                        LOG.info("Logical Connection Point for {} {} is {}", circuitPackName, portName, port
                             .getLogicalConnectionPoint());
                         portMapList.add(createMappingObject(port, circuitPackName, port.getLogicalConnectionPoint(),
                             deviceDb));
                     } else {
 
-                        LOG.warn("Logical Connection Point value missing for " + circuitPackName + " " + port
+                        LOG.warn("Logical Connection Point value missing for {} {}", circuitPackName, port
                             .getPortName());
                     }
                 }
@@ -242,67 +244,99 @@ public class PortMapping {
 
     private boolean createPpPortMapping(DataBroker deviceDb, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for degree PP's
-        List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks> srgCps = getSrgCps(
-            deviceDb, deviceInfo);
 
-        for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks cps : srgCps) {
-            String circuitPackName = cps.getCircuitPackName();
+        ReadOnlyTransaction rtx = deviceDb.newReadOnlyTransaction();
+        Integer maxSrg;
+        // Get value for max Srg from subtree, required for iteration
+        // if it is not defined in the netconf node then set maxSrg to 20
+        if (deviceInfo.getMaxSrgs() != null) {
+            maxSrg = deviceInfo.getMaxSrgs();
+        } else {
+            maxSrg = 20;
+        }
+
+        Integer srgCounter = 1;
+        Integer nbSrg = 0;
+        while (srgCounter <= maxSrg) {
+            List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks> srgCps =
+                new ArrayList<>();
+            LOG.info("Getting CircuitPacks for Srg Number {}", srgCounter);
+            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
+                SharedRiskGroup.class, new SharedRiskGroupKey(srgCounter));
             try {
-                InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-                    CircuitPacks.class, new CircuitPacksKey(circuitPackName));
-                ReadOnlyTransaction rtx = deviceDb.newReadOnlyTransaction();
-                Optional<CircuitPacks> circuitPackObject = rtx.read(LogicalDatastoreType.OPERATIONAL, cpIID).get();
+                Optional<SharedRiskGroup> ordmSrgObject = rtx.read(LogicalDatastoreType.CONFIGURATION, srgIID).get();
 
-                if (circuitPackObject.isPresent()) {
-                    CircuitPacks cp = circuitPackObject.get();
-                    if (cp.getPorts() == null) {
-                        LOG.warn("No port found for {} {}: {}", deviceInfo.getNodeId(), circuitPackName, cp);
-                    } else if (!cp.getPorts().isEmpty()) {
-                        for (Ports port : cp.getPorts()) {
+                if (ordmSrgObject.isPresent()) {
+                    srgCps.addAll(new ArrayList<>(ordmSrgObject.get().getCircuitPacks()));
+                    nbSrg++;
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                LOG.warn("Failed to read Srg {}", srgCounter, ex);
+                break;
+            }
 
-                            if (port.getLogicalConnectionPoint() != null && port.getPortQual().getIntValue() == 2) {
-                                String logicalConnectionPoint = null;
-                                if (port.getPortDirection().getIntValue() == 1) {
-                                    // Port direction is transmit
-                                    logicalConnectionPoint = port.getLogicalConnectionPoint() + "-TX";
+            for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks cps : srgCps) {
+                String circuitPackName = cps.getCircuitPackName();
+                try {
+                    InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
+                        CircuitPacks.class, new CircuitPacksKey(circuitPackName));
+                    Optional<CircuitPacks> circuitPackObject = rtx.read(LogicalDatastoreType.OPERATIONAL, cpIID).get();
+
+                    if (circuitPackObject.isPresent()) {
+                        CircuitPacks cp = circuitPackObject.get();
+                        if (cp.getPorts() == null) {
+                            LOG.warn("No port found for {} {}", deviceInfo.getNodeId(), circuitPackName);
+                        } else if (!cp.getPorts().isEmpty()) {
+                            for (Ports port : cp.getPorts()) {
+
+                                if (port.getLogicalConnectionPoint() != null && port.getPortQual().getIntValue() == 2) {
+                                    String logicalConnectionPoint = null;
+                                    if (port.getPortDirection().getIntValue() == 1) {
+                                        // Port direction is transmit
+                                        logicalConnectionPoint = "SRG" + srgCounter + "-" + port
+                                            .getLogicalConnectionPoint() + "-TX";
+                                    }
+                                    if (port.getPortDirection().getIntValue() == 2) {
+                                        // Port direction is receive
+                                        logicalConnectionPoint = "SRG" + srgCounter + "-" + port
+                                            .getLogicalConnectionPoint() + "-RX";
+                                    }
+                                    if (port.getPortDirection().getIntValue() == 3) {
+                                        // port is bi-directional
+                                        logicalConnectionPoint = "SRG" + srgCounter + "-" + port
+                                            .getLogicalConnectionPoint() + "-TXRX";
+                                    }
+
+                                    LOG.info("Logical Connection Point for {} {} is {}", circuitPackName, port
+                                        .getPortName(), logicalConnectionPoint);
+
+                                    portMapList.add(createMappingObject(port, circuitPackName, logicalConnectionPoint,
+                                        deviceDb));
+
+                                } else if (port.getPortQual().getIntValue() == 1) {
+
+                                    LOG.info("Port is internal, skipping Logical Connection Point missing for "
+                                        + circuitPackName + " " + port.getPortName());
+
+                                } else if (port.getLogicalConnectionPoint() == null) {
+
+                                    LOG.info("Value missing, Skipping Logical Connection Point missing for {} {}",
+                                        circuitPackName, port.getPortName());
                                 }
-                                if (port.getPortDirection().getIntValue() == 2) {
-                                    // Port direction is receive
-                                    logicalConnectionPoint = port.getLogicalConnectionPoint() + "-RX";
-                                }
-                                if (port.getPortDirection().getIntValue() == 3) {
-                                    // port is bi-directional
-                                    logicalConnectionPoint = port.getLogicalConnectionPoint() + "-TXRX";
-                                }
 
-                                LOG.info("Logical Connection Point for " + circuitPackName + " " + port.getPortName()
-                                    + " is " + logicalConnectionPoint);
-
-                                portMapList.add(createMappingObject(port, circuitPackName, logicalConnectionPoint,
-                                    deviceDb));
-
-                            } else if (port.getPortQual().getIntValue() == 1) {
-
-                                LOG.info("Port is internal, skipping Logical Connection Point missing for "
-                                    + circuitPackName + " " + port.getPortName());
-
-                            } else if (port.getLogicalConnectionPoint() == null) {
-
-                                LOG.info("Value missing, Skipping Logical Connection Point missing for "
-                                    + circuitPackName + " " + port.getPortName());
                             }
 
                         }
 
                     }
-
+                } catch (InterruptedException | ExecutionException ex) {
+                    LOG.warn("Read failed for {}", circuitPackName, ex);
+                    return false;
                 }
-            } catch (InterruptedException | ExecutionException ex) {
-                LOG.warn("Read failed for " + circuitPackName, ex);
-                return false;
             }
+            srgCounter++;
         }
-
+        LOG.info("Device has {} Srg", nbSrg);
         return true;
     }
 
@@ -490,62 +524,6 @@ public class PortMapping {
             degreeCounter++;
         }
         return degreeConPorts;
-    }
-
-    /**
-     * This method does a get operation on shared risk group subtree of the
-     * netconf device's config datastore and returns a list of all circuit packs
-     * objects that are part of srgs. It is required to do a selective get on
-     * all the circuit packs that contain add/drop ports of interest.
-     *
-     * @param deviceDb
-     *            Reference to device's databroker
-     * @param ordmInfo
-     *            Info subtree from the device
-     * @return List of circuit packs object belonging to- shared risk group
-     *         subtree
-     */
-
-    private List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks> getSrgCps(
-        DataBroker deviceDb, Info ordmInfo) {
-
-        List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks> srgCps =
-            new ArrayList<>();
-        ReadOnlyTransaction rtx = deviceDb.newReadOnlyTransaction();
-        Integer maxSrg;
-        // Get value for max Srg from info subtree, required for iteration
-        // if not present assume to be 20 (temporary)
-        if (ordmInfo.getMaxSrgs() != null) {
-            maxSrg = ordmInfo.getMaxSrgs();
-        } else {
-            maxSrg = 20;
-        }
-
-        Integer srgCounter = 1;
-        while (srgCounter <= maxSrg) {
-            LOG.info("Getting Circuitpacks for Srg Number " + srgCounter);
-            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-                SharedRiskGroup.class, new SharedRiskGroupKey(srgCounter));
-            try {
-                Optional<SharedRiskGroup> ordmSrgObject = rtx.read(LogicalDatastoreType.CONFIGURATION, srgIID).get();
-
-                if (ordmSrgObject.isPresent()) {
-
-                    srgCps.addAll(
-                        new ArrayList<>(ordmSrgObject.get().getCircuitPacks()));
-
-                } else {
-                    LOG.info("Device has " + (srgCounter - 1) + " Srg");
-                    break;
-                }
-            } catch (InterruptedException | ExecutionException ex) {
-                LOG.warn("Failed to read Srg " + srgCounter, ex);
-                break;
-            }
-            srgCounter++;
-        }
-
-        return srgCps;
     }
 
     /**
