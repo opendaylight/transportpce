@@ -1,5 +1,5 @@
 module transportpce-servicepath {
-  namespace "http://org/transportpce/B-C-interface";
+  namespace "http://org/transportpce/B-C-interface/servicepath";
   prefix transportpce-servicepath;
 
   import ietf-yang-types {
@@ -7,6 +7,7 @@ module transportpce-servicepath {
   }
   import transportpce-routing-constraints {
     prefix transportpce-routing-constraints;
+    revision-date 2017-04-26; 
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
@@ -19,9 +20,11 @@ module transportpce-servicepath {
   }
   import transportpce-common-service-path-types {
     prefix transportpce-common-service-path-types;
+    revision-date 2017-04-26; 
   }
   import transportpce-pathDescription {
       prefix transportpce-pathDescription;
+      revision-date 2017-04-26; 
   }
   import org-openroadm-topology {
     prefix org-openroadm-topology;
