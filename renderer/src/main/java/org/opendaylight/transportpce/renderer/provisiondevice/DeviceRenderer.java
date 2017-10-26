@@ -117,7 +117,7 @@ public class DeviceRenderer implements RendererService {
 
                 Long waveNumber = input.getWaveNumber();
                 String mf = input.getModulationFormat();
-                if (destTp.contains("NETWORK")) {
+                if (destTp.contains("LINE")) {
                     crossConnectFlag++;
 
                     ModulationFormat modulationFormat = null;
@@ -134,13 +134,13 @@ public class DeviceRenderer implements RendererService {
                     }
 
                     if (!new OpenRoadmXponderInterface(db, mps, nodeId, destTp, serviceName)
-                            .createLineInterfaces(waveNumber, R100G.class, ModulationFormat.Qpsk)) {
+                            .createLineInterfaces(waveNumber, R100G.class, modulationFormat)) {
 
                         return setServBldr.setResult("Unable to LINE interface on " + nodeId + " at " + destTp);
                     }
                     LOG.info("LINE interface created for node " + nodeId);
                 }
-                if (srcTp.contains("CLIENT")) {
+                if (srcTp.contains("CLNT")) {
                     crossConnectFlag++;
                     if (!new OpenRoadmXponderInterface(db, mps, nodeId, srcTp, serviceName).createClientInterfaces()) {
                         return setServBldr.setResult("Unable to Client interface on " + nodeId + " at " + srcTp);
@@ -219,7 +219,7 @@ public class DeviceRenderer implements RendererService {
             // if the node is currently mounted then proceed.
             if (currentMountedDevice.contains(nodeId)) {
 
-                if (destTp.contains("NETWORK")) {
+                if (destTp.contains("LINE")) {
                     if (new OpenRoadmInterfaces(db, mps, nodeId, destTp)
                             .deleteInterface(destTp + "-ODU") == false) {
                         LOG.error("Failed to delete interface " + destTp + "-ODU");
@@ -233,7 +233,7 @@ public class DeviceRenderer implements RendererService {
                         LOG.error("Failed to delete interface " + destTp + "-" + waveNumber);
                     }
                 }
-                if (srcTp.contains("CLIENT")) {
+                if (srcTp.contains("CLNT")) {
                     // Deleting interface on source termination point
                     if (new OpenRoadmInterfaces(db, mps, nodeId, srcTp)
                             .deleteInterface(srcTp + "-ETHERNET") == false) {
