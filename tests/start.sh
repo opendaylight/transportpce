@@ -9,7 +9,7 @@
 # opts="${opts} --ssh tcp"
 # opts="${opts} --notification-file notif.xml"
 
-java -jar ./netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.3.0-SNAPSHOT-executable.jar \
+java -jar ./netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.3.1-SNAPSHOT-executable.jar \
      --schemas-dir schemas \
      --initial-config-xml-file sample-config-ROADM.xml \
      ${opts}
