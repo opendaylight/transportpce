@@ -29,7 +29,7 @@ class TransportPCEtesting(unittest.TestCase):
     @classmethod
     def __start_testtools(cls):
         executable = ("./netconf/netconf/tools/netconf-testtool/target/"
-                      "netconf-testtool-1.3.1-SNAPSHOT-executable.jar")
+                      "netconf-testtool-1.3.1-executable.jar")
         if os.path.isfile(executable):
             with open('testtools.log', 'w') as outfile:
                 cls.testtools_process = subprocess.Popen(
