@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a1969be_4409a630",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/mapping/PortMapping.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-07T17:41:31Z",
+      "side": 1,
+      "message": "if no default, what to do if nodetype is not recognized ?",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 22
+      },
+      "revId": "becd5ad8a30f7bee36ef55f6d9cd0d48c26e3bca",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
