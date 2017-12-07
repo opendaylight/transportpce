@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a1969be_19427b10",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-07T11:01:43Z",
+      "side": 1,
+      "message": "maybe this submission can be split into 4 different changes according to the description given here.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "177fe7399731b3ac7ed7912c774c584eb0a13926",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a1969be_d93743af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-07T11:01:43Z",
+      "side": 1,
+      "message": "http://docs.opendaylight.org/en/stable-nitrogen/gerrit.html#updating-an-existing-patch\n\nhttps://wiki.openstack.org/wiki/GitCommitMessages#Including_external_references",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 32
+      },
+      "revId": "177fe7399731b3ac7ed7912c774c584eb0a13926",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
