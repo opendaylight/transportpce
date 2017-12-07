@@ -45,6 +45,52 @@
       "revId": "177fe7399731b3ac7ed7912c774c584eb0a13926",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a1969be_a4069a1e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/DeviceDataUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-07T17:41:31Z",
+      "side": 1,
+      "message": "should be before odl imports",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 47
+      },
+      "revId": "177fe7399731b3ac7ed7912c774c584eb0a13926",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a1969be_84039e0e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/CrossConnect.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-07T17:41:31Z",
+      "side": 1,
+      "message": "should be before ODL imports but after google imports",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 35
+      },
+      "revId": "177fe7399731b3ac7ed7912c774c584eb0a13926",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
