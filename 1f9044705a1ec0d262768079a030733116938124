@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7150c22_8395026b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-11T17:13:05Z",
+      "side": 1,
+      "message": "this is more an error than a warning",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 22
+      },
+      "revId": "1f9044705a1ec0d262768079a030733116938124",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "89f2d77b_146b0099",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-11T17:13:05Z",
+      "side": 1,
+      "message": "It lacked some protection here.",
+      "range": {
+        "startLine": 514,
+        "startChar": 0,
+        "endLine": 517,
+        "endChar": 64
+      },
+      "revId": "1f9044705a1ec0d262768079a030733116938124",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4b5e3d80_0919ac61",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-11T17:13:05Z",
+      "side": 1,
+      "message": "function declaration seems to expect that a string is returned.",
+      "range": {
+        "startLine": 522,
+        "startChar": 19,
+        "endLine": 522,
+        "endChar": 52
+      },
+      "revId": "1f9044705a1ec0d262768079a030733116938124",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
