@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85ded465_47c6b870",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceGraph.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-12T00:31:59Z",
+      "side": 1,
+      "message": "lacked some protection here.",
+      "range": {
+        "startLine": 429,
+        "startChar": 0,
+        "endLine": 431,
+        "endChar": 22
+      },
+      "revId": "e6d8100cad510ada726010705bc4dbbc838ad8bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0629b50a_4b04f85a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceResult.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2017-12-12T00:31:59Z",
+      "side": 1,
+      "message": "missing protection: not clear if we should raise an error or consider a RESPONSE_FAILED.\nthis probably never occurs.",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 92
+      },
+      "revId": "e6d8100cad510ada726010705bc4dbbc838ad8bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
