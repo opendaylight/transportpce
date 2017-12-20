@@ -69,7 +69,7 @@ public class RollbackProcessor {
             try {
                 LOG.info("rolling back: {}", task.getId());
                 task.call();
-            //this methode prototype only use the generic Exception and no specific and useable subclasse
+            //this method prototype only uses the generic Exception but no specific and useable subclass
             } catch (Exception e) {
                 LOG.error("ERROR: Rollback task {} has failed", task.getId(), e);
             }

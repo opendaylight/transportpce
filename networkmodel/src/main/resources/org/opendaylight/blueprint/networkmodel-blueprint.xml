@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vi: set et smarttab sw=4 tabstop=4: -->
+<!-- Copyright © 2016 Orange and others. All rights reserved. This program and the accompanying materials 
+    are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, 
+    and is available at http://www.eclipse.org/legal/epl-v10.html -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+    odl:use-default-for-reference-types="true">
+
+    <reference id="dataBroker" interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"
+        odl:type="default" />
+    <reference id="rpcProviderRegistry" interface="org.opendaylight.controller.sal.binding.api.RpcProviderRegistry" />
+    <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
+    <reference id="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
+    <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
+
+    <bean id="openRoadmTopology" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology">
+        <argument ref="dataBroker" />
+        <argument ref="deviceTransactionManager" />
+    </bean>
+
+    <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
+        <argument ref="dataBroker" />
+        <argument ref="linkDiscoveryImpl" />
+        <argument ref="deviceTransactionManager" />
+        <argument ref="openRoadmTopology" />
+        <argument ref="portMapping" />
+    </bean>
+
+    <bean id="provider" class="org.opendaylight.transportpce.networkmodel.NetworkModelProvider"
+        init-method="init" destroy-method="close">
+        <argument ref="dataBroker" />
+        <argument ref="rpcProviderRegistry" />
+        <argument ref="networkutilsServiceImpl" />
+        <argument ref="netconfTopologyListener" />
+        <argument ref="openRoadmTopology" />
+    </bean>
+
+    <bean id="netconfTopologyListener" class="org.opendaylight.transportpce.networkmodel.NetConfTopologyListener">
+        <argument ref="networkModelService" />
+        <argument ref="dataBroker" />
+        <argument ref="linkDiscoveryImpl" />
+        <argument ref="deviceTransactionManager" />
+    </bean>
+
+    <bean id="networkutilsServiceImpl" class="org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl">
+        <argument ref="dataBroker" />
+        <argument ref="openRoadmTopology" />
+    </bean>
+
+    <bean id="linkDiscoveryImpl" class="org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery">
+        <argument ref="dataBroker" />
+        <argument ref="deviceTransactionManager" />
+        <argument ref="openRoadmTopology" />
+        <argument ref="openRoadmInterfaces" />
+   </bean>
+
+    <service ref="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService" />
+
+</blueprint>
