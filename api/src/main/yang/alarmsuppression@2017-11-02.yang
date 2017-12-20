@@ -1,0 +1,56 @@
+module alarmsuppression {
+  yang-version 1;
+  namespace "urn:opendaylight:params:xml:ns:yang:alarmsuppression";
+  prefix "alarmsuppression";
+
+ organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions of RPCs supported by OLM.
+     Copyright (c) 2017 AT&T and others.  All rights reserved.
+     authors: Dhruv Bhardwaj ( db929a@att.com )
+              Shweta Vachhani ( sv111y@att.com )";
+
+  revision "2017-11-02" {
+    description "Initial revision of alarm suppression model";
+  }
+  container service-nodelist{
+    list nodelist {
+      key service-name;
+      leaf service-name{
+        type string;
+        description
+          "Unique identifier for service";
+      }
+      list nodes{
+        key node-id;
+        leaf node-id{
+          type string;
+          description
+          "Unique identifier for node in the network";
+        }
+      /*leaf-list interface-list {
+          type string;
+      }
+      leaf-list connection-list {
+          type string;
+      }
+      leaf-list degree-number-list {
+          type uint16;
+      }
+      leaf-list srg-number-list {
+          type uint16;
+      }
+      leaf-list circuit-pack-list {
+          type string;
+      }
+      leaf-list port-list {
+          type string;
+      }
+      */
+      }
+    }
+  }
+}

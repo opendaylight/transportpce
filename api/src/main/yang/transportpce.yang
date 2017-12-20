@@ -1,9 +1,0 @@
-module transportpce {
-    yang-version 1;
-    namespace "urn:opendaylight:params:xml:ns:yang:transportpce";
-    prefix "transportpce";
-
-    revision "2016-12-13" {
-        description "Initial revision of transportpce model";
-    }
-}
