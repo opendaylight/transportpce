@@ -37,31 +37,7 @@ module renderer {
           }
         }
       }
-      leaf service-name {
-            type string;
-        }
-        leaf wave-number {
-            type uint32;
-        }
-        list nodes {
-            ordered-by user;
-            key "node-id";
-            leaf node-id {
-                type string;
-                description "Gloabally unique identifier
-                    for the node";
-            }
-            leaf src-tp {
-                type string;
-                description "Source termination point ";
-                mandatory true;
-            }
-            leaf dest-tp {
-                type string;
-                description "Destination termination point ";
-                mandatory true;
-            }
-        }
+      uses org-transportpce-common-types:olm-renderer-input;
     }
     output{
       leaf success {
@@ -74,7 +50,7 @@ module renderer {
     }
   }
 
-  /*rpc renderer-rollback {
+  rpc renderer-rollback {
     input {
       uses org-transportpce-common-types:node-interfaces;
     }
@@ -92,5 +68,5 @@ module renderer {
         }
       }
     }
-  }*/
+  }
 }

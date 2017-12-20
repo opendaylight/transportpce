@@ -1,0 +1,485 @@
+/*
+ * Copyright © 2017 AT&T and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+
+package org.opendaylight.transportpce.renderer.provisiondevice;
+
+import com.google.common.collect.Sets;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
+import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
+import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
+import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServiceListTopology;
+import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.Topology;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.get.connection.port.trail.output.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes.ModulationFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.R100G;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterface;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.olm.renderer.input.Nodes;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.ServiceNodelist;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist.NodelistBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist.NodelistKey;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.ServicePathInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.ServicePathOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.ServicePathOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.renderer.rollback.output.FailedToRollback;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.renderer.rollback.output.FailedToRollbackBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.renderer.rollback.output.FailedToRollbackKey;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class DeviceRendererServiceImpl implements DeviceRendererService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DeviceRendererServiceImpl.class);
+
+    private final DataBroker dataBroker;
+    private final DeviceTransactionManager deviceTransactionManager;
+    private final OpenRoadmInterfaceFactory openRoadmInterfaceFactory;
+    private final OpenRoadmInterfaces openRoadmInterfaces;
+    private final CrossConnect crossConnect;
+
+    public DeviceRendererServiceImpl(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
+            OpenRoadmInterfaceFactory openRoadmInterfaceFactory, OpenRoadmInterfaces openRoadmInterfaces,
+            CrossConnect crossConnect) {
+        this.dataBroker = dataBroker;
+        this.deviceTransactionManager = deviceTransactionManager;
+        this.openRoadmInterfaceFactory = openRoadmInterfaceFactory;
+        this.openRoadmInterfaces = openRoadmInterfaces;
+        this.crossConnect = crossConnect;
+    }
+
+    @Override
+    public ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction) {
+        List<Nodes> nodes = input.getNodes();
+        // Register node for suppressing alarms
+        if (!alarmSuppressionNodeRegistration(input)) {
+            LOG.warn("Alarm suppresion node registraion failed!!!!");
+        }
+
+        ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
+        Set<NodeInterface> nodeInterfaces = Sets.newConcurrentHashSet();
+        Set<String> nodesProvisioned = Sets.newConcurrentHashSet();
+        ServiceListTopology topology = new ServiceListTopology();
+        AtomicBoolean success = new AtomicBoolean(true);
+
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        ForkJoinTask forkJoinTask = forkJoinPool.submit(() ->
+            nodes.parallelStream().forEach(node -> {
+                String nodeId = node.getNodeId();
+                LOG.info("Starting provisioning for node : {}", nodeId);
+                List<String> createdEthInterfaces = new ArrayList<>();
+                List<String> createdOtuInterfaces = new ArrayList<>();
+                List<String> createdOduInterfaces = new ArrayList<>();
+                List<String> createdOchInterfaces = new ArrayList<>();
+                List<String> createdConnections = new ArrayList<>();
+                int crossConnectFlag = 0;
+
+                try {
+                    // if the node is currently mounted then proceed
+                    if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
+                        String srcTp = node.getSrcTp();
+                        String destTp = node.getDestTp();
+
+                        Long waveNumber = input.getWaveNumber();
+                        if ((destTp != null) && destTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                            crossConnectFlag++;
+                            // create OpenRoadm Xponder Line Interfaces
+                            String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
+                                    nodeId, destTp, waveNumber, R100G.class, ModulationFormat.DpQpsk);
+                            createdOchInterfaces.add(supportingOchInterface);
+
+                            String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
+                                    nodeId, destTp, supportingOchInterface);
+                            createdOtuInterfaces.add(supportingOtuInterface);
+
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(
+                                    nodeId, destTp,supportingOtuInterface));
+                        }
+                        if ((srcTp != null) && srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                            crossConnectFlag++;
+                            // create OpenRoadm Xponder Client Interfaces
+                            createdEthInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmEthInterface(nodeId,
+                                    srcTp));
+
+
+                        }
+                        if ((srcTp != null) && srcTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                            crossConnectFlag++;
+                            // create OpenRoadm Xponder Line Interfaces
+                            String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
+                                    nodeId, srcTp, waveNumber, R100G.class, ModulationFormat.DpQpsk);
+                            createdOchInterfaces.add(supportingOchInterface);
+
+                            String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
+                                    nodeId, srcTp, supportingOchInterface);
+                            createdOtuInterfaces.add(supportingOtuInterface);
+
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(
+                                    nodeId, srcTp, supportingOtuInterface));
+                        }
+                        if ((destTp != null) && destTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                            crossConnectFlag++;
+                            // create OpenRoadm Xponder Client Interfaces
+                            createdEthInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmEthInterface(nodeId,
+                                    destTp));
+
+
+                        }
+                        if ((srcTp != null) && (srcTp.contains(OpenRoadmInterfacesImpl.TTP_TOKEN)
+                                || srcTp.contains(OpenRoadmInterfacesImpl.PP_TOKEN))) {
+                            createdOchInterfaces.add(this.openRoadmInterfaceFactory .createOpenRoadmOchInterface(nodeId,
+                                    srcTp, waveNumber));
+                        }
+                        if ((destTp != null) && (destTp.contains(OpenRoadmInterfacesImpl.TTP_TOKEN)
+                                || destTp.contains(OpenRoadmInterfacesImpl.PP_TOKEN))) {
+                            createdOchInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(nodeId,
+                                    destTp, waveNumber));
+                        }
+                        if (crossConnectFlag < 1) {
+                            LOG.info("Creating cross connect between source {} and destination {} for node {}",
+                                    srcTp, destTp, nodeId);
+                            Optional<String> connectionNameOpt = this.crossConnect.postCrossConnect(nodeId, waveNumber,
+                                    srcTp, destTp);
+                            if (connectionNameOpt.isPresent()) {
+                                nodesProvisioned.add(nodeId);
+                                List<Ports> ports = this.crossConnect.getConnectionPortTrail(nodeId, waveNumber, srcTp,
+                                        destTp);
+                                if (ServicePathDirection.A_TO_Z.equals(direction)) {
+                                    topology.updateAtoZTopologyList(ports, nodeId);
+                                }
+                                if (ServicePathDirection.Z_TO_A.equals(direction)) {
+                                    topology.updateZtoATopologyList(ports, nodeId);
+
+                                }
+                                createdConnections.add(connectionNameOpt.get());
+                            } else {
+                                processErrorMessage("Unable to post Roadm-connection for node " + nodeId, forkJoinPool,
+                                        results);
+                                success.set(false);
+                            }
+                        }
+                    } else {
+                        processErrorMessage(nodeId + " is not mounted on the controller", forkJoinPool, results);
+                        success.set(false);
+                    }
+                } catch (OpenRoadmInterfaceException ex) {
+                    processErrorMessage("Setup service path failed! Exception:" + ex.toString(), forkJoinPool, results);
+                    success.set(false);
+                }
+
+                NodeInterfaceBuilder nodeInterfaceBuilder = new NodeInterfaceBuilder();
+                nodeInterfaceBuilder.setKey(new NodeInterfaceKey(nodeId));
+                nodeInterfaceBuilder.setNodeId(nodeId);
+                nodeInterfaceBuilder.setConnectionId(createdConnections);
+                nodeInterfaceBuilder.setEthInterfaceId(createdEthInterfaces);
+                nodeInterfaceBuilder.setOtuInterfaceId(createdOtuInterfaces);
+                nodeInterfaceBuilder.setOduInterfaceId(createdOduInterfaces);
+                nodeInterfaceBuilder.setOchInterfaceId(createdOchInterfaces);
+                nodeInterfaces.add(nodeInterfaceBuilder.build());
+            })
+        );
+
+        try {
+            forkJoinTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error while setting up service paths!", e);
+        }
+
+        forkJoinPool.shutdown();
+
+        if (success.get()) {
+            results.add("Roadm-connection successfully created for nodes: " + String.join(", ", nodesProvisioned));
+        }
+        ServicePathOutputBuilder setServBldr = new ServicePathOutputBuilder();
+        setServBldr.setNodeInterface(new ArrayList<>(nodeInterfaces));
+        setServBldr.setSuccess(success.get());
+        setServBldr.setResult(String.join("\n", results));
+
+        //setting topology in the service list data store
+        try {
+            setTopologyForService(input.getServiceName(), topology.getTopology());
+        } catch (InterruptedException | TimeoutException | ExecutionException e) {
+            LOG.warn("Failed to write topologies for service {}.", input.getServiceName(), e);
+        }
+
+        if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
+            LOG.error("Alarm suppresion node removal failed!!!!");
+        }
+
+        return setServBldr.build();
+    }
+
+    private ConcurrentLinkedQueue<String> processErrorMessage(String message, ForkJoinPool forkJoinPool,
+            ConcurrentLinkedQueue<String> messages) {
+        LOG.warn(message);
+        messages.add(message);
+        forkJoinPool.shutdown();
+        return messages;
+    }
+
+    @Override
+    public ServicePathOutput deleteServicePath(ServicePathInput input) {
+        List<Nodes> nodes = input.getNodes();
+        ServicePathOutputBuilder delServBldr = new ServicePathOutputBuilder();
+
+        ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
+        if (!alarmSuppressionNodeRegistration(input)) {
+            LOG.warn("Alarm suppresion node registraion failed!!!!");
+        }
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        ForkJoinTask forkJoinTask = forkJoinPool.submit(() ->
+            nodes.parallelStream().forEach(node -> {
+                List<String> interfacesToDelete = new LinkedList<>();
+                String nodeId = node.getNodeId();
+                LOG.info("Deleting service setup on node {}", nodeId);
+                String srcTp = node.getSrcTp();
+                String destTp = node.getDestTp();
+                Long waveNumber = input.getWaveNumber();
+
+                if ((srcTp == null) || (destTp == null)) {
+                    LOG.error("Source ({}) or destination ({}) termination point is null.", srcTp, destTp);
+                    return;
+                }
+
+                // if the node is currently mounted then proceed.
+                if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
+                    if (destTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)
+                            || srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                        if (destTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                            interfacesToDelete.add(destTp + "-ODU");
+                            interfacesToDelete.add(destTp + "-OTU");
+                            interfacesToDelete.add(
+                                    this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber));
+                        }
+                        if (srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                            interfacesToDelete.add(srcTp + "-ETHERNET");
+                        }
+                    } else {
+                        String connectionNumber = srcTp + "-" + destTp + "-" + waveNumber;
+                        if (!this.crossConnect.deleteCrossConnect(nodeId, connectionNumber)) {
+                            LOG.error("Failed to delete cross connect {}", srcTp + "-" + destTp + "-" + waveNumber);
+                        }
+                        interfacesToDelete.add(
+                                this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(srcTp, waveNumber));
+                        interfacesToDelete.add(
+                                this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber));
+                    }
+                } else {
+                    String result = nodeId + " is not mounted on the controller";
+                    results.add(result);
+                    LOG.warn(result);
+                    forkJoinPool.shutdown();
+                    return; // TODO should deletion end here?
+                }
+
+                for (String interfaceId : interfacesToDelete) {
+                    try {
+                        this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
+                    } catch (OpenRoadmInterfaceException e) {
+                        String result = String.format("Failed to delete interface %s on node %s!", interfaceId, nodeId);
+                        LOG.error(result, e);
+                        results.add(result);
+                    }
+                }
+            })
+        );
+
+        try {
+            forkJoinTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error while deleting service paths!", e);
+        }
+
+        forkJoinPool.shutdown();
+        if (!alarmSuppressionNodeRemoval(input.getServiceName())) {
+            LOG.error("Alarm suppresion node removal failed!!!!");
+        }
+        if (results.isEmpty()) {
+            return delServBldr.setResult("Request processed").build();
+        } else {
+            return delServBldr.setResult(String.join("\n", results)).build();
+        }
+    }
+
+    @Override
+    public RendererRollbackOutput rendererRollback(RendererRollbackInput input) {
+        boolean success = true;
+        List<FailedToRollback> failedToRollbackList = new ArrayList<>();
+        for (NodeInterface nodeInterfaces : input.getNodeInterface()) {
+            List<String> failedInterfaces = new ArrayList<>();
+            String nodeId = nodeInterfaces.getNodeId();
+            for (String connectionId : nodeInterfaces.getConnectionId()) {
+                if (this.crossConnect.deleteCrossConnect(nodeId, connectionId)) {
+                    LOG.info("Cross connect {} on node {} successfully deleted.", connectionId, nodeId);
+                } else {
+                    LOG.error("Failed to delete cross connect {} on node {}!", connectionId, nodeId);
+                    success = false;
+                    failedInterfaces.add(connectionId);
+                }
+            }
+            // Interfaces needs to be in specific order to delete. Order is:
+            // 1. ODU interfaces
+            // 2. OTU interfaces
+            // 3. OCH interfaces
+            // 4. ETH interfaces
+            LinkedList<String> interfacesToDelete = new LinkedList<>();
+            if (nodeInterfaces.getOduInterfaceId() != null) {
+                interfacesToDelete.addAll(nodeInterfaces.getOduInterfaceId());
+            }
+            if (nodeInterfaces.getOtuInterfaceId() != null) {
+                interfacesToDelete.addAll(nodeInterfaces.getOtuInterfaceId());
+            }
+            if (nodeInterfaces.getOchInterfaceId() != null) {
+                interfacesToDelete.addAll(nodeInterfaces.getOchInterfaceId());
+            }
+            if (nodeInterfaces.getEthInterfaceId() != null) {
+                interfacesToDelete.addAll(nodeInterfaces.getEthInterfaceId());
+            }
+
+            LOG.info("Going to execute rollback on node {}. Interfaces to rollback: {}", nodeId,
+                    String.join(", ", interfacesToDelete));
+
+            for (String interfaceId : interfacesToDelete) {
+                try {
+                    this.openRoadmInterfaces.deleteInterface(nodeId, interfaceId);
+                    LOG.info("Interface {} on node {} successfully deleted.", interfaceId, nodeId);
+                } catch (OpenRoadmInterfaceException e) {
+                    LOG.error("Failed to delete interface {} on node {}!", interfaceId, nodeId);
+                    success = false;
+                    failedInterfaces.add(interfaceId);
+                }
+            }
+            failedToRollbackList.add(new FailedToRollbackBuilder()
+                    .setKey(new FailedToRollbackKey(nodeId))
+                    .setNodeId(nodeId)
+                    .setInterface(failedInterfaces)
+                    .build()
+            );
+        }
+        return new RendererRollbackOutputBuilder()
+                .setSuccess(success)
+                .setFailedToRollback(failedToRollbackList)
+                .build();
+    }
+
+    private boolean alarmSuppressionNodeRegistration(ServicePathInput input) {
+        NodelistBuilder nodeListBuilder = new NodelistBuilder();
+        nodeListBuilder.setKey(new NodelistKey(input.getServiceName()));
+        nodeListBuilder.setServiceName(input.getServiceName());
+        List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service
+            .nodelist.nodelist.Nodes> nodeList = new ArrayList<>();
+        for (Nodes node: input.getNodes()) {
+            nodeList.add(new org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns
+                    .yang.alarmsuppression.rev171102.service.nodelist.nodelist.NodesBuilder()
+                    .setNodeId(node.getNodeId()).build());
+        }
+        nodeListBuilder.setNodes(nodeList);
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.opendaylight.params
+            .xml.ns.yang.alarmsuppression.rev171102.service.nodelist.Nodelist> nodeListIID =
+            InstanceIdentifier.create(ServiceNodelist.class).child(org.opendaylight.yang.gen.v1.urn
+            .opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist.Nodelist.class,
+                    new NodelistKey(input.getServiceName()));
+        final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
+        writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodeListIID, nodeListBuilder.build());
+        Future<Void> submit = writeTransaction.submit();
+        try {
+            submit.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            LOG.info("Nodes are register for alarm suppression for service: {}",
+                    input.getServiceName());
+            return true;
+
+        } catch (ExecutionException | InterruptedException | TimeoutException e) {
+            LOG.warn("Failed to alarm suppresslist for service: {}", input.getServiceName(), e);
+            return false;
+        }
+    }
+
+    private boolean alarmSuppressionNodeRemoval(String serviceName) {
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.opendaylight.params
+            .xml.ns.yang.alarmsuppression.rev171102.service.nodelist.Nodelist> nodeListIID =
+            InstanceIdentifier.create(ServiceNodelist.class).child(org.opendaylight.yang.gen.v1.urn
+                .opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist.Nodelist.class,
+                        new NodelistKey(serviceName));
+        final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
+        writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, nodeListIID);
+        Future<Void> submit = writeTransaction.submit();
+        try {
+            submit.get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
+            LOG.info("Nodes are unregister for alarm suppression for service: {}", serviceName);
+            return true;
+
+        } catch (InterruptedException | TimeoutException | ExecutionException e) {
+            LOG.warn("Failed to alarm suppresslist for service: {}", serviceName, e);
+            return false;
+        }
+    }
+
+    private void setTopologyForService(String serviceName, Topology topo)
+            throws InterruptedException, ExecutionException, TimeoutException {
+
+        ServicesBuilder servicesBuilder;
+        //Get the service from the service list inventory
+
+        ServicesKey serviceKey = new ServicesKey(serviceName);
+        InstanceIdentifier<Services> iid =
+                InstanceIdentifier.create(ServiceList.class).child(Services.class, serviceKey);
+        Optional<Services> services;
+        try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Future<com.google.common.base.Optional<Services>> future = readTx.read(LogicalDatastoreType.OPERATIONAL,
+                iid);
+            services = future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS).toJavaUtil();
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw e;
+        }
+
+        if (services.isPresent()) {
+            servicesBuilder = new ServicesBuilder(services.get());
+        } else {
+            servicesBuilder = new ServicesBuilder();
+            servicesBuilder.setKey(serviceKey);
+        }
+        servicesBuilder.setTopology(topo);
+
+        WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
+        writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, servicesBuilder.build());
+        writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+
+    }
+}

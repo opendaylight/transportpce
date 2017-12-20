@@ -11,9 +11,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.opendaylight.controller</groupId>
-    <artifactId>config-parent</artifactId>
-    <version>0.7.0</version>
+    <groupId>org.opendaylight.odlparent</groupId>
+    <artifactId>bundle-parent</artifactId>
+    <version>2.0.5</version>
     <relativePath/>
   </parent>
 
@@ -21,6 +21,25 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <artifactId>transportpce-renderer</artifactId>
   <version>0.2.0</version>
   <packaging>bundle</packaging>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.opendaylight.controller</groupId>
+        <artifactId>mdsal-artifacts</artifactId>
+        <version>1.6.0</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.opendaylight.netconf</groupId>
+        <artifactId>netconf-artifacts</artifactId>
+        <version>1.3.0</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -30,22 +49,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
     <dependency>
       <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-network</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-service</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
       <artifactId>transportpce-ordmodels-device</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-common</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -55,7 +64,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>sal-netconf-connector</artifactId>
-      <version>1.6.0</version>
     </dependency>
 
     <!-- Testing Dependencies -->
@@ -71,4 +79,5 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <scope>test</scope>
     </dependency>
   </dependencies>
+
 </project>

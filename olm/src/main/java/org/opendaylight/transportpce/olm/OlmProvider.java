@@ -8,10 +8,9 @@
 
 package org.opendaylight.transportpce.olm;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
+import org.opendaylight.transportpce.olm.service.OlmPowerService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.OlmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,40 +19,21 @@ import org.slf4j.LoggerFactory;
  * The Class OlmProvider.
  */
 public class OlmProvider {
-
-    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(OlmProvider.class);
-
-    /** The data broker. */
-    private final DataBroker dataBroker;
-
-    /** The mount point service. */
-    private final MountPointService mountPointService;
-
-    /** The rpc provider registry. */
     private final RpcProviderRegistry rpcProviderRegistry;
-
-    /** The get pm registration. */
+    private final OlmPowerService olmPowerService;
     private RpcRegistration<OlmService> olmRPCRegistration;
 
     /**
      * Instantiates a new olm provider.
-     *
-     * @param dataBroker
-     *            the data broker
-     * @param mountPointService
-     *            the mount point service
+     * @param olmPowerService
+     *            implementation of OlmService
      * @param rpcProviderRegistry
      *            the rpc provider registry
      */
-    public OlmProvider(final DataBroker dataBroker, final MountPointService mountPointService,
-        final RpcProviderRegistry rpcProviderRegistry) {
-        this.dataBroker = dataBroker;
-        this.mountPointService = mountPointService;
+    public OlmProvider(final RpcProviderRegistry rpcProviderRegistry, final OlmPowerService olmPowerService) {
         this.rpcProviderRegistry = rpcProviderRegistry;
-        if (mountPointService == null) {
-            LOG.error("Mount service is null");
-        }
+        this.olmPowerService = olmPowerService;
     }
 
     /**
@@ -62,8 +42,8 @@ public class OlmProvider {
     public void init() {
         LOG.info("OlmProvider Session Initiated");
         // Initializing Notification module
-        olmRPCRegistration = rpcProviderRegistry.addRpcImplementation(OlmService.class, new OlmPowerSetupImpl(
-            dataBroker,mountPointService));
+        olmRPCRegistration = rpcProviderRegistry.addRpcImplementation(OlmService.class, new OlmPowerServiceRpcImpl(
+            this.olmPowerService));
     }
 
     /**

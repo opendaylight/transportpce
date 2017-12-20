@@ -53,11 +53,11 @@ module org-transportpce-common-types {
             mandatory true;
         }
         leaf resource-type {
-            type string;
+            type org-openroadm-resource-types:resource-type-enum;
             description "Type of the PM resource";
             mandatory true;
         }
-        //container resource-identifier {
+        container resource-identifier {
             leaf resource-name {
                 type string;
                 description "Identifier of particular resource of given type";
@@ -71,9 +71,9 @@ module org-transportpce-common-types {
                 mandatory true;
 
             }
-        //}
+        }
         leaf granularity {
-            type string;
+            type org-openroadm-pm-types:pm-granularity;
             description "Granularity of PM bin can be
                 notApplicable,15min,24Hour";
             mandatory true;

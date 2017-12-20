@@ -50,41 +50,41 @@ module transportpce-pathDescription {
   }
 
   grouping PCE-resource {
-      description
-        "This resource identifier is intended to provide a generic identifer
-         for any resource that can be used without specific knowledge of
-         the resource.";
-      container resource {
-        choice resource {
-          case termination-point {
-            container termination-point-identifier {
-              leaf tp-id {
-                  type string; //to be clarified with topology model
-              }
-              leaf node-id {
-                  type string; //to be clarified with topology model
-              }
+    description
+      "This resource identifier is intended to provide a generic identifer
+       for any resource that can be used without specific knowledge of
+       the resource.";
+    container resource {
+      choice resource {
+        case termination-point {
+          container termination-point-identifier {
+            leaf tp-id {
+                type string; //to be clarified with topology model
+            }
+            leaf node-id {
+                type string; //to be clarified with topology model
             }
           }
+        }
 
-          case link {
-            container link-identifier {
-              leaf link-id {
-                  type string; //to be clarified with topology model
-              }
+        case link {
+          container link-identifier {
+            leaf link-id {
+                type string; //to be clarified with topology model
             }
           }
+        }
 
-          case node {
-            container node-identifier {
-              leaf node-id {
-                  type string; // to be clarified with topology model
-              }
+        case node {
+          container node-identifier {
+            leaf node-id {
+                type string; // to be clarified with topology model
             }
           }
         }
       }
     }
+  }
 
 
   grouping path-description {

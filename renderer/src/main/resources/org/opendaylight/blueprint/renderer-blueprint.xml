@@ -11,19 +11,62 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
   odl:use-default-for-reference-types="true">
 
-  <reference id="dataBroker"
-    interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"
-    odl:type="default" />
-  <reference id="mountPointService"
-    interface="org.opendaylight.controller.md.sal.binding.api.MountPointService" />
-  <reference id="rpcProviderRegistry"
-    interface="org.opendaylight.controller.sal.binding.api.RpcProviderRegistry" />
-  <bean id="provider"
-    class="org.opendaylight.transportpce.renderer.RendererProvider"
-    init-method="init" destroy-method="close">
-    <argument ref="dataBroker" />
-    <argument ref="mountPointService" />
-    <argument ref="rpcProviderRegistry" />
+  <reference id="dataBroker" interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"
+        odl:type="default" />
+  <reference id="mountPointService" interface="org.opendaylight.controller.md.sal.binding.api.MountPointService" />
+  <reference id="rpcProviderRegistry" interface="org.opendaylight.controller.sal.binding.api.RpcProviderRegistry" />
+  <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
+  <reference id="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
+  <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
+  <reference id="crossConnect" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
+
+  <odl:rpc-service id="olmService"
+      interface="org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.OlmService"/>
+
+  <bean id="openRoadmInterfaceFactory" class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory" >
+    <argument ref="portMapping" />
+    <argument ref="openRoadmInterfaces" />
   </bean>
+
+  <bean id="deviceRenderer" class="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl" >
+    <argument ref="dataBroker" />
+    <argument ref="deviceTransactionManager" />
+    <argument ref="openRoadmInterfaceFactory" />
+    <argument ref="openRoadmInterfaces" />
+    <argument ref="crossConnect" />
+  </bean>
+
+  <bean id="deviceRendererRPCImpl" class="org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl" >
+    <argument ref="deviceRenderer" />
+  </bean>
+
+  <bean id="networkModelWavelengthService"
+        class="org.opendaylight.transportpce.renderer.NetworkModelWavelengthServiceImpl">
+    <argument ref="dataBroker" />
+  </bean>
+
+  <bean id="rendererServiceOperations" class="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperationsImpl" >
+    <argument ref="deviceRenderer" />
+    <argument ref="olmService" />
+    <argument ref="dataBroker" />
+    <argument ref="networkModelWavelengthService" />
+  </bean>
+
+  <bean id="rendererProvider" class="org.opendaylight.transportpce.renderer.RendererProvider"
+        init-method="init" destroy-method="close">
+    <argument ref="dataBroker"/>
+    <argument ref="mountPointService"/>
+    <argument ref="rpcProviderRegistry" />
+    <argument ref="deviceRendererRPCImpl" />
+    <argument ref="rendererServiceOperations" />
+    <argument ref="portMapping" />
+    <argument ref="deviceTransactionManager" />
+  </bean>
+
+  <service ref="deviceRenderer"
+           interface="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService" />
+
+  <service ref="rendererServiceOperations"
+           interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
 
 </blueprint>
