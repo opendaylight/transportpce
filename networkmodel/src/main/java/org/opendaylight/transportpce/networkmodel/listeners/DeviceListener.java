@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.renderer.listeners;
+package org.opendaylight.transportpce.networkmodel.listeners;
 
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.ChangeNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceListener;
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 public class DeviceListener implements OrgOpenroadmDeviceListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OrgOpenroadmDeviceListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DeviceListener.class);
 
     /**
      * Callback for change-notification.
@@ -39,4 +39,5 @@ public class DeviceListener implements OrgOpenroadmDeviceListener {
 
         LOG.info("Notification {} received {}", OtdrScanResult.QNAME, notification);
     }
+
 }

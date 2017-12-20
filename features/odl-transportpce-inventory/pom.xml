@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright © 2016 Orange and others. All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution,
+    and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.opendaylight.odlparent</groupId>
+        <artifactId>single-feature-parent</artifactId>
+        <version>3.1.0</version>
+        <relativePath />
+    </parent>
+
+    <groupId>org.opendaylight.transportpce</groupId>
+    <artifactId>odl-transportpce-inventory</artifactId>
+    <version>0.2.0-SNAPSHOT</version>
+    <packaging>feature</packaging>
+
+    <properties>
+        <transportpce.db.host>localhost:3306</transportpce.db.host>
+        <transportpce.db.database>tpce</transportpce.db.database>
+        <transportpce.db.username>root</transportpce.db.username>
+        <transportpce.db.password>root</transportpce.db.password>
+        <transporpce.device.backup.folder>data/transportpce/devicebackup</transporpce.device.backup.folder>
+        <transporpce.device.backup.prefix></transporpce.device.backup.prefix>
+        <transporpce.device.backup.period>600</transporpce.device.backup.period>
+        <!-- skipping single feature test because DataSource is not available in Pax4j (H2 possible workaround) -->
+        <skip.karaf.featureTest>true</skip.karaf.featureTest>
+    </properties>
+
+    <name>OpenDaylight :: transportpce :: Inventory</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>transportpce-inventory</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>odl-transportpce-ui</artifactId>
+            <version>${project.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>
+                                        src/main/resources
+                                    </directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-db-artifact</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>target/resources/org.ops4j.datasource-transporpce.cfg</file>
+                                    <type>cfg</type>
+                                    <classifier>datasource</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>target/resources/org.opendaylight.transportpce.job.cfg</file>
+                                    <type>cfg</type>
+                                    <classifier>config</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

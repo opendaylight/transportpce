@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.renderer.listeners;
+package org.opendaylight.transportpce.networkmodel.listeners;
 
 import org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev161014.OrgOpenroadmDeOperationsListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev161014.RestartNotification;
@@ -26,4 +26,5 @@ public class DeOperationsListener implements OrgOpenroadmDeOperationsListener {
     public void onRestartNotification(RestartNotification notification) {
         LOG.info("Notification {} received {}", RestartNotification.QNAME, notification);
     }
+
 }

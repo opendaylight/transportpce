@@ -7,15 +7,8 @@
  */
 package org.opendaylight.transportpce.renderer;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
-import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
@@ -27,30 +20,17 @@ import org.slf4j.LoggerFactory;
 public class RendererProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(RendererProvider.class);
-    private final DataBroker dataBroker;
-    private final MountPointService mountPointService;
     private final RpcProviderRegistry rpcProviderRegistry;
-    private final PortMapping portMapping;
-    private final DeviceTransactionManager deviceTransactionManager;
     private RpcRegistration<RendererService> deviceRendererRegistration;
     private DeviceRendererRPCImpl deviceRendererRPCImpl;
     private RpcRegistration<TransportpceServicepathService> tpceServiceRegistry;
     private RendererServiceOperations rendererServiceOperations;
-    private RendererNotificationsImpl rendererNotificationsImpl;
-    private final Set<String> currentMountedDevice;
 
     public RendererProvider(RpcProviderRegistry rpcProviderRegistry, DeviceRendererRPCImpl deviceRendererRPCImpl,
-                            RendererServiceOperations rendererServiceOperations,DataBroker dataBroker,
-                            MountPointService mountPointService, PortMapping portMapping,
-                            DeviceTransactionManager deviceTransactionManager) {
+                            RendererServiceOperations rendererServiceOperations) {
         this.rpcProviderRegistry = rpcProviderRegistry;
         this.deviceRendererRPCImpl = deviceRendererRPCImpl;
         this.rendererServiceOperations = rendererServiceOperations;
-        this.dataBroker = dataBroker;
-        this.mountPointService = mountPointService;
-        this.currentMountedDevice = new HashSet<>();
-        this.portMapping = portMapping;
-        this.deviceTransactionManager = deviceTransactionManager;
     }
 
     /**
@@ -64,8 +44,6 @@ public class RendererProvider {
                 .addRpcImplementation(RendererService.class, this.deviceRendererRPCImpl);
         this.tpceServiceRegistry = this.rpcProviderRegistry
                 .addRpcImplementation(TransportpceServicepathService.class, transportPCEServicePathRPCImpl);
-        this.rendererNotificationsImpl = new RendererNotificationsImpl(this.dataBroker, this.mountPointService,
-                this.currentMountedDevice,this.portMapping,this.deviceTransactionManager);
     }
 
     /**
@@ -78,10 +56,6 @@ public class RendererProvider {
         }
         if (this.tpceServiceRegistry != null) {
             this.tpceServiceRegistry.close();
-        }
-        // Clean up the RendererNotificationsImpl
-        if (this.rendererNotificationsImpl != null) {
-            this.rendererNotificationsImpl.close();
         }
     }
 
