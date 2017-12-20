@@ -9,13 +9,13 @@
 package org.opendaylight.transportpce.servicehandler.impl;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServicehandlerService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.StubpceListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererListener;
+import org.opendaylight.transportpce.pce.service.PathComputationService;
+import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PceListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.OrgOpenroadmServiceService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
@@ -24,8 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Class to register
  * Servicehandler Service and Notification.
- *
- * @author <a href="mailto:martial.coulibaly@gfi.com">Martial Coulibaly</a> on behalf of Orange
+ * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
 public class ServicehandlerProvider {
@@ -35,21 +34,19 @@ public class ServicehandlerProvider {
     private final DataBroker dataBroker;
     private final RpcProviderRegistry rpcRegistry;
     private final NotificationService notificationService;
-    private final NotificationPublishService notificationPublishService;
-
-    /** Listener register for TransportpceService Notification. */
-    private ListenerRegistration<StubpceListener> stubpcelistenerRegistration;
-    private ListenerRegistration<StubrendererListener> stubrendererlistenerRegistration;
+    private ListenerRegistration<PceListener> pcelistenerRegistration;
     private RpcRegistration<OrgOpenroadmServiceService> rpcRegistration;
-    private RpcRegistration<ServicehandlerService> rpcRegistrationServiceHandler;
-
+    private PathComputationService pathComputationService;
+    private RendererServiceOperations rendererServiceOperations;
 
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderRegistry rpcProviderRegistry,
-            NotificationService notificationService, NotificationPublishService notificationPublishService) {
+            NotificationService notificationService, PathComputationService pathComputationService,
+            RendererServiceOperations rendererServiceOperations) {
         this.dataBroker = dataBroker;
         this.rpcRegistry = rpcProviderRegistry;
         this.notificationService = notificationService;
-        this.notificationPublishService = notificationPublishService;
+        this.pathComputationService = pathComputationService;
+        this.rendererServiceOperations = rendererServiceOperations;
     }
 
     /**
@@ -57,11 +54,11 @@ public class ServicehandlerProvider {
      */
     public void init() {
         LOG.info("ServicehandlerProvider Session Initiated");
-        final ServicehandlerImpl consumer = new ServicehandlerImpl(dataBroker, rpcRegistry, notificationPublishService);
-        stubpcelistenerRegistration = notificationService.registerNotificationListener(consumer);
-        stubrendererlistenerRegistration = notificationService.registerNotificationListener(consumer);
-        rpcRegistration = rpcRegistry.addRpcImplementation(OrgOpenroadmServiceService.class, consumer);
-        rpcRegistrationServiceHandler = rpcRegistry.addRpcImplementation(ServicehandlerService.class, consumer);
+        final ServicehandlerImpl servicehandler = new ServicehandlerImpl(dataBroker, pathComputationService,
+                rendererServiceOperations);
+        final PceListenerImpl pceListener = new PceListenerImpl();
+        pcelistenerRegistration = notificationService.registerNotificationListener(pceListener);
+        rpcRegistration = rpcRegistry.addRpcImplementation(OrgOpenroadmServiceService.class, servicehandler);
     }
 
     /**
@@ -69,9 +66,8 @@ public class ServicehandlerProvider {
      */
     public void close() {
         LOG.info("ServicehandlerProvider Closed");
-        stubpcelistenerRegistration.close();
-        stubrendererlistenerRegistration.close();
+        pcelistenerRegistration.close();
         rpcRegistration.close();
-        rpcRegistrationServiceHandler.close();
     }
+
 }

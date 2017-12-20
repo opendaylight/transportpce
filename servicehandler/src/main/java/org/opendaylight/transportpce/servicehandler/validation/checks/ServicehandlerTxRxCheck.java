@@ -6,8 +6,9 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.servicehandler;
+package org.opendaylight.transportpce.servicehandler.validation.checks;
 
+import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceEndpoint;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.endpoint.RxDirection;
@@ -20,33 +21,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Class for checking missing info on Tx/Rx for A/Z end.
  *
- * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  */
 public class ServicehandlerTxRxCheck {
-    /** Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerTxRxCheck.class);
-    /** ServiceEndpoint. */
-    private ServiceEndpoint serviceEnd;
-    /** Response message from procedure. */
-    private String message;
-    /** type serviceEndpoint : serviceAEnd / serviceZEnd. */
-    private String service = null;
 
-    /**
-     * ServicehandlerTxRxCheck class constructor.
-     *
-     * @param endPoint
-     *            ServiceEndpoint
-     * @param value
-     *            Integer to define ServiceAEND/ZEND
-     */
-    public ServicehandlerTxRxCheck(ServiceEndpoint endPoint, int value) {
-        this.serviceEnd = endPoint;
-        this.setMessage("");
-        if (value > 0) {
-            service = MyEndpoint.forValue(value).name();
-        }
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerTxRxCheck.class);
 
     /**
      * Check if a String is not null and not equal to ''.
@@ -55,13 +33,8 @@ public class ServicehandlerTxRxCheck {
      *            String value
      * @return true if String ok false if not
      */
-    public Boolean checkString(String value) {
-        Boolean result = false;
-        if (value != null && value.compareTo("") != 0) {
-            result = true;
-        }
-        return result;
-
+    public static boolean checkString(String value) {
+        return ((value != null) && (value.compareTo("") != 0));
     }
 
     /**
@@ -71,8 +44,8 @@ public class ServicehandlerTxRxCheck {
      *            port info
      * @return true if String ok false if not
      */
-    public Boolean checkPort(Port port) {
-        Boolean result = false;
+    public static boolean checkPort(Port port) {
+        boolean result = false;
         if (port != null) {
             String portDeviceName = port.getPortDeviceName();
             String portType = port.getPortType();
@@ -86,7 +59,6 @@ public class ServicehandlerTxRxCheck {
             }
         }
         return result;
-
     }
 
     /**
@@ -96,8 +68,8 @@ public class ServicehandlerTxRxCheck {
      *            lgx info
      * @return true if String ok false if not
      */
-    public Boolean checkLgx(Lgx lgx) {
-        Boolean result = false;
+    public static boolean checkLgx(Lgx lgx) {
+        boolean result = false;
         if (lgx != null) {
             String lgxDeviceName = lgx.getLgxDeviceName();
             String lgxPortName = lgx.getLgxPortName();
@@ -121,8 +93,9 @@ public class ServicehandlerTxRxCheck {
      *
      * @return <code>true</code> if check is ok <code>false</code> else
      */
-    public boolean checkTxOrRxInfo(TxDirection txDirection, RxDirection rxDirection) {
-        Boolean result = true;
+    public static ComplianceCheckResult checkTxOrRxInfo(TxDirection txDirection, RxDirection rxDirection) {
+        boolean result = true;
+        String message = "";
         if (txDirection != null) {
             if (!checkPort(txDirection.getPort())) {
                 result = false;
@@ -146,7 +119,7 @@ public class ServicehandlerTxRxCheck {
             result = false;
             message = "Service TxDirection is not correctly set";
         }
-        return result;
+        return new ComplianceCheckResult(result, message);
     }
 
     /**
@@ -154,48 +127,45 @@ public class ServicehandlerTxRxCheck {
      *
      * @return true if String ok false if not
      */
-    public Boolean check() {
-        Boolean result = true;
+    public static ComplianceCheckResult check(ServiceEndpoint serviceEnd, ServiceEndpointType endpointType) {
+        boolean result = true;
+        String message = "";
         if (serviceEnd != null) {
-            Long serviceRate = serviceEnd.getServiceRate();
-            ServiceFormat serviceformat = serviceEnd.getServiceFormat();
-            String clli = serviceEnd.getClli();
-            if (serviceRate != null && serviceRate <= 0) {
-                result = false;
-                message = "Service " + service + " rate is not set";
-                LOG.debug(message);
-            } else if (serviceformat == null) {
-                result = false;
-                message = "Service " + service + " format is not set";
-                LOG.debug(message);
-            } else if (!checkString(clli)) {
-                result = false;
-                message = "Service" + service + " clli format is not set";
-                LOG.debug(message);
-            } else {
-                if (!checkTxOrRxInfo(serviceEnd.getTxDirection(), serviceEnd.getRxDirection())) {
+            try {
+                Long serviceRate = serviceEnd.getServiceRate();
+                ServiceFormat serviceformat = serviceEnd.getServiceFormat();
+                String clli = serviceEnd.getClli();
+                if ((serviceRate == null) || (serviceRate <= 0)) {
                     result = false;
+                    message = "Service " + endpointType + " rate is not set";
+                    LOG.debug(message);
+                } else if (serviceformat == null) {
+                    result = false;
+                    message = "Service " + endpointType + " format is not set";
+                    LOG.debug(message);
+                } else if (!checkString(clli)) {
+                    result = false;
+                    message = "Service" + endpointType + " clli format is not set";
+                    LOG.debug(message);
+                } else {
+                    ComplianceCheckResult complianceCheckResult
+                            = checkTxOrRxInfo(serviceEnd.getTxDirection(), serviceEnd.getRxDirection());
+                    if (!complianceCheckResult.hasPassed()) {
+                        result = false;
+                        message = complianceCheckResult.getMessage();
+                    }
                 }
+            } catch (NullPointerException e) {
+                message = "Service " + endpointType + " rate, format or clli is not set";
+                LOG.error(message, e);
+                return new ComplianceCheckResult(false, message);
             }
         } else {
             result = false;
-            message = service + " is not set";
+            message = endpointType + " is not set";
             LOG.debug(message);
         }
-        return result;
-
-    }
-
-    public static void main(String[] args) {
-
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+        return new ComplianceCheckResult(result, message);
     }
 
 }

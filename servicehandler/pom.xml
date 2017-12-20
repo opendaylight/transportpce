@@ -64,7 +64,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-stubmodels</artifactId>
+      <artifactId>transportpce-pce</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -74,7 +74,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>test-common</artifactId>
@@ -103,11 +102,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
-    </dependency>
-
-    <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>
     </dependency>
   </dependencies>
 </project>

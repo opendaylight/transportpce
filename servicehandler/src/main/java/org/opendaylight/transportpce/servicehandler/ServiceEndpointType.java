@@ -5,36 +5,34 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-
 package org.opendaylight.transportpce.servicehandler;
+
+import com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
 
 /**
  * Enum class to identify ServiceAEnd / serviceZEnd.
  *
- * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
- *
  */
-enum MyEndpoint {
+public enum ServiceEndpointType {
     SERVICEAEND(1),
     SERVICEZEND(2);
 
     int value;
-    private static final Map<Integer, MyEndpoint> VALUE_MAP;
+    private static final Map<Integer, ServiceEndpointType> VALUE_MAP;
 
-    MyEndpoint(int value) {
+    ServiceEndpointType(int value) {
         this.value = value;
     }
 
     static {
-        final com.google.common.collect.ImmutableMap.Builder<java.lang.Integer, MyEndpoint> b =
-                com.google.common.collect.ImmutableMap.builder();
-        for (MyEndpoint enumItem : MyEndpoint.values()) {
-            b.put(enumItem.value, enumItem);
+        final ImmutableMap.Builder<java.lang.Integer, ServiceEndpointType> builder =
+                ImmutableMap.builder();
+        for (ServiceEndpointType enumItem : ServiceEndpointType.values()) {
+            builder.put(enumItem.value, enumItem);
         }
-
-        VALUE_MAP = b.build();
+        VALUE_MAP = builder.build();
     }
 
     /**
@@ -53,7 +51,8 @@ enum MyEndpoint {
      *            Integer to identify Enum
      * @return corresponding ServiceFormat item
      */
-    public static MyEndpoint forValue(int valueArg) {
+    public static ServiceEndpointType forValue(int valueArg) {
         return VALUE_MAP.get(valueArg);
     }
+
 }
