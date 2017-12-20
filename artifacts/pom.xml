@@ -13,7 +13,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent-lite</artifactId>
-    <version>2.0.4</version>
+    <version>2.0.5</version>
     <relativePath/>
   </parent>
 
@@ -30,8 +30,23 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>transportpce-impl</artifactId>
+        <groupId>${project.groupId}.ordmodels</groupId>
+        <artifactId>transportpce-ordmodels-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}.ordmodels</groupId>
+        <artifactId>transportpce-ordmodels-network</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}.ordmodels</groupId>
+        <artifactId>transportpce-ordmodels-service</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}.ordmodels</groupId>
+        <artifactId>transportpce-ordmodels-device</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

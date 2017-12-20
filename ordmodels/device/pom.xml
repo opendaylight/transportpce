@@ -66,4 +66,33 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>ietf-yang-types-20130715</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.felix</groupId>
+         <artifactId>maven-bundle-plugin</artifactId>
+         <version>3.0.1</version>
+         <extensions>true</extensions>
+         <configuration>
+           <instructions>
+             <Include-Resource>{maven-resources},target/classes/LICENSE,META-INF/git.properties=-target/classes/META-INF/git.properties</Include-Resource>
+             <_exportcontents>
+               org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.link,
+               org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.links,
+               org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.links,*
+             </_exportcontents>
+           </instructions>
+         </configuration>
+       </plugin>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-javadoc-plugin</artifactId>
+         <configuration>
+           <sourcepath>*/target/generated-sources/mdsal-binding/*</sourcepath>
+           <excludePackageNames>*</excludePackageNames>
+         </configuration>
+       </plugin>
+     </plugins>
+  </build>
 </project>

@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent-lite</artifactId>
-    <version>2.0.4</version>
+    <version>2.0.5</version>
     <relativePath/>
   </parent>
 
@@ -26,9 +26,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>features-transportpce</module>
     <module>odl-transportpce-api</module>
     <module>odl-transportpce-ordmodels</module>
+    <module>odl-transportpce-stubmodels</module>
     <module>odl-transportpce</module>
-    <module>odl-transportpce-rest</module>
     <module>odl-transportpce-ui</module>
+    <module>odl-transportpce-rest</module>
   </modules>
 
 </project>

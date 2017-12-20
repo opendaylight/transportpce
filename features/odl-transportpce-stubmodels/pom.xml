@@ -17,7 +17,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </parent>
 
   <groupId>org.opendaylight.transportpce</groupId>
-  <artifactId>odl-transportpce-api</artifactId>
+  <artifactId>odl-transportpce-stubmodels</artifactId>
   <version>0.2.0</version>
   <packaging>feature</packaging>
 
@@ -28,7 +28,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </properties>
 
 
-<name>OpenDaylight :: transportpce :: api</name>
+<name>OpenDaylight :: transportpce :: stubmodels</name>
 
   <dependencies>
     <dependency>
@@ -41,6 +41,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>odl-transportpce-ordmodels</artifactId>
+      <version>${project.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-transportpce-api</artifactId>
       <version>${project.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
@@ -68,6 +75,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-stubmodels</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
