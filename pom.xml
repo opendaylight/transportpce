@@ -38,6 +38,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>networkmodel</module>
     <module>olm</module>
     <module>tests</module>
+    <module>pce</module>
     <module>servicehandler</module>
     <module>features</module>
     <module>karaf</module>
