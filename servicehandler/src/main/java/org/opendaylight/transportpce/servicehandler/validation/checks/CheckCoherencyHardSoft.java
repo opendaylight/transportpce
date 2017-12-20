@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.servicehandler;
+package org.opendaylight.transportpce.servicehandler.validation.checks;
 
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraints;
@@ -14,33 +14,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class to check coherency between hard and  soft constraints.
- *
- * @author <a href="mailto:martial.coulibaly@gfi.com">Martial Coulibaly</a> on behalf of Orange
+ * Class to check coherency between hard and soft constraints.
  *
  */
 public class CheckCoherencyHardSoft {
-    /** Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(CheckCoherencyHardSoft.class);
-    /** Hard Constraints. */
-    private HardConstraints hard;
-    /** Soft Constraints. */
-    private SoftConstraints soft;
 
-    public CheckCoherencyHardSoft(HardConstraints hard, SoftConstraints soft) {
-        this.hard = hard;
-        this.soft = soft;
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(CheckCoherencyHardSoft.class);
 
     /**
      * function to check coherency between hard and soft constraints.
      * @return  <code> true </code>  if coherent
      *          <code> false </code> else
      */
-    public boolean check() {
+    public static boolean check(HardConstraints hard, SoftConstraints soft) {
         boolean result = false;
         if (hard != null && soft != null) {
-            /**
+            /*
              * Check coherency with hard/soft constraints
              * hard/soft include/exclude coherency
              *
