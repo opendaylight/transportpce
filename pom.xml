@@ -31,6 +31,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <modules>
     <module>artifacts</module>
     <module>api</module>
+    <module>common</module>
     <module>ordmodels</module>
     <module>renderer</module>
     <module>olm</module>
