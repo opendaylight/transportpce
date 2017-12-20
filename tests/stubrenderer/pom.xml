@@ -31,8 +31,23 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-ordmodels</artifactId>
+      <groupId>${project.groupId}.ordmodels</groupId>
+      <artifactId>transportpce-ordmodels-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.ordmodels</groupId>
+      <artifactId>transportpce-ordmodels-network</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.ordmodels</groupId>
+      <artifactId>transportpce-ordmodels-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.ordmodels</groupId>
+      <artifactId>transportpce-ordmodels-device</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
