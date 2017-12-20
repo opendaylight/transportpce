@@ -8,22 +8,24 @@
 
 package org.opendaylight.transportpce.olm.power;
 
-import com.google.common.base.Optional;
-import com.google.common.util.concurrent.CheckedFuture;
+import com.google.common.util.concurrent.ListenableFuture;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.MountPoint;
-import org.opendaylight.controller.md.sal.binding.api.MountPointService;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaces;
-import org.opendaylight.transportpce.renderer.provisiondevice.CrossConnect;
+import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
+import org.opendaylight.transportpce.common.device.DeviceTransaction;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
+import org.opendaylight.transportpce.olm.util.OlmUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.PowerDBm;
@@ -35,42 +37,36 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfac
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.och.container.OchBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.network.topology.topology.topology.types.TopologyNetconf;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerTurndownInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.Network;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.Nodes;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.NodesKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.NodeKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PowerMgmt {
     private static final Logger LOG = LoggerFactory.getLogger(PowerMgmt.class);
+    private static final long DATA_STORE_READ_TIMEOUT = 120;
     private final DataBroker db;
-    private final MountPointService mps;
-    public static final InstanceIdentifier<Topology> NETCONF_TOPO_IID =
-            InstanceIdentifier
-                    .create(NetworkTopology.class)
-                    .child(Topology.class,
-                            new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())));
+    private final OpenRoadmInterfaces openRoadmInterfaces;
+    private final CrossConnect crossConnect;
+    private final DeviceTransactionManager deviceTransactionManager;
 
-    public PowerMgmt(DataBroker db, MountPointService mps) {
+    public PowerMgmt(DataBroker db, OpenRoadmInterfaces openRoadmInterfaces,
+            CrossConnect crossConnect, DeviceTransactionManager deviceTransactionManager) {
         this.db = db;
-        this.mps = mps;
+        this.openRoadmInterfaces = openRoadmInterfaces;
+        this.crossConnect = crossConnect;
+        this.deviceTransactionManager = deviceTransactionManager;
     }
 
     /**
@@ -89,52 +85,51 @@ public class PowerMgmt {
             String nodeId = input.getNodes().get(i).getNodeId();
             String srcTpId =  input.getNodes().get(i).getSrcTp();
             String destTpId = input.getNodes().get(i).getDestTp();
-            DataBroker deviceDb = getDeviceDataBroker(nodeId , mps);
-            Nodes inputNode = getNode(nodeId, mps, db);
-            LOG.info("Getting data from input node {}",inputNode.getNodeType());
-            LOG.info("Getting mapping data for node is {}",inputNode.getMapping().stream().filter(o -> o.getKey()
-                            .equals(new MappingKey(destTpId))).findFirst().toString());
+            Optional<Nodes> inputNodeOptional = OlmUtils.getNode(nodeId, db);
             // If node type is transponder
-            if (inputNode.getNodeType() != null && inputNode.getNodeType().equals(NodeTypes.Xpdr)) {
+            if (inputNodeOptional.isPresent()
+                    && inputNodeOptional.get().getNodeType() != null
+                    && inputNodeOptional.get().getNodeType().equals(NodeTypes.Xpdr)) {
+
+                Nodes inputNode = inputNodeOptional.get();
+                LOG.info("Getting data from input node {}", inputNode.getNodeType());
+                LOG.info("Getting mapping data for node is {}", inputNode.getMapping().stream().filter(o -> o.getKey()
+                        .equals(new MappingKey(destTpId))).findFirst().toString());
                 // If its A-End transponder
                 if (destTpId.toLowerCase().contains("network")) {
                     java.util.Optional<Mapping> mappingObject = inputNode.getMapping().stream().filter(o -> o.getKey()
                             .equals(new MappingKey(destTpId))).findFirst();
                     if (mappingObject.isPresent()) {
-                        Map<String, Double> txPowerRangeMap = getXponderPowerRange(nodeId, mappingObject.get()
-                                .getSupportingCircuitPackName(),
-                                mappingObject.get().getSupportingPort(),deviceDb);
+                        Map<String, Double> txPowerRangeMap = getXponderPowerRange(mappingObject.get()
+                                .getSupportingCircuitPackName(), mappingObject.get().getSupportingPort(), nodeId);
                         if (!txPowerRangeMap.isEmpty()) {
                             LOG.info("Transponder range exists for nodeId: {}", nodeId);
                             String srgId =  input.getNodes().get(i + 1).getSrcTp();
                             String nextNodeId = input.getNodes().get(i + 1).getNodeId();
-                            DataBroker deviceDbSRG = getDeviceDataBroker(nextNodeId , mps);
-                            Map<String, Double> rxSRGPowerRangeMap = getSRGRxPowerRange(nextNodeId, srgId, deviceDbSRG);
-                            Double powerValue = new Double(0);
+
+                            Map<String, Double> rxSRGPowerRangeMap = getSRGRxPowerRange(nextNodeId, srgId);
+                            double powerValue = 0;
                             if (!rxSRGPowerRangeMap.isEmpty()) {
                                 LOG.info("SRG Rx Power range exists for nodeId: {}", nodeId);
-                                if (txPowerRangeMap.get("MaxTx").doubleValue()
-                                        <= rxSRGPowerRangeMap.get("MaxRx").doubleValue()) {
-                                    powerValue = txPowerRangeMap.get("MaxTx").doubleValue();
-                                } else if (rxSRGPowerRangeMap.get("MaxRx").doubleValue()
-                                        < txPowerRangeMap.get("MaxTx").doubleValue()) {
-                                    powerValue = rxSRGPowerRangeMap.get("MaxRx").doubleValue();
+                                if (txPowerRangeMap.get("MaxTx")
+                                        <= rxSRGPowerRangeMap.get("MaxRx")) {
+                                    powerValue = txPowerRangeMap.get("MaxTx");
+                                } else if (rxSRGPowerRangeMap.get("MaxRx")
+                                        < txPowerRangeMap.get("MaxTx")) {
+                                    powerValue = rxSRGPowerRangeMap.get("MaxRx");
                                 }
                                 LOG.info("Calculated Transponder Power value is {}" , powerValue);
-                                if (setTransponderPower(nodeId, destTpId, destTpId + "-" + input.getWaveNumber(),
-                                        new BigDecimal(powerValue), deviceDb)) {
-                                    LOG.info("Transponder OCH connection: {} power updated ",
-                                            destTpId + "-" + input.getWaveNumber());
+                                String interfaceName = destTpId + "-" + input.getWaveNumber();
+                                if (setTransponderPower(nodeId, interfaceName, new BigDecimal(powerValue))) {
+                                    LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
                                     try {
                                         LOG.info("Now going in sleep mode");
-                                        Thread.sleep(180000);
+                                        Thread.sleep(120000);
                                     } catch (InterruptedException e) {
-                                        LOG.info("Transponder warmup failed for OCH connection: {}",
-                                              destTpId + "-" + input.getWaveNumber(), e);
+                                        LOG.info("Transponder warmup failed for OCH connection: {}", interfaceName, e);
                                     }
                                 } else {
-                                    LOG.info("Transponder OCH connection: {} power update failed ",
-                                           destTpId + "-" + input.getWaveNumber());
+                                    LOG.info("Transponder OCH connection: {} power update failed ", interfaceName);
                                 }
                             } else {
                                 LOG.info("SRG Power Range not found");
@@ -142,20 +137,17 @@ public class PowerMgmt {
                         } else {
                             LOG.info("Tranponder range not available seting to default "
                                     + "power for nodeId: {}", nodeId);
-                            if (setTransponderPower(nodeId, destTpId, destTpId + "-" + input.getWaveNumber(),
-                                    new BigDecimal(-5), deviceDb)) {
-                                LOG.info("Transponder OCH connection: {} power updated ",
-                                        destTpId + "-" + input.getWaveNumber());
+                            String interfaceName = destTpId + "-" + input.getWaveNumber();
+                            if (setTransponderPower(nodeId, interfaceName, new BigDecimal(-5))) {
+                                LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
                                 try {
-                                    Thread.sleep(180000);
+                                    Thread.sleep(120000);
                                 } catch (InterruptedException e) {
                                     // TODO Auto-generated catch block
-                                    LOG.info("Transponder warmup failed for OCH connection: {}",
-                                            destTpId + "-" + input.getWaveNumber(), e);
+                                    LOG.info("Transponder warmup failed for OCH connection: {}", interfaceName, e);
                                 }
                             } else {
-                                LOG.info("Transponder OCH connection: {} power update failed ",
-                                         destTpId + "-" + input.getWaveNumber());
+                                LOG.info("Transponder OCH connection: {} power update failed ", interfaceName);
                             }
                         }
                     } else {
@@ -165,45 +157,64 @@ public class PowerMgmt {
                 } else {
                     LOG.info("{} is a drop node. Net power settings needed", nodeId);
                 }
-            } else if (inputNode.getNodeType() != null && inputNode.getNodeType().equals(NodeTypes.Rdm)) {
-            // If Degree is transmitting end then set power
+            } else if (inputNodeOptional.isPresent()
+                    && inputNodeOptional.get().getNodeType() != null
+                    && inputNodeOptional.get().getNodeType().equals(NodeTypes.Rdm)) {
+                // If Degree is transmitting end then set power
+                Nodes inputNode = inputNodeOptional.get();
+                LOG.info("This is a roadm device ");
+                String connectionNumber = srcTpId + "-" + destTpId + "-" + input.getWaveNumber();
+                LOG.info("Connection number is {}", connectionNumber);
                 if (destTpId.toLowerCase().contains("deg")) {
-                    java.util.Optional<Mapping> mappingObject = inputNode.getMapping().stream().filter(o -> o.getKey()
+                    Optional<Mapping> mappingObjectOptional = inputNode.getMapping().stream().filter(o -> o.getKey()
                             .equals(new MappingKey(destTpId))).findFirst();
-                    Mapping portMapping = mappingObject.get();
-                    if (portMapping != null && deviceDb != null) {
-                        BigDecimal spanLossTx = new OpenRoadmInterfaces(db, mps, nodeId, destTpId)
-                                .getInterface(portMapping.getSupportingOts()).getAugmentation(Interface1.class).getOts()
-                                .getSpanLossTransmit().getValue();
-                        Double powerValue = Math.min(spanLossTx.doubleValue() - 9 , 2);
-                        CrossConnect roadmCrossConnect = new CrossConnect(deviceDb, srcTpId
-                               + "-" + destTpId + "-" + input.getWaveNumber());
+                    if (mappingObjectOptional.isPresent()) {
+                        LOG.info("Dest point is Degree {}", mappingObjectOptional.get());
+                        Mapping portMapping = mappingObjectOptional.get();
+                        Optional<Interface> interfaceOpt;
                         try {
-                            Boolean setXconnPowerSuccessVal = roadmCrossConnect.setPowerLevel(OpticalControlMode.Power,
-                                    new PowerDBm(BigDecimal.valueOf(powerValue)));
-                            if (setXconnPowerSuccessVal) {
-                                LOG.info("Roadm-connection: {} updated ");
-                                //TODO - commented code because one vendor is not supporting
-                                //GainLoss with target-output-power
-                                Thread.sleep(20000);
-                                roadmCrossConnect.setPowerLevel(OpticalControlMode.GainLoss,
-                                        new PowerDBm(BigDecimal.valueOf(powerValue)));
-                            } else {
-                                LOG.info("Set Power failed for Roadm-connection: {} on Node: {}",
-                                        srcTpId + "-" + destTpId + "-" + input.getWaveNumber(), nodeId);
+                            interfaceOpt = openRoadmInterfaces.getInterface(nodeId, portMapping.getSupportingOts());
+                        } catch (OpenRoadmInterfaceException ex) {
+                            LOG.error("Failed to get interface {} from node {}!", portMapping.getSupportingOts(),
+                                    nodeId, ex);
+                            return false;
+                        }
+                        if (interfaceOpt.isPresent()) {
+                            BigDecimal spanLossTx = interfaceOpt.get().getAugmentation(Interface1.class).getOts()
+                                    .getSpanLossTransmit().getValue();
+                            LOG.info("Spanloss TX is {}", spanLossTx);
+                            BigDecimal powerValue = BigDecimal.valueOf(Math.min(spanLossTx.doubleValue() - 9, 2));
+                            LOG.info("Power Value is {}", powerValue);
+                            try {
+                                Boolean setXconnPowerSuccessVal = setPowerLevel(nodeId,
+                                        OpticalControlMode.Power, powerValue, connectionNumber);
+                                LOG.info("Success Value is {}", setXconnPowerSuccessVal);
+                                if (setXconnPowerSuccessVal) {
+                                    LOG.info("Roadm-connection: {} updated ");
+                                    //TODO - commented code because one vendor is not supporting
+                                    //GainLoss with target-output-power
+                                    Thread.sleep(20000);
+                                    setPowerLevel(nodeId, OpticalControlMode.GainLoss, powerValue,
+                                            connectionNumber);
+                                } else {
+                                    LOG.info("Set Power failed for Roadm-connection: {} on Node: {}", connectionNumber,
+                                            nodeId);
+                                    return false;
+                                }
+                            } catch (InterruptedException e) {
+                                LOG.error("Olm-setPower wait failed {}", e);
                                 return false;
                             }
-                        } catch (InterruptedException e) {
-                            LOG.error("Olm-setPower wait failed {}",e);
+                        } else {
+                            LOG.error("Interface {} on node {} is not present!", portMapping.getSupportingOts(),
+                                    nodeId);
                             return false;
                         }
                     }
                   // If Drop node leave node is power mode
                 } else if (destTpId.toLowerCase().contains("srg")) {
                     LOG.info("Setting power at drop node");
-                    CrossConnect roadmDropCrossConnect = new CrossConnect(deviceDb, srcTpId + "-"
-                            + destTpId + "-" + input.getWaveNumber());
-                    roadmDropCrossConnect.setPowerLevel(OpticalControlMode.Power, null);
+                    setPowerLevel(nodeId, OpticalControlMode.Power, null, connectionNumber);
                 }
             }
         }
@@ -232,43 +243,36 @@ public class PowerMgmt {
      */
     public Boolean powerTurnDown(ServicePowerTurndownInput input) {
         LOG.info("Olm-powerTurnDown initiated");
-        /**Starting with last element into the list Z -> A for
-          turning down A -> Z **/
+        /*Starting with last element into the list Z -> A for
+          turning down A -> Z */
         for (int i = input.getNodes().size() - 1; i >= 0; i--) {
             String nodeId = input.getNodes().get(i).getNodeId();
             String srcTpId =  input.getNodes().get(i).getSrcTp();
             String destTpId = input.getNodes().get(i).getDestTp();
             Long wlNumber = input.getWaveNumber();
-            DataBroker deviceDb = getDeviceDataBroker(nodeId , mps);
-            if (!setInterfaceOutOfService(nodeId, srcTpId,
-                    srcTpId + "-" + wlNumber, deviceDb)) {
-                LOG.warn("Out of service status update failed for interface {} ",
-                       srcTpId + "-" + wlNumber);
-                return false;
-            }
-            if (!setInterfaceOutOfService(nodeId, destTpId,
-                    destTpId + "-" + wlNumber, deviceDb)) {
-                LOG.warn("Out of service status update failed for interface {} ",
-                       destTpId + "-" + wlNumber);
-                return false;
-            }
-            CrossConnect roadmCrossConnect = new CrossConnect(deviceDb, srcTpId
-                    + "-" + destTpId + "-" + wlNumber);
+            String srcInterfaceName = srcTpId + "-" + wlNumber;
+            //if (!setInterfaceOutOfService(nodeId, srcTpId, srcInterfaceName, deviceDb)) {
+            //    LOG.warn("Out of service status update failed for interface {} ", srcInterfaceName);
+            //    return false;
+            //}
+            String destInterfaceName = destTpId + "-" + wlNumber;
+            //if (!setInterfaceOutOfService(nodeId, destTpId, destInterfaceName, deviceDb)) {
+            //    LOG.warn("Out of service status update failed for interface {} ", destInterfaceName);
+            //    return false;
+            //}
+            String connectionNumber =  srcTpId + "-" + destTpId + "-" + wlNumber;
             if (destTpId.toLowerCase().contains("srg")) {
-                roadmCrossConnect.setPowerLevel(OpticalControlMode.Off, null);
+                setPowerLevel(nodeId, OpticalControlMode.Off, null, connectionNumber);
             } else if (destTpId.toLowerCase().contains("deg")) {
                 try {
-                    if (!roadmCrossConnect.setPowerLevel(OpticalControlMode.Power,
-                            new PowerDBm(new BigDecimal(-60)))) {
-                        LOG.warn("Power down failed for Roadm-connection: {}", srcTpId
-                                + "-" + destTpId + "-" + wlNumber);
+                    if (!setPowerLevel(nodeId, OpticalControlMode.Power, new BigDecimal(-60),
+                            connectionNumber)) {
+                        LOG.warn("Power down failed for Roadm-connection: {}", connectionNumber);
                         return false;
                     }
                     Thread.sleep(20000);
-                    if (!roadmCrossConnect.setPowerLevel(OpticalControlMode.Off,
-                            null)) {
-                        LOG.warn("Setting power-control mode off failed for Roadm-connection: {}",
-                                srcTpId + "-" + destTpId + "-" + wlNumber);
+                    if (!setPowerLevel(nodeId, OpticalControlMode.Off, null, connectionNumber)) {
+                        LOG.warn("Setting power-control mode off failed for Roadm-connection: {}", connectionNumber);
                         return false;
                     }
                 } catch (InterruptedException e) {
@@ -291,145 +295,83 @@ public class PowerMgmt {
      *            Termination point of mounted netconf - node
      * @param interfaceName
      *            Name of interface which needs status update
-     * @param deviceDb
-     *            Reference to device data broker
      * @return true/false based on status of operation
      */
-    public Boolean setInterfaceOutOfService(String nodeId, String tpId,
-            String interfaceName, DataBroker deviceDb) {
+    private Boolean setInterfaceOutOfService(String nodeId, String tpId, String interfaceName) {
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier
                 .create(OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey(interfaceName));
-        Interface nodeInterface = new OpenRoadmInterfaces(db, mps, nodeId, tpId)
-                .getInterface(interfaceName);
-        InterfaceBuilder intfBuilder = new InterfaceBuilder(nodeInterface);
-        intfBuilder.setAdministrativeState(AdminStates.OutOfService);
-        final WriteTransaction writeTransaction = deviceDb.newWriteOnlyTransaction();
-        writeTransaction.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, intfBuilder.build());
-        final CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
+        Optional<Interface> nodeInterfaceOpt;
         try {
-            submit.checkedGet();
-            LOG.info("Successfully posted interface {}" , interfaceName);
-            return true;
-        } catch (TransactionCommitFailedException ex) {
-            LOG.warn("Failed to post {} ", interfaceName ,ex);
+            nodeInterfaceOpt = openRoadmInterfaces.getInterface(nodeId, interfaceName);
+        } catch (OpenRoadmInterfaceException ex) {
+            LOG.error("Failed to get interface {} from node {}!", interfaceName, nodeId, ex);
+            return false;
+        }
+        if (nodeInterfaceOpt.isPresent()) {
+            InterfaceBuilder intfBuilder = new InterfaceBuilder(nodeInterfaceOpt.get());
+            intfBuilder.setAdministrativeState(AdminStates.OutOfService);
+            Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
+            DeviceTransaction deviceTx;
+            try {
+                Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
+                if (deviceTxOpt.isPresent()) {
+                    deviceTx = deviceTxOpt.get();
+                } else {
+                    LOG.error("Transaction for device {} was not found!", nodeId);
+                    return false;
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Unable to get transaction for device {}!", nodeId, e);
+                return false;
+            }
+            deviceTx.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, intfBuilder.build());
+            ListenableFuture<Void> submit = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
+                    Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            try {
+                submit.get();
+                LOG.info("Successfully posted interface {}", interfaceName);
+                return true;
+            } catch (InterruptedException | ExecutionException ex) {
+                LOG.warn("Failed to post {} ", interfaceName, ex);
+                return false;
+            }
+        } else {
+            LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
             return false;
         }
     }
 
     /**
-     * This static method returns the DataBroker for a netconf node.
-     *
-     * @param nodeId
-     *            Unique identifier for the mounted netconf- node
-     * @param mps
-     *            Reference to mount service
-     * @return Databroker for the given device
-     */
-    public static DataBroker getDeviceDataBroker(String nodeId, MountPointService mps) {
-        MountPoint netconfNode = getDeviceMountPoint(nodeId, mps);
-        if (netconfNode != null) {
-            DataBroker netconfNodeDataBroker = netconfNode.getService(DataBroker.class).get();
-            return netconfNodeDataBroker;
-        } else {
-            LOG.info("Device Data broker not found for :" + nodeId);
-            return null;
-        }
-    }
-
-    /**
-     * This static method returns the Mountpoint for a netconf node.
-     *
-     * @param nodeId
-     *            Unique identifier for the mounted netconf- node
-     * @param mps
-     *            Reference to mount service
-     * @return MountPoint for the given device
-     */
-    public static MountPoint getDeviceMountPoint(String nodeId, MountPointService mps) {
-        final Optional<MountPoint> netconfNodeOptional = mps.getMountPoint(NETCONF_TOPO_IID
-                .child(Node.class, new NodeKey(new NodeId(nodeId))));
-        // Get mount point for specified device
-        if (netconfNodeOptional.isPresent()) {
-            MountPoint netconfNode = netconfNodeOptional.get();
-            return netconfNode;
-        } else {
-            LOG.info("Mount Point not found for :" + nodeId);
-            return null;
-        }
-
-    }
-
-    /**
-     * This static method returns the DataBroker for a netconf node.
-     *
-     * @param nodeId
-     *            Unique identifier for the mounted netconf- node
-     * @param mps
-     *            Reference to mount service
-     * @param db
-     *            Databroker
-     * @return Nodes from portMapping for given nodeId
-     */
-    public static Nodes getNode(String nodeId, MountPointService mps, DataBroker db) {
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
-                .child(Nodes.class, new NodesKey(nodeId));
-        ReadOnlyTransaction readTransaction = db.newReadOnlyTransaction();
-        Optional<Nodes> nodeObject;
-        try {
-            nodeObject = readTransaction.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
-            if (nodeObject.isPresent()) {
-                LOG.info("Found Node in Portmapping for nodeId {}", nodeObject.get().getNodeId());
-                return nodeObject.get();
-            } else {
-                LOG.info("Could not find Portmapping for nodeId {}", nodeId);
-                return null;
-            }
-        } catch (InterruptedException | ExecutionException ex) {
-            LOG.info("Unable to read Portmapping for nodeId {}", nodeId, ex);
-        }
-        return null;
-    }
-
-    /**
      * This method provides Transponder transmit power range.
      *
-     * @param nodeId
-     *            Unique identifier for the mounted netconf- node
      * @param circuitPackName
      *            Transponder circuitPack name
      * @param portName
      *            Transponder port name
-     * @param deviceDb
+     * @param deviceId
      *            Databroker for the given device
      * @return HashMap holding Min and Max transmit power for given port
      */
-    public Map<String, Double> getXponderPowerRange(String nodeId, String circuitPackName, String portName,
-            DataBroker deviceDb) {
-        InstanceIdentifier<Ports> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-                CircuitPacks.class, new CircuitPacksKey(circuitPackName)).child(Ports.class, new PortsKey(portName));
-        ReadOnlyTransaction readTransaction = deviceDb.newReadOnlyTransaction();
-        Map<String, Double> powerRangeMap = new HashMap<String, Double>();
-        try {
-            LOG.info("Fetching logical Connection Point value for port " + portName + " at circuit pack "
-                + circuitPackName);
-            Optional<Ports> portObject = readTransaction.read(LogicalDatastoreType.OPERATIONAL, portIID).get();
-            if (portObject.isPresent()) {
-                Ports port = portObject.get();
-                if (port.getTransponderPort() != null) {
-                    powerRangeMap.put("MaxTx", port.getTransponderPort().getPortPowerCapabilityMaxTx()
-                            .getValue().doubleValue());
-                    powerRangeMap.put("MinTx", port.getTransponderPort().getPortPowerCapabilityMinTx()
-                            .getValue().doubleValue());
-                } else {
-                    LOG.warn("Logical Connection Point value missing for " + circuitPackName + " " + port
-                        .getPortName());
-                }
+    private Map<String, Double> getXponderPowerRange(String circuitPackName, String portName, String deviceId) {
+        InstanceIdentifier<Ports> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
+                .child(Ports.class, new PortsKey(portName));
+        Map<String, Double> powerRangeMap = new HashMap<>();
+        LOG.info("Fetching logical Connection Point value for port {} at circuit pack {}", portName, circuitPackName);
+        Optional<Ports> portObject =
+                deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, portIID,
+                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (portObject.isPresent()) {
+            Ports port = portObject.get();
+            if (port.getTransponderPort().getPortPowerCapabilityMaxTx() != null) {
+                powerRangeMap.put("MaxTx", port.getTransponderPort().getPortPowerCapabilityMaxTx().getValue()
+                        .doubleValue());
+                powerRangeMap.put("MinTx", port.getTransponderPort().getPortPowerCapabilityMinTx().getValue()
+                        .doubleValue());
+            } else {
+                LOG.warn("Logical Connection Point value missing for {} {}", circuitPackName, port.getPortName());
             }
-        } catch (InterruptedException | ExecutionException ex) {
-            LOG.warn("Read failed for Logical Connection Point value missing for " + circuitPackName + " "
-                + portName,ex);
-            return powerRangeMap;
         }
         return powerRangeMap;
     }
@@ -441,48 +383,43 @@ public class PowerMgmt {
      *            Unique identifier for the mounted netconf- node
      * @param srgId
      *            SRG Id connected to transponder
-     * @param deviceDb
-     *            Databroker for the given device
      * @return HashMap holding Min and Max transmit power for given port
      */
-    public Map<String, Double> getSRGRxPowerRange(String nodeId, String srgId, DataBroker deviceDb) {
-        Map<String, Double> powerRangeMap = new HashMap<String, Double>();
+    private Map<String, Double> getSRGRxPowerRange(String nodeId, String srgId) {
+        Map<String, Double> powerRangeMap = new HashMap<>();
         LOG.info("Coming inside Xpdr power range");
-        java.util.Optional<Mapping> mappingSRGObject = getNode(nodeId, mps, db).getMapping()
+        Optional<Mapping> mappingSRGOptional = OlmUtils.getNode(nodeId, db).flatMap(node -> node.getMapping()
                 .stream().filter(o -> o.getKey()
-                .equals(new MappingKey(srgId))).findFirst();
-        if (mappingSRGObject.isPresent()) {
+                        .equals(new MappingKey(srgId))).findFirst());
+        if (mappingSRGOptional.isPresent()) {
             LOG.info("Mapping object exists.");
-            String circuitPackName = mappingSRGObject.get().getSupportingCircuitPackName();
-            String portName = mappingSRGObject.get().getSupportingPort();
+            String circuitPackName = mappingSRGOptional.get().getSupportingCircuitPackName();
+            String portName = mappingSRGOptional.get().getSupportingPort();
             InstanceIdentifier<Ports> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                     .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
                     .child(Ports.class, new PortsKey(portName));
-            try {
-                LOG.info("Fetching logical Connection Point value for port " + portName + " at circuit pack "
-                    + circuitPackName + portIID);
-                ReadOnlyTransaction rtx = deviceDb.newReadOnlyTransaction();
-                Optional<Ports> portObject = rtx.read(LogicalDatastoreType.OPERATIONAL, portIID).get();
-                if (portObject.isPresent()) {
-                    Ports port = portObject.get();
-                    if (port.getRoadmPort() != null) {
-                        LOG.info("Port found on the node ID");
-                        powerRangeMap.put("MinRx", port.getRoadmPort()
-                                .getPortPowerCapabilityMinRx().getValue().doubleValue());
-                        powerRangeMap.put("MaxRx", port.getRoadmPort()
-                                .getPortPowerCapabilityMaxRx().getValue().doubleValue());
-                        return powerRangeMap;
-                    } else {
-                        LOG.warn("Roadm ports power value is missing for " + circuitPackName + " " + port
-                            .getPortName());
-                    }
+
+            LOG.info("Fetching logical Connection Point value for port {} at circuit pack {}{}", portName,
+                    circuitPackName, portIID);
+            Optional<Ports> portObject =
+                    deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, portIID,
+                            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            if (portObject.isPresent()) {
+                Ports port = portObject.get();
+                if (port.getRoadmPort() != null) {
+                    LOG.info("Port found on the node ID");
+                    powerRangeMap.put("MinRx", port.getRoadmPort()
+                            .getPortPowerCapabilityMinRx().getValue().doubleValue());
+                    powerRangeMap.put("MaxRx", port.getRoadmPort()
+                            .getPortPowerCapabilityMaxRx().getValue().doubleValue());
+                    return powerRangeMap;
                 } else {
-                    LOG.info("Port not found");
+                    LOG.warn("Roadm ports power value is missing for {} {}", circuitPackName, port.getPortName());
                 }
-            } catch (InterruptedException | ExecutionException ex) {
-                LOG.warn("Read failed for Logical Connection Point value missing for " + circuitPackName + " "
-                    + portName,ex);
+            } else {
+                LOG.info("Port not found");
             }
+
         } else {
             LOG.info("Port mapping not found for nodeId: {} and srgId: {} ",
                     nodeId, srgId);
@@ -497,41 +434,124 @@ public class PowerMgmt {
      *
      * @param nodeId
      *            Unique identifier for the mounted netconf- node
-     * @param tpId
-     *            Termination port for transponder connected to SRG
      * @param interfaceName
      *            OCH interface name carrying WL
      * @param txPower
      *            Calculated transmit power
-     * @param deviceDb
-     *            Databroker for the given device
      * @return true/false based on status of operation
      */
-    public boolean setTransponderPower(String nodeId, String tpId, String interfaceName, BigDecimal txPower,
-            DataBroker deviceDb) {
+    private boolean setTransponderPower(String nodeId, String interfaceName, BigDecimal txPower) {
         LOG.info("Setting target-power for transponder nodeId: {} InterfaceName: {}",
                 nodeId, interfaceName);
-        InterfaceBuilder ochInterfaceBuilder = new InterfaceBuilder(
-                new OpenRoadmInterfaces(db, mps, nodeId, tpId)
-                   .getInterface(interfaceName));
-        OchBuilder ochBuilder = new OchBuilder(ochInterfaceBuilder
-                .getAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                        .channel.interfaces.rev161014.Interface1.class).getOch());
-        ochBuilder.setTransmitPower(new PowerDBm(txPower));
-        ochInterfaceBuilder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.optical
-                .channel.interfaces.rev161014.Interface1.class,
-                new Interface1Builder().setOch(ochBuilder.build()).build());
-        ReadWriteTransaction rwtx = deviceDb.newReadWriteTransaction();
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Interface.class, new InterfaceKey(interfaceName));
-        rwtx.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, ochInterfaceBuilder.build());
-        CheckedFuture<Void, TransactionCommitFailedException> submit = rwtx.submit();
+        Optional<Interface> interfaceOptional;
         try {
-            submit.checkedGet();
-            LOG.info("Power update is submitted");
-            return true;
-        } catch (TransactionCommitFailedException e) {
-            LOG.info("Setting transponder power failed {}" ,e);
+            interfaceOptional = openRoadmInterfaces.getInterface(nodeId, interfaceName);
+        } catch (OpenRoadmInterfaceException ex) {
+            LOG.error("Failed to get interface {} from node {}!", interfaceName, nodeId, ex);
+            return false;
+        }
+        if (interfaceOptional.isPresent()) {
+            InterfaceBuilder ochInterfaceBuilder =
+                    new InterfaceBuilder(interfaceOptional.get());
+            OchBuilder ochBuilder = new OchBuilder(ochInterfaceBuilder.getAugmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
+                            .Interface1.class).getOch());
+            ochBuilder.setTransmitPower(new PowerDBm(txPower));
+            ochInterfaceBuilder.addAugmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
+                            .Interface1.class, new Interface1Builder().setOch(ochBuilder.build()).build());
+
+            Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
+            DeviceTransaction deviceTx;
+            try {
+                Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
+                if (deviceTxOpt.isPresent()) {
+                    deviceTx = deviceTxOpt.get();
+                } else {
+                    LOG.error("Transaction for device {} was not found!", nodeId);
+                    return false;
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Unable to get transaction for device {}!", nodeId, e);
+                return false;
+            }
+
+            InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                    .child(Interface.class, new InterfaceKey(interfaceName));
+            deviceTx.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, ochInterfaceBuilder.build());
+            ListenableFuture<Void> submit = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
+                    Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            try {
+                submit.get();
+                LOG.info("Power update is submitted");
+                return true;
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Setting transponder power failed {}", e);
+            }
+        } else {
+            LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
+        }
+        return false;
+    }
+
+    /**
+     * This method does an edit-config on roadm connection subtree for a given
+     * connection number in order to set power level for use by the optical
+     * power control.
+     *
+     * @param deviceId
+     *            Device id.
+     * @param mode
+     *            Optical control modelcan be off, power or gainLoss.
+     * @param powerValue
+     *            Power value in DBm.
+     * @param connectionNumber
+     *            Name of the cross connect.
+     * @return true/false based on status of operation.
+     */
+    private boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue,
+            String connectionNumber) {
+        Optional<RoadmConnections> rdmConnOpt = crossConnect.getCrossConnect(deviceId, connectionNumber);
+        if (rdmConnOpt.isPresent()) {
+            RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
+            rdmConnBldr.setOpticalControlMode(mode);
+            if (powerValue != null) {
+                rdmConnBldr.setTargetOutputPower(new PowerDBm(powerValue));
+            }
+            RoadmConnections newRdmConn = rdmConnBldr.build();
+
+            Future<Optional<DeviceTransaction>> deviceTxFuture =
+                    deviceTransactionManager.getDeviceTransaction(deviceId);
+            DeviceTransaction deviceTx;
+            try {
+                Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
+                if (deviceTxOpt.isPresent()) {
+                    deviceTx = deviceTxOpt.get();
+                } else {
+                    LOG.error("Transaction for device {} was not found!", deviceId);
+                    return false;
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Unable to get transaction for device {}!", deviceId, e);
+                return false;
+            }
+
+            // post the cross connect on the device
+            InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                    .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
+            deviceTx.put(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
+            ListenableFuture<Void> submit = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
+                    Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            try {
+                submit.get();
+                LOG.info("Roadm connection power level successfully set ");
+                return true;
+            } catch (InterruptedException | ExecutionException ex) {
+                LOG.warn("Failed to post {}", newRdmConn, ex);
+            }
+
+        } else {
+            LOG.warn("Roadm-Connection is null in set power level ({})", connectionNumber);
         }
         return false;
     }

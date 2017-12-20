@@ -1,0 +1,46 @@
+/*
+ * Copyright © 2017 AT&T and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
+package org.opendaylight.transportpce.renderer;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.opendaylight.transportpce.renderer.provisiondevice.tasks.RollbackProcessor;
+
+public class RollbackProcessorTest {
+
+    @Test
+    public void rollbackIfNecessaryTest() throws Exception {
+        int rolledBack = -1;
+        RollbackProcessor rollbackProcessor = new RollbackProcessor();
+        rollbackProcessor.addTask(new TestRollbackTask("task1", false));
+        rollbackProcessor.addTask(new TestRollbackTask("task2", false));
+        rolledBack = rollbackProcessor.rollbackAllIfNecessary();
+        Assert.assertTrue(rolledBack == 0);
+        rollbackProcessor.addTask(new TestRollbackTask("task3", true));
+        rollbackProcessor.addTask(new TestRollbackTask("task4", false));
+        rolledBack = rollbackProcessor.rollbackAllIfNecessary();
+        Assert.assertTrue(rolledBack == 4);
+        rolledBack = rollbackProcessor.rollbackAllIfNecessary();
+        Assert.assertTrue(rolledBack == 0);
+    }
+
+    @Test
+    public void rollbackAllTest() throws Exception {
+        RollbackProcessor rollbackProcessor = new RollbackProcessor();
+        rollbackProcessor.addTask(new TestRollbackTask("task1", false));
+        rollbackProcessor.addTask(new TestRollbackTask("task2", false));
+        rollbackProcessor.addTask(new TestRollbackTask("task3", false));
+        rollbackProcessor.addTask(new TestRollbackTask("task4", false));
+        int rolledBack = -1;
+        rolledBack = rollbackProcessor.rollbackAll();
+        Assert.assertTrue(rolledBack == 4);
+        rolledBack = rollbackProcessor.rollbackAll();
+        Assert.assertTrue(rolledBack == 0);
+    }
+
+}

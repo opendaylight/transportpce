@@ -7,15 +7,17 @@
  */
 package org.opendaylight.transportpce.renderer;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification.ModificationType;
@@ -27,12 +29,13 @@ import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.sal.binding.api.RpcConsumerRegistry;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.renderer.listeners.AlarmNotificationListener;
 import org.opendaylight.transportpce.renderer.listeners.DeOperationsListener;
 import org.opendaylight.transportpce.renderer.listeners.DeviceListener;
 import org.opendaylight.transportpce.renderer.listeners.LldpListener;
 import org.opendaylight.transportpce.renderer.listeners.TcaListener;
-import org.opendaylight.transportpce.renderer.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.AlarmNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.OrgOpenroadmAlarmListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.de.operations.rev161014.OrgOpenroadmDeOperationsListener;
@@ -59,12 +62,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
-
     private final DataBroker dataBroker;
     private final MountPointService mountService;
     private static final Logger LOG = LoggerFactory.getLogger(RendererNotificationsImpl.class);
     private ListenerRegistration<RendererNotificationsImpl> dataTreeChangeListenerRegistration;
-
+    private final PortMapping portMapping;
+    private final DeviceTransactionManager deviceTransactionManager;
     private final Set<String> currentMountedDevice;
     public static final InstanceIdentifier<Topology> NETCONF_TOPO_IID = InstanceIdentifier.create(NetworkTopology.class)
         .child(Topology.class, new TopologyKey(new TopologyId(TopologyNetconf.QNAME.getLocalName())));
@@ -78,13 +81,20 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
         });
 
     public RendererNotificationsImpl(final DataBroker dataBroker, final MountPointService mountService,
-        Set<String> currentMountedDevice) {
+        Set<String> currentMountedDevice, PortMapping portMapping,DeviceTransactionManager deviceTransactionManager) {
         this.dataBroker = dataBroker;
         this.mountService = mountService;
         this.currentMountedDevice = currentMountedDevice;
+        this.portMapping = portMapping;
+        this.deviceTransactionManager = deviceTransactionManager;
+        if (portMapping == null) {
+            LOG.error("Portmapping is null !");
+        }
+        if (deviceTransactionManager == null) {
+            LOG.error("deviceTransactionManager is null");
+        }
         if (mountService == null) {
             LOG.error("Mount service is null");
-
         }
         if (dataBroker != null) {
             this.dataTreeChangeListenerRegistration = dataBroker.registerDataTreeChangeListener(
@@ -92,15 +102,23 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
         }
     }
 
-    private void registerNotificationListener(final NodeId nodeId) {
+    private void registerNotificationListener(final String nodeId) {
 
-        MountPoint mountPoint = PortMapping.getDeviceMountPoint(nodeId.getValue(), this.mountService);
+        LOG.info("onDeviceConnected: {}", nodeId);
+        Optional<MountPoint> mountPointOpt = this.deviceTransactionManager.getDeviceMountPoint(nodeId);
+        MountPoint mountPoint;
+        if (mountPointOpt.isPresent()) {
+            mountPoint = mountPointOpt.get();
+        } else {
+            LOG.error("Failed to get mount point for node {}", nodeId);
+            return;
+        }
 
-        // Register notification service
-        final Optional<NotificationService> notificationService = mountPoint.getService(
-            NotificationService.class);
+        final Optional<NotificationService> notificationService =
+                mountPoint.getService(NotificationService.class).toJavaUtil();
         if (!notificationService.isPresent()) {
-            LOG.error("Failed to get RpcService for node {}", nodeId.getValue());
+            LOG.error("Failed to get RpcService for node {}", nodeId);
+            return;
         }
 
         final OrgOpenroadmAlarmListener alarmListener;
@@ -130,9 +148,9 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
 
         // Listening to NETCONF datastream
         final String streamName = "NETCONF";
-        final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
+        final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class).toJavaUtil();
         if (!service.isPresent()) {
-            LOG.error("Failed to get RpcService for node {}", nodeId.getValue());
+            LOG.error("Failed to get RpcService for node {}", nodeId);
         }
 
         final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
@@ -168,7 +186,6 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                 String nodeid = rootNode.getDataBefore().getKey().getNodeId().getValue();
                 LOG.info("Node {} removed...", nodeid);
                 this.currentMountedDevice.remove(nodeid);
-                new PortMapping(this.dataBroker, this.mountService, nodeid).deleteMappingData();
             }
 
             if (nnode != null) {
@@ -192,9 +209,9 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                              * TODO: check for required capabilities to listen
                              * for notifications
                              */
-                            registerNotificationListener(rootNode.getDataAfter().getNodeId());
+                            registerNotificationListener(nodeId);
                             this.currentMountedDevice.add(nodeId);
-                            new PortMapping(this.dataBroker, this.mountService, nodeId).createMappingData();
+                            this.portMapping.createMappingData(nodeId);
                             break;
                         }
                         case Connecting: {
