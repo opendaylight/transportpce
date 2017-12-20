@@ -1,0 +1,107 @@
+module org-transportpce-common-types {
+    namespace "http://org/transportpce/common-types";
+    prefix org-transportpce-common-types;
+
+    import org-openroadm-resource-types {
+        prefix org-openroadm-resource-types;
+        revision-date 2016-10-14;
+    }
+    import org-openroadm-pm-types {
+        prefix org-openroadm-pm-types;
+        revision-date 2016-10-14;
+    }
+
+    revision "2017-09-07" {
+        description "Initial revision of TransportPCE common-types";
+    }
+
+    grouping olm-renderer-input {
+        leaf service-name {
+            type string;
+        }
+        leaf wave-number {
+            type uint32;
+        }
+        list nodes {
+            ordered-by user;
+            key "node-id";
+            leaf node-id {
+                type string;
+                description "Gloabally unique identifier
+                    for the node";
+            }
+            leaf src-tp {
+                type string;
+                description "Source termination point ";
+                mandatory true;
+            }
+            leaf dest-tp {
+                type string;
+                description "Destination termination point ";
+                mandatory true;
+            }
+        }
+        description
+            "Type to be used by OLM and Renderer RPCs";
+    }
+
+    grouping olm-get-pm-input {
+        leaf node-id {
+            type string;
+            description "Gloabally unique identifier
+                for the node";
+            mandatory true;
+        }
+        leaf resource-type {
+            type string;
+            description "Type of the PM resource";
+            mandatory true;
+        }
+        //container resource-identifier {
+            leaf resource-name {
+                type string;
+                description "Identifier of particular resource of given type";
+                mandatory true;
+            }
+            leaf circuit-pack-name {
+                when "../../resource-type = 'port'";
+                type string;
+                description "In case resource type is port, then particular resource is identified by port-name
+                    (resource-name) and circuit-pack-name (this leaf).";
+                mandatory true;
+
+            }
+        //}
+        leaf granularity {
+            type string;
+            description "Granularity of PM bin can be
+                notApplicable,15min,24Hour";
+            mandatory true;
+        }
+    }
+
+    grouping node-interfaces {
+        list node-interface {
+            key node-id;
+            leaf node-id {
+                type string;
+            }
+            leaf-list och-interface-id {
+                type string;
+            }
+            leaf-list otu-interface-id {
+                type string;
+            }
+            leaf-list odu-interface-id {
+                type string;
+            }
+            leaf-list eth-interface-id {
+                type string;
+            }
+            leaf-list connection-id {
+                type string;
+            }
+        }
+   }
+
+}

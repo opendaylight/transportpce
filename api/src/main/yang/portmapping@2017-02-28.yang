@@ -5,6 +5,7 @@ module portmapping {
 
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
+    revision-date 2016-10-14;
   }
 
  organization
@@ -13,7 +14,7 @@ module portmapping {
     "transportPCE committers - ODL";
   description
     "YANG definitions of RPCs supported by OLM.
-     Copyright © 2017 AT&T and others.  All rights reserved.
+     Copyright (c) 2017 AT&T and others.  All rights reserved.
      authors: Dhruv Bhardwaj ( db929a@att.com )
               Shweta Vachhani ( sv111y@att.com )";
 
@@ -60,6 +61,18 @@ module portmapping {
           type string;
           description
           "OTS interface provisioned on the port";
+        }
+      }
+      list cp-to-degree{
+        description
+          "This mapping helps locate degree number of the circuitpack that does lldp
+         protocol management";
+       key circuit-pack-name;
+       leaf circuit-pack-name{
+          type string;
+       }
+       leaf degree-number{
+            type uint32;
         }
       }
     }

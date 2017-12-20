@@ -75,11 +75,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </dependency>
     <dependency>
       <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>transportpce-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>transportpce-renderer</artifactId>
       <version>${project.version}</version>
     </dependency>

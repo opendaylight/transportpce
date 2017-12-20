@@ -1,0 +1,96 @@
+module renderer {
+  yang-version 1;
+  namespace "urn:opendaylight:params:xml:ns:yang:renderer";
+  prefix "renderer";
+
+  import org-transportpce-common-types {
+      prefix org-transportpce-common-types;
+      revision-date 2017-09-07;
+  }
+
+  organization
+       "transportPCE";
+     contact
+       "transportPCE committers - ODL";
+     description
+       "YANG definitions of RPCs supported by renderer.
+        Copyright (c) 2017 AT&T and others.  All rights reserved.
+        authors: Dhruv Bhardwaj ( db929a@att.com )
+                 Shweta Vachhani ( sv111y@att.com )";
+
+  revision "2017-02-28" {
+    description "Initial revision of renderer model";
+  }
+
+  rpc service-path {
+    input {
+      leaf modulation-format {
+          type string;
+      }
+      leaf operation {
+        type enumeration {
+          enum "create" {
+            value 1;
+          }
+          enum "delete" {
+            value 2;
+          }
+        }
+      }
+      leaf service-name {
+            type string;
+        }
+        leaf wave-number {
+            type uint32;
+        }
+        list nodes {
+            ordered-by user;
+            key "node-id";
+            leaf node-id {
+                type string;
+                description "Gloabally unique identifier
+                    for the node";
+            }
+            leaf src-tp {
+                type string;
+                description "Source termination point ";
+                mandatory true;
+            }
+            leaf dest-tp {
+                type string;
+                description "Destination termination point ";
+                mandatory true;
+            }
+        }
+    }
+    output{
+      leaf success {
+        type boolean;
+      }
+      leaf result {
+        type string;
+      }
+      uses org-transportpce-common-types:node-interfaces;
+    }
+  }
+
+  /*rpc renderer-rollback {
+    input {
+      uses org-transportpce-common-types:node-interfaces;
+    }
+    output {
+      leaf success {
+        type boolean;
+      }
+      list failed-to-rollback {
+        key node-id;
+        leaf node-id {
+          type string;
+        }
+        leaf-list interface {
+          type string;
+        }
+      }
+    }
+  }*/
+}
