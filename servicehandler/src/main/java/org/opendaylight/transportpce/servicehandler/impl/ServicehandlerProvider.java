@@ -13,6 +13,7 @@ import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService
 import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServicehandlerService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.StubpceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.OrgOpenroadmServiceService;
@@ -40,6 +41,7 @@ public class ServicehandlerProvider {
     private ListenerRegistration<StubpceListener> stubpcelistenerRegistration;
     private ListenerRegistration<StubrendererListener> stubrendererlistenerRegistration;
     private RpcRegistration<OrgOpenroadmServiceService> rpcRegistration;
+    private RpcRegistration<ServicehandlerService> rpcRegistrationServiceHandler;
 
 
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderRegistry rpcProviderRegistry,
@@ -59,6 +61,7 @@ public class ServicehandlerProvider {
         stubpcelistenerRegistration = notificationService.registerNotificationListener(consumer);
         stubrendererlistenerRegistration = notificationService.registerNotificationListener(consumer);
         rpcRegistration = rpcRegistry.addRpcImplementation(OrgOpenroadmServiceService.class, consumer);
+        rpcRegistrationServiceHandler = rpcRegistry.addRpcImplementation(ServicehandlerService.class, consumer);
     }
 
     /**
@@ -69,5 +72,6 @@ public class ServicehandlerProvider {
         stubpcelistenerRegistration.close();
         stubrendererlistenerRegistration.close();
         rpcRegistration.close();
+        rpcRegistrationServiceHandler.close();
     }
 }

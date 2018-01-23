@@ -60,7 +60,7 @@ public class Topology {
             xml = inputStreamToString(is);
             if (xml != null) {
                 setNetwork(xmlMapper.readValue(xml, Network.class));
-                LOG.info("Network : " + network.toString());
+                LOG.info("Network : {}", network.toString());
             } else {
                 LOG.info("String xml is null");
             }

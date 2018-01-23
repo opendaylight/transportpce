@@ -35,6 +35,10 @@ import org.opendaylight.transportpce.servicehandler.ServicehandlerCompliancyChec
 import org.opendaylight.transportpce.servicehandler.ServicehandlerTxRxCheck;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServiceRpcResultShBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServiceStateModifyInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServiceStateModifyOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServiceStateModifyOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServicehandlerService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathComputationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.ServicePathRpcResult;
@@ -48,6 +52,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeader;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.ServiceZEnd;
@@ -119,7 +124,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author <a href="mailto:martial.coulibaly@gfi.com">Martial Coulibaly</a> on behalf of Orange
  */
-public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceListener,
+public class ServicehandlerImpl implements OrgOpenroadmServiceService, ServicehandlerService, StubpceListener,
     StubrendererListener,AutoCloseable {
     /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerImpl.class);
@@ -149,7 +154,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
     private ServicePathRpcResult servicePathRpcResult = null;
     private ServiceRpcResultSp serviceRpcResultSp = null;
 
-    private String notificationUrl = "";
     private RpcActions action;
 
     private PathDescription pathDescription;
@@ -188,7 +192,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             serviceName = service.getServiceName();
         }
         if (serviceName != null) {
-            LOG.info("deleting service '" + serviceName + "'from datastore ...");
+            LOG.info("deleting service '{}' from datastore ...", serviceName);
             ServiceRpcResultSh notification = null;
             String message = "";
             /**
@@ -210,7 +214,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             try {
                 notificationPublishService.putNotification(notification);
             } catch (InterruptedException e) {
-                LOG.info("notification offer rejected : " + e);
+                LOG.info("notification offer rejected : {}", e);
             }
         } else {
             LOG.error("Parameter 'ServiceName' fro deleteServiceFromDatastore is null !");
@@ -274,13 +278,13 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                 }
                 notification = new ServiceRpcResultShBuilder()
                         .setNotificationType(notif)
-                        .setServiceName(serviceCreateInput.getServiceName())
+                        .setServiceName(serviceName)
                         .setStatus(RpcStatusEx.Successful).setStatusMessage(message)
                         .build();
                 try {
                     notificationPublishService.putNotification(notification);
                 } catch (InterruptedException e) {
-                    LOG.info("notification offer rejected : " + e);
+                    LOG.info("notification offer rejected : {}", e);
                 }
             } else {
                 message = "pathTopology not in stubrenderer notification, cancelling pce resource reserve ...";
@@ -294,7 +298,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                 try {
                     notificationPublishService.putNotification(notification);
                 } catch (InterruptedException e) {
-                    LOG.info("notification offer rejected : " + e);
+                    LOG.info("notification offer rejected : {}", e);
                 }
                 pceCancelResResource();
             }
@@ -359,7 +363,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
         try {
             notificationPublishService.putNotification(notification);
         } catch (InterruptedException e) {
-            LOG.info("notification offer rejected : " + e);
+            LOG.info("notification offer rejected : {}", e);
         }
         FutureCallback<Boolean> pceCallback =  new FutureCallback<Boolean>() {
             String message = "";
@@ -383,7 +387,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
                 } else {
                     message = mappingAndSendingPCRequest.getError();
@@ -394,7 +398,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
                 }
             }
@@ -409,7 +413,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                 try {
                     notificationPublishService.putNotification(notification);
                 } catch (InterruptedException e) {
-                    LOG.info("notification offer rejected : " + e);
+                    LOG.info("notification offer rejected : {}", e);
                 }
 
             }
@@ -483,7 +487,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                         try {
                             notificationPublishService.putNotification(notification);
                         } catch (InterruptedException e) {
-                            LOG.info("notification offer rejected : " + e);
+                            LOG.info("notification offer rejected : {}", e);
                         }
                     } else {
                         message = mappingAndSendingPCRequest.getError();
@@ -494,7 +498,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                         try {
                             notificationPublishService.putNotification(notification);
                         } catch (InterruptedException e) {
-                            LOG.info("notification offer rejected : " + e);
+                            LOG.info("notification offer rejected : {}", e);
                         }
                     }
                 }
@@ -510,7 +514,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
 
                 }
@@ -536,7 +540,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
 
         if (tmp != null && id != null) {
             final String serviceName = tmp;
-            LOG.info("stubrendererDelete service '" + serviceName + "'");
+            LOG.info("stubrendererDelete service '{}'", serviceName);
             mappingAndSendingSIRequest = new MappingAndSendingSIRequest(rpcRegistry, id, serviceName);
             ListenableFuture<Boolean> renderer = mappingAndSendingSIRequest.serviceDelete();
             FutureCallback<Boolean> rendererCallback = new FutureCallback<Boolean>() {
@@ -554,7 +558,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
 
                 }
@@ -570,7 +574,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                         try {
                             notificationPublishService.putNotification(notification);
                         } catch (InterruptedException e) {
-                            LOG.info("notification offer rejected : " + e);
+                            LOG.info("notification offer rejected : {}", e);
                         }
                     } else {
                         message = "deleting service failed !";
@@ -582,7 +586,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                         try {
                             notificationPublishService.putNotification(notification);
                         } catch (InterruptedException e) {
-                            LOG.info("notification offer rejected : " + e);
+                            LOG.info("notification offer rejected : {}", e);
                         }
                     }
                 }
@@ -655,11 +659,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             final ServiceNotificationTypes notifType = type;
             if (!create) { /** ServiceReconfigure. */
                 if ((result = writeOrModifyOrDeleteServiceList(serviceName, pathComputationResponse,null, 1)) == null) {
-                    LOG.info("Service '" + serviceName + "' deleted from datastore");
+                    LOG.info("Service '{}' deleted from datastore", serviceName);
                     serviceName = newServiceName;
                     delete = true;
                 } else {
-                    LOG.info("deleting Service '" + serviceName + "' failed !");
+                    LOG.info("deleting Service '{}' failed !", serviceName);
                 }
             }
             if (delete) {
@@ -682,7 +686,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
 
                     FutureCallback<Boolean> rendererCallback = new FutureCallback<Boolean>() {
@@ -707,7 +711,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                                 try {
                                     notificationPublishService.putNotification(notification);
                                 } catch (InterruptedException e) {
-                                    LOG.info("notification offer rejected : " + e);
+                                    LOG.info("notification offer rejected : {}", e);
                                 }
                             } else {
                                 message = mappingAndSendingSIRequest.getError();
@@ -718,7 +722,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                                 try {
                                     notificationPublishService.putNotification(notification);
                                 } catch (InterruptedException e) {
-                                    LOG.info("notification offer rejected : " + e);
+                                    LOG.info("notification offer rejected : {}", e);
                                 }
                             }
                         }
@@ -733,7 +737,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                             try {
                                 notificationPublishService.putNotification(notification);
                             } catch (InterruptedException e) {
-                                LOG.info("notification offer rejected : " + e);
+                                LOG.info("notification offer rejected : {}", e);
                             }
                         }
                     };
@@ -764,10 +768,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
         Boolean commonId = true;
         Boolean coherencyHardSoft = false;
 
-        if (sdncRequestHeader != null) {
+        if (rpcActions.equals(RpcActions.ServiceCreate) || rpcActions.equals(RpcActions.ServiceFeasibilityCheck)
+                || rpcActions.equals(RpcActions.ServiceDelete)) {
             sdncRequest = true;
-        }
-        if (connectionType != null) {
+        } else if (rpcActions.equals(RpcActions.ServiceCreate)
+                || rpcActions.equals(RpcActions.ServiceFeasibilityCheck)
+                || rpcActions.equals(RpcActions.ServiceReconfigure)) {
             contype = true;
         }
         compliancyCheck = new ServicehandlerCompliancyCheck(sdncRequestHeader, serviceName,
@@ -832,8 +838,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
         pathDescription = null;
         pathTopology = null;
         action = RpcActions.ServiceCreate;
-        notificationUrl = null;
-        LOG.info("notificationUrl : " + notificationUrl);
         setPathDescription(null);
         serviceCreateInput = input;
         setServiceDeleteInput(null);
@@ -852,21 +856,35 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                 input.getConnectionType(), RpcActions.ServiceCreate, input.getServiceAEnd(), input.getServiceZEnd(),
                 input.getCommonId(), input.getHardConstraints(), input.getSoftConstraints())) != null) {
             message = "Service not compliant : " + serviceCompliancy;
+            responseCode = "500";
             LOG.info(message);
         } else {
             LOG.info("Service compliant !");
-            pcePathComputation(input);
-            LOG.info("PCR Request in progress ");
-            configurationResponseCommon = new ConfigurationResponseCommonBuilder()
-                    .setAckFinalIndicator("No").setRequestId(input.getSdncRequestHeader().getRequestId())
-                    .setResponseMessage("Service compliant, serviceCreate in progress...")
-                    .setResponseCode("200").build();
+            String name = input.getServiceName();
+            if (readServiceList(name) == null) {
+                pcePathComputation(input);
+                LOG.info("PCR Request in progress ");
+                configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                        .setAckFinalIndicator("No").setRequestId(input.getSdncRequestHeader().getRequestId())
+                        .setResponseMessage("Service compliant, serviceCreate in progress...")
+                        .setResponseCode("200").build();
 
-            ServiceCreateOutputBuilder output = new ServiceCreateOutputBuilder()
-                    .setConfigurationResponseCommon(configurationResponseCommon);
+                ServiceCreateOutputBuilder output = new ServiceCreateOutputBuilder()
+                        .setConfigurationResponseCommon(configurationResponseCommon);
 
-            return RpcResultBuilder.success(output.build()).buildFuture();
+                return RpcResultBuilder.success(output.build()).buildFuture();
+            } else {
+                LOG.info("Service '{}' already created !", name);
+                configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                        .setAckFinalIndicator("Yes").setRequestId(input.getSdncRequestHeader().getRequestId())
+                        .setResponseMessage("Service already created !")
+                        .setResponseCode("500").build();
 
+                ServiceCreateOutputBuilder output = new ServiceCreateOutputBuilder()
+                        .setConfigurationResponseCommon(configurationResponseCommon);
+
+                return RpcResultBuilder.success(output.build()).buildFuture();
+            }
         }
         /*compliancyCheck = new ServicehandlerCompliancyCheck(input.getSdncRequestHeader(), input.getServiceName(),
                 input.getConnectionType(), RpcActions.ServiceCreate);
@@ -921,22 +939,29 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             responseCode = "500";
         }*/
 
-        configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+        ConfigurationResponseCommonBuilder builder = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator("Yes")
-                .setRequestId(input.getSdncRequestHeader().getRequestId()).setResponseMessage(message)
-                .setResponseCode(responseCode).build();
+                .setResponseMessage(message)
+                .setResponseCode(responseCode);
+        SdncRequestHeader sdnc = input.getSdncRequestHeader();
+        if (sdnc != null) {
+            String requestId = sdnc.getRequestId();
+            if (requestId != null) {
+                builder.setRequestId(requestId);
+            }
+        }
+        configurationResponseCommon = builder.build();
 
         ServiceCreateOutputBuilder output = new ServiceCreateOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon);
 
         return RpcResultBuilder.success(output.build()).buildFuture();
-
     }
 
     @Override
     public Future<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
-        LOG.info("RPC serviceDelete request received for Service '" + input.getServiceDeleteReqInfo().getServiceName()
-                + "'");
+        LOG.info("RPC serviceDelete request received for Service '{}'", input.getServiceDeleteReqInfo()
+                .getServiceName());
         setServiceDeleteInput(input);
         setServiceReconfigureInput(null);
         serviceCreateInput = null;
@@ -955,7 +980,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             String serviceName = input.getServiceDeleteReqInfo().getServiceName();
             Services service = readServiceList(serviceName);
             if (service != null) {
-                LOG.debug("Service '" + serviceName + "' present in datastore !");
+                LOG.debug("Service '{}' present in datastore !", serviceName);
                 stubrendererDelete();
                 LOG.info("ServiceDelete Request in progress ... ");
                 ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
@@ -1110,7 +1135,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             String serviceName = input.getServiceName();
             Services service = readServiceList(serviceName);
             if (service != null) {
-                LOG.debug("Service '" + serviceName + "' present in datastore !");
+                LOG.debug("Service '{}' present in datastore !", serviceName);
                 /**
                  * Sending cancel resource reserve request to PCE.
                  */
@@ -1155,7 +1180,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                         String serviceName = input.getServiceName();
                         Services service = readServiceList(serviceName);
                         if (service != null) {
-                            LOG.debug("Service '" + serviceName + "' present in datastore !");
+                            LOG.debug("Service '{}' present in datastore !", serviceName);
                             pceCancelResResource();
                             ServiceReconfigureOutput output = new ServiceReconfigureOutputBuilder()
                                     .setStatus(RpcStatusEx.Pending)
@@ -1163,7 +1188,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                             return RpcResultBuilder.success(output).buildFuture();
                         } else {
                             message = "Service '" + serviceName + "' not exists in datastore";
-                            LOG.error(message);
+                            LOG.error("Service '{}' not exists in datastore", serviceName);
                         }
                     }
                 } else {
@@ -1176,7 +1201,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             message = compliancyCheck.getMessage();
         }*/
 
-        ServiceReconfigureOutput output = new ServiceReconfigureOutputBuilder().setStatus(RpcStatus.Successful)
+        ServiceReconfigureOutput output = new ServiceReconfigureOutputBuilder().setStatus(RpcStatus.Failed)
                 .setStatusMessage(message).build();
         return RpcResultBuilder.success(output).buildFuture();
     }
@@ -1187,7 +1212,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
         ServiceRpcResultSh notification = null;
         setServiceDeleteInput(null);
         setServiceReconfigureInput(null);
-        notificationUrl = null;
         String message = "";
         LOG.info("checking Service Compliancy ...");
         compliancyCheck = new ServicehandlerCompliancyCheck(input.getServiceName(), RpcActions.ServiceRestoration);
@@ -1200,23 +1224,34 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             Services service = readServiceList(serviceName);
             if (service != null) {
                 this.service = service;
-                LOG.debug("Service '" + serviceName + "' present in datastore !");
-                notification = new ServiceRpcResultShBuilder()
-                        .setNotificationType(ServiceNotificationTypes.ServiceRestorationResult)
-                        .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Pending)
-                        .setStatusMessage("Service '" + serviceName + "' present in datastore, deleting service ...")
-                        .build();
-                try {
-                    notificationPublishService.putNotification(notification);
-                } catch (InterruptedException e) {
-                    LOG.info("notification offer rejected : " + e);
+                LOG.debug("Service '{}' present in datastore !", serviceName);
+                /** verify if service state is down. */
+                State state = service.getOperationalState();
+                if (state != null && !state.equals(State.InService)) {
+                    notification = new ServiceRpcResultShBuilder()
+                            .setNotificationType(ServiceNotificationTypes.ServiceRestorationResult)
+                            .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Pending)
+                            .setStatusMessage("Service '" + serviceName + "' present in datastore, deleting service ..")
+                            .build();
+                    try {
+                        notificationPublishService.putNotification(notification);
+                    } catch (InterruptedException e) {
+                        LOG.info("notification offer rejected : {}", e);
+                    }
+                    stubrendererDelete();
+                    LOG.info("PCR Request in progress ");
+                    ServiceRestorationOutput output = new ServiceRestorationOutputBuilder()
+                            .setStatus(RpcStatus.Successful)
+                            .setStatusMessage("ServiceRestoration in progress...").build();
+                    return RpcResultBuilder.success(output).buildFuture();
+                } else {
+                    LOG.info("Service '{}' still in '{}' state", serviceName, state);
+                    ServiceRestorationOutput output = new ServiceRestorationOutputBuilder()
+                            .setStatus(RpcStatus.Failed)
+                            .setStatusMessage("ServiceRestoration failed : Service still in service !")
+                            .build();
+                    return RpcResultBuilder.success(output).buildFuture();
                 }
-                stubrendererDelete();
-                LOG.info("PCR Request in progress ");
-                ServiceRestorationOutput output = new ServiceRestorationOutputBuilder()
-                        .setStatus(RpcStatus.Successful)
-                        .setStatusMessage("ServiceRestoration in progress...").build();
-                return RpcResultBuilder.success(output).buildFuture();
             } else {
                 message = "Service '" + serviceName + "' not exists in datastore";
                 LOG.error(message);
@@ -1226,7 +1261,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             LOG.error(message);
         }
 
-        ServiceRestorationOutput output = new ServiceRestorationOutputBuilder().setStatus(RpcStatus.Successful)
+        ServiceRestorationOutput output = new ServiceRestorationOutputBuilder().setStatus(RpcStatus.Failed)
                 .setStatusMessage(message).build();
 
         return RpcResultBuilder.success(output).buildFuture();
@@ -1286,15 +1321,19 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
         if (serviceCreateInput != null) {
             aend = new ServiceAEndBuilder(serviceCreateInput.getServiceAEnd()).build();
             zend = new ServiceZEndBuilder(serviceCreateInput.getServiceZEnd()).build();
-            service.setServiceName(serviceCreateInput.getServiceName()).setAdministrativeState(State.OutOfService)
-            .setOperationalState(State.OutOfService).setCommonId(serviceCreateInput.getCommonId())
-            .setConnectionType(serviceCreateInput.getConnectionType())
-            .setCustomer(serviceCreateInput.getCustomer())
-            .setCustomerContact(serviceCreateInput.getCustomerContact())
-            .setHardConstraints(serviceCreateInput.getHardConstraints())
-            .setSoftConstraints(serviceCreateInput.getSoftConstraints())
-            .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend)
-            .setSdncRequestHeader(serviceCreateInput.getSdncRequestHeader());
+            service.setServiceName(serviceCreateInput.getServiceName())
+                .setAdministrativeState(State.OutOfService)
+                .setOperationalState(State.OutOfService).setCommonId(serviceCreateInput.getCommonId())
+                .setConnectionType(serviceCreateInput.getConnectionType())
+                .setCustomer(serviceCreateInput.getCustomer())
+                .setCustomerContact(serviceCreateInput.getCustomerContact())
+                .setHardConstraints(serviceCreateInput.getHardConstraints())
+                .setSoftConstraints(serviceCreateInput.getSoftConstraints())
+                .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend)
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder()
+                        .setRequestId(serviceCreateInput.getSdncRequestHeader().getRequestId())
+                        .setRpcAction(serviceCreateInput.getSdncRequestHeader().getRpcAction())
+                        .build());
 
         } else if (serviceReconfigureInput != null) {
             aend = new ServiceAEndBuilder(serviceReconfigureInput.getServiceAEnd()).build();
@@ -1307,7 +1346,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             .setCustomerContact(serviceReconfigureInput.getCustomerContact())
             .setHardConstraints(serviceReconfigureInput.getHardConstraints())
             .setSoftConstraints(serviceReconfigureInput.getSoftConstraints())
-            .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
+            .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend)
+            .setSdncRequestHeader(new SdncRequestHeaderBuilder()
+                    .setRequestId("reconfigure_" + serviceReconfigureInput.getNewServiceName())
+                    .setRpcAction(RpcActions.ServiceReconfigure)
+                    .build());
         }
 
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.response
@@ -1370,7 +1413,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             LOG.error("Reading service failed:", e);
         }
         if (optional.isPresent()) {
-            LOG.debug("Service '" + serviceName + "' present !");
+            LOG.debug("Service '{}' present !", serviceName);
             result = new ServicesBuilder(optional.get()).build();
         }
         return result;
@@ -1391,7 +1434,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
      */
     private String writeOrModifyOrDeleteServiceList(String serviceName, PathComputationRequestOutput output,
             Topology topo, int choice) {
-        LOG.info("WriteOrModifyOrDeleting '" + serviceName + "' Service");
+        LOG.info("WriteOrModifyOrDeleting '{}' Service", serviceName);
         WriteTransaction writeTx = db.newWriteOnlyTransaction();
         String result = null;
         Services readService = readServiceList(serviceName);
@@ -1407,7 +1450,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             String action = null;
             switch (choice) {
                 case 0: /** Modify. */
-                    LOG.info("Modifying '" + serviceName + "' Service");
+                    LOG.info("Modifying '{}' Service", serviceName);
                     service.setOperationalState(State.InService).setAdministrativeState(State.InService);
                     service.setTopology(topo);
                     writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, service.build());
@@ -1415,7 +1458,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
                     break;
 
                 case 1: /** Delete. */
-                    LOG.info("Deleting '" + serviceName + "' Service");
+                    LOG.info("Deleting '{}' Service", serviceName);
                     writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
                     action = "delete";
                     break;
@@ -1428,11 +1471,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
             try {
                 Futures.getChecked(future, ExecutionException.class);
             } catch (ExecutionException e) {
-                LOG.info("Failed to " + action + " service from Service List");
+                LOG.info("Failed to {} service from Service List", action);
                 result = "Failed to " + action + " service from Service List";
             }
         } else if (choice == 2) { /** Write Service. */
-            LOG.info("Writing '" + serviceName + "' Service");
+            LOG.info("Writing '{}' Service", serviceName);
             InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class).child(Services.class,
                     new ServicesKey(serviceName));
             Services writeService = null;
@@ -1704,5 +1747,51 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService,StubpceLis
 
     public void setServiceFeasibilityCheckInput(ServiceFeasibilityCheckInput serviceFeasibilityCheckInput) {
         this.serviceFeasibilityCheckInput = serviceFeasibilityCheckInput;
+    }
+
+    @Override
+    public Future<RpcResult<ServiceStateModifyOutput>> serviceStateModify(ServiceStateModifyInput input) {
+        LOG.info("RPC service state modify received");
+        String servicename = input.getServiceName();
+        String message = "";
+        String responseCode = "500";
+        if (servicename != null) {
+            Services service = readServiceList(servicename);
+            if (service != null) {
+                LOG.info("Modify '{}' Service state", servicename);
+                WriteTransaction writeTx = db.newWriteOnlyTransaction();
+                String result = null;
+                Future<Void> future = null;
+                InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class).child(Services.class,
+                        new ServicesKey(servicename));
+                ServicesBuilder modifyService = new ServicesBuilder(service);
+                modifyService.setOperationalState(State.OutOfService);
+                writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, modifyService.build());
+                future = writeTx.submit();
+                try {
+                    Futures.getChecked(future, ExecutionException.class);
+                } catch (ExecutionException e) {
+                    LOG.info("Failed to {} service from Service List", action);
+                    result = "Failed to " + action + " service from Service List";
+                }
+                if (result == null) {
+                    responseCode = "200";
+                    message = "Service state modified !";
+                }
+            } else {
+                message = "Service not present in datastore ! ";
+            }
+        } else {
+            message = "servicename not set in ServiceStateModifyInput";
+        }
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setAckFinalIndicator("Yes")
+                .setResponseCode(responseCode)
+                .setResponseMessage(message)
+                .build();
+        ServiceStateModifyOutput output = new ServiceStateModifyOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon)
+                .build();
+        return RpcResultBuilder.success(output).buildFuture();
     }
 }

@@ -33,6 +33,26 @@ import org.opendaylight.transportpce.stubpce.StubpceTxRxCheck;
 import org.opendaylight.transportpce.stubpce.topology.PathDescriptionsOrdered;
 import org.opendaylight.transportpce.stubpce.topology.SuperNodePath;
 import org.opendaylight.transportpce.stubpce.topology.Topology;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.CancelResourceReserveInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.CancelResourceReserveOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.CancelResourceReserveOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathDescriptionList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathDescriptionListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.ServicePathList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.ServicePathListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.ServicePathRpcResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.ServicePathRpcResultBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.StubpceService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.path.description.list.PathDescriptions;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.path.description.list.PathDescriptionsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.path.description.list.PathDescriptionsKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.service.path.list.ServicePaths;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.service.path.list.ServicePathsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.service.path.list.ServicePathsKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
@@ -40,30 +60,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.ServicePathNotificationTypes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.response.parameters.sp.response.parameters.PathDescriptionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathDescriptionList;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathDescriptionListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServicePathList;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServicePathListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServicePathRpcResult;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServicePathRpcResultBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.path.description.list.PathDescriptions;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.path.description.list.PathDescriptionsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.path.description.list.PathDescriptionsKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.path.list.ServicePaths;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.path.list.ServicePathsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.path.list.ServicePathsKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.path.rpc.result.PathDescription;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -77,7 +73,7 @@ import org.slf4j.LoggerFactory;
  *         behalf of Orange
  */
 
-public class StubpceImpl implements TransportpceServicepathService {
+public class StubpceImpl implements StubpceService {
     /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(StubpceImpl.class);
     /** Permit to access database. */
@@ -115,7 +111,7 @@ public class StubpceImpl implements TransportpceServicepathService {
         String responseCode = "";
         ConfigurationResponseCommonBuilder configurationResponseCommon = null;
         String serviceName = input.getServiceName();
-        LOG.info("serviceName : " + serviceName);
+        LOG.info("serviceName : {}", serviceName);
         if (serviceName != null) {
             sendingPCE = new SendingPceRPCs(input,db,executor);
             FutureCallback<Boolean> pceCallback = new FutureCallback<Boolean>() {
@@ -124,8 +120,7 @@ public class StubpceImpl implements TransportpceServicepathService {
 
                 @Override
                 public void onFailure(Throwable arg0) {
-                    LOG.error(arg0.toString());
-                    LOG.error("Cancel resource failed !");
+                    LOG.error("Cancel resource failed : {}", arg0);
                     notification = new ServicePathRpcResultBuilder()
                             .setNotificationType(ServicePathNotificationTypes.CancelResourceReserve)
                             .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
@@ -133,13 +128,13 @@ public class StubpceImpl implements TransportpceServicepathService {
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
                 }
 
                 @Override
                 public void onSuccess(Boolean response) {
-                    LOG.info("response : " + response);
+                    LOG.info("response : {}", response);
                     if (response) {
                         message = "Resource cancelled !";
                         notification = new ServicePathRpcResultBuilder()
@@ -160,7 +155,7 @@ public class StubpceImpl implements TransportpceServicepathService {
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
                     LOG.info(message);
                 }
@@ -176,7 +171,6 @@ public class StubpceImpl implements TransportpceServicepathService {
 
             CancelResourceReserveOutputBuilder output = new CancelResourceReserveOutputBuilder()
                     .setConfigurationResponseCommon(configurationResponseCommon.build());
-
             return RpcResultBuilder.success(output.build()).buildFuture();
         } else {
             message = "serviceName / requestId is not correct !";
@@ -188,7 +182,7 @@ public class StubpceImpl implements TransportpceServicepathService {
             try {
                 notificationPublishService.putNotification(notification);
             } catch (InterruptedException e) {
-                LOG.info("notification offer rejected : " + e);
+                LOG.info("notification offer rejected : {}", e);
             }
         }
         configurationResponseCommon = new ConfigurationResponseCommonBuilder();
@@ -255,7 +249,7 @@ public class StubpceImpl implements TransportpceServicepathService {
                         try {
                             notificationPublishService.putNotification(notification);
                         } catch (InterruptedException e) {
-                            LOG.info("notification offer rejected : " + e);
+                            LOG.info("notification offer rejected : {}", e);
                         }
                         sendingPCE = new SendingPceRPCs(input,db,executor);
                         FutureCallback<Boolean> pceCallback = new FutureCallback<Boolean>() {
@@ -264,7 +258,7 @@ public class StubpceImpl implements TransportpceServicepathService {
 
                             @Override
                             public void onFailure(Throwable arg0) {
-                                LOG.error("Failure message : " + arg0.toString());
+                                LOG.error("Failure message : {}", arg0.toString());
                                 LOG.error("Path calculation failed !");
                                 notification = new ServicePathRpcResultBuilder()
                                         .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
@@ -272,13 +266,13 @@ public class StubpceImpl implements TransportpceServicepathService {
                                 try {
                                     notificationPublishService.putNotification(notification);
                                 } catch (InterruptedException e) {
-                                    LOG.info("notification offer rejected : " + e);
+                                    LOG.info("notification offer rejected : {}", e);
                                 }
                             }
 
                             @Override
                             public void onSuccess(Boolean response) {
-                                LOG.info("response : " + response);
+                                LOG.info("response : {}", response);
                                 if (response) {
                                     message = "Path Computated !";
                                     ServicePathRpcResultBuilder tmp = new ServicePathRpcResultBuilder()
@@ -293,7 +287,10 @@ public class StubpceImpl implements TransportpceServicepathService {
                                                 .setAToZDirection(pathDescriptionBuilder.getAToZDirection())
                                                 .setZToADirection(pathDescriptionBuilder.getZToADirection())
                                                 .build();
-                                        tmp.setPathDescription(pathDescription);
+                                        tmp.setPathDescription(new PathDescriptionBuilder()
+                                                .setAToZDirection(pathDescription.getAToZDirection())
+                                                .setZToADirection(pathDescription.getZToADirection())
+                                                .build());
                                     }
                                     notification = tmp.build();
                                 } else {
@@ -308,7 +305,7 @@ public class StubpceImpl implements TransportpceServicepathService {
                                 try {
                                     notificationPublishService.putNotification(notification);
                                 } catch (InterruptedException e) {
-                                    LOG.info("notification offer rejected : " + e);
+                                    LOG.info("notification offer rejected : {}", e);
                                 }
                                 LOG.info(message);
                             }
@@ -345,7 +342,7 @@ public class StubpceImpl implements TransportpceServicepathService {
             try {
                 notificationPublishService.putNotification(notification);
             } catch (InterruptedException e) {
-                LOG.info("notification offer rejected : " + e);
+                LOG.info("notification offer rejected : {}", e);
             }
         }
         configurationResponseCommon = new ConfigurationResponseCommonBuilder();
@@ -400,7 +397,7 @@ public class StubpceImpl implements TransportpceServicepathService {
         try {
             Futures.getChecked(future, ExecutionException.class);
         } catch (ExecutionException e) {
-            LOG.error("Failed to create ServicePathList List : " + e.toString());
+            LOG.error("Failed to create ServicePathList List : {}", e.toString());
             result = false;
         }
         return result;
@@ -415,7 +412,7 @@ public class StubpceImpl implements TransportpceServicepathService {
         LOG.info("filling PathDescription List...");
         Topology topo = new Topology();
         topo.start();
-        LOG.info("Network : " + topo.getNetwork());
+        LOG.info("Network : {}", topo.getNetwork());
         SuperNodePath superNodePath = new SuperNodePath(topo.getNetwork());
         String aend = "NodeA";
         String zend = "NodeZ";
@@ -447,7 +444,7 @@ public class StubpceImpl implements TransportpceServicepathService {
                     try {
                         Futures.getChecked(future, ExecutionException.class);
                     } catch (ExecutionException e) {
-                        LOG.error("Failed to write PathDescriptions to PathDescriptionsList : " + e.toString());
+                        LOG.error("Failed to write PathDescriptions to PathDescriptionsList : {}", e.toString());
                     }
                 } else {
                     LOG.error("PathDescriptions gets is null !");
@@ -480,7 +477,7 @@ public class StubpceImpl implements TransportpceServicepathService {
             LOG.error("Reading service failed:", e);
         }
         if (optional.isPresent()) {
-            LOG.debug("Service '" + serviceName + "' present !");
+            LOG.debug("Service '{}' present !", serviceName);
             result = new ServicesBuilder(optional.get()).build();
         }
         return result;
@@ -508,7 +505,7 @@ public class StubpceImpl implements TransportpceServicepathService {
             LOG.error("Reading service failed:", e);
         }
         if (optional.isPresent()) {
-            LOG.debug("Service '" + serviceName + "' present !");
+            LOG.debug("Service '{}' present !", serviceName);
             result = new ServicePathsBuilder(optional.get()).build();
         }
         return result;
@@ -536,7 +533,7 @@ public class StubpceImpl implements TransportpceServicepathService {
             LOG.error("Reading service failed:", e);
         }
         if (optional.isPresent()) {
-            LOG.debug("PathDescritions '" + pathName + "' present !");
+            LOG.debug("PathDescritions '{}' present !", pathName);
             result = new PathDescriptionsBuilder(optional.get()).build();
         }
         return result;
@@ -553,9 +550,9 @@ public class StubpceImpl implements TransportpceServicepathService {
     @SuppressWarnings("unused")
     private String writeServicePathList(PathComputationRequestInput input) {
         String serviceName = input.getServiceName();
-        LOG.debug("Write ServicePath '" + serviceName + "' Service");
+        LOG.debug("Write ServicePath '{}' Service", serviceName);
         String result = null;
-        LOG.debug("Writing '" + serviceName + "' ServicePath");
+        LOG.debug("Writing '{}' ServicePath", serviceName);
         InstanceIdentifier<ServicePaths> iid = InstanceIdentifier.create(ServicePathList.class)
                 .child(ServicePaths.class, new ServicePathsKey(serviceName));
 
@@ -586,18 +583,5 @@ public class StubpceImpl implements TransportpceServicepathService {
 
     public void setPathDescriptionBuilder(PathDescriptionBuilder pathDescriptionBuilder) {
         this.pathDescriptionBuilder = pathDescriptionBuilder;
-    }
-
-    @Override
-    public Future<RpcResult<ServiceImplementationRequestOutput>> serviceImplementationRequest(
-            ServiceImplementationRequestInput input) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Future<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

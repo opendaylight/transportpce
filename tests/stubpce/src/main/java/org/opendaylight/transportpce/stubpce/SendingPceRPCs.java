@@ -30,6 +30,15 @@ import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.stubpce.topology.PathDescriptionsOrdered;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.CancelResourceReserveInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.PathDescriptionList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.ServicePathList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.path.description.list.PathDescriptions;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.service.path.list.ServicePaths;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.service.path.list.ServicePathsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.service.path.list.ServicePathsKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZ;
@@ -42,18 +51,9 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.Exclude;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.response.parameters.sp.response.parameters.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.handler.header.ServiceHandlerHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.path.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.path.ServiceZEnd;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathDescriptionList;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServicePathList;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.path.description.list.PathDescriptions;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.path.list.ServicePaths;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.path.list.ServicePathsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.path.list.ServicePathsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,7 +144,7 @@ public class SendingPceRPCs {
     private Boolean egalResource(Resource res1, Resource res2) {
         LOG.info("comparing resource ...");
         Boolean result = false;
-        LOG.info(res1.getClass().getName() + " - " + res2.getClass().getName());
+        LOG.info("{} - {}", res1.getClass().getName(), res2.getClass().getName());
         if (res1.getClass().getName().compareToIgnoreCase(res2.getClass().getName()) == 0) {
             if (res1 instanceof Node && res2 instanceof Node) {
                 Node node1 = (Node)res1;
@@ -187,14 +187,14 @@ public class SendingPceRPCs {
         if (atoz1.getAToZ().size() == atoz2.getAToZ().size()) {
             int index = 0;
             int size = atoz1.getAToZ().size();
-            LOG.info("size : " + size);
+            LOG.info("size : {}", size);
             String id1 = null;
             String id2 = null;
             while (index < size) {
                 id1 = atoz1.getAToZ().get(index).getId();
-                LOG.info("id : " + id1);
+                LOG.info("id : {}", id1);
                 Resource res1 = atoz1.getAToZ().get(index).getResource().getResource();
-                LOG.info("res1 : " + res1.toString());
+                LOG.info("res1 : {}", res1.toString());
                 Resource res2 = null;
                 if (id1 != null) {
                     Boolean trouve = false;
@@ -202,7 +202,7 @@ public class SendingPceRPCs {
                         id2 = atoz2.getAToZ().get(loop).getId();
                         if (id2 != null && id2.compareTo(id1) == 0) {
                             res2 = atoz2.getAToZ().get(loop).getResource().getResource();
-                            LOG.info("res2 : " + res2.toString());
+                            LOG.info("res2 : {}", res2.toString());
                             trouve = true;
                             break;
                         }
@@ -239,14 +239,14 @@ public class SendingPceRPCs {
         if (ztoa1.getZToA().size() == ztoa2.getZToA().size()) {
             int index = 0;
             int size = ztoa1.getZToA().size();
-            LOG.info("size : " + size);
+            LOG.info("size : {}", size);
             String id1 = null;
             String id2 = null;
             while (index < size) {
                 id1 = ztoa1.getZToA().get(index).getId();
-                LOG.info("id : " + id1);
+                LOG.info("id : {}", id1);
                 Resource res1 = ztoa1.getZToA().get(index).getResource().getResource();
-                LOG.info("res1 : " + res1.toString());
+                LOG.info("res1 : {}", res1.toString());
                 Resource res2 = null;
                 if (id1 != null) {
                     Boolean trouve = false;
@@ -254,7 +254,7 @@ public class SendingPceRPCs {
                         id2 = ztoa2.getZToA().get(loop).getId();
                         if (id2 != null && id2.compareTo(id1) == 0) {
                             res2 = ztoa2.getZToA().get(loop).getResource().getResource();
-                            LOG.info("res2 : " + res2.toString());
+                            LOG.info("res2 : {}", res2.toString());
                             trouve = true;
                             break;
                         }
@@ -340,7 +340,7 @@ public class SendingPceRPCs {
                     if (servicePathList != null && !servicePathList.isEmpty()) {
                         for (ServicePaths service : servicePathList) {
                             if (service.getServicePathName().compareTo(tmp) == 0) {
-                                LOG.info("Existing Service '" + tmp + "' found in ServicePathList ...");
+                                LOG.info("Existing Service '{}' found in ServicePathList ...", tmp);
                                 pathDesc = service.getPathDescription();
                             }
                         }
@@ -366,7 +366,7 @@ public class SendingPceRPCs {
                                 break;
                         }
                     } else {
-                        LOG.info("Existing Service '" + tmp + "' not found in ServicePathList !");
+                        LOG.info("Existing Service '{}' not found in ServicePathList !", tmp);
                         result = true;
                     }
                     if (!result) {
@@ -395,7 +395,7 @@ public class SendingPceRPCs {
             LOG.info("retrieving path from servicePath List ...");
             try {
                 if (!servicePathList.isEmpty()) {
-                    LOG.info("ServicePathList not empty, contains " + servicePathList.size() + " paths.");
+                    LOG.info("ServicePathList not empty, contains {} paths.", servicePathList.size());
                     for (ServicePaths service : servicePathList) {
                         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
                             .types.rev170426.service.path.PathDescription tmp = service.getPathDescription();
@@ -428,7 +428,7 @@ public class SendingPceRPCs {
             LOG.info("PathDescriptions is null !");
             result = true;
         }
-        LOG.info("testPathDescription result : " + result);
+        LOG.info("testPathDescription result : {}", result);
         return result;
     }
 
@@ -444,13 +444,13 @@ public class SendingPceRPCs {
         List<PathDescriptions> result = new ArrayList<PathDescriptions>();
         List<PathDescriptions> paths = readPathDescriptionList();
         if (!paths.isEmpty() && aendNodeId != null && zendNodeId != null) {
-            LOG.info("retrieving paths from pathDescription List for " + aendNodeId + " / " + zendNodeId);
+            LOG.info("retrieving paths from pathDescription List for {} / {}", aendNodeId, zendNodeId);
             for (PathDescriptions tmp : paths) {
                 Resource pathAend = null;
                 Resource pathZend = null;
                 String id = null;
                 if (tmp != null) {
-                    LOG.info("Getting Aend & ZEnd from path '" + tmp.getPathName() + "'...");
+                    LOG.info("Getting Aend & ZEnd from path '{}'...",tmp.getPathName());
                     int index = 0;
                     int size = tmp.getAToZDirection().getAToZ().size();
                     while (index < size) {
@@ -458,7 +458,7 @@ public class SendingPceRPCs {
                         if (id.compareToIgnoreCase("1") == 0) {
                             Resource resource = tmp.getAToZDirection().getAToZ().get(index).getResource()
                                     .getResource();
-                            LOG.info(resource.getClass().toString() + " : " + resource.toString());
+                            LOG.info("{} : {}", resource.getClass().toString(), resource.toString());
                             pathAend = resource;
                             break;
                         }
@@ -477,8 +477,8 @@ public class SendingPceRPCs {
                         index++;
                     }
                     if (pathAend != null && pathZend != null) {
-                        LOG.info("pathAend : " + pathAend + " - pathZend: " + pathZend);
-                        LOG.info("aendNodeId : " + aendNodeId + " - zendNodeId : " + zendNodeId);
+                        LOG.info("pathAend : {} - pathZend: {}",pathAend, pathZend);
+                        LOG.info("aendNodeId : {} - zendNodeId : {}", aendNodeId, zendNodeId);
                         if (comp(pathAend, pathZend, aendNodeId, zendNodeId)) {
                             LOG.info("PathDescription found !");
                             result.add(tmp);
@@ -506,9 +506,9 @@ public class SendingPceRPCs {
         while (it.hasNext()) {
             PathDescriptions path = it.next();
             String name = path.getPathName();
-            LOG.info("path  : " + name);
+            LOG.info("path  : {}", name);
             if (name != null && name.contains(contain)) {
-                LOG.info("    path gets : " + name);
+                LOG.info("    path gets : {}", name);
                 String [] split = name.split("_");
                 if (split.length == 3) {
                     odr = Integer.parseInt(split[2]);
@@ -628,12 +628,12 @@ public class SendingPceRPCs {
                     /** get pathList ordered. */
                     pathsList = orderPathdescriptionsList(pathsList);
                     if (!pathsList.isEmpty()) {
-                        LOG.info(pathsList.size() + " Paths get from Pathdescription List");
+                        LOG.info("{} Paths get from Pathdescription List", pathsList.size());
                         index = 0;
                         output = false;
                         while (index < pathsList.size()) {
                             path = pathsList.get(index);
-                            LOG.info("path n°" + index + " gets : '" + path.getPathName() + "'!");
+                            LOG.info("path n°{} gets : '{}'!", index, path.getPathName());
                             if (constraints) {
                                 LOG.info("Calculating path with constraints ...");
                                 if (inputHard.getCoRoutingOrGeneral() instanceof General) {
@@ -774,7 +774,7 @@ public class SendingPceRPCs {
     private Boolean writeOrDeleteServicePathList(String serviceName, int choice) {
         Boolean result = null;
         if (serviceName != null && serviceName.compareTo(" ") != 0 && choice >= 0 && choice < 2) {
-            LOG.info("WriteOrDeleting '" + serviceName + "' ServicePaths");
+            LOG.info("WriteOrDeleting '{}' ServicePaths", serviceName);
             WriteTransaction writeTx = db.newWriteOnlyTransaction();
             result = true;
             String action = null;
@@ -783,7 +783,7 @@ public class SendingPceRPCs {
             Future<Void> future = null;
             switch (choice) {
                 case 0: /** Write. */
-                    LOG.info("Writing '" + serviceName + "' Service");
+                    LOG.info("Writing '{}' Service", serviceName);
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service
                         .path.PathDescriptionBuilder path = new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c
                         ._interface.service.types.rev170426.service.path.PathDescriptionBuilder();
@@ -818,24 +818,24 @@ public class SendingPceRPCs {
                     //CheckedFuture<Void, OperationFailedException> future = transaction.submit();
                     future = writeTx.submit();
                     try {
-                        LOG.info("Sending '" + action + "' command to datastore !");
+                        LOG.info("Sending '{}' command to datastore !", action);
                         Futures.getChecked(future, ExecutionException.class);
                     } catch (ExecutionException e) {
-                        LOG.error("Failed to " + action + " service from Service List");
+                        LOG.error("Failed to {} service from Service List", action);
                         result = false;
                     }
                     break;
 
                 case 1: /** Delete */
-                    LOG.info("Deleting '" + serviceName + "' Service");
+                    LOG.info("Deleting '{}' Service", serviceName);
                     writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
                     action = "delete";
                     future = writeTx.submit();
                     try {
-                        LOG.info("Sending '" + action + "' command to datastore !");
+                        LOG.info("Sending '{}' command to datastore !", serviceName);
                         Futures.getChecked(future, ExecutionException.class);
                     } catch (ExecutionException e) {
-                        LOG.error("Failed to " + action + " service from Service List");
+                        LOG.error("Failed to {} service from Service List", serviceName);
                         result = false;
                     }
                     break;

@@ -35,6 +35,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>transportpce-ordmodels</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-stubmodels</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- Testing Dependencies -->
     <dependency>

@@ -13,8 +13,8 @@ import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService
 import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathListener;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +30,8 @@ public class StubrendererProvider {
     private final NotificationPublishService notificationPublishService;
 
 
-    private BindingAwareBroker.RpcRegistration<TransportpceServicepathService> rpcRegistration;
-    private ListenerRegistration<TransportpceServicepathListener> stubRendererlistenerRegistration;
+    private BindingAwareBroker.RpcRegistration<StubrendererService> rpcRegistration;
+    private ListenerRegistration<StubrendererListener> stubRendererlistenerRegistration;
 
     public StubrendererProvider(RpcProviderRegistry rpcProviderRegistry,
             NotificationService notificationService,
@@ -46,7 +46,7 @@ public class StubrendererProvider {
     public void init() {
         LOG.info("StubrendererProvider Session Initiated");
         final StubrendererImpl consumer = new StubrendererImpl(notificationPublishService);
-        rpcRegistration = rpcRegistry.addRpcImplementation(TransportpceServicepathService.class, consumer);
+        rpcRegistration = rpcRegistry.addRpcImplementation(StubrendererService.class, consumer);
     }
 
     /**

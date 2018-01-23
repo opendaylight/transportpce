@@ -150,13 +150,13 @@ public class NodePath {
         List<TpNodeTp> direction = new ArrayList<TpNodeTp>();
         for (Link link : links) {
             String linkId = link.getLinkId();
-            LOG.info("LinkId : " + linkId);
+            LOG.info("LinkId : {}", linkId);
             if (!isXpdrSrgAbsent) {
                 if (StringUtils.countMatches(link.getLinkId(), "ROADM") < 2) {
                     if ((linkId.contains("XPDR") && linkId.startsWith("ROADM"))
                         || ((linkId.startsWith("DEG") && linkId.contains("SRG")))
                         || (nodeId.contains("XPDR") && linkId.contains("TAIL-LINKS"))) {
-                        LOG.info("reversing TpNodetp list for link '" + linkId + "'");
+                        LOG.info("reversing TpNodetp list for link '{}'", linkId);
                         direction = reverseTpNodetpList();
                     } else {
                         direction = tpNodeTps;
@@ -289,7 +289,7 @@ public class NodePath {
         Network net = topo.getNetwork();
         if (net != null) {
             SuperNode superNode = net.getSuperNodes().get(0);
-            LOG.info("SuperNode : " + superNode.getSuperNodeId());
+            LOG.info("SuperNode : {}", superNode.getSuperNodeId());
             for (org.opendaylight.transportpce.stubpce.topology.Resource res :
                 superNode.getResources()) {
                 LOG.info(res.toString());
