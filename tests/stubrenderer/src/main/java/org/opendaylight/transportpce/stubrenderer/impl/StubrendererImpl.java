@@ -21,25 +21,21 @@ import java.util.concurrent.Future;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.stubrenderer.SendingRendererRPCs;
 import org.opendaylight.transportpce.stubrenderer.StubrendererCompliancyCheck;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.rpc.result.sp.PathTopology;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.rpc.result.sp.PathTopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.ServicePathNotificationTypes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceRpcResultSpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.rpc.result.sp.PathTopology;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.rpc.result.sp.PathTopologyBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -52,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
-public class StubrendererImpl implements TransportpceServicepathService {
+public class StubrendererImpl implements StubrendererService {
     /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(StubrendererImpl.class);
     /** send notification. */
@@ -93,7 +89,7 @@ public class StubrendererImpl implements TransportpceServicepathService {
             try {
                 notificationPublishService.putNotification(notification);
             } catch (InterruptedException e) {
-                LOG.info("notification offer rejected : " + e);
+                LOG.info("notification offer rejected : {}", e);
             }
 
             SendingRendererRPCs sendingRenderer = new SendingRendererRPCs(executor);
@@ -104,22 +100,22 @@ public class StubrendererImpl implements TransportpceServicepathService {
 
                 @Override
                 public void onFailure(Throwable arg0) {
-                    LOG.error("Failure message : " + arg0.toString());
+                    LOG.error("Failure message : {}", arg0.toString());
                     LOG.error("Service implementation failed !");
                     notification = new ServiceRpcResultSpBuilder()
                             .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
                             .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
-                            .setStatusMessage("PCR Request failed  : " + arg0.getMessage()).build();
+                            .setStatusMessage("PCR Request failed  : {}" + arg0.getMessage()).build();
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
                 }
 
                 @Override
                 public void onSuccess(Boolean response) {
-                    LOG.info("response : " + response);
+                    LOG.info("response : {}", response);
                     if (response) {
                         message = "Service implemented !";
                         TopologyBuilder topo = sendingRenderer.getTopology();
@@ -148,7 +144,7 @@ public class StubrendererImpl implements TransportpceServicepathService {
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
                     LOG.info(message);
                 }
@@ -169,7 +165,7 @@ public class StubrendererImpl implements TransportpceServicepathService {
         } else {
             message = compliancyCheck.getMessage();
             responseCode = "500";
-            LOG.info("Service not compliant caused by : " + message);
+            LOG.info("Service not compliant caused by : {}", message);
             notification = new ServiceRpcResultSpBuilder()
                     .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
                     .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
@@ -178,7 +174,7 @@ public class StubrendererImpl implements TransportpceServicepathService {
             try {
                 notificationPublishService.putNotification(notification);
             } catch (InterruptedException e) {
-                LOG.info("notification offer rejected : " + e);
+                LOG.info("notification offer rejected : {}", e);
             }
         }
         configurationResponseCommon = new ConfigurationResponseCommonBuilder()
@@ -217,7 +213,7 @@ public class StubrendererImpl implements TransportpceServicepathService {
             try {
                 notificationPublishService.putNotification(notification);
             } catch (InterruptedException e) {
-                LOG.info("notification offer rejected : " + e);
+                LOG.info("notification offer rejected : {}", e);
             }
             SendingRendererRPCs sendingRenderer = new SendingRendererRPCs(executor);
             FutureCallback<Boolean> rendererCallback = new FutureCallback<Boolean>() {
@@ -226,7 +222,7 @@ public class StubrendererImpl implements TransportpceServicepathService {
 
                 @Override
                 public void onFailure(Throwable arg0) {
-                    LOG.error("Failure message : " + arg0.toString());
+                    LOG.error("Failure message : {}", arg0.toString());
                     LOG.error("Service delete failed !");
                     notification = new ServiceRpcResultSpBuilder()
                             .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
@@ -235,13 +231,13 @@ public class StubrendererImpl implements TransportpceServicepathService {
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
                 }
 
                 @Override
                 public void onSuccess(Boolean response) {
-                    LOG.info("response : " + response);
+                    LOG.info("response : {}", response);
                     if (response) {
                         message = "Service deleted !";
                         notification = new ServiceRpcResultSpBuilder()
@@ -260,7 +256,7 @@ public class StubrendererImpl implements TransportpceServicepathService {
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : {}", e);
                     }
                     LOG.info(message);
                 }
@@ -280,7 +276,7 @@ public class StubrendererImpl implements TransportpceServicepathService {
             return RpcResultBuilder.success(output).buildFuture();
         } else {
             message = compliancyCheck.getMessage();
-            LOG.info("Service not compliant caused by : " + message);
+            LOG.info("Service not compliant caused by : {}", message);
             responseCode = "500";
             notification = new ServiceRpcResultSpBuilder()
                     .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
@@ -290,7 +286,7 @@ public class StubrendererImpl implements TransportpceServicepathService {
             try {
                 notificationPublishService.putNotification(notification);
             } catch (InterruptedException e) {
-                LOG.info("notification offer rejected : " + e);
+                LOG.info("notification offer rejected : {}", e);
             }
         }
         configurationResponseCommon = new ConfigurationResponseCommonBuilder()
@@ -302,17 +298,5 @@ public class StubrendererImpl implements TransportpceServicepathService {
                 .setConfigurationResponseCommon(configurationResponseCommon.build())
                 .build();
         return RpcResultBuilder.success(output).buildFuture();
-    }
-
-    @Override
-    public Future<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(CancelResourceReserveInput input) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Future<RpcResult<PathComputationRequestOutput>> pathComputationRequest(PathComputationRequestInput input) {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

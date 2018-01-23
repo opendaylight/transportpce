@@ -56,6 +56,23 @@ module servicehandler {
       "Version 1.2";
   }
 
+  rpc service-state-modify {
+      input {
+          leaf service-name {
+              type string;
+              mandatory true;
+          }
+          leaf operational-state {
+              type org-openroadm-common-types:state;
+          }
+      }
+      output {
+        uses org-openroadm-common-service-types:configuration-response-common;
+      }
+      description
+          "Just to test rpc restoration from org-openroadm-service";
+  }
+
   notification service-rpc-result-sh{
     description
       "This Notification indicates result of service RPC";

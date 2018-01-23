@@ -32,6 +32,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrende
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeader;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
@@ -150,7 +151,7 @@ public class MappingAndSendingSIRequest {
         try {
             tmp = pathComputationOutput.getResponseParameters().getPathDescription();
         } catch (NullPointerException e) {
-            LOG.error("PathDescription is null : " + e.toString());
+            LOG.error("PathDescription is null : {}", e.toString());
         }
         PathDescriptionBuilder pathDescription = new PathDescriptionBuilder();
         if (tmp != null) {
@@ -246,7 +247,7 @@ public class MappingAndSendingSIRequest {
         try {
             tmp = pathComputationOutput.getResponseParameters().getPathDescription();
         } catch (NullPointerException e) {
-            LOG.error("PathDescription is null : " + e.toString());
+            LOG.error("PathDescription is null : {}", e.toString());
         }
         PathDescriptionBuilder pathDescription = new PathDescriptionBuilder();
         if (tmp != null) {
@@ -259,7 +260,7 @@ public class MappingAndSendingSIRequest {
         .setServiceAEnd(serviceAEnd)
         .setServiceZEnd(serviceZEnd)
         .build();
-        LOG.info("ServiceImplementationRequestInput : " + serviceImplementationRequestInput.toString());*/
+        LOG.info("ServiceImplementationRequestInput : {}", serviceImplementationRequestInput.toString());*/
     }
 
 
@@ -310,6 +311,13 @@ public class MappingAndSendingSIRequest {
 
         /** Building ServiceImplementationRequestInput  / ServiceDeleteInput serviceDeleteInput .*/
         ServiceHandlerHeaderBuilder serviceHandlerHeader = new ServiceHandlerHeaderBuilder();
+        SdncRequestHeader sdnc = services.getSdncRequestHeader();
+        if (sdnc != null) {
+            String requestId = services.getSdncRequestHeader().getRequestId();
+            if (requestId != null) {
+                serviceHandlerHeader.setRequestId(requestId);
+            }
+        }
         mappingSIRequest(pathComputationOutput, serviceHandlerHeader, services.getServiceAEnd(),
                 services.getServiceZEnd(), services.getServiceName());
         /*org.opendaylight.yang.gen.v1.http.org.openroadm.common.service
@@ -359,7 +367,7 @@ public class MappingAndSendingSIRequest {
         try {
             tmp = pathComputationOutput.getResponseParameters().getPathDescription();
         } catch (NullPointerException e) {
-            LOG.error("PathDescription is null : " + e.toString());
+            LOG.error("PathDescription is null : {}", e);
         }
         PathDescriptionBuilder pathDescription = new PathDescriptionBuilder();
         if (tmp != null) {
@@ -373,7 +381,7 @@ public class MappingAndSendingSIRequest {
         .setServiceAEnd(serviceAEnd)
         .setServiceZEnd(serviceZEnd)
         .build();
-        LOG.info("ServiceImplementationRequestInput : " + serviceImplementationRequestInput.toString());*/
+        LOG.info("ServiceImplementationRequestInput : {}", serviceImplementationRequestInput.toString());*/
     }
 
     /**
@@ -434,7 +442,7 @@ public class MappingAndSendingSIRequest {
         try {
             tmp = pathComputationOutput.getResponseParameters().getPathDescription();
         } catch (NullPointerException e) {
-            LOG.error("PathDescription is null : " + e.toString());
+            LOG.error("PathDescription is null : {}", e.toString());
         }
         PathDescriptionBuilder pathDescription = new PathDescriptionBuilder();
         if (tmp != null) {

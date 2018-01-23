@@ -14,8 +14,8 @@ import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService
 import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathListener;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.StubpceListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.StubpceService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +33,8 @@ public class StubpceProvider {
     private final DataBroker dataBroker;
 
 
-    private BindingAwareBroker.RpcRegistration<TransportpceServicepathService> rpcRegistration;
-    private ListenerRegistration<TransportpceServicepathListener> stubPcelistenerRegistration;
+    private BindingAwareBroker.RpcRegistration<StubpceService> rpcRegistration;
+    private ListenerRegistration<StubpceListener> stubPcelistenerRegistration;
 
     public StubpceProvider(RpcProviderRegistry rpcProviderRegistry,final DataBroker dataBroker,
             NotificationService notificationService, NotificationPublishService notificationPublishService) {
@@ -49,7 +49,7 @@ public class StubpceProvider {
     public void init() {
         LOG.info("StubpceProvider Session Initiated");
         final StubpceImpl consumer = new StubpceImpl(notificationPublishService,dataBroker);
-        rpcRegistration = rpcRegistry.addRpcImplementation(TransportpceServicepathService.class, consumer);
+        rpcRegistration = rpcRegistry.addRpcImplementation(StubpceService.class, consumer);
     }
 
     /**

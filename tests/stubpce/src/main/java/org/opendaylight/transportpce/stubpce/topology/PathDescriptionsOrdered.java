@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.stubpce.topology;
 
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.path.description.list.PathDescriptions;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.path.description.list.PathDescriptions;
 
 /**
  * class to create structure

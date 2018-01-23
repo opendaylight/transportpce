@@ -343,7 +343,7 @@ public class MappingAndSendingPCRequest {
                 RpcResult<PathComputationRequestOutput> pceOutputResult = null;
                 Boolean output = false;
                 if (pathComputationRequestInput != null) {
-                    LOG.info("pathComputationRequestInput : " + pathComputationRequestInput.toString());
+                    LOG.info("pathComputationRequestInput : {}", pathComputationRequestInput.toString());
                     Future<RpcResult<PathComputationRequestOutput>> pceOutputFuture = service
                             .pathComputationRequest(pathComputationRequestInput);
                     try {

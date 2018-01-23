@@ -16,6 +16,7 @@ import java.util.ListIterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.path.description.list.PathDescriptionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ZToADirection;
@@ -30,7 +31,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.ResourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.Link;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.LinkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.path.description.list.PathDescriptionsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,7 +121,7 @@ public class SuperNodePath {
             for (String tmp : links) {
                 if (tmp.contains(aend)
                         && tmp.contains(zend)) {
-                    LOG.info("direct path found for : " + aend + " / " + zend);
+                    LOG.info("direct path found for : {} / {}", aend, zend);
                     if (tmp.startsWith(aend)) {
                         atozlink = tmp;
                     }
@@ -156,7 +156,7 @@ public class SuperNodePath {
             tmp = tmp.replace("Node", "ROADM");
             if (tmp.compareTo(aend) != 0) {
                 if (link.contains(aend) && link.contains(tmp)) {
-                    LOG.info("hop : " + tmp);
+                    LOG.info("hop : {}", tmp);
                     result = tmp;
                 }
             }
@@ -226,7 +226,7 @@ public class SuperNodePath {
             }
 
         } else {
-            LOG.info(term + " links not found !");
+            LOG.info("{} links not found !", term);
         }
     }
 
@@ -257,7 +257,7 @@ public class SuperNodePath {
                             hop = findHop(tmp, aend, supernodes);
                             if (hop != null) {
                                 if (hop.compareTo(zend.replace("Node", "ROADM")) != 0) {
-                                    LOG.info("next hop found : " + hop);
+                                    LOG.info("next hop found : {}", hop);
                                     links.addAll(findLinks(aend,hop,roadmLinks,false));
                                     links.addAll(findLinks(hop,zend,roadmLinks,false));
                                 } else {
@@ -501,7 +501,7 @@ public class SuperNodePath {
         PathDescriptionsBuilder pathDescr = new PathDescriptionsBuilder();
         int size = atozDirection.size();
         if (!atozDirection.isEmpty()) {
-            LOG.info("result list AToZDirection size  : " + atozDirection.size());
+            LOG.info("result list AToZDirection size  : {}", atozDirection.size());
             List<ZToADirection> ztoadirList = new ArrayList<ZToADirection>();
             for (AToZDirection atozdir : atozDirection) {
                 ZToADirection ztodir = convertToZtoaDirection(atozdir);
@@ -515,10 +515,10 @@ public class SuperNodePath {
                 String pathName = null;
                 for (int indexPath = 0 ; indexPath < size ; indexPath++) {
                     pathName = term.concat(Integer.toString(index));
-                    LOG.info("pathName : " + pathName);
+                    LOG.info("pathName : {}", pathName);
                     pathDescr.setAToZDirection(atozDirection.get(indexPath))
                     .setZToADirection(ztoadirList.get(indexPath)).setPathName(pathName);
-                    LOG.info(pathDescr.build().toString());
+                    LOG.info("pathdesciption : {}", pathDescr.build().toString());
                     result.add(new PathDescriptionsOrdered(pathDescr.build(),index));
                     index++;
                 }
@@ -546,7 +546,7 @@ public class SuperNodePath {
                 String aend = split[0].replaceAll("ROADM", "Node");
                 String zend = split[2].replaceAll("ROADM", "Node");
                 if (aend != null && zend != null) {
-                    LOG.info("getting super node for : " + aend + " and " + zend);
+                    LOG.info("getting super node for : {} and {}", aend, zend);
                     SuperNode aendSp = getSuperNode(aend);
                     SuperNode zendSp = getSuperNode(zend);
                     if (aendSp != null && zendSp != null) {
@@ -575,20 +575,20 @@ public class SuperNodePath {
         if (!paths.isEmpty()) {
             for (NodeLinkNode tmp : paths) {
                 if (tmp.getDirect()) {
-                    LOG.info("Direct NodeLinkNode : " + tmp.toString());
+                    LOG.info("Direct NodeLinkNode : {}", tmp.toString());
                     String atozLink = null;
                     String ztoaLink = null;
                     atozLink = tmp.getAtozLink().get(0);
                     ztoaLink = tmp.getZtoaLink().get(0);
                     if (atozLink != null && ztoaLink != null) {
-                        LOG.info("atozlink : " + atozLink);
-                        LOG.info("ztoalink : " + ztoaLink);
+                        LOG.info("atozlink : {}", atozLink);
+                        LOG.info("ztoalink : {}", ztoaLink);
                         InterNodePath interAend = new InterNodePath(aendSp);
                         interAend.buildPath(zend);
                         InterNodePath interZend = new InterNodePath(zendSp);
                         interZend.buildPath(zend);
                         List<String> deg = getDeg(atozLink,ztoaLink);
-                        LOG.info("deg : " + deg.toString());
+                        LOG.info("deg : {}", deg.toString());
                         if (deg.size() == 2) {
                             List<AToZDirection> cleanInterA =
                                     interAend.replaceOrRemoveAToZDirectionEndLink(deg.get(0),"",atozLink,
@@ -614,7 +614,7 @@ public class SuperNodePath {
             LOG.info("List of direct path is empty !");
         }
         if (!atozdirectionPaths.isEmpty()) {
-            LOG.info("result size : " + result.size());
+            LOG.info("result size : {}", result.size());
             result = buildPathDescription(atozdirectionPaths,aend.concat("To").concat(zend).concat("_direct_"));
         } else {
             LOG.info("result is empty");
@@ -638,17 +638,17 @@ public class SuperNodePath {
         if (!paths.isEmpty()) {
             for (NodeLinkNode tmp : paths) {
                 if (!tmp.getDirect()) {
-                    LOG.info("Indirect NodeLinkNode : " + tmp.toString());
+                    LOG.info("Indirect NodeLinkNode : {}", tmp.toString());
                     int size = tmp.getAtozLink().size();
                     /** must be two for now just one hop. */
-                    LOG.info("number of links  : " + size);
+                    LOG.info("number of links  : {}", size);
                     boolean first = true;
                     if (size == 2) {
                         List<String> atozLinks = tmp.getAtozLink();
                         List<String> ztoaLinks = tmp.getZtoaLink();
                         if (!atozLinks.isEmpty() && !ztoaLinks.isEmpty()) {
-                            LOG.info("atozlink : " + atozLinks.toString());
-                            LOG.info("ztoalink : " + ztoaLinks.toString());
+                            LOG.info("atozlink : {}", atozLinks.toString());
+                            LOG.info("ztoalink : {}", ztoaLinks.toString());
                             int loop = 0;
                             while (loop < 2) {
                                 List<SuperNode> hop = getSuperNodeEndLink(atozLinks.get(loop));
@@ -657,12 +657,12 @@ public class SuperNodePath {
                                     zendSp = hop.get(1);
                                     InterNodePath interAend = new InterNodePath(aendSp);
                                     interAend.buildPath(zend);
-                                    LOG.info("interAend : " + interAend.getAtoz().toString());
+                                    LOG.info("interAend : {}", interAend.getAtoz().toString());
                                     InterNodePath interZend = new InterNodePath(zendSp);
                                     interZend.buildPath(zend);
-                                    LOG.info("interZend : " + interZend.getAtoz().toString());
+                                    LOG.info("interZend : {}", interZend.getAtoz().toString());
                                     List<String> deg1 = getDeg(atozLinks.get(loop),ztoaLinks.get(loop));
-                                    LOG.info("deg1 : " + deg1.toString());
+                                    LOG.info("deg1 : {}", deg1.toString());
                                     if (!deg1.isEmpty() && deg1.size() == 2) {
                                         List<AToZDirection> cleanInterA = null;
                                         List<AToZDirection> cleanInterZ = null;
@@ -702,7 +702,7 @@ public class SuperNodePath {
             LOG.info("List of indirect path is empty !");
         }
         if (!atozdirectionPaths.isEmpty()) {
-            LOG.info("result size : " + result.size());
+            LOG.info("result size : {}", result.size());
             result = buildPathDescription(atozdirectionPaths,aend.concat("To").concat(zend).concat("_indirect_"));
         } else {
             LOG.info("result is empty");

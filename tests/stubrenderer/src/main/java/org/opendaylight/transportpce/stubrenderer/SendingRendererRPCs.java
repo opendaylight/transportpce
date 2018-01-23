@@ -70,7 +70,7 @@ public class SendingRendererRPCs {
                     Thread.sleep(10000); //sleep for 10s
                 } catch (InterruptedException e) {
                     output = false;
-                    LOG.error(e.toString());
+                    LOG.error("Thread.sleep failed : {}", e.toString());
                 }
                 buildAtoZ();
                 buildZtoA();
@@ -92,7 +92,7 @@ public class SendingRendererRPCs {
                     Thread.sleep(10000); //sleep for 10s
                 } catch (InterruptedException e) {
                     output = false;
-                    LOG.error(e.toString());
+                    LOG.error("Thread.sleep failed : {}", e.toString());
                 }
                 buildAtoZ();
                 buildZtoA();

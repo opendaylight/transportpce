@@ -385,7 +385,7 @@ public class InterNodePath {
                 LOG.info("firstnodeTpId is null !");
             }
         }
-        LOG.info("getAToZDirectionEndBy result size : " + result.size() + "\n " + result.toString());
+        LOG.info("getAToZDirectionEndBy result size : {}\n{}", result.size(),result.toString());
         return result;
     }
 
@@ -445,7 +445,7 @@ public class InterNodePath {
                 }
             }
         } else {
-            LOG.info("getAToZDirectionEndBy size " + tmp.size());
+            LOG.info("getAToZDirectionEndBy size : {}", tmp.size());
         }
         return result;
     }
@@ -473,7 +473,7 @@ public class InterNodePath {
                         if (res != null  && res instanceof TerminationPoint) {
                             TerminationPoint tp = (TerminationPoint) res;
                             if (tp != null && tp.getTpId().contains(beginBy)) {
-                                LOG.info("tmp : " + tmp.toString());
+                                LOG.info("tmp : {}", tmp.toString());
                                 result.add(tmp);
                             }
                         }
@@ -481,7 +481,7 @@ public class InterNodePath {
                 }
             }
         }
-        LOG.info("result size : " + result.size());
+        LOG.info("result size : {}", result.size());
         return result;
     }
 
@@ -501,7 +501,7 @@ public class InterNodePath {
                 path.fill();
                 nodepaths.add(path);
             }
-            LOG.info("nodepaths size : " + nodepaths.size());
+            LOG.info("nodepaths size : {}", nodepaths.size());
             build(superNode.isXpdrSrgAbsent(),superNode.getSuperNodeId(), zend);
         }
     }
