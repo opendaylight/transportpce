@@ -29,7 +29,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>odl-transportpce</module>
     <module>odl-transportpce-rest</module>
     <module>odl-transportpce-ui</module>
-    <module>odl-transportpce-cli</module>
   </modules>
 
 </project>
