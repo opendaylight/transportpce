@@ -293,18 +293,30 @@ public class PortMapping {
                                     String logicalConnectionPoint = null;
                                     if (port.getPortDirection().getIntValue() == 1) {
                                         // Port direction is transmit
-                                        logicalConnectionPoint = "SRG" + srgCounter + "-" + port
-                                            .getLogicalConnectionPoint() + "-TX";
+                                        if (!port.getLogicalConnectionPoint().contains("SRG")) {
+                                            logicalConnectionPoint = "SRG" + srgCounter + "-" + port
+                                                .getLogicalConnectionPoint() + "-TX";
+                                        } else {
+                                            logicalConnectionPoint = port.getLogicalConnectionPoint() + "-TX";
+                                        }
                                     }
                                     if (port.getPortDirection().getIntValue() == 2) {
                                         // Port direction is receive
-                                        logicalConnectionPoint = "SRG" + srgCounter + "-" + port
-                                            .getLogicalConnectionPoint() + "-RX";
+                                        if (!port.getLogicalConnectionPoint().contains("SRG")) {
+                                            logicalConnectionPoint = "SRG" + srgCounter + "-" + port
+                                                .getLogicalConnectionPoint() + "-RX";
+                                        } else {
+                                            logicalConnectionPoint = port.getLogicalConnectionPoint() + "-RX";
+                                        }
                                     }
                                     if (port.getPortDirection().getIntValue() == 3) {
                                         // port is bi-directional
-                                        logicalConnectionPoint = "SRG" + srgCounter + "-" + port
-                                            .getLogicalConnectionPoint() + "-TXRX";
+                                        if (!port.getLogicalConnectionPoint().contains("SRG")) {
+                                            logicalConnectionPoint = "SRG" + srgCounter + "-" + port
+                                                .getLogicalConnectionPoint() + "-TXRX";
+                                        } else {
+                                            logicalConnectionPoint = port.getLogicalConnectionPoint() + "-TXRX";
+                                        }
                                     }
 
                                     LOG.info("Logical Connection Point for {} {} is {}", circuitPackName, port
