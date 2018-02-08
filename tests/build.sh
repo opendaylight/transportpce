@@ -16,7 +16,13 @@ rm -rf netconf mdsal && git submodule update --init
 (cd netconf && patch -p1 < ../netconf.patch && patch -p1 < ../get_connection_port_trail.patch)
 
 (cd netconf/netconf/tools/netconf-testtool && mvn clean install -DskipTests)
-rm -rf schemas; mkdir -p schemas && cp -r ../ordmodels/src/main/yang/org-openroadm-* schemas
+rm -rf schemas && mkdir -p schemas
+#sample config for ordm 2.x are not yet ready
+#cp -r ../ordmodels/common/src/main/yang/org-openroadm-* schemas
+#cp -r ../ordmodels/device/src/main/yang/org-openroadm-* schemas
+#rm schemas/org-openroadm-otn-common-types@2016-10-14.yang
+#we expect that the ODL instance compiled with ordm 2.x models will be compatible with ordm 1.2.1 devices
+cp ordmodels_1.2.1/org-openroadm-* schemas
 cp ${yang} schemas
 
 exit $?
