@@ -31,6 +31,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.ResourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.Link;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.LinkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.link.LinkIdentifierBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -453,13 +454,14 @@ public class SuperNodePath {
                     if (resLink != null) {
                         if (resLink instanceof Link) {
                             Link link = (Link) resLink;
-                            String newLinkId = reverseLinkId(link.getLinkId());
+                            String newLinkId = reverseLinkId(link.getLinkIdentifier().getLinkId());
                             if (newLinkId != null) {
-                                resource = new ResourceBuilder().setResource(
-                                        new LinkBuilder()
-                                        .setLinkId(newLinkId)
-                                        .build()
-                                        ).build();
+                                resource = new ResourceBuilder().setResource(new LinkBuilder()
+                                        .setLinkIdentifier(new LinkIdentifierBuilder()
+                                                .setLinkId(newLinkId)
+                                                .build())
+                                        .build())
+                                    .build();
                             }
 
                         } else {

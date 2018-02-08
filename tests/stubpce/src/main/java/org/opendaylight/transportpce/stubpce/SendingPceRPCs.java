@@ -124,8 +124,8 @@ public class SendingPceRPCs {
             if (pathAend instanceof Node && pathZend instanceof Node) {
                 Node aend = (Node) pathAend;
                 Node zend = (Node) pathZend;
-                if (aend.getNodeId().compareToIgnoreCase(inputAend) == 0) {
-                    if (zend.getNodeId().compareToIgnoreCase(inputZend) == 0) {
+                if (aend.getNodeIdentifier().getNodeId().compareToIgnoreCase(inputAend) == 0) {
+                    if (zend.getNodeIdentifier().getNodeId().compareToIgnoreCase(inputZend) == 0) {
                         result = true;
                     }
                 }
@@ -149,15 +149,18 @@ public class SendingPceRPCs {
             if (res1 instanceof Node && res2 instanceof Node) {
                 Node node1 = (Node)res1;
                 Node node2 = (Node)res2;
-                if (node1.getNodeId().compareTo(node2.getNodeId()) == 0) {
+                if (node1.getNodeIdentifier().getNodeId()
+                        .compareTo(node2.getNodeIdentifier().getNodeId()) == 0) {
                     result = true;
                 }
             }
             if (res1 instanceof TerminationPoint && res2 instanceof TerminationPoint) {
                 TerminationPoint tp1 = (TerminationPoint)res1;
                 TerminationPoint tp2 = (TerminationPoint)res2;
-                if (tp1.getTpNodeId().compareTo(tp2.getTpNodeId()) == 0) {
-                    if (tp1.getTpId().compareTo(tp2.getTpId()) == 0) {
+                if (tp1.getTerminationPointIdentifier().getNodeId()
+                        .compareTo(tp2.getTerminationPointIdentifier().getNodeId()) == 0) {
+                    if (tp1.getTerminationPointIdentifier().getTpId()
+                            .compareTo(tp2.getTerminationPointIdentifier().getTpId()) == 0) {
                         result = true;
                     }
                 }
@@ -165,7 +168,7 @@ public class SendingPceRPCs {
             if (res1 instanceof Link && res2 instanceof Link) {
                 Link link1 = (Link)res1;
                 Link link2 = (Link)res2;
-                if (link1.getLinkId().compareTo(link2.getLinkId()) == 0) {
+                if (link1.getLinkIdentifier().getLinkId().compareTo(link2.getLinkIdentifier().getLinkId()) == 0) {
                     result = true;
                 }
 
@@ -298,7 +301,7 @@ public class SendingPceRPCs {
                     if (res != null && res instanceof Node) {
                         Node node = (Node) res;
                         for (String exclude : nodes) {
-                            if (exclude.compareToIgnoreCase(node.getNodeId()) == 0) {
+                            if (exclude.compareToIgnoreCase(node.getNodeIdentifier().getNodeId()) == 0) {
                                 LOG.info("Node not excluded !");
                                 found = true;
                                 break;
