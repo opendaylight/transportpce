@@ -31,6 +31,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.Link;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.LinkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.TerminationPoint;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.link.LinkIdentifierBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -191,7 +192,7 @@ public class InterNodePath {
             }
             for (Path deg1Path : deb.getPath()) {
                 TpNodeTp tmpdeg = deg1Path.getTpNodeTp();
-                if (tmpdeg.getTpIn().getTpId().contains("TTP")) {
+                if (tmpdeg.getTpIn().getTerminationPointIdentifier().getTpId().contains("TTP")) {
                     result.clear();
                     result.addAll(Lists.newArrayList(deg1Path));
                     if (!twotoOne) {
@@ -203,7 +204,7 @@ public class InterNodePath {
             }
             for (Path deg2Path : end.getPath()) {
                 TpNodeTp tmpdeg = deg2Path.getTpNodeTp();
-                if (tmpdeg.getTpIn().getTpId().contains("CTP")) {
+                if (tmpdeg.getTpIn().getTerminationPointIdentifier().getTpId().contains("CTP")) {
                     result.clear();
                     result.addAll(Lists.newArrayList(deg2Path));
                     if (!twotoOne) {
@@ -232,13 +233,13 @@ public class InterNodePath {
         List<Path> result =  new ArrayList<Path>();
         for (Path degPath : deg.getPath()) {
             TpNodeTp tmpdeg = degPath.getTpNodeTp();
-            if (tmpdeg.getTpIn().getTpId().contains("TTP")) {
+            if (tmpdeg.getTpIn().getTerminationPointIdentifier().getTpId().contains("TTP")) {
                 for (Path srgPath : srg.getPath()) {
                     TpNodeTp tmpsrg = srgPath.getTpNodeTp();
-                    if (tmpsrg.getTpIn().getTpId().contains("CP")) {
+                    if (tmpsrg.getTpIn().getTerminationPointIdentifier().getTpId().contains("CP")) {
                         for (Path xpdrPath : xpdr.getPath()) {
                             TpNodeTp tmpxpdr = xpdrPath.getTpNodeTp();
-                            if (tmpxpdr.getTpIn().getTpId().contains("NETWORK")) {
+                            if (tmpxpdr.getTpIn().getTerminationPointIdentifier().getTpId().contains("NETWORK")) {
                                 result.clear();
                                 result.addAll(Lists.newArrayList(degPath,srgPath,xpdrPath));
                                 if (reverse) {
@@ -292,15 +293,15 @@ public class InterNodePath {
             List<Path> result =  new ArrayList<Path>();
             for (Path xpdrPath : xpdr.getPath()) {
                 TpNodeTp tmpxpdr = xpdrPath.getTpNodeTp();
-                if (tmpxpdr.getTpIn().getTpId().contains("CLIENT")) {
+                if (tmpxpdr.getTpIn().getTerminationPointIdentifier().getTpId().contains("CLIENT")) {
                     for (Path srgPath : srg.getPath()) {
                         TpNodeTp tmp = srgPath.getTpNodeTp();
                         Link srglink = srgPath.getLink();
-                        if (tmp.getTpIn().getTpId().contains("PP")) {
+                        if (tmp.getTpIn().getTerminationPointIdentifier().getTpId().contains("PP")) {
                             for (Path deg1Path : deg1.getPath()) {
                                 TpNodeTp tmpdeg = deg1Path.getTpNodeTp();
-                                if (tmpdeg.getTpIn().getTpId().contains("CTP")
-                                        && srglink.getLinkId().contains("DEG1")) {
+                                if (tmpdeg.getTpIn().getTerminationPointIdentifier().getTpId().contains("CTP")
+                                        && srglink.getLinkIdentifier().getLinkId().contains("DEG1")) {
                                     result.clear();
                                     result.addAll(Lists.newArrayList(xpdrPath,srgPath,deg1Path));
                                     if (reverse) {
@@ -312,8 +313,8 @@ public class InterNodePath {
                             }
                             for (Path deg2Path : deg2.getPath()) {
                                 TpNodeTp tmpdeg = deg2Path.getTpNodeTp();
-                                if (tmpdeg.getTpIn().getTpId().contains("CTP")
-                                        && srglink.getLinkId().contains("DEG2")) {
+                                if (tmpdeg.getTpIn().getTerminationPointIdentifier().getTpId().contains("CTP")
+                                        && srglink.getLinkIdentifier().getLinkId().contains("DEG2")) {
                                     result.clear();
                                     result.addAll(Lists.newArrayList(xpdrPath,srgPath,deg2Path));
                                     if (reverse) {
@@ -360,7 +361,7 @@ public class InterNodePath {
                                 case 1: //last link
                                     if (res instanceof Link) {
                                         Link tp = (Link) res;
-                                        if (tp != null && tp.getLinkId().contains(endBy)) {
+                                        if (tp != null && tp.getLinkIdentifier().getLinkId().contains(endBy)) {
                                             result.add(tmp);
                                         }
                                     }
@@ -369,7 +370,8 @@ public class InterNodePath {
                                 case 2: //last tp
                                     if (res instanceof TerminationPoint) {
                                         TerminationPoint tp = (TerminationPoint) res;
-                                        if (tp != null && tp.getTpId().contains(endBy)) {
+                                        if (tp != null && tp.getTerminationPointIdentifier().getTpId()
+                                                .contains(endBy)) {
                                             result.add(tmp);
                                         }
                                     }
@@ -426,7 +428,9 @@ public class InterNodePath {
                                 .rev170426.pce.resource.resource.Resource res = atoz.getResource().getResource();
                             if (res != null  && res instanceof Link) {
                                 Link link = new LinkBuilder()
-                                        .setLinkId(atozLink)
+                                        .setLinkIdentifier(new LinkIdentifierBuilder()
+                                                .setLinkId(atozLink)
+                                                .build())
                                         .build();
                                 AToZKey atozKey = new AToZKey(atoz.getKey());
                                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
@@ -472,7 +476,7 @@ public class InterNodePath {
                             .rev170426.pce.resource.resource.Resource res = atoz.getResource().getResource();
                         if (res != null  && res instanceof TerminationPoint) {
                             TerminationPoint tp = (TerminationPoint) res;
-                            if (tp != null && tp.getTpId().contains(beginBy)) {
+                            if (tp != null && tp.getTerminationPointIdentifier().getTpId().contains(beginBy)) {
                                 LOG.info("tmp : {}", tmp.toString());
                                 result.add(tmp);
                             }

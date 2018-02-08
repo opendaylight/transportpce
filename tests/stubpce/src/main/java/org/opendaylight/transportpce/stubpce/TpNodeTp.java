@@ -68,11 +68,13 @@ public class TpNodeTp {
         ztoa.clear();
 
         resources.add(new ResourceBuilder().setResource(tpIn).build());
-        ids.add(tpIn.getTpNodeId().concat("-").concat(tpIn.getTpId()));
+        ids.add(tpIn.getTerminationPointIdentifier().getNodeId().concat("-")
+                .concat(tpIn.getTerminationPointIdentifier().getTpId()));
         resources.add(new ResourceBuilder().setResource(node).build());
-        ids.add(node.getNodeId());
+        ids.add(node.getNodeIdentifier().getNodeId());
         resources.add(new ResourceBuilder().setResource(tpOut).build());
-        ids.add(tpOut.getTpNodeId().concat("-").concat(tpOut.getTpId()));
+        ids.add(tpOut.getTerminationPointIdentifier().getNodeId().concat("-")
+                .concat(tpOut.getTerminationPointIdentifier().getTpId()));
     }
 
     /**
@@ -122,9 +124,9 @@ public class TpNodeTp {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("[ ");
-        result.append("tpIn : " + tpIn.getTpId());
-        result.append(" - Node : " + node.getNodeId());
-        result.append(" - tpOut : " + tpOut.getTpId());
+        result.append("tpIn : " + tpIn.getTerminationPointIdentifier().getTpId());
+        result.append(" - Node : " + node.getNodeIdentifier().getNodeId());
+        result.append(" - tpOut : " + tpOut.getTerminationPointIdentifier().getTpId());
         result.append(" ]");
         return result.toString();
 
