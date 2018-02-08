@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ##############################################################################
-#Copyright (c) 2017 Orange, Inc. and others.  All rights reserved.
+# Copyright (c) 2017 Orange, Inc. and others.  All rights reserved.
 #
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Apache License, Version 2.0
@@ -20,9 +20,10 @@ import time
 import unittest
 
 
-class TransportPCEtesting(unittest.TestCase):
+class TransportPCEPortMappingTesting(unittest.TestCase):
 
-    testtools_process = None
+    testtools_process1 = None
+    testtools_process2 = None
     odl_process = None
     restconf_baseurl = "http://127.0.0.1:8181/restconf"
 
@@ -31,10 +32,17 @@ class TransportPCEtesting(unittest.TestCase):
         executable = ("./netconf/netconf/tools/netconf-testtool/target/"
                       "netconf-testtool-1.3.1-executable.jar")
         if os.path.isfile(executable):
-            with open('testtools.log', 'w') as outfile:
-                cls.testtools_process = subprocess.Popen(
+            with open('testtools1.log', 'w') as outfile:
+                cls.testtools_process1 = subprocess.Popen(
                     ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample-config-ROADM.xml"],
+                     "--initial-config-xml", "sample_configs/ord_1.2.1/sample-config-ROADM.xml",
+                     "--starting-port","17830"],
+                    stdout=outfile)
+            with open('testtools2.log', 'w') as outfile:
+                cls.testtools_process2 = subprocess.Popen(
+                    ["java", "-jar", executable, "--schemas-dir", "schemas",
+                     "--initial-config-xml", "sample_configs/ord_1.2.1/sample-config-XPDR.xml",
+                     "--starting-port","17831"],
                     stdout=outfile)
 
     @classmethod
@@ -53,8 +61,10 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.testtools_process.send_signal(signal.SIGINT)
-        cls.testtools_process.wait()
+        cls.testtools_process1.send_signal(signal.SIGINT)
+        cls.testtools_process1.wait()
+        cls.testtools_process2.send_signal(signal.SIGINT)
+        cls.testtools_process2.wait()
         for child in psutil.Process(cls.odl_process.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
@@ -62,9 +72,33 @@ class TransportPCEtesting(unittest.TestCase):
         cls.odl_process.wait()
 
     def setUp(self):
-        time.sleep(1)
+        print ("execution of {}".format(self.id().split(".")[-1]))
+        time.sleep(10)
 
-    def test_01_connect_device(self):
+    def test_01_restconfAPI(self):
+        url = ("{}/operational/network-topology:network-topology/topology/"
+        "topology-netconf/node/controller-config".format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json'}
+        response = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertEqual(res['node'] [0] ['netconf-node-topology:connection-status'],
+                         'connected')
+
+    def test_02_restconfAPI(self):
+        url = ("{}/config/portmapping:network/nodes/controller-config"
+               .format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.not_found)
+        res = response.json()
+        self.assertIn(
+            {"error-type":"application","error-tag":"data-missing",
+             "error-message":"Request could not be completed because the relevant data model content does not exist "},
+            res['errors']['error'])
+
+    def test_03_rdm_device_connected(self):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADMA"
               .format(self.restconf_baseurl))
@@ -83,7 +117,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(20)
 
-    def test_02_device_connected(self):
+    def test_04_rdm_device_connected(self):
         url = ("{}/operational/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADMA"
                .format(self.restconf_baseurl))
@@ -97,35 +131,7 @@ class TransportPCEtesting(unittest.TestCase):
             'connected')
         time.sleep(10)
 
-    def test_03_portmapping_SRG1_PP3_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP3-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C3', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP3-TXRX'},
-            res['mapping'])
-
-    def test_04_portmapping_SRG1_PP6_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP6-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C6', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP6-TXRX'},
-            res['mapping'])
-
-    def test_05_portmapping_DEG1_TTP_TXRX(self):
+    def test_05_rdm_portmapping_DEG1_TTP_TXRX(self):
         url = ("{}/config/portmapping:network/"
                "nodes/ROADMA/mapping/DEG1-TTP-TXRX"
                .format(self.restconf_baseurl))
@@ -139,91 +145,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'DEG1-TTP-TXRX'},
             res['mapping'])
 
-    def test_06_portmapping_SRG1_PP9_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP9-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C9', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP9-TXRX'},
-            res['mapping'])
-
-    def test_07_portmapping_SRG1_PP16_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP16-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C16', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP16-TXRX'},
-            res['mapping'])
-
-    def test_08_portmapping_SRG1_PP4_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP4-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C4', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP4-TXRX'},
-            res['mapping'])
-
-    def test_09_portmapping_SRG1_PP2_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP2-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C2', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP2-TXRX'},
-            res['mapping'])
-
-    def test_10_portmapping_SRG1_PP14_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP14-TXRX"
-              .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C14', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP14-TXRX'},
-            res['mapping'])
-
-    def test_11_portmapping_SRG1_PP11_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP11-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C11', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP11-TXRX'},
-            res['mapping'])
-
-    def test_12_portmapping_SRG1_PP7_TXRX(self):
+    def test_06_rdm_portmapping_SRG1_PP7_TXRX(self):
         url = ("{}/config/portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP7-TXRX"
                .format(self.restconf_baseurl))
@@ -237,9 +159,9 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP7-TXRX'},
             res['mapping'])
 
-    def test_13_portmapping_DEG2_TTP_TXRX(self):
+    def test_07_rdm_portmapping_SRG3_PP1_TXRX(self):
         url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/DEG2-TTP-TXRX"
+               "nodes/ROADMA/mapping/SRG3-PP1-TXRX"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -247,13 +169,46 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supporting-port': 'L1', 'supporting-circuit-pack-name': '3/0',
-             'logical-connection-point': 'DEG2-TTP-TXRX'},
+            {'supporting-port': 'C1', 'supporting-circuit-pack-name': '5/0',
+             'logical-connection-point': 'SRG3-PP1-TXRX'},
             res['mapping'])
 
-    def test_14_portmapping_DEG2_TTP_TXRX(self):
+    def test_08_xpdr_device_connected(self):
+        url = ("{}/config/network-topology:"
+               "network-topology/topology/topology-netconf/node/XPDRA"
+              .format(self.restconf_baseurl))
+        data = {"node": [{
+            "node-id": "XPDRA",
+            "netconf-node-topology:username": "admin",
+            "netconf-node-topology:password": "admin",
+            "netconf-node-topology:host": "127.0.0.1",
+            "netconf-node-topology:port": "17831",
+            "netconf-node-topology:tcp-only": "false",
+            "netconf-node-topology:pass-through": {}}]}
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "PUT", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.created)
+        time.sleep(20)
+
+    def test_09_xpdr_device_connected(self):
+        url = ("{}/operational/network-topology:"
+               "network-topology/topology/topology-netconf/node/XPDRA"
+               .format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertEqual(
+            res['node'][0]['netconf-node-topology:connection-status'],
+            'connected')
+        time.sleep(10)
+
+    def test_10_xpdr_portmapping_NETWORK1(self):
         url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/DEG2-TTP-TXRX"
+               "nodes/XPDRA/mapping/XPDR-LINE1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -261,13 +216,13 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supporting-port': 'L1', 'supporting-circuit-pack-name': '3/0',
-             'logical-connection-point': 'DEG2-TTP-TXRX'},
+            {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
+             'logical-connection-point': 'XPDR-LINE1'},
             res['mapping'])
 
-    def test_15_portmapping_SRG1_PP12_TXRX(self):
+    def test_11_xpdr_portmapping_CLIENT1(self):
         url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP12-TXRX"
+               "nodes/XPDRA/mapping/XPDR-CLNT1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -275,155 +230,85 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supporting-port': 'C12', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP12-TXRX'},
+            {'supporting-port': '1',
+             'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
+             'logical-connection-point': 'XPDR-CLNT1'},
             res['mapping'])
 
-    def test_16_portmapping_SRG1_PP8_TXRX(self):
+    def test_12_xpdr_device_disconnected(self):
+        url = ("{}/config/network-topology:"
+                "network-topology/topology/topology-netconf/node/XPDRA"
+               .format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+             "DELETE", url, headers=headers,
+             auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        time.sleep(20)
+
+    def test_13_xpdr_device_disconnected(self):
+        url = ("{}/operational/network-topology:network-topology/topology/"
+               "topology-netconf/node/XPDRA".format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.not_found)
+        res = response.json()
+        self.assertIn(
+            {"error-type":"application","error-tag":"data-missing",
+             "error-message":"Request could not be completed because the relevant data model content does not exist "},
+            res['errors']['error'])
+
+    def test_14_xpdr_device_disconnected(self):
         url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP8-TXRX"
+               "nodes/XPDRA"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {'supporting-port': 'C8', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP8-TXRX'},
-            res['mapping'])
+            {"error-type":"application","error-tag":"data-missing",
+             "error-message":"Request could not be completed because the relevant data model content does not exist "},
+            res['errors']['error'])
 
-    def test_17_portmapping_SRG1_PP5_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP5-TXRX"
+    def test_15_rdm_device_disconnected(self):
+        url = ("{}/config/network-topology:"
+                "network-topology/topology/topology-netconf/node/ROADMA"
+               .format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+             "DELETE", url, headers=headers,
+             auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        time.sleep(20)
+
+    def test_16_rdm_device_disconnected(self):
+        url = ("{}/operational/network-topology:network-topology/topology/"
+               "topology-netconf/node/ROADMA".format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.not_found)
+        res = response.json()
+        self.assertIn(
+            {"error-type":"application","error-tag":"data-missing",
+             "error-message":"Request could not be completed because the relevant data model content does not exist "},
+            res['errors']['error'])
+
+    def test_17_rdm_device_disconnected(self):
+        url = ("{}/config/portmapping:network/nodes/ROADMA"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {'supporting-port': 'C5', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP5-TXRX'},
-            res['mapping'])
-
-    def test_18_portmapping_SRG1_PP13_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP13-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C13', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP13-TXRX'},
-            res['mapping'])
-
-    def test_19_portmapping_SRG1_PP15_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP15-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C15', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP15-TXRX'},
-            res['mapping'])
-
-    def test_20_portmapping_SRG1_PP10_TXRX(self):
-        url = ("{}/config/portmapping:network/"
-               "nodes/ROADMA/mapping/SRG1-PP10-TXRX"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supporting-port': 'C10', 'supporting-circuit-pack-name': '4/0',
-             'logical-connection-point': 'SRG1-PP10-TXRX'},
-            res['mapping'])
-
-    def test_21_cross_connection_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
-        data = {"renderer:input": {
-            "renderer:service-name": "service_32",
-            "renderer:wave-number": "32",
-            "renderer:operation": "create",
-            "renderer:nodes": [
-                {"renderer:node-id": "ROADMA",
-                 "renderer:src-tp": "DEG1-TTP-TXRX",
-                 "renderer:dest-tp": "SRG1-PP3-TXRX"}]}}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json(), {
-            'output': {
-                'result':
-                'Roadm-connection successfully created for nodes [ROADMA]'}})
-
-    def test_22_cross_connection_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
-        data = {"renderer:input": {
-            "renderer:service-name": "service_32",
-            "renderer:wave-number": "32",
-            "renderer:operation": "create",
-            "renderer:nodes": [
-                {"renderer:node-id": "ROADMA",
-                 "renderer:src-tp": "SRG1-PP3-TXRX",
-                 "renderer:dest-tp": "DEG1-TTP-TXRX"}]}}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json(), {
-            'output': {
-                'result':
-                'Roadm-connection successfully created for nodes [ROADMA]'}})
-
-    def test_23_delete_DEG1_TTP_TXRX_SRG1_PP3_TXRX(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
-        data = {"renderer:input": {
-            "renderer:service-name": "service_32",
-            "renderer:wave-number": "32",
-            "renderer:operation": "delete",
-            "renderer:nodes": [
-                {"renderer:node-id": "ROADMA",
-                 "renderer:src-tp": "DEG1-TTP-TXRX",
-                 "renderer:dest-tp": "SRG1-PP3-TXRX"}]}}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json(), {
-            'output': {'result': 'Request processed'}})
-
-    def test_24_delete_SRG1_PP3_TXRX_DEG1_TTP_TXRX(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
-        data = {"renderer:input": {
-            "renderer:service-name": "service_32",
-            "renderer:wave-number": "32",
-            "renderer:operation": "delete",
-            "renderer:nodes": [
-                {"renderer:node-id": "ROADMA",
-                 "renderer:src-tp": "SRG1-PP3-TXRX",
-                 "renderer:dest-tp": "DEG1-TTP-TXRX"}]}}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        self.assertEqual(response.json(), {
-            'output': {'result': 'Request processed'}})
+            {"error-type":"application","error-tag":"data-missing",
+             "error-message":"Request could not be completed because the relevant data model content does not exist "},
+            res['errors']['error'])
 
 
 if __name__ == "__main__":
