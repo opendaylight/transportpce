@@ -115,9 +115,9 @@ public class DeviceTransactionManagerImpl implements DeviceTransactionManager {
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Throwable throwable) {
                 LOG.error("Exception thrown while getting device transaction for device {}! Unlocking device.",
-                        deviceId, t);
+                        deviceId, throwable);
                 newLock.countDown();
             }
         }, checkingExecutor);

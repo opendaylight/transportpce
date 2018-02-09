@@ -1339,18 +1339,18 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService, Serviceha
             aend = new ServiceAEndBuilder(serviceReconfigureInput.getServiceAEnd()).build();
             zend = new ServiceZEndBuilder(serviceReconfigureInput.getServiceZEnd()).build();
             service.setServiceName(serviceReconfigureInput.getNewServiceName())
-            .setAdministrativeState(State.OutOfService).setOperationalState(State.OutOfService)
-            .setCommonId(serviceReconfigureInput.getCommonId())
-            .setConnectionType(serviceReconfigureInput.getConnectionType())
-            .setCustomer(serviceReconfigureInput.getCustomer())
-            .setCustomerContact(serviceReconfigureInput.getCustomerContact())
-            .setHardConstraints(serviceReconfigureInput.getHardConstraints())
-            .setSoftConstraints(serviceReconfigureInput.getSoftConstraints())
-            .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend)
-            .setSdncRequestHeader(new SdncRequestHeaderBuilder()
-                    .setRequestId("reconfigure_" + serviceReconfigureInput.getNewServiceName())
-                    .setRpcAction(RpcActions.ServiceReconfigure)
-                    .build());
+                .setAdministrativeState(State.OutOfService).setOperationalState(State.OutOfService)
+                .setCommonId(serviceReconfigureInput.getCommonId())
+                .setConnectionType(serviceReconfigureInput.getConnectionType())
+                .setCustomer(serviceReconfigureInput.getCustomer())
+                .setCustomerContact(serviceReconfigureInput.getCustomerContact())
+                .setHardConstraints(serviceReconfigureInput.getHardConstraints())
+                .setSoftConstraints(serviceReconfigureInput.getSoftConstraints())
+                .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend)
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder()
+                        .setRequestId("reconfigure_" + serviceReconfigureInput.getNewServiceName())
+                        .setRpcAction(RpcActions.ServiceReconfigure)
+                        .build());
         }
 
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.response
