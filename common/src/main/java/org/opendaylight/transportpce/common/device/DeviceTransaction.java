@@ -126,9 +126,9 @@ public class DeviceTransaction {
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Throwable throwable) {
                 LOG.error("Device transaction submit failed or submit took longer than {} {}!"
-                        + " Unlocking device.", timeout, timeUnit, t);
+                        + " Unlocking device.", timeout, timeUnit, throwable);
                 afterClose();
             }
         }, scheduledExecutorService);

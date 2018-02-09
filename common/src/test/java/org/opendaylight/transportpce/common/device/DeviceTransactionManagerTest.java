@@ -102,9 +102,6 @@ public class DeviceTransactionManagerTest {
                     transactionManager.getDeviceTransaction(defaultDeviceId);
             Assert.assertFalse(thirdDeviceTxFuture.isDone());
 
-            Future<java.util.Optional<DeviceTransaction>> anotherDeviceTxFuture =
-                    transactionManager.getDeviceTransaction("another-id");
-
             firstDeviceTx.put(defaultDatastore, defaultIid, defaultData);
             Assert.assertFalse(secondDeviceTxFuture.isDone());
             Assert.assertFalse(thirdDeviceTxFuture.isDone());
@@ -112,6 +109,8 @@ public class DeviceTransactionManagerTest {
             Assert.assertFalse(secondDeviceTxFuture.isDone());
             Assert.assertFalse(thirdDeviceTxFuture.isDone());
 
+            Future<java.util.Optional<DeviceTransaction>> anotherDeviceTxFuture =
+                    transactionManager.getDeviceTransaction("another-id");
             Assert.assertTrue(anotherDeviceTxFuture.isDone());
             anotherDeviceTxFuture.get().get().submit(defaultTimeout, defaultTimeUnit);
 
