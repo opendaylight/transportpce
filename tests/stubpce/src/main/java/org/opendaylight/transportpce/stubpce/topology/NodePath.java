@@ -19,6 +19,9 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.NodeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.TerminationPointBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.link.LinkIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.node.NodeIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.termination.point.TerminationPointIdentifierBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +99,9 @@ public class NodePath {
             List<LogicalConnectionPoint> resLcps = resource.getLcps();
             for (String tmp : resLinks) {
                 Link link = new LinkBuilder()
-                        .setLinkId(tmp)
+                        .setLinkIdentifier(new LinkIdentifierBuilder()
+                                .setLinkId(tmp)
+                                .build())
                         .build();
                 links.add(link);
             }
@@ -105,7 +110,9 @@ public class NodePath {
                 xpdr = true;
                 buildXpdrTopo(nodeid,resLinks,resLcps,xpdr);
                 links.add(new LinkBuilder()
-                        .setLinkId("TAIL-LINKS")
+                        .setLinkIdentifier(new LinkIdentifierBuilder()
+                                .setLinkId("TAIL-LINKS")
+                                .build())
                         .build());
             }
             if (nodeid.contains("SRG")) {
@@ -117,7 +124,9 @@ public class NodePath {
                 xpdr = false;
                 buildXpdrTopo(nodeid,resLinks,resLcps,xpdr);
                 links.add(new LinkBuilder()
-                        .setLinkId("EXTERNAL-LINKS")
+                        .setLinkIdentifier(new LinkIdentifierBuilder()
+                                .setLinkId("EXTERNAL-LINKS")
+                                .build())
                         .build());
             }
         }
@@ -149,10 +158,10 @@ public class NodePath {
         Path resourcePath = null;
         List<TpNodeTp> direction = new ArrayList<TpNodeTp>();
         for (Link link : links) {
-            String linkId = link.getLinkId();
+            String linkId = link.getLinkIdentifier().getLinkId();
             LOG.info("LinkId : {}", linkId);
             if (!isXpdrSrgAbsent) {
-                if (StringUtils.countMatches(link.getLinkId(), "ROADM") < 2) {
+                if (StringUtils.countMatches(link.getLinkIdentifier().getLinkId(), "ROADM") < 2) {
                     if ((linkId.contains("XPDR") && linkId.startsWith("ROADM"))
                         || ((linkId.startsWith("DEG") && linkId.contains("SRG")))
                         || (nodeId.contains("XPDR") && linkId.contains("TAIL-LINKS"))) {
@@ -165,7 +174,7 @@ public class NodePath {
                     LOG.info("link is deg to deg link !");
                 }
             } else {
-                if (StringUtils.countMatches(link.getLinkId(), "ROADM") == 2) {
+                if (StringUtils.countMatches(link.getLinkIdentifier().getLinkId(), "ROADM") == 2) {
                     direction = reverseTpNodetpList();
                 } else {
                     direction = tpNodeTps;
@@ -237,17 +246,23 @@ public class NodePath {
         List<String> lcps = getOrderedTps(xpdr,resLcps);
         if (lcps.size() == 2) {
             in = new TerminationPointBuilder()
-                    .setTpNodeId(nodeid)
-                    .setTpId(lcps.get(0));
+                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
+                            .setNodeId(nodeid)
+                            .setTpId(lcps.get(0))
+                            .build());
             out = new TerminationPointBuilder()
-                    .setTpNodeId(nodeid)
-                    .setTpId(lcps.get(1));
+                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
+                            .setNodeId(nodeid)
+                            .setTpId(lcps.get(1))
+                            .build());
         } else {
             LOG.info("lcps size not equal to 2");
 
         }
         Node node = new NodeBuilder()
-                .setNodeId(nodeid)
+                .setNodeIdentifier(new NodeIdentifierBuilder()
+                        .setNodeId(nodeid)
+                        .build())
                 .build();
         TpNodeTp tmp = new TpNodeTp(in.build(), out.build(), node);
         tpNodeTps.add(tmp);
@@ -265,18 +280,23 @@ public class NodePath {
     private void buildSRGTopo(String nodeid, List<String> resLinks,List<LogicalConnectionPoint> resLcps) {
         /** build TpNodetp .*/
         Node node = new NodeBuilder()
-                .setNodeId(nodeid)
+                .setNodeIdentifier(new NodeIdentifierBuilder()
+                        .setNodeId(nodeid)
+                        .build())
                 .build();
         TerminationPoint out = new TerminationPointBuilder()
-                .setTpNodeId(nodeid)
-                .setTpId("SRG1-CP-TXRX")
+                .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
+                        .setNodeId(nodeid)
+                        .setTpId("SRG1-CP-TXRX")
+                        .build())
                 .build();
-
         for (LogicalConnectionPoint lcp : resLcps) {
             if (lcp.getTpId().compareTo("SRG1-CP-TXRX") != 0) {
                 TerminationPoint in = new TerminationPointBuilder()
-                        .setTpNodeId(nodeid)
-                        .setTpId(lcp.getTpId())
+                        .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
+                                .setNodeId(nodeid)
+                                .setTpId(lcp.getTpId())
+                                .build())
                         .build();
                 tpNodeTps.add(new TpNodeTp(in, out, node));
             }
