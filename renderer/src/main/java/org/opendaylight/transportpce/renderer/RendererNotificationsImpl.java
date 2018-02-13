@@ -185,7 +185,7 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
             if (rootNode.getModificationType() == ModificationType.DELETE) {
                 String nodeid = rootNode.getDataBefore().getKey().getNodeId().getValue();
                 LOG.info("Node {} removed...", nodeid);
-                this.currentMountedDevice.remove(nodeid);
+                this.portMapping.deleteMappingData(nodeid);
             }
 
             if (nnode != null) {
