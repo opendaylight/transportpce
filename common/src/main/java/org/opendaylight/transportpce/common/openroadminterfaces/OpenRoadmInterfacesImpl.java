@@ -40,9 +40,9 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfacesImpl.class);
 
     // TODO move somewhere to constants
-    public static final String NETWORK_TOKEN = "XPDR1-NETWORK";
+    public static final String NETWORK_TOKEN = "XPDR-LINE";
     public static final String TTP_TOKEN = "TTP";
-    public static final String CLIENT_TOKEN = "XPDR1-CLIENT";
+    public static final String CLIENT_TOKEN = "XPDR-CLNT";
     public static final String PP_TOKEN = "PP";
 
     private final DeviceTransactionManager deviceTransactionManager;
@@ -53,7 +53,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
     @Override
     public void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException {
-        Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
+        Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(nodeId);
         DeviceTransaction deviceTx;
         try {
             Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
@@ -86,7 +86,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     public Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey(interfaceName));
-        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, interfacesIID,
+        return this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, interfacesIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
@@ -144,7 +144,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
             InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                     .child(Interface.class, new InterfaceKey(interfaceName));
-            Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
+            Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(nodeId);
             DeviceTransaction deviceTx;
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
