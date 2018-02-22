@@ -15,7 +15,7 @@ netconf/netconf/models/ietf-netconf-notifications/src/main/yang/notifications@20
 rm -rf netconf mdsal && git submodule update --init
 (cd netconf && patch -p1 < ../netconf.patch && patch -p1 < ../get_connection_port_trail.patch)
 
-(cp testtool_pom.xml netconf/netconf/tools/netconf-testtool/pom.xml  && cd netconf/netconf/tools/netconf-testtool &&  mvn clean install -DskipTests)
+(cd netconf/netconf/tools/netconf-testtool &&  mvn clean install -DskipTests)
 rm -rf schemas && mkdir -p schemas
 #sample config for ordm 2.x are not yet ready
 #cp -r ../ordmodels/common/src/main/yang/org-openroadm-* schemas

@@ -25,7 +25,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     testtools_process1 = None
     testtools_process2 = None
     odl_process = None
-    restconf_baseurl = "http://127.0.0.1:8181/restconf"
+    restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def __start_testtools(cls):
