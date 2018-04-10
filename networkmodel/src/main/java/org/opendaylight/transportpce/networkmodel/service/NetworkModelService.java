@@ -23,6 +23,14 @@ public interface NetworkModelService {
     void createOpenROADMnode(String nodeId);
 
     /**
+     * Delete OpenROADM node mapping and topologies.
+     *
+     * @param nodeId unique node ID of OpenROADM node
+     *
+     */
+    void deleteOpenROADMnode(String nodeId);
+
+    /**
      * Set/update connection status of OpenROADM node.
      *
      * @param nodeId

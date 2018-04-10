@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.networkmodel.service;
 
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -25,6 +26,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.network.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.network.Link;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
@@ -42,6 +44,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmTopology openRoadmTopology;
     private final PortMapping portMapping;
+    private HashMap<String,TopologyShard> topologyShardMountedDevice;
 
     public NetworkModelServiceImpl(final DataBroker dataBroker, final R2RLinkDiscovery linkDiscovery,
             DeviceTransactionManager deviceTransactionManager,
@@ -51,6 +54,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         this.deviceTransactionManager = deviceTransactionManager;
         this.openRoadmTopology = openRoadmTopology;
         this.portMapping = portMapping;
+        this.topologyShardMountedDevice = new HashMap<String,TopologyShard>();
     }
 
     public void init() {
@@ -85,6 +89,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 LOG.error("Unable to create topology shard for node {}!", nodeId);
                 return;
             }
+            this.topologyShardMountedDevice.put(nodeId, topologyShard);
 
             WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
             LOG.info("creating node in {}", NetworkUtils.CLLI_NETWORK_ID);
@@ -140,4 +145,58 @@ public class NetworkModelServiceImpl implements NetworkModelService {
          */
     }
 
+    /* (non-Javadoc)
+     * @see org.opendaylight.transportpce.networkmodel.service.NetworkModelService#deleteOpenROADMnode(java.lang.String)
+     */
+    @Override
+    public void deleteOpenROADMnode(String nodeId) {
+        try {
+            LOG.info("deleteOpenROADMnode: {} ", nodeId);
+            this.portMapping.deleteMappingData(nodeId);
+
+            NodeKey nodeIdKey = new NodeKey(new NodeId(nodeId));
+            WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
+            LOG.info("deleting node in {}", NetworkUtils.CLLI_NETWORK_ID);
+            InstanceIdentifier<Node> iiClliNode = InstanceIdentifier
+                    .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+                    .child(Node.class, nodeIdKey)
+                    .build();
+            writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, iiClliNode);
+            LOG.info("deleting node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
+            InstanceIdentifier<Node> iiOpenRoadmNode = InstanceIdentifier
+                    .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+                    .child(Node.class, nodeIdKey)
+                    .build();
+            writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmNode);
+            TopologyShard topologyShard = this.topologyShardMountedDevice.get(nodeId);
+            if (topologyShard != null) {
+                LOG.info("TopologyShard for node '{}' is present", nodeId);
+                for (Node openRoadmTopologyNode: topologyShard .getNodes()) {
+                    LOG.info("deleting node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
+                            NetworkUtils.OVERLAY_NETWORK_ID);
+                    InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier
+                            .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                            .child(Node.class, openRoadmTopologyNode.getKey())
+                            .build();
+                    writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode);
+                }
+                for (Link openRoadmTopologyLink: topologyShard.getLinks()) {
+                    LOG.info("deleting link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
+                            NetworkUtils.OVERLAY_NETWORK_ID);
+                    InstanceIdentifier<Link> iiOpenRoadmTopologyLink = InstanceIdentifier
+                            .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                            .augmentation(Network1.class)
+                            .child(Link.class, openRoadmTopologyLink.getKey())
+                            .build();
+                    writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink);
+                }
+            } else {
+                LOG.warn("TopologyShard for node '{}' is not present", nodeId);
+            }
+            writeTransaction.submit().get();
+            LOG.info("all nodes and links deleted ! ");
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error when trying to delete node : {}", nodeId, e);
+        }
+    }
 }

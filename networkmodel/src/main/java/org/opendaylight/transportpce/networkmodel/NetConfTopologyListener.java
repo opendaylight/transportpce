@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
+import org.opendaylight.controller.md.sal.binding.api.DataObjectModification.ModificationType;
 import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
 import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
@@ -157,16 +158,28 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         LOG.info("onDataTreeChanged");
         for (DataTreeModification<Node> change : changes) {
             DataObjectModification<Node> rootNode = change.getRootNode();
-            if (rootNode.getDataAfter() == null) {
+            if ((rootNode.getDataAfter() == null) && (rootNode.getModificationType() != ModificationType.DELETE)) {
+                LOG.error("rootNode.getDataAfter is null : Node not connected via Netconf protocol");
+                continue;
+            }
+            if (rootNode.getModificationType() == ModificationType.DELETE) {
+                if (rootNode.getDataBefore() != null) {
+                    String nodeId = rootNode.getDataBefore().getKey().getNodeId().getValue();
+                    LOG.info("Node {} deleted", nodeId);
+                    this.networkModelService.deleteOpenROADMnode(nodeId);
+                    onDeviceDisConnected(nodeId);
+                } else {
+                    LOG.error("rootNode.getDataBefore is null !");
+                }
                 continue;
             }
             String nodeId = rootNode.getDataAfter().getKey().getNodeId().getValue();
             NetconfNode netconfNode = rootNode.getDataAfter().getAugmentation(NetconfNode.class);
+
             if ((netconfNode != null) && !StringConstants.DEFAULT_NETCONF_NODEID.equals(nodeId)) {
                 switch (rootNode.getModificationType()) {
                     case WRITE:
                         LOG.info("Node added: {}", nodeId);
-                        break;
                     case SUBTREE_MODIFIED:
                         NetconfNodeConnectionStatus.ConnectionStatus connectionStatus =
                                 netconfNode.getConnectionStatus();
@@ -191,10 +204,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                             }
                         }
                         break;
-                    case DELETE:
-                        LOG.info("Node deleted: {}", nodeId);
-                        break;
                     default:
+                        LOG.warn("Unexpected connection status : {}", rootNode.getModificationType());
                         break;
                 }
             }
