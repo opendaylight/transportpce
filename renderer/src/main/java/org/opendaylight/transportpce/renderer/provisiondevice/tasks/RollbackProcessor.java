@@ -60,6 +60,7 @@ public class RollbackProcessor {
      * @return
      *   number of tasks rolled back
      */
+    @SuppressWarnings("checkstyle:IllegalCatch")
     public int rollbackAll() {
         int rollbackCounter = 0;
         while (this.tasks.size() > 0) {
@@ -68,6 +69,7 @@ public class RollbackProcessor {
             try {
                 LOG.info("rolling back: {}", task.getId());
                 task.call();
+            //this methode prototype only use the generic Exception and no specific and useable subclasse
             } catch (Exception e) {
                 LOG.error("ERROR: Rollback task {} has failed", task.getId(), e);
             }
