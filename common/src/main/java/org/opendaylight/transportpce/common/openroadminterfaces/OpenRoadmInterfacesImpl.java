@@ -86,8 +86,8 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     public Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey(interfaceName));
-        return this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, interfacesIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        return this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+                interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
     @Override
@@ -144,7 +144,8 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
             InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                     .child(Interface.class, new InterfaceKey(interfaceName));
-            Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(nodeId);
+            Future<Optional<DeviceTransaction>> deviceTxFuture =
+                this.deviceTransactionManager.getDeviceTransaction(nodeId);
             DeviceTransaction deviceTx;
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
