@@ -47,7 +47,6 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.InstanceIdenti
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class OpenRoadmNetwork {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmNetwork.class);
@@ -57,7 +56,8 @@ public class OpenRoadmNetwork {
     }
 
     /**
-     * This public method creates the OpenRoadmNetwork Layer and posts it to the controller.
+     * This public method creates the OpenRoadmNetwork Layer and posts it to the
+     * controller.
      */
     public static void createOpenRoadmNetworkLayer(DataBroker controllerdb) {
         try {
@@ -80,9 +80,9 @@ public class OpenRoadmNetwork {
     public static Node createNode(String nodeId, DeviceTransactionManager deviceTransactionManager) {
         // Fetches the info from the deviceInfo
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
-        Optional<Info> deviceInfoOpt =
-                deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        Optional<Info> deviceInfoOpt = deviceTransactionManager.getDataFromDevice(nodeId,
+                LogicalDatastoreType.OPERATIONAL, infoIID, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         Info deviceInfo;
         if (deviceInfoOpt.isPresent()) {
             deviceInfo = deviceInfoOpt.get();
@@ -100,12 +100,18 @@ public class OpenRoadmNetwork {
         Node1Builder node1bldr = new Node1Builder();
 
         /*
-         * If the type of the Node is ROADM, Node type is set to ROADM Else, XPONDER
+         * Recognize the node type: 1:ROADM, 2:XPONDER
          */
-        if (nodeType.getIntValue() == 1) {
-            node1bldr.setNodeType(OpenroadmNodeType.ROADM);
-        } else if (nodeType.getIntValue() == 3) {
-            node1bldr.setNodeType(OpenroadmNodeType.XPONDER);
+        switch (nodeType.getIntValue()) {
+            case 1:
+                node1bldr.setNodeType(OpenroadmNodeType.ROADM);
+                break;
+            case 2:
+                node1bldr.setNodeType(OpenroadmNodeType.XPONDER);
+                break;
+            default:
+                LOG.error("No correponsding type for the value: {}", nodeType.getIntValue());
+                break;
         }
 
         String vendor = deviceInfo.getVendor();
@@ -116,7 +122,8 @@ public class OpenRoadmNetwork {
         node1bldr.setModel(model);
         node1bldr.setVendor(vendor);
 
-        // Sets the value of Network-ref and Node-ref as a part of the supporting node attribute
+        // Sets the value of Network-ref and Node-ref as a part of the supporting node
+        // attribute
         String clli = deviceInfo.getClli();
         SupportingNodeBuilder supportbldr = new SupportingNodeBuilder();
         supportbldr.setKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID), new NodeId(clli)));
@@ -137,7 +144,7 @@ public class OpenRoadmNetwork {
         NetworkId nwId = new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID);
         openrdmnwBuilder.setNetworkId(nwId);
         openrdmnwBuilder.setKey(new NetworkKey(nwId));
-        //sets network type to OpenRoadmNetwork
+        // sets network type to OpenRoadmNetwork
         NetworkTypes1Builder openRoadmNetworkTypesBldr = new NetworkTypes1Builder();
         openRoadmNetworkTypesBldr.setOpenroadmNetwork(new OpenroadmNetworkBuilder().build());
         NetworkTypesBuilder openrdmnwTypeBuilder = new NetworkTypesBuilder();
