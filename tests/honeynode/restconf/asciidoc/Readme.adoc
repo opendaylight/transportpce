@@ -1,0 +1,14 @@
+= restconf
+
+Provides modules and configuration for RESTCONF northbound interface.
+
+* To start RESTCONF HTTP use
+ ** "restconf-http-enabled": "true"
+* To start RESTCONF HTTPS use
+ ** "restconf-https-enabled": "true"
+* To disable RESTCONF start use
+ ** "restconf-http-enabled": "false"
+ ** "restconf-https-enabled": "false"
+* To disable RESTCONF fully
+ ** comment/remove io.fd.honeycomb.northbound.restconf.RestconfModule
+from distribution module configuration

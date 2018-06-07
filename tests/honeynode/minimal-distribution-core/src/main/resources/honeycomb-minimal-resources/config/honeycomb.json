@@ -1,0 +1,10 @@
+{
+  "persist-context": "true",
+  "persisted-context-path": "./persist/context/data.json",
+  "persisted-context-restoration-type": "Merge",
+  "persist-config": "true",
+  "persisted-config-path": "./persist/config/data.json",
+  "persisted-config-restoration-type": "Merge",
+  "notification-service-queue-depth": 1,
+  "netconf-initial-config-xml": ""
+}
