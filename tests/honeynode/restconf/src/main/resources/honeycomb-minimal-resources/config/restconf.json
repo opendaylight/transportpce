@@ -1,0 +1,22 @@
+{
+  "restconf-http-enabled": "true",
+  "restconf-root-path": "/restconf",
+  "restconf-binding-address": "127.0.0.1",
+  "restconf-port": 8183,
+  "restconf-https-enabled": "true",
+  "restconf-https-binding-address": "0.0.0.0",
+  "restconf-https-port": 8445,
+  "restconf-keystore": "/honeycomb-keystore",
+  "restconf-keystore-password": "OBF:1v9s1unr1unn1vv51zlk1t331vg91x1b1vgl1t331zly1vu51uob1uo71v8u",
+  "restconf-keystore-manager-password": "OBF:1v9s1unr1unn1vv51zlk1t331vg91x1b1vgl1t331zly1vu51uob1uo71v8u",
+  "restconf-truststore": "/honeycomb-keystore",
+  "restconf-truststore-password": "OBF:1v9s1unr1unn1vv51zlk1t331vg91x1b1vgl1t331zly1vu51uob1uo71v8u",
+  "restconf-websocket-address": "0.0.0.0",
+  "restconf-websocket-port": 7779,
+  "restconf-pool-max-size": 10,
+  "restconf-pool-min-size": 1,
+  "restconf-acceptors-size": 1,
+  "restconf-selectors-size": 1,
+  "restconf-https-acceptors-size": 1,
+  "restconf-https-selectors-size": 1
+}

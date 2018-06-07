@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<yangModuleWhitelist>
+    <modules>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715</package>
+            <description>
+                This module contains a collection of generally useful derived
+                YANG data types for Internet addresses and related things.
+
+                Dependency for network-topology,ietf-netconf-notifications,network-topology
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.library.rev160621</package>
+            <description>
+                This module contains monitoring information about the YANG
+                modules and submodules that are used within a YANG-based
+                server.
+
+                Required for mounting of netconf devices(Operational read does not work without it)
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.base._1._0.rev110601</package>
+            <description>
+                NETCONF Protocol Data Types and Protocol Operations.
+
+                Dependency of ietf-netconf-notifications
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.notifications.rev120206
+            </package>
+            <description>
+                This module defines a YANG data model for use with the
+                NETCONF protocol that allows the NETCONF client to
+                receive common NETCONF base event notifications.
+
+                Directly used for netconf notification binding
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev130712</package>
+            <description>
+                Required for mounting of netconf devices(Operational read does not work without it)
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714</package>
+            <description>
+                Conversion of the 'ncEvent' XSD in the
+                NETCONF Notifications RFC.
+
+                Directly used for netconf notification binding
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714</package>
+            <description>
+                Conversion of the 'manageEvent' XSD in the NETCONF
+                Notifications RFC.
+
+                Directly used for netconf notification binding
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.rev101004
+            </package>
+            <description>
+                NETCONF Monitoring Module.
+                All elements in this module are read-only.
+
+                Required for mounting of netconf devices(Operational read does not work without it)
+            </description>
+        </module>
+        <module>
+            <package>
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.extension.rev131210
+            </package>
+            <description>
+                Required for mounting of netconf devices(Operational read does not work without it)
+            </description>
+        </module>
+    </modules>
+</yangModuleWhitelist>

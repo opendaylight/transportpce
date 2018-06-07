@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<yangModuleWhitelist>
+    <modules>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715</package>
+            <description>
+                This module contains a collection of generally useful derived
+                YANG data types for Internet addresses and related things.
+
+                Dependency for ietf-restconf-monitoring
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715</package>
+            <description>
+                This module contains a collection of generally useful derived
+                YANG data types.
+
+                Dependency for ietf-restconf-monitoring
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.restconf.monitoring.rev170126
+            </package>
+            <description>
+                This module contains monitoring information for the
+                RESTCONF protocol.
+
+                Required for mounting of netconf devices
+            </description>
+        </module>
+        <module>
+            <package>org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.library.rev160621</package>
+            <description>
+                This module contains monitoring information about the YANG
+                modules and submodules that are used within a YANG-based
+                server.
+
+                Required for mounting of netconf devices
+            </description>
+        </module>
+    </modules>
+</yangModuleWhitelist>
