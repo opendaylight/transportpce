@@ -16,7 +16,7 @@ rm -rf netconf mdsal && git submodule update --init
 (cd netconf && patch -p1 < ../netconf.patch && patch -p1 < ../get_connection_port_trail.patch)
 (cd netconf/netconf/tools/netconf-testtool && mvn clean install -DskipTests)
 #Honeynode build
-(cd honeynode && mvn clean install -Dcheckstyle.skip -DskipTests)
+(cd honeynode && mvn clean install -DskipTests -s fd_io_honeycomb_settings.xml)
 chmod +x ./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc/honeynode-distribution-1.18.01/honeycomb-tpce
 rm -rf schemas && mkdir -p schemas
 #sample config for ordm 2.x are not yet ready
