@@ -113,7 +113,7 @@
         <label>OSC-SLOT</label>
         <provisioned-circuit-pack>2/0/OSC-PLUG</provisioned-circuit-pack>
       </cp-slots>
-	  <cp-slots>
+      <cp-slots>
         <slot-name>ETH-PLUG</slot-name>
         <label>ETH-PLUG</label>
         <provisioned-circuit-pack>2/0/ETH-PLUG</provisioned-circuit-pack>
@@ -283,7 +283,7 @@
         <operational-state>inService</operational-state>
       </ports>
     </circuit-packs>
-	<circuit-packs>
+    <circuit-packs>
       <circuit-pack-name>2/0/ETH-PLUG</circuit-pack-name>
       <circuit-pack-type>port</circuit-pack-type>
       <administrative-state>inService</administrative-state>
@@ -297,7 +297,7 @@
       <shelf>2</shelf>
       <slot>0</slot>
       <subSlot>0</subSlot>
-	  <parent-circuit-pack>
+      <parent-circuit-pack>
         <circuit-pack-name>2/0</circuit-pack-name>
         <cp-slot-name>ETH-PLUG</cp-slot-name>
       </parent-circuit-pack>
@@ -310,7 +310,7 @@
         <administrative-state>inService</administrative-state>
         <operational-state>inService</operational-state>
       </ports>
-	</circuit-packs>
+    </circuit-packs>
     <circuit-packs>
       <circuit-pack-name>3/0</circuit-pack-name>
       <circuit-pack-type>WSSDEG</circuit-pack-type>
@@ -330,7 +330,7 @@
         <label>OSC-SLOT</label>
         <provisioned-circuit-pack>3/0/OSC-PLUG</provisioned-circuit-pack>
       </cp-slots>
-	  <cp-slots>
+      <cp-slots>
         <slot-name>ETH-PLUG</slot-name>
         <label>ETH-PLUG</label>
         <provisioned-circuit-pack>3/0/ETH-PLUG</provisioned-circuit-pack>
@@ -500,7 +500,7 @@
         <operational-state>inService</operational-state>
       </ports>
     </circuit-packs>
-	<circuit-packs>
+    <circuit-packs>
       <circuit-pack-name>3/0/ETH-PLUG</circuit-pack-name>
       <circuit-pack-type>port</circuit-pack-type>
       <administrative-state>inService</administrative-state>
@@ -514,7 +514,7 @@
       <shelf>3</shelf>
       <slot>0</slot>
       <subSlot>0</subSlot>
-	  <parent-circuit-pack>
+      <parent-circuit-pack>
         <circuit-pack-name>3/0</circuit-pack-name>
         <cp-slot-name>ETH-PLUG</cp-slot-name>
       </parent-circuit-pack>
@@ -883,7 +883,7 @@
         <span-loss-transmit>15.0</span-loss-transmit>
       </ots>
     </interface>
-	<interface>
+    <interface>
       <name>eth-2/0/ETH-PLUG</name>
       <type xmlns:openROADM-if="http://org/openroadm/interfaces">openROADM-if:ethernetCsmacd</type>
       <administrative-state>inService</administrative-state>
@@ -915,7 +915,7 @@
         <curr-duplex>FULL</curr-duplex>
       </ethernet>
     </interface>
-	<protocols>
+    <protocols>
       <lldp xmlns="http://org/openroadm/lldp">
         <global-config>
           <adminStatus>enable</adminStatus>
@@ -926,7 +926,7 @@
           <ifName>eth-2/0/ETH-PLUG</ifName>
           <adminStatus>txandrx</adminStatus>
         </port-config>
-		<port-config>
+        <port-config>
           <ifName>eth-3/0/ETH-PLUG</ifName>
           <adminStatus>txandrx</adminStatus>
         </port-config>
@@ -3313,11 +3313,11 @@
         <index>1</index>
         <circuit-pack-name>2/0</circuit-pack-name>
       </circuit-packs>
-	  <circuit-packs>
+      <circuit-packs>
         <index>2</index>
         <circuit-pack-name>2/0/OSC-PLUG</circuit-pack-name>
       </circuit-packs>
-	  <circuit-packs>
+      <circuit-packs>
         <index>3</index>
         <circuit-pack-name>2/0/ETH-PLUG</circuit-pack-name>
       </circuit-packs>
@@ -3334,11 +3334,11 @@
         <index>1</index>
         <circuit-pack-name>3/0</circuit-pack-name>
       </circuit-packs>
-	  <circuit-packs>
+      <circuit-packs>
         <index>2</index>
         <circuit-pack-name>3/0/OSC-PLUG</circuit-pack-name>
       </circuit-packs>
-	  <circuit-packs>
+      <circuit-packs>
         <index>3</index>
         <circuit-pack-name>3/0/ETH-PLUG</circuit-pack-name>
       </circuit-packs>

@@ -6,7 +6,7 @@ xmlns:oor="http://org/openroadm/device"
 exclude-result-prefixes="oor d">
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-  
+
   <xsl:template match="/">
     <xsl:element name="config" namespace="urn:ietf:params:xml:ns:netconf:base:1.0">
     <xsl:element name="org-openroadm-device" namespace="http://org/openroadm/device">
@@ -27,13 +27,13 @@ exclude-result-prefixes="oor d">
         <xsl:call-template name="cp-body"/>
       </xsl:element>
     </xsl:for-each>
-    
+
     <xsl:for-each select="d:data/oor:org-openroadm-device/oor:interface">
         <xsl:element name="interface" >
             <xsl:call-template name="inter-body"/>
         </xsl:element>
     </xsl:for-each>
-    
+
     <xsl:for-each select="d:data/oor:org-openroadm-device/oor:protocols">
         <xsl:element name="protocols" >
             <xsl:call-template name="proto-body"/>
@@ -55,13 +55,13 @@ exclude-result-prefixes="oor d">
     </xsl:element>
     </xsl:element>
   </xsl:template>
-  
+
   <xsl:template match="oor:info">
     <xsl:for-each select="./*">
       <xsl:if test="name(.) = 'node-id' or name(.) = 'node-number' or name(.) = 'clli' or name(.) = 'ipAddress' or name(.) = 'prefix-length' or name(.) = 'defaultGateway' or name(.) = 'template' or name(.) = 'geoLocation'">
         <xsl:copy-of select="." />
       </xsl:if>
-     </xsl:for-each> 
+     </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="shelve-body">
@@ -84,7 +84,7 @@ exclude-result-prefixes="oor d">
           </xsl:element>
         </xsl:for-each>
       </xsl:if>
-     </xsl:for-each> 
+     </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="inter-body">
@@ -99,7 +99,7 @@ exclude-result-prefixes="oor d">
         </xsl:if>
     </xsl:for-each>
   </xsl:template>
-  
+
    <xsl:template name="eth-body">
     <xsl:for-each select="./*">
       <xsl:if test="not(name(.) = 'curr-speed' or name(.)='curr-duplex') ">
@@ -107,7 +107,7 @@ exclude-result-prefixes="oor d">
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:template name="proto-body">
     <xsl:for-each select="./*">
       <xsl:if test="name(.) = 'lldp'">
@@ -117,7 +117,7 @@ exclude-result-prefixes="oor d">
           </xsl:element>
         </xsl:for-each>
       </xsl:if>
-     </xsl:for-each> 
+     </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="ports-body">
@@ -127,7 +127,7 @@ exclude-result-prefixes="oor d">
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:template name="lldp-body">
     <xsl:for-each select="./*">
       <xsl:if test="not(name(.) = 'nbr-list') ">
@@ -135,7 +135,7 @@ exclude-result-prefixes="oor d">
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:template name="degree-body">
     <xsl:for-each select="./*">
       <xsl:if test="not(name(.) = 'max-wavelengths')">
