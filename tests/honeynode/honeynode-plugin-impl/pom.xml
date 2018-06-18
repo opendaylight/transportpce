@@ -42,7 +42,7 @@
             <artifactId>honeynode-plugin-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>minimal-distribution-core</artifactId>
