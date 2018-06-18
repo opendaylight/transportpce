@@ -70,8 +70,8 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </dependency>
 
     <dependency>
-    	<groupId>com.google.code.gson</groupId>
-    	<artifactId>gson</artifactId>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
     </dependency>
   </dependencies>
 </project>
