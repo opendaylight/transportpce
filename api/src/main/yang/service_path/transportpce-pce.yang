@@ -20,9 +20,6 @@ module transportpce-pce {
     prefix transportpce-pathDescription;
     revision-date 2017-10-17;
   }
-  import transportpce-pathDescription {
-    prefix transportpce-pathDescription;
-  }
 
   organization
     "transportPCE";
