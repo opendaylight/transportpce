@@ -135,7 +135,7 @@ public class DeviceWrapper {
         YangInstanceIdentifier initialDataIi = YangInstanceIdentifier.of(dataQName);
         LOG.debug("Searching for {} inside {}", initialDataIi, initialDataNormalizedNodes.get());
         Optional<NormalizedNode<?, ?>> dataNormalizedNodes =
-                NormalizedNodes.findNode(initialDataNormalizedNodes.get(), initialDataIi).toJavaUtil();
+                NormalizedNodes.findNode(initialDataNormalizedNodes.get(), initialDataIi);//.toJavaUtil();
         Preconditions.checkArgument(dataNormalizedNodes.isPresent());
         LOG.info("Initial data was successfully stored into ds");
         DOMDataWriteTransaction writeOnlyTransaction = domDataBroker.newWriteOnlyTransaction();

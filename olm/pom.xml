@@ -59,7 +59,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>sal-netconf-connector</artifactId>
-      <version>1.7.3-SNAPSHOT</version>
     </dependency>
 
     <!-- Testing Dependencies -->

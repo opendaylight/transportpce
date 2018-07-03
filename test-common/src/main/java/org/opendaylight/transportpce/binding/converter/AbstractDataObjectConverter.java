@@ -80,7 +80,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
             YangInstanceIdentifier.PathArgument directChildIdentifier =
                     YangInstanceIdentifier.of(rootNode).getLastPathArgument();
             Optional<NormalizedNode<?, ?>> directChild =
-                    NormalizedNodes.getDirectChild(normalizedNode, directChildIdentifier).toJavaUtil();
+                    NormalizedNodes.getDirectChild(normalizedNode, directChildIdentifier);//.toJavaUtil();
             if (!directChild.isPresent()) {
                 throw new IllegalStateException(String.format("Could not get the direct child of %s", rootNode));
             }

@@ -19,7 +19,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import org.opendaylight.transportpce.binding.converter.api.DataObjectConverter;
 import org.opendaylight.transportpce.test.common.DataStoreContext;
-import org.opendaylight.yangtools.binding.data.codec.impl.BindingNormalizedNodeCodecRegistry;
+import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;

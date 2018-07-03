@@ -71,7 +71,7 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-        <dependency>
+       <dependency>
             <groupId>org.apache.karaf.scheduler</groupId>
             <artifactId>org.apache.karaf.scheduler.core</artifactId>
             <version>4.0.9</version>
