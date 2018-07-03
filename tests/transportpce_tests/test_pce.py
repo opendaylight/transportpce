@@ -24,7 +24,7 @@ class TransportPCEtesting(unittest.TestCase):
     odl_process = None
     simple_data = None
     complex_data = None
-    restconf_baseurl = "http://127.0.0.1:8181/restconf"
+    restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def _get_file(cls):

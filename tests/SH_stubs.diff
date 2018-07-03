@@ -1,0 +1,791 @@
+diff --git a/servicehandler/pom.xml b/servicehandler/pom.xml
+index 43085f6..8a9699a 100644
+--- a/servicehandler/pom.xml
++++ b/servicehandler/pom.xml
+@@ -67,6 +67,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
+       <artifactId>transportpce-pce</artifactId>
+       <version>${project.version}</version>
+     </dependency>
++    <dependency>
++      <groupId>${project.groupId}</groupId>
++      <artifactId>transportpce-stubrenderer</artifactId>
++      <version>${project.version}</version>
++    </dependency>
+ 
+     <!-- Testing Dependencies -->
+     <dependency>
+diff --git a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java
+index 2b0ee83..2899617 100644
+--- a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java
++++ b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java
+@@ -7,8 +7,6 @@
+  */
+ package org.opendaylight.transportpce.servicehandler;
+ 
+-import java.util.ArrayList;
+-import java.util.List;
+ import java.util.concurrent.Future;
+ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
+ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.path.computation.request.input.ServiceAEnd;
+@@ -18,8 +16,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev17
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.response.parameters.ResponseParametersBuilder;
+-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.Topology;
+-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.TopologyBuilder;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.LifecycleState;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
+@@ -31,12 +27,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesBuilder;
+-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.AToZ;
+-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.AToZBuilder;
+-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.AToZKey;
+-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.ZToA;
+-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.ZToABuilder;
+-import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.ZToAKey;
+ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.HardConstraintsBuilder;
+ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.SoftConstraintsBuilder;
+ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.endpoint.sp.RxDirection;
+@@ -237,42 +227,6 @@ public final class ModelMappingUtils {
+                 .setSoftConstraints(serviceReconfigureInput.getSoftConstraints())
+                 .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
+         }
+-
+-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.response
+-                .parameters.sp.ResponseParameters responseParameters = output.getResponseParameters();
+-        if (responseParameters != null) {
+-            // service.setPceMetric(responseParameters.getPceMetric());
+-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426
+-                .response.parameters.sp.response.parameters.PathDescription pathDescription =
+-                responseParameters.getPathDescription();
+-            if (pathDescription != null) {
+-                List<AToZ> atozList = new ArrayList<>();
+-                List<ZToA> ztoaList = new ArrayList<>();
+-
+-                for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426
+-                    .path.description.atoz.direction.AToZ tmp : pathDescription.getAToZDirection().getAToZ()) {
+-
+-                    AToZKey key = new AToZKey(tmp.getKey().getId());
+-                    AToZ atoz = new AToZBuilder().setId(tmp.getId()).setKey(key)
+-                            // .setResource(tmp.getResource())
+-                            .build();
+-                    atozList.add(atoz);
+-                }
+-
+-                for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426
+-                        .path.description.ztoa.direction.ZToA
+-                        tmp : pathDescription.getZToADirection().getZToA()) {
+-                    ZToAKey key = new ZToAKey(tmp.getKey().getId());
+-                    ZToA ztoa = new ZToABuilder().setId(tmp.getId()).setKey(key)
+-                            // .setResource(tmp.getResource())
+-                            .build();
+-                    ztoaList.add(ztoa);
+-                }
+-
+-                Topology topology = new TopologyBuilder().setAToZ(atozList).setZToA(ztoaList).build();
+-                service.setTopology(topology);
+-            }
+-        }
+         return service.build();
+     }
+ 
+diff --git a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
+index 5dc24b3..714e2b3 100644
+--- a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
++++ b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
+@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
+ import java.util.Optional;
+ import java.util.concurrent.ExecutionException;
+ import java.util.concurrent.Future;
+-
+ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+ import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
+ import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+@@ -27,6 +26,7 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
+ import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateValidation;
+ import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
+ import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck;
++import org.opendaylight.transportpce.stubrenderer.SendingRendererRPCs;
+ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeaderBuilder;
+@@ -89,6 +89,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+     private ServiceDataStoreOperations serviceDataStoreOperations;
+     private RendererServiceOperations rendererServiceOperations;
+     private PCEServiceWrapper pceServiceWrapper;
++    private SendingRendererRPCs stubrendererService;
+ 
+     //TODO: remove private request fields as they are in global scope
+ 
+@@ -145,8 +146,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+ 
+         ServiceImplementationRequestInput serviceImplementationRequest =
+                 ModelMappingUtils.createServiceImplementationRequest(input, pceResponse);
++//        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
++//            .ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
++//            .serviceImplementation(serviceImplementationRequest);
++        this.stubrendererService = new SendingRendererRPCs();
+         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
+-            .ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
++        .ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.stubrendererService
+             .serviceImplementation(serviceImplementationRequest);
+         if (ResponseCodes.RESPONSE_OK
+                 .equals(serviceImplementationRequestOutput.getConfigurationResponseCommon().getResponseCode())) {
+@@ -215,9 +220,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+         LOG.debug("Service '{}' present in datastore !", serviceName);
+         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput
+                 serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(input);
++//        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
++//            .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
++        this.stubrendererService = new SendingRendererRPCs();
+         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
+-            .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
+-
++            .ServiceDeleteOutput output = this.stubrendererService.serviceDelete(serviceDeleteInput);
+         if (!ResponseCodes.RESPONSE_OK
+                 .equals(output.getConfigurationResponseCommon().getResponseCode())) {
+             message = "Service delete failed!";
+diff --git a/servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java b/servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java
+index 6db468c..76e4a26 100644
+--- a/servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java
++++ b/servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java
+@@ -9,13 +9,8 @@ package org.opendaylight.transportpce.servicehandler.stub;
+ 
+ import java.util.concurrent.ExecutionException;
+ import java.util.concurrent.Future;
+-
+ import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
+ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+-import org.opendaylight.transportpce.servicehandler.mappers.ServiceDeleteInputConverter;
+-import org.opendaylight.transportpce.servicehandler.mappers.ServiceDeleteOutputConverter;
+-import org.opendaylight.transportpce.servicehandler.mappers.ServiceImplementationRequestInputConverter;
+-import org.opendaylight.transportpce.servicehandler.mappers.ServiceImplementationRequestOutputConverter;
+ import org.opendaylight.transportpce.stubrenderer.impl.StubrendererImpl;
+ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput;
+ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutput;
+@@ -30,16 +25,15 @@ public class StubRendererServiceOperations implements RendererServiceOperations
+     private StubrendererImpl stubrenderer;
+ 
+     public StubRendererServiceOperations(NotificationPublishService notificationPublishService) {
+-        this.stubrenderer = new StubrendererImpl(notificationPublishService);
++        this.stubrenderer = new StubrendererImpl();
+     }
+ 
+     @Override
+     public ServiceImplementationRequestOutput serviceImplementation(ServiceImplementationRequestInput input) {
+-        Future<RpcResult<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426
+-            .ServiceImplementationRequestOutput>> rpcResultFuture = this.stubrenderer
+-                .serviceImplementationRequest(ServiceImplementationRequestInputConverter.getStub(input));
++        Future<RpcResult<ServiceImplementationRequestOutput>> rpcResultFuture = this.stubrenderer
++                .serviceImplementationRequest(input);
+         try {
+-            return ServiceImplementationRequestOutputConverter.getConcrete(rpcResultFuture.get().getResult());
++            return rpcResultFuture.get().getResult();
+         } catch (InterruptedException e) {
+             LOG.error("RPC serviceImplementation failed !",e);
+         } catch (ExecutionException e) {
+@@ -50,11 +44,10 @@ public class StubRendererServiceOperations implements RendererServiceOperations
+ 
+     @Override
+     public ServiceDeleteOutput serviceDelete(ServiceDeleteInput input) {
+-        Future<RpcResult<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426
+-            .ServiceDeleteOutput>> rpcResultFuture = this.stubrenderer
+-                .serviceDelete(ServiceDeleteInputConverter.getStub(input));
++        Future<RpcResult<ServiceDeleteOutput>> rpcResultFuture = this.stubrenderer
++                .serviceDelete(input);
+         try {
+-            return ServiceDeleteOutputConverter.getConcrete(rpcResultFuture.get().getResult());
++            return rpcResultFuture.get().getResult();
+         } catch (InterruptedException e) {
+             LOG.error("RPC serviceDelete failed !",e);
+         } catch (ExecutionException e) {
+diff --git a/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/SendingRendererRPCs.java b/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/SendingRendererRPCs.java
+index cdcdc0e..7c7a825 100644
+--- a/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/SendingRendererRPCs.java
++++ b/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/SendingRendererRPCs.java
+@@ -8,16 +8,18 @@
+ 
+ package org.opendaylight.transportpce.stubrenderer;
+ 
+-import com.google.common.util.concurrent.ListenableFuture;
+-import com.google.common.util.concurrent.ListeningExecutorService;
+-
+ import java.util.ArrayList;
+ import java.util.List;
+-import java.util.concurrent.Callable;
+-
++import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.TopologyBuilder;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.AToZ;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.ZToA;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutputBuilder;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutputBuilder;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ 
+@@ -41,73 +43,78 @@ public class SendingRendererRPCs {
+     private List<AToZ> atoz;
+     private List<ZToA> ztoa;
+     private String error;
+-    private final ListeningExecutorService executor;
+ 
+-    public SendingRendererRPCs(ListeningExecutorService executor) {
+-        success = true;
++    public SendingRendererRPCs() {
++        this.success = true;
+         setTopology(null);
+-        this.executor = executor;
+         setError("");
+     }
+ 
+     private void buildAtoZ() {
+-        atoz = new ArrayList<AToZ>();
++        this.atoz = new ArrayList<AToZ>();
+     }
+ 
+     private void buildZtoA() {
+-        ztoa = new ArrayList<ZToA>();
++        this.ztoa = new ArrayList<ZToA>();
+     }
+ 
+-    public ListenableFuture<Boolean> serviceDelete() {
++    public ServiceDeleteOutput serviceDelete(ServiceDeleteInput input) {
++        String message = "Service deleted !";
++        String responseCode = "200";
+         LOG.info("ServiceDelete request ...");
+-        success = false;
+-        return executor.submit(new Callable<Boolean>() {
+-            @Override
+-            public Boolean call() throws Exception {
+-                Boolean output = true;
+-                LOG.info("Wait for 10s til beginning the Renderer serviceDelete request");
+-                try {
+-                    Thread.sleep(10000); //sleep for 10s
+-                } catch (InterruptedException e) {
+-                    output = false;
+-                    LOG.error("Thread.sleep failed : {}", e.toString());
+-                }
+-                buildAtoZ();
+-                buildZtoA();
+-                success = true;
+-                return output;
+-            }
+-        });
++        LOG.info("Wait for 10s til beginning the Renderer serviceDelete request");
++        try {
++            Thread.sleep(1000); //sleep for 10s
++        } catch (InterruptedException e) {
++            message = "deleting service failed !";
++            LOG.error(message);
++            responseCode = "500";
++            setError(message);
++        }
++        ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
++                .setAckFinalIndicator("yes")
++                .setRequestId(input.getServiceHandlerHeader().getRequestId())
++                .setResponseCode(responseCode)
++                .setResponseMessage(message);
++        ServiceDeleteOutput output =  new ServiceDeleteOutputBuilder()
++                .setConfigurationResponseCommon(configurationResponseCommon.build())
++                .build();
++        return output;
+     }
+ 
+-    public ListenableFuture<Boolean> serviceImplementation() {
++    public ServiceImplementationRequestOutput serviceImplementation(ServiceImplementationRequestInput input) {
++        String message = "Service implemented !";
++        String responseCode = "200";
++        setSuccess(true);
+         LOG.info("serviceImplementation request ...");
+-        success = false;
+-        return executor.submit(new Callable<Boolean>() {
+-            @Override
+-            public Boolean call() throws Exception {
+-                Boolean output = true;
+-                LOG.info("Wait for 10s til beginning the Renderer serviceDelete request");
+-                try {
+-                    Thread.sleep(10000); //sleep for 10s
+-                } catch (InterruptedException e) {
+-                    output = false;
+-                    LOG.error("Thread.sleep failed : {}", e.toString());
+-                }
+-                buildAtoZ();
+-                buildZtoA();
+-                setTopology(new TopologyBuilder()
+-                        .setAToZ(atoz)
+-                        .setZToA(ztoa));
+-                output = true;
+-                success = true;
+-                return output;
+-            }
+-        });
++        LOG.info("Wait for 10s til beginning the Renderer serviceDelete request");
++        try {
++            Thread.sleep(2000); //sleep for 1s
++        } catch (InterruptedException e) {
++            message = "implementing service failed !";
++            LOG.error(message);
++            setError(message);
++            responseCode = "500";
++            setSuccess(false);
++        }
++        buildAtoZ();
++        buildZtoA();
++        setTopology(new TopologyBuilder()
++                .setAToZ(SendingRendererRPCs.this.atoz)
++                .setZToA(SendingRendererRPCs.this.ztoa));
++        ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
++                .setAckFinalIndicator("yes")
++                .setRequestId(input.getServiceHandlerHeader().getRequestId())
++                .setResponseCode(responseCode)
++                .setResponseMessage(message);
++        ServiceImplementationRequestOutput output =  new ServiceImplementationRequestOutputBuilder()
++                .setConfigurationResponseCommon(configurationResponseCommon.build())
++                .build();
++        return output;
+     }
+ 
+     public Boolean getSuccess() {
+-        return success;
++        return this.success;
+     }
+ 
+     public void setSuccess(Boolean success) {
+@@ -115,7 +122,7 @@ public class SendingRendererRPCs {
+     }
+ 
+     public TopologyBuilder getTopology() {
+-        return topology;
++        return this.topology;
+     }
+ 
+     public void setTopology(TopologyBuilder topo) {
+@@ -123,7 +130,7 @@ public class SendingRendererRPCs {
+     }
+ 
+     public String getError() {
+-        return error;
++        return this.error;
+     }
+ 
+     public void setError(String error) {
+diff --git a/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererImpl.java b/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererImpl.java
+index 23ae976..4187f96 100644
+--- a/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererImpl.java
++++ b/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererImpl.java
+@@ -9,33 +9,21 @@
+ 
+ package org.opendaylight.transportpce.stubrenderer.impl;
+ 
+-import com.google.common.util.concurrent.FutureCallback;
+-import com.google.common.util.concurrent.Futures;
+-import com.google.common.util.concurrent.ListenableFuture;
+-import com.google.common.util.concurrent.ListeningExecutorService;
+-import com.google.common.util.concurrent.MoreExecutors;
+-
+-import java.util.concurrent.Executors;
+ import java.util.concurrent.Future;
+-
+-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
+ import org.opendaylight.transportpce.stubrenderer.SendingRendererRPCs;
+ import org.opendaylight.transportpce.stubrenderer.StubrendererCompliancyCheck;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteInput;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteOutput;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteOutputBuilder;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestInput;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestOutput;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestOutputBuilder;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceRpcResultSp;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceRpcResultSpBuilder;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererService;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.rpc.result.sp.PathTopology;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.rpc.result.sp.PathTopologyBuilder;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
+-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.TopologyBuilder;
+-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.RpcStatusEx;
+-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.ServicePathNotificationTypes;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveInput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveOutput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestInput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestOutput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutputBuilder;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutput;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutputBuilder;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService;
+ import org.opendaylight.yangtools.yang.common.RpcResult;
+ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+ import org.slf4j.Logger;
+@@ -48,21 +36,12 @@ import org.slf4j.LoggerFactory;
+  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
+  *
+  */
+-public class StubrendererImpl implements StubrendererService {
++public class StubrendererImpl implements TransportpceServicepathService {
+     /** Logging. */
+     private static final Logger LOG = LoggerFactory.getLogger(StubrendererImpl.class);
+-    /** send notification. */
+-    private NotificationPublishService notificationPublishService;
+-    private ServiceRpcResultSp notification;
+-    private final ListeningExecutorService executor = MoreExecutors
+-            .listeningDecorator(Executors.newFixedThreadPool(10));
+     /** check service sdnc-request-header compliancy. */
+     private StubrendererCompliancyCheck compliancyCheck;
+ 
+-    public StubrendererImpl(NotificationPublishService notificationPublishService) {
+-        this.notificationPublishService = notificationPublishService;
+-    }
+-
+     @Override
+     public Future<RpcResult<ServiceImplementationRequestOutput>> serviceImplementationRequest(
+             ServiceImplementationRequestInput input) {
+@@ -71,121 +50,37 @@ public class StubrendererImpl implements StubrendererService {
+         String message = "";
+         ConfigurationResponseCommonBuilder configurationResponseCommon = null;
+ 
+-        compliancyCheck = new StubrendererCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
+-        if (compliancyCheck.check(false, true)) {
++        this.compliancyCheck = new StubrendererCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
++        if (this.compliancyCheck.check(false, true)) {
+             LOG.info("Service compliant !");
+             /**
+              * If compliant, service-request parameters are verified in order to
+              * check if there is no missing parameter that prevents calculating
+              * a path and implement a service.
+              */
+-
+-            notification = new ServiceRpcResultSpBuilder()
+-                    .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
+-                    .setServiceName(input.getServiceName())
+-                    .setStatus(RpcStatusEx.Pending)
+-                    .setStatusMessage("Service compliant, submitting serviceImplementation Request ...")
+-                    .build();
+-            try {
+-                notificationPublishService.putNotification(notification);
+-            } catch (InterruptedException e) {
+-                LOG.info("notification offer rejected : {}", e);
++            SendingRendererRPCs sendingRenderer = new SendingRendererRPCs();
++            sendingRenderer.serviceImplementation(input);
++            if (sendingRenderer.getSuccess()) {
++                message = "Service implemented !";
++                LOG.info(message);
++                responseCode = "200";
++            } else {
++                message = "Service implementation failed : " + sendingRenderer.getError();
++                LOG.error(message);
++                responseCode = "500";
+             }
+-
+-            SendingRendererRPCs sendingRenderer = new SendingRendererRPCs(executor);
+-            FutureCallback<Boolean> rendererCallback =
+-                    new FutureCallback<Boolean>() {
+-                String message = "";
+-                ServiceRpcResultSp notification = null;
+-
+-                @Override
+-                public void onFailure(Throwable arg0) {
+-                    LOG.error("Failure message : {}", arg0.toString());
+-                    LOG.error("Service implementation failed !");
+-                    notification = new ServiceRpcResultSpBuilder()
+-                            .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
+-                            .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
+-                            .setStatusMessage("PCR Request failed  : {}" + arg0.getMessage()).build();
+-                    try {
+-                        notificationPublishService.putNotification(notification);
+-                    } catch (InterruptedException e) {
+-                        LOG.info("notification offer rejected : {}", e);
+-                    }
+-                }
+-
+-                @Override
+-                public void onSuccess(Boolean response) {
+-                    LOG.info("response : {}", response);
+-                    if (response) {
+-                        message = "Service implemented !";
+-                        TopologyBuilder topo = sendingRenderer.getTopology();
+-                        ServiceRpcResultSpBuilder tmp = new ServiceRpcResultSpBuilder()
+-                                .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
+-                                .setServiceName(input.getServiceName())
+-                                .setStatus(RpcStatusEx.Successful)
+-                                .setStatusMessage(message);
+-                        if (topo != null) {
+-                            PathTopology value = new PathTopologyBuilder()
+-                                    .setAToZ(topo.getAToZ())
+-                                    .setZToA(topo.getZToA())
+-                                    .build();
+-                            tmp.setPathTopology(value);
+-                        }
+-                        notification = tmp.build();
+-                    } else {
+-                        message = "Service implementation failed : " + sendingRenderer.getError();
+-                        notification = new ServiceRpcResultSpBuilder()
+-                                .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
+-                                .setServiceName("")
+-                                .setStatus(RpcStatusEx.Failed).setStatusMessage(message)
+-                                .build();
+-                    }
+-                    LOG.info(notification.toString());
+-                    try {
+-                        notificationPublishService.putNotification(notification);
+-                    } catch (InterruptedException e) {
+-                        LOG.info("notification offer rejected : {}", e);
+-                    }
+-                    LOG.info(message);
+-                }
+-            };
+-            ListenableFuture<Boolean> renderer = sendingRenderer.serviceImplementation();
+-            Futures.addCallback(renderer, rendererCallback, executor);
+-            LOG.info("Service implmentation Request in progress ");
+-            configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+-                    .setAckFinalIndicator("Yes")
+-                    .setRequestId(input.getServiceHandlerHeader().getRequestId())
+-                    .setResponseCode("200")
+-                    .setResponseMessage("Service implementation Request in progress ");
+-
+-            ServiceImplementationRequestOutput output = new ServiceImplementationRequestOutputBuilder()
+-                    .setConfigurationResponseCommon(configurationResponseCommon.build())
+-                    .build();
+-            return RpcResultBuilder.success(output).buildFuture();
+         } else {
+-            message = compliancyCheck.getMessage();
++            message = "Service not compliant";
+             responseCode = "500";
+-            LOG.info("Service not compliant caused by : {}", message);
+-            notification = new ServiceRpcResultSpBuilder()
+-                    .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
+-                    .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
+-                    .setStatusMessage("Service not compliant caused by : " + message)
+-                    .build();
+-            try {
+-                notificationPublishService.putNotification(notification);
+-            } catch (InterruptedException e) {
+-                LOG.info("notification offer rejected : {}", e);
+-            }
+         }
+         configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+-                .setAckFinalIndicator("yes")
+-                .setRequestId(input.getServiceHandlerHeader().getRequestId())
+-                .setResponseCode(responseCode)
+-                .setResponseMessage(message);
++            .setAckFinalIndicator("yes")
++            .setRequestId(input.getServiceHandlerHeader().getRequestId())
++            .setResponseCode(responseCode)
++            .setResponseMessage(message);
+         ServiceImplementationRequestOutput output = new ServiceImplementationRequestOutputBuilder()
+-                .setConfigurationResponseCommon(configurationResponseCommon.build())
+-                .build();
+-
++            .setConfigurationResponseCommon(configurationResponseCommon.build())
++            .build();
+         return RpcResultBuilder.success(output).buildFuture();
+     }
+ 
+@@ -195,108 +90,55 @@ public class StubrendererImpl implements StubrendererService {
+         LOG.info("RPC serviceDelete request received");
+         String responseCode = "";
+         ConfigurationResponseCommonBuilder configurationResponseCommon = null;
+-        compliancyCheck = new StubrendererCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
+-        if (compliancyCheck.check(false, true)) {
++        this.compliancyCheck = new StubrendererCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
++        if (this.compliancyCheck.check(false, true)) {
+             LOG.info("Service compliant !");
+             /**
+              * If compliant, service-request parameters are verified in order to
+              * check if there is no missing parameter that prevents calculating
+              * a path and implement a service.
+              */
+-
+-            notification = new ServiceRpcResultSpBuilder()
+-                    .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
+-                    .setServiceName(input.getServiceName())
+-                    .setStatus(RpcStatusEx.Pending)
+-                    .setStatusMessage("Service compliant, submitting serviceDelete Request ...")
+-                    .build();
+-            try {
+-                notificationPublishService.putNotification(notification);
+-            } catch (InterruptedException e) {
+-                LOG.info("notification offer rejected : {}", e);
++            SendingRendererRPCs sendingRenderer = new SendingRendererRPCs();
++            sendingRenderer.serviceDelete(input);
++            if (sendingRenderer.getSuccess()) {
++                message = "Service deleted !";
++                responseCode = "200";
++                LOG.info(message);
++            } else {
++                message = "Service implementation failed : " + sendingRenderer.getError();
++                LOG.error(message);
++                responseCode = "500";
+             }
+-            SendingRendererRPCs sendingRenderer = new SendingRendererRPCs(executor);
+-            FutureCallback<Boolean> rendererCallback = new FutureCallback<Boolean>() {
+-                String message = "";
+-                ServiceRpcResultSp notification = null;
+-
+-                @Override
+-                public void onFailure(Throwable arg0) {
+-                    LOG.error("Failure message : {}", arg0.toString());
+-                    LOG.error("Service delete failed !");
+-                    notification = new ServiceRpcResultSpBuilder()
+-                            .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
+-                            .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
+-                            .setStatusMessage("PCR Request failed  : " + arg0.getMessage()).build();
+-                    try {
+-                        notificationPublishService.putNotification(notification);
+-                    } catch (InterruptedException e) {
+-                        LOG.info("notification offer rejected : {}", e);
+-                    }
+-                }
+-
+-                @Override
+-                public void onSuccess(Boolean response) {
+-                    LOG.info("response : {}", response);
+-                    if (response) {
+-                        message = "Service deleted !";
+-                        notification = new ServiceRpcResultSpBuilder()
+-                                .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
+-                                .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Successful)
+-                                .setStatusMessage(message).build();
+-                    } else {
+-                        message = "Service delete failed : " + sendingRenderer.getError();
+-                        notification = new ServiceRpcResultSpBuilder()
+-                                .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
+-                                .setServiceName("")
+-                                .setStatus(RpcStatusEx.Failed).setStatusMessage(message)
+-                                .build();
+-                    }
+-                    LOG.info(notification.toString());
+-                    try {
+-                        notificationPublishService.putNotification(notification);
+-                    } catch (InterruptedException e) {
+-                        LOG.info("notification offer rejected : {}", e);
+-                    }
+-                    LOG.info(message);
+-                }
+-            };
+-            ListenableFuture<Boolean> renderer = sendingRenderer.serviceDelete();
+-            Futures.addCallback(renderer, rendererCallback, executor);
+-            message = "Service delete Request in progress ...";
+-            LOG.info(message);
+-            configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+-                    .setAckFinalIndicator("Yes")
+-                    .setRequestId(input.getServiceHandlerHeader().getRequestId())
+-                    .setResponseCode("200")
+-                    .setResponseMessage(message);
+-            ServiceDeleteOutput output = new ServiceDeleteOutputBuilder()
+-                    .setConfigurationResponseCommon(configurationResponseCommon.build())
+-                    .build();
+-            return RpcResultBuilder.success(output).buildFuture();
+         } else {
+-            message = compliancyCheck.getMessage();
+-            LOG.info("Service not compliant caused by : {}", message);
++            message = "Service not compliant";
+             responseCode = "500";
+-            notification = new ServiceRpcResultSpBuilder()
+-                    .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
+-                    .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
+-                    .setStatusMessage("Service not compliant caused by : " + message)
+-                    .build();
+-            try {
+-                notificationPublishService.putNotification(notification);
+-            } catch (InterruptedException e) {
+-                LOG.info("notification offer rejected : {}", e);
+-            }
+         }
+         configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+-                .setAckFinalIndicator("yes")
+-                .setRequestId(input.getServiceHandlerHeader().getRequestId())
+-                .setResponseCode(responseCode)
+-                .setResponseMessage(message);
++            .setAckFinalIndicator("yes")
++            .setRequestId(input.getServiceHandlerHeader().getRequestId())
++            .setResponseCode(responseCode)
++            .setResponseMessage(message);
+         ServiceDeleteOutput output = new ServiceDeleteOutputBuilder()
+-                .setConfigurationResponseCommon(configurationResponseCommon.build())
+-                .build();
++            .setConfigurationResponseCommon(configurationResponseCommon.build())
++            .build();
+         return RpcResultBuilder.success(output).buildFuture();
+     }
++
++    /* (non-Javadoc)
++     * @see org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService#cancelResourceReserve(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveInput)
++     */
++    @Override
++    public Future<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(CancelResourceReserveInput input) {
++        // TODO Auto-generated method stub
++        return null;
++    }
++
++    /* (non-Javadoc)
++     * @see org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService#pathComputationRequest(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestInput)
++     */
++    @Override
++    public Future<RpcResult<PathComputationRequestOutput>> pathComputationRequest(PathComputationRequestInput input) {
++        // TODO Auto-generated method stub
++        return null;
++    }
+ }
+diff --git a/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererProvider.java b/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererProvider.java
+index 6dcdb8e..92b20f5 100644
+--- a/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererProvider.java
++++ b/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererProvider.java
+@@ -13,9 +13,7 @@ import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService
+ import org.opendaylight.controller.md.sal.binding.api.NotificationService;
+ import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
+ import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererListener;
+-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.StubrendererService;
+-import org.opendaylight.yangtools.concepts.ListenerRegistration;
++import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ 
+@@ -27,17 +25,13 @@ import org.slf4j.LoggerFactory;
+ public class StubrendererProvider {
+     private static final Logger LOG = LoggerFactory.getLogger(StubrendererProvider.class);
+     private final RpcProviderRegistry rpcRegistry;
+-    private final NotificationPublishService notificationPublishService;
+ 
+-
+-    private BindingAwareBroker.RpcRegistration<StubrendererService> rpcRegistration;
+-    private ListenerRegistration<StubrendererListener> stubRendererlistenerRegistration;
++    private BindingAwareBroker.RpcRegistration<TransportpceServicepathService> rpcRegistration;
+ 
+     public StubrendererProvider(RpcProviderRegistry rpcProviderRegistry,
+             NotificationService notificationService,
+             NotificationPublishService notificationPublishService) {
+         this.rpcRegistry = rpcProviderRegistry;
+-        this.notificationPublishService = notificationPublishService;
+     }
+ 
+     /**
+@@ -45,8 +39,8 @@ public class StubrendererProvider {
+      */
+     public void init() {
+         LOG.info("StubrendererProvider Session Initiated");
+-        final StubrendererImpl consumer = new StubrendererImpl(notificationPublishService);
+-        rpcRegistration = rpcRegistry.addRpcImplementation(StubrendererService.class, consumer);
++        final StubrendererImpl consumer = new StubrendererImpl();
++        this.rpcRegistration = this.rpcRegistry.addRpcImplementation(TransportpceServicepathService.class, consumer);
+     }
+ 
+     /**
+@@ -54,7 +48,6 @@ public class StubrendererProvider {
+      */
+     public void close() {
+         LOG.info("StubrendererProvider Closed");
+-        rpcRegistration.close();
+-        stubRendererlistenerRegistration.close();
++        this.rpcRegistration.close();
+     }
+ }
