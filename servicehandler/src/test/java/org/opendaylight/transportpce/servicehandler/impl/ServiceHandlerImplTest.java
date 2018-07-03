@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,6 +59,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.lgx.LgxBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.port.Port;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInputBuilder;
@@ -65,6 +67,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
@@ -754,7 +759,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
         builtInput.setServiceAEnd(serviceAEnd);
         builtInput.setServiceZEnd(serviceZEnd);
         builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
-                .setRpcAction(RpcActions.ServiceCreate).build());
+                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build());
 
         return builtInput.build();
     }
@@ -1092,5 +1097,35 @@ public class ServiceHandlerImplTest extends AbstractTest {
         sdncBuilder.setRpcAction(RpcActions.ServiceDelete);
         deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
         return deleteInputBldr.build();
+    }
+
+
+    @Test
+    public void rerouteServiceIsNotePresent() throws ExecutionException, InterruptedException {
+
+        ServiceRerouteInput input = buildServiceRerouteInput();
+        ServiceRerouteOutput result = serviceHandler.serviceReroute(input).get().getResult();
+        Assert.assertEquals(result.getStatus(), RpcStatus.Failed);
+        Assert.assertEquals(result.getStatusMessage(), "Failure");
+
+    }
+
+    @Test
+    public void rerouteServiceIfservicesIIDIswildCarded() throws ExecutionException, InterruptedException {
+
+        ServiceCreateInput createInput = buildServiceCreateInput();
+        ServiceCreateOutput createOutput = serviceHandler.serviceCreate(createInput).get().getResult();
+        ServiceRerouteInput input = buildServiceRerouteInput();
+        ServiceRerouteOutput result = serviceHandler.serviceReroute(input).get().getResult();
+        Assert.assertEquals(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus.Successful,
+                result.getStatus());
+        Assert.assertEquals("Success", result.getStatusMessage());
+
+    }
+
+    private ServiceRerouteInput buildServiceRerouteInput() {
+        ServiceRerouteInputBuilder builder = new ServiceRerouteInputBuilder();
+        builder.setServiceName("service 1");
+        return builder.build();
     }
 }
