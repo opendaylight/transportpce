@@ -47,7 +47,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.InstanceIdenti
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OpenRoadmNetwork {
+public final class OpenRoadmNetwork {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmNetwork.class);
 

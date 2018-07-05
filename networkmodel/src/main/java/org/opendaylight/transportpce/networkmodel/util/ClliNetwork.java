@@ -40,7 +40,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.InstanceIdenti
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ClliNetwork {
+public final class ClliNetwork {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClliNetwork.class);
 

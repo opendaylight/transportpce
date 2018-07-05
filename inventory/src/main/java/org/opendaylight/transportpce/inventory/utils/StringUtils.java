@@ -14,7 +14,7 @@ import java.util.Date;
  * Utility class which handles strings in inventory project.
  *
  */
-public class StringUtils {
+public final class StringUtils {
     public static final String DEFAULT_SQL_DATE = "yyyy-MM-dd HH:mm:ss";
 
     private StringUtils() {

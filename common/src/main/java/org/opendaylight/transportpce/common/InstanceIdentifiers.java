@@ -18,7 +18,7 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-public class InstanceIdentifiers {
+public final class InstanceIdentifiers {
 
     public static final InstanceIdentifier<Topology> NETCONF_TOPOLOGY_II =
             InstanceIdentifier.create(NetworkTopology.class).child(Topology.class, new TopologyKey(

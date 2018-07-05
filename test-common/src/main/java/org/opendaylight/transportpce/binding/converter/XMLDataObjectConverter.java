@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-public class XMLDataObjectConverter extends AbstractDataObjectConverter {
+public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(XMLDataObjectConverter.class);
 

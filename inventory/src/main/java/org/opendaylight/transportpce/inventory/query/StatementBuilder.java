@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.inventory.query;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class StatementBuilder {
+public final class StatementBuilder {
 
     private final PreparedStatement statement;
     private int index;

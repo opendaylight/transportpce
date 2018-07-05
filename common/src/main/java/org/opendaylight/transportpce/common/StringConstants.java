@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.common;
 
-public class StringConstants {
+public final class StringConstants {
 
     public static final String OPENROADM_DEVICE_MODEL_NAME = "org-openroadm-device";
     public static final String DEFAULT_NETCONF_NODEID = "controller-config";

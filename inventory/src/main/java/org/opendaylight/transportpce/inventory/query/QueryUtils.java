@@ -25,7 +25,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
 /**
  * Query manipulation class.
  */
-public class QueryUtils {
+public final class QueryUtils {
 
     private QueryUtils() {
         // no instance, just static access

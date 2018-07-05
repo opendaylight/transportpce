@@ -32,7 +32,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class Rdm2XpdrLink {
+final class Rdm2XpdrLink {
 
     private static final Logger LOG = LoggerFactory.getLogger(Rdm2XpdrLink.class);
 

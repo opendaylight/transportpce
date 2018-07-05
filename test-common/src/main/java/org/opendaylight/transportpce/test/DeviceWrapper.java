@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * Wrapper class around {@link DataBroker} and {@link DOMDataBroker}.
  *
  */
-public class DeviceWrapper {
+public final class DeviceWrapper {
     private static final Logger LOG = LoggerFactory.getLogger(DeviceWrapper.class);
 
     private final String identifier;
