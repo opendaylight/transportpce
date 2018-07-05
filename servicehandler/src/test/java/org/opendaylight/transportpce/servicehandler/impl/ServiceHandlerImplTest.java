@@ -12,16 +12,12 @@ import static org.mockito.Mockito.verify;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,13 +39,12 @@ import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.stub.StubRendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeaderBuilder;
@@ -68,15 +63,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +77,6 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceHandlerImplTest.class);
 
-    private NotificationPublishService notificationPublishService;
     private PathComputationService pathComputationService;
     private RendererServiceOperations rendererServiceOperations;
     private ServicehandlerImpl serviceHandler;
@@ -109,7 +100,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     private ServicehandlerImpl serviceHandlerImplMock;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService,
                 this.rendererServiceOperations);
         this.serviceHandlerImplMock = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
@@ -117,17 +108,17 @@ public class ServiceHandlerImplTest extends AbstractTest {
     }
 
     public ServiceHandlerImplTest() throws Exception {
-        this.notificationPublishService = new NotificationPublishServiceMock();
-        this.pathComputationService = new PathComputationServiceImpl(getDataBroker(), this.notificationPublishService);
+        NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
+        this.pathComputationService = new PathComputationServiceImpl(getDataBroker(), notificationPublishService);
         PceTestUtils.writeTopologyIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 "topologyData/NW-simple-topology.xml");
-        this.rendererServiceOperations = new StubRendererServiceOperations(this.notificationPublishService);
+        this.rendererServiceOperations = new StubRendererServiceOperations(notificationPublishService);
     }
 
     @Test
     public void testCreateServiceValid() throws ExecutionException, InterruptedException {
 
-        ServiceCreateInput serviceInput = buildServiceCreateInput();
+        ServiceCreateInput serviceInput = ServiceDataUtils.buildServiceCreateInput();
 
         Future<RpcResult<ServiceCreateOutput>> output0 = this.serviceHandler.serviceCreate(serviceInput);
         Assert.assertNotNull(output0);
@@ -140,7 +131,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerInvalidIfNameIsEmpty() throws ExecutionException, InterruptedException {
-        ServiceCreateInput emptyServiceNameInput = buildServiceCreateInput();
+        ServiceCreateInput emptyServiceNameInput = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder(emptyServiceNameInput);
         emptyServiceNameInput = builtInput.setServiceName("").build();
         Assert.assertEquals(this.serviceHandler.serviceCreate(emptyServiceNameInput).get().getResult(),
@@ -150,7 +141,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerInvalidIfNameIsNull() throws ExecutionException, InterruptedException {
-        ServiceCreateInput nullServiceNameInput = buildServiceCreateInput();
+        ServiceCreateInput nullServiceNameInput = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder(nullServiceNameInput);
         nullServiceNameInput = builtInput.setServiceName(null).build();
         Assert.assertEquals(this.serviceHandler.serviceCreate(nullServiceNameInput).get().getResult(),
@@ -160,7 +151,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHnadlerInvalidIfConTypeIsEmpty() throws ExecutionException, InterruptedException {
-        ServiceCreateInput emptyConTypeInput = buildServiceCreateInput();
+        ServiceCreateInput emptyConTypeInput = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder(emptyConTypeInput);
         emptyConTypeInput = builtInput.setConnectionType(null).build();
         Assert.assertEquals(this.serviceHandler.serviceCreate(emptyConTypeInput).get().getResult(),
@@ -170,7 +161,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerInvalidIfSdncRequestHeaderNull() throws ExecutionException, InterruptedException {
-        ServiceCreateInput emptySdncRequestHeader = buildServiceCreateInput();
+        ServiceCreateInput emptySdncRequestHeader = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(emptySdncRequestHeader);
         emptySdncRequestHeader = buildInput.setSdncRequestHeader(null).build();
         ServiceCreateOutput result = this.serviceHandler.serviceCreate(emptySdncRequestHeader).get().getResult();
@@ -181,7 +172,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerInvalidIfRequestIdEmpty() throws ExecutionException, InterruptedException {
-        ServiceCreateInput emptyRequestId = buildServiceCreateInput();
+        ServiceCreateInput emptyRequestId = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(emptyRequestId);
         emptyRequestId = buildInput
                 .setSdncRequestHeader(
@@ -196,7 +187,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerInvalidIfRequestIdNull() throws ExecutionException, InterruptedException {
-        ServiceCreateInput nullRequestId = buildServiceCreateInput();
+        ServiceCreateInput nullRequestId = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(nullRequestId);
         nullRequestId = buildInput
                 .setSdncRequestHeader(
@@ -211,7 +202,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void serviceHandlerInvalidServiceActionIsNull() throws ExecutionException, InterruptedException {
-        ServiceCreateInput emptyServiceAction = buildServiceCreateInput();
+        ServiceCreateInput emptyServiceAction = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(emptyServiceAction);
         emptyServiceAction = buildInput.setSdncRequestHeader(
                 new SdncRequestHeaderBuilder(emptyServiceAction.getSdncRequestHeader()).setRpcAction(null).build())
@@ -225,7 +216,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void serviceHandlerInvalidServiceActionIsNotCreate() throws ExecutionException, InterruptedException {
-        ServiceCreateInput notCreateServiceAction = buildServiceCreateInput();
+        ServiceCreateInput notCreateServiceAction = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(notCreateServiceAction);
         notCreateServiceAction = buildInput
                 .setSdncRequestHeader(new SdncRequestHeaderBuilder(notCreateServiceAction.getSdncRequestHeader())
@@ -241,7 +232,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerNotValidServiceAEndIsNull() throws ExecutionException, InterruptedException {
-        ServiceCreateInput notValidServiceAEnd = buildServiceCreateInput();
+        ServiceCreateInput notValidServiceAEnd = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(notValidServiceAEnd);
         notValidServiceAEnd = buildInput.setServiceAEnd(null).build();
         Assert.assertEquals(this.serviceHandler.serviceCreate(notValidServiceAEnd).get().getResult(),
@@ -251,7 +242,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerNotValidServiceZEndIsNull() throws ExecutionException, InterruptedException {
-        ServiceCreateInput notValidServiceAEnd = buildServiceCreateInput();
+        ServiceCreateInput notValidServiceAEnd = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(notValidServiceAEnd);
         notValidServiceAEnd = buildInput.setServiceZEnd(null).build();
         Assert.assertEquals(this.serviceHandler.serviceCreate(notValidServiceAEnd).get().getResult(),
@@ -262,9 +253,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void createServiceHandlerNotValidServiceAEndRateIsNull() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
-        ServiceCreateInput notValidServiceAEnd = buildServiceCreateInput();
+        ServiceCreateInput notValidServiceAEnd = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(notValidServiceAEnd);
-        notValidServiceAEnd = buildInput.setServiceAEnd(getServiceAEndBuild().setServiceRate(null).build()).build();
+        notValidServiceAEnd = buildInput.setServiceAEnd(ServiceDataUtils.getServiceAEndBuild().setServiceRate(null)
+                .build()).build();
         Assert.assertEquals(servicehandler.serviceCreate(notValidServiceAEnd).get().getResult(),
                 ModelMappingUtils.createCreateServiceReply(notValidServiceAEnd, ResponseCodes.FINAL_ACK_YES,
                         "Service " + ServiceEndpointType.SERVICEAEND + " rate is not set",
@@ -274,9 +266,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void createServiceHandlerNotValidServiceZEndRateIsNull() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
-        ServiceCreateInput notValidServiceZEnd = buildServiceCreateInput();
+        ServiceCreateInput notValidServiceZEnd = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(notValidServiceZEnd);
-        notValidServiceZEnd = buildInput.setServiceZEnd(getServiceZEndBuild().setServiceRate(null).build()).build();
+        notValidServiceZEnd = buildInput.setServiceZEnd(ServiceDataUtils.getServiceZEndBuild().setServiceRate(null)
+                .build()).build();
         Assert.assertEquals(servicehandler.serviceCreate(notValidServiceZEnd).get().getResult(),
                 ModelMappingUtils.createCreateServiceReply(notValidServiceZEnd, ResponseCodes.FINAL_ACK_YES,
                         "Service " + ServiceEndpointType.SERVICEZEND + " rate is not set",
@@ -285,10 +278,11 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerNotValidServiceAEndClliIsNull()
-            throws ExecutionException, InterruptedException, InvocationTargetException, IllegalAccessException {
-        ServiceCreateInput notValidServiceAEnd = buildServiceCreateInput();
+            throws ExecutionException, InterruptedException {
+        ServiceCreateInput notValidServiceAEnd = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(notValidServiceAEnd);
-        notValidServiceAEnd = buildInput.setServiceAEnd(getServiceAEndBuild().setClli(null).build()).build();
+        notValidServiceAEnd = buildInput.setServiceAEnd(ServiceDataUtils.getServiceAEndBuild().setClli(null)
+                .build()).build();
         Assert.assertEquals(this.serviceHandler.serviceCreate(notValidServiceAEnd).get().getResult(),
                 ModelMappingUtils.createCreateServiceReply(notValidServiceAEnd, ResponseCodes.FINAL_ACK_YES,
                         "Service" + ServiceEndpointType.SERVICEAEND + " clli format is not set",
@@ -298,9 +292,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void createServiceHandlerNotValidServiceZEndClliIsNull()
             throws ExecutionException, InterruptedException, InvocationTargetException, IllegalAccessException {
-        ServiceCreateInput notValidServiceZEnd = buildServiceCreateInput();
+        ServiceCreateInput notValidServiceZEnd = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(notValidServiceZEnd);
-        notValidServiceZEnd = buildInput.setServiceZEnd(getServiceZEndBuild().setClli(null).build()).build();
+        notValidServiceZEnd = buildInput.setServiceZEnd(ServiceDataUtils.getServiceZEndBuild().setClli(null).build())
+                .build();
         Assert.assertEquals(this.serviceHandler.serviceCreate(notValidServiceZEnd).get().getResult(),
                 ModelMappingUtils.createCreateServiceReply(notValidServiceZEnd, ResponseCodes.FINAL_ACK_YES,
                         "Service" + ServiceEndpointType.SERVICEZEND + " clli format is not set",
@@ -319,9 +314,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
         for (Method method : org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
                 .ServiceAEndBuilder.class.getDeclaredMethods()) {
             if (notValidData.containsKey(method.getName())) {
-                ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(buildServiceCreateInput());
+                ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(ServiceDataUtils
+                        .buildServiceCreateInput());
                 org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-                    .ServiceAEndBuilder serviceAEndBuilder = getServiceAEndBuild();
+                    .ServiceAEndBuilder serviceAEndBuilder = ServiceDataUtils.getServiceAEndBuild();
                 method.invoke(serviceAEndBuilder, notValidData.get(method.getName()));
                 ServiceCreateOutput result = this.serviceHandler
                         .serviceCreate(buildInput.setServiceAEnd(serviceAEndBuilder.build()).build()).get().getResult();
@@ -345,9 +341,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
         for (Method method : org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
                 .ServiceZEndBuilder.class.getDeclaredMethods()) {
             if (notValidData.containsKey(method.getName())) {
-                ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(buildServiceCreateInput());
+                ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(ServiceDataUtils
+                        .buildServiceCreateInput());
                 org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-                    .ServiceZEndBuilder serviceZEndBuilder = getServiceZEndBuild();
+                    .ServiceZEndBuilder serviceZEndBuilder = ServiceDataUtils.getServiceZEndBuild();
                 method.invoke(serviceZEndBuilder, notValidData.get(method.getName()));
                 ServiceCreateOutput result = this.serviceHandler
                         .serviceCreate(buildInput.setServiceZEnd(serviceZEndBuilder.build()).build()).get().getResult();
@@ -363,7 +360,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     public void createServiceHandlerNotValidTxDirectionPort()
             throws InvocationTargetException, IllegalAccessException, ExecutionException, InterruptedException {
         List<String> invalidData = Arrays.asList(null, "");
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         for (Method method : PortBuilder.class.getMethods()) {
             if (method.getName().startsWith("set") && !method.getName().contains("Slot")) {
                 for (Object data : invalidData) {
@@ -384,7 +381,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void createServiceHandlerTxDirectionPortIsNull() throws ExecutionException, InterruptedException {
         ServiceCreateOutput result = getTxDirectionPortServiceCreateOutput(null,
-                buildServiceCreateInput().getServiceAEnd().getTxDirection().getLgx());
+            ServiceDataUtils.buildServiceCreateInput().getServiceAEnd().getTxDirection().getLgx());
         Assert.assertEquals(result.getConfigurationResponseCommon().getAckFinalIndicator(),
                 ResponseCodes.FINAL_ACK_YES);
         Assert.assertEquals(result.getConfigurationResponseCommon().getResponseCode(), ResponseCodes.RESPONSE_FAILED);
@@ -394,7 +391,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     public void createServiceHandlerNotValidTxDirectionLgx()
             throws InvocationTargetException, IllegalAccessException, ExecutionException, InterruptedException {
         List<String> invalidData = Arrays.asList(null, "");
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         for (Method method : LgxBuilder.class.getMethods()) {
             if (method.getName().startsWith("set")) {
                 for (Object data : invalidData) {
@@ -415,7 +412,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void createServiceHandlerTxDirectionLgxIsNull() throws ExecutionException, InterruptedException {
         ServiceCreateOutput result = getTxDirectionPortServiceCreateOutput(
-                buildServiceCreateInput().getServiceAEnd().getTxDirection().getPort(), null);
+            ServiceDataUtils.buildServiceCreateInput().getServiceAEnd().getTxDirection().getPort(), null);
         Assert.assertEquals(result.getConfigurationResponseCommon().getAckFinalIndicator(),
                 ResponseCodes.FINAL_ACK_YES);
         Assert.assertEquals(result.getConfigurationResponseCommon().getResponseCode(), ResponseCodes.RESPONSE_FAILED);
@@ -423,9 +420,9 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     private ServiceCreateOutput getTxDirectionPortServiceCreateOutput(Port port, Lgx lgx)
             throws InterruptedException, ExecutionException {
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-            .ServiceAEndBuilder serviceAEndBuilder = getServiceAEndBuild();
+            .ServiceAEndBuilder serviceAEndBuilder = ServiceDataUtils.getServiceAEndBuild();
         TxDirectionBuilder txDirectionBuilder = new TxDirectionBuilder(
                 serviceCreateInput.getServiceAEnd().getTxDirection());
         txDirectionBuilder.setPort(port);
@@ -441,7 +438,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     public void createServiceHandlerNotValidRxDirectionPort()
             throws InvocationTargetException, IllegalAccessException, ExecutionException, InterruptedException {
         List<String> invalidData = Arrays.asList(null, "");
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         for (Method method : PortBuilder.class.getMethods()) {
             if (method.getName().startsWith("set") && !method.getName().contains("Slot")) {
                 for (Object data : invalidData) {
@@ -461,9 +458,9 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerRxDirectionPortIsNull()
-            throws InvocationTargetException, IllegalAccessException, ExecutionException, InterruptedException {
+            throws ExecutionException, InterruptedException {
         ServiceCreateOutput result = getRxDirectionPortServiceCreateOutput(null,
-                buildServiceCreateInput().getServiceAEnd().getRxDirection().getLgx());
+            ServiceDataUtils.buildServiceCreateInput().getServiceAEnd().getRxDirection().getLgx());
         Assert.assertEquals(result.getConfigurationResponseCommon().getAckFinalIndicator(),
                 ResponseCodes.FINAL_ACK_YES);
         Assert.assertEquals(result.getConfigurationResponseCommon().getResponseCode(), ResponseCodes.RESPONSE_FAILED);
@@ -473,7 +470,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     public void createServiceHandlerNotValidRxDirectionLgx()
             throws InvocationTargetException, IllegalAccessException, ExecutionException, InterruptedException {
         List<String> invalidData = Arrays.asList(null, "");
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         for (Method method : LgxBuilder.class.getMethods()) {
             if (method.getName().startsWith("set")) {
                 for (Object data : invalidData) {
@@ -494,7 +491,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void createServiceHandlerRxDirectionLgxIsNull() throws ExecutionException, InterruptedException {
         ServiceCreateOutput result = getRxDirectionPortServiceCreateOutput(
-                buildServiceCreateInput().getServiceAEnd().getRxDirection().getPort(), null);
+            ServiceDataUtils.buildServiceCreateInput().getServiceAEnd().getRxDirection().getPort(), null);
         Assert.assertEquals(result.getConfigurationResponseCommon().getAckFinalIndicator(),
                 ResponseCodes.FINAL_ACK_YES);
         Assert.assertEquals(result.getConfigurationResponseCommon().getResponseCode(), ResponseCodes.RESPONSE_FAILED);
@@ -502,7 +499,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerResponseCodesNotPassed() throws ExecutionException, InterruptedException {
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
 
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO).setRequestId("1")
@@ -521,7 +518,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerOperationResultNotPassed() throws ExecutionException, InterruptedException {
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
@@ -545,7 +542,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void createServiceHandlerOperationServicePathSaveResultNotPassed()
             throws ExecutionException, InterruptedException {
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
@@ -570,7 +567,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerModifyServicePassed() throws ExecutionException, InterruptedException {
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
@@ -603,7 +600,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerModifyServiceNotPassed() throws ExecutionException, InterruptedException {
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
@@ -636,7 +633,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerServiceImplementationNotPassed() throws ExecutionException, InterruptedException {
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
@@ -671,7 +668,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerServiceImplementationNotPassed2() throws ExecutionException, InterruptedException {
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
@@ -706,9 +703,9 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     private ServiceCreateOutput getRxDirectionPortServiceCreateOutput(Port port, Lgx lgx)
             throws InterruptedException, ExecutionException {
-        ServiceCreateInput serviceCreateInput = buildServiceCreateInput();
+        ServiceCreateInput serviceCreateInput = ServiceDataUtils.buildServiceCreateInput();
         org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-            .ServiceAEndBuilder serviceAEndBuilder = getServiceAEndBuild();
+            .ServiceAEndBuilder serviceAEndBuilder = ServiceDataUtils.getServiceAEndBuild();
         RxDirectionBuilder rxDirectionBuilder = new RxDirectionBuilder(
                 serviceCreateInput.getServiceAEnd().getRxDirection());
         rxDirectionBuilder.setPort(port);
@@ -720,108 +717,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
                 .getResult();
     }
 
-    private static ServiceCreateInput buildServiceCreateInput() {
-
-        ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-            .ServiceAEnd serviceAEnd = getServiceAEndBuild()
-                .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-            .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
-                .create.input.ServiceZEndBuilder()
-                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-3-2")
-                .setTxDirection(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
-                            .endpoint.TxDirectionBuilder()
-                                .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
-                                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
-                                        .setPortSubSlot("port subslot").setPortType("port type").build())
-                                .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
-                                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
-                                        .setLgxPortShelf("lgx port shelf").build())
-                                .build())
-                .setRxDirection(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
-                            .endpoint.RxDirectionBuilder()
-                                .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
-                                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
-                                        .setPortSubSlot("port subslot").setPortType("port type").build())
-                                .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
-                                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
-                                        .setLgxPortShelf("lgx port shelf").build())
-                                .build())
-                .build();
-
-        builtInput.setCommonId("commonId");
-        builtInput.setConnectionType(ConnectionType.Service);
-        builtInput.setCustomer("Customer");
-        builtInput.setServiceName("service 1");
-        builtInput.setServiceAEnd(serviceAEnd);
-        builtInput.setServiceZEnd(serviceZEnd);
-        builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
-                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build());
-
-        return builtInput.build();
-    }
-
-    private static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-        .ServiceAEndBuilder getServiceAEndBuild() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-                .ServiceAEndBuilder()
-                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
-                .setTxDirection(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
-                            .endpoint.TxDirectionBuilder()
-                                .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
-                                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
-                                        .setPortSubSlot("port subslot").setPortType("port type").build())
-                                .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
-                                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
-                                        .setLgxPortShelf("lgx port shelf").build())
-                                .build())
-                .setRxDirection(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
-                            .endpoint.RxDirectionBuilder()
-                                .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
-                                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
-                                        .setPortSubSlot("port subslot").setPortType("port type").build())
-                                .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
-                                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
-                                        .setLgxPortShelf("lgx port shelf").build())
-                                .build());
-    }
-
-    private static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-        .ServiceZEndBuilder getServiceZEndBuild() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-                .ServiceZEndBuilder()
-                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
-                .setTxDirection(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
-                            .endpoint.TxDirectionBuilder()
-                                .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
-                                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
-                                        .setPortSubSlot("port subslot").setPortType("port type").build())
-                                .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
-                                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
-                                        .setLgxPortShelf("lgx port shelf").build())
-                                .build())
-                .setRxDirection(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
-                            .endpoint.RxDirectionBuilder()
-                                .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
-                                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
-                                        .setPortSubSlot("port subslot").setPortType("port type").build())
-                                .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
-                                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
-                                        .setLgxPortShelf("lgx port shelf").build())
-                                .build());
-    }
-
     @Test
     public void deleteServiceInvalidIfServiceNameIsEmpty() throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder(serviceDeleteInput);
         serviceDeleteInput = builder
                 .setServiceDeleteReqInfo(
@@ -836,7 +735,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void deleteServiceInvalidIfServiceNameIsNull() throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder(serviceDeleteInput);
         serviceDeleteInput = builder
                 .setServiceDeleteReqInfo(
@@ -850,7 +749,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void deleteServiceInvalidIfSdncRequestHeaderIsNull() throws ExecutionException, InterruptedException {
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder(serviceDeleteInput);
         serviceDeleteInput = builder.setSdncRequestHeader(null).build();
         ServiceDeleteOutput result = this.serviceHandler.serviceDelete(serviceDeleteInput).get().getResult();
@@ -863,7 +762,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     public void deleteServiceInvalidIfSdncRequestHeaderRequestIdIsNull()
             throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder(serviceDeleteInput);
         serviceDeleteInput = builder
                 .setSdncRequestHeader(
@@ -879,7 +778,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     public void deleteServiceInvalidIfSdncRequestHeaderRequestIdIsEmpty()
             throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder(serviceDeleteInput);
         serviceDeleteInput = builder.setSdncRequestHeader(
                 new SdncRequestHeaderBuilder(builder.getSdncRequestHeader()).setRequestId("").build()).build();
@@ -893,7 +792,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     public void deleteServiceInvalidIfSdncRequestHeaderServiceActionIsNull()
             throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder(serviceDeleteInput);
         serviceDeleteInput = builder
                 .setSdncRequestHeader(
@@ -909,7 +808,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     public void deleteServiceInvalidIfSdncRequestHeaderServiceActionIsNotDelete()
             throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder(serviceDeleteInput);
         serviceDeleteInput = builder.setSdncRequestHeader(new SdncRequestHeaderBuilder(builder.getSdncRequestHeader())
                 .setRpcAction(RpcActions.ServiceCreate).build()).build();
@@ -923,8 +822,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     public void deleteServiceIfServiceHandlerCompliancyCheckNotPassed()
             throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
-        ComplianceCheckResult res = new ComplianceCheckResult(false, "");
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
 
         Mockito.when(this.complianceCheckResultMock.hasPassed()).thenReturn(false);
 
@@ -937,7 +835,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void deleteServiceNotPresent() throws ExecutionException, InterruptedException {
 
-        ServiceDeleteOutput result = this.serviceHandler.serviceDelete(buildNotPresentServiceDeleteInput()).get()
+        ServiceDeleteOutput result = this.serviceHandler.serviceDelete(ServiceDataUtils.buildServiceDeleteInput()).get()
                 .getResult();
         Assert.assertEquals(result.getConfigurationResponseCommon().getAckFinalIndicator(),
                 ResponseCodes.FINAL_ACK_YES);
@@ -947,7 +845,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void deleteServiceIfServiceNotPresent() throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         Mockito.when(this.servicesOptionalMock.isPresent()).thenReturn(false);
         ServiceDeleteOutput result = this.serviceHandlerImplMock.serviceDelete(serviceDeleteInput).get().getResult();
         Assert.assertEquals(result.getConfigurationResponseCommon().getAckFinalIndicator(),
@@ -958,7 +856,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void deleteServiceNotPassed() throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         Optional<Services> service = Optional.of(new ServicesBuilder().setServiceName("service 1").build());
         Mockito.when(this.serviceDataStoreOperationsMock.getService("service 1")).thenReturn(service);
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
@@ -981,7 +879,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void deleteServicePathNotPassed() throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         Optional<Services> service = Optional.of(new ServicesBuilder().setServiceName("service 1").build());
         Mockito.when(this.serviceDataStoreOperationsMock.getService("service 1")).thenReturn(service);
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
@@ -1010,7 +908,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void deleteServiceOperationNotPassed() throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         Optional<Services> service = Optional.of(new ServicesBuilder().setServiceName("service 1").build());
         Mockito.when(this.serviceDataStoreOperationsMock.getService("service 1")).thenReturn(service);
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
@@ -1039,7 +937,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Test
     public void deleteServiceIfServicePresentAndValid() throws ExecutionException, InterruptedException {
 
-        ServiceDeleteInput serviceDeleteInput = buildPresentServiceDeleteInput();
+        ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         Optional<Services> service = Optional.of(new ServicesBuilder().setServiceName("service 1").build());
         Mockito.when(this.serviceDataStoreOperationsMock.getService("service 1")).thenReturn(service);
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
@@ -1065,67 +963,35 @@ public class ServiceHandlerImplTest extends AbstractTest {
         Assert.assertEquals(result.getConfigurationResponseCommon().getResponseCode(), ResponseCodes.RESPONSE_OK);
     }
 
-    private ServiceDeleteInput buildPresentServiceDeleteInput() {
-        ServiceCreateInput serviceInput = buildServiceCreateInput();
-        Future<RpcResult<ServiceCreateOutput>> output0 = this.serviceHandler.serviceCreate(serviceInput);
-        ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
-        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
-        DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
-        deleteInputBldr.setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder().setServiceName("service 1")
-                .setDueDate(datetime).setTailRetention(ServiceDeleteReqInfo.TailRetention.No).build());
-        SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder();
-        sdncBuilder.setNotificationUrl("notification url");
-        sdncBuilder.setRequestId("request 1");
-        sdncBuilder.setRequestSystemId("request system 1");
-        sdncBuilder.setRpcAction(RpcActions.ServiceDelete);
-        deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
-        return deleteInputBldr.build();
-    }
-
-    private ServiceDeleteInput buildNotPresentServiceDeleteInput() {
-        ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
-        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
-        DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
-        deleteInputBldr.setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder().setServiceName("service 2")
-                .setDueDate(datetime).setTailRetention(ServiceDeleteReqInfo.TailRetention.No).build());
-        SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder();
-        sdncBuilder.setNotificationUrl("notification url");
-        sdncBuilder.setRequestId("request 1");
-        sdncBuilder.setRequestSystemId("request system 1");
-        sdncBuilder.setRpcAction(RpcActions.ServiceDelete);
-        deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
-        return deleteInputBldr.build();
-    }
-
-
     @Test
     public void rerouteServiceIsNotePresent() throws ExecutionException, InterruptedException {
 
-        ServiceRerouteInput input = buildServiceRerouteInput();
-        ServiceRerouteOutput result = serviceHandler.serviceReroute(input).get().getResult();
+        ServiceRerouteInput input = ServiceDataUtils.buildServiceRerouteInput();
+        ServiceRerouteOutput result = this.serviceHandler.serviceReroute(input).get().getResult();
         Assert.assertEquals(result.getStatus(), RpcStatus.Failed);
         Assert.assertEquals(result.getStatusMessage(), "Failure");
 
     }
 
     @Test
-    public void rerouteServiceIfservicesIIDIswildCarded() throws ExecutionException, InterruptedException {
+    public void rerouteServiceIfserviceIsPresent() throws ExecutionException, InterruptedException {
 
-        ServiceCreateInput createInput = buildServiceCreateInput();
-        ServiceCreateOutput createOutput = serviceHandler.serviceCreate(createInput).get().getResult();
-        ServiceRerouteInput input = buildServiceRerouteInput();
-        ServiceRerouteOutput result = serviceHandler.serviceReroute(input).get().getResult();
+        ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+        ServiceCreateOutput createOutput = this.serviceHandler.serviceCreate(createInput).get().getResult();
+        ServiceRerouteInput input = ServiceDataUtils.buildServiceRerouteInput();
+        ServiceRerouteOutput result = this.serviceHandler.serviceReroute(input).get().getResult();
         Assert.assertEquals(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus.Successful,
                 result.getStatus());
         Assert.assertEquals("Success", result.getStatusMessage());
 
     }
 
-    private ServiceRerouteInput buildServiceRerouteInput() {
-        ServiceRerouteInputBuilder builder = new ServiceRerouteInputBuilder();
-        builder.setServiceName("service 1");
-        return builder.build();
-    }
+    /*@Test(expected = ReadFailedException.class)
+    public void rerouteServiceThrowsException() throws ReadFailedException, InterruptedException, ExecutionException{
+        ServiceCreateInput createInput = buildServiceCreateInput();
+        ServiceCreateOutput createOutput = serviceHandler.serviceCreate(createInput).get().getResult();
+        ServiceRerouteInput input = ServiceDataUtils.buildServiceRerouteInput();
+        Mockito.when(dataStoreService.checkedGet()).thenThrow(InterruptedException.class);
+        ServiceRerouteOutput result = serviceHandler.serviceReroute(input).get().getResult();
+    }*/
 }

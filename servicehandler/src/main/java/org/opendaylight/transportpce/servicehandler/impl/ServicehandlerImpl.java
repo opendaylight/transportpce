@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -321,14 +320,13 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     .setStatusMessage("Success");
                 return RpcResultBuilder.success(output).buildFuture();
             }
-        } catch (InterruptedException | ExecutionException | NullPointerException e) {
+        } catch (InterruptedException | ExecutionException e) {
             LOG.info("Exception caught" , e);
         }
         ServiceRerouteOutputBuilder output = new ServiceRerouteOutputBuilder()
             .setHardConstraints(null).setSoftConstraints(null).setStatus(RpcStatus.Failed).setStatusMessage("Failure");
 
         return RpcResultBuilder.success(output).buildFuture();
-        // return null;
     }
 
     @Override
