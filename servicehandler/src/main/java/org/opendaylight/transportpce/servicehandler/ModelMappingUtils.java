@@ -220,6 +220,7 @@ public final class ModelMappingUtils {
                 .setCustomerContact(serviceCreateInput.getCustomerContact())
                 .setHardConstraints(serviceCreateInput.getHardConstraints())
                 .setSoftConstraints(serviceCreateInput.getSoftConstraints())
+                .setSdncRequestHeader(serviceCreateInput.getSdncRequestHeader())
                 .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
 
         } else if (serviceReconfigureInput != null) {

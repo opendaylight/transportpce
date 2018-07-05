@@ -7,7 +7,8 @@
  */
 package org.opendaylight.transportpce.servicehandler.impl;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -276,12 +277,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         ReadOnlyTransaction rtx = this.db.newReadOnlyTransaction();
         Optional<Services> servicesObject;
         try {
-            servicesObject = rtx.read(LogicalDatastoreType.CONFIGURATION, servicesIID).get().toJavaUtil();
+            servicesObject = rtx.read(LogicalDatastoreType.OPERATIONAL, servicesIID).get().toJavaUtil();
             if (servicesObject.isPresent()) {
                 ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder();
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyy-MM-dd'T'HH:mm:ssX");
-                LocalDateTime now = LocalDateTime.now();
-                DateAndTime datetime = new DateAndTime(dtf.format(now));
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
+                OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
+                DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
                 deleteInputBldr.setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
                     .setServiceName(input.getServiceName()).setDueDate(datetime)
                     .setTailRetention(TailRetention.No).build());
@@ -320,7 +321,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     .setStatusMessage("Success");
                 return RpcResultBuilder.success(output).buildFuture();
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException | NullPointerException e) {
             LOG.info("Exception caught" , e);
         }
         ServiceRerouteOutputBuilder output = new ServiceRerouteOutputBuilder()
