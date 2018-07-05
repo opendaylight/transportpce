@@ -193,7 +193,7 @@ public class PowerMgmt {
                                     LOG.info("Roadm-connection: {} updated ");
                                     //TODO - commented code because one vendor is not supporting
                                     //GainLoss with target-output-power
-                                    Thread.sleep(20000);
+                                    Thread.sleep(60000);
                                     setPowerLevel(nodeId, OpticalControlMode.GainLoss, powerValue,
                                             connectionNumber);
                                 } else {
