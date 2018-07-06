@@ -25,7 +25,11 @@ public interface OpenRoadmInterfaces {
      * 2. If exists then admin state of interface is outOfState/Maintenance
      * </p>
      *
+     * @param nodeId node ID
+     *
      * @param ifBuilder Builder object containing the data to post.
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
      *
      */
     void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException;
@@ -35,8 +39,12 @@ public interface OpenRoadmInterfaces {
      * interface name as the key and return the class corresponding to the interface
      * type.
      *
+     * @param nodeId node ID
+     *
      * @param interfaceName
      *            Name of the interface
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
      *
      * @return Optional of Interface from datastore
      */
@@ -52,8 +60,12 @@ public interface OpenRoadmInterfaces {
      * 2. If exists then changes the state of interface to outOfService
      * </p>
      *
+     * @param nodeId node ID
+     *
      * @param interfaceName
      *            Name of the interface to delete.
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
      */
     void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 

@@ -70,6 +70,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
  *
  * <p>
  * Bellow is simple example how to get {@link DeviceTransaction}, put some data to it and then submit it.
+ * </p>
  * <pre>
  * {@code
  *     // get device transaction future from device transaction manager
@@ -103,7 +104,6 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
  *     }
  * }
  * </pre>
- * </p>
  */
 public interface DeviceTransactionManager {
 

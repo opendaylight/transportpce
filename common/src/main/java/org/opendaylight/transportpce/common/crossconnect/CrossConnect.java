@@ -73,6 +73,8 @@ public interface CrossConnect {
      *            Source logical connection point.
      * @param destTp
      *            Destination logical connection point.
+     * @throws OpenRoadmInterfaceException
+     *            OpenRoadm Interface Exception.
      *
      * @return list of Ports object type.
      */

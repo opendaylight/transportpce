@@ -36,6 +36,9 @@ public interface PortMapping {
      * successful the mapping gets stored in datastore corresponding to
      * portmapping.yang data model.
      *
+     * @param nodeId
+     *            node ID
+     *
      * @return true/false based on status of operation
      */
     boolean createMappingData(String nodeId);
@@ -43,6 +46,9 @@ public interface PortMapping {
     /**
      * This method removes mapping data from the datastore after disconnecting
      * ODL from a Netconf device.
+     *
+     * @param nodeId
+     *            node ID
      */
     void deleteMappingData(String nodeId);
 
