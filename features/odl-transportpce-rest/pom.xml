@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>3.1.1</version>
+    <version>3.1.0</version>
     <relativePath/>
   </parent>
 
@@ -22,7 +22,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <packaging>feature</packaging>
 
   <properties>
-    <restconf.version>1.7.2</restconf.version>
+    <restconf.version>1.7.3-SNAPSHOT</restconf.version>
   </properties>
 
   <name>OpenDaylight :: transportpce :: REST</name>
