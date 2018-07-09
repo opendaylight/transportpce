@@ -83,4 +83,18 @@ module networkutils {
             }
         }
     }
+    rpc delete-link {
+        description "This rpc deletes a given link in openroadm Topology layer";
+        input {
+            leaf link-id {
+                type string;
+            }
+        }
+        output {
+            leaf result {
+              type string;
+            }
+        }
+    }
+
 }
