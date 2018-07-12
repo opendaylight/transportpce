@@ -985,13 +985,4 @@ public class ServiceHandlerImplTest extends AbstractTest {
         Assert.assertEquals("Success", result.getStatusMessage());
 
     }
-
-    /*@Test(expected = ReadFailedException.class)
-    public void rerouteServiceThrowsException() throws ReadFailedException, InterruptedException, ExecutionException{
-        ServiceCreateInput createInput = buildServiceCreateInput();
-        ServiceCreateOutput createOutput = serviceHandler.serviceCreate(createInput).get().getResult();
-        ServiceRerouteInput input = ServiceDataUtils.buildServiceRerouteInput();
-        Mockito.when(dataStoreService.checkedGet()).thenThrow(InterruptedException.class);
-        ServiceRerouteOutput result = serviceHandler.serviceReroute(input).get().getResult();
-    }*/
 }

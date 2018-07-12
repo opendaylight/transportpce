@@ -104,6 +104,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                     .setResponseCode("Path not calculated")
                     .setResponseMessage(check.getMessage());
 
+
             output.setConfigurationResponseCommon(configurationResponseCommon.build())
                     .setResponseParameters(null);
 
