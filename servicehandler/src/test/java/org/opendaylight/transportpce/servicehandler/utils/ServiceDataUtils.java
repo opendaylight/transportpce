@@ -10,6 +10,10 @@ package org.opendaylight.transportpce.servicehandler.utils;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.ServicePathRpcResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.ServicePathRpcResultBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceFormat;
@@ -24,6 +28,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ZToADirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ZToADirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 
 public class ServiceDataUtils {
@@ -147,4 +157,102 @@ public class ServiceDataUtils {
         builder.setServiceName("service 1");
         return builder.build();
     }
+
+    public static ServicePathRpcResult buildServicePathRpcResult() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
+        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
+        DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
+        ServicePathRpcResultBuilder builder = new ServicePathRpcResultBuilder();
+        builder.setActualDate(datetime).setNotificationType(ServicePathNotificationTypes.PathComputationRequest)
+            .setPathDescription(createPathDescription(0,1, 0, 1))
+            .setServiceName("service 1")
+            .setStatus(RpcStatusEx.Successful).setStatusMessage("success");
+        return builder.build();
+    }
+
+    public static ServicePathRpcResult buildFailedServicePathRpcResult() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
+        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
+        DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
+        ServicePathRpcResultBuilder builder = new ServicePathRpcResultBuilder();
+        builder.setActualDate(datetime).setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
+            .setPathDescription(createPathDescription(0,1, 0, 1))
+            .setServiceName("service 1")
+            .setStatus(RpcStatusEx.Failed).setStatusMessage("success");
+        return builder.build();
+    }
+
+    private static PathDescription createPathDescription(long azRate, long azWaveLength, long zaRate,
+        long zaWaveLength) {
+        AToZDirection atozDirection = new AToZDirectionBuilder()
+            .setRate(azRate)
+            .setAToZWavelengthNumber(azWaveLength)
+            .setAToZ(null)
+            .build();
+        ZToADirection ztoaDirection = new ZToADirectionBuilder()
+            .setRate(zaRate)
+            .setZToAWavelengthNumber(zaWaveLength)
+            .setZToA(null)
+            .build();
+        PathDescription pathDescription = new PathDescriptionBuilder()
+            .setAToZDirection(atozDirection)
+            .setZToADirection(ztoaDirection)
+            .build();
+        return pathDescription;
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
+        .ServiceAEndBuilder getServiceAEndBuildReconfigure() {
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
+            .ServiceAEndBuilder()
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
+            .setTxDirection(
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
+                    .endpoint.TxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
+                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
+                        .setPortSubSlot("port subslot").setPortType("port type").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
+                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
+                        .setLgxPortShelf("lgx port shelf").build())
+                    .build())
+            .setRxDirection(
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
+                    .endpoint.RxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
+                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
+                        .setPortSubSlot("port subslot").setPortType("port type").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
+                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
+                        .setLgxPortShelf("lgx port shelf").build())
+                    .build());
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
+        .ServiceZEndBuilder getServiceZEndBuildReconfigure() {
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
+            .ServiceZEndBuilder()
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
+            .setTxDirection(
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
+                    .endpoint.TxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
+                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
+                        .setPortSubSlot("port subslot").setPortType("port type").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
+                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
+                        .setLgxPortShelf("lgx port shelf").build())
+                    .build())
+            .setRxDirection(
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
+                    .endpoint.RxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
+                        .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
+                        .setPortSubSlot("port subslot").setPortType("port type").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("lgx device name")
+                        .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
+                        .setLgxPortShelf("lgx port shelf").build())
+                    .build());
+    }
+
 }
