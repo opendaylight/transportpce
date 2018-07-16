@@ -166,7 +166,7 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
 
             if (rootNode.getModificationType() == ModificationType.DELETE) {
                 String nodeid = rootNode.getDataBefore().getKey().getNodeId().getValue();
-                LOG.info("Node " + nodeid + " removed...");
+                LOG.info("Node {} removed...", nodeid);
                 currentMountedDevice.remove(nodeid);
                 new PortMapping(dataBroker, mountService, nodeid).deleteMappingData();
             }
@@ -178,11 +178,11 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                     return;
                 }
                 if (rootNode.getModificationType() == ModificationType.WRITE) {
-                    LOG.info("Node added " + nodeId);
+                    LOG.info("Node added {}", nodeId);
 
                 } else if (rootNode.getModificationType() == ModificationType.SUBTREE_MODIFIED) {
 
-                    LOG.info("Node modified " + nodeId);
+                    LOG.info("Node modified {}", nodeId);
                     ConnectionStatus csts = nnode.getConnectionStatus();
 
                     switch (csts) {
@@ -209,11 +209,11 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                             break;
                         }
                         default:
-                            LOG.warn("Unexpected connection status " + csts.getName());
+                            LOG.warn("Unexpected connection status {}", csts.getName());
                     }
                 }
             }
         }
-        LOG.info("Netconf devices currently mounted are : " + currentMountedDevice.toString());
+        LOG.info("Netconf devices currently mounted are : {}", currentMountedDevice.toString());
     }
 }
