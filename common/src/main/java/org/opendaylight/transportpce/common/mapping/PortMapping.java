@@ -41,6 +41,12 @@ public interface PortMapping {
     boolean createMappingData(String nodeId);
 
     /**
+     * This method removes mapping data from the datastore after disconnecting
+     * ODL from a Netconf device.
+     */
+    void deleteMappingData(String nodeId);
+
+    /**
      * This method for a given node's termination point returns the Mapping object based on
      * portmapping.yang model stored in the MD-SAL data store which is created when the node is
      * connected for the first time. The mapping object basically contains the following attributes of
