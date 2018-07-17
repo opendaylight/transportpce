@@ -94,7 +94,7 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
 
     private void registerNotificationListener(final NodeId nodeId) {
 
-        MountPoint mountPoint = PortMapping.getDeviceMountPoint(nodeId.getValue(), mountService);
+        MountPoint mountPoint = PortMapping.getDeviceMountPoint(nodeId.getValue(), this.mountService);
 
         // Register notification service
         final Optional<NotificationService> notificationService = mountPoint.getService(
@@ -145,8 +145,8 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
     public void close() {
         LOG.info("RenderernotificationsImpl Closed");
         // Clean up the Data Change Listener registration
-        if (dataTreeChangeListenerRegistration != null) {
-            dataTreeChangeListenerRegistration.close();
+        if (this.dataTreeChangeListenerRegistration != null) {
+            this.dataTreeChangeListenerRegistration.close();
         }
     }
 
@@ -167,8 +167,8 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
             if (rootNode.getModificationType() == ModificationType.DELETE) {
                 String nodeid = rootNode.getDataBefore().getKey().getNodeId().getValue();
                 LOG.info("Node {} removed...", nodeid);
-                currentMountedDevice.remove(nodeid);
-                new PortMapping(dataBroker, mountService, nodeid).deleteMappingData();
+                this.currentMountedDevice.remove(nodeid);
+                new PortMapping(this.dataBroker, this.mountService, nodeid).deleteMappingData();
             }
 
             if (nnode != null) {
@@ -177,12 +177,9 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                     LOG.info("{} ignored: org-openroadm-device advertised but not a real ROADM device", nodeId);
                     return;
                 }
-                if (rootNode.getModificationType() == ModificationType.WRITE) {
-                    LOG.info("Node added {}", nodeId);
-
-                } else if (rootNode.getModificationType() == ModificationType.SUBTREE_MODIFIED) {
-
-                    LOG.info("Node modified {}", nodeId);
+                if ((rootNode.getModificationType() == ModificationType.WRITE) ||
+                        (rootNode.getModificationType() == ModificationType.SUBTREE_MODIFIED)) {
+                    LOG.info("Node added or modified {}", nodeId);
                     ConnectionStatus csts = nnode.getConnectionStatus();
 
                     switch (csts) {
@@ -196,12 +193,12 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                              * for notifications
                              */
                             registerNotificationListener(rootNode.getDataAfter().getNodeId());
-                            currentMountedDevice.add(nodeId);
-                            new PortMapping(dataBroker, mountService, nodeId).createMappingData();
+                            this.currentMountedDevice.add(nodeId);
+                            new PortMapping(this.dataBroker, this.mountService, nodeId).createMappingData();
                             break;
                         }
                         case Connecting: {
-                            LOG.info("NETCONF Node: {} was disconnected", nodeId);
+                            LOG.info("NETCONF Node: {} is (dis)connecting", nodeId);
                             break;
                         }
                         case UnableToConnect: {
@@ -214,6 +211,6 @@ public class RendererNotificationsImpl implements DataTreeChangeListener<Node> {
                 }
             }
         }
-        LOG.info("Netconf devices currently mounted are : {}", currentMountedDevice.toString());
+        LOG.info("Netconf devices currently mounted are : {}", this.currentMountedDevice.toString());
     }
 }
