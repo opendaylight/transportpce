@@ -92,8 +92,7 @@ public class PortMappingImpl implements PortMapping {
         List<Mapping> portMapList = new ArrayList<>();
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.OPERATIONAL, infoIID,
-            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.OPERATIONAL, infoIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
 
         Info deviceInfo;
         if (deviceInfoOptional.isPresent()) {
@@ -166,25 +165,24 @@ public class PortMappingImpl implements PortMapping {
         for (ConnectionPorts cp : degreeConPorts) {
             String circuitPackName = cp.getCircuitPackName();
             String portName = cp.getPortName().toString();
-            InstanceIdentifier<Ports> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
-                .child(Ports.class, new PortsKey(portName));
+            InstanceIdentifier<Ports> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
+                CircuitPacks.class, new CircuitPacksKey(circuitPackName)).child(Ports.class, new PortsKey(portName));
 
             LOG.info("Fetching logical Connection Point value for port {} at circuit pack {}", portName,
                 circuitPackName);
             Optional<Ports> portObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-                LogicalDatastoreType.OPERATIONAL, portIID,
-                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                LogicalDatastoreType.OPERATIONAL, portIID, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (portObject.isPresent()) {
                 Ports port = portObject.get();
                 if (port.getLogicalConnectionPoint() != null) {
-                    LOG.info("Logical Connection Point for {} {} is {}", circuitPackName, portName,
-                        port.getLogicalConnectionPoint());
-                    portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                        port.getLogicalConnectionPoint()));
+                    LOG.info("Logical Connection Point for {} {} is {}", circuitPackName, portName, port
+                        .getLogicalConnectionPoint());
+                    portMapList.add(createMappingObject(nodeId, port, circuitPackName, port
+                        .getLogicalConnectionPoint()));
                 } else {
-                    LOG.warn("Logical Connection Point value is missing for {} {}", circuitPackName,
-                        port.getPortName());
+                    LOG.warn("Logical Connection Point value is missing for {} {}", circuitPackName, port
+                        .getPortName());
                 }
             } else {
                 LOG.warn("Port {} is not present in node {} in circuit pack {}!", portName, nodeId, circuitPackName);
@@ -208,11 +206,11 @@ public class PortMappingImpl implements PortMapping {
 
         for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
             LOG.info("Getting Connection ports for Degree Number {}", degreeCounter);
-            InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Degree.class, new DegreeKey(degreeCounter));
+            InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
+                Degree.class, new DegreeKey(degreeCounter));
             Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-                LogicalDatastoreType.CONFIGURATION,
-                deviceIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                LogicalDatastoreType.CONFIGURATION, deviceIID, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmDegreeObject.isPresent()) {
                 degrees.add(ordmDegreeObject.get());
             } else {
@@ -244,21 +242,23 @@ public class PortMappingImpl implements PortMapping {
 
     private boolean createPpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for SRG's PP
-        HashMap<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg
-            .CircuitPacks>> srgCps = getSrgCps(nodeId, deviceInfo);
-        Set<Map.Entry<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-            .srg.CircuitPacks>>> circuitPacks = srgCps.entrySet();
-        for (Entry<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg
-                .CircuitPacks>> entry : circuitPacks) {
+        HashMap<Integer, List<
+            org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks>> srgCps = getSrgCps(
+                nodeId, deviceInfo);
+        Set<Map.Entry<Integer, List<
+            org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks>>> circuitPacks = srgCps
+                .entrySet();
+        for (Entry<Integer, List<
+            org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks>> entry : circuitPacks) {
             Integer srgIndex = entry.getKey();
             for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks cp : entry
                 .getValue()) {
                 String circuitPackName = cp.getCircuitPackName();
-                InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName));
+                InstanceIdentifier<CircuitPacks> cpIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
+                    CircuitPacks.class, new CircuitPacksKey(circuitPackName));
                 Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-                    LogicalDatastoreType.OPERATIONAL, cpIID,
-                    Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                    LogicalDatastoreType.OPERATIONAL, cpIID, Timeouts.DEVICE_READ_TIMEOUT,
+                    Timeouts.DEVICE_READ_TIMEOUT_UNIT);
 
                 if (!circuitPackObject.isPresent() || (circuitPackObject.get().getPorts() == null)) {
                     LOG.warn("{} : Circuit pack {} not found or without ports.", nodeId, circuitPackName);
@@ -269,13 +269,11 @@ public class PortMappingImpl implements PortMapping {
                     if (port.getLogicalConnectionPoint() != null) {
                         String logicalConnectionPoint = getLogicalConnectionPort(port, srgIndex);
                         LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId, circuitPackName, port
-                            .getPortName(),
-                            logicalConnectionPoint);
+                            .getPortName(), logicalConnectionPoint);
                         portMapList.add(createMappingObject(nodeId, port, circuitPackName, logicalConnectionPoint));
                     } else if (Port.PortQual.RoadmInternal.equals(port.getPortQual())) {
                         LOG.info("Port is internal, skipping Logical Connection Point missing for {} {}",
-                            circuitPackName,
-                            port.getPortName());
+                            circuitPackName, port.getPortName());
                     } else if (port.getLogicalConnectionPoint() == null) {
                         LOG.info("Value missing, Skipping Logical Connection Point missing for {} {}", circuitPackName,
                             port.getPortName());
@@ -299,10 +297,12 @@ public class PortMappingImpl implements PortMapping {
      * @return List of circuit packs object belonging to- shared risk group
      *         subtree
      */
-    private HashMap<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg
-        .CircuitPacks>> getSrgCps(String deviceId, Info ordmInfo) {
-        HashMap<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg
-            .CircuitPacks>> cpPerSrg = new HashMap<>();
+    private HashMap<Integer, List<
+        org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks>> getSrgCps(String deviceId,
+            Info ordmInfo) {
+        HashMap<Integer, List<
+            org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks>> cpPerSrg =
+                new HashMap<>();
         Integer maxSrg;
         // Get value for max Srg from info subtree, required for iteration
         // if not present assume to be 20 (temporary)
@@ -315,11 +315,11 @@ public class PortMappingImpl implements PortMapping {
             List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks> srgCps =
                 new ArrayList<>();
             LOG.info("Getting Circuitpacks for Srg Number {}", srgCounter);
-            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(SharedRiskGroup.class, new SharedRiskGroupKey(srgCounter));
+            InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
+                SharedRiskGroup.class, new SharedRiskGroupKey(srgCounter));
             Optional<SharedRiskGroup> ordmSrgObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-                LogicalDatastoreType.CONFIGURATION,
-                srgIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                LogicalDatastoreType.CONFIGURATION, srgIID, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmSrgObject.isPresent()) {
                 srgCps.addAll(ordmSrgObject.get().getCircuitPacks());
                 cpPerSrg.put(ordmSrgObject.get().getSrgNumber(), srgCps);
@@ -354,8 +354,8 @@ public class PortMappingImpl implements PortMapping {
         // Creating for Xponder Line and Client Ports
         InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
         Optional<OrgOpenroadmDevice> deviceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.OPERATIONAL, deviceIID,
-            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.OPERATIONAL, deviceIID, Timeouts.DEVICE_READ_TIMEOUT,
+            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
 
         // Variable to keep track of number of line ports
         int line = 1;
@@ -379,17 +379,53 @@ public class PortMappingImpl implements PortMapping {
                 if (Port.PortQual.XpdrNetwork.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
                         "XPDR1-"+OpenRoadmInterfacesImpl.NETWORK_TOKEN + line));
+                //String lcp = port.getLogicalConnectionPoint();
+                //String regex = "XPDR[0-9]+-NETWORK[0-9]+";
+                //checkLogicalConnectionPoint(regex, lcp, nodeId, portMapList, circuitPackName, port, "NETWORK", line);
                     line++;
                 } else if (Port.PortQual.XpdrClient.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
                         "XPDR1-"+OpenRoadmInterfacesImpl.CLIENT_TOKEN + client));
+                //String lcp = port.getLogicalConnectionPoint();
+                //String regex = "XPDR[0-9]+-CLIENT[0-9]+";
+                //checkLogicalConnectionPoint(regex, lcp, nodeId, portMapList, circuitPackName, port, "CLIENT", client);
                     client++;
                 } else {
-                    LOG.warn("Not supported type of port! Port type: {}", port.getPortQual());
+                    LOG.warn("Port type {} not supported", port.getPortQual());
                 }
             }
         }
         return true;
+    }
+
+    private void checkLogicalConnectionPoint(String regex, String logicalConnectionPoint, String nodeId, List<
+        Mapping> portMapList, String circuitPackName, Ports port, String portQual, int index) {
+        if (logicalConnectionPoint.matches(regex)) {
+            Mapping map = createMappingObject(nodeId, port, circuitPackName, logicalConnectionPoint);
+            if (portMapList.stream().filter(mapping -> mapping.getLogicalConnectionPoint().equals(
+                logicalConnectionPoint)).count() > 0) {
+                LOG.warn("{} : logical connection point {} on {}  {} already used. Port can not be used", nodeId,
+                    logicalConnectionPoint, circuitPackName, port.getPortName());
+            } else {
+                portMapList.add(map);
+                LOG.info("{} : logical connection point for {}  {} is {}", nodeId, circuitPackName, port.getPortName(),
+                    logicalConnectionPoint);
+            }
+        } else if (logicalConnectionPoint.isEmpty()) {
+            String lcp = "XPDR0-" + portQual + index;
+            Mapping map = createMappingObject(nodeId, port, circuitPackName, lcp);
+            if (portMapList.contains(map)) {
+                LOG.warn("{} : can not assign logical connection point {} to port {} of circuit pack {}. "
+                    + "Name is already used", nodeId, lcp, port.getPortName(), circuitPackName);
+            } else {
+                portMapList.add(createMappingObject(nodeId, port, circuitPackName, lcp));
+                LOG.info("{} : no logical connection port on {}  {}. Assigning {}.", nodeId, circuitPackName, port
+                    .getPortName(), lcp);
+            }
+        } else {
+            LOG.warn("{} : logical connection point {} on {} {} does not respect OrgOpenRoadm recommendation. Port can "
+                + "not be used.", nodeId, logicalConnectionPoint, circuitPackName, port.getPortName());
+        }
     }
 
     /**
@@ -417,8 +453,8 @@ public class PortMappingImpl implements PortMapping {
         if (logicalConnectionPoint.contains(OpenRoadmInterfacesImpl.TTP_TOKEN) && (port.getInterfaces() != null)) {
             for (Interfaces interfaces : port.getInterfaces()) {
                 try {
-                    Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
-                        interfaces.getInterfaceName());
+                    Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId, interfaces
+                        .getInterfaceName());
                     if (openRoadmInterface.isPresent()) {
                         Class<? extends InterfaceType> interfaceType = openRoadmInterface.get().getType();
                         // Check if interface type is OMS or OTS
@@ -451,8 +487,8 @@ public class PortMappingImpl implements PortMapping {
     }
 
     private static List<ConnectionPorts> getDegreePorts(List<Degree> degrees) {
-        return degrees.stream().filter(degree -> degree.getConnectionPorts() != null)
-            .flatMap(degree -> degree.getConnectionPorts().stream()).collect(Collectors.toList());
+        return degrees.stream().filter(degree -> degree.getConnectionPorts() != null).flatMap(degree -> degree
+            .getConnectionPorts().stream()).collect(Collectors.toList());
     }
 
     private List<CpToDegree> getCpToDegreeList(List<Degree> degrees, String nodeId,
@@ -486,8 +522,8 @@ public class PortMappingImpl implements PortMapping {
      *
      * @return Result true/false based on status of operation.
      */
-    private boolean postPortMapping(Info deviceInfo, List<Mapping> portMapList, Integer nodeType,
-        List<CpToDegree> cp2DegreeList) {
+    private boolean postPortMapping(Info deviceInfo, List<Mapping> portMapList, Integer nodeType, List<
+        CpToDegree> cp2DegreeList) {
         NodesBuilder nodesBldr = new NodesBuilder();
         nodesBldr.withKey(new NodesKey(deviceInfo.getNodeId())).setNodeId(deviceInfo.getNodeId());
         nodesBldr.setNodeType(NodeTypes.forValue(nodeType));
@@ -584,8 +620,8 @@ public class PortMappingImpl implements PortMapping {
             }
             return logicalConnectionPoint;
         }
-        LOG.warn("Unsupported port direction for port {} - {} - LogicalConnectionPoint is null",
-            port, port.getPortDirection());
+        LOG.warn("Unsupported port direction for port {} - {} - LogicalConnectionPoint is null", port, port
+            .getPortDirection());
         return null; // TODO return false or continue?
     }
 
@@ -593,8 +629,8 @@ public class PortMappingImpl implements PortMapping {
     public void deleteMappingData(String nodeId) {
         LOG.info("Deleting Mapping Data corresponding at node '{}'", nodeId);
         WriteTransaction rw = this.dataBroker.newWriteOnlyTransaction();
-        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId));
+        InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class).child(Nodes.class, new NodesKey(
+            nodeId));
         rw.delete(LogicalDatastoreType.CONFIGURATION, nodesIID);
         try {
             rw.submit().get(1, TimeUnit.SECONDS);
