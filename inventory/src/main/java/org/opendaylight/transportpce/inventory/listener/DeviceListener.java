@@ -47,8 +47,8 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
     public void onDataTreeChanged(Collection<DataTreeModification<Node>> changes) {
         List<DataTreeModification<Node>> changesWithoutDefaultNetconfNode = getRealDevicesOnly(changes);
         for (DataTreeModification<Node> device : changesWithoutDefaultNetconfNode) {
-            String nodeId = device.getRootNode().getDataAfter().getKey().getNodeId().getValue();
-            NetconfNode netconfNode = device.getRootNode().getDataAfter().getAugmentation(NetconfNode.class);
+            String nodeId = device.getRootNode().getDataAfter().key().getNodeId().getValue();
+            NetconfNode netconfNode = device.getRootNode().getDataAfter().augmentation(NetconfNode.class);
             if (isCreate(device) || isUpdate(device)) {
                 LOG.info("Node {} was modified", nodeId);
                 try {
@@ -82,7 +82,7 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
             return;
         }
         if (ConnectionStatus.Connected.equals(connectionStatus)) {
-            deviceInventory.initializeDevice(nodeId);
+            this.deviceInventory.initializeDevice(nodeId);
         } else if (ConnectionStatus.Connecting.equals(connectionStatus)
                 || ConnectionStatus.UnableToConnect.equals(connectionStatus)) {
             LOG.info("The device is in {} state", connectionStatus);
@@ -100,14 +100,14 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
      */
     private static List<DataTreeModification<Node>> getRealDevicesOnly(Collection<DataTreeModification<Node>> changes) {
         return changes.stream()
-                .filter(change -> (change.getRootNode().getDataAfter() != null
+                .filter(change -> ((change.getRootNode().getDataAfter() != null)
                         && !StringConstants.DEFAULT_NETCONF_NODEID
-                                .equalsIgnoreCase(change.getRootNode().getDataAfter().getKey().getNodeId().getValue())
-                        && change.getRootNode().getDataAfter().getAugmentation(NetconfNode.class) != null)
-                        || (change.getRootNode().getDataBefore() != null
+                                .equalsIgnoreCase(change.getRootNode().getDataAfter().key().getNodeId().getValue())
+                        && (change.getRootNode().getDataAfter().augmentation(NetconfNode.class) != null))
+                        || ((change.getRootNode().getDataBefore() != null)
                                 && !StringConstants.DEFAULT_NETCONF_NODEID.equalsIgnoreCase(
-                                        change.getRootNode().getDataBefore().getKey().getNodeId().getValue())
-                                && change.getRootNode().getDataBefore().getAugmentation(NetconfNode.class) != null
+                                        change.getRootNode().getDataBefore().key().getNodeId().getValue())
+                                && (change.getRootNode().getDataBefore().augmentation(NetconfNode.class) != null)
 
                         )).collect(Collectors.toList());
     }
@@ -119,7 +119,7 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
      * @return boolean true if the change is a new write
      */
     private static boolean isCreate(DataTreeModification<Node> change) {
-        return change.getRootNode().getDataBefore() == null && change.getRootNode().getDataAfter() != null
+        return (change.getRootNode().getDataBefore() == null) && (change.getRootNode().getDataAfter() != null)
                 && ModificationType.WRITE.equals(change.getRootNode().getModificationType());
     }
 
@@ -140,7 +140,7 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
      * @return boolean true if the node was deleted
      */
     private static boolean isDelete(DataTreeModification<Node> change) {
-        return change.getRootNode().getDataBefore() != null && change.getRootNode().getDataAfter() == null
+        return (change.getRootNode().getDataBefore() != null) && (change.getRootNode().getDataAfter() == null)
                 && ModificationType.DELETE.equals(change.getRootNode().getModificationType());
     }
 }

@@ -65,7 +65,7 @@ public final class MountPointUtils {
                                        DeviceTransactionManager deviceTransactionManager) {
         try {
             MappingBuilder mappingBuilder = new MappingBuilder();
-            mappingBuilder.setKey(new MappingKey(logicalConnPoint));
+            mappingBuilder.withKey(new MappingKey(logicalConnPoint));
             mappingBuilder.setLogicalConnectionPoint(logicalConnPoint);
             mappingBuilder.setSupportingOms("OMS");
             mappingBuilder.setSupportingPort("8080");

@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -124,7 +123,7 @@ public class OpenRoadmTopology {
         NetworkBuilder nwBuilder = new NetworkBuilder();
         NetworkId nwId = new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID);
         nwBuilder.setNetworkId(nwId);
-        nwBuilder.setKey(new NetworkKey(nwId));
+        nwBuilder.withKey(new NetworkKey(nwId));
         // set network type to Transport Underlay
         NetworkTypes1Builder topoNetworkTypesBldr = new NetworkTypes1Builder();
         topoNetworkTypesBldr.setOpenroadmTopology(new OpenroadmTopologyBuilder().build());
@@ -300,7 +299,7 @@ public class OpenRoadmTopology {
         String nodeIdtopo = new StringBuilder().append(nodeId).append("-XPDR1").toString();
         // Ad degree node specific augmentation
         nodebldr.setNodeId(new NodeId(nodeIdtopo));
-        nodebldr.setKey(new NodeKey(new NodeId(nodeIdtopo)));
+        nodebldr.withKey(new NodeKey(new NodeId(nodeIdtopo)));
         nodebldr.addAugmentation(Node1.class, node1bldr.build());
         while (clientCounter != 0) {
             // Create CLNT-TX termination
@@ -589,7 +588,7 @@ public class OpenRoadmTopology {
         // Sets the value of Network-ref and Node-ref as a part of the supporting node
         // attribute
         SupportingNodeBuilder supportbldr = new SupportingNodeBuilder();
-        supportbldr.setKey(new SupportingNodeKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID), new NodeId(nodeId)));
+        supportbldr.withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID), new NodeId(nodeId)));
         supportbldr.setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID));
         supportbldr.setNodeRef(new NodeId(nodeId));
         ArrayList<SupportingNode> supportlist = new ArrayList<>();
@@ -629,7 +628,7 @@ public class OpenRoadmTopology {
         TerminationPointBuilder tpBldr = new TerminationPointBuilder();
         TpId tp = new TpId(tpId);
         TerminationPointKey tpKey = new TerminationPointKey(tp);
-        tpBldr.setKey(tpKey);
+        tpBldr.withKey(tpKey);
         tpBldr.setTpId(tp);
         return tpBldr;
     }
@@ -650,7 +649,7 @@ public class OpenRoadmTopology {
         lnkBldr.setDestination(dstNodeBldr.build());
         lnkBldr.setSource(srcNodeBldr.build());
         lnkBldr.setLinkId(LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp));
-        lnkBldr.setKey(new LinkKey(lnkBldr.getLinkId()));
+        lnkBldr.withKey(new LinkKey(lnkBldr.getLinkId()));
         org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder lnk1Bldr =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder();
         LinkId oppositeLinkId = LinkIdUtil.getOppositeLinkId(srcNode, srcTp, dstNode, destTp);
@@ -829,7 +828,7 @@ public class OpenRoadmTopology {
         for (int i = 1; i < 97; i++) {
             AvailableWavelengthsBuilder avalBldr = new AvailableWavelengthsBuilder();
             avalBldr.setIndex((long) i);
-            avalBldr.setKey(new AvailableWavelengthsKey((long) i));
+            avalBldr.withKey(new AvailableWavelengthsKey((long) i));
             waveList.add(avalBldr.build());
         }
 
@@ -848,7 +847,7 @@ public class OpenRoadmTopology {
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
                     .AvailableWavelengthsBuilder();
             avalBldr.setIndex((long) i);
-            avalBldr.setKey(
+            avalBldr.withKey(
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
                     .AvailableWavelengthsKey((long) i));
             waveList.add(avalBldr.build());

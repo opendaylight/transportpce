@@ -161,7 +161,7 @@ public class DeviceRendererServiceImplTest extends AbstractTest {
 
         NodeInterfaceBuilder nodeInterfaceBuilder = new NodeInterfaceBuilder();
         nodeInterfaceBuilder.setNodeId("node1");
-        nodeInterfaceBuilder.setKey(new NodeInterfaceKey("node1"));
+        nodeInterfaceBuilder.withKey(new NodeInterfaceKey("node1"));
         List<String> connectionID = new ArrayList<>();
         connectionID.add("node1-PP");
         nodeInterfaceBuilder.setConnectionId(connectionID);

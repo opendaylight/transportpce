@@ -14,13 +14,11 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
@@ -94,7 +92,7 @@ public class StubpceImpl implements StubpceService {
     public StubpceImpl(NotificationPublishService notificationPublishService, DataBroker databroker) {
         this.notificationPublishService = notificationPublishService;
         this.db = databroker;
-        pathDescriptionBuilder = null;
+        this.pathDescriptionBuilder = null;
         if (initializePathDescriptionList(databroker)) {
             fillPathDesciptionList();
         }
@@ -105,7 +103,7 @@ public class StubpceImpl implements StubpceService {
     }
 
     @Override
-    public Future<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(CancelResourceReserveInput input) {
+    public ListenableFuture<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(CancelResourceReserveInput input) {
         LOG.info("RPC cancelResourceReserve  request received");
         String message = "";
         String responseCode = "";
@@ -113,7 +111,7 @@ public class StubpceImpl implements StubpceService {
         String serviceName = input.getServiceName();
         LOG.info("serviceName : {}", serviceName);
         if (serviceName != null) {
-            sendingPCE = new SendingPceRPCs(input,db,executor);
+            this.sendingPCE = new SendingPceRPCs(input,this.db,this.executor);
             FutureCallback<Boolean> pceCallback = new FutureCallback<Boolean>() {
                 String message = "";
                 ServicePathRpcResult notification = null;
@@ -121,12 +119,12 @@ public class StubpceImpl implements StubpceService {
                 @Override
                 public void onFailure(Throwable arg0) {
                     LOG.error("Cancel resource failed : {}", arg0);
-                    notification = new ServicePathRpcResultBuilder()
+                    this.notification = new ServicePathRpcResultBuilder()
                             .setNotificationType(ServicePathNotificationTypes.CancelResourceReserve)
                             .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
                             .setStatusMessage("Cancel resource request failed  : " + arg0.getMessage()).build();
                     try {
-                        notificationPublishService.putNotification(notification);
+                        StubpceImpl.this.notificationPublishService.putNotification(this.notification);
                     } catch (InterruptedException e) {
                         LOG.info("notification offer rejected : {}", e);
                     }
@@ -136,32 +134,32 @@ public class StubpceImpl implements StubpceService {
                 public void onSuccess(Boolean response) {
                     LOG.info("response : {}", response);
                     if (response) {
-                        message = "Resource cancelled !";
-                        notification = new ServicePathRpcResultBuilder()
+                        this.message = "Resource cancelled !";
+                        this.notification = new ServicePathRpcResultBuilder()
                                 .setNotificationType(ServicePathNotificationTypes.CancelResourceReserve)
                                 .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Successful)
-                                .setStatusMessage(message)
+                                .setStatusMessage(this.message)
                                 .build();
                     } else {
-                        message = sendingPCE.getError();
-                        notification = new ServicePathRpcResultBuilder()
+                        this.message = StubpceImpl.this.sendingPCE.getError();
+                        this.notification = new ServicePathRpcResultBuilder()
                                 .setNotificationType(ServicePathNotificationTypes.CancelResourceReserve)
                                 .setServiceName("")
-                                .setStatus(RpcStatusEx.Failed).setStatusMessage(message)
+                                .setStatus(RpcStatusEx.Failed).setStatusMessage(this.message)
                                 .build();
-                        message = "Cancel request failed !";
+                        this.message = "Cancel request failed !";
                     }
-                    LOG.info(notification.toString());
+                    LOG.info(this.notification.toString());
                     try {
-                        notificationPublishService.putNotification(notification);
+                        StubpceImpl.this.notificationPublishService.putNotification(this.notification);
                     } catch (InterruptedException e) {
                         LOG.info("notification offer rejected : {}", e);
                     }
-                    LOG.info(message);
+                    LOG.info(this.message);
                 }
             };
-            ListenableFuture<Boolean> pce = sendingPCE.cancelResourceReserve();
-            Futures.addCallback(pce, pceCallback, executor);
+            ListenableFuture<Boolean> pce = this.sendingPCE.cancelResourceReserve();
+            Futures.addCallback(pce, pceCallback, this.executor);
             LOG.info("Cancel Resource Request in progress ...");
             configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                     .setAckFinalIndicator("No")
@@ -175,12 +173,12 @@ public class StubpceImpl implements StubpceService {
         } else {
             message = "serviceName / requestId is not correct !";
             responseCode = "500";
-            notification = new ServicePathRpcResultBuilder()
+            this.notification = new ServicePathRpcResultBuilder()
                     .setNotificationType(ServicePathNotificationTypes.CancelResourceReserve)
                     .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
                     .setStatusMessage(message).build();
             try {
-                notificationPublishService.putNotification(notification);
+                this.notificationPublishService.putNotification(this.notification);
             } catch (InterruptedException e) {
                 LOG.info("notification offer rejected : {}", e);
             }
@@ -196,15 +194,15 @@ public class StubpceImpl implements StubpceService {
     }
 
     @Override
-    public Future<RpcResult<PathComputationRequestOutput>> pathComputationRequest(PathComputationRequestInput input) {
+    public ListenableFuture<RpcResult<PathComputationRequestOutput>> pathComputationRequest(PathComputationRequestInput input) {
         LOG.info("RPC pathcomputation request received");
         String message = "";
         String responseCode = "";
         boolean coherencyHardSoft = false;
         boolean commonId = true;
         ConfigurationResponseCommonBuilder configurationResponseCommon = null;
-        compliancyCheck = new StubpceCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
-        if (compliancyCheck.check(false, true)) {
+        this.compliancyCheck = new StubpceCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
+        if (this.compliancyCheck.check(false, true)) {
             LOG.info("Service compliant !");
             /**
              * If compliant, service-request parameters are verified in order to
@@ -212,12 +210,12 @@ public class StubpceImpl implements StubpceService {
              * a path and implement a service.
              */
             LOG.info("checking Tx/Rx Info for AEnd ...");
-            txrxCheck = new StubpceTxRxCheck(input.getServiceAEnd(), 1);
-            if (txrxCheck.check()) {
+            this.txrxCheck = new StubpceTxRxCheck(input.getServiceAEnd(), 1);
+            if (this.txrxCheck.check()) {
                 LOG.info("Tx/Rx Info for AEnd checked !");
                 LOG.info("checking Tx/Rx Info for ZEnd ...");
-                txrxCheck = new StubpceTxRxCheck(input.getServiceZEnd(), 2);
-                if (txrxCheck.check()) {
+                this.txrxCheck = new StubpceTxRxCheck(input.getServiceZEnd(), 2);
+                if (this.txrxCheck.check()) {
                     LOG.info("Tx/Rx Info for ZEnd checked !");
                     /**
                      * If OK, common-id is verified in order to see if there is
@@ -226,11 +224,11 @@ public class StubpceImpl implements StubpceService {
                      * with hard/soft constraints provided in the input of the
                      * RPC.
                      */
-                    if (input.getHardConstraints() != null || input.getSoftConstraints() != null) {
+                    if ((input.getHardConstraints() != null) || (input.getSoftConstraints() != null)) {
                         LOG.info("Constraints specified !");
-                        checkCoherencyHardSoft = new CheckCoherencyHardSoft(input.getHardConstraints(),
+                        this.checkCoherencyHardSoft = new CheckCoherencyHardSoft(input.getHardConstraints(),
                                 input.getSoftConstraints());
-                        if (checkCoherencyHardSoft.check()) {
+                        if (this.checkCoherencyHardSoft.check()) {
                             LOG.info("hard/soft constraints coherent !");
                             coherencyHardSoft = true;
                         } else {
@@ -242,16 +240,16 @@ public class StubpceImpl implements StubpceService {
                         commonId = false;
                     }
                     if (!commonId || (commonId && coherencyHardSoft)) {
-                        notification = new ServicePathRpcResultBuilder()
+                        this.notification = new ServicePathRpcResultBuilder()
                                 .setNotificationType(ServicePathNotificationTypes.PathComputationRequest)
                                 .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Pending)
                                 .setStatusMessage("Service compliant, submitting pathComputation Request ...").build();
                         try {
-                            notificationPublishService.putNotification(notification);
+                            this.notificationPublishService.putNotification(this.notification);
                         } catch (InterruptedException e) {
                             LOG.info("notification offer rejected : {}", e);
                         }
-                        sendingPCE = new SendingPceRPCs(input,db,executor);
+                        this.sendingPCE = new SendingPceRPCs(input,this.db,this.executor);
                         FutureCallback<Boolean> pceCallback = new FutureCallback<Boolean>() {
                             String message = "";
                             ServicePathRpcResult notification = null;
@@ -260,11 +258,11 @@ public class StubpceImpl implements StubpceService {
                             public void onFailure(Throwable arg0) {
                                 LOG.error("Failure message : {}", arg0.toString());
                                 LOG.error("Path calculation failed !");
-                                notification = new ServicePathRpcResultBuilder()
+                                this.notification = new ServicePathRpcResultBuilder()
                                         .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
                                         .setStatusMessage("PCR Request failed  : " + arg0.getMessage()).build();
                                 try {
-                                    notificationPublishService.putNotification(notification);
+                                    StubpceImpl.this.notificationPublishService.putNotification(this.notification);
                                 } catch (InterruptedException e) {
                                     LOG.info("notification offer rejected : {}", e);
                                 }
@@ -274,44 +272,44 @@ public class StubpceImpl implements StubpceService {
                             public void onSuccess(Boolean response) {
                                 LOG.info("response : {}", response);
                                 if (response) {
-                                    message = "Path Computated !";
+                                    this.message = "Path Computated !";
                                     ServicePathRpcResultBuilder tmp = new ServicePathRpcResultBuilder()
                                             .setNotificationType(ServicePathNotificationTypes.PathComputationRequest)
                                             .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Successful)
-                                            .setStatusMessage(message);
-                                    pathDescriptionBuilder = sendingPCE.getPathDescription();
-                                    if (pathDescriptionBuilder != null) {
+                                            .setStatusMessage(this.message);
+                                    StubpceImpl.this.pathDescriptionBuilder = StubpceImpl.this.sendingPCE.getPathDescription();
+                                    if (StubpceImpl.this.pathDescriptionBuilder != null) {
                                         PathDescription pathDescription = new org.opendaylight.yang.gen.v1.http.org
                                                 .transportpce.b.c._interface.servicepath.rev170426.service.path
                                                 .rpc.result.PathDescriptionBuilder()
-                                                .setAToZDirection(pathDescriptionBuilder.getAToZDirection())
-                                                .setZToADirection(pathDescriptionBuilder.getZToADirection())
+                                                .setAToZDirection(StubpceImpl.this.pathDescriptionBuilder.getAToZDirection())
+                                                .setZToADirection(StubpceImpl.this.pathDescriptionBuilder.getZToADirection())
                                                 .build();
                                         tmp.setPathDescription(new PathDescriptionBuilder()
                                                 .setAToZDirection(pathDescription.getAToZDirection())
                                                 .setZToADirection(pathDescription.getZToADirection())
                                                 .build());
                                     }
-                                    notification = tmp.build();
+                                    this.notification = tmp.build();
                                 } else {
-                                    message = sendingPCE.getError();
-                                    notification = new ServicePathRpcResultBuilder()
+                                    this.message = StubpceImpl.this.sendingPCE.getError();
+                                    this.notification = new ServicePathRpcResultBuilder()
                                             .setNotificationType(ServicePathNotificationTypes.PathComputationRequest)
                                             .setServiceName("")
-                                            .setStatus(RpcStatusEx.Failed).setStatusMessage(message)
+                                            .setStatus(RpcStatusEx.Failed).setStatusMessage(this.message)
                                             .build();
-                                    message = "Path not calculated!";
+                                    this.message = "Path not calculated!";
                                 }
                                 try {
-                                    notificationPublishService.putNotification(notification);
+                                    StubpceImpl.this.notificationPublishService.putNotification(this.notification);
                                 } catch (InterruptedException e) {
                                     LOG.info("notification offer rejected : {}", e);
                                 }
-                                LOG.info(message);
+                                LOG.info(this.message);
                             }
                         };
-                        ListenableFuture<Boolean> pce = sendingPCE.pathComputation();
-                        Futures.addCallback(pce, pceCallback, executor);
+                        ListenableFuture<Boolean> pce = this.sendingPCE.pathComputation();
+                        Futures.addCallback(pce, pceCallback, this.executor);
                         LOG.info("PathComputation Request in progress ...");
                         configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                                 .setAckFinalIndicator("No")
@@ -325,22 +323,22 @@ public class StubpceImpl implements StubpceService {
                     }
 
                 } else {
-                    message = txrxCheck.getMessage();
+                    message = this.txrxCheck.getMessage();
                     responseCode = "500";
                 }
             } else {
-                message = txrxCheck.getMessage();
+                message = this.txrxCheck.getMessage();
                 responseCode = "500";
             }
         } else {
-            message = compliancyCheck.getMessage();
+            message = this.compliancyCheck.getMessage();
             responseCode = "500";
-            notification = new ServicePathRpcResultBuilder()
+            this.notification = new ServicePathRpcResultBuilder()
                     .setNotificationType(ServicePathNotificationTypes.PathComputationRequest)
                     .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
                     .setStatusMessage("Service not compliant : " + message).build();
             try {
-                notificationPublishService.putNotification(notification);
+                this.notificationPublishService.putNotification(this.notification);
             } catch (InterruptedException e) {
                 LOG.info("notification offer rejected : {}", e);
             }
@@ -438,7 +436,7 @@ public class StubpceImpl implements StubpceService {
                 if (pathDesc != null) {
                     iid = InstanceIdentifier.create(PathDescriptionList.class)
                             .child(PathDescriptions.class, new PathDescriptionsKey(pathDesc.getPathName()));
-                    writeTx = db.newWriteOnlyTransaction();
+                    writeTx = this.db.newWriteOnlyTransaction();
                     writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, pathDesc);
                     future = writeTx.submit();
                     try {
@@ -466,7 +464,7 @@ public class StubpceImpl implements StubpceService {
     @SuppressWarnings("unused")
     private Services readServiceList(String serviceName) {
         Services result = null;
-        ReadOnlyTransaction readTx = db.newReadOnlyTransaction();
+        ReadOnlyTransaction readTx = this.db.newReadOnlyTransaction();
         InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class).child(Services.class,
                 new ServicesKey(serviceName));
         Future<Optional<Services>> future = readTx.read(LogicalDatastoreType.OPERATIONAL,iid);
@@ -494,7 +492,7 @@ public class StubpceImpl implements StubpceService {
     @SuppressWarnings("unused")
     private ServicePaths readServicePathList(String serviceName) {
         ServicePaths result = null;
-        ReadOnlyTransaction readTx = db.newReadOnlyTransaction();
+        ReadOnlyTransaction readTx = this.db.newReadOnlyTransaction();
         InstanceIdentifier<ServicePaths> iid = InstanceIdentifier.create(ServicePathList.class)
                 .child(ServicePaths.class, new ServicePathsKey(serviceName));
         Future<Optional<ServicePaths>> future = readTx.read(LogicalDatastoreType.OPERATIONAL,iid);
@@ -522,7 +520,7 @@ public class StubpceImpl implements StubpceService {
     @SuppressWarnings("unused")
     private PathDescriptions readPathDescriptionList(String pathName) {
         PathDescriptions result = null;
-        ReadOnlyTransaction readTx = db.newReadOnlyTransaction();
+        ReadOnlyTransaction readTx = this.db.newReadOnlyTransaction();
         InstanceIdentifier<PathDescriptions> iid = InstanceIdentifier.create(PathDescriptionList.class)
                 .child(PathDescriptions.class, new PathDescriptionsKey(pathName));
         Future<Optional<PathDescriptions>> future = readTx.read(LogicalDatastoreType.OPERATIONAL,iid);
@@ -559,12 +557,12 @@ public class StubpceImpl implements StubpceService {
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service
             .path.PathDescriptionBuilder path = new org.opendaylight.yang.gen.v1.http.org.transportpce
             .b.c._interface.service.types.rev170426.service.path.PathDescriptionBuilder();
-        path.setAToZDirection(pathDescriptionBuilder.getAToZDirection());
-        path.setZToADirection(pathDescriptionBuilder.getZToADirection());
+        path.setAToZDirection(this.pathDescriptionBuilder.getAToZDirection());
+        path.setZToADirection(this.pathDescriptionBuilder.getZToADirection());
         ServicePaths service = new ServicePathsBuilder().setServicePathName(input.getServiceName())
                 .setSoftConstraints(input.getSoftConstraints()).setHardConstraints(input.getHardConstraints())
                 .setPathDescription(path.build()).build();
-        WriteTransaction writeTx = db.newWriteOnlyTransaction();
+        WriteTransaction writeTx = this.db.newWriteOnlyTransaction();
         writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
         Future<Void> future = writeTx.submit();
         try {
@@ -578,7 +576,7 @@ public class StubpceImpl implements StubpceService {
     }
 
     public PathDescriptionBuilder getPathDescriptionBuilder() {
-        return pathDescriptionBuilder;
+        return this.pathDescriptionBuilder;
     }
 
     public void setPathDescriptionBuilder(PathDescriptionBuilder pathDescriptionBuilder) {

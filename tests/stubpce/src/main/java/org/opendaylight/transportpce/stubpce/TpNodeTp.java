@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.stubpce;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZKey;
@@ -51,10 +50,10 @@ public class TpNodeTp {
         this.tpOut = out;
         this.tpIn = in;
         this.node = node;
-        resources = new ArrayList<Resource>();
-        atoz = new ArrayList<AToZ>();
-        ztoa = new ArrayList<ZToA>();
-        ids = new ArrayList<String>();
+        this.resources = new ArrayList<Resource>();
+        this.atoz = new ArrayList<AToZ>();
+        this.ztoa = new ArrayList<ZToA>();
+        this.ids = new ArrayList<String>();
 
     }
 
@@ -62,19 +61,19 @@ public class TpNodeTp {
      * create resource List.
      */
     public void createListResource() {
-        ids.clear();
-        resources.clear();
-        atoz.clear();
-        ztoa.clear();
+        this.ids.clear();
+        this.resources.clear();
+        this.atoz.clear();
+        this.ztoa.clear();
 
-        resources.add(new ResourceBuilder().setResource(tpIn).build());
-        ids.add(tpIn.getTerminationPointIdentifier().getNodeId().concat("-")
-                .concat(tpIn.getTerminationPointIdentifier().getTpId()));
-        resources.add(new ResourceBuilder().setResource(node).build());
-        ids.add(node.getNodeIdentifier().getNodeId());
-        resources.add(new ResourceBuilder().setResource(tpOut).build());
-        ids.add(tpOut.getTerminationPointIdentifier().getNodeId().concat("-")
-                .concat(tpOut.getTerminationPointIdentifier().getTpId()));
+        this.resources.add(new ResourceBuilder().setResource(this.tpIn).build());
+        this.ids.add(this.tpIn.getTerminationPointIdentifier().getNodeId().concat("-")
+                .concat(this.tpIn.getTerminationPointIdentifier().getTpId()));
+        this.resources.add(new ResourceBuilder().setResource(this.node).build());
+        this.ids.add(this.node.getNodeIdentifier().getNodeId());
+        this.resources.add(new ResourceBuilder().setResource(this.tpOut).build());
+        this.ids.add(this.tpOut.getTerminationPointIdentifier().getNodeId().concat("-")
+                .concat(this.tpOut.getTerminationPointIdentifier().getTpId()));
     }
 
     /**
@@ -85,14 +84,14 @@ public class TpNodeTp {
         AToZ hop = null;
         AToZKey atozKey = null;
         createListResource();
-        for (Resource resource : resources) {
+        for (Resource resource : this.resources) {
             atozKey = new AToZKey(Integer.toString(odr));
             resource = new ResourceBuilder().setResource(resource.getResource()).build();
             hop = new AToZBuilder()
-                    .setKey(atozKey)
+                    .withKey(atozKey)
                     .setResource(resource)
                     .build();
-            atoz.add(hop);
+            this.atoz.add(hop);
             odr++;
         }
     }
@@ -105,50 +104,50 @@ public class TpNodeTp {
         ZToA hop = null;
         ZToAKey ztoaKey = null;
         createListResource();
-        for (Resource resource : resources) {
+        for (Resource resource : this.resources) {
             ztoaKey = new ZToAKey(Integer.toString(odr));
             resource = new ResourceBuilder().setResource(resource.getResource()).build();
             hop = new ZToABuilder()
-                    .setKey(ztoaKey)
+                    .withKey(ztoaKey)
                     .setResource(resource)
                     .build();
-            ztoa.add(hop);
+            this.ztoa.add(hop);
             odr++;
         }
     }
 
     public TpNodeTp reverse() {
-        return new TpNodeTp(tpOut, tpIn, node);
+        return new TpNodeTp(this.tpOut, this.tpIn, this.node);
     }
 
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("[ ");
-        result.append("tpIn : " + tpIn.getTerminationPointIdentifier().getTpId());
-        result.append(" - Node : " + node.getNodeIdentifier().getNodeId());
-        result.append(" - tpOut : " + tpOut.getTerminationPointIdentifier().getTpId());
+        result.append("tpIn : " + this.tpIn.getTerminationPointIdentifier().getTpId());
+        result.append(" - Node : " + this.node.getNodeIdentifier().getNodeId());
+        result.append(" - tpOut : " + this.tpOut.getTerminationPointIdentifier().getTpId());
         result.append(" ]");
         return result.toString();
 
     }
 
     public List<AToZ> getAToZ() {
-        return atoz;
+        return this.atoz;
     }
 
     public List<ZToA> getZToA() {
-        return ztoa;
+        return this.ztoa;
     }
 
     public Node getNode() {
-        return node;
+        return this.node;
     }
 
     public TerminationPoint getTpIn() {
-        return tpIn;
+        return this.tpIn;
     }
 
     public TerminationPoint getTpOut() {
-        return tpOut;
+        return this.tpOut;
     }
 }

@@ -51,7 +51,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer
 public final class ServiceDataUtils {
 
     public static Nodes createNode(String nodeId, String srcTp, String dstTp) {
-        return new NodesBuilder().setNodeId(nodeId).setKey(new NodesKey(nodeId)).setSrcTp(srcTp)
+        return new NodesBuilder().setNodeId(nodeId).withKey(new NodesKey(nodeId)).setSrcTp(srcTp)
                 .setDestTp(dstTp).build();
     }
 
@@ -115,9 +115,9 @@ public final class ServiceDataUtils {
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource
             .resource.resource.Node node2 = nodesBuilder.setNodeIdentifier(new NodeIdentifierBuilder()
             .setNodeId("XPONDER-1-2").build()).build();
-        AToZ atoZ = new AToZBuilder().setId("1").setKey(new AToZKey("1")).setResource(new ResourceBuilder()
+        AToZ atoZ = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
             .setResource(node1).build()).build();
-        AToZ atoZ2 = new AToZBuilder().setId("1").setKey(new AToZKey("1")).setResource(new ResourceBuilder()
+        AToZ atoZ2 = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
             .setResource(node2).build()).build();
         atoZList.add(atoZ);
         atoZList.add(atoZ2);
@@ -127,9 +127,9 @@ public final class ServiceDataUtils {
             .setAToZ(atoZList)
             .build();
         List<ZToA> ztoAList = new ArrayList<ZToA>();
-        ZToA ztoA = new ZToABuilder().setId("1").setKey(new ZToAKey("1")).setResource(new ResourceBuilder()
+        ZToA ztoA = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
             .setResource(node1).build()).build();
-        ZToA ztoA2 = new ZToABuilder().setId("1").setKey(new ZToAKey("1")).setResource(new ResourceBuilder()
+        ZToA ztoA2 = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
             .setResource(node2).build()).build();
         ztoAList.add(ztoA);
         ztoAList.add(ztoA2);
@@ -153,9 +153,9 @@ public final class ServiceDataUtils {
         TerminationPoint terminationPoint2 = terminationPointBuilder
             .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId("XPONDER-1-2")
                 .setTpId("XPONDER-1-2-" + tpId).build()).build();
-        AToZ atoZ = new AToZBuilder().setId("1").setKey(new AToZKey("1")).setResource(new ResourceBuilder()
+        AToZ atoZ = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
             .setResource(terminationPoint).build()).build();
-        AToZ atoZ2 = new AToZBuilder().setId("2").setKey(new AToZKey("2")).setResource(new ResourceBuilder()
+        AToZ atoZ2 = new AToZBuilder().setId("2").withKey(new AToZKey("2")).setResource(new ResourceBuilder()
             .setResource(terminationPoint2).build()).build();
         atoZList.add(atoZ);
         atoZList.add(atoZ2);
@@ -165,9 +165,9 @@ public final class ServiceDataUtils {
             .setAToZ(atoZList)
             .build();
         List<ZToA> ztoAList = new ArrayList<ZToA>();
-        ZToA ztoA = new ZToABuilder().setId("1").setKey(new ZToAKey("1")).setResource(new ResourceBuilder()
+        ZToA ztoA = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
             .setResource(terminationPoint).build()).build();
-        ZToA ztoA2 = new ZToABuilder().setId("2").setKey(new ZToAKey("2")).setResource(new ResourceBuilder()
+        ZToA ztoA2 = new ZToABuilder().setId("2").withKey(new ZToAKey("2")).setResource(new ResourceBuilder()
             .setResource(terminationPoint).build()).build();
         ztoAList.add(ztoA);
         ztoAList.add(ztoA2);
@@ -190,9 +190,9 @@ public final class ServiceDataUtils {
             .build();
         Link link2 = new LinkBuilder().setLinkIdentifier(new LinkIdentifierBuilder().setLinkId("link 2").build())
             .build();
-        AToZ atoZ = new AToZBuilder().setId("1").setKey(new AToZKey("1")).setResource(new ResourceBuilder()
+        AToZ atoZ = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
             .setResource(link1).build()).build();
-        AToZ atoZ2 = new AToZBuilder().setId("1").setKey(new AToZKey("1")).setResource(new ResourceBuilder()
+        AToZ atoZ2 = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
             .setResource(link2).build()).build();
         atoZList.add(atoZ);
         atoZList.add(atoZ2);
@@ -202,9 +202,9 @@ public final class ServiceDataUtils {
             .setAToZ(atoZList)
             .build();
         List<ZToA> ztoAList = new ArrayList<ZToA>();
-        ZToA ztoA = new ZToABuilder().setId("1").setKey(new ZToAKey("1")).setResource(new ResourceBuilder()
+        ZToA ztoA = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
             .setResource(link1).build()).build();
-        ZToA ztoA2 = new ZToABuilder().setId("1").setKey(new ZToAKey("1")).setResource(new ResourceBuilder()
+        ZToA ztoA2 = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
             .setResource(link2).build()).build();
         ztoAList.add(ztoA);
         ztoAList.add(ztoA2);

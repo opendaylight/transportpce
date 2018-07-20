@@ -7,12 +7,12 @@
  */
 package org.opendaylight.transportpce.servicehandler.impl;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -102,7 +102,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public Future<RpcResult<ServiceCreateOutput>> serviceCreate(ServiceCreateInput input) {
+    public ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreate(ServiceCreateInput input) {
         LOG.info("RPC service creation received");
         // Validation
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(input);
@@ -181,7 +181,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public Future<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
+    public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         LOG.info("RPC serviceDelete request received for {}", input.getServiceDeleteReqInfo().getServiceName());
         String message = "";
 
@@ -242,35 +242,35 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public Future<RpcResult<ServiceFeasibilityCheckOutput>> serviceFeasibilityCheck(
+    public ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> serviceFeasibilityCheck(
             ServiceFeasibilityCheckInput input) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public Future<RpcResult<ServiceReconfigureOutput>> serviceReconfigure(ServiceReconfigureInput input) {
+    public ListenableFuture<RpcResult<ServiceReconfigureOutput>> serviceReconfigure(ServiceReconfigureInput input) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public Future<RpcResult<ServiceRestorationOutput>> serviceRestoration(ServiceRestorationInput input) {
+    public ListenableFuture<RpcResult<ServiceRestorationOutput>> serviceRestoration(ServiceRestorationInput input) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public Future<RpcResult<EquipmentNotificationOutput>> equipmentNotification(EquipmentNotificationInput input) {
+    public ListenableFuture<RpcResult<EquipmentNotificationOutput>> equipmentNotification(EquipmentNotificationInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<RpcResult<ServiceRerouteConfirmOutput>> serviceRerouteConfirm(ServiceRerouteConfirmInput input) {
+    public ListenableFuture<RpcResult<ServiceRerouteConfirmOutput>> serviceRerouteConfirm(ServiceRerouteConfirmInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<RpcResult<ServiceRerouteOutput>> serviceReroute(ServiceRerouteInput input) {
+    public ListenableFuture<RpcResult<ServiceRerouteOutput>> serviceReroute(ServiceRerouteInput input) {
         InstanceIdentifier<Services> servicesIID = InstanceIdentifier.create(ServiceList.class)
                 .child(Services.class, new ServicesKey(input.getServiceName()));
         ReadOnlyTransaction rtx = this.db.newReadOnlyTransaction();
@@ -330,31 +330,31 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public Future<RpcResult<ServiceReversionOutput>> serviceReversion(ServiceReversionInput input) {
+    public ListenableFuture<RpcResult<ServiceReversionOutput>> serviceReversion(ServiceReversionInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<RpcResult<ServiceRollOutput>> serviceRoll(ServiceRollInput input) {
+    public ListenableFuture<RpcResult<ServiceRollOutput>> serviceRoll(ServiceRollInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<RpcResult<NetworkReOptimizationOutput>> networkReOptimization(NetworkReOptimizationInput input) {
+    public ListenableFuture<RpcResult<NetworkReOptimizationOutput>> networkReOptimization(NetworkReOptimizationInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<RpcResult<TempServiceDeleteOutput>> tempServiceDelete(TempServiceDeleteInput input) {
+    public ListenableFuture<RpcResult<TempServiceDeleteOutput>> tempServiceDelete(TempServiceDeleteInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<RpcResult<TempServiceCreateOutput>> tempServiceCreate(TempServiceCreateInput input) {
+    public ListenableFuture<RpcResult<TempServiceCreateOutput>> tempServiceCreate(TempServiceCreateInput input) {
         // TODO Auto-generated method stub
         return null;
     }

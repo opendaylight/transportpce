@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.test.common;
 
+import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.concurrent.Executors;
 import javassist.ClassPool;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.controller.md.sal.binding.api.NotificationService;
@@ -37,6 +39,7 @@ import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
 import org.opendaylight.mdsal.binding.generator.util.BindingRuntimeContext;
 import org.opendaylight.mdsal.binding.generator.util.JavassistUtils;
 import org.opendaylight.mdsal.dom.api.DOMSchemaService;
+import org.opendaylight.mdsal.dom.api.DOMSchemaServiceExtension;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.util.ListenerRegistry;
 import org.opendaylight.yangtools.yang.binding.YangModelBindingProvider;
@@ -71,8 +74,8 @@ public class DataStoreContextImpl implements DataStoreContext {
         this.dataBroker = createDataBroker();
         this.notificationService = createNotificationService();
         this.notificationPublishService = createNotificationPublishService();
-        for (ListenerRegistration<SchemaContextListener> listener : mockedSchemaContext.listeners) {
-            listener.getInstance().onGlobalContextUpdated(mockedSchemaContext.schemaContext);
+        for (ListenerRegistration<SchemaContextListener> listener : this.mockedSchemaContext.listeners) {
+            listener.getInstance().onGlobalContextUpdated(this.mockedSchemaContext.schemaContext);
         }
     }
 
@@ -100,26 +103,26 @@ public class DataStoreContextImpl implements DataStoreContext {
 
     @Override
     public SchemaContext getSchemaContext() {
-        return mockedSchemaContext.schemaContext;
+        return this.mockedSchemaContext.schemaContext;
     }
 
     @Override
     public BindingNormalizedNodeCodecRegistry getBindingToNormalizedNodeCodec() {
-        return mockedSchemaContext.bindingStreamCodecs;
+        return this.mockedSchemaContext.bindingStreamCodecs;
     }
 
     @Override
     public NotificationService getNotificationService() {
-        return notificationService;
+        return this.notificationService;
     }
 
     @Override
     public NotificationPublishService getNotificationPublishService() {
-        return notificationPublishService;
+        return this.notificationPublishService;
     }
 
     private DOMDataBroker createDOMDataBroker() {
-        return new SerializedDOMDataBroker(datastores,
+        return new SerializedDOMDataBroker(this.datastores,
                 MoreExecutors.listeningDecorator(Executors.newSingleThreadExecutor()));
     }
 
@@ -164,13 +167,13 @@ public class DataStoreContextImpl implements DataStoreContext {
             this.listeners = ListenerRegistry.create();
             this.bindingStreamCodecs = createBindingRegistry();
             GeneratedClassLoadingStrategy loading = GeneratedClassLoadingStrategy.getTCCLClassLoadingStrategy();
-            this.bindingToNormalized = new BindingToNormalizedNodeCodec(loading, bindingStreamCodecs);
+            this.bindingToNormalized = new BindingToNormalizedNodeCodec(loading, this.bindingStreamCodecs);
             registerSchemaContextListener(this.bindingToNormalized);
         }
 
         @Override
         public SchemaContext getSchemaContext() {
-            return schemaContext;
+            return this.schemaContext;
         }
 
         /**
@@ -180,9 +183,9 @@ public class DataStoreContextImpl implements DataStoreContext {
          * @return SchemaContext a schema context
          */
         private SchemaContext getSchemaContext(List<YangModuleInfo> moduleInfos) {
-            moduleInfoBackedCntxt.addModuleInfos(moduleInfos);
+            this.moduleInfoBackedCntxt.addModuleInfos(moduleInfos);
             Optional<SchemaContext> tryToCreateSchemaContext =
-                    moduleInfoBackedCntxt.tryToCreateSchemaContext().toJavaUtil();
+                    this.moduleInfoBackedCntxt.tryToCreateSchemaContext().toJavaUtil();
             if (!tryToCreateSchemaContext.isPresent()) {
                 LOG.error("Could not create the initial schema context. Schema context is empty");
                 throw new IllegalStateException();
@@ -192,18 +195,18 @@ public class DataStoreContextImpl implements DataStoreContext {
 
         @Override
         public SchemaContext getGlobalContext() {
-            return schemaContext;
+            return this.schemaContext;
         }
 
         @Override
         public SchemaContext getSessionContext() {
-            return schemaContext;
+            return this.schemaContext;
         }
 
         @Override
         public ListenerRegistration<SchemaContextListener> registerSchemaContextListener(
                 SchemaContextListener listener) {
-            return listeners.register(listener);
+            return this.listeners.register(listener);
         }
 
         /**
@@ -228,12 +231,21 @@ public class DataStoreContextImpl implements DataStoreContext {
          * @return BindingNormalizedNodeCodecRegistry the resulting binding registry
          */
         private BindingNormalizedNodeCodecRegistry createBindingRegistry() {
-            BindingRuntimeContext bindingContext = BindingRuntimeContext.create(moduleInfoBackedCntxt, schemaContext);
+            BindingRuntimeContext bindingContext = BindingRuntimeContext.create(this.moduleInfoBackedCntxt, this.schemaContext);
             BindingNormalizedNodeCodecRegistry bindingNormalizedNodeCodecRegistry =
                     new BindingNormalizedNodeCodecRegistry(
                             StreamWriterGenerator.create(JavassistUtils.forClassPool(ClassPool.getDefault())));
             bindingNormalizedNodeCodecRegistry.onBindingRuntimeContextUpdated(bindingContext);
             return bindingNormalizedNodeCodecRegistry;
+        }
+
+        /* (non-Javadoc)
+         * @see org.opendaylight.mdsal.dom.api.DOMExtensibleService#getExtensions()
+         */
+        @Override
+        public @NonNull ClassToInstanceMap<DOMSchemaServiceExtension> getExtensions() {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
 }

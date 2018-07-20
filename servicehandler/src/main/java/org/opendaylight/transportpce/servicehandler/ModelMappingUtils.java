@@ -7,9 +7,9 @@
  */
 package org.opendaylight.transportpce.servicehandler;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.path.computation.request.input.ServiceAEndBuilder;
@@ -158,7 +158,7 @@ public final class ModelMappingUtils {
         return txDirectionBuilder.build();
     }
 
-    public static Future<RpcResult<ServiceDeleteOutput>> createDeleteServiceReply(ServiceDeleteInput input,
+    public static ListenableFuture<RpcResult<ServiceDeleteOutput>> createDeleteServiceReply(ServiceDeleteInput input,
         String finalAck, String message, String responseCode) {
         ConfigurationResponseCommonBuilder builder = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
@@ -173,7 +173,7 @@ public final class ModelMappingUtils {
         return RpcResultBuilder.success(output).buildFuture();
     }
 
-    public static Future<RpcResult<ServiceCreateOutput>> createCreateServiceReply(ServiceCreateInput input,
+    public static ListenableFuture<RpcResult<ServiceCreateOutput>> createCreateServiceReply(ServiceCreateInput input,
                                                                String finalAck,
                                                                String message, String responseCode) {
         ResponseParametersBuilder responseParameters = new ResponseParametersBuilder();
@@ -253,8 +253,8 @@ public final class ModelMappingUtils {
                 for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426
                     .path.description.atoz.direction.AToZ tmp : pathDescription.getAToZDirection().getAToZ()) {
 
-                    AToZKey key = new AToZKey(tmp.getKey().getId());
-                    AToZ atoz = new AToZBuilder().setId(tmp.getId()).setKey(key)
+                    AToZKey key = new AToZKey(tmp.key().getId());
+                    AToZ atoz = new AToZBuilder().setId(tmp.getId()).withKey(key)
                             // .setResource(tmp.getResource())
                             .build();
                     atozList.add(atoz);
@@ -263,8 +263,8 @@ public final class ModelMappingUtils {
                 for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426
                         .path.description.ztoa.direction.ZToA
                         tmp : pathDescription.getZToADirection().getZToA()) {
-                    ZToAKey key = new ZToAKey(tmp.getKey().getId());
-                    ZToA ztoa = new ZToABuilder().setId(tmp.getId()).setKey(key)
+                    ZToAKey key = new ZToAKey(tmp.key().getId());
+                    ZToA ztoa = new ZToABuilder().setId(tmp.getId()).withKey(key)
                             // .setResource(tmp.getResource())
                             .build();
                     ztoaList.add(ztoa);

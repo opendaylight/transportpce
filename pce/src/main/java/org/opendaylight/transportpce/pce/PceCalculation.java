@@ -9,14 +9,12 @@
 package org.opendaylight.transportpce.pce;
 
 import com.google.common.base.Optional;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -149,7 +147,7 @@ public class PceCalculation {
             return false;
         }
         this.allNodes = nw.getNode();
-        Network1 nw1 = nw.getAugmentation(Network1.class);
+        Network1 nw1 = nw.augmentation(Network1.class);
 
         this.allLinks = nw1.getLink();
         if ((this.allNodes == null) || this.allNodes.isEmpty()) {
@@ -353,7 +351,7 @@ public class PceCalculation {
             }
 
             // extract node type
-            Node1 node1 = node.getAugmentation(Node1.class);
+            Node1 node1 = node.augmentation(Node1.class);
             if (node1 == null) {
                 LOG.error("validateNode: no Node1 (type) Augmentation for node: [{}]. Node is ignored",
                         nodeId.getValue());

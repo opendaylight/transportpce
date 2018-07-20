@@ -9,13 +9,11 @@
 package org.opendaylight.transportpce.stubpce.topology;
 
 import com.google.common.collect.Lists;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubpce.rev170426.path.description.list.PathDescriptionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirectionBuilder;
@@ -71,7 +69,7 @@ public class SuperNodePath {
      */
     private Boolean endNode(String end, List<String> supernodes) {
         Boolean result = false;
-        if (end != null && end.compareTo(" ") != 0) {
+        if ((end != null) && (end.compareTo(" ") != 0)) {
             for (String node : supernodes) {
                 if (node.compareTo(end) == 0) {
                     result = true;
@@ -91,8 +89,8 @@ public class SuperNodePath {
      */
     public SuperNode getSuperNode(String nodeId) {
         SuperNode result = null;
-        if (network != null) {
-            for (SuperNode tmp : network.getSuperNodes()) {
+        if (this.network != null) {
+            for (SuperNode tmp : this.network.getSuperNodes()) {
                 if (tmp.getSuperNodeId().compareTo(nodeId) == 0) {
                     result = tmp;
                     break;
@@ -129,7 +127,7 @@ public class SuperNodePath {
                     if (tmp.startsWith(zend)) {
                         ztoalink = tmp;
                     }
-                    if (atozlink != null && ztoalink != null) {
+                    if ((atozlink != null) && (ztoalink != null)) {
                         result.add(atozlink.concat("/").concat(ztoalink));
                         atozlink = null;
                         ztoalink = null;
@@ -173,8 +171,8 @@ public class SuperNodePath {
      */
     private List<String> getSuperNodeId() {
         List<String> result = new ArrayList<String>();
-        if (network.getSuperNodes().size() > 0) {
-            for (SuperNode tmp : network.getSuperNodes()) {
+        if (this.network.getSuperNodes().size() > 0) {
+            for (SuperNode tmp : this.network.getSuperNodes()) {
                 result.add(tmp.getSuperNodeId());
             }
         }
@@ -189,8 +187,8 @@ public class SuperNodePath {
      */
     private List<String> getRoadmLinks() {
         List<String> result = new ArrayList<String>();
-        if (network.getRoadmToroadm().getLinks().size() > 0) {
-            for (String tmp : network.getRoadmToroadm().getLinks()) {
+        if (this.network.getRoadmToroadm().getLinks().size() > 0) {
+            for (String tmp : this.network.getRoadmToroadm().getLinks()) {
                 result.add(tmp);
             }
         }
@@ -221,9 +219,9 @@ public class SuperNodePath {
                     ztoa.add(split[1]);
                 }
             }
-            if (!atoz.isEmpty() && atoz.size() == ztoa.size()) {
+            if (!atoz.isEmpty() && (atoz.size() == ztoa.size())) {
                 NodeLinkNode node = new NodeLinkNode(aend, zend, atoz,ztoa,direct);
-                paths.add(node);
+                this.paths.add(node);
             }
 
         } else {
@@ -239,10 +237,10 @@ public class SuperNodePath {
      * @param zend ending extremity path
      */
     public void run(String aend, String zend) {
-        if (network != null) {
+        if (this.network != null) {
             List<String> supernodes = getSuperNodeId();
             List<String> roadmLinks = getRoadmLinks();
-            if (aend != null && zend != null) {
+            if ((aend != null) && (zend != null)) {
                 int size = supernodes.size();
                 String hop = null;
                 List<String> links = null;
@@ -298,12 +296,12 @@ public class SuperNodePath {
                     AToZ atoz = it.next();
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription
                         .rev170426.pce.resource.resource.Resource res = atoz.getResource().getResource();
-                    int tmpkey = order + Integer.parseInt(atoz.getKey().getId());
+                    int tmpkey = order + Integer.parseInt(atoz.key().getId());
                     AToZKey atozKey = new AToZKey(Integer.toString(tmpkey));
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
                         .pathdescription.rev170426.pce.resource.Resource resource = new ResourceBuilder()
                         .setResource(res).build();
-                    AToZ hop = new AToZBuilder().setId(atozKey.getId()).setKey(atozKey).setResource(resource).build();
+                    AToZ hop = new AToZBuilder().setId(atozKey.getId()).withKey(atozKey).setResource(resource).build();
                     it.remove();
                     it.add(hop);
                     tmpkey++;
@@ -375,7 +373,7 @@ public class SuperNodePath {
      */
     public List<String> getDeg(String atozLink, String ztoaLink) {
         List<String> result = new ArrayList<String>();
-        if (atozLink != null && ztoaLink != null) {
+        if ((atozLink != null) && (ztoaLink != null)) {
             String [] split = atozLink.split("-", 4);
             if (split.length == 4) {
                 result = Lists.newArrayList(split[1],split[3]);
@@ -470,7 +468,7 @@ public class SuperNodePath {
                     }
                     if (resource != null) {
                         hop = new ZToABuilder()
-                                .setKey(ztoaKey)
+                                .withKey(ztoaKey)
                                 .setResource(resource)
                                 .build();
                         ztoaList.add(hop);
@@ -511,7 +509,7 @@ public class SuperNodePath {
                     ztoadirList.add(ztodir);
                 }
             }
-            if (!ztoadirList.isEmpty() && size == ztoadirList.size()) {
+            if (!ztoadirList.isEmpty() && (size == ztoadirList.size())) {
                 LOG.info("building PathDescriptions ...");
                 int index = 1;
                 String pathName = null;
@@ -547,11 +545,11 @@ public class SuperNodePath {
             if (split.length == 4) {
                 String aend = split[0].replaceAll("ROADM", "Node");
                 String zend = split[2].replaceAll("ROADM", "Node");
-                if (aend != null && zend != null) {
+                if ((aend != null) && (zend != null)) {
                     LOG.info("getting super node for : {} and {}", aend, zend);
                     SuperNode aendSp = getSuperNode(aend);
                     SuperNode zendSp = getSuperNode(zend);
-                    if (aendSp != null && zendSp != null) {
+                    if ((aendSp != null) && (zendSp != null)) {
                         result.add(aendSp);
                         result.add(zendSp);
                     }
@@ -582,7 +580,7 @@ public class SuperNodePath {
                     String ztoaLink = null;
                     atozLink = tmp.getAtozLink().get(0);
                     ztoaLink = tmp.getZtoaLink().get(0);
-                    if (atozLink != null && ztoaLink != null) {
+                    if ((atozLink != null) && (ztoaLink != null)) {
                         LOG.info("atozlink : {}", atozLink);
                         LOG.info("ztoalink : {}", ztoaLink);
                         InterNodePath interAend = new InterNodePath(aendSp);
@@ -654,7 +652,7 @@ public class SuperNodePath {
                             int loop = 0;
                             while (loop < 2) {
                                 List<SuperNode> hop = getSuperNodeEndLink(atozLinks.get(loop));
-                                if (!hop.isEmpty() && hop.size() == 2) {
+                                if (!hop.isEmpty() && (hop.size() == 2)) {
                                     aendSp = hop.get(0);
                                     zendSp = hop.get(1);
                                     InterNodePath interAend = new InterNodePath(aendSp);
@@ -665,7 +663,7 @@ public class SuperNodePath {
                                     LOG.info("interZend : {}", interZend.getAtoz().toString());
                                     List<String> deg1 = getDeg(atozLinks.get(loop),ztoaLinks.get(loop));
                                     LOG.info("deg1 : {}", deg1.toString());
-                                    if (!deg1.isEmpty() && deg1.size() == 2) {
+                                    if (!deg1.isEmpty() && (deg1.size() == 2)) {
                                         List<AToZDirection> cleanInterA = null;
                                         List<AToZDirection> cleanInterZ = null;
                                         if (zendSp.getSuperNodeId().compareTo(zend) == 0) {
@@ -724,7 +722,7 @@ public class SuperNodePath {
     }
 
     public List<NodeLinkNode> getPaths() {
-        return paths;
+        return this.paths;
     }
 
     public void setPaths(List<NodeLinkNode> paths) {

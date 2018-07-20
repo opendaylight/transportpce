@@ -12,7 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-
 import org.apache.karaf.scheduler.Job;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
@@ -82,7 +80,7 @@ public class PeriodicDeviceBackupJob implements Runnable {
 
     @Override
     public void run() {
-        LOG.info("Running periodical device backup into {}", folder);
+        LOG.info("Running periodical device backup into {}", this.folder);
         try {
             backupAllDevices();
         } catch (InterruptedException | ExecutionException e) {
@@ -96,7 +94,7 @@ public class PeriodicDeviceBackupJob implements Runnable {
      * @return the folder
      */
     public String getFolder() {
-        return folder;
+        return this.folder;
     }
 
     /**
@@ -114,7 +112,7 @@ public class PeriodicDeviceBackupJob implements Runnable {
      * @return the filePrefix
      */
     public String getFilePrefix() {
-        return filePrefix;
+        return this.filePrefix;
     }
 
     /**
@@ -133,7 +131,7 @@ public class PeriodicDeviceBackupJob implements Runnable {
      * @throws ExecutionException execution exception
      */
     private void backupAllDevices() throws InterruptedException, ExecutionException {
-        ReadOnlyTransaction newReadOnlyTransaction = dataBroker.newReadOnlyTransaction();
+        ReadOnlyTransaction newReadOnlyTransaction = this.dataBroker.newReadOnlyTransaction();
         Optional<Topology> topology = newReadOnlyTransaction
                 .read(LogicalDatastoreType.OPERATIONAL, InstanceIdentifiers.NETCONF_TOPOLOGY_II).get().toJavaUtil();
         if (!topology.isPresent()) {
@@ -159,7 +157,7 @@ public class PeriodicDeviceBackupJob implements Runnable {
     private void storeRoadmDevice(String nodeId) {
         InstanceIdentifier<OrgOpenroadmDevice> deviceIi = InstanceIdentifier.create(OrgOpenroadmDevice.class);
         Optional<OrgOpenroadmDevice> deviceObject =
-                deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIi,
+                this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIi,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!deviceObject.isPresent()) {
             LOG.warn("Device object {} is not present.", nodeId);
@@ -182,13 +180,13 @@ public class PeriodicDeviceBackupJob implements Runnable {
         }
 
         String prepareFileName = prepareFileName(nodeId);
-        File parent = new File(folder);
+        File parent = new File(this.folder);
         if (!parent.exists() && !parent.isDirectory() && !parent.mkdirs()) {
-            LOG.error("Could not create empty directory {}", folder);
-            throw new IllegalStateException(String.format("Could not create empty directory %s", folder));
+            LOG.error("Could not create empty directory {}", this.folder);
+            throw new IllegalStateException(String.format("Could not create empty directory %s", this.folder));
         }
 
-        File file = new File(parent, filePrefix.concat(prepareFileName));
+        File file = new File(parent, this.filePrefix.concat(prepareFileName));
         if (file.exists()) {
             throw new IllegalStateException(String.format("The file %s already exists", file));
         }
@@ -200,7 +198,7 @@ public class PeriodicDeviceBackupJob implements Runnable {
     }
 
     private String prepareFileName(String nodeId) {
-        String format = filenameFormatter.format(new Date());
+        String format = this.filenameFormatter.format(new Date());
         StringBuilder sb = new StringBuilder(format);
         sb.append("__").append(nodeId).append("__").append(".xml");
         return sb.toString();
@@ -219,31 +217,31 @@ public class PeriodicDeviceBackupJob implements Runnable {
             LOG.trace("The node is null");
             return "";
         }
-        NetconfNode netconfNode = node.getAugmentation(NetconfNode.class);
+        NetconfNode netconfNode = node.augmentation(NetconfNode.class);
         if (netconfNode == null) {
             LOG.trace("The node {} has not properties of NetconfNode", node);
             return "";
         }
-        if (netconfNode.getAvailableCapabilities() == null
-                || netconfNode.getAvailableCapabilities().getAvailableCapability() == null) {
+        if ((netconfNode.getAvailableCapabilities() == null)
+                || (netconfNode.getAvailableCapabilities().getAvailableCapability() == null)) {
             LOG.trace("No available capabilities");
             return "";
         }
         long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
-                .filter(cp -> cp.getCapability() != null && cp.getCapability().contains(ORG_OPENROADM_DEVICE)).count();
+                .filter(cp -> (cp.getCapability() != null) && cp.getCapability().contains(ORG_OPENROADM_DEVICE)).count();
         if (count < 1) {
             LOG.trace("The node {} has not capabilities of OpenROADMDevice", node);
             return "";
         }
-        if (node.getKey() == null || node.getKey().getNodeId() == null) {
+        if ((node.key() == null) || (node.key().getNodeId() == null)) {
             LOG.trace("Node {} has invalid key", node);
             return "";
         }
-        if ("controller-config".equalsIgnoreCase(node.getKey().getNodeId().getValue())) {
+        if ("controller-config".equalsIgnoreCase(node.key().getNodeId().getValue())) {
             LOG.info("Got controller-config instead of roadm-node");
             return "";
         }
-        return node.getKey().getNodeId().getValue();
+        return node.key().getNodeId().getValue();
     }
 
 }

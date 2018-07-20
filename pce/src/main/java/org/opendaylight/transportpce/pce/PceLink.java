@@ -68,7 +68,7 @@ public class PceLink {
         OpenroadmLinkType tmplType = null;
 
         // ID and type
-        link1 = link.getAugmentation(Link1.class);
+        link1 = link.augmentation(Link1.class);
         if (link1 == null) {
             this.isValid = false;
             LOG.error("PceLink: No Link augmentation available. Link is ignored {}", this.linkId);
@@ -88,7 +88,7 @@ public class PceLink {
         // opposite link
         LinkId tmpoppositeLink = null;
         org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1 linkOpposite = link
-            .getAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1.class);
+            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1.class);
         tmpoppositeLink = linkOpposite.getOppositeLink();
         LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite.toString());
         if (tmpoppositeLink == null) {
@@ -103,7 +103,7 @@ public class PceLink {
         Long tmplatency = (long)0;
         Link1 link1 = null;
         // latency
-        link1 = link.getAugmentation(Link1.class);
+        link1 = link.augmentation(Link1.class);
         tmplatency = link1.getLinkLatency();
         if (tmplatency == null) {
             tmplatency = (long) 0;

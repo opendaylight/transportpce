@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.CheckedFuture;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
@@ -405,7 +403,7 @@ public class PortMappingImpl implements PortMapping {
     private Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
         String logicalConnectionPoint) {
         MappingBuilder mpBldr = new MappingBuilder();
-        mpBldr.setKey(new MappingKey(logicalConnectionPoint)).setLogicalConnectionPoint(logicalConnectionPoint)
+        mpBldr.withKey(new MappingKey(logicalConnectionPoint)).setLogicalConnectionPoint(logicalConnectionPoint)
             .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName());
 
         // Get OMS and OTS interface provisioned on the TTP's
@@ -436,7 +434,7 @@ public class PortMappingImpl implements PortMapping {
     }
 
     private static CpToDegree createCpToDegreeObject(String circuitPackName, String degreeNumber) {
-        return new CpToDegreeBuilder().setKey(new CpToDegreeKey(circuitPackName)).setCircuitPackName(circuitPackName)
+        return new CpToDegreeBuilder().withKey(new CpToDegreeKey(circuitPackName)).setCircuitPackName(circuitPackName)
             .setDegreeNumber(new Long(degreeNumber)).build();
     }
 
@@ -476,7 +474,7 @@ public class PortMappingImpl implements PortMapping {
     private boolean postPortMapping(Info deviceInfo, List<Mapping> portMapList, Integer nodeType,
         List<CpToDegree> cp2DegreeList) {
         NodesBuilder nodesBldr = new NodesBuilder();
-        nodesBldr.setKey(new NodesKey(deviceInfo.getNodeId())).setNodeId(deviceInfo.getNodeId());
+        nodesBldr.withKey(new NodesKey(deviceInfo.getNodeId())).setNodeId(deviceInfo.getNodeId());
         nodesBldr.setNodeType(NodeTypes.forValue(nodeType));
 
         if (portMapList != null) {

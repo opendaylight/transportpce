@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.networkmodel.service;
 
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -95,14 +94,14 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             LOG.info("creating node in {}", NetworkUtils.CLLI_NETWORK_ID);
             InstanceIdentifier<Node> iiClliNode = InstanceIdentifier
                     .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
-                    .child(Node.class, clliNode.getKey())
+                    .child(Node.class, clliNode.key())
                     .build();
             writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiClliNode, clliNode,
                     CREATE_MISSING_PARENTS);
             LOG.info("creating node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
             InstanceIdentifier<Node> iiOpenRoadmNode = InstanceIdentifier
                     .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
-                    .child(Node.class, openRoadmNode.getKey())
+                    .child(Node.class, openRoadmNode.key())
                     .build();
             writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmNode, openRoadmNode,
                     CREATE_MISSING_PARENTS);
@@ -111,7 +110,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         NetworkUtils.OVERLAY_NETWORK_ID);
                 InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier
                         .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .child(Node.class, openRoadmTopologyNode.getKey())
+                        .child(Node.class, openRoadmTopologyNode.key())
                         .build();
                 writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
                         openRoadmTopologyNode, CREATE_MISSING_PARENTS);
@@ -122,7 +121,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 InstanceIdentifier<Link> iiOpenRoadmTopologyLink = InstanceIdentifier
                         .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                         .augmentation(Network1.class)
-                        .child(Link.class, openRoadmTopologyLink.getKey())
+                        .child(Link.class, openRoadmTopologyLink.key())
                         .build();
                 writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink,
                         openRoadmTopologyLink, CREATE_MISSING_PARENTS);
@@ -176,7 +175,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                             NetworkUtils.OVERLAY_NETWORK_ID);
                     InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier
                             .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                            .child(Node.class, openRoadmTopologyNode.getKey())
+                            .child(Node.class, openRoadmTopologyNode.key())
                             .build();
                     writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode);
                 }
@@ -186,7 +185,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     InstanceIdentifier<Link> iiOpenRoadmTopologyLink = InstanceIdentifier
                             .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                             .augmentation(Network1.class)
-                            .child(Link.class, openRoadmTopologyLink.getKey())
+                            .child(Link.class, openRoadmTopologyLink.key())
                             .build();
                     writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink);
                 }

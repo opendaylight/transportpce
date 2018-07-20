@@ -9,14 +9,12 @@
 package org.opendaylight.transportpce.olm.power;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
@@ -85,19 +83,19 @@ public class PowerMgmt {
             String nodeId = input.getNodes().get(i).getNodeId();
             String srcTpId =  input.getNodes().get(i).getSrcTp();
             String destTpId = input.getNodes().get(i).getDestTp();
-            Optional<Nodes> inputNodeOptional = OlmUtils.getNode(nodeId, db);
+            Optional<Nodes> inputNodeOptional = OlmUtils.getNode(nodeId, this.db);
             // If node type is transponder
             if (inputNodeOptional.isPresent()
-                    && inputNodeOptional.get().getNodeType() != null
+                    && (inputNodeOptional.get().getNodeType() != null)
                     && inputNodeOptional.get().getNodeType().equals(NodeTypes.Xpdr)) {
 
                 Nodes inputNode = inputNodeOptional.get();
                 LOG.info("Getting data from input node {}", inputNode.getNodeType());
-                LOG.info("Getting mapping data for node is {}", inputNode.getMapping().stream().filter(o -> o.getKey()
+                LOG.info("Getting mapping data for node is {}", inputNode.getMapping().stream().filter(o -> o.key()
                         .equals(new MappingKey(destTpId))).findFirst().toString());
                 // If its A-End transponder
                 if (destTpId.toLowerCase().contains("network")) {
-                    java.util.Optional<Mapping> mappingObject = inputNode.getMapping().stream().filter(o -> o.getKey()
+                    java.util.Optional<Mapping> mappingObject = inputNode.getMapping().stream().filter(o -> o.key()
                             .equals(new MappingKey(destTpId))).findFirst();
                     if (mappingObject.isPresent()) {
                         Map<String, Double> txPowerRangeMap = getXponderPowerRange(mappingObject.get()
@@ -158,7 +156,7 @@ public class PowerMgmt {
                     LOG.info("{} is a drop node. Net power settings needed", nodeId);
                 }
             } else if (inputNodeOptional.isPresent()
-                    && inputNodeOptional.get().getNodeType() != null
+                    && (inputNodeOptional.get().getNodeType() != null)
                     && inputNodeOptional.get().getNodeType().equals(NodeTypes.Rdm)) {
                 // If Degree is transmitting end then set power
                 Nodes inputNode = inputNodeOptional.get();
@@ -166,21 +164,21 @@ public class PowerMgmt {
                 String connectionNumber = srcTpId + "-" + destTpId + "-" + input.getWaveNumber();
                 LOG.info("Connection number is {}", connectionNumber);
                 if (destTpId.toLowerCase().contains("deg")) {
-                    Optional<Mapping> mappingObjectOptional = inputNode.getMapping().stream().filter(o -> o.getKey()
+                    Optional<Mapping> mappingObjectOptional = inputNode.getMapping().stream().filter(o -> o.key()
                             .equals(new MappingKey(destTpId))).findFirst();
                     if (mappingObjectOptional.isPresent()) {
                         LOG.info("Dest point is Degree {}", mappingObjectOptional.get());
                         Mapping portMapping = mappingObjectOptional.get();
                         Optional<Interface> interfaceOpt;
                         try {
-                            interfaceOpt = openRoadmInterfaces.getInterface(nodeId, portMapping.getSupportingOts());
+                            interfaceOpt = this.openRoadmInterfaces.getInterface(nodeId, portMapping.getSupportingOts());
                         } catch (OpenRoadmInterfaceException ex) {
                             LOG.error("Failed to get interface {} from node {}!", portMapping.getSupportingOts(),
                                     nodeId, ex);
                             return false;
                         }
                         if (interfaceOpt.isPresent()) {
-                            BigDecimal spanLossTx = interfaceOpt.get().getAugmentation(Interface1.class).getOts()
+                            BigDecimal spanLossTx = interfaceOpt.get().augmentation(Interface1.class).getOts()
                                     .getSpanLossTransmit().getValue();
                             LOG.info("Spanloss TX is {}", spanLossTx);
                             BigDecimal powerValue = BigDecimal.valueOf(Math.min(spanLossTx.doubleValue() - 9, 2));
@@ -304,7 +302,7 @@ public class PowerMgmt {
                 .child(Interface.class, new InterfaceKey(interfaceName));
         Optional<Interface> nodeInterfaceOpt;
         try {
-            nodeInterfaceOpt = openRoadmInterfaces.getInterface(nodeId, interfaceName);
+            nodeInterfaceOpt = this.openRoadmInterfaces.getInterface(nodeId, interfaceName);
         } catch (OpenRoadmInterfaceException ex) {
             LOG.error("Failed to get interface {} from node {}!", interfaceName, nodeId, ex);
             return false;
@@ -312,7 +310,7 @@ public class PowerMgmt {
         if (nodeInterfaceOpt.isPresent()) {
             InterfaceBuilder intfBuilder = new InterfaceBuilder(nodeInterfaceOpt.get());
             intfBuilder.setAdministrativeState(AdminStates.OutOfService);
-            Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
+            Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(nodeId);
             DeviceTransaction deviceTx;
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
@@ -361,7 +359,7 @@ public class PowerMgmt {
         Map<String, Double> powerRangeMap = new HashMap<>();
         LOG.info("Fetching logical Connection Point value for port {} at circuit pack {}", portName, circuitPackName);
         Optional<Ports> portObject =
-                deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, portIID,
+                this.deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, portIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (portObject.isPresent()) {
             Ports port = portObject.get();
@@ -389,8 +387,8 @@ public class PowerMgmt {
     private Map<String, Double> getSRGRxPowerRange(String nodeId, String srgId) {
         Map<String, Double> powerRangeMap = new HashMap<>();
         LOG.info("Coming inside Xpdr power range");
-        Optional<Mapping> mappingSRGOptional = OlmUtils.getNode(nodeId, db).flatMap(node -> node.getMapping()
-                .stream().filter(o -> o.getKey()
+        Optional<Mapping> mappingSRGOptional = OlmUtils.getNode(nodeId, this.db).flatMap(node -> node.getMapping()
+                .stream().filter(o -> o.key()
                         .equals(new MappingKey(srgId))).findFirst());
         if (mappingSRGOptional.isPresent()) {
             LOG.info("Mapping object exists.");
@@ -403,7 +401,7 @@ public class PowerMgmt {
             LOG.info("Fetching logical Connection Point value for port {} at circuit pack {}{}", portName,
                     circuitPackName, portIID);
             Optional<Ports> portObject =
-                    deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, portIID,
+                    this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, portIID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (portObject.isPresent()) {
                 Ports port = portObject.get();
@@ -446,7 +444,7 @@ public class PowerMgmt {
                 nodeId, interfaceName);
         Optional<Interface> interfaceOptional;
         try {
-            interfaceOptional = openRoadmInterfaces.getInterface(nodeId, interfaceName);
+            interfaceOptional = this.openRoadmInterfaces.getInterface(nodeId, interfaceName);
         } catch (OpenRoadmInterfaceException ex) {
             LOG.error("Failed to get interface {} from node {}!", interfaceName, nodeId, ex);
             return false;
@@ -454,7 +452,7 @@ public class PowerMgmt {
         if (interfaceOptional.isPresent()) {
             InterfaceBuilder ochInterfaceBuilder =
                     new InterfaceBuilder(interfaceOptional.get());
-            OchBuilder ochBuilder = new OchBuilder(ochInterfaceBuilder.getAugmentation(
+            OchBuilder ochBuilder = new OchBuilder(ochInterfaceBuilder.augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
                             .Interface1.class).getOch());
             ochBuilder.setTransmitPower(new PowerDBm(txPower));
@@ -462,7 +460,7 @@ public class PowerMgmt {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
                             .Interface1.class, new Interface1Builder().setOch(ochBuilder.build()).build());
 
-            Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
+            Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(nodeId);
             DeviceTransaction deviceTx;
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
@@ -512,7 +510,7 @@ public class PowerMgmt {
      */
     private boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue,
             String connectionNumber) {
-        Optional<RoadmConnections> rdmConnOpt = crossConnect.getCrossConnect(deviceId, connectionNumber);
+        Optional<RoadmConnections> rdmConnOpt = this.crossConnect.getCrossConnect(deviceId, connectionNumber);
         if (rdmConnOpt.isPresent()) {
             RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
             rdmConnBldr.setOpticalControlMode(mode);
@@ -522,7 +520,7 @@ public class PowerMgmt {
             RoadmConnections newRdmConn = rdmConnBldr.build();
 
             Future<Optional<DeviceTransaction>> deviceTxFuture =
-                    deviceTransactionManager.getDeviceTransaction(deviceId);
+                    this.deviceTransactionManager.getDeviceTransaction(deviceId);
             DeviceTransaction deviceTx;
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();

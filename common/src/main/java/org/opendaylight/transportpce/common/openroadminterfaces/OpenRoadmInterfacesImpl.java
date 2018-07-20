@@ -9,11 +9,9 @@
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
@@ -105,7 +103,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             // State admin state to out of service
             InterfaceBuilder ifBuilder = new InterfaceBuilder(intf2Delete);
             if (ifBuilder.getType() == OtnOdu.class) {
-                Interface1Builder oduBuilder = new Interface1Builder(intf2Delete.getAugmentation(Interface1.class));
+                Interface1Builder oduBuilder = new Interface1Builder(intf2Delete.augmentation(Interface1.class));
                 OduBuilder odu = new OduBuilder(oduBuilder.getOdu());
                 if (odu.getMaintTestsignal() != null) {
                     MaintTestsignalBuilder maintSignalBuilder =
@@ -120,7 +118,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
                     .interfaces.rev161014.Interface1Builder otuBuilder =
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu
                     .interfaces.rev161014.Interface1Builder(intf2Delete
-                            .getAugmentation(org.opendaylight.yang.gen.v1
+                            .augmentation(org.opendaylight.yang.gen.v1
                                     .http.org.openroadm.otn.otu.interfaces.rev161014.Interface1.class));
                 OtuBuilder otu = new OtuBuilder(otuBuilder.getOtu());
                 if (otu.getMaintLoopback() != null) {

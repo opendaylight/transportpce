@@ -9,12 +9,10 @@
 package org.opendaylight.transportpce.networkmodel.util;
 
 import com.google.common.collect.ImmutableList;
-
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -96,7 +94,7 @@ public final class OpenRoadmNetwork {
         NodeBuilder nodeBldr = new NodeBuilder();
         NodeId nwNodeId = new NodeId(nodeId);
         nodeBldr.setNodeId(nwNodeId);
-        nodeBldr.setKey(new NodeKey(nwNodeId));
+        nodeBldr.withKey(new NodeKey(nwNodeId));
         Node1Builder node1bldr = new Node1Builder();
 
         /*
@@ -126,7 +124,7 @@ public final class OpenRoadmNetwork {
         // attribute
         String clli = deviceInfo.getClli();
         SupportingNodeBuilder supportbldr = new SupportingNodeBuilder();
-        supportbldr.setKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID), new NodeId(clli)));
+        supportbldr.withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID), new NodeId(clli)));
         supportbldr.setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID));
         supportbldr.setNodeRef(new NodeId(clli));
         nodeBldr.setSupportingNode(ImmutableList.of(supportbldr.build()));
@@ -143,7 +141,7 @@ public final class OpenRoadmNetwork {
         NetworkBuilder openrdmnwBuilder = new NetworkBuilder();
         NetworkId nwId = new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID);
         openrdmnwBuilder.setNetworkId(nwId);
-        openrdmnwBuilder.setKey(new NetworkKey(nwId));
+        openrdmnwBuilder.withKey(new NetworkKey(nwId));
         // sets network type to OpenRoadmNetwork
         NetworkTypes1Builder openRoadmNetworkTypesBldr = new NetworkTypes1Builder();
         openRoadmNetworkTypesBldr.setOpenroadmNetwork(new OpenroadmNetworkBuilder().build());

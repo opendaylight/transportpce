@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -89,7 +88,7 @@ public final class ClliNetwork {
         NodeBuilder nodeBldr = new NodeBuilder();
         NodeId nwNodeId = new NodeId(clli);
         nodeBldr.setNodeId(nwNodeId);
-        nodeBldr.setKey(new NodeKey(nwNodeId));
+        nodeBldr.withKey(new NodeKey(nwNodeId));
         /*
          * create clli node augmentation
          * defined in openroadm-clli-network.yang
@@ -107,7 +106,7 @@ public final class ClliNetwork {
         NetworkBuilder nwBuilder = new NetworkBuilder();
         NetworkId nwId = new NetworkId(NetworkUtils.CLLI_NETWORK_ID);
         nwBuilder.setNetworkId(nwId);
-        nwBuilder.setKey(new NetworkKey(nwId));
+        nwBuilder.withKey(new NetworkKey(nwId));
         //set network type to clli
         NetworkTypes1Builder clliNetworkTypesBldr = new NetworkTypes1Builder();
         clliNetworkTypesBldr.setClliNetwork(new ClliNetworkBuilder().build());

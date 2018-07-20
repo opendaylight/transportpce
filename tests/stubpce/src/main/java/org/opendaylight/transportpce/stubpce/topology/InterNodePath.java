@@ -10,11 +10,9 @@
 package org.opendaylight.transportpce.stubpce.topology;
 
 import com.google.common.collect.Lists;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-
 import org.opendaylight.transportpce.stubpce.TpNodeTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirectionBuilder;
@@ -83,12 +81,12 @@ public class InterNodePath {
             Link link = path.getLink();
             AToZKey atozKey = new AToZKey(Integer.toString(order));
             Resource resource = new ResourceBuilder().setResource(link).build();
-            AToZ hop = new AToZBuilder().setId(atozKey.getId()).setKey(atozKey).setResource(resource).build();
+            AToZ hop = new AToZBuilder().setId(atozKey.getId()).withKey(atozKey).setResource(resource).build();
             atozList.add(hop);
             order++;
         }
         atozDirection.setRate((long) 100).setAToZWavelengthNumber((long) 200).setAToZ(atozList);
-        atoz.add(atozDirection.build());
+        this.atoz.add(atozDirection.build());
     }
 
     /**
@@ -111,12 +109,12 @@ public class InterNodePath {
             Link link = path.getLink();
             ZToAKey ztoaKey = new ZToAKey(Integer.toString(order));
             Resource resource = new ResourceBuilder().setResource(link).build();
-            ZToA hop = new ZToABuilder().setId(ztoaKey.getId()).setKey(ztoaKey).setResource(resource).build();
+            ZToA hop = new ZToABuilder().setId(ztoaKey.getId()).withKey(ztoaKey).setResource(resource).build();
             ztoaList.add(hop);
             order++;
         }
         ztoaDirection.setRate((long) 100).setZToAWavelengthNumber((long) 200).setZToA(ztoaList);
-        ztoa.add(ztoaDirection.build());
+        this.ztoa.add(ztoaDirection.build());
     }
 
     /**
@@ -141,7 +139,7 @@ public class InterNodePath {
             NodePath srg = null;
             NodePath deg1 = null;
             NodePath deg2 = null;
-            for (NodePath node : nodepaths) {
+            for (NodePath node : this.nodepaths) {
                 //LOG.info(node.toString());
                 String id = node.getNodeId();
                 if (id.contains("XPDR")) {
@@ -172,7 +170,7 @@ public class InterNodePath {
         LOG.info("buildDegToDeg ...");
         NodePath deg1 = null;
         NodePath deg2 = null;
-        for (NodePath node : nodepaths) {
+        for (NodePath node : this.nodepaths) {
             //LOG.info(node.toString());
             String nodeId = node.getNodeId();
             if (nodeId.contains("DEG1")) {
@@ -182,7 +180,7 @@ public class InterNodePath {
                 deg2 = node;
             }
         }
-        if (deg1 != null && deg2 != null) {
+        if ((deg1 != null) && (deg2 != null)) {
             List<Path> result =  new ArrayList<Path>();
             NodePath deb = deg1;
             NodePath end = deg2;
@@ -268,7 +266,7 @@ public class InterNodePath {
      */
     private void buildDegToSrgToXpdr(NodePath xpdr,NodePath srg,NodePath deg1,NodePath deg2,boolean reverse) {
         LOG.info("buildDegToSrgToXpr ...");
-        if (xpdr != null && srg != null && deg1 != null && deg2 != null) {
+        if ((xpdr != null) && (srg != null) && (deg1 != null) && (deg2 != null)) {
             buildDeg(xpdr, srg, deg1, reverse);
             buildDeg(xpdr, srg, deg2, reverse);
         } else {
@@ -289,7 +287,7 @@ public class InterNodePath {
      */
     private void buildXpdrToSrgToDeg(NodePath xpdr,NodePath srg,NodePath deg1,NodePath deg2,boolean reverse) {
         LOG.info("buildXpdrToSrgToDeg ...");
-        if (xpdr != null && srg != null && deg1 != null && deg2 != null) {
+        if ((xpdr != null) && (srg != null) && (deg1 != null) && (deg2 != null)) {
             List<Path> result =  new ArrayList<Path>();
             for (Path xpdrPath : xpdr.getPath()) {
                 TpNodeTp tmpxpdr = xpdrPath.getTpNodeTp();
@@ -361,7 +359,7 @@ public class InterNodePath {
                                 case 1: //last link
                                     if (res instanceof Link) {
                                         Link tp = (Link) res;
-                                        if (tp != null && tp.getLinkIdentifier().getLinkId().contains(endBy)) {
+                                        if ((tp != null) && tp.getLinkIdentifier().getLinkId().contains(endBy)) {
                                             result.add(tmp);
                                         }
                                     }
@@ -370,7 +368,7 @@ public class InterNodePath {
                                 case 2: //last tp
                                     if (res instanceof TerminationPoint) {
                                         TerminationPoint tp = (TerminationPoint) res;
-                                        if (tp != null && tp.getTerminationPointIdentifier().getTpId()
+                                        if ((tp != null) && tp.getTerminationPointIdentifier().getTpId()
                                                 .contains(endBy)) {
                                             result.add(tmp);
                                         }
@@ -426,17 +424,17 @@ public class InterNodePath {
                         if (atoz.getId().compareTo(id) == 0) {
                             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription
                                 .rev170426.pce.resource.resource.Resource res = atoz.getResource().getResource();
-                            if (res != null  && res instanceof Link) {
+                            if ((res != null)  && (res instanceof Link)) {
                                 Link link = new LinkBuilder()
                                         .setLinkIdentifier(new LinkIdentifierBuilder()
                                                 .setLinkId(atozLink)
                                                 .build())
                                         .build();
-                                AToZKey atozKey = new AToZKey(atoz.getKey());
+                                AToZKey atozKey = new AToZKey(atoz.key());
                                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
                                     .pathdescription.rev170426.pce.resource.Resource resource = new ResourceBuilder()
                                     .setResource(link).build();
-                                AToZ hop = new AToZBuilder().setId(atozKey.getId()).setKey(atozKey)
+                                AToZ hop = new AToZBuilder().setId(atozKey.getId()).withKey(atozKey)
                                         .setResource(resource).build();
                                 it.remove();
                                 if (!remove) {
@@ -474,9 +472,9 @@ public class InterNodePath {
                     if (atoz.getId().compareTo(id) == 0) {
                         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription
                             .rev170426.pce.resource.resource.Resource res = atoz.getResource().getResource();
-                        if (res != null  && res instanceof TerminationPoint) {
+                        if ((res != null)  && (res instanceof TerminationPoint)) {
                             TerminationPoint tp = (TerminationPoint) res;
-                            if (tp != null && tp.getTerminationPointIdentifier().getTpId().contains(beginBy)) {
+                            if ((tp != null) && tp.getTerminationPointIdentifier().getTpId().contains(beginBy)) {
                                 LOG.info("tmp : {}", tmp.toString());
                                 result.add(tmp);
                             }
@@ -499,14 +497,14 @@ public class InterNodePath {
      * @param zend path zend Supernode nodeId
      */
     public void buildPath(String zend) {
-        if (superNode != null) {
-            for (org.opendaylight.transportpce.stubpce.topology.Resource res : superNode.getResources()) {
-                NodePath path = new NodePath(res, superNode.getSuperNodeId(), superNode.isXpdrSrgAbsent());
+        if (this.superNode != null) {
+            for (org.opendaylight.transportpce.stubpce.topology.Resource res : this.superNode.getResources()) {
+                NodePath path = new NodePath(res, this.superNode.getSuperNodeId(), this.superNode.isXpdrSrgAbsent());
                 path.fill();
-                nodepaths.add(path);
+                this.nodepaths.add(path);
             }
-            LOG.info("nodepaths size : {}", nodepaths.size());
-            build(superNode.isXpdrSrgAbsent(),superNode.getSuperNodeId(), zend);
+            LOG.info("nodepaths size : {}", this.nodepaths.size());
+            build(this.superNode.isXpdrSrgAbsent(),this.superNode.getSuperNodeId(), zend);
         }
     }
 
@@ -524,7 +522,7 @@ public class InterNodePath {
     }
 
     public SuperNode getSuperNode() {
-        return superNode;
+        return this.superNode;
     }
 
     public void setSuperNode(SuperNode superNode) {
@@ -532,7 +530,7 @@ public class InterNodePath {
     }
 
     public List<AToZDirection> getAtoz() {
-        return atoz;
+        return this.atoz;
     }
 
     public void setAtoz(List<AToZDirection> atoz) {
@@ -540,7 +538,7 @@ public class InterNodePath {
     }
 
     public List<ZToADirection> getZtoa() {
-        return ztoa;
+        return this.ztoa;
     }
 
     public void setZtoa(List<ZToADirection> ztoa) {
@@ -548,7 +546,7 @@ public class InterNodePath {
     }
 
     public List<NodePath> getNodepaths() {
-        return nodepaths;
+        return this.nodepaths;
     }
 
     public void setNodepaths(List<NodePath> nodepaths) {

@@ -50,12 +50,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
-    <dependency>
+    <!-- <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>odl-transportpce-inventory</artifactId>
       <version>${project.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
-    </dependency>
+    </dependency> -->
   </dependencies>
 </project>

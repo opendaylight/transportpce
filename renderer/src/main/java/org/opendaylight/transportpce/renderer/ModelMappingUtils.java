@@ -7,12 +7,12 @@
  */
 package org.opendaylight.transportpce.renderer;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.Future;
 
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
@@ -74,7 +74,7 @@ public final class ModelMappingUtils {
         return cmBldr.build();
     }
 
-    public static Future<RpcResult<ServiceImplementationRequestOutput>>
+    public static ListenableFuture<RpcResult<ServiceImplementationRequestOutput>>
         createRpcResponse(ServiceImplementationRequestOutput payload) {
         return RpcResultBuilder.success(payload).buildFuture();
     }
@@ -165,7 +165,7 @@ public final class ModelMappingUtils {
             } else if (desID == null) {
                 desID = values.getTpID();
                 NodesBuilder nb = new NodesBuilder();
-                nb.setKey(new NodesKey(values.getNodeID()));
+                nb.withKey(new NodesKey(values.getNodeID()));
                 nb.setDestTp(desID);
                 nb.setSrcTp(srcID);
                 list.add(nb.build());
@@ -241,7 +241,7 @@ public final class ModelMappingUtils {
             } else if (desID == null) {
                 desID = values.getTpID();
                 NodesBuilder nb = new NodesBuilder();
-                nb.setKey(new NodesKey(values.getNodeID()));
+                nb.withKey(new NodesKey(values.getNodeID()));
                 nb.setDestTp(desID);
                 nb.setSrcTp(srcID);
                 list.add(nb.build());
@@ -261,7 +261,7 @@ public final class ModelMappingUtils {
     }
 
     public static int[] findTheLongestSubstring(String s1, String s2) {
-        if (s1 == null || s2 == null) {
+        if ((s1 == null) || (s2 == null)) {
             return null;
         }
         int[][] dp = new int[s1.length() + 1][s2.length() + 1];

@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.networkmodel;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
@@ -64,11 +63,11 @@ public class R2RLinkDiscovery {
         Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId.getValue(),
                 LogicalDatastoreType.OPERATIONAL, protocolsIID, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (!protocolObject.isPresent() || (protocolObject.get().getAugmentation(Protocols1.class) == null)) {
+        if (!protocolObject.isPresent() || (protocolObject.get().augmentation(Protocols1.class) == null)) {
             LOG.warn("LLDP subtree is missing : isolated openroadm device");
             return false;
         }
-        NbrList nbrList = protocolObject.get().getAugmentation(Protocols1.class).getLldp().getNbrList();
+        NbrList nbrList = protocolObject.get().augmentation(Protocols1.class).getLldp().getNbrList();
         LOG.info("LLDP subtree is present. Device has {} neighbours", nbrList.getIfName().size());
         for (IfName ifName : nbrList.getIfName()) {
             if (ifName.getRemoteSysName() == null) {
@@ -170,7 +169,7 @@ public class R2RLinkDiscovery {
         r2rlinkBuilderAToZ.setRdmANode(nodeId.getValue()).setDegANum(srcDegId.shortValue())
                 .setTerminationPointA(srcTpTx).setRdmZNode(destNodeId.getValue()).setDegZNum(destDegId.shortValue())
                 .setTerminationPointZ(destTpRx);
-        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderAToZ.build(), openRoadmTopology, dataBroker)) {
+        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderAToZ.build(), this.openRoadmTopology, this.dataBroker)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in A->Z direction", nodeId.getValue(),
                     destNodeId.getValue());
             return false;
@@ -185,7 +184,7 @@ public class R2RLinkDiscovery {
         r2rlinkBuilderZToA.setRdmANode(destNodeId.getValue()).setDegANum(destDegId.shortValue())
                 .setTerminationPointA(destTpTx).setRdmZNode(nodeId.getValue()).setDegZNum(srcDegId.shortValue())
                 .setTerminationPointZ(srcTpRx);
-        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderZToA.build(), openRoadmTopology, dataBroker)) {
+        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderZToA.build(), this.openRoadmTopology, this.dataBroker)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in Z->A direction",
                     destNodeId.getValue(), nodeId.getValue());
             return false;

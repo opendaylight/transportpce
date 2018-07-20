@@ -8,8 +8,7 @@
 
 package org.opendaylight.transportpce.renderer.rpcs;
 
-import java.util.concurrent.Future;
-
+import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackOutput;
@@ -56,13 +55,13 @@ public class DeviceRendererRPCImpl implements RendererService {
      * @return Result of the request
      */
     @Override
-    public Future<RpcResult<ServicePathOutput>> servicePath(ServicePathInput input) {
+    public ListenableFuture<RpcResult<ServicePathOutput>> servicePath(ServicePathInput input) {
         if (input.getOperation().getIntValue() == 1) {
             LOG.info("Create operation request received");
-            return RpcResultBuilder.success(deviceRenderer.setupServicePath(input, null)).buildFuture();
+            return RpcResultBuilder.success(this.deviceRenderer.setupServicePath(input, null)).buildFuture();
         } else if (input.getOperation().getIntValue() == 2) {
             LOG.info("Delete operation request received");
-            return RpcResultBuilder.success(deviceRenderer.deleteServicePath(input)).buildFuture();
+            return RpcResultBuilder.success(this.deviceRenderer.deleteServicePath(input)).buildFuture();
         }
         return RpcResultBuilder.success(new ServicePathOutputBuilder().setResult("Invalid operation")).buildFuture();
     }
@@ -74,7 +73,7 @@ public class DeviceRendererRPCImpl implements RendererService {
      * @return Success flag and nodes which failed to rollback
      */
     @Override
-    public Future<RpcResult<RendererRollbackOutput>> rendererRollback(RendererRollbackInput input) {
-        return RpcResultBuilder.success(deviceRenderer.rendererRollback(input)).buildFuture();
+    public ListenableFuture<RpcResult<RendererRollbackOutput>> rendererRollback(RendererRollbackInput input) {
+        return RpcResultBuilder.success(this.deviceRenderer.rendererRollback(input)).buildFuture();
     }
 }

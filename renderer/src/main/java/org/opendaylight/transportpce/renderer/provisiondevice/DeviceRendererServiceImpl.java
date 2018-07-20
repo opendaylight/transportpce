@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import com.google.common.collect.Sets;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +22,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
@@ -208,7 +206,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 }
 
                 NodeInterfaceBuilder nodeInterfaceBuilder = new NodeInterfaceBuilder();
-                nodeInterfaceBuilder.setKey(new NodeInterfaceKey(nodeId));
+                nodeInterfaceBuilder.withKey(new NodeInterfaceKey(nodeId));
                 nodeInterfaceBuilder.setNodeId(nodeId);
                 nodeInterfaceBuilder.setConnectionId(createdConnections);
                 nodeInterfaceBuilder.setEthInterfaceId(createdEthInterfaces);
@@ -407,7 +405,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 }
             }
             failedToRollbackList.add(new FailedToRollbackBuilder()
-                    .setKey(new FailedToRollbackKey(nodeId))
+                    .withKey(new FailedToRollbackKey(nodeId))
                     .setNodeId(nodeId)
                     .setInterface(failedInterfaces)
                     .build()
@@ -421,7 +419,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
 
     private boolean alarmSuppressionNodeRegistration(ServicePathInput input) {
         NodelistBuilder nodeListBuilder = new NodelistBuilder();
-        nodeListBuilder.setKey(new NodelistKey(input.getServiceName()));
+        nodeListBuilder.withKey(new NodelistKey(input.getServiceName()));
         nodeListBuilder.setServiceName(input.getServiceName());
         List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service
             .nodelist.nodelist.Nodes> nodeList = new ArrayList<>();
@@ -493,7 +491,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             servicesBuilder = new ServicesBuilder(services.get());
         } else {
             servicesBuilder = new ServicesBuilder();
-            servicesBuilder.setKey(serviceKey);
+            servicesBuilder.withKey(serviceKey);
         }
         servicesBuilder.setTopology(topo);
 

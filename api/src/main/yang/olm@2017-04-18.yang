@@ -8,7 +8,7 @@ module olm {
       revision-date 2017-09-07;
   }
 
-  import ietf-network-topology {
+  import old-ietf-network-topology {
      prefix ietf-network-topology;
      revision-date 2015-06-08;
   }

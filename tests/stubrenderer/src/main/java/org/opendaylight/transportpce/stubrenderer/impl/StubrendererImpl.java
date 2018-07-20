@@ -14,10 +14,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.stubrenderer.SendingRendererRPCs;
 import org.opendaylight.transportpce.stubrenderer.StubrendererCompliancyCheck;
@@ -64,15 +61,15 @@ public class StubrendererImpl implements StubrendererService {
     }
 
     @Override
-    public Future<RpcResult<ServiceImplementationRequestOutput>> serviceImplementationRequest(
+    public ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> serviceImplementationRequest(
             ServiceImplementationRequestInput input) {
         LOG.info("RPC  serviceImplementationRequest request received");
         String responseCode = "";
         String message = "";
         ConfigurationResponseCommonBuilder configurationResponseCommon = null;
 
-        compliancyCheck = new StubrendererCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
-        if (compliancyCheck.check(false, true)) {
+        this.compliancyCheck = new StubrendererCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
+        if (this.compliancyCheck.check(false, true)) {
             LOG.info("Service compliant !");
             /**
              * If compliant, service-request parameters are verified in order to
@@ -80,19 +77,19 @@ public class StubrendererImpl implements StubrendererService {
              * a path and implement a service.
              */
 
-            notification = new ServiceRpcResultSpBuilder()
+            this.notification = new ServiceRpcResultSpBuilder()
                     .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
                     .setServiceName(input.getServiceName())
                     .setStatus(RpcStatusEx.Pending)
                     .setStatusMessage("Service compliant, submitting serviceImplementation Request ...")
                     .build();
             try {
-                notificationPublishService.putNotification(notification);
+                this.notificationPublishService.putNotification(this.notification);
             } catch (InterruptedException e) {
                 LOG.info("notification offer rejected : {}", e);
             }
 
-            SendingRendererRPCs sendingRenderer = new SendingRendererRPCs(executor);
+            SendingRendererRPCs sendingRenderer = new SendingRendererRPCs(this.executor);
             FutureCallback<Boolean> rendererCallback =
                     new FutureCallback<Boolean>() {
                 String message = "";
@@ -102,12 +99,12 @@ public class StubrendererImpl implements StubrendererService {
                 public void onFailure(Throwable arg0) {
                     LOG.error("Failure message : {}", arg0.toString());
                     LOG.error("Service implementation failed !");
-                    notification = new ServiceRpcResultSpBuilder()
+                    this.notification = new ServiceRpcResultSpBuilder()
                             .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
                             .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
                             .setStatusMessage("PCR Request failed  : {}" + arg0.getMessage()).build();
                     try {
-                        notificationPublishService.putNotification(notification);
+                        StubrendererImpl.this.notificationPublishService.putNotification(this.notification);
                     } catch (InterruptedException e) {
                         LOG.info("notification offer rejected : {}", e);
                     }
@@ -117,13 +114,13 @@ public class StubrendererImpl implements StubrendererService {
                 public void onSuccess(Boolean response) {
                     LOG.info("response : {}", response);
                     if (response) {
-                        message = "Service implemented !";
+                        this.message = "Service implemented !";
                         TopologyBuilder topo = sendingRenderer.getTopology();
                         ServiceRpcResultSpBuilder tmp = new ServiceRpcResultSpBuilder()
                                 .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
                                 .setServiceName(input.getServiceName())
                                 .setStatus(RpcStatusEx.Successful)
-                                .setStatusMessage(message);
+                                .setStatusMessage(this.message);
                         if (topo != null) {
                             PathTopology value = new PathTopologyBuilder()
                                     .setAToZ(topo.getAToZ())
@@ -131,26 +128,26 @@ public class StubrendererImpl implements StubrendererService {
                                     .build();
                             tmp.setPathTopology(value);
                         }
-                        notification = tmp.build();
+                        this.notification = tmp.build();
                     } else {
-                        message = "Service implementation failed : " + sendingRenderer.getError();
-                        notification = new ServiceRpcResultSpBuilder()
+                        this.message = "Service implementation failed : " + sendingRenderer.getError();
+                        this.notification = new ServiceRpcResultSpBuilder()
                                 .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
                                 .setServiceName("")
-                                .setStatus(RpcStatusEx.Failed).setStatusMessage(message)
+                                .setStatus(RpcStatusEx.Failed).setStatusMessage(this.message)
                                 .build();
                     }
-                    LOG.info(notification.toString());
+                    LOG.info(this.notification.toString());
                     try {
-                        notificationPublishService.putNotification(notification);
+                        StubrendererImpl.this.notificationPublishService.putNotification(this.notification);
                     } catch (InterruptedException e) {
                         LOG.info("notification offer rejected : {}", e);
                     }
-                    LOG.info(message);
+                    LOG.info(this.message);
                 }
             };
             ListenableFuture<Boolean> renderer = sendingRenderer.serviceImplementation();
-            Futures.addCallback(renderer, rendererCallback, executor);
+            Futures.addCallback(renderer, rendererCallback, this.executor);
             LOG.info("Service implmentation Request in progress ");
             configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                     .setAckFinalIndicator("Yes")
@@ -163,16 +160,16 @@ public class StubrendererImpl implements StubrendererService {
                     .build();
             return RpcResultBuilder.success(output).buildFuture();
         } else {
-            message = compliancyCheck.getMessage();
+            message = this.compliancyCheck.getMessage();
             responseCode = "500";
             LOG.info("Service not compliant caused by : {}", message);
-            notification = new ServiceRpcResultSpBuilder()
+            this.notification = new ServiceRpcResultSpBuilder()
                     .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
                     .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
                     .setStatusMessage("Service not compliant caused by : " + message)
                     .build();
             try {
-                notificationPublishService.putNotification(notification);
+                this.notificationPublishService.putNotification(this.notification);
             } catch (InterruptedException e) {
                 LOG.info("notification offer rejected : {}", e);
             }
@@ -190,13 +187,13 @@ public class StubrendererImpl implements StubrendererService {
     }
 
     @Override
-    public Future<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
+    public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         String message = "";
         LOG.info("RPC serviceDelete request received");
         String responseCode = "";
         ConfigurationResponseCommonBuilder configurationResponseCommon = null;
-        compliancyCheck = new StubrendererCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
-        if (compliancyCheck.check(false, true)) {
+        this.compliancyCheck = new StubrendererCompliancyCheck(input.getServiceName(), input.getServiceHandlerHeader());
+        if (this.compliancyCheck.check(false, true)) {
             LOG.info("Service compliant !");
             /**
              * If compliant, service-request parameters are verified in order to
@@ -204,18 +201,18 @@ public class StubrendererImpl implements StubrendererService {
              * a path and implement a service.
              */
 
-            notification = new ServiceRpcResultSpBuilder()
+            this.notification = new ServiceRpcResultSpBuilder()
                     .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
                     .setServiceName(input.getServiceName())
                     .setStatus(RpcStatusEx.Pending)
                     .setStatusMessage("Service compliant, submitting serviceDelete Request ...")
                     .build();
             try {
-                notificationPublishService.putNotification(notification);
+                this.notificationPublishService.putNotification(this.notification);
             } catch (InterruptedException e) {
                 LOG.info("notification offer rejected : {}", e);
             }
-            SendingRendererRPCs sendingRenderer = new SendingRendererRPCs(executor);
+            SendingRendererRPCs sendingRenderer = new SendingRendererRPCs(this.executor);
             FutureCallback<Boolean> rendererCallback = new FutureCallback<Boolean>() {
                 String message = "";
                 ServiceRpcResultSp notification = null;
@@ -224,12 +221,12 @@ public class StubrendererImpl implements StubrendererService {
                 public void onFailure(Throwable arg0) {
                     LOG.error("Failure message : {}", arg0.toString());
                     LOG.error("Service delete failed !");
-                    notification = new ServiceRpcResultSpBuilder()
+                    this.notification = new ServiceRpcResultSpBuilder()
                             .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
                             .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
                             .setStatusMessage("PCR Request failed  : " + arg0.getMessage()).build();
                     try {
-                        notificationPublishService.putNotification(notification);
+                        StubrendererImpl.this.notificationPublishService.putNotification(this.notification);
                     } catch (InterruptedException e) {
                         LOG.info("notification offer rejected : {}", e);
                     }
@@ -239,30 +236,30 @@ public class StubrendererImpl implements StubrendererService {
                 public void onSuccess(Boolean response) {
                     LOG.info("response : {}", response);
                     if (response) {
-                        message = "Service deleted !";
-                        notification = new ServiceRpcResultSpBuilder()
+                        this.message = "Service deleted !";
+                        this.notification = new ServiceRpcResultSpBuilder()
                                 .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
                                 .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Successful)
-                                .setStatusMessage(message).build();
+                                .setStatusMessage(this.message).build();
                     } else {
-                        message = "Service delete failed : " + sendingRenderer.getError();
-                        notification = new ServiceRpcResultSpBuilder()
+                        this.message = "Service delete failed : " + sendingRenderer.getError();
+                        this.notification = new ServiceRpcResultSpBuilder()
                                 .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
                                 .setServiceName("")
-                                .setStatus(RpcStatusEx.Failed).setStatusMessage(message)
+                                .setStatus(RpcStatusEx.Failed).setStatusMessage(this.message)
                                 .build();
                     }
-                    LOG.info(notification.toString());
+                    LOG.info(this.notification.toString());
                     try {
-                        notificationPublishService.putNotification(notification);
+                        StubrendererImpl.this.notificationPublishService.putNotification(this.notification);
                     } catch (InterruptedException e) {
                         LOG.info("notification offer rejected : {}", e);
                     }
-                    LOG.info(message);
+                    LOG.info(this.message);
                 }
             };
             ListenableFuture<Boolean> renderer = sendingRenderer.serviceDelete();
-            Futures.addCallback(renderer, rendererCallback, executor);
+            Futures.addCallback(renderer, rendererCallback, this.executor);
             message = "Service delete Request in progress ...";
             LOG.info(message);
             configurationResponseCommon = new ConfigurationResponseCommonBuilder()
@@ -275,16 +272,16 @@ public class StubrendererImpl implements StubrendererService {
                     .build();
             return RpcResultBuilder.success(output).buildFuture();
         } else {
-            message = compliancyCheck.getMessage();
+            message = this.compliancyCheck.getMessage();
             LOG.info("Service not compliant caused by : {}", message);
             responseCode = "500";
-            notification = new ServiceRpcResultSpBuilder()
+            this.notification = new ServiceRpcResultSpBuilder()
                     .setNotificationType(ServicePathNotificationTypes.ServiceDelete)
                     .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Failed)
                     .setStatusMessage("Service not compliant caused by : " + message)
                     .build();
             try {
-                notificationPublishService.putNotification(notification);
+                this.notificationPublishService.putNotification(this.notification);
             } catch (InterruptedException e) {
                 LOG.info("notification offer rejected : {}", e);
             }

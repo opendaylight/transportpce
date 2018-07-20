@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.olm.service;
 
 import com.google.common.base.Strings;
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -112,14 +110,14 @@ public class OlmPowerServiceImpl implements OlmPowerService {
 
     @Override
     public GetPmOutput getPm(GetPmInput pmInput) {
-        GetPmOutputBuilder pmOutputBuilder = OlmUtils.pmFetch(pmInput, deviceTransactionManager);
+        GetPmOutputBuilder pmOutputBuilder = OlmUtils.pmFetch(pmInput, this.deviceTransactionManager);
         return pmOutputBuilder.build();
     }
 
     @Override
     public ServicePowerSetupOutput servicePowerSetup(ServicePowerSetupInput powerSetupInput) {
         ServicePowerSetupOutputBuilder powerSetupOutput = new ServicePowerSetupOutputBuilder();
-        boolean successValPowerCalculation = powerMgmt.setPower(powerSetupInput);
+        boolean successValPowerCalculation = this.powerMgmt.setPower(powerSetupInput);
 
         if (successValPowerCalculation) {
             powerSetupOutput.setResult(SUCCESS);
@@ -135,7 +133,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
 
         ServicePowerTurndownOutputBuilder powerTurnDownOutput = new ServicePowerTurndownOutputBuilder();
         // TODO add flag or return failure instead of string
-        if (powerMgmt.powerTurnDown(powerTurndownInput)) {
+        if (this.powerMgmt.powerTurnDown(powerTurndownInput)) {
             powerTurnDownOutput.setResult(SUCCESS);
         } else {
             powerTurnDownOutput.setResult(FAILED);
@@ -162,7 +160,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
 
         List<RoadmLinks> roadmLinks = new ArrayList<>();
         for (Link link : networkLinks) {
-            Link1 roadmLinkAugmentation = link.getAugmentation(Link1.class);
+            Link1 roadmLinkAugmentation = link.augmentation(Link1.class);
             if (roadmLinkAugmentation == null) {
                 LOG.debug("Missing OpenRoadm link augmentation in link {} from {} topology.",
                         link.getLinkId().getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
@@ -207,7 +205,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         }
         List<RoadmLinks> roadmLinks = new ArrayList<>();
         for (Link link : networkLinks) {
-            Link1 roadmLinkAugmentation = link.getAugmentation(Link1.class);
+            Link1 roadmLinkAugmentation = link.augmentation(Link1.class);
             if (roadmLinkAugmentation == null) {
                 LOG.debug("Missing OpenRoadm link augmentation in link {} from {} topology.",
                         link.getLinkId().getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
@@ -254,7 +252,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 .augmentation(Network1.class)
                 .build();
         Optional<Network1> networkOptional;
-        try (ReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction()) {
+        try (ReadOnlyTransaction rtx = this.dataBroker.newReadOnlyTransaction()) {
             //TODO change to constant from Timeouts class when it will be merged.
             networkOptional = rtx.read(LogicalDatastoreType.CONFIGURATION, networkIID).get(Timeouts.DATASTORE_READ,
                     TimeUnit.MILLISECONDS).toJavaUtil();
@@ -270,7 +268,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         }
 
         List<Link> networkLinks = networkOptional.get().getLink();
-        if (networkLinks == null || networkLinks.isEmpty()) {
+        if ((networkLinks == null) || networkLinks.isEmpty()) {
             LOG.warn("Links are not present in {} topology.", NetworkUtils.OVERLAY_NETWORK_ID);
             return Collections.emptyList();
         }
@@ -292,7 +290,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
      */
     private OtsPmHolder getPmMeasurements(String nodeId, String tpID, String pmName) {
         String realNodeId = getRealNodeId(nodeId);
-        Mapping mapping = portMapping.getMapping(realNodeId, tpID);
+        Mapping mapping = this.portMapping.getMapping(realNodeId, tpID);
         if (mapping == null) {
             return null;
         }
@@ -343,7 +341,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         com.google.common.base.Optional<Interface> interfaceObject;
         try {
             Future<Optional<DeviceTransaction>> deviceTxFuture =
-                    deviceTransactionManager.getDeviceTransaction(realNodeId);
+                    this.deviceTransactionManager.getDeviceTransaction(realNodeId);
             java.util.Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
             DeviceTransaction deviceTx;
             if (deviceTxOpt.isPresent()) {
@@ -360,9 +358,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 Interface intf = interfaceObject.get();
                 InterfaceBuilder interfaceBuilder = new InterfaceBuilder(intf);
                 OtsBuilder otsBuilder = new OtsBuilder();
-                if (intf.getAugmentation(Interface1.class) != null
-                    && intf.getAugmentation(Interface1.class).getOts() != null) {
-                    Ots ots = intf.getAugmentation(Interface1.class).getOts();
+                if ((intf.augmentation(Interface1.class) != null)
+                    && (intf.augmentation(Interface1.class).getOts() != null)) {
+                    Ots ots = intf.augmentation(Interface1.class).getOts();
                     otsBuilder.setFiberType(ots.getFiberType());
                     spanLossRx = ots.getSpanLossReceive();
                     spanLossTx = ots.getSpanLossTransmit();
@@ -416,7 +414,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     .setScale(0, RoundingMode.HALF_UP);
             LOG.info("Spanloss Calculated as :" + spanLoss + "=" + srcOtsPmHoler.getOtsParameterVal() + "-"
                     + destOtsPmHoler.getOtsParameterVal());
-            if (spanLoss.doubleValue() < 28 && spanLoss.doubleValue() > 0) {
+            if ((spanLoss.doubleValue() < 28) && (spanLoss.doubleValue() > 0)) {
                 if (!setSpanLoss(roadmLinks.get(i).getSrcNodeId(), srcOtsPmHoler.getOtsInterfaceName(), spanLoss,
                         "TX")) {
                     LOG.info("Setting spanLoss failed for " + roadmLinks.get(i).getSrcNodeId());
@@ -436,22 +434,22 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         KeyedInstanceIdentifier<Node, NodeKey> mappedNodeII =
                 InstanceIdentifiers.OVERLAY_NETWORK_II.child(Node.class, new NodeKey(new NodeId(mappedNodeId)));
         com.google.common.base.Optional<Node> realNode;
-        try (ReadOnlyTransaction readOnlyTransaction = dataBroker.newReadOnlyTransaction()) {
+        try (ReadOnlyTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction()) {
             realNode = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, mappedNodeII).get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error(e.getMessage(), e);
             throw new IllegalStateException(e);
         }
-        if (!realNode.isPresent() || realNode.get().getSupportingNode() == null) {
+        if (!realNode.isPresent() || (realNode.get().getSupportingNode() == null)) {
             throw new IllegalArgumentException(
                     String.format("Could not find node %s, or supporting node is not present", mappedNodeId));
         }
         List<SupportingNode> collect = realNode.get().getSupportingNode().stream()
-                .filter(node -> node.getNetworkRef() != null
+                .filter(node -> (node.getNetworkRef() != null)
                         && NetworkUtils.UNDERLAY_NETWORK_ID.equals(node.getNetworkRef().getValue())
-                        && node.getNodeRef() != null && !Strings.isNullOrEmpty(node.getNodeRef().getValue()))
+                        && (node.getNodeRef() != null) && !Strings.isNullOrEmpty(node.getNodeRef().getValue()))
                 .collect(Collectors.toList());
-        if (collect.isEmpty() || collect.size() > 1) {
+        if (collect.isEmpty() || (collect.size() > 1)) {
             throw new IllegalArgumentException(String.format("Invalid support node count [%d] was found for node %s",
                     collect.size(), mappedNodeId));
         }

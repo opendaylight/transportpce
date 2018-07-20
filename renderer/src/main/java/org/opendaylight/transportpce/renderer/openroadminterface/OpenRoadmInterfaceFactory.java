@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
 import java.math.BigDecimal;
-
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -245,7 +244,7 @@ public class OpenRoadmInterfaceFactory {
         interfaceBuilder.setAdministrativeState(AdminStates.InService);
         interfaceBuilder.setType(type);
         interfaceBuilder.setName(key);
-        interfaceBuilder.setKey(new InterfaceKey(key));
+        interfaceBuilder.withKey(new InterfaceKey(key));
         return interfaceBuilder;
     }
 }

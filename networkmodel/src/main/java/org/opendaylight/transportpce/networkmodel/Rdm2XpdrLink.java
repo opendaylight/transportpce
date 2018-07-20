@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.networkmodel;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.CheckedFuture;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -100,13 +99,13 @@ final class Rdm2XpdrLink {
         NetworkId nwId = new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID);
         NetworkBuilder nwBuilder = new NetworkBuilder();
         nwBuilder.setNetworkId(nwId);
-        nwBuilder.setKey(new NetworkKey(nwId));
+        nwBuilder.withKey(new NetworkKey(nwId));
         Link1Builder lnk1bldr = new Link1Builder();
         LinkBuilder linkBuilder = openRoadmTopology.createLink(srcNode, destNode, srcTp, destTp);
         lnk1bldr.setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT);
         linkBuilder.addAugmentation(Link1.class, lnk1bldr.build());
         LOG.info("Link id in the linkbldr {}", linkBuilder.getLinkId());
-        LOG.info("Link with oppo link {}", linkBuilder.getAugmentation(Link1.class));
+        LOG.info("Link with oppo link {}", linkBuilder.augmentation(Link1.class));
         Network1Builder nwBldr1 = new Network1Builder();
         nwBldr1.setLink(ImmutableList.of(linkBuilder.build()));
         nwBuilder.addAugmentation(Network1.class, nwBldr1.build());

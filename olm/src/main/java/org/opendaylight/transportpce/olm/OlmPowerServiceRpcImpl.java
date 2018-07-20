@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.olm;
 
-import java.util.concurrent.Future;
+import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.CalculateSpanlossBaseOutput;
@@ -53,8 +53,8 @@ public class OlmPowerServiceRpcImpl implements OlmService {
      * @return Result of the request
      */
     @Override
-    public Future<RpcResult<GetPmOutput>> getPm(GetPmInput input) {
-        return RpcResultBuilder.success(olmPowerService.getPm(input)).buildFuture();
+    public ListenableFuture<RpcResult<GetPmOutput>> getPm(GetPmInput input) {
+        return RpcResultBuilder.success(this.olmPowerService.getPm(input)).buildFuture();
     }
 
     /**
@@ -78,9 +78,9 @@ public class OlmPowerServiceRpcImpl implements OlmService {
      * @return Result of the request
      */
     @Override
-    public Future<org.opendaylight.yangtools.yang.common.RpcResult<ServicePowerSetupOutput>> servicePowerSetup(
+    public ListenableFuture<RpcResult<ServicePowerSetupOutput>> servicePowerSetup(
         ServicePowerSetupInput input) {
-        return RpcResultBuilder.success(olmPowerService.servicePowerSetup(input)).buildFuture();
+        return RpcResultBuilder.success(this.olmPowerService.servicePowerSetup(input)).buildFuture();
     }
 
     /**
@@ -104,8 +104,8 @@ public class OlmPowerServiceRpcImpl implements OlmService {
      * @return Result of the request
      */
     @Override
-    public  Future<RpcResult<ServicePowerTurndownOutput>> servicePowerTurndown(ServicePowerTurndownInput input) {
-        return RpcResultBuilder.success(olmPowerService.servicePowerTurndown(input)).buildFuture();
+    public  ListenableFuture<RpcResult<ServicePowerTurndownOutput>> servicePowerTurndown(ServicePowerTurndownInput input) {
+        return RpcResultBuilder.success(this.olmPowerService.servicePowerTurndown(input)).buildFuture();
     }
 
     /**
@@ -131,18 +131,18 @@ public class OlmPowerServiceRpcImpl implements OlmService {
      * @return Result of the request
      */
     @Override
-    public Future<RpcResult<CalculateSpanlossBaseOutput>> calculateSpanlossBase(CalculateSpanlossBaseInput input) {
-        return RpcResultBuilder.success(olmPowerService.calculateSpanlossBase(input)).buildFuture();
+    public ListenableFuture<RpcResult<CalculateSpanlossBaseOutput>> calculateSpanlossBase(CalculateSpanlossBaseInput input) {
+        return RpcResultBuilder.success(this.olmPowerService.calculateSpanlossBase(input)).buildFuture();
     }
 
     @Override
-    public Future<RpcResult<CalculateSpanlossCurrentOutput>> calculateSpanlossCurrent(
+    public ListenableFuture<RpcResult<CalculateSpanlossCurrentOutput>> calculateSpanlossCurrent(
             CalculateSpanlossCurrentInput input) {
-        return RpcResultBuilder.success(olmPowerService.calculateSpanlossCurrent(input)).buildFuture();
+        return RpcResultBuilder.success(this.olmPowerService.calculateSpanlossCurrent(input)).buildFuture();
     }
 
     @Override
-    public Future<RpcResult<ServicePowerResetOutput>> servicePowerReset(ServicePowerResetInput input) {
-        return RpcResultBuilder.success(olmPowerService.servicePowerReset(input)).buildFuture();
+    public ListenableFuture<RpcResult<ServicePowerResetOutput>> servicePowerReset(ServicePowerResetInput input) {
+        return RpcResultBuilder.success(this.olmPowerService.servicePowerReset(input)).buildFuture();
     }
 }

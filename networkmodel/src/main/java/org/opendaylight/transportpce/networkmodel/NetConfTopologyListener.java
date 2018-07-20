@@ -163,7 +163,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             }
             if (rootNode.getModificationType() == ModificationType.DELETE) {
                 if (rootNode.getDataBefore() != null) {
-                    String nodeId = rootNode.getDataBefore().getKey().getNodeId().getValue();
+                    String nodeId = rootNode.getDataBefore().key().getNodeId().getValue();
                     LOG.info("Node {} deleted", nodeId);
                     this.networkModelService.deleteOpenROADMnode(nodeId);
                     onDeviceDisConnected(nodeId);
@@ -172,8 +172,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 }
                 continue;
             }
-            String nodeId = rootNode.getDataAfter().getKey().getNodeId().getValue();
-            NetconfNode netconfNode = rootNode.getDataAfter().getAugmentation(NetconfNode.class);
+            String nodeId = rootNode.getDataAfter().key().getNodeId().getValue();
+            NetconfNode netconfNode = rootNode.getDataAfter().augmentation(NetconfNode.class);
 
             if ((netconfNode != null) && !StringConstants.DEFAULT_NETCONF_NODEID.equals(nodeId)) {
                 switch (rootNode.getModificationType()) {

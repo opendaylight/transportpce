@@ -7,8 +7,7 @@
  */
 package org.opendaylight.transportpce.renderer.rpcs;
 
-import java.util.concurrent.Future;
-
+import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveInput;
@@ -35,27 +34,27 @@ public class TransportPCEServicePathRPCImpl implements TransportpceServicepathSe
     }
 
     @Override
-    public Future<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(CancelResourceReserveInput input) {
+    public ListenableFuture<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(CancelResourceReserveInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
+    public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Future<RpcResult<ServiceImplementationRequestOutput>> serviceImplementationRequest(
+    public ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> serviceImplementationRequest(
             ServiceImplementationRequestInput input) {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service impl request {} {}", serviceName);
-        return ModelMappingUtils.createRpcResponse(rendererServiceOperations.serviceImplementation(input));
+        return ModelMappingUtils.createRpcResponse(this.rendererServiceOperations.serviceImplementation(input));
     }
 
     @Override
-    public Future<RpcResult<PathComputationRequestOutput>> pathComputationRequest(PathComputationRequestInput input) {
+    public ListenableFuture<RpcResult<PathComputationRequestOutput>> pathComputationRequest(PathComputationRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }

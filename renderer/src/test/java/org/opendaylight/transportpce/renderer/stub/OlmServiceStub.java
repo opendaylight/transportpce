@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.renderer.stub;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
-import java.util.concurrent.Future;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.CalculateSpanlossBaseOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.CalculateSpanlossCurrentInput;
@@ -29,33 +29,33 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
 public class OlmServiceStub implements OlmService {
 
-    @Override public Future<RpcResult<CalculateSpanlossCurrentOutput>> calculateSpanlossCurrent(
+    @Override public ListenableFuture<RpcResult<CalculateSpanlossCurrentOutput>> calculateSpanlossCurrent(
         CalculateSpanlossCurrentInput input) {
         return null;
     }
 
-    @Override public Future<RpcResult<GetPmOutput>> getPm(GetPmInput input) {
+    @Override public ListenableFuture<RpcResult<GetPmOutput>> getPm(GetPmInput input) {
         GetPmOutput output = new GetPmOutputBuilder()
             .setNodeId("node1").setMeasurements(new ArrayList<>()).build();
         return RpcResultBuilder.success(
             output).buildFuture();
     }
 
-    @Override public Future<RpcResult<ServicePowerTurndownOutput>> servicePowerTurndown(
+    @Override public ListenableFuture<RpcResult<ServicePowerTurndownOutput>> servicePowerTurndown(
         ServicePowerTurndownInput input) {
         return null;
     }
 
-    @Override public Future<RpcResult<CalculateSpanlossBaseOutput>> calculateSpanlossBase(
+    @Override public ListenableFuture<RpcResult<CalculateSpanlossBaseOutput>> calculateSpanlossBase(
         CalculateSpanlossBaseInput input) {
         return null;
     }
 
-    @Override public Future<RpcResult<ServicePowerResetOutput>> servicePowerReset(ServicePowerResetInput input) {
+    @Override public ListenableFuture<RpcResult<ServicePowerResetOutput>> servicePowerReset(ServicePowerResetInput input) {
         return null;
     }
 
-    @Override public Future<RpcResult<ServicePowerSetupOutput>> servicePowerSetup(ServicePowerSetupInput input) {
+    @Override public ListenableFuture<RpcResult<ServicePowerSetupOutput>> servicePowerSetup(ServicePowerSetupInput input) {
         return RpcResultBuilder.success(new ServicePowerSetupOutputBuilder().build()).buildFuture();
     }
 }

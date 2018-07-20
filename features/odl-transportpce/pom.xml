@@ -27,12 +27,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <mdsal.version>1.8.0-SNAPSHOT</mdsal.version>
     <yangtools.version>2.0.7</yangtools.version>
     <netconf.version>1.5.0-SNAPSHOT</netconf.version>
+    <restconf.version>1.8.0-SNAPSHOT</restconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
   <name>OpenDaylight :: transportpce</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>odl-restconf-all</artifactId>
+      <version>${restconf.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
     <dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>odl-mdsal-broker</artifactId>

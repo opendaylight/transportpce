@@ -8,10 +8,9 @@
 package org.opendaylight.transportpce.networkmodel;
 
 import com.google.common.base.Optional;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
@@ -56,7 +55,7 @@ public class NetworkUtilsImpl implements NetworkutilsService {
     }
 
     @Override
-    public Future<RpcResult<DeleteLinkOutput>> deleteLink(DeleteLinkInput input) {
+    public ListenableFuture<RpcResult<DeleteLinkOutput>> deleteLink(DeleteLinkInput input) {
 
         LinkId linkId = new LinkId(input.getLinkId());
         // Building link instance identifier
@@ -99,9 +98,9 @@ public class NetworkUtilsImpl implements NetworkutilsService {
         }
     }
 
-    public Future<RpcResult<InitRoadmNodesOutput>> initRoadmNodes(InitRoadmNodesInput input) {
+    public ListenableFuture<RpcResult<InitRoadmNodesOutput>> initRoadmNodes(InitRoadmNodesInput input) {
         boolean createRdmLinks = OrdLink.createRdm2RdmLinks(input,
-            openRoadmTopology, dataBroker);
+                this.openRoadmTopology,this.dataBroker);
         if (createRdmLinks) {
             return RpcResultBuilder
                 .success(new InitRoadmNodesOutputBuilder().setResult(
@@ -113,10 +112,10 @@ public class NetworkUtilsImpl implements NetworkutilsService {
     }
 
     @Override
-    public Future<RpcResult<InitXpdrRdmLinksOutput>> initXpdrRdmLinks(InitXpdrRdmLinksInput input) {
+    public ListenableFuture<RpcResult<InitXpdrRdmLinksOutput>> initXpdrRdmLinks(InitXpdrRdmLinksInput input) {
         // Assigns user provided input in init-network-view RPC to nodeId
         boolean createXpdrRdmLinks = Rdm2XpdrLink.createXpdrRdmLinks(input.getLinksInput(),
-            openRoadmTopology, dataBroker);
+                this.openRoadmTopology,this.dataBroker);
         if (createXpdrRdmLinks) {
             return RpcResultBuilder
                 .success(new InitXpdrRdmLinksOutputBuilder().setResult("Xponder Roadm Link created successfully"))
@@ -126,9 +125,10 @@ public class NetworkUtilsImpl implements NetworkutilsService {
         }
     }
 
-    public Future<RpcResult<InitRdmXpdrLinksOutput>> initRdmXpdrLinks(InitRdmXpdrLinksInput input) {
+    @Override
+    public ListenableFuture<RpcResult<InitRdmXpdrLinksOutput>> initRdmXpdrLinks(InitRdmXpdrLinksInput input) {
         boolean createRdmXpdrLinks = Rdm2XpdrLink.createRdmXpdrLinks(input.getLinksInput(),
-            openRoadmTopology, dataBroker);
+                this.openRoadmTopology,this.dataBroker);
         if (createRdmXpdrLinks) {
             return RpcResultBuilder
                 .success(new InitRdmXpdrLinksOutputBuilder().setResult("Roadm Xponder links created successfully"))
