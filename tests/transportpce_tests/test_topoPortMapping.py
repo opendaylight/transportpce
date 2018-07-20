@@ -25,7 +25,7 @@ class TransportPCEtesting(unittest.TestCase):
     testtools_process1 = None
     testtools_process2 = None
     odl_process = None
-    restconf_baseurl = "http://127.0.0.1:8181/restconf"
+    restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def __start_testtools(cls):
@@ -86,7 +86,7 @@ class TransportPCEtesting(unittest.TestCase):
              "node-id": "ROADMA",
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
-             "netconf-node-topology:host": "127.0.0.11",
+             "netconf-node-topology:host": "127.0.0.1",
              "netconf-node-topology:port": "17831",
              "netconf-node-topology:tcp-only": "false",
              "netconf-node-topology:pass-through": {}}]}
@@ -191,7 +191,7 @@ class TransportPCEtesting(unittest.TestCase):
               "node-id": "XPDRA",
               "netconf-node-topology:username": "admin",
               "netconf-node-topology:password": "admin",
-              "netconf-node-topology:host": "127.0.0.10",
+              "netconf-node-topology:host": "127.0.0.1",
               "netconf-node-topology:port": "17830",
               "netconf-node-topology:tcp-only": "false",
               "netconf-node-topology:pass-through": {}}]}
