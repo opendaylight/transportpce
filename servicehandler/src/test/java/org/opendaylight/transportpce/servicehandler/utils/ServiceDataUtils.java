@@ -36,7 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 
-public class ServiceDataUtils {
+public final class ServiceDataUtils {
 
     public static ServiceCreateInput buildServiceCreateInput() {
 
@@ -253,6 +253,9 @@ public class ServiceDataUtils {
                         .setLgxPortName("lgx port name").setLgxPortRack("lgx port rack")
                         .setLgxPortShelf("lgx port shelf").build())
                     .build());
+    }
+
+    private ServiceDataUtils() {
     }
 
 }

@@ -44,9 +44,9 @@ public interface OpenRoadmInterfaces {
      * @param interfaceName
      *            Name of the interface
      *
-     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
-     *
      * @return Optional of Interface from datastore
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
      */
     Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 

@@ -42,7 +42,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
-public class MountPointUtils {
+public final class MountPointUtils {
 
     public static MountPointStub getMountPoint(List<Ports> ports, DataBroker dataBroker) {
         RpcConsumerRegistry rpcConsumerRegistry = Mockito.spy(RpcConsumerRegistry.class);
@@ -114,4 +114,8 @@ public class MountPointUtils {
         }
         return true;
     }
+
+    private MountPointUtils() {
+    }
+
 }

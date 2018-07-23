@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * Class to check coherency between hard and soft constraints.
  *
  */
-public class CheckCoherencyHardSoft {
+public final class CheckCoherencyHardSoft {
 
     private static final Logger LOG = LoggerFactory.getLogger(CheckCoherencyHardSoft.class);
 
@@ -39,6 +39,9 @@ public class CheckCoherencyHardSoft {
             result = true;
         }
         return result;
+    }
+
+    public CheckCoherencyHardSoft() {
     }
 
 }

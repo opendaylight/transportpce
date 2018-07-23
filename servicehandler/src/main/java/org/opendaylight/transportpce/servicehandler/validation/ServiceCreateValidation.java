@@ -21,7 +21,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServiceCreateValidation {
+public final class ServiceCreateValidation {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceCreateValidation.class);
 
     public static OperationResult validateServiceCreateRequest(ServiceCreateInput input) {
@@ -89,4 +89,8 @@ public class ServiceCreateValidation {
         }
         return OperationResult.ok("Validation successful.");
     }
+
+    public ServiceCreateValidation() {
+    }
+
 }

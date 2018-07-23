@@ -13,7 +13,7 @@ import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterface;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.olm.renderer.input.Nodes;
 
-public class DeviceRenderingResult extends OperationResult {
+public final class DeviceRenderingResult extends OperationResult {
 
     private final List<Nodes> olmList;
     private final List<NodeInterface> renderedNodeInterfaces;

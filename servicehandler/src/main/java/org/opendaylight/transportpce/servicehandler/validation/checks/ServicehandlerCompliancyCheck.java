@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * Class for checking service sdnc-request-header compliancy.
  *
  */
-public class ServicehandlerCompliancyCheck {
+public final class ServicehandlerCompliancyCheck {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerCompliancyCheck.class);
 
@@ -80,6 +80,9 @@ public class ServicehandlerCompliancyCheck {
         }
         LOG.debug(message);
         return new ComplianceCheckResult(result, message);
+    }
+
+    public ServicehandlerCompliancyCheck() {
     }
 
 }

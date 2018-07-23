@@ -48,7 +48,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.ServicePathInputBuilder;
 
 
-public class ServiceDataUtils {
+public final class ServiceDataUtils {
 
     public static Nodes createNode(String nodeId, String srcTp, String dstTp) {
         return new NodesBuilder().setNodeId(nodeId).setKey(new NodesKey(nodeId)).setSrcTp(srcTp)
@@ -251,6 +251,9 @@ public class ServiceDataUtils {
                         .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
                         .setPortSubSlot("port subslot").setPortType("port type").build())
                     .build());
+    }
+
+    private ServiceDataUtils() {
     }
 
 }

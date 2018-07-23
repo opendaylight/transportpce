@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.servicehandler.mappers;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceDeleteOutputBuilder;
 
-public class ServiceDeleteOutputConverter {
+public final class ServiceDeleteOutputConverter {
 
     public static ServiceDeleteOutput
         getStub(
@@ -34,4 +34,6 @@ public class ServiceDeleteOutputConverter {
         return concreteBuilder.build();
     }
 
+    private ServiceDeleteOutputConverter() {
+    }
 }

@@ -31,4 +31,7 @@ public final class Timeouts {
     public static final TimeUnit DEVICE_WRITE_TIMEOUT_UNIT = TimeUnit.SECONDS;
 
     //TODO add timeouts for device setup (olm power setup etc.)
+
+    private Timeouts() {
+    }
 }

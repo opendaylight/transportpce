@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.servicehandler.mappers;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.PathDescriptionBuilder;
 
-public class PathDescriptionConverter {
+public final class PathDescriptionConverter {
 
     public static PathDescription getStub(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
             .servicepath.rev170426.service.implementation.request.input.PathDescription concrete) {
@@ -30,5 +30,8 @@ public class PathDescriptionConverter {
         concreteBuilder.setAToZDirection(stub.getAToZDirection());
         concreteBuilder.setZToADirection(stub.getZToADirection());
         return concreteBuilder.build();
+    }
+
+    private PathDescriptionConverter() {
     }
 }
