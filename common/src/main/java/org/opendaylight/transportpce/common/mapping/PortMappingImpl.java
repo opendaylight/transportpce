@@ -40,16 +40,21 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPorts;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Degree;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.DegreeKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Protocols;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpenROADMOpticalMultiplex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpticalTransport;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.Lldp;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfig;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.Network;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.Nodes;
@@ -151,7 +156,9 @@ public class PortMappingImpl implements PortMapping {
 
         List<Degree> degrees = getDegrees(nodeId, deviceInfo);
         List<ConnectionPorts> degreeConPorts = getDegreePorts(degrees);
-        List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees);
+        Map<String, String> interfaceList = getEthInterfaceList(nodeId);
+        List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees, nodeId, interfaceList);
+        LOG.info("Map looks like this {}",interfaceList);
 
         postPortMapping(deviceInfo, null, deviceInfo.getNodeType().getIntValue(), cpToDegreeList);
 
@@ -433,9 +440,14 @@ public class PortMappingImpl implements PortMapping {
         return mpBldr.build();
     }
 
-    private static CpToDegree createCpToDegreeObject(String circuitPackName, String degreeNumber) {
+    private CpToDegree createCpToDegreeObject(String circuitPackName, String degreeNumber, String nodeId,
+                                                     Map<String, String> interfaceList) {
+        String interfaceName = null;
+        if (interfaceList.get(circuitPackName) !=  null) {
+            interfaceName = interfaceList.get(circuitPackName);
+        }
         return new CpToDegreeBuilder().withKey(new CpToDegreeKey(circuitPackName)).setCircuitPackName(circuitPackName)
-            .setDegreeNumber(new Long(degreeNumber)).build();
+            .setDegreeNumber(new Long(degreeNumber)).setInterfaceName(interfaceName).build();
     }
 
     private static List<ConnectionPorts> getDegreePorts(List<Degree> degrees) {
@@ -443,12 +455,15 @@ public class PortMappingImpl implements PortMapping {
             .flatMap(degree -> degree.getConnectionPorts().stream()).collect(Collectors.toList());
     }
 
-    private List<CpToDegree> getCpToDegreeList(List<Degree> degrees) {
+    private List<CpToDegree> getCpToDegreeList(List<Degree> degrees, String nodeId,
+                                               Map<String, String> interfaceList) {
         List<CpToDegree> cpToDegreeList = new ArrayList<>();
         for (Degree degree : degrees) {
             if (degree.getCircuitPacks() != null) {
+                LOG.info("Inside CP to degree list");
                 cpToDegreeList.addAll(degree.getCircuitPacks().stream()
-                    .map(cp -> createCpToDegreeObject(cp.getCircuitPackName(), degree.getDegreeNumber().toString()))
+                    .map(cp -> createCpToDegreeObject(cp.getCircuitPackName() ,
+                            degree.getDegreeNumber().toString(), nodeId ,interfaceList))
                     .collect(Collectors.toList()));
             }
         }
@@ -625,6 +640,44 @@ public class PortMappingImpl implements PortMapping {
             return false;
         }
 
+    }
+
+    private Map<String, String> getEthInterfaceList(String nodeId) {
+        LOG.info("It is calling get ethernet interface");
+        Map<String, String> cpToInterfaceMap = new HashMap<>();
+        InstanceIdentifier<Lldp> lldpIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(Protocols.class).augmentation(Protocols1.class).child(Lldp.class);
+        Optional<Lldp> lldpObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
+                LogicalDatastoreType.OPERATIONAL, lldpIID, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (lldpObject.isPresent() && (lldpObject.get().getPortConfig() != null)) {
+            for (PortConfig portConfig : lldpObject.get().getPortConfig()) {
+                if (portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
+                    InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                            .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
+                    Optional<Interface> interfaceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
+                            LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
+                            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                    if (interfaceObject.isPresent() && (interfaceObject.get().getSupportingCircuitPackName() != null)) {
+                        String supportingCircuitPackName = interfaceObject.get().getSupportingCircuitPackName();
+                        cpToInterfaceMap.put(supportingCircuitPackName, portConfig.getIfName());
+                        InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier.create(OrgOpenroadmDevice
+                                .class).child(CircuitPacks.class, new CircuitPacksKey(supportingCircuitPackName));
+                        Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(
+                                nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, Timeouts
+                                                .DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        if (circuitPackObject.isPresent() && (circuitPackObject.get().getParentCircuitPack() != null)) {
+                            cpToInterfaceMap.put(circuitPackObject.get().getParentCircuitPack().getCircuitPackName() ,
+                                    portConfig.getIfName());
+                        }
+                    }
+                }
+            }
+        } else {
+            LOG.warn("Couldnt find port config under LLDP for Node : {}", nodeId);
+        }
+        LOG.info("Processiong is done.. now returning..");
+        return cpToInterfaceMap;
     }
 
 }

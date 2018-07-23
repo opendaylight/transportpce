@@ -73,7 +73,10 @@ module portmapping {
        }
        leaf degree-number{
             type uint32;
-        }
+       }
+       leaf interface-name{
+          type string;
+       }
       }
     }
   }

@@ -804,16 +804,21 @@ public class OpenRoadmTopology {
     }
 
     // This method returns the linkBuilder object for given source and destination.
-    public boolean deleteLink(String srcNode, String dstNode, String srcTp, String destTp) {
+    public boolean deleteLink(String srcNode, String dstNode, Integer srcDegId,
+            Integer destDegId ,String srcTp, String destTp) {
         LOG.info("deleting link for {}-{}", srcNode, dstNode);
         try {
+            LinkId linkId = LinkIdUtil.buildLinkId(srcNode + "-DEG" + srcDegId,
+                    srcTp, dstNode + "-DEG" + destDegId, destTp);
+            LOG.info("Link is for the link is {}", linkId.getValue());
             InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier
                     .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                    .augmentation(Network1.class)
-                    .child(Link.class, new LinkKey(LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp)));
+                    .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
             WriteTransaction wrtx = this.dataBroker.newWriteOnlyTransaction();
             wrtx.delete(LogicalDatastoreType.CONFIGURATION, linkIID.build());
+            LOG.info("Deleted");
             wrtx.submit().get(1, TimeUnit.SECONDS);
+            LOG.info("Submitted");
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error(e.getMessage(), e);
             return false;
