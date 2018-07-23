@@ -15,7 +15,7 @@ index 43085f6..8a9699a 100644
      <!-- Testing Dependencies -->
      <dependency>
 diff --git a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java
-index 2b0ee83..2899617 100644
+index 6e385ca..d13f52b 100644
 --- a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java
 +++ b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java
 @@ -7,8 +7,6 @@
@@ -49,7 +49,7 @@ index 2b0ee83..2899617 100644
  import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.HardConstraintsBuilder;
  import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.SoftConstraintsBuilder;
  import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.endpoint.sp.RxDirection;
-@@ -237,42 +227,6 @@ public final class ModelMappingUtils {
+@@ -238,42 +228,6 @@ public final class ModelMappingUtils {
                  .setSoftConstraints(serviceReconfigureInput.getSoftConstraints())
                  .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
          }
@@ -93,18 +93,10 @@ index 2b0ee83..2899617 100644
      }
  
 diff --git a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
-index 5dc24b3..714e2b3 100644
+index 8ad06b2..139b68d 100644
 --- a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
 +++ b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
-@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
- import java.util.Optional;
- import java.util.concurrent.ExecutionException;
- import java.util.concurrent.Future;
--
- import org.opendaylight.controller.md.sal.binding.api.DataBroker;
- import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
- import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-@@ -27,6 +26,7 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
+@@ -27,6 +27,7 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
  import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateValidation;
  import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
  import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck;
@@ -112,7 +104,7 @@ index 5dc24b3..714e2b3 100644
  import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
  import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
  import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeaderBuilder;
-@@ -89,6 +89,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+@@ -89,6 +90,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
      private ServiceDataStoreOperations serviceDataStoreOperations;
      private RendererServiceOperations rendererServiceOperations;
      private PCEServiceWrapper pceServiceWrapper;
@@ -120,7 +112,7 @@ index 5dc24b3..714e2b3 100644
  
      //TODO: remove private request fields as they are in global scope
  
-@@ -145,8 +146,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+@@ -145,8 +147,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
  
          ServiceImplementationRequestInput serviceImplementationRequest =
                  ModelMappingUtils.createServiceImplementationRequest(input, pceResponse);
@@ -134,7 +126,7 @@ index 5dc24b3..714e2b3 100644
              .serviceImplementation(serviceImplementationRequest);
          if (ResponseCodes.RESPONSE_OK
                  .equals(serviceImplementationRequestOutput.getConfigurationResponseCommon().getResponseCode())) {
-@@ -215,9 +220,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+@@ -215,9 +221,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
          LOG.debug("Service '{}' present in datastore !", serviceName);
          org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput
                  serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(input);
@@ -148,6 +140,22 @@ index 5dc24b3..714e2b3 100644
          if (!ResponseCodes.RESPONSE_OK
                  .equals(output.getConfigurationResponseCommon().getResponseCode())) {
              message = "Service delete failed!";
+@@ -320,13 +328,14 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+                     .setStatusMessage("Success");
+                 return RpcResultBuilder.success(output).buildFuture();
+             }
+-        } catch (InterruptedException | ExecutionException e) {
++        } catch (InterruptedException | ExecutionException | NullPointerException e) {
+             LOG.info("Exception caught" , e);
+         }
+         ServiceRerouteOutputBuilder output = new ServiceRerouteOutputBuilder()
+             .setHardConstraints(null).setSoftConstraints(null).setStatus(RpcStatus.Failed).setStatusMessage("Failure");
+ 
+         return RpcResultBuilder.success(output).buildFuture();
++        // return null;
+     }
+ 
+     @Override
 diff --git a/servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java b/servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java
 index 6db468c..76e4a26 100644
 --- a/servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java
@@ -736,7 +744,7 @@ index 23ae976..4187f96 100644
 +    }
  }
 diff --git a/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererProvider.java b/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererProvider.java
-index 6dcdb8e..92b20f5 100644
+index 0beb087..92b20f5 100644
 --- a/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererProvider.java
 +++ b/tests/stubrenderer/src/main/java/org/opendaylight/transportpce/stubrenderer/impl/StubrendererProvider.java
 @@ -13,9 +13,7 @@ import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService
@@ -773,19 +781,10 @@ index 6dcdb8e..92b20f5 100644
       */
      public void init() {
          LOG.info("StubrendererProvider Session Initiated");
--        final StubrendererImpl consumer = new StubrendererImpl(notificationPublishService);
--        rpcRegistration = rpcRegistry.addRpcImplementation(StubrendererService.class, consumer);
+-        final StubrendererImpl consumer = new StubrendererImpl(this.notificationPublishService);
+-        this.rpcRegistration = this.rpcRegistry.addRpcImplementation(StubrendererService.class, consumer);
 +        final StubrendererImpl consumer = new StubrendererImpl();
 +        this.rpcRegistration = this.rpcRegistry.addRpcImplementation(TransportpceServicepathService.class, consumer);
      }
  
      /**
-@@ -54,7 +48,6 @@ public class StubrendererProvider {
-      */
-     public void close() {
-         LOG.info("StubrendererProvider Closed");
--        rpcRegistration.close();
--        stubRendererlistenerRegistration.close();
-+        this.rpcRegistration.close();
-     }
- }

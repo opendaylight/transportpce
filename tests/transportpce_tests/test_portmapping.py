@@ -75,15 +75,15 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         print ("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(10)
 
-    def test_01_restconfAPI(self):
-        url = ("{}/operational/network-topology:network-topology/topology/"
-        "topology-netconf/node/controller-config".format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(res['node'] [0] ['netconf-node-topology:connection-status'],
-                         'connected')
+#    def test_01_restconfAPI(self):
+#        url = ("{}/operational/network-topology:network-topology/topology/"
+#        "topology-netconf/node/controller-config".format(self.restconf_baseurl))
+#        headers = {'content-type': 'application/json'}
+#        response = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))
+#        self.assertEqual(response.status_code, requests.codes.ok)
+#        res = response.json()
+#        self.assertEqual(res['node'] [0] ['netconf-node-topology:connection-status'],
+#                         'connected')
 
     def test_02_restconfAPI(self):
         url = ("{}/config/portmapping:network/nodes/controller-config"

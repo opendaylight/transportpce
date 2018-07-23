@@ -57,16 +57,16 @@ class TransportPCEtesting(unittest.TestCase):
     def setUp(self):  # instruction executed before each test method
         print ("execution of {}".format(self.id().split(".")[-1]))
 
-    def test_01_restconfAPI(self):
-        url = ("{}/operational/network-topology:network-topology/topology/"
-        "topology-netconf/node/controller-config".format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual(res['node'] [0] ['netconf-node-topology:connection-status'],
-                         'connected')
-        time.sleep(1)
+#    def test_01_restconfAPI(self):
+#        url = ("{}/operational/network-topology:network-topology/topology/"
+#        "topology-netconf/node/controller-config".format(self.restconf_baseurl))
+#        headers = {'content-type': 'application/json'}
+#        response = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))
+#        self.assertEqual(response.status_code, requests.codes.ok)
+#        res = response.json()
+#        self.assertEqual(res['node'] [0] ['netconf-node-topology:connection-status'],
+#                         'connected')
+#        time.sleep(1)
 
     # Load honeynode topology
     def test_02_load_honeynode_topology(self):
