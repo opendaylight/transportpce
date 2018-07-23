@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * Class for checking missing info on Tx/Rx for A/Z end.
  *
  */
-public class ServicehandlerTxRxCheck {
+public final class ServicehandlerTxRxCheck {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerTxRxCheck.class);
 
@@ -166,6 +166,9 @@ public class ServicehandlerTxRxCheck {
             LOG.debug(message);
         }
         return new ComplianceCheckResult(result, message);
+    }
+
+    public ServicehandlerTxRxCheck() {
     }
 
 }

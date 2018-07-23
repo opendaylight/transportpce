@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.common;
 
-public class ResponseCodes {
+public final class ResponseCodes {
 
     public static final String RESPONSE_FAILED = "500";
     public static final String RESPONSE_OK = "200";
@@ -16,5 +16,8 @@ public class ResponseCodes {
 
     public static final String SUCCESS_RESULT = "Success";
     public static final String FAILED_RESULT = "Failed";
+
+    private ResponseCodes() {
+    }
 
 }

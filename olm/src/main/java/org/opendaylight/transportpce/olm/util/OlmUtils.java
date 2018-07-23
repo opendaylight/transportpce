@@ -54,7 +54,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OlmUtils {
+public final class OlmUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(OlmUtils.class);
     private static long DATABROKER_READ_TIMEOUT_SECONDS = 120;
@@ -287,6 +287,9 @@ public class OlmUtils {
             return Optional.of((T) resource);
         }
         return Optional.empty();
+    }
+
+    private OlmUtils() {
     }
 
 }

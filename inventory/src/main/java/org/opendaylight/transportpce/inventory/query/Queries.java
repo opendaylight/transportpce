@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.inventory.query;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
-public class Queries {
+public final class Queries {
 
     private static final String DEVICE_INFO_INSERT =
         "INSERT INTO %sinv_dev_info "
@@ -81,7 +81,7 @@ public class Queries {
         return new Query();
     }
 
-    public static class Query {
+    public final static class Query {
         private String sql;
         private String schema;
 

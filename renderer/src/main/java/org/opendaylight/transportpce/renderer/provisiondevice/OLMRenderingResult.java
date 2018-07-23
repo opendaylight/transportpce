@@ -9,7 +9,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import org.opendaylight.transportpce.common.OperationResult;
 
-public class OLMRenderingResult extends OperationResult {
+public final class OLMRenderingResult extends OperationResult {
 
     private OLMRenderingResult(boolean success, String message) {
         super(success, message);

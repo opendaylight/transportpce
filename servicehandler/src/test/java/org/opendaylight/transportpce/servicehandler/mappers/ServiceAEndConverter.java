@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.servicehandler.mappers;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.service.implementation.request.input.ServiceAEndBuilder;
 
-public class ServiceAEndConverter {
+public final class ServiceAEndConverter {
 
     public static ServiceAEnd getStub(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath
             .rev170426.service.implementation.request.input.ServiceAEnd concrete) {
@@ -38,5 +38,8 @@ public class ServiceAEndConverter {
         concreteBuilder.setServiceRate(stub.getServiceRate());
         concreteBuilder.setTxDirection(stub.getTxDirection());
         return concreteBuilder.build();
+    }
+
+    private ServiceAEndConverter() {
     }
 }

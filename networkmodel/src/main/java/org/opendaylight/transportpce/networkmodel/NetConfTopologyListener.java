@@ -152,6 +152,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:FallThrough")
     public void onDataTreeChanged(@Nonnull Collection<DataTreeModification<Node>> changes) {
         LOG.info("onDataTreeChanged");
         for (DataTreeModification<Node> change : changes) {
@@ -183,8 +184,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                                 netconfNode.getConnectionStatus();
                         try {
                             long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
-                                    .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
-                                    .count();
+                                .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
+                                .count();
                             if (count > 0) {
                                 LOG.info("OpenROADM node detected: {} {}", nodeId, connectionStatus.name());
                                 switch (connectionStatus) {

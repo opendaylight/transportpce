@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.servicehandler.mappers;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426.ServiceImplementationRequestInputBuilder;
 
-public class ServiceImplementationRequestInputConverter {
+public final class ServiceImplementationRequestInputConverter {
 
     public static ServiceImplementationRequestInput getStub(org.opendaylight.yang.gen.v1.http.org.transportpce
                 .b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput concrete) {
@@ -35,6 +35,9 @@ public class ServiceImplementationRequestInputConverter {
         concreteBuilder.setServiceAEnd(ServiceAEndConverter.getConcrete(stub.getServiceAEnd()));
         concreteBuilder.setServiceZEnd(ServiceZEndConverter.getConcrete(stub.getServiceZEnd()));
         return concreteBuilder.build();
+    }
+
+    private ServiceImplementationRequestInputConverter() {
     }
 
 }

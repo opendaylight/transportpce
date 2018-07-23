@@ -112,5 +112,9 @@ final class Rdm2XpdrLink {
         nwBuilder.addAugmentation(Network1.class, nwBldr1.build());
         return nwBuilder;
     }
+
+    private Rdm2XpdrLink() {
+    }
+
 }
 
