@@ -56,10 +56,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>odl-netconf-console</artifactId>
+      <artifactId>netconf-console</artifactId>
       <version>${netconf.version}</version>
-      <classifier>features</classifier>
-      <type>xml</type>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>

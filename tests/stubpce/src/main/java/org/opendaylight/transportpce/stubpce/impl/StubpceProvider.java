@@ -48,8 +48,8 @@ public class StubpceProvider {
      */
     public void init() {
         LOG.info("StubpceProvider Session Initiated");
-        final StubpceImpl consumer = new StubpceImpl(notificationPublishService,dataBroker);
-        rpcRegistration = rpcRegistry.addRpcImplementation(StubpceService.class, consumer);
+        final StubpceImpl consumer = new StubpceImpl(this.notificationPublishService,this.dataBroker);
+        this.rpcRegistration = this.rpcRegistry.addRpcImplementation(StubpceService.class, consumer);
     }
 
     /**
@@ -57,7 +57,6 @@ public class StubpceProvider {
      */
     public void close() {
         LOG.info("StubpceProvider Closed");
-        rpcRegistration.close();
-        stubPcelistenerRegistration.close();
+        this.rpcRegistration.close();
     }
 }

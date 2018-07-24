@@ -45,8 +45,8 @@ public class StubrendererProvider {
      */
     public void init() {
         LOG.info("StubrendererProvider Session Initiated");
-        final StubrendererImpl consumer = new StubrendererImpl(notificationPublishService);
-        rpcRegistration = rpcRegistry.addRpcImplementation(StubrendererService.class, consumer);
+        final StubrendererImpl consumer = new StubrendererImpl(this.notificationPublishService);
+        this.rpcRegistration = this.rpcRegistry.addRpcImplementation(StubrendererService.class, consumer);
     }
 
     /**
@@ -54,7 +54,6 @@ public class StubrendererProvider {
      */
     public void close() {
         LOG.info("StubrendererProvider Closed");
-        rpcRegistration.close();
-        stubRendererlistenerRegistration.close();
+        this.rpcRegistration.close();
     }
 }

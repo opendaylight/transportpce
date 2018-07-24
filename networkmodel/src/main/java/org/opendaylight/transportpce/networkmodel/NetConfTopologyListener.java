@@ -11,9 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.Nonnull;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification.ModificationType;
@@ -183,25 +181,29 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                     case SUBTREE_MODIFIED:
                         NetconfNodeConnectionStatus.ConnectionStatus connectionStatus =
                                 netconfNode.getConnectionStatus();
-                        long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
-                                .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
-                                .count();
-                        if (count > 0) {
-                            LOG.info("OpenROADM node detected: {} {}", nodeId, connectionStatus.name());
-                            switch (connectionStatus) {
-                                case Connected:
-                                    this.networkModelService.createOpenROADMnode(nodeId);
-                                    onDeviceConnected(nodeId);
-                                    break;
-                                case Connecting:
-                                case UnableToConnect:
-                                    this.networkModelService.setOpenROADMnodeStatus(nodeId, connectionStatus);
-                                    onDeviceDisConnected(nodeId);
-                                    break;
-                                default:
-                                    LOG.warn("Unsupported device state {}", connectionStatus.getName());
-                                    break;
+                        try {
+                            long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
+                                    .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
+                                    .count();
+                            if (count > 0) {
+                                LOG.info("OpenROADM node detected: {} {}", nodeId, connectionStatus.name());
+                                switch (connectionStatus) {
+                                    case Connected:
+                                        this.networkModelService.createOpenROADMnode(nodeId);
+                                        onDeviceConnected(nodeId);
+                                        break;
+                                    case Connecting:
+                                    case UnableToConnect:
+                                        this.networkModelService.setOpenROADMnodeStatus(nodeId, connectionStatus);
+                                        onDeviceDisConnected(nodeId);
+                                        break;
+                                    default:
+                                        LOG.warn("Unsupported device state {}", connectionStatus.getName());
+                                        break;
+                                }
                             }
+                        } catch (NullPointerException e) {
+                            LOG.error("Cannot get available Capabilities");
                         }
                         break;
                     default:
