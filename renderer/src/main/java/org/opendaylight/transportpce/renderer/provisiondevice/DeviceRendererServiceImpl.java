@@ -39,6 +39,9 @@ import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.Servic
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.Topology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.get.connection.port.trail.output.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.R100G;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceList;
@@ -90,7 +93,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         List<Nodes> nodes = input.getNodes();
         // Register node for suppressing alarms
         if (!alarmSuppressionNodeRegistration(input)) {
-            LOG.warn("Alarm suppresion node registraion failed!!!!");
+            LOG.warn("Alarm suppresion node registration failed!!!!");
         }
 
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
@@ -281,25 +284,42 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 // if the node is currently mounted then proceed.
                 if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
                     if (destTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)
-                            || srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                            || srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)
+                            || srcTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)
+                            || destTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
                         if (destTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
                             interfacesToDelete.add(destTp + "-ODU");
                             interfacesToDelete.add(destTp + "-OTU");
                             interfacesToDelete.add(
                                     this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber));
                         }
+                        if (srcTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                            interfacesToDelete.add(srcTp + "-ODU");
+                            interfacesToDelete.add(srcTp + "-OTU");
+                            interfacesToDelete.add(
+                                this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(srcTp, waveNumber));
+                        }
                         if (srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
                             interfacesToDelete.add(srcTp + "-ETHERNET");
+                        }
+                        if (destTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                            interfacesToDelete.add(destTp + "-ETHERNET");
                         }
                     } else {
                         String connectionNumber = srcTp + "-" + destTp + "-" + waveNumber;
                         if (!this.crossConnect.deleteCrossConnect(nodeId, connectionNumber)) {
-                            LOG.error("Failed to delete cross connect {}", srcTp + "-" + destTp + "-" + waveNumber);
+                            LOG.error("Failed to delete cross connect {}", connectionNumber);
                         }
-                        interfacesToDelete.add(
-                                this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(srcTp, waveNumber));
-                        interfacesToDelete.add(
-                                this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber));
+                        connectionNumber = destTp + "-" + srcTp + "-" + waveNumber;
+                        String interfName = this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(srcTp,
+                            waveNumber);
+                        if (!isUsedByXc(nodeId, interfName, connectionNumber)) {
+                            interfacesToDelete.add(interfName);
+                        }
+                        interfName = this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber);
+                        if (!isUsedByXc(nodeId, interfName, connectionNumber)) {
+                            interfacesToDelete.add(interfName);
+                        }
                     }
                 } else {
                     String result = nodeId + " is not mounted on the controller";
@@ -481,5 +501,25 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, servicesBuilder.build());
         writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
 
+    }
+
+    private boolean isUsedByXc(String nodeid, String interfaceid, String xcid) {
+        InstanceIdentifier<RoadmConnections> xciid = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+            .child(RoadmConnections.class, new RoadmConnectionsKey(xcid));
+        LOG.info("reading xc {} in node {}", xcid, nodeid);
+        Optional<RoadmConnections> crossconnection = deviceTransactionManager.getDataFromDevice(nodeid,
+            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT,
+            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (crossconnection.isPresent()) {
+            RoadmConnections xc = crossconnection.get();
+            LOG.info("xd {} found", xcid);
+            if (xc.getSource().getSrcIf().equals(interfaceid) || xc.getDestination().getDstIf().equals(
+                interfaceid)) {
+                return true;
+            }
+        } else {
+            LOG.info("xd {} not found !", xcid);
+        }
+        return false;
     }
 }
