@@ -20,13 +20,13 @@ public class RollbackProcessorTest {
         rollbackProcessor.addTask(new TestRollbackTask("task1", false));
         rollbackProcessor.addTask(new TestRollbackTask("task2", false));
         rolledBack = rollbackProcessor.rollbackAllIfNecessary();
-        Assert.assertTrue(rolledBack == 0);
+        Assert.assertEquals(0, rolledBack);
         rollbackProcessor.addTask(new TestRollbackTask("task3", true));
         rollbackProcessor.addTask(new TestRollbackTask("task4", false));
         rolledBack = rollbackProcessor.rollbackAllIfNecessary();
-        Assert.assertTrue(rolledBack == 4);
+        Assert.assertEquals(4, rolledBack);
         rolledBack = rollbackProcessor.rollbackAllIfNecessary();
-        Assert.assertTrue(rolledBack == 0);
+        Assert.assertEquals(0, rolledBack);
     }
 
     @Test
@@ -38,9 +38,9 @@ public class RollbackProcessorTest {
         rollbackProcessor.addTask(new TestRollbackTask("task4", false));
         int rolledBack = -1;
         rolledBack = rollbackProcessor.rollbackAll();
-        Assert.assertTrue(rolledBack == 4);
+        Assert.assertEquals(4, rolledBack);
         rolledBack = rollbackProcessor.rollbackAll();
-        Assert.assertTrue(rolledBack == 0);
+        Assert.assertEquals(0, rolledBack);
     }
 
 }

@@ -52,7 +52,7 @@ public class OpenRoadmInterfaceFactory {
             String logicalConnPoint) throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
+            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node %s and"
                     + " logical connection port %s", nodeId, logicalConnPoint));
         }
 
@@ -166,7 +166,7 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
+            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node %s and"
                     + " logical connection port %s", nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(portMap, OtnOdu.class,
@@ -209,7 +209,7 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
+            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node %s and"
                     + " logical connection port %s", nodeId, logicalConnPoint));
         }
         // Create generic interface

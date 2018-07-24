@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.Future;
 
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
@@ -144,7 +145,7 @@ public final class ModelMappingUtils {
                     int[] pos = findTheLongestSubstring(nodeID, tpID);
                     //TODO: do not rely on nodeId to be integer
                     int id = Integer.parseInt(sortId);
-                    treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
+                    treeMap.put(id, new NodeIdPair(nodeID.substring(pos[0], pos[1]), tpID));
                 } else if (resourceType.equals("Link")) {
                     LOG.info("The type is link");
                 } else {
@@ -210,15 +211,17 @@ public final class ModelMappingUtils {
                     if (tpID.contains("CTP") || tpID.contains("CP")) {
                         continue;
                     }
-                    if (!tpID.contains("TTP") && !tpID.contains("PP") && !tpID.contains("NETWORK")
-                            && !tpID.contains("CLIENT")) {
+                    if (!tpID.contains(OpenRoadmInterfacesImpl.TTP_TOKEN)
+                        && !tpID.contains(OpenRoadmInterfacesImpl.PP_TOKEN)
+                        && !tpID.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)
+                        && !tpID.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
                         continue;
                     }
 
                     int[] pos = findTheLongestSubstring(nodeID, tpID);
                     //TODO: do not rely on nodeId to be integer
                     int id = Integer.parseInt(sortId);
-                    treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
+                    treeMap.put(id, new NodeIdPair(nodeID.substring(pos[0], pos[1]), tpID));
                 } else if (resourceType.equals("Link")) {
                     LOG.info("The type is link");
                 } else {
