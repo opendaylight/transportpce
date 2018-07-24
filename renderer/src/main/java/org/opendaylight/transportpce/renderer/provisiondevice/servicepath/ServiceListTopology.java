@@ -104,7 +104,7 @@ public class ServiceListTopology {
         String circuitPackName = "";
         String portName = "";
 
-        int id = this.a2zTopologyList.size();
+        int id = this.z2aTopologyList.size();
 
         DeviceBuilder deviceBldr = new DeviceBuilder();
         deviceBldr.setNodeId(nodeId);
@@ -152,6 +152,9 @@ public class ServiceListTopology {
             this.z2aTopologyList.add(z2aBldr.build());
 
         }
+
+        //update Topology
+        this.serviceTopology.setZToA(this.z2aTopologyList);
 
     }
 
