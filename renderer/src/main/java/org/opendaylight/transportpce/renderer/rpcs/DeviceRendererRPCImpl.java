@@ -9,7 +9,10 @@
 package org.opendaylight.transportpce.renderer.rpcs;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.CreateOtsOmsInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.CreateOtsOmsOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererService;
@@ -69,11 +72,25 @@ public class DeviceRendererRPCImpl implements RendererService {
     /**
      * Rollback created interfaces and cross connects specified by input.
      *
-     * @param input Lists of created interfaces and connections per node
+     * @param input
+     *            Lists of created interfaces and connections per node
      * @return Success flag and nodes which failed to rollback
      */
     @Override
     public ListenableFuture<RpcResult<RendererRollbackOutput>> rendererRollback(RendererRollbackInput input) {
         return RpcResultBuilder.success(this.deviceRenderer.rendererRollback(input)).buildFuture();
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<CreateOtsOmsOutput>> createOtsOms(CreateOtsOmsInput input) {
+        LOG.info("Request received to create oms and ots interfaces on {}: {}", input.getNodeId(), input
+            .getLogicalConnectionPoint());
+        try {
+            return RpcResultBuilder.success(deviceRenderer.createOtsOms(input)).buildFuture();
+        } catch (OpenRoadmInterfaceException e) {
+            LOG.error("failed to create oms and ots interfaces on {}: {}", input.getNodeId(), input
+                    .getLogicalConnectionPoint(),e);
+        }
+        return null;
     }
 }

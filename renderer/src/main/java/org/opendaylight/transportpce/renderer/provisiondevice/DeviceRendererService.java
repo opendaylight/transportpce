@@ -8,7 +8,10 @@
 
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.CreateOtsOmsInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.CreateOtsOmsOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.ServicePathInput;
@@ -65,4 +68,14 @@ public interface DeviceRendererService {
      * @return Success flag and nodes which failed to rollback
      */
     RendererRollbackOutput rendererRollback(RendererRollbackInput input);
+
+    /**
+     * This method creates the basis of ots and oms interfaces on a specific ROADM degree.
+     *
+     * @param input
+     *             Input parameter from the create-ots-oms yang model
+     * @return Success flag and names of interfaces created
+     * @throws OpenRoadmInterfaceException OpenRoadmInterfaceException
+     */
+    CreateOtsOmsOutput createOtsOms(CreateOtsOmsInput input) throws OpenRoadmInterfaceException;
 }
