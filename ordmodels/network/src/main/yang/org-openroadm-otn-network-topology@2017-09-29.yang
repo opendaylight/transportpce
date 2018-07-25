@@ -2,11 +2,11 @@ module org-openroadm-otn-network-topology {
   namespace "http://org/openroadm/otn/network/topology";
   prefix otn-topo;
 
-  import old-ietf-network {
+  import ietf-network {
     prefix nd;
     revision-date 2015-06-08;
   }
-  import old-ietf-network-topology {
+  import ietf-network-topology {
     prefix nwt;
     revision-date 2015-06-08;
   }

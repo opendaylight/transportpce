@@ -2,11 +2,11 @@ module org-openroadm-xponder {
   namespace "http://org/openroadm/xponder";
   prefix xpndr;
 
-  import old-ietf-network {
+  import ietf-network {
     prefix nd;
     revision-date 2015-06-08;
   }
-  import old-ietf-network-topology {
+  import ietf-network-topology {
     prefix nwt;
     revision-date 2015-06-08;
   }

@@ -37,10 +37,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
-      <artifactId>odl-mdsal-models</artifactId>
-      <version>${mdsal.model.version}</version>
-      <classifier>features</classifier>
-      <type>xml</type>
+      <artifactId>ietf-inet-types-2013-07-15</artifactId>
+      <version>${netconf.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

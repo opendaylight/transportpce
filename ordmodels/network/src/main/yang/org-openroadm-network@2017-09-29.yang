@@ -2,7 +2,7 @@ module org-openroadm-network {
   namespace "http://org/openroadm/network";
   prefix net;
 
-  import old-ietf-network {
+  import ietf-network {
     prefix nd;
     revision-date 2015-06-08;
   }

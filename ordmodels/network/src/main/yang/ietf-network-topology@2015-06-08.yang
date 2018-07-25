@@ -1,4 +1,4 @@
-module old-ietf-network-topology {
+module ietf-network-topology {
   yang-version 1;
   namespace "urn:ietf:params:xml:ns:yang:ietf-network-topology";
   prefix lnk;
@@ -6,7 +6,7 @@ module old-ietf-network-topology {
   import ietf-inet-types {
     prefix inet;
   }
-  import old-ietf-network {
+  import ietf-network {
     prefix nd;
   }
 
