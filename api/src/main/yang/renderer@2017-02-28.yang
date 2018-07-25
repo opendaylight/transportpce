@@ -69,4 +69,23 @@ module renderer {
       }
     }
   }
+
+  rpc create-ots-oms {
+	    input {
+	      leaf node-id {
+	        type string;
+	      }
+	      leaf logical-connection-point {
+	        type string;
+	      }
+	    }
+	    output {
+	      leaf success {
+            type boolean;
+	      }
+	      leaf result {
+	        type string;
+	      }
+	    }
+	  }
 }

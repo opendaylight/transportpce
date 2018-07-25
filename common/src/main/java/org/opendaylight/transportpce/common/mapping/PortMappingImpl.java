@@ -624,4 +624,42 @@ public class PortMappingImpl implements PortMapping {
         }
 
     }
+
+    @Override
+    public boolean updateMapping(String nodeId, Mapping oldMapping) {
+        InstanceIdentifier<Ports> portIId = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
+            CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName())).child(Ports.class,
+                new PortsKey(oldMapping.getSupportingPort()));
+        if (oldMapping != null && nodeId != null) {
+            try {
+                Optional<Ports> portObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
+                    LogicalDatastoreType.OPERATIONAL, portIId, Timeouts.DEVICE_READ_TIMEOUT,
+                    Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                if (portObject.isPresent()) {
+                    Ports port = portObject.get();
+                    Mapping newMapping = createMappingObject(nodeId, port, oldMapping.getSupportingCircuitPackName(),
+                        oldMapping.getLogicalConnectionPoint());
+
+                    final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
+                    InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class).child(Nodes.class,
+                        new NodesKey(nodeId)).child(Mapping.class, new MappingKey(oldMapping
+                            .getLogicalConnectionPoint()));
+                    writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, mapIID, newMapping);
+                    CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
+                    submit.checkedGet();
+                    return true;
+                }
+                return false;
+            } catch (TransactionCommitFailedException e) {
+                LOG.error("Transaction Commit Error updating Mapping {} for node {}", oldMapping
+                    .getLogicalConnectionPoint(), nodeId, e);
+                return false;
+            }
+        } else {
+            LOG.error("Impossible to update mapping");
+            return false;
+        }
+
+    }
+
 }

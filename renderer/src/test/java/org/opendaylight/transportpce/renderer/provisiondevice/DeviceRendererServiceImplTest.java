@@ -58,7 +58,8 @@ public class DeviceRendererServiceImplTest extends AbstractTest {
             openRoadmInterfaces);
         CrossConnect crossConnect = new CrossConnectImpl(this.deviceTransactionManager);
         this.deviceRendererService = new DeviceRendererServiceImpl(this.getDataBroker(),
-            this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect);
+        this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect,
+            portMapping);
     }
 
     @Test

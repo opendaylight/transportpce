@@ -76,4 +76,6 @@ public interface PortMapping {
      * @return Result Mapping object if success otherwise null.
      */
     Mapping getMapping(String nodeId, String logicalConnPoint);
+
+    boolean updateMapping(String nodeId, Mapping mapping);
 }

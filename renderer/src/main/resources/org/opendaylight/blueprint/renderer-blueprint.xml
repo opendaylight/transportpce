@@ -33,6 +33,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="openRoadmInterfaceFactory" />
     <argument ref="openRoadmInterfaces" />
     <argument ref="crossConnect" />
+    <argument ref="portMapping" />
   </bean>
 
   <bean id="deviceRendererRPCImpl" class="org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl" >
