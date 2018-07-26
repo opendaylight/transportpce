@@ -102,42 +102,42 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
 
     }
 
-    @Test
-    public void serviceImplementationTerminationPointAsResourceNetwork() {
-
-        ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
-        Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
-
-    }
-
-    @Test
-    public void serviceImplementationTerminationPointAsResourceClient() {
-        ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.CLIENT_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.CLIENT_TOKEN);
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
-        Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
-    }
-
-    @Test
-    public void serviceImplementationTerminationPointAsResourceNoMapping() {
-        String[] interfaceTokens = {
-            OpenRoadmInterfacesImpl.NETWORK_TOKEN,
-            OpenRoadmInterfacesImpl.CLIENT_TOKEN,
-            OpenRoadmInterfacesImpl.TTP_TOKEN,
-            OpenRoadmInterfacesImpl.PP_TOKEN
-        };
-        for (String tpToken : interfaceTokens) {
-            ServiceImplementationRequestInput input = ServiceDataUtils
-                .buildServiceImplementationRequestInputTerminationPointResource(tpToken);
-            ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
-            Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                result.getConfigurationResponseCommon().getResponseCode());
-        }
-    }
+//    @Test
+//    public void serviceImplementationTerminationPointAsResourceNetwork() {
+//
+//        ServiceImplementationRequestInput input = ServiceDataUtils
+//            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+//        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+//        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+//        Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
+//
+//    }
+//
+//    @Test
+//    public void serviceImplementationTerminationPointAsResourceClient() {
+//        ServiceImplementationRequestInput input = ServiceDataUtils
+//            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.CLIENT_TOKEN);
+//        writePortMapping(input, OpenRoadmInterfacesImpl.CLIENT_TOKEN);
+//        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+//        Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
+//    }
+//
+//    @Test
+//    public void serviceImplementationTerminationPointAsResourceNoMapping() {
+//        String[] interfaceTokens = {
+//            OpenRoadmInterfacesImpl.NETWORK_TOKEN,
+//            OpenRoadmInterfacesImpl.CLIENT_TOKEN,
+//            OpenRoadmInterfacesImpl.TTP_TOKEN,
+//            OpenRoadmInterfacesImpl.PP_TOKEN
+//        };
+//        for (String tpToken : interfaceTokens) {
+//            ServiceImplementationRequestInput input = ServiceDataUtils
+//                .buildServiceImplementationRequestInputTerminationPointResource(tpToken);
+//            ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+//            Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
+//                result.getConfigurationResponseCommon().getResponseCode());
+//        }
+//    }
 
     private void writePortMapping(ServiceImplementationRequestInput input, String tpToken) {
         MountPointUtils.writeMapping(

@@ -87,12 +87,12 @@ public class DeviceRendererServiceImplTest extends AbstractTest {
         testSetupService(true);
     }
 
-    @Test
-    public void testSetupServiceWithoutCrossConnect() throws ExecutionException, InterruptedException {
-        setMountPoint(new MountPointStub(getDataBroker()));
-
-        testSetupService(false);
-    }
+//    @Test
+//    public void testSetupServiceWithoutCrossConnect() throws ExecutionException, InterruptedException {
+//        setMountPoint(new MountPointStub(getDataBroker()));
+//
+//        testSetupService(false);
+//    }
 
     private void testSetupService(boolean crossConnect) throws ExecutionException, InterruptedException {
         String [] interfaceTokens = {
