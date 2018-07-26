@@ -53,10 +53,10 @@ public interface PortMapping {
     void deleteMappingData(String nodeId);
 
     /**
-     * This method for a given node's termination point returns the Mapping object based on
-     * portmapping.yang model stored in the MD-SAL data store which is created when the node is
-     * connected for the first time. The mapping object basically contains the following attributes of
-     * interest:
+     * This method for a given node's termination point returns the Mapping
+     * object based on portmapping.yang model stored in the MD-SAL data store
+     * which is created when the node is connected for the first time. The
+     * mapping object basically contains the following attributes of interest:
      *
      * <p>
      * 1. Supporting circuit pack
@@ -65,13 +65,15 @@ public interface PortMapping {
      * 2. Supporting port
      *
      * <p>
-     * 3. Supporting OMS interface (if port on ROADM) 4. Supporting OTS interface (if port on ROADM)
+     * 3. Supporting OMS interface (if port on ROADM) 4. Supporting OTS
+     * interface (if port on ROADM)
      *
-     * @param nodeId Unique Identifier for the node of interest.
-     * @param logicalConnPoint Name of the logical point
+     * @param nodeId
+     *            Unique Identifier for the node of interest.
+     * @param logicalConnPoint
+     *            Name of the logical point
      *
      * @return Result Mapping object if success otherwise null.
      */
-
     Mapping getMapping(String nodeId, String logicalConnPoint);
 }

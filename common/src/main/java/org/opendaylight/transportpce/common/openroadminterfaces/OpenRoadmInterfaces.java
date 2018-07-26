@@ -16,13 +16,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfac
 public interface OpenRoadmInterfaces {
 
     /**
-     * This methods does an edit-config operation on the openROADM device in order
-     * to create the given interface.
+     * This methods does an edit-config operation on the openROADM device in
+     * order to create the given interface.
      *
      * <p>
-     * Before posting the interface it checks if:
-     * 1. Interface with same name does not exist
-     * 2. If exists then admin state of interface is outOfState/Maintenance
+     * Before posting the interface it checks if: 1. Interface with same name
+     * does not exist 2. If exists then admin state of interface is
+     * outOfState/Maintenance
      * </p>
      *
      * @param nodeId node ID
@@ -35,29 +35,40 @@ public interface OpenRoadmInterfaces {
     void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException;
 
     /**
+     * This methods does an edit-config operation on the openROADM device in
+     * order to manages the equipment-state status of the circuit pack on which
+     * OpenRoadmEthernet or OpenRoadmOch interfaces are created, according to
+     * OpenRoadm whitepaper. Concerns only XPDR node.
+     *
+     * @param nodeId node ID
+     * @param circuitPackName Circtuit-Pack name
+     * @param activate activate or not
+     */
+    void postEquipmentState(String nodeId, String circuitPackName, boolean activate) throws OpenRoadmInterfaceException;
+
+    /**
      * This private does a get on the interface subtree of the device with the
-     * interface name as the key and return the class corresponding to the interface
-     * type.
+     * interface name as the key and return the class corresponding to the
+     * interface type.
      *
      * @param nodeId node ID
      *
      * @param interfaceName
      *            Name of the interface
      *
-     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
-     *
      * @return Optional of Interface from datastore
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
      */
     Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 
     /**
-     * This methods does an edit-config operation on the openROADM device in order
-     * to delete the given interface.
+     * This methods does an edit-config operation on the openROADM device in
+     * order to delete the given interface.
      *
      * <p>
-     * Before deleting the method:
-     * 1. Checks if interface exists
-     * 2. If exists then changes the state of interface to outOfService
+     * Before deleting the method: 1. Checks if interface exists 2. If exists
+     * then changes the state of interface to outOfService
      * </p>
      *
      * @param nodeId node ID
