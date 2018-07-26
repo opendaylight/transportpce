@@ -30,7 +30,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     @classmethod
     def __start_testtools(cls):
         executable = ("./netconf/netconf/tools/netconf-testtool/target/"
-                      "netconf-testtool-1.3.1-executable.jar")
+                      "netconf-testtool-1.5.0-SNAPSHOT-executable.jar")
         if os.path.isfile(executable):
             with open('testtools1.log', 'w') as outfile:
                 cls.testtools_process1 = subprocess.Popen(
