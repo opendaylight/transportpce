@@ -37,7 +37,7 @@ class TransportPCEtesting(unittest.TestCase):
         executable = "../karaf/target/assembly/bin/karaf"
         with open('odl.log', 'w') as outfile:
             cls.odl_process = subprocess.Popen(
-                ["bash", executable], stdout=outfile,
+                ["bash", executable, "server"], stdout=outfile,
                 stdin=open(os.devnull))
 
     @classmethod

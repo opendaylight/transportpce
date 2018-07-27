@@ -36,13 +36,13 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                 cls.testtools_process1 = subprocess.Popen(
                     ["java", "-jar", executable, "--schemas-dir", "schemas",
                      "--initial-config-xml", "sample_configs/ord_1.2.1/sample-config-ROADM.xml",
-                     "--starting-port","17830"],
+                     "--starting-port", "17830"],
                     stdout=outfile)
             with open('testtools2.log', 'w') as outfile:
                 cls.testtools_process2 = subprocess.Popen(
                     ["java", "-jar", executable, "--schemas-dir", "schemas",
                      "--initial-config-xml", "sample_configs/ord_1.2.1/sample-config-XPDR.xml",
-                     "--starting-port","17831"],
+                     "--starting-port", "17831"],
                     stdout=outfile)
 
     @classmethod
@@ -50,7 +50,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         executable = "../karaf/target/assembly/bin/karaf"
         with open('odl.log', 'w') as outfile:
             cls.odl_process = subprocess.Popen(
-                ["bash", executable], stdout=outfile,
+                ["bash", executable, "server"], stdout=outfile,
                 stdin=open(os.devnull))
 
     @classmethod
@@ -94,7 +94,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application","error-tag":"data-missing",
+            {"error-type":"application", "error-tag":"data-missing",
              "error-message":"Request could not be completed because the relevant data model content does not exist "},
             res['errors']['error'])
 
@@ -255,7 +255,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application","error-tag":"data-missing",
+            {"error-type":"application", "error-tag":"data-missing",
              "error-message":"Request could not be completed because the relevant data model content does not exist "},
             res['errors']['error'])
 
@@ -269,7 +269,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application","error-tag":"data-missing",
+            {"error-type":"application", "error-tag":"data-missing",
              "error-message":"Request could not be completed because the relevant data model content does not exist "},
             res['errors']['error'])
 
@@ -293,7 +293,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application","error-tag":"data-missing",
+            {"error-type":"application", "error-tag":"data-missing",
              "error-message":"Request could not be completed because the relevant data model content does not exist "},
             res['errors']['error'])
 
@@ -306,7 +306,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application","error-tag":"data-missing",
+            {"error-type":"application", "error-tag":"data-missing",
              "error-message":"Request could not be completed because the relevant data model content does not exist "},
             res['errors']['error'])
 
