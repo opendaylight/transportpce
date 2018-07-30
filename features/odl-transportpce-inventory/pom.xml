@@ -37,13 +37,6 @@
             <artifactId>transportpce-inventory</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.opendaylight.transportpce</groupId>
-            <artifactId>odl-transportpce-ui</artifactId>
-            <version>${project.version}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-        </dependency>
     </dependencies>
 
     <build>

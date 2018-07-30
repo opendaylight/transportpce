@@ -23,7 +23,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <packaging>pom</packaging>
 
     <properties>
-        <karaf.localFeature>odl-transportpce-ui</karaf.localFeature>
+        <karaf.localFeature>odl-transportpce</karaf.localFeature>
         <device.yang.jar.extract.directory>
             ${project.build.outputDirectory}/../yang-models/schema
         </device.yang.jar.extract.directory>
