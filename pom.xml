@@ -34,7 +34,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>api</module>
     <module>common</module>
     <module>renderer</module>
-    <module>inventory</module>
     <module>networkmodel</module>
     <module>olm</module>
     <module>tests</module>

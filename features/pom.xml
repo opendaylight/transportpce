@@ -28,7 +28,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>odl-transportpce-ordmodels</module>
     <module>odl-transportpce-stubmodels</module>
     <module>odl-transportpce</module>
-    <module>odl-transportpce-inventory</module>
   </modules>
 
 </project>
