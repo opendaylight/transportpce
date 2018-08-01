@@ -51,13 +51,13 @@ public class OlmServiceStub implements OlmService {
         return null;
     }
 
-    @Override public ListenableFuture<RpcResult<ServicePowerResetOutput>>
-        servicePowerReset(ServicePowerResetInput input) {
+    @Override public ListenableFuture<RpcResult<ServicePowerResetOutput>> servicePowerReset(
+            ServicePowerResetInput input) {
         return null;
     }
 
-    @Override public ListenableFuture<RpcResult<ServicePowerSetupOutput>>
-        servicePowerSetup(ServicePowerSetupInput input) {
+    @Override public ListenableFuture<RpcResult<ServicePowerSetupOutput>> servicePowerSetup(
+            ServicePowerSetupInput input) {
         return RpcResultBuilder.success(new ServicePowerSetupOutputBuilder().build()).buildFuture();
     }
 }

@@ -34,8 +34,8 @@ public class TransportPCEServicePathRPCImpl implements TransportpceServicepathSe
     }
 
     @Override
-    public ListenableFuture<RpcResult<CancelResourceReserveOutput>>
-            cancelResourceReserve(CancelResourceReserveInput input) {
+    public ListenableFuture<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(
+            CancelResourceReserveInput input) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -55,8 +55,8 @@ public class TransportPCEServicePathRPCImpl implements TransportpceServicepathSe
     }
 
     @Override
-    public ListenableFuture<RpcResult<PathComputationRequestOutput>>
-            pathComputationRequest(PathComputationRequestInput input) {
+    public ListenableFuture<RpcResult<PathComputationRequestOutput>> pathComputationRequest(
+            PathComputationRequestInput input) {
         // TODO Auto-generated method stub
         return null;
     }

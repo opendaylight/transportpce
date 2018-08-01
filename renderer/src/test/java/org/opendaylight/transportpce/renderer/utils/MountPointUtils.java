@@ -8,9 +8,9 @@
 
 package org.opendaylight.transportpce.renderer.utils;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.mockito.Mockito;
@@ -50,10 +50,8 @@ public final class MountPointUtils {
         GetConnectionPortTrailOutputBuilder getConnectionPortTrailOutputBuilder =
                 new GetConnectionPortTrailOutputBuilder();
         getConnectionPortTrailOutputBuilder.setPorts(ports);
-        RpcResultBuilder<GetConnectionPortTrailOutput> rpcResultBuilder =
-                RpcResultBuilder.success(getConnectionPortTrailOutputBuilder.build());
-        Future<RpcResult<GetConnectionPortTrailOutput>> rpcResultFuture =
-                CompletableFuture.completedFuture(rpcResultBuilder.build());
+        ListenableFuture<RpcResult<GetConnectionPortTrailOutput>> rpcResultFuture =
+                RpcResultBuilder.success(getConnectionPortTrailOutputBuilder.build()).buildFuture();
         Mockito.doReturn(rpcResultFuture).when(orgOpenroadmDeviceService).getConnectionPortTrail(Mockito.any());
         Mockito.doReturn(orgOpenroadmDeviceService).when(rpcConsumerRegistry).getRpcService(Mockito.any());
         MountPointStub mountPoint = new MountPointStub(dataBroker);
