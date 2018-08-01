@@ -228,7 +228,7 @@ public class PeriodicDeviceBackupJob implements Runnable {
             return "";
         }
         long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
-                .filter(cp -> (cp.getCapability() != null) && cp.getCapability().contains(ORG_OPENROADM_DEVICE)).count();
+            .filter(cp -> (cp.getCapability() != null) && cp.getCapability().contains(ORG_OPENROADM_DEVICE)).count();
         if (count < 1) {
             LOG.trace("The node {} has not capabilities of OpenROADMDevice", node);
             return "";

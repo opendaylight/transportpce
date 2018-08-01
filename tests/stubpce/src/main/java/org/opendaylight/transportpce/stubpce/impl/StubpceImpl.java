@@ -103,7 +103,8 @@ public class StubpceImpl implements StubpceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(CancelResourceReserveInput input) {
+    public ListenableFuture<RpcResult<CancelResourceReserveOutput>>
+            cancelResourceReserve(CancelResourceReserveInput input) {
         LOG.info("RPC cancelResourceReserve  request received");
         String message = "";
         String responseCode = "";
@@ -194,7 +195,8 @@ public class StubpceImpl implements StubpceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<PathComputationRequestOutput>> pathComputationRequest(PathComputationRequestInput input) {
+    public ListenableFuture<RpcResult<PathComputationRequestOutput>>
+            pathComputationRequest(PathComputationRequestInput input) {
         LOG.info("RPC pathcomputation request received");
         String message = "";
         String responseCode = "";
@@ -277,14 +279,17 @@ public class StubpceImpl implements StubpceService {
                                             .setNotificationType(ServicePathNotificationTypes.PathComputationRequest)
                                             .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Successful)
                                             .setStatusMessage(this.message);
-                                    StubpceImpl.this.pathDescriptionBuilder = StubpceImpl.this.sendingPCE.getPathDescription();
+                                    StubpceImpl.this.pathDescriptionBuilder =
+                                        StubpceImpl.this.sendingPCE.getPathDescription();
                                     if (StubpceImpl.this.pathDescriptionBuilder != null) {
                                         PathDescription pathDescription = new org.opendaylight.yang.gen.v1.http.org
-                                                .transportpce.b.c._interface.servicepath.rev170426.service.path
-                                                .rpc.result.PathDescriptionBuilder()
-                                                .setAToZDirection(StubpceImpl.this.pathDescriptionBuilder.getAToZDirection())
-                                                .setZToADirection(StubpceImpl.this.pathDescriptionBuilder.getZToADirection())
-                                                .build();
+                                            .transportpce.b.c._interface.servicepath.rev170426.service.path
+                                            .rpc.result.PathDescriptionBuilder()
+                                            .setAToZDirection(
+                                                StubpceImpl.this.pathDescriptionBuilder.getAToZDirection())
+                                            .setZToADirection(
+                                                StubpceImpl.this.pathDescriptionBuilder.getZToADirection())
+                                            .build();
                                         tmp.setPathDescription(new PathDescriptionBuilder()
                                                 .setAToZDirection(pathDescription.getAToZDirection())
                                                 .setZToADirection(pathDescription.getZToADirection())

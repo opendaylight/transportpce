@@ -38,14 +38,16 @@ public class PceServiceRPCImpl implements PceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(CancelResourceReserveInput input) {
+    public ListenableFuture<RpcResult<CancelResourceReserveOutput>>
+            cancelResourceReserve(CancelResourceReserveInput input) {
         LOG.info("RPC cancelResourceReserve request received");
         return RpcResultBuilder.success(this.pathComputationService.cancelResourceReserve(input)).buildFuture();
     }
 
 
     @Override
-    public ListenableFuture<RpcResult<PathComputationRequestOutput>> pathComputationRequest(PathComputationRequestInput input) {
+    public ListenableFuture<RpcResult<PathComputationRequestOutput>>
+            pathComputationRequest(PathComputationRequestInput input) {
         LOG.info("RPC path computation request received");
         return RpcResultBuilder.success(this.pathComputationService.pathComputationRequest(input)).buildFuture();
     }

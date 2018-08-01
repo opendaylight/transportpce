@@ -171,7 +171,8 @@ public class PowerMgmt {
                         Mapping portMapping = mappingObjectOptional.get();
                         Optional<Interface> interfaceOpt;
                         try {
-                            interfaceOpt = this.openRoadmInterfaces.getInterface(nodeId, portMapping.getSupportingOts());
+                            interfaceOpt =
+                                this.openRoadmInterfaces.getInterface(nodeId, portMapping.getSupportingOts());
                         } catch (OpenRoadmInterfaceException ex) {
                             LOG.error("Failed to get interface {} from node {}!", portMapping.getSupportingOts(),
                                     nodeId, ex);
@@ -310,7 +311,8 @@ public class PowerMgmt {
         if (nodeInterfaceOpt.isPresent()) {
             InterfaceBuilder intfBuilder = new InterfaceBuilder(nodeInterfaceOpt.get());
             intfBuilder.setAdministrativeState(AdminStates.OutOfService);
-            Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(nodeId);
+            Future<Optional<DeviceTransaction>> deviceTxFuture =
+                this.deviceTransactionManager.getDeviceTransaction(nodeId);
             DeviceTransaction deviceTx;
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
@@ -460,7 +462,8 @@ public class PowerMgmt {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
                             .Interface1.class, new Interface1Builder().setOch(ochBuilder.build()).build());
 
-            Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(nodeId);
+            Future<Optional<DeviceTransaction>> deviceTxFuture =
+                this.deviceTransactionManager.getDeviceTransaction(nodeId);
             DeviceTransaction deviceTx;
             try {
                 Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();

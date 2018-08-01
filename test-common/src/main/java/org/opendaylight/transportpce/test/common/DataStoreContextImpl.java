@@ -231,7 +231,8 @@ public class DataStoreContextImpl implements DataStoreContext {
          * @return BindingNormalizedNodeCodecRegistry the resulting binding registry
          */
         private BindingNormalizedNodeCodecRegistry createBindingRegistry() {
-            BindingRuntimeContext bindingContext = BindingRuntimeContext.create(this.moduleInfoBackedCntxt, this.schemaContext);
+            BindingRuntimeContext bindingContext =
+                BindingRuntimeContext.create(this.moduleInfoBackedCntxt, this.schemaContext);
             BindingNormalizedNodeCodecRegistry bindingNormalizedNodeCodecRegistry =
                     new BindingNormalizedNodeCodecRegistry(
                             StreamWriterGenerator.create(JavassistUtils.forClassPool(ClassPool.getDefault())));

@@ -258,13 +258,15 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<EquipmentNotificationOutput>> equipmentNotification(EquipmentNotificationInput input) {
+    public ListenableFuture<RpcResult<EquipmentNotificationOutput>>
+            equipmentNotification(EquipmentNotificationInput input) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ListenableFuture<RpcResult<ServiceRerouteConfirmOutput>> serviceRerouteConfirm(ServiceRerouteConfirmInput input) {
+    public ListenableFuture<RpcResult<ServiceRerouteConfirmOutput>>
+            serviceRerouteConfirm(ServiceRerouteConfirmInput input) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -342,7 +344,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     }
 
     @Override
-    public ListenableFuture<RpcResult<NetworkReOptimizationOutput>> networkReOptimization(NetworkReOptimizationInput input) {
+    public ListenableFuture<RpcResult<NetworkReOptimizationOutput>>
+            networkReOptimization(NetworkReOptimizationInput input) {
         // TODO Auto-generated method stub
         return null;
     }

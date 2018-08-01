@@ -81,7 +81,7 @@ public final class Queries {
         return new Query();
     }
 
-    public final static class Query {
+    public static final class Query {
         private String sql;
         private String schema;
 
