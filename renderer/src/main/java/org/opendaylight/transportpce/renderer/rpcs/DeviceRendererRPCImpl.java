@@ -88,8 +88,8 @@ public class DeviceRendererRPCImpl implements RendererService {
         try {
             return RpcResultBuilder.success(deviceRenderer.createOtsOms(input)).buildFuture();
         } catch (OpenRoadmInterfaceException e) {
-            LOG.error("failed to create oms and ots interfaces on {}: {}", input.getNodeId(), input
-                    .getLogicalConnectionPoint(),e);
+            LOG.error("failed to send request to create oms and ots interfaces on {}: {}", input.getNodeId(),
+                    input.getLogicalConnectionPoint(),e);
         }
         return null;
     }

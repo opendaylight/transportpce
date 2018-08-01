@@ -420,12 +420,12 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         nodeListBuilder.withKey(new NodelistKey(input.getServiceName()));
         nodeListBuilder.setServiceName(input.getServiceName());
         List<
-            org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist
-                .nodelist.Nodes> nodeList = new ArrayList<>();
+            org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service
+                .nodelist.nodelist.Nodes> nodeList = new ArrayList<>();
         for (Nodes node : input.getNodes()) {
             nodeList.add(
-                new org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service
-                    .nodelist.nodelist.NodesBuilder().setNodeId(node.getNodeId()).build());
+                new org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102
+                    .service.nodelist.nodelist.NodesBuilder().setNodeId(node.getNodeId()).build());
         }
         nodeListBuilder.setNodes(nodeList);
         InstanceIdentifier<
@@ -449,10 +449,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
 
     private boolean alarmSuppressionNodeRemoval(String serviceName) {
         InstanceIdentifier<
-            org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service
-                .nodelist.Nodelist> nodeListIID = InstanceIdentifier.create(ServiceNodelist.class).child(
-                        org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102
-                            .service.nodelist.Nodelist.class, new NodelistKey(serviceName));
+            org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist
+                .Nodelist> nodeListIID = InstanceIdentifier.create(ServiceNodelist.class).child(org.opendaylight.yang
+                        .gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist
+                        .Nodelist.class, new NodelistKey(serviceName));
         final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
         writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, nodeListIID);
         Future<Void> submit = writeTransaction.submit();
