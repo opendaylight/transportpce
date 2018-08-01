@@ -71,7 +71,7 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
     }
 
     @Parameterized.Parameters
-    public static Collection primeNumbers() {
+    public static Collection createParameters() {
         List<Object[]> parameters = new ArrayList<>();
 
         PathDescription pathDescription =
@@ -119,13 +119,17 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
     @Test
     public void freeWavelengthsTest() throws ExecutionException, InterruptedException {
         WaveLengthServiceUtils
-            .putTerminationPoint1ToDatastore("node1", "node1-" + OpenRoadmInterfacesImpl.TTP_TOKEN,
+            .putTerminationPoint1ToDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN,
+                OpenRoadmInterfacesImpl.TTP_TOKEN,
                 this.terminationPoint1, this.deviceTransactionManager);
-        WaveLengthServiceUtils.putNode1ToDatastore("node1", this.node1, this.deviceTransactionManager);
+        WaveLengthServiceUtils.putNode1ToDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN, this.node1,
+            this.deviceTransactionManager);
         this.networkModelWavelengthService.useWavelengths(this.pathDescription);
-        Node1 updatedNode1 = WaveLengthServiceUtils.getNode1FromDatastore("node1", this.deviceTransactionManager);
+        Node1 updatedNode1 = WaveLengthServiceUtils.getNode1FromDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN,
+            this.deviceTransactionManager);
         TerminationPoint1 updatedTerminationPoint1 = WaveLengthServiceUtils
-            .getTerminationPoint1FromDatastore("node1", "node1-" + OpenRoadmInterfacesImpl.TTP_TOKEN,
+            .getTerminationPoint1FromDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN,
+                OpenRoadmInterfacesImpl.TTP_TOKEN,
                 this.deviceTransactionManager);
 
         switch (updatedTerminationPoint1.getTpType()) {

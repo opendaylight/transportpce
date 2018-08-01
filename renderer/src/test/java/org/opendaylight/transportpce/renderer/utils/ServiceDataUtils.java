@@ -88,12 +88,12 @@ public final class ServiceDataUtils {
         ServiceImplementationRequestInputBuilder builder = new ServiceImplementationRequestInputBuilder()
             .setServiceName("service 1").setPathDescription(createPathDescriptionTerminationPointResource(tpId))
             .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("Request 1").build())
-            .setServiceAEnd(getServiceAEndBuild().build())
-            .setServiceZEnd(getServiceZEndBuild().build());
+            .setServiceAEnd(getServiceAEndBuild(tpId).build())
+            .setServiceZEnd(getServiceZEndBuild(tpId).build());
         return builder.build();
     }
 
-    public static ServiceImplementationRequestInput buildServiceImplementationRequestInputInvalidResource() {
+    /*public static ServiceImplementationRequestInput buildServiceImplementationRequestInputInvalidResource() {
         ServiceImplementationRequestInputBuilder builder = new ServiceImplementationRequestInputBuilder()
             .setServiceName("service 1").setPathDescription(createPathDescriptionInvalidResource())
             .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("Request 1").build())
@@ -109,7 +109,7 @@ public final class ServiceDataUtils {
             .setServiceAEnd(getServiceAEndBuild().build())
             .setServiceZEnd(getServiceZEndBuild().build());
         return builder.build();
-    }
+    }*/
 
     private static PathDescription createPathDescriptionInvalidResource() {
         List<AToZ> atoZList = new ArrayList<AToZ>();
@@ -158,8 +158,9 @@ public final class ServiceDataUtils {
         for (String nodeId : nodeIds) {
             for (String otherNodeId : nodeIds) {
                 TerminationPoint terminationPoint = terminationPointBuilder
-                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId(nodeId)
-                        .setTpId((nodeId.equals(otherNodeId) ? "" : nodeId + "-") + otherNodeId + "-" + tpId).build())
+                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId(nodeId + '-'
+                            + tpId)
+                        .setTpId(tpId).build())
                     .build();
                 AToZ atoZ = new AToZBuilder().setId(atozId.toString())
                     .withKey(new AToZKey(atozId.toString())).setResource(new ResourceBuilder()
@@ -180,8 +181,9 @@ public final class ServiceDataUtils {
         for (String nodeId : nodeIds) {
             for (String otherNodeId : nodeIds) {
                 TerminationPoint terminationPoint = terminationPointBuilder
-                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId(nodeId)
-                        .setTpId((nodeId.equals(otherNodeId) ? "" : nodeId + "-") + otherNodeId + "-" + tpId).build())
+                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId(nodeId + '-'
+                            + tpId)
+                        .setTpId(tpId).build())
                     .build();
                 ZToA ztoA = new ZToABuilder().setId(ztoaId.toString())
                     .withKey(new ZToAKey(ztoaId.toString())).setResource(new ResourceBuilder()
@@ -238,9 +240,10 @@ public final class ServiceDataUtils {
         return builder.build();
     }
 
-    public static ServiceAEndBuilder getServiceAEndBuild() {
+    public static ServiceAEndBuilder getServiceAEndBuild(String tpId) {
         return new ServiceAEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2-"
+                    + tpId)
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
@@ -255,9 +258,10 @@ public final class ServiceDataUtils {
                     .build());
     }
 
-    public static ServiceZEndBuilder getServiceZEndBuild() {
+    public static ServiceZEndBuilder getServiceZEndBuild(String tpId) {
         return new ServiceZEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-2-3")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-2-3-"
+                    + tpId)
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")

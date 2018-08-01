@@ -29,7 +29,7 @@ public class NodeIdPairTest {
     }
 
     @Parameterized.Parameters
-    public static Collection primeNumbers() {
+    public static Collection nodes() {
         NodeIdPair same = new NodeIdPair("nodeS", "CLIENT");
         return Arrays.asList(new Object[][] {
                 { new NodeIdPair("",""), null, false },
@@ -49,7 +49,7 @@ public class NodeIdPairTest {
     @Test
     public void equalityTest() {
         Assert.assertEquals(this.equality, firstPair.equals(this.secondPair));
-        if (this.secondPair != null && this.firstPair.getClass().equals(this.secondPair.getClass())) {
+        if ((this.secondPair != null) && this.firstPair.getClass().equals(this.secondPair.getClass())) {
             Assert.assertEquals(this.equality, this.firstPair.hashCode() == this.secondPair.hashCode());
         }
     }
