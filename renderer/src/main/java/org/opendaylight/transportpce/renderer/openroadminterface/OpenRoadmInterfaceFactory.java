@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
 import java.math.BigDecimal;
-
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -115,8 +114,9 @@ public class OpenRoadmInterfaceFactory {
         }
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder ochIf1Builder =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
+            .Interface1Builder ochIf1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel
+            .interfaces.rev161014.Interface1Builder();
         ochInterfaceBldr.addAugmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1.class,
             ochIf1Builder.setOch(ocIfBuilder.build()).build());
@@ -148,8 +148,9 @@ public class OpenRoadmInterfaceFactory {
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder ochIf1Builder =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.Interface1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
+            .Interface1Builder ochIf1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel
+            .interfaces.rev161014.Interface1Builder();
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.class,
             createOpenRoadmOchInterfaceName(logicalConnPoint, waveNumber));
@@ -261,8 +262,9 @@ public class OpenRoadmInterfaceFactory {
 
             // Create Interface1 type object required for adding as
             // augmentation
-            org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1Builder otsIf1Builder =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1Builder();
+            org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014
+                .Interface1Builder otsIf1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport
+                .interfaces.rev161014.Interface1Builder();
             otsInterfaceBldr.addAugmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1.class,
                 otsIf1Builder.setOts(otsIfBuilder.build()).build());

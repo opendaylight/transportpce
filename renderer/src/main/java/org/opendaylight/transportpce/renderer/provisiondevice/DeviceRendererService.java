@@ -70,12 +70,12 @@ public interface DeviceRendererService {
     RendererRollbackOutput rendererRollback(RendererRollbackInput input);
 
     /**
-     * This method creates the basis of ots and oms interfaces on a specific ROADM degree
+     * This method creates the basis of ots and oms interfaces on a specific ROADM degree.
      *
      * @param input
      *             Input parameter from the create-ots-oms yang model
      * @return Success flag and names of interfaces created
-     * @throws OpenRoadmInterfaceException
+     * @throws OpenRoadmInterfaceException OpenRoadmInterfaceException
      */
     CreateOtsOmsOutput createOtsOms(CreateOtsOmsInput input) throws OpenRoadmInterfaceException;
 }

@@ -24,6 +24,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev1
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerSetupOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerTurndownOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerTurndownOutputBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
@@ -43,7 +44,8 @@ public class OlmServiceStub implements OlmService {
 
     @Override public Future<RpcResult<ServicePowerTurndownOutput>> servicePowerTurndown(
         ServicePowerTurndownInput input) {
-        return null;
+        return RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
+                .setResult("Success").build()).buildFuture();
     }
 
     @Override public Future<RpcResult<CalculateSpanlossBaseOutput>> calculateSpanlossBase(

@@ -8,8 +8,6 @@
 package org.opendaylight.transportpce.renderer.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.port.PortBuilder;
@@ -50,7 +48,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.ServicePathInputBuilder;
 
 
-public class ServiceDataUtils {
+public class ServiceImplementationDataUtils {
 
     public static Nodes createNode(String nodeId, String srcTp, String dstTp) {
         return new NodesBuilder().setNodeId(nodeId).setKey(new NodesKey(nodeId)).setSrcTp(srcTp)
@@ -67,7 +65,7 @@ public class ServiceDataUtils {
     public static ServicePathInput buildServicePathInputs() {
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder();
         List<Nodes> nodes = new ArrayList<>();
-        nodes.add(ServiceDataUtils.createNode("node1", "src", "dst"));
+        nodes.add(ServiceImplementationDataUtils.createNode("node1", "src", "dst"));
         servicePathInputBuilder.setNodes(nodes);
         servicePathInputBuilder.setServiceName("Service 1").setWaveNumber(20L);
         return servicePathInputBuilder.build();
@@ -84,12 +82,12 @@ public class ServiceDataUtils {
         ServiceImplementationRequestInputBuilder builder = new ServiceImplementationRequestInputBuilder()
             .setServiceName("service 1").setPathDescription(createPathDescriptionTerminationPointResource(tpId))
             .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("Request 1").build())
-            .setServiceAEnd(getServiceAEndBuild(tpId).build())
-            .setServiceZEnd(getServiceZEndBuild(tpId).build());
+            .setServiceAEnd(getServiceAEndBuild().build())
+            .setServiceZEnd(getServiceZEndBuild().build());
         return builder.build();
     }
 
-    /*public static ServiceImplementationRequestInput buildServiceImplementationRequestInputInvalidResource() {
+    public static ServiceImplementationRequestInput buildServiceImplementationRequestInputInvalidResource() {
         ServiceImplementationRequestInputBuilder builder = new ServiceImplementationRequestInputBuilder()
             .setServiceName("service 1").setPathDescription(createPathDescriptionInvalidResource())
             .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId("Request 1").build())
@@ -105,7 +103,7 @@ public class ServiceDataUtils {
             .setServiceAEnd(getServiceAEndBuild().build())
             .setServiceZEnd(getServiceZEndBuild().build());
         return builder.build();
-    }*/
+    }
 
     private static PathDescription createPathDescriptionInvalidResource() {
         List<AToZ> atoZList = new ArrayList<AToZ>();
@@ -149,43 +147,30 @@ public class ServiceDataUtils {
     public static PathDescription createPathDescriptionTerminationPointResource(String tpId) {
         List<AToZ> atoZList = new ArrayList<AToZ>();
         TerminationPointBuilder terminationPointBuilder = new TerminationPointBuilder();
-        List<String> nodeIds = Arrays.asList("XPONDER-1-2", "XPONDER-2-3");
-        Integer atozId = 1;
-        for (String nodeId : nodeIds) {
-            for (String otherNodeId : nodeIds) {
-                TerminationPoint terminationPoint = terminationPointBuilder
-                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId(nodeId+'-'+tpId)
-                        .setTpId(tpId).build())
-                    .build();
-                AToZ atoZ = new AToZBuilder().setId(atozId.toString())
-                    .setKey(new AToZKey(atozId.toString())).setResource(new ResourceBuilder()
-                        .setResource(terminationPoint).build()).build();
-                atozId++;
-                atoZList.add(atoZ);
-            }
-        }
+        TerminationPoint terminationPoint = terminationPointBuilder
+            .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId("XPONDER-1-2")
+                .setTpId("XPONDER-1-2-" + tpId).build()).build();
+        TerminationPoint terminationPoint2 = terminationPointBuilder
+            .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId("XPONDER-1-2")
+                .setTpId("XPONDER-1-2-" + tpId).build()).build();
+        AToZ atoZ = new AToZBuilder().setId("1").setKey(new AToZKey("1")).setResource(new ResourceBuilder()
+            .setResource(terminationPoint).build()).build();
+        AToZ atoZ2 = new AToZBuilder().setId("2").setKey(new AToZKey("2")).setResource(new ResourceBuilder()
+            .setResource(terminationPoint2).build()).build();
+        atoZList.add(atoZ);
+        atoZList.add(atoZ2);
         AToZDirection atozDirection = new AToZDirectionBuilder()
             .setRate(20L)
             .setAToZWavelengthNumber(20L)
             .setAToZ(atoZList)
             .build();
-
-        Collections.reverse(nodeIds);
         List<ZToA> ztoAList = new ArrayList<ZToA>();
-        Integer ztoaId = 1;
-        for (String nodeId : nodeIds) {
-            for (String otherNodeId : nodeIds) {
-                TerminationPoint terminationPoint = terminationPointBuilder
-                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId(nodeId+'-'+tpId)
-                        .setTpId(tpId).build())
-                    .build();
-                ZToA ztoA = new ZToABuilder().setId(ztoaId.toString())
-                    .setKey(new ZToAKey(ztoaId.toString())).setResource(new ResourceBuilder()
-                        .setResource(terminationPoint).build()).build();
-                ztoaId++;
-                ztoAList.add(ztoA);
-            }
-        }
+        ZToA ztoA = new ZToABuilder().setId("1").setKey(new ZToAKey("1")).setResource(new ResourceBuilder()
+            .setResource(terminationPoint).build()).build();
+        ZToA ztoA2 = new ZToABuilder().setId("2").setKey(new ZToAKey("2")).setResource(new ResourceBuilder()
+            .setResource(terminationPoint).build()).build();
+        ztoAList.add(ztoA);
+        ztoAList.add(ztoA2);
         ZToADirection ztoaDirection = new ZToADirectionBuilder()
             .setRate(20L)
             .setZToAWavelengthNumber(20L)
@@ -234,9 +219,9 @@ public class ServiceDataUtils {
         return builder.build();
     }
 
-    public static ServiceAEndBuilder getServiceAEndBuild(String tpId) {
+    public static ServiceAEndBuilder getServiceAEndBuild() {
         return new ServiceAEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2-"+tpId)
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
@@ -251,9 +236,9 @@ public class ServiceDataUtils {
                     .build());
     }
 
-    public static ServiceZEndBuilder getServiceZEndBuild(String tpId) {
+    public static ServiceZEndBuilder getServiceZEndBuild() {
         return new ServiceZEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-2-3-"+tpId)
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")

@@ -62,10 +62,10 @@ public class DeviceRendererRPCImpl implements RendererService {
     public Future<RpcResult<ServicePathOutput>> servicePath(ServicePathInput input) {
         if (input.getOperation().getIntValue() == 1) {
             LOG.info("Create operation request received");
-            return RpcResultBuilder.success(deviceRenderer.setupServicePath(input, null)).buildFuture();
+            return RpcResultBuilder.success(this.deviceRenderer.setupServicePath(input, null)).buildFuture();
         } else if (input.getOperation().getIntValue() == 2) {
             LOG.info("Delete operation request received");
-            return RpcResultBuilder.success(deviceRenderer.deleteServicePath(input)).buildFuture();
+            return RpcResultBuilder.success(this.deviceRenderer.deleteServicePath(input)).buildFuture();
         }
         return RpcResultBuilder.success(new ServicePathOutputBuilder().setResult("Invalid operation")).buildFuture();
     }
@@ -79,7 +79,7 @@ public class DeviceRendererRPCImpl implements RendererService {
      */
     @Override
     public Future<RpcResult<RendererRollbackOutput>> rendererRollback(RendererRollbackInput input) {
-        return RpcResultBuilder.success(deviceRenderer.rendererRollback(input)).buildFuture();
+        return RpcResultBuilder.success(this.deviceRenderer.rendererRollback(input)).buildFuture();
     }
 
     @Override
@@ -89,7 +89,8 @@ public class DeviceRendererRPCImpl implements RendererService {
         try {
             return RpcResultBuilder.success(deviceRenderer.createOtsOms(input)).buildFuture();
         } catch (OpenRoadmInterfaceException e) {
-            e.printStackTrace();
+            LOG.error("failed to send request to create oms and ots interfaces on {}: {}", input.getNodeId(),
+                    input.getLogicalConnectionPoint(),e);
         }
         return null;
     }
