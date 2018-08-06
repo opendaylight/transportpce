@@ -208,7 +208,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_10_xpdr_portmapping_NETWORK1(self):
         url = ("{}/config/portmapping:network/"
-               "nodes/XPDRA/mapping/XPDR-LINE1"
+               "nodes/XPDRA/mapping/NETWORK1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -217,12 +217,12 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
-             'logical-connection-point': 'XPDR-LINE1'},
+             'logical-connection-point': 'NETWORK1'},
             res['mapping'])
 
     def test_11_xpdr_portmapping_CLIENT1(self):
         url = ("{}/config/portmapping:network/"
-               "nodes/XPDRA/mapping/XPDR-CLNT1"
+               "nodes/XPDRA/mapping/CLIENT1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -232,7 +232,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'supporting-port': '1',
              'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
-             'logical-connection-point': 'XPDR-CLNT1'},
+             'logical-connection-point': 'CLIENT1'},
             res['mapping'])
 
     def test_12_xpdr_device_disconnected(self):

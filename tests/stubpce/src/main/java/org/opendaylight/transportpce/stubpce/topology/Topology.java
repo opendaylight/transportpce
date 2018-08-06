@@ -9,12 +9,10 @@
 package org.opendaylight.transportpce.stubpce.topology;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
@@ -39,7 +37,7 @@ public class Topology {
 
     /** Structure of Supernode topology. */
     private Network network;
-    public BundleContext bcontext;
+    private BundleContext bcontext;
     /** String to get Supernode topolgy info freom xml file. */
     private String xml = null;
 
@@ -55,8 +53,6 @@ public class Topology {
         try {
             InputStream is = FrameworkUtil.getBundle(Topology.class).getBundleContext()
                     .getBundle().getEntry("/fakepce.xml").openStream();
-            /*File file = new File("target/classes/fakepce.xml");
-            InputStream is = new FileInputStream(file);*/
             xml = inputStreamToString(is);
             if (xml != null) {
                 setNetwork(xmlMapper.readValue(xml, Network.class));
