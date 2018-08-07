@@ -237,7 +237,6 @@ public class OpenRoadmTopology {
                 nodes.add(tempNode.build());
                 clientCounter++;
                 lineCounter++;
-                LOG.info("Entered this loop");
             }
             return new TopologyShard(nodes, links);
         }
