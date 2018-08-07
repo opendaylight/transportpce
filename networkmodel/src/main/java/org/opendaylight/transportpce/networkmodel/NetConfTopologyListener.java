@@ -112,31 +112,6 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         final ListenerRegistration<OrgOpenroadmTcaListener> accessTcaNotificationListenerRegistration =
                 notificationService.get().registerNotificationListener(tcaListener);
 
-
-
-        String streamName = getSupportedStream(nodeId);
-        if (streamName == null) {
-            streamName = "OPENROADM";
-        }
-        final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class).toJavaUtil();
-        if (service.isPresent()) {
-            final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
-            if (rpcService == null) {
-                LOG.error("Failed to get RpcService for node {}", nodeId);
-            } else {
-                final CreateSubscriptionInputBuilder createSubscriptionInputBuilder =
-                    new CreateSubscriptionInputBuilder();
-                createSubscriptionInputBuilder.setStream(new StreamNameType(streamName));
-                LOG.info("Triggering notification stream {} for node {}", streamName, nodeId);
-                rpcService.createSubscription(createSubscriptionInputBuilder.build());
-            }
-        } else {
-            LOG.error("Failed to get RpcService for node {}", nodeId);
-        }
-        NodeRegistration nodeRegistration = new NodeRegistration(nodeId, accessAlarmNotificationListenerRegistration,
-                accessDeOperationasNotificationListenerRegistration, accessDeviceNotificationListenerRegistration,
-                accessLldpNotificationListenerRegistration, accessTcaNotificationListenerRegistration);
-        this.registrations.put(nodeId, nodeRegistration);
     }
 
     private void onDeviceDisConnected(final String nodeId) {
