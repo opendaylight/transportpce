@@ -371,11 +371,11 @@ public class PortMappingImpl implements PortMapping {
             for (Ports port : cp.getPorts()) {
                 if (Port.PortQual.XpdrNetwork.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                        OpenRoadmInterfacesImpl.NETWORK_TOKEN + line));
+                        "XPDR1"+OpenRoadmInterfacesImpl.NETWORK_TOKEN + line));
                     line++;
                 } else if (Port.PortQual.XpdrClient.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                        OpenRoadmInterfacesImpl.CLIENT_TOKEN + client));
+                        "XPDR1"+OpenRoadmInterfacesImpl.CLIENT_TOKEN + client));
                     client++;
                 } else {
                     LOG.warn("Not supported type of port! Port type: {}", port.getPortQual());
