@@ -58,9 +58,9 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.__start_honeynode1()
-        time.sleep(40)
+        time.sleep(20)
         cls.__start_honeynode2()
-        time.sleep(40)
+        time.sleep(20)
         cls.__start_odl()
         time.sleep(60)
 
@@ -232,7 +232,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_11_xpdr_portmapping_NETWORK2(self):
         url = ("{}/config/portmapping:network/"
-               "nodes/XPDRA/mapping/XPDR0-NETWORK2"
+               "nodes/XPDRA/mapping/XPDR1-NETWORK2"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -241,7 +241,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {'supporting-port': '2', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
-             'logical-connection-point': 'XPDR0-NETWORK2'},
+             'logical-connection-point': 'XPDR1-NETWORK2'},
             res['mapping'])
 
     def test_12_xpdr_portmapping_CLIENT1(self):
@@ -266,16 +266,17 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {"error-type":"application","error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist "},
-            res['errors']['error'])
+            {'supporting-port': 'C2',
+                 'supporting-circuit-pack-name': '1/0/C2-PLUG-CLIENT',
+                 'logical-connection-point': 'XPDR1-CLIENT2'},
+            res['mapping'])
 
     def test_14_xpdr_portmapping_CLIENT4(self):
         url = ("{}/config/portmapping:network/"
-               "nodes/XPDRA/mapping/XPDR0-CLIENT4"
+               "nodes/XPDRA/mapping/XPDR1-CLIENT4"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -285,7 +286,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'supporting-port': 'C4',
              'supporting-circuit-pack-name': '1/0/C4-PLUG-CLIENT',
-             'logical-connection-point': 'XPDR0-CLIENT4'},
+             'logical-connection-point': 'XPDR1-CLIENT4'},
             res['mapping'])
 
     def test_15_xpdr_device_disconnected(self):

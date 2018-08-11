@@ -20,6 +20,7 @@ import psutil
 import shutil
 from unittest.result import failfast
 
+
 class TransportPCERendererTesting(unittest.TestCase):
 
     honeynode_process1 = None
@@ -161,7 +162,6 @@ class TransportPCERendererTesting(unittest.TestCase):
               'logical-connection-point': 'XPDR1-CLIENT1'},
              res['nodes'][0]['mapping'])
 
-
     def test_05_service_path_create(self):
         url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
         data = {"renderer:input": {
@@ -262,7 +262,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              res['interface'][0])
         self.assertDictEqual(
              {u'rate': u'org-openroadm-optical-channel-interfaces:R100G',
-              u'transmit-power': -5,
+              u'transmit-power':-5,
               u'wavelength-number': 7,
               u'modulation-format': u'dp-qpsk'},
              res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
@@ -368,8 +368,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertEqual(response.json(), {
-             'output': {'result': 'Request processed'}})
-
+             'output': {'result': 'Request processed', 'success': True}})
 
     def test_15_service_path_delete_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
@@ -382,7 +381,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application","error-tag":"data-missing",
+             {"error-type":"application", "error-tag":"data-missing",
               "error-message":"Request could not be completed because the relevant data model content does not exist "},
              res['errors']['error'])
 
@@ -397,7 +396,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application","error-tag":"data-missing","error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
              res['errors']['error'])
 
     def test_17_service_path_delete_rdm_check(self):
@@ -411,7 +410,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application","error-tag":"data-missing","error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
              res['errors']['error'])
 
     def test_18_service_path_delete_xpdr_check(self):
@@ -425,7 +424,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application","error-tag":"data-missing","error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
              res['errors']['error'])
 
     def test_19_service_path_delete_xpdr_check(self):
@@ -439,7 +438,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application","error-tag":"data-missing","error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
              res['errors']['error'])
 
     def test_20_service_path_delete_xpdr_check(self):
@@ -453,7 +452,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application","error-tag":"data-missing","error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
              res['errors']['error'])
 
     def test_21_service_path_delete_xpdr_check(self):
@@ -467,7 +466,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application","error-tag":"data-missing","error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
              res['errors']['error'])
 
     def test_22_service_path_delete_xpdr_check(self):
@@ -503,6 +502,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(20)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2, failfast=True)
