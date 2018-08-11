@@ -22,14 +22,8 @@ import io.fd.honeycomb.translate.MappingContext;
 import io.fd.honeycomb.translate.ModificationCache;
 import io.fd.honeycomb.translate.read.ReadContext;
 import io.fd.honeycomb.translate.read.registry.InitRegistry;
-
 import javax.annotation.Nonnull;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,37 +36,23 @@ final class InitializerRegistryAdapter implements InitializerRegistry {
     private final InitRegistry initRegistry;
     private final DataBroker dataBroker;
     private final MappingContext realtimeMappingContext;
-    /** Add by Martial. */
-    private final DataBroker deviceDataBroker;
-    private final DataBroker hcConfigDataBroker;
-    private final InstanceIdentifier<OrgOpenroadmDevice> DEVICE_CONTAINER_ID = InstanceIdentifier
-            .create(OrgOpenroadmDevice.class);
 
     InitializerRegistryAdapter(final DataTreeInitializer configInitializer,
                                final DataTreeInitializer contextInitializer,
                                final InitRegistry initRegistry,
                                final DataBroker noopConfigDataBroker,
-                               final MappingContext realtimeMappingContext,
-                               final DataBroker deviceDataBroker,
-                               final DataBroker hcConfigDataBroker) {
+                               final MappingContext realtimeMappingContext) {
         this.configInitializer = configInitializer;
         this.contextInitializer = contextInitializer;
         this.initRegistry = initRegistry;
         this.dataBroker = noopConfigDataBroker;
         this.realtimeMappingContext = realtimeMappingContext;
-        this.deviceDataBroker = deviceDataBroker;
-        this.hcConfigDataBroker = hcConfigDataBroker;
     }
 
     @Override
     public void initialize() throws DataTreeInitializer.InitializeException {
         LOG.info("Config initialization started");
         try {
-            LOG.info("Register device databroker listener ...");
-            deviceDataBroker
-            .registerDataTreeChangeListener(new DataTreeIdentifier<>(LogicalDatastoreType.CONFIGURATION,
-                    DEVICE_CONTAINER_ID), new DeviceChangeListener(deviceDataBroker, hcConfigDataBroker));
-            LOG.info("Device databroker listener registered");
             // Initialize contexts first so that other initializers can find any relevant mapping before initializing
             // configuration to what is already in VPP
             contextInitializer.initialize();

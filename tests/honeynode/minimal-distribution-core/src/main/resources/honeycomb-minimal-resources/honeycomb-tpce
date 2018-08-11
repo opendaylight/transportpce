@@ -12,14 +12,14 @@ then
         filename=$(basename -- "$CONFIG")
         echo "changing netconf port with $PORT in netconf.json file ..."
         sed -i "/netconf-ssh-binding-port/c\  \"netconf-ssh-binding-port\" : "$PORT"," $(dirname $0)/config/netconf.json
-        echo "changing context and config path in honeycomb.json file ..."
-        sed -i "/persisted-context-path/c\  \"persisted-context-path\" : \"./persist/"$PORT"/context/data.json\"," $(dirname $0)/config/honeycomb.json
-        sed -i "/persisted-config-path/c\  \"persisted-config-path\" : \"./persist/"$PORT"/config/data.json\"," $(dirname $0)/config/honeycomb.json
+        echo "changing persist-context and persist-config to false in honeycomb.json file ..."
+        sed -i "/persist-context/c\  \"persist-context\" : \"false\"," $(dirname $0)/config/honeycomb.json
+        sed -i "/persist-config/c\  \"persist-config\" : \"false\"," $(dirname $0)/config/honeycomb.json
         echo "changing netconf-initial-config-xml location with $CONFIG in honeycomb.json file ..."
         sed -i "/netconf-initial-config-xml/c\  \"netconf-initial-config-xml\" : \"device/$filename\"" $(dirname $0)/config/honeycomb.json
         while [ $STATUS -eq 100 ]
         do
-          java -Xms32m -Xmn90m -Xmx128m -XX:MetaspaceSize=32m -XX:MaxMetaspaceSize=128m -jar $(dirname $0)/honeynode-distribution-1.18.01.jar
+          java -Xms512m -Xmn512m -Xmx1024m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -jar $(dirname $0)/honeynode-distribution-1.18.01.jar
           STATUS=$?
           echo "Honeycomb exited with status: $STATUS"
           if [ $STATUS -eq 100 ]

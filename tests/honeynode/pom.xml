@@ -28,10 +28,10 @@
     <module>honeynode-common</module>
     <module>honeynode-plugin-api</module>
     <module>honeynode-plugin-impl</module>
+    <module>netconf-netty-util</module>
     <module>netconf</module>
     <module>restconf</module>
     <module>honeynode-distribution</module>
-    
   </modules>
 
   <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->

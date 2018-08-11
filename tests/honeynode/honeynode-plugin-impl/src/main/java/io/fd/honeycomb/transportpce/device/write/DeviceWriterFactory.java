@@ -17,14 +17,13 @@ package io.fd.honeycomb.transportpce.device.write;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
 import io.fd.honeycomb.translate.util.write.BindingBrokerWriter;
 import io.fd.honeycomb.translate.write.WriterFactory;
 import io.fd.honeycomb.translate.write.registry.ModifiableWriterRegistryBuilder;
-
 import javax.annotation.Nonnull;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
+import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
@@ -40,5 +39,7 @@ public class DeviceWriterFactory implements WriterFactory {
     @Override
     public void init(@Nonnull final ModifiableWriterRegistryBuilder registry) {
         registry.wildcardedSubtreeAdd(new BindingBrokerWriter<>(DEVICE_CONTAINER_ID, deviceDataBroker));
+        deviceDataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(LogicalDatastoreType.CONFIGURATION,
+                DEVICE_CONTAINER_ID), new DeviceChangeListener(deviceDataBroker));
     }
 }
