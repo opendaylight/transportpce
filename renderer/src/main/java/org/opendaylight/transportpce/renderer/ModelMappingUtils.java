@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
@@ -145,7 +144,7 @@ public final class ModelMappingUtils {
                     int[] pos = findTheLongestSubstring(nodeID, tpID);
                     //TODO: do not rely on nodeId to be integer
                     int id = Integer.parseInt(sortId);
-                   treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
+                    treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
                 } else if (resourceType.equals("Link")) {
                     LOG.info("The type is link");
                 } else {
@@ -221,7 +220,7 @@ public final class ModelMappingUtils {
                     int[] pos = findTheLongestSubstring(nodeID, tpID);
                     //TODO: do not rely on nodeId to be integer
                     int id = Integer.parseInt(sortId);
-                   treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
+                    treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
                 } else if (resourceType.equals("Link")) {
                     LOG.info("The type is link");
                 } else {
