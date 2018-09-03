@@ -11,7 +11,6 @@ package org.opendaylight.transportpce.stubpce.topology;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-
 import java.util.List;
 
 
@@ -72,8 +71,8 @@ public class Resource {
         return lcps;
     }
 
-    public void setLpcs(List<LogicalConnectionPoint> lcps) {
-        this.lcps = lcps;
+    public void setLpcs(List<LogicalConnectionPoint> logicalConPoints) {
+        this.lcps = logicalConPoints;
     }
 
     @Override

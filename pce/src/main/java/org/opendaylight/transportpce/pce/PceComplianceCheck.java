@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 /*
  * Class to check RPCs Compliancy.
  */
-public class PceComplianceCheck {
+public final class PceComplianceCheck {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceComplianceCheck.class);
 
@@ -49,6 +49,9 @@ public class PceComplianceCheck {
             result = false;
         }
         return new PceComplianceCheckResult(result, message);
+    }
+
+    private PceComplianceCheck() {
     }
 
 }

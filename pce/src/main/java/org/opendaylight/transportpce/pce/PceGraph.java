@@ -10,13 +10,11 @@ package org.opendaylight.transportpce.pce;
 
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.collections15.Transformer;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.PceResult.LocalCause;
@@ -448,9 +446,9 @@ public class PceGraph {
 
     }
 
-    public void setConstrains(PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints) {
-        this.pceHardConstraints = pceHardConstraints;
-        this.pceSoftConstraints = pceSoftConstraints;
+    public void setConstrains(PceConstraints pceHardCons, PceConstraints pceSoftCons) {
+        this.pceHardConstraints = pceHardCons;
+        this.pceSoftConstraints = pceSoftCons;
     }
 
 }

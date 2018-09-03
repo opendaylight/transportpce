@@ -44,7 +44,7 @@ public final class CheckCoherencyHardSoft {
         return result;
     }
 
-    public CheckCoherencyHardSoft() {
+    private CheckCoherencyHardSoft() {
     }
 
 }

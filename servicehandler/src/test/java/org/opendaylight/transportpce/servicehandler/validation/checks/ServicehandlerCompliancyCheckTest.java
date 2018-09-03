@@ -28,10 +28,4 @@ public class ServicehandlerCompliancyCheckTest {
         Assert.assertEquals("", result.getMessage());
         Assert.assertEquals(true, result.hasPassed());
     }
-
-    @Test
-    public void constructServicehandlerCompliancyCheck() {
-        ServicehandlerCompliancyCheck servicehandlerCompliancyCheck = new ServicehandlerCompliancyCheck();
-        Assert.assertEquals(ServicehandlerCompliancyCheck.class, servicehandlerCompliancyCheck.getClass());
-    }
 }

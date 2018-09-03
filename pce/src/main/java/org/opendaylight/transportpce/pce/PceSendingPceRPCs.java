@@ -103,7 +103,7 @@ public class PceSendingPceRPCs {
             // TODO fix. This is quick workaround for algorithm problem
             if ((rc.getLocalCause() == LocalCause.TOO_HIGH_LATENCY)
                 && (pceHardConstraints.getPceMetrics() == PceMetric.HopCount)
-                && (pceHardConstraints.getMaxLatency() != (long) -1)) {
+                && (pceHardConstraints.getMaxLatency() != -1)) {
 
                 pceHardConstraints.setPceMetrics(PceMetric.PropagationDelay);
                 graph = patchRerunGraph(graph, pceHardConstraints, pceSoftConstraints);
@@ -129,12 +129,12 @@ public class PceSendingPceRPCs {
         LOG.info("setPathDescription ...");
         AToZDirection atoz = rc.getAtoZDirection();
         ZToADirection ztoa = rc.getZtoADirection();
-        if (atoz == null || atoz.getAToZ() == null) {
+        if ((atoz == null) || (atoz.getAToZ() == null)) {
             rc.setRC("400");
             LOG.error("In pathComputation empty atoz path after description: result = {}", rc.toString());
             return;
         }
-        if (ztoa == null || ztoa.getZToA() == null) {
+        if ((ztoa == null) || (ztoa.getZToA() == null)) {
             rc.setRC("400");
             LOG.error("In pathComputation empty ztoa path after description: result = {}", rc.toString());
             return;
@@ -145,11 +145,10 @@ public class PceSendingPceRPCs {
         LOG.info("In pathComputation Graph is Found");
     }
 
-    private PceGraph patchRerunGraph(PceGraph graph, PceConstraints pceHardConstraints,
-        PceConstraints pceSoftConstraints) {
+    private PceGraph patchRerunGraph(PceGraph graph, PceConstraints pceHardCons, PceConstraints pceSoftCons) {
 
         LOG.info("In pathComputation patchRerunGraph : rerun Graph with metric = PROPAGATION-DELAY ");
-        graph.setConstrains(pceHardConstraints, pceSoftConstraints);
+        graph.setConstrains(pceHardCons, pceSoftCons);
         graph.calcPath();
         return graph;
 

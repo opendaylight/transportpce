@@ -86,12 +86,12 @@ public class PceResult {
         return this.ztoadirection;
     }
 
-    public void setAtoZDirection(AToZDirection atozdirection) {
-        this.atozdirection = atozdirection;
+    public void setAtoZDirection(AToZDirection atozdir) {
+        this.atozdirection = atozdir;
     }
 
-    public void setZtoADirection(ZToADirection ztoadirection) {
-        this.ztoadirection = ztoadirection;
+    public void setZtoADirection(ZToADirection ztoadir) {
+        this.ztoadirection = ztoadir;
     }
 
     public long getRate() {

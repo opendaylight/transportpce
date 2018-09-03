@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.stubpce.topology;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.opendaylight.transportpce.stubpce.TpNodeTp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.Link;
@@ -371,7 +370,7 @@ public class NodePath {
         return isXpdrSrgAbsent;
     }
 
-    public void setXpdrSrgAbsent(boolean isXpdrSrgAbsent) {
-        this.isXpdrSrgAbsent = isXpdrSrgAbsent;
+    public void setXpdrSrgAbsent(boolean xpdrSrgAbsent) {
+        this.isXpdrSrgAbsent = xpdrSrgAbsent;
     }
 }

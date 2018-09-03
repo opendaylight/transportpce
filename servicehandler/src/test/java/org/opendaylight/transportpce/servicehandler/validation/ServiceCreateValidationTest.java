@@ -12,8 +12,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
-import org.opendaylight.transportpce.servicehandler.validation.checks.CheckCoherencyHardSoft;
-import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerTxRxCheck;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.co.routing.or.general.CoRoutingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraintsBuilder;
@@ -93,23 +91,5 @@ public class ServiceCreateValidationTest {
                 .build()).build();
         OperationResult result = ServiceCreateValidation.validateServiceCreateRequest(input);
         Assert.assertEquals(true, result.isSuccess());
-    }
-
-    @Test
-    public void constructServicehandlerTxRxCheck() {
-        ServicehandlerTxRxCheck servicehandlerTxRxCheck = new ServicehandlerTxRxCheck();
-        Assert.assertEquals(ServicehandlerTxRxCheck.class, servicehandlerTxRxCheck.getClass());
-    }
-
-    @Test
-    public void constructCheckCoherencyHardSoft() {
-        CheckCoherencyHardSoft checkCoherencyHardSoft = new  CheckCoherencyHardSoft();
-        Assert.assertEquals(CheckCoherencyHardSoft.class, checkCoherencyHardSoft.getClass());
-    }
-
-    @Test
-    public void constructServiceCreateValidation() {
-        ServiceCreateValidation serviceCreateValidation = new  ServiceCreateValidation();
-        Assert.assertEquals(ServiceCreateValidation.class, serviceCreateValidation.getClass());
     }
 }

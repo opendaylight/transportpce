@@ -120,7 +120,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
                     otuBuilder =
                     new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1Builder(
                         intf2Delete.augmentation(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1.class));
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1.class));
                 OtuBuilder otu = new OtuBuilder(otuBuilder.getOtu());
                 if (otu.getMaintLoopback() != null) {
                     MaintLoopbackBuilder maintLoopBackBuilder = new MaintLoopbackBuilder();
@@ -200,15 +200,14 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         CircuitPacksBuilder cpBldr = new CircuitPacksBuilder(cp);
         boolean change = false;
         if (activate) {
-            if (cpBldr.getEquipmentState()!=null && !cpBldr.getEquipmentState().equals(States.NotReservedInuse)) {
+            if (cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().equals(States.NotReservedInuse)) {
                 cpBldr.setEquipmentState(States.NotReservedInuse);
                 change = true;
             }
-        } else {
-            if ((cpBldr.getEquipmentState()!=null && !cpBldr.getEquipmentState().equals(States.NotReservedAvailable))) {
-                cpBldr.setEquipmentState(States.NotReservedAvailable);
-                change = true;
-            }
+        } else if (
+            (cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().equals(States.NotReservedAvailable))) {
+            cpBldr.setEquipmentState(States.NotReservedAvailable);
+            change = true;
         }
         if (change) {
             Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(

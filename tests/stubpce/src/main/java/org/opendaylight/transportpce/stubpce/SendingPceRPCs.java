@@ -13,7 +13,6 @@ import com.google.common.base.Optional;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
@@ -120,8 +118,8 @@ public class SendingPceRPCs {
      */
     private Boolean comp(Resource pathAend, Resource pathZend, String inputAend, String inputZend) {
         Boolean result = false;
-        if (pathAend != null && pathZend != null && inputAend != null && inputZend != null) {
-            if (pathAend instanceof Node && pathZend instanceof Node) {
+        if ((pathAend != null) && (pathZend != null) && (inputAend != null) && (inputZend != null)) {
+            if ((pathAend instanceof Node) && (pathZend instanceof Node)) {
                 Node aend = (Node) pathAend;
                 Node zend = (Node) pathZend;
                 if (aend.getNodeIdentifier().getNodeId().compareToIgnoreCase(inputAend) == 0) {
@@ -146,7 +144,7 @@ public class SendingPceRPCs {
         Boolean result = false;
         LOG.info("{} - {}", res1.getClass().getName(), res2.getClass().getName());
         if (res1.getClass().getName().compareToIgnoreCase(res2.getClass().getName()) == 0) {
-            if (res1 instanceof Node && res2 instanceof Node) {
+            if ((res1 instanceof Node) && (res2 instanceof Node)) {
                 Node node1 = (Node)res1;
                 Node node2 = (Node)res2;
                 if (node1.getNodeIdentifier().getNodeId()
@@ -154,7 +152,7 @@ public class SendingPceRPCs {
                     result = true;
                 }
             }
-            if (res1 instanceof TerminationPoint && res2 instanceof TerminationPoint) {
+            if ((res1 instanceof TerminationPoint) && (res2 instanceof TerminationPoint)) {
                 TerminationPoint tp1 = (TerminationPoint)res1;
                 TerminationPoint tp2 = (TerminationPoint)res2;
                 if (tp1.getTerminationPointIdentifier().getNodeId()
@@ -165,7 +163,7 @@ public class SendingPceRPCs {
                     }
                 }
             }
-            if (res1 instanceof Link && res2 instanceof Link) {
+            if ((res1 instanceof Link) && (res2 instanceof Link)) {
                 Link link1 = (Link)res1;
                 Link link2 = (Link)res2;
                 if (link1.getLinkIdentifier().getLinkId().compareTo(link2.getLinkIdentifier().getLinkId()) == 0) {
@@ -203,7 +201,7 @@ public class SendingPceRPCs {
                     Boolean trouve = false;
                     for (int loop = 0;loop < size;loop++) {
                         id2 = atoz2.getAToZ().get(loop).getId();
-                        if (id2 != null && id2.compareTo(id1) == 0) {
+                        if ((id2 != null) && (id2.compareTo(id1) == 0)) {
                             res2 = atoz2.getAToZ().get(loop).getResource().getResource();
                             LOG.info("res2 : {}", res2.toString());
                             trouve = true;
@@ -255,7 +253,7 @@ public class SendingPceRPCs {
                     Boolean trouve = false;
                     for (int loop = 0;loop < size;loop++) {
                         id2 = ztoa2.getZToA().get(loop).getId();
-                        if (id2 != null && id2.compareTo(id1) == 0) {
+                        if ((id2 != null) && (id2.compareTo(id1) == 0)) {
                             res2 = ztoa2.getZToA().get(loop).getResource().getResource();
                             LOG.info("res2 : {}", res2.toString());
                             trouve = true;
@@ -291,14 +289,14 @@ public class SendingPceRPCs {
     private Boolean excludeNode(PathDescriptions path, List<String> nodes) {
         LOG.info("Testing exclude Nodes ...");
         Boolean result = false;
-        if (path != null && !nodes.isEmpty()) {
+        if ((path != null) && !nodes.isEmpty()) {
             List<AToZ> list = path.getAToZDirection().getAToZ();
             if (!list.isEmpty()) {
                 int index = 0;
                 boolean found = false;
-                while (index < list.size() && !found) {
+                while ((index < list.size()) && !found) {
                     Resource res = list.get(index).getResource().getResource();
-                    if (res != null && res instanceof Node) {
+                    if ((res != null) && (res instanceof Node)) {
                         Node node = (Node) res;
                         for (String exclude : nodes) {
                             if (exclude.compareToIgnoreCase(node.getNodeIdentifier().getNodeId()) == 0) {
@@ -333,14 +331,14 @@ public class SendingPceRPCs {
     private Boolean diversityService(List<String> existingService, PathDescriptions path, int choice) {
         LOG.info("Testing diversity ...");
         Boolean result = false;
-        if (path != null && choice >= 0 && !existingService.isEmpty()) {
+        if ((path != null) && (choice >= 0) && !existingService.isEmpty()) {
             int index = 0;
             while (index < existingService.size()) {
                 String tmp = existingService.get(index);
                 if (tmp != null) {
                     org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
                         .types.rev170426.service.path.PathDescription pathDesc = null;
-                    if (servicePathList != null && !servicePathList.isEmpty()) {
+                    if ((servicePathList != null) && !servicePathList.isEmpty()) {
                         for (ServicePaths service : servicePathList) {
                             if (service.getServicePathName().compareTo(tmp) == 0) {
                                 LOG.info("Existing Service '{}' found in ServicePathList ...", tmp);
@@ -403,9 +401,9 @@ public class SendingPceRPCs {
                         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
                             .types.rev170426.service.path.PathDescription tmp = service.getPathDescription();
                         if (tmp != null) {
-                            if (path.getAToZDirection() != null && tmp.getAToZDirection() != null
+                            if ((path.getAToZDirection() != null) && (tmp.getAToZDirection() != null)
                                     && egalAtoZDirection(path.getAToZDirection(), tmp.getAToZDirection())) {
-                                if (path.getZToADirection() != null && tmp.getZToADirection() != null
+                                if ((path.getZToADirection() != null) && (tmp.getZToADirection() != null)
                                         && egalZtoADirection(path.getZToADirection(), tmp.getZToADirection())) {
                                     result = true;
                                     LOG.info("Path already present in servicePath List");
@@ -446,7 +444,7 @@ public class SendingPceRPCs {
     private List<PathDescriptions> retrievePath(String aendNodeId, String zendNodeId) {
         List<PathDescriptions> result = new ArrayList<PathDescriptions>();
         List<PathDescriptions> paths = readPathDescriptionList();
-        if (!paths.isEmpty() && aendNodeId != null && zendNodeId != null) {
+        if (!paths.isEmpty() && (aendNodeId != null) && (zendNodeId != null)) {
             LOG.info("retrieving paths from pathDescription List for {} / {}", aendNodeId, zendNodeId);
             for (PathDescriptions tmp : paths) {
                 Resource pathAend = null;
@@ -479,7 +477,7 @@ public class SendingPceRPCs {
                         }
                         index++;
                     }
-                    if (pathAend != null && pathZend != null) {
+                    if ((pathAend != null) && (pathZend != null)) {
                         LOG.info("pathAend : {} - pathZend: {}",pathAend, pathZend);
                         LOG.info("aendNodeId : {} - zendNodeId : {}", aendNodeId, zendNodeId);
                         if (comp(pathAend, pathZend, aendNodeId, zendNodeId)) {
@@ -510,7 +508,7 @@ public class SendingPceRPCs {
             PathDescriptions path = it.next();
             String name = path.getPathName();
             LOG.info("path  : {}", name);
-            if (name != null && name.contains(contain)) {
+            if ((name != null) && name.contains(contain)) {
                 LOG.info("    path gets : {}", name);
                 String [] split = name.split("_");
                 if (split.length == 3) {
@@ -577,7 +575,7 @@ public class SendingPceRPCs {
                 if (cancelInput != null) {
                     Boolean found = false;
                     String name = cancelInput.getServiceName();
-                    if (name != null && !servicePathList.isEmpty()) {
+                    if ((name != null) && !servicePathList.isEmpty()) {
                         for (ServicePaths service : servicePathList) {
                             if (name.compareTo(service.getServicePathName()) == 0) {
                                 LOG.info("ServicePaths found in ServicePathList !!!");
@@ -620,7 +618,7 @@ public class SendingPceRPCs {
                 if (input != null) {
                     HardConstraints inputHard = input.getHardConstraints();
                     SoftConstraints inputSoft = input.getSoftConstraints();
-                    if (inputHard != null || inputSoft != null) {
+                    if ((inputHard != null) || (inputSoft != null)) {
                         constraints = true;
                     }
                     path = null;
@@ -649,17 +647,17 @@ public class SendingPceRPCs {
                                             if (existingService.size() > 0) {
                                                 LOG.info("Getting existing service applicability ...");
                                                 int choice = -1;
-                                                if (choice < 0
+                                                if ((choice < 0)
                                                         && diversity.getExistingServiceApplicability().isNode()) {
                                                     LOG.info("existing-service-applicability : Node");
                                                     choice = 0;
                                                 }
-                                                if (choice < 0
+                                                if ((choice < 0)
                                                         && diversity.getExistingServiceApplicability().isClli()) {
                                                     LOG.info("existing-service-applicability : Clli");
                                                     choice = 1;
                                                 }
-                                                if (choice < 0
+                                                if ((choice < 0)
                                                         && diversity.getExistingServiceApplicability().isSrlg()) {
                                                     LOG.info("existing-service-applicability : Srlg");
                                                     choice = 2;
@@ -776,7 +774,7 @@ public class SendingPceRPCs {
      */
     private Boolean writeOrDeleteServicePathList(String serviceName, int choice) {
         Boolean result = null;
-        if (serviceName != null && serviceName.compareTo(" ") != 0 && choice >= 0 && choice < 2) {
+        if ((serviceName != null) && (serviceName.compareTo(" ") != 0) && (choice >= 0) && (choice < 2)) {
             LOG.info("WriteOrDeleting '{}' ServicePaths", serviceName);
             WriteTransaction writeTx = db.newWriteOnlyTransaction();
             result = true;
@@ -875,16 +873,16 @@ public class SendingPceRPCs {
         return input;
     }
 
-    public void setInput(PathComputationRequestInput input) {
-        this.input = input;
+    public void setInput(PathComputationRequestInput pathComputationRequestInput) {
+        this.input = pathComputationRequestInput;
     }
 
     public CancelResourceReserveInput getCancelInput() {
         return cancelInput;
     }
 
-    public void setCancelInput(CancelResourceReserveInput input) {
-        this.cancelInput = input;
+    public void setCancelInput(CancelResourceReserveInput cancelResourceReserveInput) {
+        this.cancelInput = cancelResourceReserveInput;
     }
 
     public DataBroker getDb() {

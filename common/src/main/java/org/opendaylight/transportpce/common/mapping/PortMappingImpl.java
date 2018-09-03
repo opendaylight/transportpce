@@ -378,14 +378,14 @@ public class PortMappingImpl implements PortMapping {
             for (Ports port : cp.getPorts()) {
                 if (Port.PortQual.XpdrNetwork.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                        "XPDR1-"+OpenRoadmInterfacesImpl.NETWORK_TOKEN + line));
+                        "XPDR1-" + OpenRoadmInterfacesImpl.NETWORK_TOKEN + line));
                 //String lcp = port.getLogicalConnectionPoint();
                 //String regex = "XPDR[0-9]+-NETWORK[0-9]+";
                 //checkLogicalConnectionPoint(regex, lcp, nodeId, portMapList, circuitPackName, port, "NETWORK", line);
                     line++;
                 } else if (Port.PortQual.XpdrClient.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                        "XPDR1-"+OpenRoadmInterfacesImpl.CLIENT_TOKEN + client));
+                        "XPDR1-" + OpenRoadmInterfacesImpl.CLIENT_TOKEN + client));
                 //String lcp = port.getLogicalConnectionPoint();
                 //String regex = "XPDR[0-9]+-CLIENT[0-9]+";
                 //checkLogicalConnectionPoint(regex, lcp, nodeId, portMapList, circuitPackName, port, "CLIENT", client);

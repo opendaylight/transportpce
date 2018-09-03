@@ -90,7 +90,7 @@ public final class ServicehandlerCompliancyCheck {
         return new ComplianceCheckResult(result, message);
     }
 
-    public ServicehandlerCompliancyCheck() {
+    private ServicehandlerCompliancyCheck() {
     }
 
 }

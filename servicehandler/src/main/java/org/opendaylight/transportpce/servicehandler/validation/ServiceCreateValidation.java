@@ -90,7 +90,7 @@ public final class ServiceCreateValidation {
         return OperationResult.ok("Validation successful.");
     }
 
-    public ServiceCreateValidation() {
+    private ServiceCreateValidation() {
     }
 
 }
