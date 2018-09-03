@@ -86,4 +86,7 @@ final class OrdLink {
             return false;
         }
     }
+
+    private OrdLink(){
+    }
 }

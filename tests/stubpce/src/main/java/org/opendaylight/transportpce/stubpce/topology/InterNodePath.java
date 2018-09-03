@@ -74,8 +74,8 @@ public class InterNodePath {
         for (Path path : paths) {
             tpNodeTp = path.getTpNodeTp();
             tpNodeTp.createAToZListHop(order);
-            for (AToZ atoz : tpNodeTp.getAToZ()) {
-                atozList.add(atoz);
+            for (AToZ tmp : tpNodeTp.getAToZ()) {
+                atozList.add(tmp);
                 order++;
             }
             Link link = path.getLink();
@@ -102,8 +102,8 @@ public class InterNodePath {
         for (Path path : paths) {
             tpNodeTp = path.getTpNodeTp();
             tpNodeTp.createZToAListHop(order);
-            for (ZToA ztoa : tpNodeTp.getZToA()) {
-                ztoaList.add(ztoa);
+            for (ZToA tmp : tpNodeTp.getZToA()) {
+                ztoaList.add(tmp);
                 order++;
             }
             Link link = path.getLink();
@@ -350,9 +350,9 @@ public class InterNodePath {
                 String id = Integer.toString(size - index);
                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription
                     .rev170426.pce.resource.resource.Resource res = null;
-                for (AToZ atoz : atozList) {
-                    if (atoz.getId().compareTo(id) == 0) {
-                        res = atoz.getResource().getResource();
+                for (AToZ tmpAtoz : atozList) {
+                    if (tmpAtoz.getId().compareTo(id) == 0) {
+                        res = tmpAtoz.getResource().getResource();
                         if (res != null) {
 
                             switch (index) {
@@ -420,17 +420,17 @@ public class InterNodePath {
                 if (size > 0) {
                     String id = Integer.toString(size - 1);
                     for (ListIterator<AToZ> it = atozList.listIterator(); it.hasNext();) {
-                        AToZ atoz = it.next();
-                        if (atoz.getId().compareTo(id) == 0) {
+                        AToZ tmpAtoz = it.next();
+                        if (tmpAtoz.getId().compareTo(id) == 0) {
                             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription
-                                .rev170426.pce.resource.resource.Resource res = atoz.getResource().getResource();
+                                .rev170426.pce.resource.resource.Resource res = tmpAtoz.getResource().getResource();
                             if ((res != null)  && (res instanceof Link)) {
                                 Link link = new LinkBuilder()
                                         .setLinkIdentifier(new LinkIdentifierBuilder()
                                                 .setLinkId(atozLink)
                                                 .build())
                                         .build();
-                                AToZKey atozKey = new AToZKey(atoz.key());
+                                AToZKey atozKey = new AToZKey(tmpAtoz.key());
                                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
                                     .pathdescription.rev170426.pce.resource.Resource resource = new ResourceBuilder()
                                     .setResource(link).build();
@@ -468,10 +468,10 @@ public class InterNodePath {
             int size = atozList.size();
             if (size > 0) {
                 String id = Integer.toString(0);
-                for (AToZ atoz : atozList) {
-                    if (atoz.getId().compareTo(id) == 0) {
+                for (AToZ tmpAtoz : atozList) {
+                    if (tmpAtoz.getId().compareTo(id) == 0) {
                         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription
-                            .rev170426.pce.resource.resource.Resource res = atoz.getResource().getResource();
+                            .rev170426.pce.resource.resource.Resource res = tmpAtoz.getResource().getResource();
                         if ((res != null)  && (res instanceof TerminationPoint)) {
                             TerminationPoint tp = (TerminationPoint) res;
                             if ((tp != null) && tp.getTerminationPointIdentifier().getTpId().contains(beginBy)) {

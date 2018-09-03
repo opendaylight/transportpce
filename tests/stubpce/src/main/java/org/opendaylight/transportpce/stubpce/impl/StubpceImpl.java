@@ -365,10 +365,10 @@ public class StubpceImpl implements StubpceService {
      * @param DataBroker
      *            Access DataStore
      */
-    private boolean initializePathDescriptionList(DataBroker db) {
+    private boolean initializePathDescriptionList(DataBroker dataBroker) {
         Boolean result = true;
         LOG.info("Preparing to initialize the PathDescription List");
-        WriteTransaction transaction = db.newWriteOnlyTransaction();
+        WriteTransaction transaction = dataBroker.newWriteOnlyTransaction();
         InstanceIdentifier<PathDescriptionList> iid = InstanceIdentifier.create(PathDescriptionList.class);
         PathDescriptionList pathDescriptionList = new PathDescriptionListBuilder().build();
         transaction.put(LogicalDatastoreType.OPERATIONAL, iid, pathDescriptionList);
@@ -389,10 +389,10 @@ public class StubpceImpl implements StubpceService {
      *            Access DataStore
      * @return <code>true</code> if ok, <code>false</code> else
      */
-    private boolean initializeServicePathList(DataBroker db) {
+    private boolean initializeServicePathList(DataBroker dataBroker) {
         Boolean result = true;
         LOG.info("Preparing to initialize the ServicePathList registry");
-        WriteTransaction transaction = db.newWriteOnlyTransaction();
+        WriteTransaction transaction = dataBroker.newWriteOnlyTransaction();
         InstanceIdentifier<ServicePathList> iid = InstanceIdentifier.create(ServicePathList.class);
         ServicePathList servicePathList = new ServicePathListBuilder().build();
         transaction.put(LogicalDatastoreType.OPERATIONAL, iid, servicePathList);

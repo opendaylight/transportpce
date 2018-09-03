@@ -429,7 +429,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
         txDirectionBuilder.setLgx(lgx);
         serviceAEndBuilder.setTxDirection(txDirectionBuilder.build());
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(serviceCreateInput);
-        ServicehandlerImpl serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
+        this.serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
         return serviceHandler.serviceCreate(buildInput.setServiceAEnd(serviceAEndBuilder.build()).build()).get()
                 .getResult();
     }
@@ -712,7 +712,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
         rxDirectionBuilder.setLgx(lgx);
         serviceAEndBuilder.setRxDirection(rxDirectionBuilder.build());
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(serviceCreateInput);
-        ServicehandlerImpl serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
+        this.serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
         return serviceHandler.serviceCreate(buildInput.setServiceAEnd(serviceAEndBuilder.build()).build()).get()
                 .getResult();
     }

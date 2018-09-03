@@ -567,13 +567,14 @@ public class SuperNodePath {
      * @param paths NodeLinkNode list paths
      * @return PathDescriptionsOrdered List of direct paths
      */
-    public SortedSet<PathDescriptionsOrdered> getDirectPathDesc(String aend, String zend,List<NodeLinkNode> paths) {
+    public SortedSet<PathDescriptionsOrdered> getDirectPathDesc(String aend, String zend,
+            List<NodeLinkNode> nodeLinkNodes) {
         List<AToZDirection> atozdirectionPaths = new ArrayList<AToZDirection>();
         SortedSet<PathDescriptionsOrdered> result = new TreeSet<PathDescriptionsOrdered>();
         SuperNode aendSp = getSuperNode(aend);
         SuperNode zendSp = getSuperNode(zend);
-        if (!paths.isEmpty()) {
-            for (NodeLinkNode tmp : paths) {
+        if (!nodeLinkNodes.isEmpty()) {
+            for (NodeLinkNode tmp : nodeLinkNodes) {
                 if (tmp.getDirect()) {
                     LOG.info("Direct NodeLinkNode : {}", tmp.toString());
                     String atozLink = null;
@@ -630,13 +631,14 @@ public class SuperNodePath {
      * @param paths NodeLinkNode list paths
      * @return PathDescriptionsOrdered List of indirect paths
      */
-    public SortedSet<PathDescriptionsOrdered> getIndirectPathDesc(String aend, String zend,List<NodeLinkNode> paths) {
+    public SortedSet<PathDescriptionsOrdered> getIndirectPathDesc(String aend, String zend,
+            List<NodeLinkNode> nodeLinkNodes) {
         List<AToZDirection> atozdirectionPaths = new ArrayList<AToZDirection>();
         SortedSet<PathDescriptionsOrdered> result = new TreeSet<PathDescriptionsOrdered>();
         SuperNode aendSp = getSuperNode(aend);
         SuperNode zendSp = getSuperNode(zend);
-        if (!paths.isEmpty()) {
-            for (NodeLinkNode tmp : paths) {
+        if (!nodeLinkNodes.isEmpty()) {
+            for (NodeLinkNode tmp : nodeLinkNodes) {
                 if (!tmp.getDirect()) {
                     LOG.info("Indirect NodeLinkNode : {}", tmp.toString());
                     int size = tmp.getAtozLink().size();

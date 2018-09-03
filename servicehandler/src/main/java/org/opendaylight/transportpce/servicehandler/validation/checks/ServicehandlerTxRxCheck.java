@@ -168,7 +168,7 @@ public final class ServicehandlerTxRxCheck {
         return new ComplianceCheckResult(result, message);
     }
 
-    public ServicehandlerTxRxCheck() {
+    private ServicehandlerTxRxCheck() {
     }
 
 }
