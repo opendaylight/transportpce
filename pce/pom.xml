@@ -23,7 +23,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
 
   <groupId>org.opendaylight.transportpce</groupId>
   <artifactId>transportpce-pce</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.2.0</version>
   <packaging>bundle</packaging>
 
   <build>
@@ -80,7 +80,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>sal-binding-broker-impl</artifactId>
-      <version>1.8.0-SNAPSHOT</version>
+      <version>1.8.0</version>
       <scope>test</scope>
     </dependency>
 

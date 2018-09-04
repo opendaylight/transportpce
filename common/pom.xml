@@ -16,7 +16,7 @@
 
     <groupId>org.opendaylight.transportpce</groupId>
     <artifactId>transportpce-common</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.2.0</version>
     <packaging>bundle</packaging>
 
     <dependencyManagement>
@@ -24,21 +24,21 @@
             <dependency>
                 <groupId>org.opendaylight.controller</groupId>
                 <artifactId>mdsal-artifacts</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.8.0</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.opendaylight.netconf</groupId>
                 <artifactId>netconf-artifacts</artifactId>
-                <version>1.5.0-SNAPSHOT</version>
+                <version>1.5.0</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.opendaylight.mdsal.model</groupId>
                 <artifactId>mdsal-model-artifacts</artifactId>
-                <version>0.13.0-SNAPSHOT</version>
+                <version>0.13.0</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
