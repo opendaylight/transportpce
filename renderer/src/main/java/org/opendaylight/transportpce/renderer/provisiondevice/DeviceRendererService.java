@@ -35,6 +35,8 @@ public interface DeviceRendererService {
      *
      * @param input
      *            Input parameter from the service-path yang model
+     * @param direction
+     *            Direction parameter from the service-path yang model
      *
      * @return Result list of all nodes if request successful otherwise specific
      *         reason of failure.

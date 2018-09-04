@@ -49,6 +49,8 @@ public final class ClliNetwork {
 
     /**
      * This public method creates the CLLI Layer and posts it to the controller.
+     *
+     * @param controllerdb controller DataBroker
      */
     public static void createClliLayer(DataBroker controllerdb) {
         try {
@@ -67,6 +69,10 @@ public final class ClliNetwork {
     /**
      * Create single node entry for CLLI topology.
      *
+     * @param deviceTransactionManager Device Transaction Manager
+     * @param deviceId Device ID
+     *
+     * @return Node Node Builder
      */
     public static Node createNode(DeviceTransactionManager deviceTransactionManager, String deviceId) {
         //Read clli from the device

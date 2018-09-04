@@ -56,6 +56,8 @@ public final class OpenRoadmNetwork {
     /**
      * This public method creates the OpenRoadmNetwork Layer and posts it to the
      * controller.
+     *
+     * @param controllerdb controller DataBroker
      */
     public static void createOpenRoadmNetworkLayer(DataBroker controllerdb) {
         try {
@@ -74,6 +76,10 @@ public final class OpenRoadmNetwork {
     /**
      * Create single node entry for OpenRoadmNetwork.
      *
+     * @param nodeId node ID
+     * @param deviceTransactionManager Device Transaction Manager
+     *
+     * @return Node Node Builder
      */
     public static Node createNode(String nodeId, DeviceTransactionManager deviceTransactionManager) {
         // Fetches the info from the deviceInfo

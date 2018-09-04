@@ -564,7 +564,7 @@ public class SuperNodePath {
      *
      * @param aend beginning extremity path
      * @param zend ending extremity path
-     * @param paths NodeLinkNode list paths
+     * @param nodeLinkNodes list paths
      * @return PathDescriptionsOrdered List of direct paths
      */
     public SortedSet<PathDescriptionsOrdered> getDirectPathDesc(String aend, String zend,
@@ -628,7 +628,7 @@ public class SuperNodePath {
      *
      * @param aend beginning extremity path
      * @param zend ending extremity path
-     * @param paths NodeLinkNode list paths
+     * @param nodeLinkNodes list paths
      * @return PathDescriptionsOrdered List of indirect paths
      */
     public SortedSet<PathDescriptionsOrdered> getIndirectPathDesc(String aend, String zend,
