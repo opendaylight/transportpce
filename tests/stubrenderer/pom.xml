@@ -15,13 +15,13 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>0.13.0</version>
+    <version>0.13.0-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.transportpce</groupId>
   <artifactId>transportpce-stubrenderer</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <dependencyManagement>
@@ -29,14 +29,14 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <dependency>
         <groupId>org.opendaylight.controller</groupId>
         <artifactId>mdsal-artifacts</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.0-SNAPSHOT</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.opendaylight.netconf</groupId>
         <artifactId>netconf-artifacts</artifactId>
-        <version>1.5.0</version>
+        <version>1.5.0-SNAPSHOT</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
