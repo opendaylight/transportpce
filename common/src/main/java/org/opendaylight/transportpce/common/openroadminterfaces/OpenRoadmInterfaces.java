@@ -43,6 +43,8 @@ public interface OpenRoadmInterfaces {
      * @param nodeId node ID
      * @param circuitPackName Circtuit-Pack name
      * @param activate activate or not
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
      */
     void postEquipmentState(String nodeId, String circuitPackName, boolean activate) throws OpenRoadmInterfaceException;
 

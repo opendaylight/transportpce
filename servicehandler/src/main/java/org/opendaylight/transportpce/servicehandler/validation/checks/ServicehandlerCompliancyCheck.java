@@ -35,16 +35,24 @@ public final class ServicehandlerCompliancyCheck {
     /**
      * Check Compliancy of Service request.
      *
+     * @param serviceName
+     *            Service Name
+     * @param sdncRequestHeader
+     *            sdncRequestHeader
+     * @param conType
+     *            Connection type
+     * @param action
+     *            RPC Actions
      * @param contype
      *            Boolean to check connection Type
-     * @param sndcRequest
-     *            Boolean to check sndcRequestHeader
+     * @param sdncRequest
+     *            Boolean to check sdncRequestHeader
      *
      * @return true if String ok false if not
      */
     public static ComplianceCheckResult check(String serviceName, SdncRequestHeader sdncRequestHeader,
                                        ConnectionType conType, RpcActions action,
-                                       Boolean contype, Boolean sndcRequest) {
+                                       Boolean contype, Boolean sdncRequest) {
         boolean result = true;
         String message = "";
         if (!checkString(serviceName)) {
@@ -54,7 +62,7 @@ public final class ServicehandlerCompliancyCheck {
             result = false;
             message = "Service ConnectionType is not set";
         }
-        if (sndcRequest) {
+        if (sdncRequest) {
             if (sdncRequestHeader != null) {
                 RpcActions serviceAction = sdncRequestHeader.getRpcAction();
                 String requestId = sdncRequestHeader.getRequestId();
