@@ -223,6 +223,8 @@ public final class PceTestData {
 
     /**
      * Generate Data for Test 1 result 5-4.
+     * @param wl WaveLength
+     *
      * @return output PathComputationRequestOutput data
      */
     public static PathComputationRequestOutput getPCE_test_result_54(Long wl) {
@@ -466,6 +468,8 @@ public final class PceTestData {
          "pce:pce-metric": "hop-count"
        }
      }</code>
+     * @param base Path Computation Request Input base
+     *
      * @return input PathComputationRequestInput data
      */
     public static PathComputationRequestInput build_diversity_from_request(PathComputationRequestInput base) {

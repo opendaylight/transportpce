@@ -124,6 +124,8 @@ public final class ServicehandlerTxRxCheck {
 
     /**
      * Check Compliancy of Service TxRx info.
+     * @param serviceEnd Service Endpoint
+     * @param endpointType Endpoint type
      *
      * @return true if String ok false if not
      */

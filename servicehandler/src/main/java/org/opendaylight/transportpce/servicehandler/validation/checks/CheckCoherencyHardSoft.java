@@ -23,6 +23,9 @@ public final class CheckCoherencyHardSoft {
 
     /**
      * function to check coherency between hard and soft constraints.
+     * @param hard Hard Constraints
+     * @param soft Soft Constraints
+     *
      * @return  <code> true </code>  if coherent
      *          <code> false </code> else
      */
