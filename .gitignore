@@ -1,6 +1,7 @@
 *.class
 *.iml
 **/target
+archives/
 bin/
 dist
 **/logs
