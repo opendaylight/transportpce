@@ -23,3 +23,8 @@ classes
 ordmodels/src/main/java
 tests/config.xml
 tests/models
+
+# Sphinx documentation
+.tox/
+docs/_build/
+
