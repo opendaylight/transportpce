@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.fd.honeycomb.transportpce.device;
+package io.fd.honeycomb.transportpce.device.configuration;
 
 import io.fd.honeycomb.transportpce.device.tools.DefaultDeviceFactory;
 import io.fd.honeycomb.transportpce.test.common.DataStoreContext;

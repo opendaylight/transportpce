@@ -19,15 +19,18 @@ import com.google.inject.PrivateModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
-import io.fd.honeycomb.infra.distro.data.DataStoreProvider;
-import io.fd.honeycomb.infra.distro.data.InmemoryDOMDataBrokerProvider;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
 import org.opendaylight.controller.md.sal.dom.store.impl.InMemoryDOMDataStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.fd.honeycomb.infra.distro.data.DataStoreProvider;
+import io.fd.honeycomb.infra.distro.data.InmemoryDOMDataBrokerProvider;
+import io.fd.honeycomb.transportpce.device.configuration.DeviceConfigurationModule;
+import io.fd.honeycomb.transportpce.device.configuration.NetconfConfigurationModule;
+import io.fd.honeycomb.transportpce.device.configuration.PmConfigurationModule;
 
 /**
  * Module class instantiating device-plugin plugin components.
@@ -44,28 +47,37 @@ public final class DeviceModule extends PrivateModule {
         LOG.info("Initializing Device Module");
         // Create inmemory config data store for DEVICE
         bind(InMemoryDOMDataStore.class).annotatedWith(Names.named(InmemoryDOMDataBrokerProvider.CONFIG))
-            .toProvider(new DataStoreProvider(InmemoryDOMDataBrokerProvider.CONFIG, LogicalDatastoreType.CONFIGURATION))
-            .in(Singleton.class);
+                .toProvider(
+                        new DataStoreProvider(InmemoryDOMDataBrokerProvider.CONFIG, LogicalDatastoreType.CONFIGURATION))
+                .in(Singleton.class);
         // Create inmemory operational data store for DEVICE
         bind(InMemoryDOMDataStore.class).annotatedWith(Names.named(InmemoryDOMDataBrokerProvider.OPERATIONAL))
-            .toProvider(new DataStoreProvider(InmemoryDOMDataBrokerProvider.OPERATIONAL, LogicalDatastoreType.OPERATIONAL))
-            .in(Singleton.class);
+                .toProvider(new DataStoreProvider(InmemoryDOMDataBrokerProvider.OPERATIONAL,
+                        LogicalDatastoreType.OPERATIONAL))
+                .in(Singleton.class);
 
         // Wrap datastores as DOMDataBroker
         // TODO make executor service configurable
         bind(DOMDataBroker.class).annotatedWith(Names.named(DEVICE_DATABROKER))
-            .toProvider(InmemoryDOMDataBrokerProvider.class).in(Singleton.class);
+                .toProvider(InmemoryDOMDataBrokerProvider.class).in(Singleton.class);
         expose(DOMDataBroker.class).annotatedWith(Names.named(DEVICE_DATABROKER));
 
         // Wrap DOMDataBroker as BA data broker
-        bind(DataBroker.class).annotatedWith(Names.named(DEVICE_DATABROKER)).toProvider(DeviceBindingDataBrokerProvider.class)
-            .in(Singleton.class);
+        bind(DataBroker.class).annotatedWith(Names.named(DEVICE_DATABROKER))
+                .toProvider(DeviceBindingDataBrokerProvider.class).in(Singleton.class);
         expose(DataBroker.class).annotatedWith(Names.named(DEVICE_DATABROKER));
 
-        //install device configuration module
+        // install device configuration module
         install(new DeviceConfigurationModule());
         LOG.info("Device Module intitailized !");
+
+        // install pm configuration module
+        install(new PmConfigurationModule());
+        LOG.info("Device Module intitailized !");
+
+        // install netconf configuration module
+        install(new NetconfConfigurationModule());
+        LOG.info("Netconf Module intitailized !");
     }
 
 }
-
