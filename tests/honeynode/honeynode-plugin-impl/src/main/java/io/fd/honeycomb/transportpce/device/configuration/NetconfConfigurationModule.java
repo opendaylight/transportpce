@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.fd.honeycomb.transportpce.device;
+package io.fd.honeycomb.transportpce.device.configuration;
 
 import com.google.inject.AbstractModule;
+
+import io.fd.honeycomb.northbound.NetconfConfiguration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,17 +25,16 @@ import org.slf4j.LoggerFactory;
 import net.jmob.guice.conf.core.ConfigurationModule;
 
 /**
- * @author Martial COULIBALY ( martial.coulibaly@gfi.com ) on behalf of Orange
+ * @author Martial COULIBALY ( mcoulibaly.ext@orange.com ) on behalf of Orange
  */
-final class DeviceConfigurationModule extends AbstractModule {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DeviceConfigurationModule.class);
+public final class NetconfConfigurationModule extends AbstractModule {
+    private static final Logger LOG = LoggerFactory.getLogger(NetconfConfigurationModule.class);
 
     @Override
     protected void configure() {
-        LOG.info("Initializing Device Readers Module");
+        LOG.info("Initializing Netconf Readers Module");
         install(ConfigurationModule.create());
-        requestInjection(DeviceConfiguration.class);
+        requestInjection(NetconfConfiguration.class);
     }
 
 }

@@ -13,28 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.fd.honeycomb.transportpce.device;
+package io.fd.honeycomb.transportpce.device.configuration;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.Multibinder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.fd.honeycomb.translate.write.WriterFactory;
-import io.fd.honeycomb.transportpce.device.write.DeviceWriterFactory;
+import net.jmob.guice.conf.core.ConfigurationModule;
 
 /**
  * @author Martial COULIBALY ( martial.coulibaly@gfi.com ) on behalf of Orange
  */
-public class DeviceWriterModule extends AbstractModule {
+public final class DeviceConfigurationModule extends AbstractModule {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DeviceWriterModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DeviceConfigurationModule.class);
 
     @Override
     protected void configure() {
-        LOG.info("Initializing Device Writers Module");
-        final Multibinder<WriterFactory> writerFactoryBinder = Multibinder.newSetBinder(binder(), WriterFactory.class);
-        writerFactoryBinder.addBinding().to(DeviceWriterFactory.class);
+        LOG.info("Initializing Device Readers Module");
+        install(ConfigurationModule.create());
+        requestInjection(DeviceConfiguration.class);
     }
+
 }
