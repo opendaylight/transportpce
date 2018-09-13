@@ -219,6 +219,7 @@ public class OpenRoadmInterfaceFactory {
      *
      *
      * @return Name of the interface if successful, otherwise return null.
+     * @throws OpenRoadmInterfaceException OpenRoadmInterfaceException
      */
 
     public String createOpenRoadmOtu4Interface(String nodeId, String logicalConnPoint, String supportOchInterface)

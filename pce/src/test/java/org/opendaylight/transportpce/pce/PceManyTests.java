@@ -47,6 +47,8 @@ public class PceManyTests extends AbstractTest {
      *   expected path computation result
      * @param topologyDataPath
      *   path to topology data file to be used for DataStore population
+     *
+     * @throws Exception exception throws by the function
      */
     public PceManyTests(PathComputationRequestInput input,
                         PathComputationRequestOutput expectedOutput, String topologyDataPath) throws Exception {
