@@ -29,12 +29,12 @@ import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.utils.ServiceImplementationDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.RendererRollbackInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.RendererRollbackInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.RendererRollbackOutput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterface;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterfaceKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererRollbackOutput;
 
 public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
 

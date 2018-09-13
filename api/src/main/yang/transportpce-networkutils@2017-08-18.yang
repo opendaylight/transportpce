@@ -1,7 +1,7 @@
-module networkutils {
+module transportpce-networkutils {
     yang-version 1;
-    namespace "urn:opendaylight:params:xml:ns:yang:networkutils";
-    prefix "networkutils";
+    namespace "http://org/opendaylight/transportpce/networkutils";
+    prefix "org-opendaylight-transportpce-networkutils";
 
     revision "2017-08-18" {
         description "Initial revision of networkutils model";

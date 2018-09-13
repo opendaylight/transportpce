@@ -13,7 +13,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.CancelResourceReserveOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PceService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.TransportpcePceService;
 /*
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.service.path.rpc.result.PathDescriptionBuilder;
 ///// check well PathDescriptionBuilder import
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 /**
  * PceService implementation.
  */
-public class PceServiceRPCImpl implements PceService {
+public class PceServiceRPCImpl implements TransportpcePceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceServiceRPCImpl.class);
 

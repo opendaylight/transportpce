@@ -1,7 +1,7 @@
-module alarmsuppression {
+module transportpce-alarmsuppression {
   yang-version 1;
-  namespace "urn:opendaylight:params:xml:ns:yang:alarmsuppression";
-  prefix "alarmsuppression";
+  namespace "http://org/opendaylight/transportpce/alarmsuppression";
+  prefix "org-opendaylight-transportpce-alarmsuppression";
 
  organization
     "transportPCE";

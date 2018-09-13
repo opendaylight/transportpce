@@ -7,15 +7,15 @@
  */
 package org.opendaylight.transportpce.servicehandler.listeners;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.ServicePathRpcResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.ServicePathNotificationTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Deprecated
-public class PceListenerImpl implements PceListener {
+public class PceListenerImpl implements TransportpcePceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
 
@@ -30,8 +30,8 @@ public class PceListenerImpl implements PceListener {
                     "Received '" + notification.getNotificationType() + "' StubPce notification " + "from service '"
                             + notification.getServiceName() + "' " + "with status '" + notification.getStatus() + "'");
             build.append(" with StatusMessage '" + notification.getStatusMessage() + "'");
-            if (notification.getStatus() == RpcStatusEx.Successful && notification.getNotificationType()
-                    .getIntValue() == ServicePathNotificationTypes.PathComputationRequest.getIntValue()) {
+            if ((notification.getStatus() == RpcStatusEx.Successful) && (notification.getNotificationType()
+                    .getIntValue() == ServicePathNotificationTypes.PathComputationRequest.getIntValue())) {
                 build.append(" PathDescription : " + notification.getPathDescription().toString());
                 /*
                  * switch (action.getIntValue()) { case 1: //service-create case

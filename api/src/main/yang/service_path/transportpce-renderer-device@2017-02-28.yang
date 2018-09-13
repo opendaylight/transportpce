@@ -1,9 +1,8 @@
-module renderer {
-  yang-version 1;
-  namespace "urn:opendaylight:params:xml:ns:yang:renderer";
-  prefix "renderer";
+module transportpce-device-renderer {
+  namespace "http://org/opendaylight/transportpce/renderer/device";
+  prefix "org-opendaylight-transportpce-renderer-device";
 
-  import org-transportpce-common-types {
+  import transportpce-common-types {
       prefix org-transportpce-common-types;
       revision-date 2017-09-07;
   }
@@ -19,7 +18,7 @@ module renderer {
                  Shweta Vachhani ( sv111y@att.com )";
 
   revision "2017-02-28" {
-    description "Initial revision of renderer model";
+    description "Initial revision of renderer model version 1.5";
   }
 
   rpc service-path {

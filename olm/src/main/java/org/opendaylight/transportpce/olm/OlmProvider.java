@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.olm;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.OlmService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,7 @@ public class OlmProvider {
     private static final Logger LOG = LoggerFactory.getLogger(OlmProvider.class);
     private final RpcProviderRegistry rpcProviderRegistry;
     private final OlmPowerService olmPowerService;
-    private RpcRegistration<OlmService> olmRPCRegistration;
+    private RpcRegistration<TransportpceOlmService> olmRPCRegistration;
 
     /**
      * Instantiates a new olm provider.
@@ -42,8 +42,8 @@ public class OlmProvider {
     public void init() {
         LOG.info("OlmProvider Session Initiated");
         // Initializing Notification module
-        olmRPCRegistration = rpcProviderRegistry.addRpcImplementation(OlmService.class, new OlmPowerServiceRpcImpl(
-            this.olmPowerService));
+        olmRPCRegistration = rpcProviderRegistry.addRpcImplementation(TransportpceOlmService.class,
+                new OlmPowerServiceRpcImpl(this.olmPowerService));
     }
 
     /**

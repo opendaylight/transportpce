@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.pce.impl;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PceService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.TransportpcePceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class PceProvider {
 
     private final RpcProviderRegistry rpcRegistry;
     private final PathComputationService pathComputationService;
-    private BindingAwareBroker.RpcRegistration<PceService> rpcRegistration;
+    private BindingAwareBroker.RpcRegistration<TransportpcePceService> rpcRegistration;
 
     public PceProvider(RpcProviderRegistry rpcProviderRegistry, PathComputationService pathComputationService) {
         this.rpcRegistry = rpcProviderRegistry;
@@ -37,7 +37,7 @@ public class PceProvider {
     public void init() {
         LOG.info("PceProvider Session Initiated");
         final PceServiceRPCImpl consumer = new PceServiceRPCImpl(pathComputationService);
-        rpcRegistration = rpcRegistry.addRpcImplementation(PceService.class, consumer);
+        rpcRegistration = rpcRegistry.addRpcImplementation(TransportpcePceService.class, consumer);
     }
 
     /*

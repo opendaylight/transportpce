@@ -1,9 +1,9 @@
-module olm {
+module transportpce-olm {
   yang-version 1;
-  namespace "urn:opendaylight:params:xml:ns:yang:olm";
-  prefix "olm";
+  namespace "http://org/opendaylight/transportpce/olm";
+  prefix "org-opendaylight-transportpce-olm";
 
-  import org-transportpce-common-types {
+  import transportpce-common-types {
       prefix org-transportpce-common-types;
       revision-date 2017-09-07;
   }
@@ -26,6 +26,7 @@ module olm {
   revision "2017-04-18" {
     description "Initial revision of olm model";
   }
+
   rpc get-pm{
    description
       "This RPC fetches from the device a list of pm measurements

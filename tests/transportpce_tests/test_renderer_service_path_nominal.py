@@ -163,7 +163,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
         data = {"renderer:input": {
              "renderer:service-name": "service_test",
              "renderer:wave-number": "7",
@@ -350,7 +350,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertIn('not-reserved-inuse', res['circuit-packs'][0]["equipment-state"])
 
     def test_14_service_path_delete(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
         data = {"renderer:input": {
              "renderer:service-name": "service_test",
              "renderer:wave-number": "7",

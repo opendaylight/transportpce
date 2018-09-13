@@ -8,19 +8,23 @@
 package org.opendaylight.transportpce.olm.util;
 
 import com.google.common.base.Strings;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.MeasurementsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.CurrentPmlist;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPm;
@@ -40,12 +44,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resour
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.olm.get.pm.input.ResourceIdentifier;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.network.topology.topology.topology.types.TopologyNetconf;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.GetPmInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.GetPmOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.get.pm.output.MeasurementsBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.Network;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.Nodes;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.NodesKey;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
@@ -112,8 +110,8 @@ public final class OlmUtils {
                 .getDataFromDevice(input.getNodeId(), LogicalDatastoreType.OPERATIONAL, currentPmsIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (currentPmList.isPresent()) {
-            List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.get.pm.output
-                    .Measurements> measurements = extractWantedMeasurements(currentPmList.get(),
+            List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output
+                .Measurements> measurements = extractWantedMeasurements(currentPmList.get(),
                     input.getResourceType(), input.getResourceIdentifier(), input.getGranularity());
             if (measurements.isEmpty()) {
                 LOG.error("No Matching PM data found for node: {}, " + "resource type: {}, resource name: {}",
@@ -144,12 +142,12 @@ public final class OlmUtils {
         }
     }
 
-    private static List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.get.pm
-            .output.Measurements> extractWantedMeasurements(CurrentPmlist currentPmList,
+    private static List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output
+        .Measurements> extractWantedMeasurements(CurrentPmlist currentPmList,
             ResourceTypeEnum wantedResourceType, ResourceIdentifier wantedResourceIdentifier,
             PmGranularity wantedGranularity) {
-        List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.get.pm
-            .output.Measurements> measurements = new ArrayList<>();
+        List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output
+            .Measurements> measurements = new ArrayList<>();
         for (CurrentPm pm : currentPmList.getCurrentPm()) {
             ResourceTypeEnum currentResourceType = pm.getResource().getResourceType().getType();
             if (currentResourceType.equals(wantedResourceType)) {
@@ -165,10 +163,10 @@ public final class OlmUtils {
         return measurements;
     }
 
-    private static List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.get.pm
-            .output.Measurements> extractMeasurements(List<Measurements> measurementsFromDevice) {
-        List<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.get.pm.output.Measurements>
-            extractedMeasurements = new ArrayList<>();
+    private static List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output
+        .Measurements> extractMeasurements(List<Measurements> measurementsFromDevice) {
+        List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output
+            .Measurements> extractedMeasurements = new ArrayList<>();
         for (Measurements measure : measurementsFromDevice) {
             MeasurementsBuilder measurement = new MeasurementsBuilder();
             if (!measure.getMeasurement().getPmParameterName().getType().equals(PmNamesEnum.VendorExtension)) {
@@ -193,7 +191,7 @@ public final class OlmUtils {
             PmGranularity wantedGranularity) {
         boolean identifiersAreEqual = compareResourceIdentifiers(resource, wantedResourceType,
                 wantedResourceIdentifier);
-        return identifiersAreEqual && granularity != null && granularity.equals(wantedGranularity);
+        return identifiersAreEqual && (granularity != null) && granularity.equals(wantedGranularity);
     }
 
     private static boolean compareResourceIdentifiers(Resource resource, ResourceTypeEnum wantedResourceType,
@@ -263,8 +261,8 @@ public final class OlmUtils {
                         .map(port -> {
                             String portName = port.getPortName();
                             String circuitPackName = port.getCircuitPackName();
-                            return portName != null
-                                    && circuitPackName != null
+                            return (portName != null)
+                                    && (circuitPackName != null)
                                     && portName.equals(wantedResourceIdentifier.getResourceName())
                                     && circuitPackName.equals(wantedResourceIdentifier.getCircuitPackName());
                         })

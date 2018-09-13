@@ -8,11 +8,11 @@
 package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.concurrent.Future;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.OlmService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerSetupInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerTurndownInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerTurndownInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.ServicePowerTurndownOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +22,10 @@ public class OlmPowerSetupRollbackTask extends RollbackTask {
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerSetupRollbackTask.class);
     private static final String FAILED = "Failed";
     private final boolean isRollbackNecessary;
-    private final OlmService olmService;
+    private final TransportpceOlmService olmService;
     private final ServicePowerSetupInput powerSetupInput;
 
-    public OlmPowerSetupRollbackTask(String id, boolean isRollbackNecessary, OlmService olmService,
+    public OlmPowerSetupRollbackTask(String id, boolean isRollbackNecessary, TransportpceOlmService olmService,
             ServicePowerSetupInput powerSetupInput) {
         super(id);
         this.isRollbackNecessary = isRollbackNecessary;

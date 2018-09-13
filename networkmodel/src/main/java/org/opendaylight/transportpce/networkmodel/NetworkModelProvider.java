@@ -16,7 +16,7 @@ import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.networkmodel.util.ClliNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.networkutils.rev170818.NetworkutilsService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
@@ -28,14 +28,14 @@ public class NetworkModelProvider {
 
     private final DataBroker dataBroker;
     private final RpcProviderRegistry rpcProviderRegistry;
-    private final NetworkutilsService networkutilsService;
+    private final TransportpceNetworkutilsService networkutilsService;
     private final NetConfTopologyListener topologyListener;
     private final OpenRoadmTopology openRoadmTopology;
     private ListenerRegistration<NetConfTopologyListener> dataTreeChangeListenerRegistration;
-    private BindingAwareBroker.RpcRegistration<NetworkutilsService> networkutilsServiceRpcRegistration;
+    private BindingAwareBroker.RpcRegistration<TransportpceNetworkutilsService> networkutilsServiceRpcRegistration;
 
     public NetworkModelProvider(final DataBroker dataBroker, final RpcProviderRegistry rpcProviderRegistry,
-            final NetworkutilsService networkutilsService, final NetConfTopologyListener topologyListener,
+            final TransportpceNetworkutilsService networkutilsService, final NetConfTopologyListener topologyListener,
             OpenRoadmTopology openRoadmTopology) {
         this.dataBroker = dataBroker;
         this.rpcProviderRegistry = rpcProviderRegistry;
@@ -56,7 +56,7 @@ public class NetworkModelProvider {
                 dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(LogicalDatastoreType.OPERATIONAL,
                         InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);
         networkutilsServiceRpcRegistration =
-                rpcProviderRegistry.addRpcImplementation(NetworkutilsService.class, networkutilsService);
+                rpcProviderRegistry.addRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
     }
 
     /**

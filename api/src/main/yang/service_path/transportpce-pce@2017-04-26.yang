@@ -1,8 +1,6 @@
-module pce {
-    yang-version 1;
+module transportpce-pce {
     namespace "http://org/opendaylight/transportpce/pce";
     prefix "org-opendaylight-transportpce-pce";
-
 
     import ietf-yang-types {
         prefix yang;
@@ -75,7 +73,7 @@ module pce {
       revision 2017-04-26 {
           description
             "Version 1.5";
-        }
+      }
 
       rpc path-computation-request {
         input {

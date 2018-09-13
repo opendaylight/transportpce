@@ -1,9 +1,13 @@
-module transportpce-renderer {
-  namespace "http://org/transportpce/C-interface/renderer";
-  prefix transportpce-renderer;
+module transportpce-pce {
+    namespace "http://org/opendaylight/transportpce/pce";
+    prefix "org-opendaylight-transportpce-pce";
 
   import ietf-yang-types {
     prefix yang;
+  }
+  import transportpce-routing-constraints {
+    prefix transportpce-routing-constraints;
+    revision-date 2017-10-17;
   }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
@@ -11,9 +15,6 @@ module transportpce-renderer {
   import transportpce-common-service-path-types {
     prefix transportpce-common-service-path-types;
     revision-date 2017-10-16;
-  }
-  import org-openroadm-topology {
-    prefix org-openroadm-topology;
   }
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
@@ -25,7 +26,7 @@ module transportpce-renderer {
   contact
     "transportPCE committers - ODL";
   description
-    "YANG definitions of C interface (transportPCE). Adapted from service definition (openroadm)
+    "YANG definitions of B interface (transportPCE). Adapted from service definition (openroadm)
      Copyright © 2017 Orange, Inc. and others.  All rights reserved.
 
      openroadm copyright:
@@ -55,12 +56,17 @@ module transportpce-renderer {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2017-04-26 {
+      description
+        "Version 1.5";
+  }
+
   revision 2017-10-17 {
     description
       "Version 1.6";
   }
 
-  rpc service-implementation-request {
+  rpc path-computation-request {
     input {
       leaf service-name {
         type string;
@@ -68,6 +74,12 @@ module transportpce-renderer {
           "Identifier for the service to be created in
            the ROADM network, e.g., CLFI, CLCI, etc. This is reported against the service, but may not get reflected in the service in the network.";
         mandatory true;
+      }
+      leaf resource-reserve {
+           type boolean;
+           description
+                "indicates if resources (from local PCE topology) must be reserved until further notice (cancel-resource-reserve or topology update)";
+           mandatory true;
       }
       uses transportpce-common-service-path-types:service-handler-header;
       container service-a-end {
@@ -76,41 +88,57 @@ module transportpce-renderer {
       container service-z-end {
         uses transportpce-common-service-path-types:service-endpoint-sp;
       }
-      container path-description {
-        uses transportpce-pathDescription:path-description;
-      }
+      uses transportpce-routing-constraints:routing-constraints-sp;
     }
     output {
-       uses org-openroadm-common-service-types:configuration-response-common;
+      uses org-openroadm-common-service-types:configuration-response-common;
+      uses transportpce-common-service-path-types:response-parameters-sp;
     }
   }
 
-  rpc service-delete {
+  rpc cancel-resource-reserve {
     input {
       leaf service-name {
         type string;
-        description
-          "Identifier for the service to be created in
-           the ROADM network, e.g., CLFI, CLCI, etc. This is reported against the service, but may not get reflected in the service in the network.";
         mandatory true;
       }
       uses transportpce-common-service-path-types:service-handler-header;
     }
     output {
-         uses org-openroadm-common-service-types:configuration-response-common;
+      uses org-openroadm-common-service-types:configuration-response-common;
     }
   }
 
-notification service-rpc-result-sp {
+notification service-path-rpc-result {
     description
-      "This Notification indicates result of  service RPC and provides the topology";
+      "This Notification indicates result of  service RPC";
     leaf notification-type {
       type transportpce-common-service-path-types:service-path-notification-types;
     }
-    container path-topology {
-      uses org-openroadm-topology:topology;
+    container path-description {
+           uses transportpce-pathDescription:path-description;
     }
     uses transportpce-common-service-path-types:rpc-response-status-ex;
     uses org-openroadm-common-service-types:service-notification-result;
+  }
+
+  grouping stubpce-path-description {
+      leaf path-name {
+          type string;
+          description
+            "Identifier for the pathDescription to be created in
+             the ROADM network, e.g., CLFI, CLCI, etc.";
+          mandatory true;
+        }
+      uses transportpce-pathDescription:path-description;
+  }
+
+  container path-description-list {
+    description
+      "List of pathDescription. Can only be created, deleted, modified, etc. using special RPCs.";
+    list pathDescriptions {
+      key "path-name";
+      uses stubpce-path-description;
+    }
   }
 }

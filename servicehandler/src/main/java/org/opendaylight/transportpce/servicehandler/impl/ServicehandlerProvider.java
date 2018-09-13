@@ -15,7 +15,7 @@ import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PceListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.OrgOpenroadmServiceService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class ServicehandlerProvider {
     private final DataBroker dataBroker;
     private final RpcProviderRegistry rpcRegistry;
     private final NotificationService notificationService;
-    private ListenerRegistration<PceListener> pcelistenerRegistration;
+    private ListenerRegistration<TransportpcePceListener> pcelistenerRegistration;
     private RpcRegistration<OrgOpenroadmServiceService> rpcRegistration;
     private PathComputationService pathComputationService;
     private RendererServiceOperations rendererServiceOperations;

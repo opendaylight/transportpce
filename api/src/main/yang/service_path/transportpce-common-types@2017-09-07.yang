@@ -1,4 +1,4 @@
-module org-transportpce-common-types {
+module transportpce-common-types {
     namespace "http://org/transportpce/common-types";
     prefix org-transportpce-common-types;
 

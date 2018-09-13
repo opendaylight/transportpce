@@ -20,7 +20,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <reference id="crossConnect" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
 
   <odl:rpc-service id="olmService"
-      interface="org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.olm.rev170418.OlmService"/>
+      interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService"/>
 
   <bean id="openRoadmInterfaceFactory" class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory" >
     <argument ref="portMapping" />

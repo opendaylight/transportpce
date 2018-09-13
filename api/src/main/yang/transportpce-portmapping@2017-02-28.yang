@@ -1,7 +1,7 @@
-module portmapping {
+module transportpce-portmapping {
   yang-version 1;
-  namespace "urn:opendaylight:params:xml:ns:yang:portmapping";
-  prefix "portmapping";
+  namespace "http://org/opendaylight/transportpce/portmapping";
+  prefix "org-opendaylight-transportpce-portmapping";
 
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;

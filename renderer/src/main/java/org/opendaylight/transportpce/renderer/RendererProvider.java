@@ -12,8 +12,8 @@ import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.TransportpceDeviceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.renderer.rev170228.RendererService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,13 +21,13 @@ public class RendererProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(RendererProvider.class);
     private final RpcProviderRegistry rpcProviderRegistry;
-    private RpcRegistration<RendererService> deviceRendererRegistration;
     private DeviceRendererRPCImpl deviceRendererRPCImpl;
+    private RpcRegistration<TransportpceDeviceRendererService> deviceRendererRegistration;
     private RpcRegistration<TransportpceServicepathService> tpceServiceRegistry;
     private RendererServiceOperations rendererServiceOperations;
 
     public RendererProvider(RpcProviderRegistry rpcProviderRegistry, DeviceRendererRPCImpl deviceRendererRPCImpl,
-                            RendererServiceOperations rendererServiceOperations) {
+            RendererServiceOperations rendererServiceOperations) {
         this.rpcProviderRegistry = rpcProviderRegistry;
         this.deviceRendererRPCImpl = deviceRendererRPCImpl;
         this.rendererServiceOperations = rendererServiceOperations;
@@ -41,7 +41,7 @@ public class RendererProvider {
         TransportPCEServicePathRPCImpl transportPCEServicePathRPCImpl =
             new TransportPCEServicePathRPCImpl(this.rendererServiceOperations);
         this.deviceRendererRegistration = this.rpcProviderRegistry
-                .addRpcImplementation(RendererService.class, this.deviceRendererRPCImpl);
+                .addRpcImplementation(TransportpceDeviceRendererService.class, deviceRendererRPCImpl);
         this.tpceServiceRegistry = this.rpcProviderRegistry
                 .addRpcImplementation(TransportpceServicepathService.class, transportPCEServicePathRPCImpl);
     }

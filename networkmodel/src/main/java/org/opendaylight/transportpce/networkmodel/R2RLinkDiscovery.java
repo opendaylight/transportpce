@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
@@ -21,6 +20,12 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.InitRoadmNodesInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev170929.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Protocols;
@@ -28,12 +33,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.NbrList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.nbr.list.IfName;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NodeId;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.networkutils.rev170818.InitRoadmNodesInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.Network;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.Nodes;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.NodesKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.nodes.CpToDegree;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.nodes.Mapping;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +95,7 @@ public class R2RLinkDiscovery {
         try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID)
                     .get().toJavaUtil();
-            if (nodesObject.isPresent() && nodesObject.get().getMapping() != null) {
+            if (nodesObject.isPresent() && (nodesObject.get().getMapping() != null)) {
                 List<Mapping> mappingList = nodesObject.get().getMapping();
                 mappingList = mappingList.stream().filter(mp -> mp.getLogicalConnectionPoint().contains("DEG"
                         + degreeCounter)).collect(Collectors.toList());
@@ -249,13 +248,13 @@ public class R2RLinkDiscovery {
         try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID)
                     .get().toJavaUtil();
-            if (nodesObject.isPresent() && nodesObject.get().getCpToDegree() != null) {
+            if (nodesObject.isPresent() && (nodesObject.get().getCpToDegree() != null)) {
                 List<CpToDegree> cpToDeg = nodesObject.get().getCpToDegree();
                 Stream cpToDegStream = cpToDeg.stream().filter(cp -> cp.getInterfaceName() != null)
                         .filter(cp -> cp.getInterfaceName().equals(interfaceName));
                 if (cpToDegStream != null) {
                     Optional<CpToDegree> firstCpToDegree = cpToDegStream.findFirst();
-                    if (firstCpToDegree.isPresent() && firstCpToDegree != null) {
+                    if (firstCpToDegree.isPresent() && (firstCpToDegree != null)) {
                         LOG.debug("Found and returning {}",firstCpToDegree.get().getDegreeNumber().intValue());
                         return firstCpToDegree.get().getDegreeNumber().intValue();
                     } else {
