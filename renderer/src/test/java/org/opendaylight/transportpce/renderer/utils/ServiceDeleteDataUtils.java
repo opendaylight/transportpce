@@ -43,11 +43,11 @@ public final class ServiceDeleteDataUtils {
         List<AToZ> atoZList = new ArrayList<AToZ>();
         TerminationPointBuilder terminationPointBuilder = new TerminationPointBuilder();
         TerminationPoint terminationPoint = terminationPointBuilder
-                .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId("node2")
-                        .setTpId("node2-" + tpId).build()).build();
+                .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId("node2" + tpId)
+                        .setTpId(tpId).build()).build();
         TerminationPoint terminationPoint2 = terminationPointBuilder
-                .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId("node1")
-                        .setTpId("node1-" + tpId).build()).build();
+                .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder().setNodeId("node1" + tpId)
+                        .setTpId(tpId).build()).build();
         AToZ atoZ = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
                 .setResource(terminationPoint).build()).build();
         AToZ atoZ2 = new AToZBuilder().setId("2").withKey(new AToZKey("2")).setResource(new ResourceBuilder()
