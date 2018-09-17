@@ -21,6 +21,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.Topology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.TopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.LifecycleState;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateOutput;
@@ -29,6 +30,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.topology.AToZ;
@@ -116,6 +120,15 @@ public final class ModelMappingUtils {
         return builder.build();
     }
 
+    public static org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
+        .ServiceDeleteInput createServiceDeleteInput(ServiceRerouteInput serviceRerouteInput, Services service) {
+        ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder();
+        builder.setServiceName(serviceRerouteInput.getServiceName());
+        builder.setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId(
+                service.getSdncRequestHeader().getRequestId()).build());
+        return builder.build();
+    }
+
     public static ServiceAEnd createServiceAEnd(
         org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
             .ServiceAEnd serviceAEnd) {
@@ -171,6 +184,17 @@ public final class ModelMappingUtils {
         ServiceDeleteOutput output = new ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
         return RpcResultBuilder.success(output).buildFuture();
+    }
+
+
+    public static ListenableFuture<RpcResult<ServiceRerouteOutput>> createRerouteServiceReply(ServiceRerouteInput input,
+            String finalAck, String message, RpcStatus rpcStatus) {
+        ServiceRerouteOutputBuilder output = new ServiceRerouteOutputBuilder()
+                .setHardConstraints(null)
+                .setSoftConstraints(null)
+                .setStatusMessage(message)
+                .setStatus(rpcStatus);
+        return RpcResultBuilder.success(output.build()).buildFuture();
     }
 
     public static ListenableFuture<RpcResult<ServiceCreateOutput>> createCreateServiceReply(ServiceCreateInput input,
@@ -238,40 +262,41 @@ public final class ModelMappingUtils {
                 .setSoftConstraints(serviceReconfigureInput.getSoftConstraints())
                 .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
         }
+        if (output != null) {
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.response
+                    .parameters.sp.ResponseParameters responseParameters = output.getResponseParameters();
+            if (responseParameters != null) {
+                // service.setPceMetric(responseParameters.getPceMetric());
+                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426
+                    .response.parameters.sp.response.parameters.PathDescription pathDescription =
+                    responseParameters.getPathDescription();
+                if (pathDescription != null) {
+                    List<AToZ> atozList = new ArrayList<>();
+                    List<ZToA> ztoaList = new ArrayList<>();
 
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.response
-                .parameters.sp.ResponseParameters responseParameters = output.getResponseParameters();
-        if (responseParameters != null) {
-            // service.setPceMetric(responseParameters.getPceMetric());
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426
-                .response.parameters.sp.response.parameters.PathDescription pathDescription =
-                responseParameters.getPathDescription();
-            if (pathDescription != null) {
-                List<AToZ> atozList = new ArrayList<>();
-                List<ZToA> ztoaList = new ArrayList<>();
+                    for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426
+                        .path.description.atoz.direction.AToZ tmp : pathDescription.getAToZDirection().getAToZ()) {
 
-                for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426
-                    .path.description.atoz.direction.AToZ tmp : pathDescription.getAToZDirection().getAToZ()) {
+                        AToZKey key = new AToZKey(tmp.key().getId());
+                        AToZ atoz = new AToZBuilder().setId(tmp.getId()).withKey(key)
+                                // .setResource(tmp.getResource())
+                                .build();
+                        atozList.add(atoz);
+                    }
 
-                    AToZKey key = new AToZKey(tmp.key().getId());
-                    AToZ atoz = new AToZBuilder().setId(tmp.getId()).withKey(key)
-                            // .setResource(tmp.getResource())
-                            .build();
-                    atozList.add(atoz);
+                    for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426
+                            .path.description.ztoa.direction.ZToA
+                            tmp : pathDescription.getZToADirection().getZToA()) {
+                        ZToAKey key = new ZToAKey(tmp.key().getId());
+                        ZToA ztoa = new ZToABuilder().setId(tmp.getId()).withKey(key)
+                                // .setResource(tmp.getResource())
+                                .build();
+                        ztoaList.add(ztoa);
+                    }
+
+                    Topology topology = new TopologyBuilder().setAToZ(atozList).setZToA(ztoaList).build();
+                    service.setTopology(topology);
                 }
-
-                for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426
-                        .path.description.ztoa.direction.ZToA
-                        tmp : pathDescription.getZToADirection().getZToA()) {
-                    ZToAKey key = new ZToAKey(tmp.key().getId());
-                    ZToA ztoa = new ZToABuilder().setId(tmp.getId()).withKey(key)
-                            // .setResource(tmp.getResource())
-                            .build();
-                    ztoaList.add(ztoa);
-                }
-
-                Topology topology = new TopologyBuilder().setAToZ(atozList).setZToA(ztoaList).build();
-                service.setTopology(topology);
             }
         }
         return service.build();

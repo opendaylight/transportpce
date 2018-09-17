@@ -88,13 +88,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>odl-transportpce-stubmodels</artifactId>
       <version>${project.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>transportpce-common</artifactId>
@@ -125,7 +125,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <artifactId>transportpce-servicehandler</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>transportpce-stubpce</artifactId>
       <version>${project.version}</version>
@@ -134,7 +134,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>transportpce-stubrenderer</artifactId>
       <version>${project.version}</version>
-    </dependency>
+    </dependency-->
   </dependencies>
 
 <!-- skipping test since this is an umbrella project / folder -->

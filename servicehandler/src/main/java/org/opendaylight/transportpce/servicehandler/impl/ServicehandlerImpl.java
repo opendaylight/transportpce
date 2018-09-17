@@ -14,8 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
@@ -45,7 +43,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteConfirmInput;
@@ -68,10 +65,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfo.TailRetention;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -204,12 +199,17 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         //Check presence of service to be deleted
         String serviceName = input.getServiceDeleteReqInfo().getServiceName();
-        Optional<Services> service = this.serviceDataStoreOperations.getService(serviceName);
-        if (!service.isPresent()) {
-            message = "Service '" + serviceName + "' does not exist in datastore";
-            LOG.error(message);
-            return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                    message, ResponseCodes.RESPONSE_FAILED);
+        LOG.info("serviceName : {}", serviceName);
+        try {
+            Optional<Services> service = this.serviceDataStoreOperations.getService(serviceName);
+            if (!service.isPresent()) {
+                message = "Service '" + serviceName + "' does not exist in datastore";
+                LOG.error(message);
+                return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                        message, ResponseCodes.RESPONSE_FAILED);
+            }
+        } catch (NullPointerException e) {
+            LOG.info("failed to get service '{}' from datastore : ", serviceName, e);
         }
 
         LOG.debug("Service '{}' present in datastore !", serviceName);
@@ -273,12 +273,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
     @Override
     public ListenableFuture<RpcResult<ServiceRerouteOutput>> serviceReroute(ServiceRerouteInput input) {
-        InstanceIdentifier<Services> servicesIID = InstanceIdentifier.create(ServiceList.class)
-                .child(Services.class, new ServicesKey(input.getServiceName()));
-        ReadOnlyTransaction rtx = this.db.newReadOnlyTransaction();
-        Optional<Services> servicesObject;
+        LOG.info("RPC service reroute received");
+        String message = "";
         try {
-            servicesObject = rtx.read(LogicalDatastoreType.OPERATIONAL, servicesIID).get().toJavaUtil();
+            Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(input.getServiceName());
             if (servicesObject.isPresent()) {
                 ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder();
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
@@ -294,8 +292,14 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                 sdncBuilder.setRpcAction(RpcActions.ServiceDelete);
                 deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
                 // Calling delete service
-                serviceDelete(deleteInputBldr.build());
+                ServiceDeleteOutput serviceDeleteOutput = serviceDelete(deleteInputBldr.build()).get().getResult();
                 // Calling create request now
+                if (!ResponseCodes.RESPONSE_OK
+                        .equals(serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode())) {
+                    message = "Service delete failed!";
+                    return ModelMappingUtils.createRerouteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                            message, RpcStatus.Failed);
+                }
                 ServiceCreateInputBuilder serviceCreateBldr = new ServiceCreateInputBuilder();
                 serviceCreateBldr.setServiceName(input.getServiceName() + 2);
                 serviceCreateBldr.setCommonId(servicesObject.get().getCommonId());
@@ -315,19 +319,27 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                 ServiceZEndBuilder serviceZendBuilder = new ServiceZEndBuilder(servicesObject.get().getServiceZEnd());
                 serviceCreateBldr.setServiceZEnd(serviceZendBuilder.build());
                 serviceCreateBldr.setSoftConstraints(servicesObject.get().getSoftConstraints());
-                serviceCreate(serviceCreateBldr.build());
+                ServiceCreateOutput serviceCreateOutput = serviceCreate(serviceCreateBldr.build()).get().getResult();
+                if (!ResponseCodes.RESPONSE_OK
+                        .equals(serviceCreateOutput.getConfigurationResponseCommon().getResponseCode())) {
+                    message = "Service create failed!";
+                    return ModelMappingUtils.createRerouteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                            message, RpcStatus.Failed);
+                }
                 ServiceRerouteOutputBuilder output = new ServiceRerouteOutputBuilder()
                     .setHardConstraints(null).setSoftConstraints(null).setStatus(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus.Successful)
-                    .setStatusMessage("Success");
+                    .setStatusMessage("Service reroute successfully !");
                 return RpcResultBuilder.success(output).buildFuture();
+            } else {
+                LOG.error("Service '{}' is not present", input.getServiceName());
+                message = "Service '" + input.getServiceName() + "' is not present";
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.info("Exception caught" , e);
         }
         ServiceRerouteOutputBuilder output = new ServiceRerouteOutputBuilder()
-            .setHardConstraints(null).setSoftConstraints(null).setStatus(RpcStatus.Failed).setStatusMessage("Failure");
-
+            .setHardConstraints(null).setSoftConstraints(null).setStatus(RpcStatus.Failed).setStatusMessage(message);
         return RpcResultBuilder.success(output).buildFuture();
     }
 

@@ -7,16 +7,9 @@
  */
 package org.opendaylight.transportpce.servicehandler.stub;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
-import org.opendaylight.transportpce.servicehandler.mappers.ServiceDeleteInputConverter;
-import org.opendaylight.transportpce.servicehandler.mappers.ServiceDeleteOutputConverter;
-import org.opendaylight.transportpce.servicehandler.mappers.ServiceImplementationRequestInputConverter;
-import org.opendaylight.transportpce.servicehandler.mappers.ServiceImplementationRequestOutputConverter;
-import org.opendaylight.transportpce.stubrenderer.impl.StubrendererImpl;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
@@ -27,19 +20,13 @@ import org.slf4j.LoggerFactory;
 
 public class StubRendererServiceOperations implements RendererServiceOperations {
     private static final Logger LOG = LoggerFactory.getLogger(StubRendererServiceOperations.class);
-    private StubrendererImpl stubrenderer;
-
-    public StubRendererServiceOperations(NotificationPublishService notificationPublishService) {
-        this.stubrenderer = new StubrendererImpl(notificationPublishService);
-    }
 
     @Override
     public ServiceImplementationRequestOutput serviceImplementation(ServiceImplementationRequestInput input) {
-        Future<RpcResult<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426
-            .ServiceImplementationRequestOutput>> rpcResultFuture = this.stubrenderer
-                .serviceImplementationRequest(ServiceImplementationRequestInputConverter.getStub(input));
+        ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> rpcResultFuture = StubrendererImpl
+                .serviceImplementation(input);
         try {
-            return ServiceImplementationRequestOutputConverter.getConcrete(rpcResultFuture.get().getResult());
+            return rpcResultFuture.get().getResult();
         } catch (InterruptedException e) {
             LOG.error("RPC serviceImplementation failed !",e);
         } catch (ExecutionException e) {
@@ -50,11 +37,9 @@ public class StubRendererServiceOperations implements RendererServiceOperations 
 
     @Override
     public ServiceDeleteOutput serviceDelete(ServiceDeleteInput input) {
-        Future<RpcResult<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.stubrenderer.rev170426
-            .ServiceDeleteOutput>> rpcResultFuture = this.stubrenderer
-                .serviceDelete(ServiceDeleteInputConverter.getStub(input));
+        ListenableFuture<RpcResult<ServiceDeleteOutput>> rpcResultFuture = StubrendererImpl.serviceDelete(input);
         try {
-            return ServiceDeleteOutputConverter.getConcrete(rpcResultFuture.get().getResult());
+            return rpcResultFuture.get().getResult();
         } catch (InterruptedException e) {
             LOG.error("RPC serviceDelete failed !",e);
         } catch (ExecutionException e) {

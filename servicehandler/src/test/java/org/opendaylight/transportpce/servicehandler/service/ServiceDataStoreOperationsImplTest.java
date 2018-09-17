@@ -38,7 +38,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         PathComputationService pathComputationService = new PathComputationServiceImpl(getDataBroker(),
             notificationPublishService);
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService);
-        this.rendererServiceOperations = new StubRendererServiceOperations(notificationPublishService);
+        this.rendererServiceOperations = new StubRendererServiceOperations();
         this.serviceHandler = new ServicehandlerImpl(getDataBroker(), pathComputationService,
             this.rendererServiceOperations);
     }
