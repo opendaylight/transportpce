@@ -25,7 +25,9 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateValidation;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus;
@@ -65,7 +67,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfo.TailRetention;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
@@ -140,8 +141,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         ServiceImplementationRequestInput serviceImplementationRequest =
                 ModelMappingUtils.createServiceImplementationRequest(input, pceResponse);
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
-            .ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
+        ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
             .serviceImplementation(serviceImplementationRequest);
         if (ResponseCodes.RESPONSE_OK
                 .equals(serviceImplementationRequestOutput.getConfigurationResponseCommon().getResponseCode())) {
@@ -213,9 +213,9 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         }
 
         LOG.debug("Service '{}' present in datastore !", serviceName);
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput
-                serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(input);
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(input);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
             .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
 
         if (!ResponseCodes.RESPONSE_OK
@@ -326,11 +326,9 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     return ModelMappingUtils.createRerouteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                             message, RpcStatus.Failed);
                 }
-                ServiceRerouteOutputBuilder output = new ServiceRerouteOutputBuilder()
-                    .setHardConstraints(null).setSoftConstraints(null).setStatus(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus.Successful)
-                    .setStatusMessage("Service reroute successfully !");
-                return RpcResultBuilder.success(output).buildFuture();
+                message = "Service reroute successfully !";
+                return ModelMappingUtils.createRerouteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                        message, RpcStatus.Successful);
             } else {
                 LOG.error("Service '{}' is not present", input.getServiceName());
                 message = "Service '" + input.getServiceName() + "' is not present";

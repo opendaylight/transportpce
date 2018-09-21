@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.servicehandler.stub;
 
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.handler.header.ServiceHandlerHeader;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.service.handler.header.ServiceHandlerHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ public class StubrendererCompliancyCheck {
      */
     public Boolean checkString(String value) {
         Boolean result = false;
-        if (value != null && value.compareTo("") != 0) {
+        if ((value != null) && (value.compareTo("") != 0)) {
             result = true;
         }
         return result;

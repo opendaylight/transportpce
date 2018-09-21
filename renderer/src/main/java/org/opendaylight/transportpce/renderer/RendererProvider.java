@@ -13,7 +13,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOpe
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.TransportpceDeviceRendererService;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.TransportpceRendererService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class RendererProvider {
     private final RpcProviderRegistry rpcProviderRegistry;
     private DeviceRendererRPCImpl deviceRendererRPCImpl;
     private RpcRegistration<TransportpceDeviceRendererService> deviceRendererRegistration;
-    private RpcRegistration<TransportpceServicepathService> tpceServiceRegistry;
+    private RpcRegistration<TransportpceRendererService> tpceServiceRegistry;
     private RendererServiceOperations rendererServiceOperations;
 
     public RendererProvider(RpcProviderRegistry rpcProviderRegistry, DeviceRendererRPCImpl deviceRendererRPCImpl,
@@ -43,7 +43,7 @@ public class RendererProvider {
         this.deviceRendererRegistration = this.rpcProviderRegistry
                 .addRpcImplementation(TransportpceDeviceRendererService.class, deviceRendererRPCImpl);
         this.tpceServiceRegistry = this.rpcProviderRegistry
-                .addRpcImplementation(TransportpceServicepathService.class, transportPCEServicePathRPCImpl);
+                .addRpcImplementation(TransportpceRendererService.class, transportPCEServicePathRPCImpl);
     }
 
     /**

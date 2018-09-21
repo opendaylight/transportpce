@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.pce;
 
 import com.google.common.base.Optional;
-
 import java.util.ArrayList;
 import java.util.List;
 //import java.util.Optional;
@@ -16,28 +15,26 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.Node;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.node.NodeIdentifier;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.RoutingConstraintsSp.PceMetric;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.CoRoutingOrGeneral;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.CoRouting;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.General;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.Diversity;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.Exclude;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.Latency;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.service.path.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServicePathList;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.path.list.ServicePaths;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.service.path.list.ServicePathsKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.Node;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.CoRoutingOrGeneral;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.CoRouting;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.General;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Diversity;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Exclude;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Latency;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,33 +183,40 @@ public class PceConstraintsCalc {
                 return false;
             }
             return aToZ.getResource().getResource() instanceof Node;
-        }).filter(aToZ -> {
-            Node node = (Node) aToZ.getResource().getResource();
-            if (node.getNodeIdentifier() == null) {
-                LOG.warn("Node in AToZ node {} contains null! Skipping this node!", aToZ.getId());
-                return false;
-            }
-            return true;
         }).map(aToZ -> {
-            NodeIdentifier node = ((Node) aToZ.getResource().getResource()).getNodeIdentifier();
+            Node node = (Node) aToZ.getResource().getResource();
+            if (node.getNodeId() == null) {
+                LOG.warn("Node in AToZ node {} contains null! Skipping this node!", aToZ.getId());
+                return null;
+            }
             return node.getNodeId().toString();
         }).collect(Collectors.toList());
     }
 
     private Optional<PathDescription> getPathDescriptionFromDatastore(String serviceName) {
-        InstanceIdentifier<PathDescription> pathDescriptionIID = InstanceIdentifier.create(ServicePathList.class)
-                .child(ServicePaths.class, new ServicePathsKey(serviceName)).child(PathDescription.class);
+        Optional<PathDescription> result = Optional.absent();
+        InstanceIdentifier<ServicePaths> pathDescriptionIID = InstanceIdentifier.create(ServicePathList.class)
+                .child(ServicePaths.class, new ServicePathsKey(serviceName));
         ReadOnlyTransaction pathDescReadTx = this.dataBroker.newReadOnlyTransaction();
         try {
             LOG.info("PCE diversity constraints: Getting path description for service {}", serviceName);
-            return pathDescReadTx.read(LogicalDatastoreType.CONFIGURATION, pathDescriptionIID)
-                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+            ServicePaths servicePaths = pathDescReadTx.read(LogicalDatastoreType.CONFIGURATION, pathDescriptionIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS).get();
+            if (servicePaths != null) {
+                PathDescription path = servicePaths.getPathDescription();
+                if (path != null) {
+                    result = Optional.of(path);
+                }
+            }
+//            return pathDescReadTx.read(LogicalDatastoreType.CONFIGURATION, pathDescriptionIID)
+//                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn(
                 "PCE diversity constraints: Exception while getting path description from datastore {} for service {}!",
                 pathDescriptionIID,serviceName, e);
-            return Optional.absent();
+            return result;
         }
+        return result;
     }
 
     private void readCoRoutingContrains(CoRouting tmpcoRouting, PceConstraints constraints) {

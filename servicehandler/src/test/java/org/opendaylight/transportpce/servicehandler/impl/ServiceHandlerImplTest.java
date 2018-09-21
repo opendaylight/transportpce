@@ -42,8 +42,11 @@ import org.opendaylight.transportpce.servicehandler.stub.StubRendererServiceOper
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
@@ -67,8 +70,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutputBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -881,15 +882,13 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         Optional<Services> service = Optional.of(new ServicesBuilder().setServiceName("service 1").build());
         Mockito.when(this.serviceDataStoreOperationsMock.getService("service 1")).thenReturn(service);
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
-            .ServiceDeleteInput input = ModelMappingUtils
-                .createServiceDeleteInput(serviceDeleteInput);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteInput input = ModelMappingUtils.createServiceDeleteInput(serviceDeleteInput);
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_FAILED).setResponseMessage("success").build();
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
-            .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                .servicepath.rev170426.ServiceDeleteOutputBuilder()
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteOutput output = new ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
         Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
         ServiceDeleteOutput result = this.serviceHandlerImplMock.serviceDelete(serviceDeleteInput).get().getResult();
@@ -904,15 +903,13 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         Optional<Services> service = Optional.of(new ServicesBuilder().setServiceName("service 1").build());
         Mockito.when(this.serviceDataStoreOperationsMock.getService("service 1")).thenReturn(service);
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
-            .ServiceDeleteInput input = ModelMappingUtils
-                .createServiceDeleteInput(serviceDeleteInput);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteInput input = ModelMappingUtils.createServiceDeleteInput(serviceDeleteInput);
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
-            .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                .servicepath.rev170426.ServiceDeleteOutputBuilder()
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteOutput output = new ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
         Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
         Mockito.when(this.serviceDataStoreOperationsMock
@@ -933,15 +930,13 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         Optional<Services> service = Optional.of(new ServicesBuilder().setServiceName("service 1").build());
         Mockito.when(this.serviceDataStoreOperationsMock.getService("service 1")).thenReturn(service);
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
-            .ServiceDeleteInput input = ModelMappingUtils
-                .createServiceDeleteInput(serviceDeleteInput);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteInput input = ModelMappingUtils.createServiceDeleteInput(serviceDeleteInput);
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
-            .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                .servicepath.rev170426.ServiceDeleteOutputBuilder()
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteOutput output = new ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
         Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
         Mockito.when(this.serviceDataStoreOperationsMock
@@ -962,14 +957,14 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ServiceDeleteInput serviceDeleteInput = ServiceDataUtils.buildServiceDeleteInput();
         Optional<Services> service = Optional.of(new ServicesBuilder().setServiceName("service 1").build());
         Mockito.when(this.serviceDataStoreOperationsMock.getService("service 1")).thenReturn(service);
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
             .ServiceDeleteInput input = ModelMappingUtils.createServiceDeleteInput(serviceDeleteInput);
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
-            .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                .servicepath.rev170426.ServiceDeleteOutputBuilder()
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer
+                .rev171017.ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
         Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
         Mockito.when(this.serviceDataStoreOperationsMock
@@ -1005,14 +1000,14 @@ public class ServiceHandlerImplTest extends AbstractTest {
         Services serviceMock = ModelMappingUtils.mappingServices(serviceInput, null);
         Optional<Services> service = Optional.of(serviceMock);
         Mockito.when(this.serviceDataStoreOperationsMock.getService(any(String.class))).thenReturn(service);
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
             .ServiceDeleteInput input = ModelMappingUtils.createServiceDeleteInput(serviceRerouteinput, service.get());
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("success").build();
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426
-            .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                .servicepath.rev170426.ServiceDeleteOutputBuilder()
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer
+                .rev171017.ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
         Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
         Mockito.when(this.serviceDataStoreOperationsMock

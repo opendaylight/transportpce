@@ -12,22 +12,22 @@ import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.CancelResourceReserveInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.CancelResourceReserveOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.CancelResourceReserveOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.ServicePathRpcResult;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.ServicePathRpcResultBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.CancelResourceReserveInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.CancelResourceReserveOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.CancelResourceReserveOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.ServicePathRpcResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.ServicePathRpcResultBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.RpcStatusEx;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.ServicePathNotificationTypes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.response.parameters.sp.ResponseParametersBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.response.parameters.sp.response.parameters.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.ServicePathNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.ResponseParametersBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,6 +131,7 @@ public class PathComputationServiceImpl implements PathComputationService {
         PathDescriptionBuilder path = null;
         path = sendingPCE.getPathDescription();
 
+
         LOG.info("PCE response: {} {}", message, responseCode);
         if ((sendingPCE.getSuccess() == false) || (path == null)) {
             configurationResponseCommon
@@ -156,7 +157,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 .setStatus(RpcStatusEx.Successful)
                 .setStatusMessage(message);
         PathDescription pathDescription = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce
-                .pce.rev170426.service.path.rpc.result.PathDescriptionBuilder()
+                .pce.rev171017.service.path.rpc.result.PathDescriptionBuilder()
                 .setAToZDirection(path.getAToZDirection())
                 .setZToADirection(path.getZToADirection())
                 .build();
@@ -170,9 +171,9 @@ public class PathComputationServiceImpl implements PathComputationService {
         }
 
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types
-                .rev170426.response.parameters.sp.response.parameters.PathDescription pathDescription1
+                .rev171016.response.parameters.sp.response.parameters.PathDescription pathDescription1
                 = new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types
-                .rev170426.response.parameters.sp.response.parameters.PathDescriptionBuilder()
+                .rev171016.response.parameters.sp.response.parameters.PathDescriptionBuilder()
                 .setAToZDirection(path.getAToZDirection())
                 .setZToADirection(path.getZToADirection())
                 .build();
@@ -184,14 +185,14 @@ public class PathComputationServiceImpl implements PathComputationService {
 
         //debug prints
         AToZDirection atoz = pathDescription.getAToZDirection();
-        if (atoz != null && atoz.getAToZ() != null) {
+        if ((atoz != null) && (atoz.getAToZ() != null)) {
             LOG.info("Impl AtoZ Notification: [{}] elements in description", atoz.getAToZ().size());
             for (int i = 0; i < atoz.getAToZ().size(); i++) {
                 LOG.info("Impl AtoZ Notification: [{}] {}", i, atoz.getAToZ().get(i));
             }
         }
         ZToADirection ztoa = pathDescription.getZToADirection();
-        if (ztoa != null && ztoa.getZToA() != null) {
+        if ((ztoa != null) && (ztoa.getZToA() != null)) {
             LOG.info("Impl ZtoA Notification: [{}] elements in description", ztoa.getZToA().size());
             for (int i = 0; i < ztoa.getZToA().size(); i++) {
                 LOG.info("Impl ZtoA Notification: [{}] {}", i, ztoa.getZToA().get(i));

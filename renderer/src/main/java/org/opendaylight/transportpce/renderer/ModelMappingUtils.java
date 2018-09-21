@@ -18,18 +18,18 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.ServicePathInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ztoa.direction.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.TerminationPoint;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.olm.renderer.input.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.olm.renderer.input.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.olm.renderer.input.NodesKey;
@@ -74,7 +74,12 @@ public final class ModelMappingUtils {
     }
 
     public static ListenableFuture<RpcResult<ServiceImplementationRequestOutput>>
-        createRpcResponse(ServiceImplementationRequestOutput payload) {
+        createServiceImplementationRpcResponse(ServiceImplementationRequestOutput payload) {
+        return RpcResultBuilder.success(payload).buildFuture();
+    }
+
+    public static ListenableFuture<RpcResult<ServiceDeleteOutput>>
+        createServiceDeleteRpcResponse(ServiceDeleteOutput payload) {
         return RpcResultBuilder.success(payload).buildFuture();
     }
 
@@ -126,10 +131,10 @@ public final class ModelMappingUtils {
             try {
                 if (TERMINATION_POINT.equals(resourceType)) {
                     tp = (TerminationPoint) pathDesObj.getResource().getResource();
-                    LOG.info(" TP is {} {}", tp.getTerminationPointIdentifier().getTpId(),
-                            tp.getTerminationPointIdentifier().getNodeId());
-                    tpID = tp.getTerminationPointIdentifier().getTpId();
-                    nodeID = tp.getTerminationPointIdentifier().getNodeId();
+                    LOG.info(" TP is {} {}", tp.getTpId(),
+                            tp.getTpNodeId());
+                    tpID = tp.getTpId();
+                    nodeID = tp.getTpNodeId();
                     sortId = pathDesObj.getId();
 
                     //TODO: do not rely on ID to be in certain format
@@ -200,10 +205,10 @@ public final class ModelMappingUtils {
             try {
                 if (TERMINATION_POINT.equals(resourceType)) {
                     tp = (TerminationPoint) pathDesObj.getResource().getResource();
-                    LOG.info(" TP is {} {}", tp.getTerminationPointIdentifier().getTpId(),
-                            tp.getTerminationPointIdentifier().getNodeId());
-                    tpID = tp.getTerminationPointIdentifier().getTpId();
-                    nodeID = tp.getTerminationPointIdentifier().getNodeId();
+                    LOG.info(" TP is {} {}", tp.getTpId(),
+                            tp.getTpNodeId());
+                    tpID = tp.getTpId();
+                    nodeID = tp.getTpNodeId();
                     sortId = pathDesObj.getId();
 
                     //TODO: do not rely on ID to be in certain format

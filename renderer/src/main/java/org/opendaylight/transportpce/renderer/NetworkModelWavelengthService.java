@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.renderer;
 
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.PathDescription;
 
 public interface NetworkModelWavelengthService {
 

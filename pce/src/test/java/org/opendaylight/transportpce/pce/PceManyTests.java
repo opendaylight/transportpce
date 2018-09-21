@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.pce;
 
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -23,8 +22,8 @@ import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthServiceImpl;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +81,7 @@ public class PceManyTests extends AbstractTest {
         PceTestUtils.checkConfigurationResponse(output, expectedOutput);
 
         if (ResponseCodes.RESPONSE_OK.equals(output.getConfigurationResponseCommon().getResponseCode())) {
-            networkModelWavelengthService.useWavelengths(output.getResponseParameters().getPathDescription());
+            //networkModelWavelengthService.useWavelengths(output.getResponseParameters().getPathDescription());
             PceTestUtils.checkCalculatedPath(output, expectedOutput);
         }
     }

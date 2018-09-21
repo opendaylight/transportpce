@@ -10,20 +10,16 @@ package org.opendaylight.transportpce.renderer.rpcs;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.CancelResourceReserveOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426.TransportpceServicepathService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.TransportpceRendererService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TransportPCEServicePathRPCImpl implements TransportpceServicepathService {
+public class TransportPCEServicePathRPCImpl implements TransportpceRendererService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TransportPCEServicePathRPCImpl.class);
 
@@ -34,16 +30,11 @@ public class TransportPCEServicePathRPCImpl implements TransportpceServicepathSe
     }
 
     @Override
-    public ListenableFuture<RpcResult<CancelResourceReserveOutput>> cancelResourceReserve(
-            CancelResourceReserveInput input) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        String serviceName = input.getServiceName();
+        LOG.info("Calling RPC service delete request {} {}", serviceName);
+        return ModelMappingUtils
+                .createServiceDeleteRpcResponse(this.rendererServiceOperations.serviceDelete(input));
     }
 
     @Override
@@ -51,14 +42,8 @@ public class TransportPCEServicePathRPCImpl implements TransportpceServicepathSe
             ServiceImplementationRequestInput input) {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service impl request {} {}", serviceName);
-        return ModelMappingUtils.createRpcResponse(this.rendererServiceOperations.serviceImplementation(input));
-    }
-
-    @Override
-    public ListenableFuture<RpcResult<PathComputationRequestOutput>> pathComputationRequest(
-            PathComputationRequestInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        return ModelMappingUtils
+                .createServiceImplementationRpcResponse(this.rendererServiceOperations.serviceImplementation(input));
     }
 
 }

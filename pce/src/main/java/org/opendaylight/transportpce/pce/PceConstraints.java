@@ -9,9 +9,7 @@ package org.opendaylight.transportpce.pce;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.RoutingConstraintsSp;
-
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -7,6 +7,7 @@ module transportpce-servicepath {
   }
   import transportpce-common-service-path-types {
     prefix transportpce-common-service-path-types;
+    revision-date 2017-10-16; 
   }
 
   organization

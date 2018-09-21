@@ -12,23 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.ResponseCodes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.AToZDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ZToADirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ztoa.direction.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ztoa.direction.ZToABuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ztoa.direction.ZToAKey;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.Resource;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.ResourceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.LinkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.NodeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.TerminationPoint;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.TerminationPointBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.link.LinkIdentifierBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.node.NodeIdentifierBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.termination.point.TerminationPointIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToABuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToAKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.Resource;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.LinkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.NodeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.TerminationPoint;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.LinkId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,8 +93,7 @@ public class PcePathDescription {
         String tpName = path.get(0).getClient();
         String xname = path.get(0).getSourceId().getValue();
         TerminationPoint stp = new TerminationPointBuilder()
-                .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
-                        .setNodeId(xname).setTpId(tpName).build())
+                .setTpId(tpName).setTpNodeId(xname)
                 .build();
 
         AToZKey clientKey = new AToZKey(index.toString());
@@ -112,9 +108,9 @@ public class PcePathDescription {
             String srcName = pcelink.getSourceId().getValue();
 
             // Nodes
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
                 .resource.resource.resource.Node sourceNode = new NodeBuilder()
-                .setNodeIdentifier(new NodeIdentifierBuilder().setNodeId(srcName).build())
+                .setNodeId(srcName)
                 .build();
 
             // Source Resource
@@ -127,8 +123,7 @@ public class PcePathDescription {
             // source TP
             tpName = pcelink.getSourceTP().toString();
             stp = new TerminationPointBuilder()
-                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
-                            .setNodeId(srcName).setTpId(tpName).build())
+                    .setTpNodeId(srcName).setTpId(tpName)
                     .build();
 
             // Resource
@@ -140,9 +135,9 @@ public class PcePathDescription {
 
             String linkName = pcelink.getLinkId().getValue();
             // Link
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
                 .resource.resource.resource.Link atozLink = new LinkBuilder()
-                .setLinkIdentifier(new LinkIdentifierBuilder().setLinkId(linkName).build())
+                .setLinkId(linkName)
                 .build();
 
             // Link Resource
@@ -156,8 +151,7 @@ public class PcePathDescription {
             // target TP
             tpName = pcelink.getDestTP().toString();
             TerminationPoint dtp = new TerminationPointBuilder()
-                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
-                            .setNodeId(destName).setTpId(tpName).build())
+                    .setTpNodeId(destName).setTpId(tpName)
                     .build();
 
             // Resource
@@ -167,9 +161,9 @@ public class PcePathDescription {
             index++;
             etoeList.add(ttpResource);
 
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
                 .resource.resource.resource.Node targetNode = new NodeBuilder()
-                .setNodeIdentifier(new NodeIdentifierBuilder().setNodeId(destName).build())
+                .setNodeId(destName)
                 .build();
 
             // Target Resource
@@ -186,8 +180,7 @@ public class PcePathDescription {
         tpName = lastLink.getClient();
         xname = lastLink.getDestId().getValue();
         stp = new TerminationPointBuilder()
-                .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
-                        .setNodeId(xname).setTpId(tpName).build())
+                .setTpNodeId(xname).setTpId(tpName)
                 .build();
 
 
@@ -209,8 +202,7 @@ public class PcePathDescription {
         String tpName = pcelink.getClient();
         String xname = pcelink.getSourceId().getValue();
         TerminationPoint stp = new TerminationPointBuilder()
-                .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
-                        .setNodeId(xname).setTpId(tpName).build())
+                .setTpNodeId(xname).setTpId(tpName)
                 .build();
 
         ZToAKey clientKey = new ZToAKey(index.toString());
@@ -228,10 +220,9 @@ public class PcePathDescription {
 
 
             // Nodes
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
                 .resource.resource.resource.Node sourceNode = new NodeBuilder()
-                .setNodeIdentifier(new NodeIdentifierBuilder().setNodeId(srcName).build()).build();
-
+                .setNodeId(srcName).build();
 
 
             // Source Resource
@@ -244,8 +235,7 @@ public class PcePathDescription {
             // source TP
             tpName = pcelink.getSourceTP().toString();
             stp = new TerminationPointBuilder()
-                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
-                            .setNodeId(srcName).setTpId(tpName).build())
+                    .setTpNodeId(srcName).setTpId(tpName)
                     .build();
 
             // Resource
@@ -257,9 +247,9 @@ public class PcePathDescription {
 
             String linkName = pcelink.getLinkId().getValue();
             // Link
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
                 .resource.resource.resource.Link ztoaLink = new LinkBuilder()
-                .setLinkIdentifier(new LinkIdentifierBuilder().setLinkId(linkName).build()).build();
+                .setLinkId(linkName).build();
 
             // Link Resource
             ZToAKey linkKey = new ZToAKey(index.toString());
@@ -272,9 +262,7 @@ public class PcePathDescription {
             // target TP
             tpName = pcelink.getDestTP().toString();
             TerminationPoint ttp = new TerminationPointBuilder()
-                    .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
-                            .setNodeId(destName).setTpId(tpName).build())
-                    .build();
+                    .setTpNodeId(destName).setTpId(tpName).build();
 
             // Resource
             ZToAKey destTPKey = new ZToAKey(index.toString());
@@ -284,9 +272,9 @@ public class PcePathDescription {
             etoelist.add(ttpResource);
 
 
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
                 .resource.resource.resource.Node targetNode = new NodeBuilder()
-                .setNodeIdentifier(new NodeIdentifierBuilder().setNodeId(destName).build()).build();
+                .setNodeId(destName).build();
             // Target Resource
             ZToAKey targetKey = new ZToAKey(index.toString());
             Resource nodeResource3 = new ResourceBuilder().setResource(targetNode).build();
@@ -300,9 +288,7 @@ public class PcePathDescription {
         tpName = lastLink.getClient();
         xname = lastLink.getDestId().getValue();
         stp = new TerminationPointBuilder()
-                .setTerminationPointIdentifier(new TerminationPointIdentifierBuilder()
-                        .setNodeId(xname).setTpId(tpName).build())
-                .build();
+                .setTpNodeId(xname).setTpId(tpName).build();
 
 
         index++;

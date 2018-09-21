@@ -19,15 +19,15 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.co.routing.or.general.general.Latency;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.ConstraintsSp;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.DiversityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.ExcludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.IncludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.constraints.sp.co.routing.or.general.general.LatencyBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.diversity.existing.service.contraints.sp.ExistingServiceApplicabilityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing.constraints.sp.SoftConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ConstraintsSp;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.DiversityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.ExcludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.IncludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.LatencyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.diversity.existing.service.contraints.sp.ExistingServiceApplicabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraintsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,9 +44,9 @@ public class MappingConstraints {
     private HardConstraints serviceHardConstraints;
     private SoftConstraints serviceSoftConstraints;
     private org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-        .routing.constraints.rev170426.routing.constraints.sp.HardConstraints servicePathHardConstraints;
+        .routing.constraints.rev171017.routing.constraints.sp.HardConstraints servicePathHardConstraints;
     private org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-        .routing.constraints.rev170426.routing.constraints.sp.SoftConstraints servicePathSoftConstraints;
+        .routing.constraints.rev171017.routing.constraints.sp.SoftConstraints servicePathSoftConstraints;
 
     /**
      * MappingConstraints class constructor
@@ -68,9 +68,9 @@ public class MappingConstraints {
      * @param soft SoftConstraints
      */
     public MappingConstraints(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-            .routing.constraints.rev170426.routing.constraints.sp.HardConstraints hard,
+            .routing.constraints.rev171017.routing.constraints.sp.HardConstraints hard,
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-            .routing.constraints.rev170426.routing.constraints.sp.SoftConstraints soft) {
+            .routing.constraints.rev171017.routing.constraints.sp.SoftConstraints soft) {
         setServicePathHardConstraints(hard);
         setServicePathSoftConstraints(soft);
     }
@@ -87,20 +87,20 @@ public class MappingConstraints {
         CoRoutingOrGeneral coRoutingOrGeneral = null;
         HardConstraintsBuilder tempHard = new HardConstraintsBuilder();
         SoftConstraintsBuilder tempSoft = new SoftConstraintsBuilder();
-        if (input  !=  null && input instanceof Constraints) {
+        if ((input  !=  null) && (input instanceof Constraints)) {
             Constraints constraints = (Constraints)input;
             coRoutingOrGeneral = constraints.getCoRoutingOrGeneral();
             General tmpGeneral = null;
             CoRouting tmpCoRouting = null;
             if (coRoutingOrGeneral  !=  null) {
                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.GeneralBuilder finalGeneral =
+                    .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder finalGeneral =
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.GeneralBuilder();
+                    .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder();
                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.CoRoutingBuilder finalCoRouting =
+                    .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder finalCoRouting =
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.CoRoutingBuilder();
+                    .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder();
                 if (coRoutingOrGeneral instanceof General) {
                     tmpGeneral = (General) coRoutingOrGeneral;
                     if (tmpGeneral  !=  null) {
@@ -190,13 +190,13 @@ public class MappingConstraints {
             CoRouting tmpCoRouting = null;
             if (coRoutingOrGeneral  !=  null) {
                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.GeneralBuilder finalGeneral =
+                    .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder finalGeneral =
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.GeneralBuilder();
+                    .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder();
                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.CoRoutingBuilder finalCoRouting =
+                    .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder finalCoRouting =
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.CoRoutingBuilder();
+                    .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder();
                 if (coRoutingOrGeneral instanceof General) {
                     tmpGeneral = (General) coRoutingOrGeneral;
                     if (tmpGeneral  !=  null) {
@@ -264,8 +264,8 @@ public class MappingConstraints {
             servicePathHardConstraints = tempHard.build();*/
 
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                .rev170426.routing.constraints.sp.HardConstraints tempHard = (org.opendaylight.yang.gen
-                    .v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing
+                .rev171017.routing.constraints.sp.HardConstraints tempHard = (org.opendaylight.yang.gen
+                    .v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing
                     .constraints.sp.HardConstraints) getConstraints(serviceHardConstraints);
             if (tempHard != null) {
                 servicePathHardConstraints = tempHard;
@@ -277,13 +277,13 @@ public class MappingConstraints {
             CoRouting tmpCoRouting = null;
             if (coRoutingOrGeneral  !=  null) {
                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.GeneralBuilder finalGeneral =
+                    .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder finalGeneral =
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.GeneralBuilder();
+                    .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder();
                 org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.CoRoutingBuilder finalCoRouting =
+                    .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder finalCoRouting =
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev170426.constraints.sp.co.routing.or.general.CoRoutingBuilder();
+                    .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder();
                 if (coRoutingOrGeneral instanceof General) {
                     tmpGeneral = (General) coRoutingOrGeneral;
                     if (tmpGeneral  !=  null) {
@@ -350,8 +350,8 @@ public class MappingConstraints {
             }
             servicePathSoftConstraints = tempSoft.build();*/
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                .rev170426.routing.constraints.sp.SoftConstraints tempSoft = (org.opendaylight.yang.gen
-                    .v1.http.org.transportpce.b.c._interface.routing.constraints.rev170426.routing
+                .rev171017.routing.constraints.sp.SoftConstraints tempSoft = (org.opendaylight.yang.gen
+                    .v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing
                     .constraints.sp.SoftConstraints) getConstraints(serviceSoftConstraints);
             if (tempSoft != null) {
                 servicePathSoftConstraints = tempSoft;
@@ -381,25 +381,25 @@ public class MappingConstraints {
 
 
     public org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-        .routing.constraints.rev170426.routing.constraints.sp.HardConstraints getServicePathHardConstraints() {
+        .routing.constraints.rev171017.routing.constraints.sp.HardConstraints getServicePathHardConstraints() {
         return servicePathHardConstraints;
     }
 
 
     public void setServicePathHardConstraints(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-            .routing.constraints.rev170426.routing.constraints.sp.HardConstraints servicePathHardConstraints) {
+            .routing.constraints.rev171017.routing.constraints.sp.HardConstraints servicePathHardConstraints) {
         this.servicePathHardConstraints = servicePathHardConstraints;
     }
 
 
     public org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-        .routing.constraints.rev170426.routing.constraints.sp.SoftConstraints getServicePathSoftConstraints() {
+        .routing.constraints.rev171017.routing.constraints.sp.SoftConstraints getServicePathSoftConstraints() {
         return servicePathSoftConstraints;
     }
 
 
     public void setServicePathSoftConstraints(org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-            .routing.constraints.rev170426.routing.constraints.sp.SoftConstraints servicePathSoftConstraints) {
+            .routing.constraints.rev171017.routing.constraints.sp.SoftConstraints servicePathSoftConstraints) {
         this.servicePathSoftConstraints = servicePathSoftConstraints;
     }
 

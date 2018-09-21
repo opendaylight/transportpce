@@ -8,14 +8,12 @@
 package org.opendaylight.transportpce.renderer;
 
 import com.google.common.base.Optional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
@@ -56,11 +54,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes.AvailableWavelengthsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev170929.xpdr.port.connection.attributes.Wavelength;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev170929.xpdr.port.connection.attributes.WavelengthBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.path.description.ztoa.direction.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.TerminationPoint;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.pce.resource.resource.resource.termination.point.TerminationPointIdentifier;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkKey;
@@ -121,19 +118,13 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                         return false;
                     }
                     return aToZ.getResource().getResource() instanceof TerminationPoint;
-                }).filter(aToZ -> {
-                    TerminationPoint tp = (TerminationPoint) aToZ.getResource().getResource();
-                    if ((tp.getTerminationPointIdentifier() == null)
-                            || (tp.getTerminationPointIdentifier().getNodeId() == null)
-                            || (tp.getTerminationPointIdentifier().getTpId() == null)) {
-                        LOG.warn("Termination point in AToZ node {} contains nulls! Skipping this node!", aToZ.getId());
-                        return false;
-                    }
-                    return true;
                 }).map(aToZ -> {
-                    TerminationPointIdentifier tp =
-                            ((TerminationPoint) aToZ.getResource().getResource()).getTerminationPointIdentifier();
-                    return new NodeIdPair(tp.getNodeId(), tp.getTpId());
+                    TerminationPoint tp = (TerminationPoint) aToZ.getResource().getResource();
+                    if ((tp == null) || (tp.getTpNodeId() == null) ||  (tp.getTpId() == null)) {
+                        LOG.warn("Termination point in AToZ node {} contains nulls! Skipping this node!", aToZ.getId());
+                        return null;
+                    }
+                    return new NodeIdPair(tp.getTpNodeId(), tp.getTpId());
                 }).collect(Collectors.toList());
     }
 
@@ -146,20 +137,13 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                         return false;
                     }
                     return zToA.getResource().getResource() instanceof TerminationPoint;
-                }).filter(zToA -> {
+                }).map(zToA -> {
                     TerminationPoint tp = (TerminationPoint) zToA.getResource().getResource();
-                    if ((tp.getTerminationPointIdentifier() == null)
-                            || (tp.getTerminationPointIdentifier().getNodeId() == null)
-                            || (tp.getTerminationPointIdentifier().getTpId() == null)) {
+                    if ((tp == null) || (tp.getTpNodeId() == null) ||  (tp.getTpId() == null)) {
                         LOG.warn("Termination point in ZToA node {} contains nulls! Skipping this node!", zToA.getId());
-                        return false;
+                        return null;
                     }
-                    return true;
-                })
-                .map(zToA -> {
-                    TerminationPointIdentifier tp =
-                            ((TerminationPoint) zToA.getResource().getResource()).getTerminationPointIdentifier();
-                    return new NodeIdPair(tp.getNodeId(), tp.getTpId());
+                    return new NodeIdPair(tp.getTpNodeId(), tp.getTpId());
                 }).collect(Collectors.toList());
     }
 

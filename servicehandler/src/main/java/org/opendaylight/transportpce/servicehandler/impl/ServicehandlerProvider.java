@@ -57,7 +57,6 @@ public class ServicehandlerProvider {
         final ServicehandlerImpl servicehandler = new ServicehandlerImpl(dataBroker, pathComputationService,
                 rendererServiceOperations);
         final PceListenerImpl pceListener = new PceListenerImpl();
-        pcelistenerRegistration = notificationService.registerNotificationListener(pceListener);
         rpcRegistration = rpcRegistry.addRpcImplementation(OrgOpenroadmServiceService.class, servicehandler);
     }
 

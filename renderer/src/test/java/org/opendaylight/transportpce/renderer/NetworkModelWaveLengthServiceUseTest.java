@@ -44,7 +44,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev17092
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrPortAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev170426.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.PathDescription;
 
 @RunWith(Parameterized.class)
 public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
