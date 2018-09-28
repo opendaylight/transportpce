@@ -37,6 +37,32 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <reference id="networkModelWavelengthService"
            interface="org.opendaylight.transportpce.renderer.NetworkModelWavelengthService" />
 
+    <bean id="serviceDatastoreOperation" class="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl">
+        <argument ref="dataBroker"/>
+      </bean>
+
+     <bean id="pceListerner" class="org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl">
+        <argument ref="rendererServiceOperations" />
+        <argument ref="pathComputationService" />
+        <argument ref="notificationPublishService" />
+        <argument ref="serviceDatastoreOperation" />
+    </bean>
+
+     <bean id="rendererListerner" class="org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl">
+        <argument ref="pathComputationService" />
+        <argument ref="notificationPublishService" />
+    </bean>
+
+    <bean id="serviceHandlerImpl" class="org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperationsImpl">
+        <argument ref="dataBroker"/>
+        <argument ref="pathComputationService" />
+        <argument ref="notificationPublishService" />
+        <argument ref="rendererServiceOperations" />
+        <argument ref="networkModelWavelengthService" />
+        <argument ref="pceListerner" />
+        <argument ref="rendererListerner" />
+    </bean>
+
     <bean id="provider"
           class="org.opendaylight.transportpce.servicehandler.impl.ServicehandlerProvider"
           init-method="init" destroy-method="close">
@@ -48,5 +74,8 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="rendererServiceOperations" />
         <argument ref="networkModelWavelengthService" />
     </bean>
+
+    <service ref="serviceHandlerImpl"
+        interface="org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperations"/>
 
 </blueprint>

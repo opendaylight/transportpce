@@ -1,0 +1,91 @@
+module tapi {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:tapi";
+    prefix "tapi";
+
+    import tapi-topology {
+        prefix tapi-topology;
+        revision-date 2018-12-10;
+    }
+
+    import org-openroadm-service {
+        prefix oor-service;
+        revision-date 2019-05-31;
+    }
+
+    import tapi-common {
+        prefix tapi-common;
+        revision-date 2018-12-10;
+    }
+
+    import org-openroadm-common-service-types {
+        prefix org-openroadm-common-service-types;
+        revision-date 2019-05-31;
+    }
+
+    organization
+        "transportPCE";
+    contact
+        "transportPCE committers - ODL";
+    description
+        "YANG definitions for using REST API in TAPI module. Copyright
+        (c) 2018 ORANGE and others. All rights reserved. authors: Gilles
+        Thouenon ( gilles.thouenon@orange.com ) Christophe Betoule ( christophe.betoule@orange.com
+        )";
+
+    revision "2018-09-28" {
+        description "Initial revision of TAPI model for internal use";
+    }
+
+    typedef end-point-type {
+        type enumeration {
+            enum "Aend" {
+                value 1;
+            }
+            enum "Zend" {
+                value 2;
+            }
+        }
+        description
+            "help to identify if the generic service end point is usable as a service termination for A or Z end-point";
+    }
+
+    rpc load-topology {
+        input {
+            leaf topology-name {
+                type string;
+                description "none";
+            }
+            container topology {
+                uses tapi-topology:topology;
+                description "none";
+            }
+        }
+        output {
+            leaf success {
+              type boolean;
+            }
+            leaf result {
+              type string;
+            }
+        }
+    }
+
+    container service-interface-points {
+        list service-end-point {
+            description
+              "List of service-interface-point from tapi-topology available
+               for an org-openroadm-service usage";
+            key "uuid";
+            leaf uuid {
+                type tapi-common:uuid;
+            }
+            container end-point {
+                leaf service-end-point-type {
+                    type end-point-type;
+                }
+                uses org-openroadm-common-service-types:service-endpoint;
+            }
+        }
+    }
+}

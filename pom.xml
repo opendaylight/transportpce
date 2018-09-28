@@ -31,6 +31,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <modules>
     <module>artifacts</module>
     <module>ordmodels</module>
+    <module>tapimodels</module>
     <module>api</module>
     <module>common</module>
     <module>renderer</module>
@@ -40,6 +41,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <!--module>tests</module-->
     <module>pce</module>
     <module>servicehandler</module>
+    <module>tapi</module>
     <module>features</module>
     <module>karaf</module>
     <module>test-common</module>
