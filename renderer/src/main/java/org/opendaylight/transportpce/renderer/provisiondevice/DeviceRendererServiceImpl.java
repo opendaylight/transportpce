@@ -81,20 +81,24 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private final CrossConnect crossConnect;
     private final PortMapping portMapping;
+    private String serviceName;
 
     public DeviceRendererServiceImpl(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
-        OpenRoadmInterfaceFactory openRoadmInterfaceFactory, OpenRoadmInterfaces openRoadmInterfaces,
-        CrossConnect crossConnect, PortMapping portMapping) {
+                                     OpenRoadmInterfaceFactory openRoadmInterfaceFactory,
+                                     OpenRoadmInterfaces openRoadmInterfaces, CrossConnect crossConnect,
+                                     PortMapping portMapping) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
         this.openRoadmInterfaceFactory = openRoadmInterfaceFactory;
         this.openRoadmInterfaces = openRoadmInterfaces;
         this.crossConnect = crossConnect;
         this.portMapping = portMapping;
+        serviceName = "Undefined";
     }
 
     @Override
     public ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction) {
+        this.serviceName = input.getServiceName();
         List<Nodes> nodes = input.getNodes();
         // Register node for suppressing alarms
         if (!alarmSuppressionNodeRegistration(input)) {
@@ -129,53 +133,53 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                            nodeId, destTp, waveNumber, R100G.class, ModulationFormat.DpQpsk);
+                            nodeId, destTp, waveNumber, R100G.class, ModulationFormat.DpQpsk,serviceName);
                         createdOchInterfaces.add(supportingOchInterface);
 
                         String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
-                            nodeId, destTp, supportingOchInterface);
+                            nodeId, destTp, supportingOchInterface,serviceName);
                         createdOtuInterfaces.add(supportingOtuInterface);
 
                         createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
-                            destTp, supportingOtuInterface));
+                            destTp, supportingOtuInterface,serviceName));
                     }
                     if ((srcTp != null) && srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Client Interfaces
                         createdEthInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmEthInterface(nodeId,
-                            srcTp));
+                            srcTp,serviceName));
 
                     }
                     if ((srcTp != null) && srcTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                            nodeId, srcTp, waveNumber, R100G.class, ModulationFormat.DpQpsk);
+                            nodeId, srcTp, waveNumber, R100G.class, ModulationFormat.DpQpsk,serviceName);
                         createdOchInterfaces.add(supportingOchInterface);
 
                         String supportingOtuInterface = this.openRoadmInterfaceFactory.createOpenRoadmOtu4Interface(
-                            nodeId, srcTp, supportingOchInterface);
+                            nodeId, srcTp, supportingOchInterface,serviceName);
                         createdOtuInterfaces.add(supportingOtuInterface);
 
                         createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
-                            srcTp, supportingOtuInterface));
+                            srcTp, supportingOtuInterface,serviceName));
                     }
                     if ((destTp != null) && destTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Client Interfaces
                         createdEthInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmEthInterface(nodeId,
-                            destTp));
+                            destTp,serviceName));
 
                     }
                     if ((srcTp != null) && (srcTp.contains(OpenRoadmInterfacesImpl.TTP_TOKEN) || srcTp.contains(
                         OpenRoadmInterfacesImpl.PP_TOKEN))) {
                         createdOchInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(nodeId,
-                            srcTp, waveNumber));
+                            srcTp, waveNumber,serviceName));
                     }
                     if ((destTp != null) && (destTp.contains(OpenRoadmInterfacesImpl.TTP_TOKEN) || destTp.contains(
                         OpenRoadmInterfacesImpl.PP_TOKEN))) {
                         createdOchInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(nodeId,
-                            destTp, waveNumber));
+                            destTp, waveNumber,serviceName));
                     }
                     if (crossConnectFlag < 1) {
                         LOG.info("Creating cross connect between source {} and destination {} for node {}", srcTp,
@@ -184,8 +188,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                             srcTp, destTp);
                         if (connectionNameOpt.isPresent()) {
                             nodesProvisioned.add(nodeId);
-                            List<Ports> ports = this.crossConnect.getConnectionPortTrail(nodeId, waveNumber, srcTp,
-                                destTp);
+                            List<Ports> ports = this.crossConnect
+                                .getConnectionPortTrail(nodeId, waveNumber, srcTp, destTp);
                             if (ServicePathDirection.A_TO_Z.equals(direction)) {
                                 topology.updateAtoZTopologyList(ports, nodeId);
                             }
@@ -251,7 +255,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     }
 
     private ConcurrentLinkedQueue<String> processErrorMessage(String message, ForkJoinPool forkJoinPool,
-        ConcurrentLinkedQueue<String> messages) {
+                                                              ConcurrentLinkedQueue<String> messages) {
         LOG.warn(message);
         messages.add(message);
         forkJoinPool.shutdown();
@@ -431,8 +435,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         InstanceIdentifier<
             org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist
                 .Nodelist> nodeListIID = InstanceIdentifier.create(ServiceNodelist.class).child(org.opendaylight.yang
-                        .gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist
-                        .Nodelist.class, new NodelistKey(input.getServiceName()));
+            .gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist
+            .Nodelist.class, new NodelistKey(input.getServiceName()));
         final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodeListIID, nodeListBuilder.build());
         Future<Void> submit = writeTransaction.submit();
@@ -447,33 +451,33 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         }
     }
 
-    private boolean alarmSuppressionNodeRemoval(String serviceName) {
+    private boolean alarmSuppressionNodeRemoval(String name) {
         InstanceIdentifier<
             org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist
                 .Nodelist> nodeListIID = InstanceIdentifier.create(ServiceNodelist.class).child(org.opendaylight.yang
-                        .gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist
-                        .Nodelist.class, new NodelistKey(serviceName));
+            .gen.v1.urn.opendaylight.params.xml.ns.yang.alarmsuppression.rev171102.service.nodelist
+            .Nodelist.class, new NodelistKey(name));
         final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
         writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, nodeListIID);
         Future<Void> submit = writeTransaction.submit();
         try {
             submit.get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
-            LOG.info("Nodes are unregister for alarm suppression for service: {}", serviceName);
+            LOG.info("Nodes are unregister for alarm suppression for service: {}", name);
             return true;
 
         } catch (InterruptedException | TimeoutException | ExecutionException e) {
-            LOG.warn("Failed to alarm suppresslist for service: {}", serviceName, e);
+            LOG.warn("Failed to alarm suppresslist for service: {}", name, e);
             return false;
         }
     }
 
-    private void setTopologyForService(String serviceName, Topology topo) throws InterruptedException,
+    private void setTopologyForService(String name, Topology topo) throws InterruptedException,
         ExecutionException, TimeoutException {
 
         ServicesBuilder servicesBuilder;
         // Get the service from the service list inventory
 
-        ServicesKey serviceKey = new ServicesKey(serviceName);
+        ServicesKey serviceKey = new ServicesKey(name);
         InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class).child(Services.class,
             serviceKey);
         Optional<Services> services;
