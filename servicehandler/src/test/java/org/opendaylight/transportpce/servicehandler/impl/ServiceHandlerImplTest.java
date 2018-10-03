@@ -1002,7 +1002,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ServiceCreateInput serviceInput = ServiceDataUtils.buildServiceCreateInput();
 
         /** Mock RPC service-delete. */
-        Services serviceMock = ModelMappingUtils.mappingServices(serviceInput, null, null);
+        Services serviceMock = ModelMappingUtils.mappingServices(serviceInput, null);
         Optional<Services> service = Optional.of(serviceMock);
         Mockito.when(this.serviceDataStoreOperationsMock.getService(any(String.class))).thenReturn(service);
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev170426

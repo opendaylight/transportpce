@@ -121,7 +121,7 @@ public final class ModelMappingUtils {
         while (iterator.hasNext()) {
             ZToA pathDesObj = iterator.next();
             resourceType = pathDesObj.getResource().getResource().getImplementedInterface().getSimpleName();
-            LOG.info("Inside AtoZ {}", resourceType);
+            LOG.info("Inside ZtoA {}", resourceType);
 
             try {
                 if (TERMINATION_POINT.equals(resourceType)) {

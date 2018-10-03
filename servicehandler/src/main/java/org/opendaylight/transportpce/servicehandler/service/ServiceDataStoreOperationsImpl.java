@@ -129,7 +129,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             InstanceIdentifier<Services> iid = InstanceIdentifier
                     .create(ServiceList.class).child(Services.class,
                             new ServicesKey(serviceCreateInput.getServiceName()));
-            Services service = ModelMappingUtils.mappingServices(serviceCreateInput, null, outputFromPce);
+            Services service = ModelMappingUtils.mappingServices(serviceCreateInput, null);
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
             writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
@@ -240,7 +240,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class).child(Services.class,
                         new ServicesKey(serviceName));
 
-                Services service = ModelMappingUtils.mappingServices(input, null, output);
+                Services service = ModelMappingUtils.mappingServices(input, null);
                 writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
                 try {
                     writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
