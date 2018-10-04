@@ -107,7 +107,7 @@ public class PceSendingPceRPCs {
                 && (pceHardConstraints.getMaxLatency() != -1)) {
 
                 pceHardConstraints.setPceMetrics(PceMetric.PropagationDelay);
-                graph = patchRerunGraph(graph, pceHardConstraints, pceSoftConstraints);
+                graph = patchRerunGraph(graph);
             }
 
             if (!rc.getStatus()) {
@@ -146,10 +146,9 @@ public class PceSendingPceRPCs {
         LOG.info("In pathComputation Graph is Found");
     }
 
-    private PceGraph patchRerunGraph(PceGraph graph, PceConstraints pceHardCons, PceConstraints pceSoftCons) {
-
+    private PceGraph patchRerunGraph(PceGraph graph) {
         LOG.info("In pathComputation patchRerunGraph : rerun Graph with metric = PROPAGATION-DELAY ");
-        graph.setConstrains(pceHardCons, pceSoftCons);
+        graph.setConstrains(pceHardConstraints, pceSoftConstraints);
         graph.calcPath();
         return graph;
 

@@ -44,6 +44,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
   </build>
 
   <dependencies>
+
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-api</artifactId>
@@ -85,4 +86,5 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </dependency>
 
   </dependencies>
+
 </project>
