@@ -446,9 +446,9 @@ public class PceGraph {
 
     }
 
-    public void setConstrains(PceConstraints pceHardCons, PceConstraints pceSoftCons) {
-        this.pceHardConstraints = pceHardCons;
-        this.pceSoftConstraints = pceSoftCons;
+    public void setConstrains(PceConstraints pceHardConstraintsIn, PceConstraints pceSoftConstraintsIn) {
+        this.pceHardConstraints = pceHardConstraintsIn;
+        this.pceSoftConstraints = pceSoftConstraintsIn;
     }
 
 }

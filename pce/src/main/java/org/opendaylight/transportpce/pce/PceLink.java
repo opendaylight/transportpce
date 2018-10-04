@@ -8,7 +8,9 @@
 
 package org.opendaylight.transportpce.pce;
 
+import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.LinkId;
@@ -43,6 +45,9 @@ public class PceLink {
     private final Object destTP;
     private final LinkId oppositeLink;
     private final Long latency;
+    private final List<Long> srlg;
+    private final double osnr;
+    private final Span omsAttributesSpan;
 
     public PceLink(Link link) {
         LOG.debug("PceLink: : PceLink start ");
@@ -59,6 +64,16 @@ public class PceLink {
 
         this.oppositeLink = calcOpposite(link);
         this.latency = calcLatency(link);
+
+        if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
+            this.omsAttributesSpan = MapUtils.getOmsAttributesSpan(link);
+            this.srlg = MapUtils.getSRLG(link);
+            this.osnr = retrieveOSNR();
+        } else {
+            this.omsAttributesSpan = null;
+            this.srlg = null;
+            this.osnr = 0L;
+        }
 
         LOG.debug("PceLink: created PceLink  {}", toString());
     }
@@ -110,6 +125,78 @@ public class PceLink {
         }
         return tmplatency;
 
+    }
+
+    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
+    public double retrieveOSNR() {
+        double sum = 0;        // sum of 1 over the span OSNRs (linear units)
+        double linkOsnrDb;     // link OSNR, in dB
+        double linkOsnrLu;     // link OSNR, in dB
+        double spanOsnrDb;     // span OSNR, in dB
+        double spanOsnrLu;     // span OSNR, in linear units
+        double ampNoise = 5.5; // default amplifier noise value, in dB
+        double loss;           // fiber span measured loss, in dB
+        double power;          // launch power, in dB
+        double constantA = 38.97293;
+        double constantB = 0.72782;
+        double constantC = -0.532331;
+        double constactD = -0.019549;
+        double upperBoundOSNR = 33;
+        double lowerBoundOSNR = 0.1;
+
+        if (omsAttributesSpan ==  null) {
+            return 0L; // indicates no data or N/A
+        }
+        loss = omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue();
+        switch (omsAttributesSpan.getLinkConcatenation().get(0).getFiberType()) {
+            case Smf:
+                power = 2;
+                break;
+
+            case Eleaf:
+                power = 1;
+                break;
+
+            case Oleaf:
+                power = 0;
+                break;
+
+            case Dsf:
+                power = 0;
+                break;
+
+            case Truewave:
+                power = 0;
+                break;
+
+            case Truewavec:
+                power = -1;
+                break;
+
+            case NzDsf:
+                power = 0;
+                break;
+
+            case Ull:
+                power = 0;
+                break;
+
+            default:
+                power = 0;
+                break;
+        }
+        spanOsnrDb = constantA + constantB * power + constantC * loss + constactD * power * loss;
+        if (spanOsnrDb > upperBoundOSNR) {
+            spanOsnrDb =  upperBoundOSNR;
+        } else if (spanOsnrDb < lowerBoundOSNR) {
+            spanOsnrDb = lowerBoundOSNR;
+        }
+        spanOsnrLu = Math.pow(10, (spanOsnrDb / 10.0));
+        sum = PceConstraints.constOSNR / spanOsnrLu;
+        linkOsnrLu = sum;
+        //link_OSNR_dB = 10 * Math.log10(1 / sum);
+        LOG.debug("In retrieveOSNR: link OSNR is {} dB", linkOsnrLu);
+        return linkOsnrLu;
     }
 
 

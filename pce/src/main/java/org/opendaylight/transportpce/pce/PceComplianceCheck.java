@@ -18,6 +18,9 @@ public final class PceComplianceCheck {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceComplianceCheck.class);
 
+    private PceComplianceCheck() {
+    }
+
     /*
      * Check if a String is not
      * null and not equal to ''.
@@ -27,7 +30,7 @@ public final class PceComplianceCheck {
      *          false if not
      */
     public static boolean checkString(String value) {
-        return (value != null) && (value.compareTo("") != 0);
+        return ((value != null) && (value.compareTo("") != 0));
     }
 
     public static PceComplianceCheckResult check(PathComputationRequestInput input) {
@@ -49,9 +52,6 @@ public final class PceComplianceCheck {
             result = false;
         }
         return new PceComplianceCheckResult(result, message);
-    }
-
-    private PceComplianceCheck() {
     }
 
 }
