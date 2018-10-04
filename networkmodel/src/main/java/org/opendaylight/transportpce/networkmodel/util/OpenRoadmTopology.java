@@ -227,19 +227,10 @@ public class OpenRoadmTopology {
             return new TopologyShard(nodes, links);
         } else if (NodeTypes.Xpdr.equals(deviceInfo.getNodeType())) {
             // Check if node is XPONDER
-            Integer clientport = getNoOfClientPorts(nodeId);
+            XponderPortNumber portNums = getNoOfPorts(nodeId);
             List<Link> links = new ArrayList<>();
-            Integer clientCounter = 1;
-            Integer lineCounter = 1;
-            while (clientCounter <= clientport) {
-                NodeBuilder tempNode = createXpdr(clientCounter, lineCounter, nodeId);
-                if (tempNode == null) {
-                    break;
-                }
-                nodes.add(tempNode.build());
-                clientCounter++;
-                lineCounter++;
-            }
+            NodeBuilder tempNode = createXpdr(portNums.getNumOfClientPorts(), portNums.getNumOfLinePorts(), nodeId);
+            nodes.add(tempNode.build());
             return new TopologyShard(nodes, links);
         }
 
@@ -259,7 +250,9 @@ public class OpenRoadmTopology {
      * <p>
      * 2. CLNTn
      */
-    private int getNoOfClientPorts(String deviceId) {
+    private  XponderPortNumber getNoOfPorts(String deviceId) {
+
+        XponderPortNumber xponderPortNumber = new XponderPortNumber();
         // Creating for Xponder Line and Client Ports
         InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
         Optional<OrgOpenroadmDevice> deviceObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
@@ -267,7 +260,8 @@ public class OpenRoadmTopology {
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
 
         // Variable to keep track of number of client ports
-        int client = 1;
+        int client = 0;
+        int line = 0;
         if (deviceObject.isPresent()) {
             for (CircuitPacks cp : deviceObject.get().getCircuitPacks()) {
                 if (cp.getPorts() != null) {
@@ -275,15 +269,19 @@ public class OpenRoadmTopology {
                         if (port.getPortQual() != null) {
                             if (port.getPortQual().getIntValue() == 4) {
                                 client++;
+                            } else if (port.getPortQual().getIntValue() == 3) {
+                                line++;
                             }
                         }
                     }
                 }
             }
         } else {
-            return 0;
+            return xponderPortNumber;
         }
-        return client;
+        xponderPortNumber.setNumOfClientPorts(client);
+        xponderPortNumber.setNumOfLinePorts(line);
+        return xponderPortNumber;
     }
 
     private NodeBuilder createXpdr(Integer clientCounter, Integer lineCounter, String nodeId) {
@@ -303,7 +301,7 @@ public class OpenRoadmTopology {
         nodebldr.withKey(new NodeKey(new NodeId(nodeIdtopo)));
         nodebldr.addAugmentation(Node1.class, node1bldr.build());
         while (clientCounter != 0) {
-            // Create CLNT-TX termination
+            // Create CLNT-TX terminationCannot get available Capabilitiesc
             tempTpBldr = createTpBldr("XPDR1-CLIENT" + clientCounter);
             tp1Bldr.setTpType(OpenroadmTpType.XPONDERCLIENT);
             XpdrClientAttributesBuilder xpdrClntBldr = new XpdrClientAttributesBuilder();
@@ -855,5 +853,31 @@ public class OpenRoadmTopology {
         }
 
         return waveList;
+    }
+
+    private class XponderPortNumber {
+        private int numOfLinePorts;
+        private int numOfClientPorts;
+
+        XponderPortNumber() {
+            numOfClientPorts = 0;
+            numOfLinePorts = 0;
+        }
+
+        public void setNumOfLinePorts(int numOfLinePorts) {
+            this.numOfLinePorts = numOfLinePorts;
+        }
+
+        public void setNumOfClientPorts(int numOfClientPorts) {
+            this.numOfClientPorts = numOfClientPorts;
+        }
+
+        public int getNumOfClientPorts() {
+            return numOfClientPorts;
+        }
+
+        public int getNumOfLinePorts() {
+            return numOfLinePorts;
+        }
     }
 }
