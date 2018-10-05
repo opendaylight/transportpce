@@ -3919,7 +3919,7 @@
     <granularity>15min</granularity>
     <measurements>
       <measurement>
-        <pmParameterValue>1.5</pmParameterValue>
+        <pmParameterValue>18.1</pmParameterValue>
         <direction>tx</direction>
         <validity>complete</validity>
         <pmParameterName>
@@ -3930,7 +3930,7 @@
     </measurements>
     <measurements>
       <measurement>
-        <pmParameterValue>1.5</pmParameterValue>
+        <pmParameterValue>-3.2</pmParameterValue>
         <direction>rx</direction>
         <validity>complete</validity>
         <pmParameterName>
