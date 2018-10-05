@@ -41,10 +41,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.OtuAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.otu.container.OtuBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.portmapping.rev170228.network.nodes.Mapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OpenRoadmInterfaceFactory {
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
+    private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfaceFactory.class);
 
     public OpenRoadmInterfaceFactory(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces) {
         this.portMapping = portMapping;
@@ -294,8 +297,9 @@ public class OpenRoadmInterfaceFactory {
             if (mapping.getSupportingOts() != null) {
                 omsInterfaceBldr.setSupportingInterface(mapping.getSupportingOts());
             } else {
-                throw new OpenRoadmInterfaceException(String.format("Unable to get ots interface from mapping % - %",
-                    nodeId, mapping.getLogicalConnectionPoint()));
+                LOG.error("Unable to get ots interface from mapping {} - {}", nodeId,
+                        mapping.getLogicalConnectionPoint());
+                return null;
             }
             this.openRoadmInterfaces.postInterface(nodeId, omsInterfaceBldr);
             this.portMapping.updateMapping(nodeId, mapping);

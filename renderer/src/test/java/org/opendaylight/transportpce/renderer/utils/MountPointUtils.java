@@ -53,6 +53,8 @@ public final class MountPointUtils {
         MappingBuilder mappingBuilder = new MappingBuilder();
         mappingBuilder.withKey(new MappingKey(logicalConnPoint));
         mappingBuilder.setLogicalConnectionPoint(logicalConnPoint);
+        mappingBuilder.setSupportingOts("OTS");
+        mappingBuilder.setSupportingCircuitPackName("2/0");
         mappingBuilder.setSupportingOms("OMS");
         mappingBuilder.setSupportingPort("8080");
         mappingBuilder.setSupportingCircuitPackName("circuit1");
