@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
@@ -643,6 +644,7 @@ public class PortMappingImpl implements PortMapping {
 
     @Override
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
+        LOG.info("Updating Mapping Data {} for node {}", oldMapping, nodeId);
         InstanceIdentifier<Ports> portIId = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
             CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName())).child(Ports.class,
                 new PortsKey(oldMapping.getSupportingPort()));
