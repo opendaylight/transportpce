@@ -686,10 +686,6 @@
         <operational-state>inService</operational-state>
         <logical-connection-point>SRG1-PP2</logical-connection-point>
         <roadm-port>
-          <port-power-capability-min-rx>-15.0</port-power-capability-min-rx>
-          <port-power-capability-min-tx>-28.0</port-power-capability-min-tx>
-          <port-power-capability-max-rx>10.0</port-power-capability-max-rx>
-          <port-power-capability-max-tx>15.0</port-power-capability-max-tx>
         </roadm-port>
       </ports>
       <ports>
@@ -3821,7 +3817,7 @@
     <granularity>15min</granularity>
     <measurements>
       <measurement>
-        <pmParameterValue>1.7</pmParameterValue>
+        <pmParameterValue>2.5</pmParameterValue>
         <direction>tx</direction>
         <validity>complete</validity>
         <pmParameterName>
@@ -3832,7 +3828,7 @@
     </measurements>
     <measurements>
       <measurement>
-        <pmParameterValue>1.3</pmParameterValue>
+        <pmParameterValue>3</pmParameterValue>
         <direction>rx</direction>
         <validity>complete</validity>
         <pmParameterName>

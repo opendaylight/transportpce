@@ -154,6 +154,10 @@
         <administrative-state>inService</administrative-state>
         <logical-connection-point>XPDR1-NETWORK1</logical-connection-point>
         <transponder-port>
+            <port-power-capability-min-tx>-10</port-power-capability-min-tx>
+            <port-power-capability-max-tx>0</port-power-capability-max-tx>
+            <port-power-capability-min-rx>-10</port-power-capability-min-rx>
+            <port-power-capability-max-rx>0</port-power-capability-max-rx>
         </transponder-port>
       </ports>
     </circuit-packs>
@@ -191,6 +195,10 @@
         <administrative-state>inService</administrative-state>
         <logical-connection-point></logical-connection-point>
         <transponder-port>
+            <port-power-capability-min-tx>-10</port-power-capability-min-tx>
+            <port-power-capability-max-tx>0</port-power-capability-max-tx>
+            <port-power-capability-min-rx>-10</port-power-capability-min-rx>
+            <port-power-capability-max-rx>0</port-power-capability-max-rx>
         </transponder-port>
       </ports>
     </circuit-packs>

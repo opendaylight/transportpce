@@ -365,13 +365,14 @@ public class PowerMgmt {
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (portObject.isPresent()) {
             Ports port = portObject.get();
-            if (port.getTransponderPort().getPortPowerCapabilityMaxTx() != null) {
+            if (port.getTransponderPort() != null && port.getTransponderPort().getPortPowerCapabilityMaxTx() != null
+                && port.getTransponderPort().getPortPowerCapabilityMinTx() != null) {
                 powerRangeMap.put("MaxTx", port.getTransponderPort().getPortPowerCapabilityMaxTx().getValue()
                         .doubleValue());
                 powerRangeMap.put("MinTx", port.getTransponderPort().getPortPowerCapabilityMinTx().getValue()
                         .doubleValue());
             } else {
-                LOG.warn("Logical Connection Point value missing for {} {}", circuitPackName, port.getPortName());
+                LOG.warn("Port {} of ciruit-pack {} has no power capability values", port.getPortName(), circuitPackName);
             }
         }
         return powerRangeMap;
