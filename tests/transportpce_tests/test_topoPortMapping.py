@@ -163,15 +163,6 @@ class TransportPCEtesting(unittest.TestCase):
              "DELETE", url, data=json.dumps(data), headers=headers,
              auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
-        #Delete in the clli-network
-        url = ("{}/config/ietf-network:network/clli-network/node/NodeA"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
         #Delete in the openroadm-network
         url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMA"
                .format(self.restconf_baseurl))
@@ -210,6 +201,8 @@ class TransportPCEtesting(unittest.TestCase):
     def test_05_compareOpenroadmTopologyPortMapping(self):
         nbXPDR=1
         for p in(1,nbXPDR+1):
+            if(p > nbXPDR):
+                break;
             url_topo = "{}/config/ietf-network:network/openroadm-topology/node/XPDRA-XPDR"+`p`
             with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
                 outfile1.write('Config: '+`p`+' : '+url_topo+'\n')
@@ -230,26 +223,28 @@ class TransportPCEtesting(unittest.TestCase):
                 response_portMap = requests.request(
                     "GET", url, headers=headers, auth=('admin', 'admin'))
                 self.assertEqual(response_portMap.status_code, requests.codes.ok)
-                #Verify the tail equipment id of the client
-                xpdr_client=res_topo['node'][0]['ietf-network-topology:termination-point'][i]["org-openroadm-network-topology:xpdr-client-attributes"]["tail-equipment-id"]
-                url_map = "{}/config/portmapping:network/nodes/XPDRA/mapping/"+xpdr_client
-                with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
-                    outfile1.write('Config: '+`i`+'/'+ `nbTP`+' : '+xpdr_client+'\n')
-                url = url_map.format(self.restconf_baseurl)
-                headers = {'content-type': 'application/json'}
-                response_xpdrClient = requests.request(
-                    "GET", url, headers=headers, auth=('admin', 'admin'))
-                self.assertEqual(response_xpdrClient.status_code, requests.codes.ok)
-                #Verify the tail equipment id of the network
-                xpdr_network=res_topo['node'][0]['ietf-network-topology:termination-point'][i]["org-openroadm-network-topology:xpdr-network-attributes"]["tail-equipment-id"]
-                url_map = "{}/config/portmapping:network/nodes/XPDRA/mapping/"+xpdr_network
-                with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
-                    outfile1.write('Config: '+`i`+'/'+ `nbTP`+' : '+xpdr_network+'\n')
-                url = url_map.format(self.restconf_baseurl)
-                headers = {'content-type': 'application/json'}
-                response_xpdrNetwork = requests.request(
-                    "GET", url, headers=headers, auth=('admin', 'admin'))
-                self.assertEqual(response_xpdrNetwork.status_code, requests.codes.ok)
+                if("CLIENT" in tp_id):
+                    #Verify the tail equipment id of the client
+                    xpdr_client=res_topo['node'][0]['ietf-network-topology:termination-point'][i]["org-openroadm-network-topology:xpdr-client-attributes"]["tail-equipment-id"]
+                    url_map = "{}/config/portmapping:network/nodes/XPDRA/mapping/"+xpdr_client
+                    with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
+                        outfile1.write('Config: '+`i`+'/'+ `nbTP`+' : '+xpdr_client+'\n')
+                    url = url_map.format(self.restconf_baseurl)
+                    headers = {'content-type': 'application/json'}
+                    response_xpdrClient = requests.request(
+                        "GET", url, headers=headers, auth=('admin', 'admin'))
+                    self.assertEqual(response_xpdrClient.status_code, requests.codes.ok)
+                if("NETWORK" in tp_id):
+                    #Verify the tail equipment id of the network
+                    xpdr_network=res_topo['node'][0]['ietf-network-topology:termination-point'][i]["org-openroadm-network-topology:xpdr-network-attributes"]["tail-equipment-id"]
+                    url_map = "{}/config/portmapping:network/nodes/XPDRA/mapping/"+xpdr_network
+                    with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
+                        outfile1.write('Config: '+`i`+'/'+ `nbTP`+' : '+xpdr_network+'\n')
+                    url = url_map.format(self.restconf_baseurl)
+                    headers = {'content-type': 'application/json'}
+                    response_xpdrNetwork = requests.request(
+                        "GET", url, headers=headers, auth=('admin', 'admin'))
+                    self.assertEqual(response_xpdrNetwork.status_code, requests.codes.ok)
 
     #Disconnect the XPDRA
     def test_06_disconnect_device(self):
