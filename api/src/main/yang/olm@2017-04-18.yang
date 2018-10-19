@@ -123,6 +123,14 @@ module olm {
          leaf result{
            type string;
          }
+         list spans {
+             leaf link-id {
+                 type ietf-network-topology:link-id;
+             }
+             leaf spanloss {
+                 type string;
+             }
+         }
        }
   }
   rpc calculate-spanloss-current{
