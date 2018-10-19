@@ -372,7 +372,8 @@ public class PowerMgmt {
                 powerRangeMap.put("MinTx", port.getTransponderPort().getPortPowerCapabilityMinTx().getValue()
                         .doubleValue());
             } else {
-                LOG.warn("Port {} of ciruit-pack {} has no power capability values", port.getPortName(), circuitPackName);
+                LOG.warn("Port {} of ciruit-pack {} has no power capability values",
+                    port.getPortName(), circuitPackName);
             }
         }
         return powerRangeMap;
