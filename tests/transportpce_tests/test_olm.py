@@ -398,14 +398,17 @@ class TransportOlmTesting(unittest.TestCase):
         res = response.json()
         self.assertIn('Success',
                       res["output"]["result"])
+        self.assertIn({
+            "spanloss": "6",
+                "link-id": "ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX"
+            }, res["output"]["spans"])
         time.sleep(5)
 
-    def test_14_calculate_span_loss_base_ROADMC_ROADMA(self):
+    def test_14_calculate_span_loss_base_all(self):
         url = "{}/operations/olm:calculate-spanloss-base".format(self.restconf_baseurl)
         data = {
             "input": {
-                "src-type": "link",
-                "link-id": "ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX"
+                "src-type": "all"
             }
         }
         headers = {'content-type': 'application/json'}
@@ -416,6 +419,14 @@ class TransportOlmTesting(unittest.TestCase):
         res = response.json()
         self.assertIn('Success',
                       res["output"]["result"])
+        self.assertIn({
+                "spanloss": "15",
+                "link-id": "ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX"
+            }, res["output"]["spans"])
+        self.assertIn({
+                "spanloss": "6",
+                "link-id": "ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX"
+            }, res["output"]["spans"])
         time.sleep(5)
 
     def test_15_get_OTS_DEG1_TTP_TXRX_ROADMA(self):
@@ -944,7 +955,18 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(10)
 
-    def test_38_rdmA_device_disconnected(self):
+    def test_38_calculate_span_loss_current(self):
+        url = "{}/operations/olm:calculate-spanloss-current".format(self.restconf_baseurl)
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+             "POST", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn('Success',
+                      res["output"]["result"])
+        time.sleep(5)
+
+    def test_39_rdmA_device_disconnected(self):
         url = ("{}/config/network-topology:"
                 "network-topology/topology/topology-netconf/node/ROADMA"
                .format(self.restconf_baseurl))
@@ -955,7 +977,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(10)
 
-    def test_39_rdmC_device_disconnected(self):
+    def test_40_rdmC_device_disconnected(self):
         url = ("{}/config/network-topology:"
                 "network-topology/topology/topology-netconf/node/ROADMC"
                .format(self.restconf_baseurl))
