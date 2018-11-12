@@ -657,7 +657,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Verify 'test' service deleted
     def test_13_get_service(self):
-        url = ("{}/operational/org-openroadm-service:service-list/services/test-new"
+        url = ("{}/operational/org-openroadm-service:service-list/services/test"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}

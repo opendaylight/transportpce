@@ -199,7 +199,7 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(20)
 
     def test_05_connect_xprdA_to_roadmA(self):
-        url = "{}/operations/networkutils:init-xpdr-rdm-links".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(self.restconf_baseurl)
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
@@ -221,7 +221,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_06_connect_roadmA_to_xpdrA(self):
-        url = "{}/operations/networkutils:init-rdm-xpdr-links".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(self.restconf_baseurl)
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
@@ -243,7 +243,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_07_connect_xprdC_to_roadmC(self):
-        url = "{}/operations/networkutils:init-xpdr-rdm-links".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(self.restconf_baseurl)
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
@@ -265,7 +265,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_08_connect_roadmC_to_xpdrC(self):
-        url = "{}/operations/networkutils:init-rdm-xpdr-links".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(self.restconf_baseurl)
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
@@ -287,7 +287,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_09_create_OTS_ROADMA(self):
-        url = "{}/operations/renderer:create-ots-oms".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:create-ots-oms".format(self.restconf_baseurl)
         data = {
             "input" : {
                 "node-id" : "ROADMA",
@@ -304,7 +304,7 @@ class TransportOlmTesting(unittest.TestCase):
                       res["output"]["result"])
 
     def test_10_create_OTS_ROADMC(self):
-        url = "{}/operations/renderer:create-ots-oms".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:create-ots-oms".format(self.restconf_baseurl)
         data = {
             "input" : {
                 "node-id" : "ROADMC",
@@ -321,7 +321,7 @@ class TransportOlmTesting(unittest.TestCase):
                       res["output"]["result"])
 
     def test_11_get_PM_ROADMA(self):
-        url = "{}/operations/olm:get-pm".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-olm:get-pm".format(self.restconf_baseurl)
         data = {
             "input": {
                 "node-id": "ROADMA",
@@ -352,7 +352,7 @@ class TransportOlmTesting(unittest.TestCase):
             }, res["output"]["measurements"])
 
     def test_12_get_PM_ROADMC(self):
-        url = "{}/operations/olm:get-pm".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-olm:get-pm".format(self.restconf_baseurl)
         data = {
             "input": {
                 "node-id": "ROADMC",
@@ -383,7 +383,7 @@ class TransportOlmTesting(unittest.TestCase):
             }, res["output"]["measurements"])
 
     def test_13_calculate_span_loss_base_ROADMA_ROADMC(self):
-        url = "{}/operations/olm:calculate-spanloss-base".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-olm:calculate-spanloss-base".format(self.restconf_baseurl)
         data = {
             "input": {
                 "src-type": "link",
@@ -405,7 +405,7 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(5)
 
     def test_14_calculate_span_loss_base_all(self):
-        url = "{}/operations/olm:calculate-spanloss-base".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-olm:calculate-spanloss-base".format(self.restconf_baseurl)
         data = {
             "input": {
                 "src-type": "all"
@@ -454,7 +454,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(6, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
 
     def test_17_servicePath_create_AToZ(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
         data = {
             "input": {
                 "service-name": "test",
@@ -495,7 +495,7 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(40)
 
     def test_18_servicePath_create_ZToA(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
         data = {
             "input": {
                 "service-name": "test",
@@ -536,7 +536,7 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(40)
 
     def test_19_service_power_setup_XPDRA_XPDRC(self):
-        url = "{}/operations/olm:service-power-setup".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-olm:service-power-setup".format(self.restconf_baseurl)
         data = {
             "input": {
                 "service-name": "test",
@@ -609,7 +609,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual("power", res['roadm-connections'][0]['opticalControlMode'])
 
     def test_23_service_power_setup_XPDRC_XPDRA(self):
-        url = "{}/operations/olm:service-power-setup".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-olm:service-power-setup".format(self.restconf_baseurl)
         data = {
             "input": {
                 "service-name": "test",
@@ -671,7 +671,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(2, res['roadm-connections'][0]['target-output-power'])
 
     def test_26_service_power_turndown_XPDRA_XPDRC(self):
-        url = "{}/operations/olm:service-power-turndown".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-olm:service-power-turndown".format(self.restconf_baseurl)
         data = {
             "input": {
                 "service-name": "test",
@@ -732,7 +732,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
 
     def test_29_servicePath_delete_AToZ(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
         data = {
             "input": {
                 "service-name": "test",
@@ -773,7 +773,7 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_30_servicePath_delete_ZToA(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
         data = {
             "input": {
                 "service-name": "test",
@@ -816,7 +816,7 @@ class TransportOlmTesting(unittest.TestCase):
     """to test case where SRG where the xpdr is connected to has no optical range data"""
 
     def test_31_connect_xprdA_to_roadmA(self):
-        url = "{}/operations/networkutils:init-xpdr-rdm-links".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(self.restconf_baseurl)
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
@@ -838,7 +838,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_32_connect_roadmA_to_xpdrA(self):
-        url = "{}/operations/networkutils:init-rdm-xpdr-links".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(self.restconf_baseurl)
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
@@ -860,7 +860,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_33_servicePath_create_AToZ(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
         data = {
             "input": {
                 "service-name": "test2",
@@ -903,7 +903,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(2, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
 
     def test_35_servicePath_delete_AToZ(self):
-        url = "{}/operations/renderer:service-path".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
         data = {
             "input": {
                 "service-name": "test",
@@ -956,7 +956,7 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_38_calculate_span_loss_current(self):
-        url = "{}/operations/olm:calculate-spanloss-current".format(self.restconf_baseurl)
+        url = "{}/operations/transportpce-olm:calculate-spanloss-current".format(self.restconf_baseurl)
         headers = {'content-type': 'application/json'}
         response = requests.request(
              "POST", url, headers=headers, auth=('admin', 'admin'))

@@ -341,7 +341,7 @@ class TransportPCEtesting(unittest.TestCase):
     #Connect the tail XPDRA to ROADMA and vice versa
     def test_10_connect_tail_xpdr_rdm(self):
          #Connect the tail: XPDRA to ROADMA
-        url = ("{}/operations/networkutils:init-xpdr-rdm-links"
+        url = ("{}/operations/transportpce-networkutils:init-xpdr-rdm-links"
                 .format(self.restconf_baseurl))
         data = {"networkutils:input": {
              "networkutils:links-input": {
@@ -363,7 +363,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_11_connect_tail_rdm_xpdr(self):
          #Connect the tail: ROADMA to XPDRA
-         url = ("{}/operations/networkutils:init-rdm-xpdr-links"
+         url = ("{}/operations/transportpce-networkutils:init-rdm-xpdr-links"
                  .format(self.restconf_baseurl))
          data = {"networkutils:input": {
               "networkutils:links-input": {

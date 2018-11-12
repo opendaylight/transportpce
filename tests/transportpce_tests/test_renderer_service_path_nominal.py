@@ -126,7 +126,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         time.sleep(20)
 
     def test_03_rdm_portmapping(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADMA"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -144,7 +144,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              res['nodes'][0]['mapping'])
 
     def test_04_xpdr_portmapping(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}

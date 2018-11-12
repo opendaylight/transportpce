@@ -97,7 +97,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 #                         'connected')
 
     def test_02_restconfAPI(self):
-        url = ("{}/config/portmapping:network/nodes/controller-config".format(self.restconf_baseurl))
+        url = ("{}/config/transportpce-portmapping:network/nodes/controller-config".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -142,7 +142,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_05_rdm_portmapping_DEG1_TTP_TXRX(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADMA/mapping/DEG1-TTP-TXRX"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -156,7 +156,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_06_rdm_portmapping_SRG1_PP7_TXRX(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP7-TXRX"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -170,7 +170,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_07_rdm_portmapping_SRG3_PP1_TXRX(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADMA/mapping/SRG3-PP1-TXRX"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -217,7 +217,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_10_xpdr_portmapping_NETWORK1(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-NETWORK1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -231,7 +231,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_11_xpdr_portmapping_NETWORK2(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-NETWORK2"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -245,7 +245,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_12_xpdr_portmapping_CLIENT1(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-CLIENT1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -260,7 +260,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_13_xpdr_portmapping_CLIENT2(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-CLIENT2"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -275,7 +275,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_14_xpdr_portmapping_CLIENT4(self):
-        url = ("{}/config/portmapping:network/"
+        url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-CLIENT4"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -314,7 +314,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_17_xpdr_device_disconnected(self):
-        url = ("{}/config/portmapping:network/nodes/XPDRA".format(self.restconf_baseurl))
+        url = ("{}/config/transportpce-portmapping:network/nodes/XPDRA".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -349,7 +349,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_20_rdm_device_disconnected(self):
-        url = ("{}/config/portmapping:network/nodes/ROADMA".format(self.restconf_baseurl))
+        url = ("{}/config/transportpce-portmapping:network/nodes/ROADMA".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))

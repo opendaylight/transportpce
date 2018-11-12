@@ -107,7 +107,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Path Computation success
     def test_04_path_computation(self):
-        url = ("{}/operations/pce:path-computation-request"
+        url = ("{}/operations/transportpce-pce:path-computation-request"
               .format(self.restconf_baseurl))
         body = {"input": {
                 "service-name": "service-1",
@@ -191,7 +191,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test failed path computation
     def test_09_fail_path_computation(self):
-        url = ("{}/operations/pce:path-computation-request"
+        url = ("{}/operations/transportpce-pce:path-computation-request"
               .format(self.restconf_baseurl))
         body = {"input": {
                 "service-handler-header": {
@@ -212,7 +212,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test1 success path computation
     def test_10_success1_path_computation(self):
-        url = ("{}/operations/pce:path-computation-request"
+        url = ("{}/operations/transportpce-pce:path-computation-request"
               .format(self.restconf_baseurl))
         body = {"input": {
                 "service-name": "service1",
@@ -313,7 +313,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test2 success path computation with path description
     def test_11_success2_path_computation(self):
-        url = ("{}/operations/pce:path-computation-request"
+        url = ("{}/operations/transportpce-pce:path-computation-request"
               .format(self.restconf_baseurl))
         body = {"input": {
                 "service-name": "service 1",
@@ -349,7 +349,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test3 success path computation with hard-constraints exclude
     def test_12_success3_path_computation(self):
-        url = ("{}/operations/pce:path-computation-request"
+        url = ("{}/operations/transportpce-pce:path-computation-request"
               .format(self.restconf_baseurl))
         body = {"input": {
                 "service-name": "service 1",

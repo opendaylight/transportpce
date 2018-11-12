@@ -117,7 +117,7 @@ class TransportPCEtesting(unittest.TestCase):
             for i in range(0,nbTP):
                 tp_id=res_topo['node'][0]['ietf-network-topology:termination-point'][i]['tp-id']
                 if(not "CP" in tp_id):
-                    url_map="{}/config/portmapping:network/nodes/ROADMA/mapping/"+tp_id
+                    url_map="{}/config/transportpce-portmapping:network/nodes/ROADMA/mapping/"+tp_id
                     with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
                         outfile1.write('Config: '+`i`+'/'+ `nbTP`+' : '+url_map+'\n')
                     url = (url_map.format(self.restconf_baseurl))
@@ -142,7 +142,7 @@ class TransportPCEtesting(unittest.TestCase):
             for i in range(0,nbTP):
                 tp_id=res_topo['node'][0]['ietf-network-topology:termination-point'][i]['tp-id']
                 if(not "CTP" in tp_id):
-                    url_map ="{}/config/portmapping:network/nodes/ROADMA/mapping/"+tp_id
+                    url_map ="{}/config/transportpce-portmapping:network/nodes/ROADMA/mapping/"+tp_id
                     with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
                         outfile1.write('Config: '+`i`+'/'+ `nbTP`+' : '+url_map+'\n')
                     url = (url_map.format(self.restconf_baseurl))
@@ -215,7 +215,7 @@ class TransportPCEtesting(unittest.TestCase):
             nbTP=len(res_topo['node'][0]['ietf-network-topology:termination-point'])
             for i in range(0,nbTP):
                 tp_id=res_topo['node'][0]['ietf-network-topology:termination-point'][i]['tp-id']
-                url_map = "{}/config/portmapping:network/nodes/XPDRA/mapping/"+tp_id
+                url_map = "{}/config/transportpce-portmapping:network/nodes/XPDRA/mapping/"+tp_id
                 with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
                     outfile1.write('Config: '+`i`+'/'+ `nbTP`+' : '+url_map+'\n')
                 url = url_map.format(self.restconf_baseurl)
@@ -226,7 +226,7 @@ class TransportPCEtesting(unittest.TestCase):
                 if("CLIENT" in tp_id):
                     #Verify the tail equipment id of the client
                     xpdr_client=res_topo['node'][0]['ietf-network-topology:termination-point'][i]["org-openroadm-network-topology:xpdr-client-attributes"]["tail-equipment-id"]
-                    url_map = "{}/config/portmapping:network/nodes/XPDRA/mapping/"+xpdr_client
+                    url_map = "{}/config/transportpce-portmapping:network/nodes/XPDRA/mapping/"+xpdr_client
                     with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
                         outfile1.write('Config: '+`i`+'/'+ `nbTP`+' : '+xpdr_client+'\n')
                     url = url_map.format(self.restconf_baseurl)
@@ -237,7 +237,7 @@ class TransportPCEtesting(unittest.TestCase):
                 if("NETWORK" in tp_id):
                     #Verify the tail equipment id of the network
                     xpdr_network=res_topo['node'][0]['ietf-network-topology:termination-point'][i]["org-openroadm-network-topology:xpdr-network-attributes"]["tail-equipment-id"]
-                    url_map = "{}/config/portmapping:network/nodes/XPDRA/mapping/"+xpdr_network
+                    url_map = "{}/config/transportpce-portmapping:network/nodes/XPDRA/mapping/"+xpdr_network
                     with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
                         outfile1.write('Config: '+`i`+'/'+ `nbTP`+' : '+xpdr_network+'\n')
                     url = url_map.format(self.restconf_baseurl)
