@@ -292,16 +292,21 @@ class TransportPCEtesting(unittest.TestCase):
              nodeId=res['network'][0]['node'][i]['node-id']
              #Tests related to XPDRA nodes
              if(nodeId=='XPDRA-XPDR1'):
-                 self.assertEqual(nodeType,'XPONDER')
-                 self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']),2)
-                 self.assertEqual({'tp-id': 'XPDR1-CLIENT1', 'org-openroadm-network-topology:tp-type': 'XPONDER-CLIENT',
-                                   'org-openroadm-network-topology:xpdr-network-attributes': {'tail-equipment-id': 'XPDR1-NETWORK1'}},
-                                  res['network'][0]['node'][i]['ietf-network-topology:termination-point'][0])
-                 self.assertEqual({'tp-id': 'XPDR1-NETWORK1', 'org-openroadm-network-topology:tp-type': 'XPONDER-NETWORK',
-                                   'org-openroadm-network-topology:xpdr-client-attributes': {'tail-equipment-id': 'XPDR1-CLIENT1'}},
-                                  res['network'][0]['node'][i]['ietf-network-topology:termination-point'][1])
                  self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA'},
                                res['network'][0]['node'][i]['supporting-node'])
+                 self.assertEqual(nodeType,'XPONDER')
+                 nbTps=len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                 self.assertTrue(nbTps >= 2)
+                 client = 0
+                 network = 0
+                 for j in range(0,nbTps):
+                     tpType=res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-network-topology:tp-type']
+                     if (tpType=='XPONDER-CLIENT'):
+                         client += 1
+                     elif (tpType=='XPONDER-NETWORK'):
+                         network += 1
+                 self.assertTrue(client > 0)
+                 self.assertTrue(network > 0)
                  listNode.remove(nodeId)
              elif(nodeId=='ROADMA-SRG1'):
                  #Test related to SRG1
@@ -577,19 +582,24 @@ class TransportPCEtesting(unittest.TestCase):
                    'ROADMC-SRG1','ROADMC-DEG1','ROADMC-DEG2']
          #************************Tests related to XPDRA nodes
          for i in range(0,nbNode):
+             nodeType=res['network'][0]['node'][i]['org-openroadm-network-topology:node-type']
              nodeId=res['network'][0]['node'][i]['node-id']
              if(nodeId=='XPDRA-XPDR1'):
-                 #Test related to XPDR1
-                 self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']),2)
-                 self.assertEqual({'tp-id': 'XPDR1-CLIENT1', 'org-openroadm-network-topology:tp-type': 'XPONDER-CLIENT',
-                                   'org-openroadm-network-topology:xpdr-network-attributes': {'tail-equipment-id': 'XPDR1-NETWORK1'}},
-                                  res['network'][0]['node'][i]['ietf-network-topology:termination-point'][0])
-                 self.assertEqual({'tp-id': 'XPDR1-NETWORK1', 'org-openroadm-network-topology:tp-type': 'XPONDER-NETWORK',
-                                   'org-openroadm-network-topology:xpdr-client-attributes': {'tail-equipment-id': 'XPDR1-CLIENT1'}},
-                                  res['network'][0]['node'][i]['ietf-network-topology:termination-point'][1])
                  self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDRA'},
                                res['network'][0]['node'][i]['supporting-node'])
-                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network-topology:node-type'],'XPONDER')
+                 self.assertEqual(nodeType,'XPONDER')
+                 nbTps=len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                 self.assertTrue(nbTps >= 2)
+                 client = 0
+                 network = 0
+                 for j in range(0,nbTps):
+                     tpType=res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-network-topology:tp-type']
+                     if (tpType=='XPONDER-CLIENT'):
+                         client += 1
+                     elif (tpType=='XPONDER-NETWORK'):
+                         network += 1
+                 self.assertTrue(client > 0)
+                 self.assertTrue(network > 0)
                  listNode.remove(nodeId)
              elif(nodeId=='ROADMA-SRG1'):
                  #Test related to SRG1
