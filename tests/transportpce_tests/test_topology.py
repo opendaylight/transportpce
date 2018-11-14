@@ -20,80 +20,122 @@ import time
 import unittest
 import logging
 
-class TransportPCEtesting(unittest.TestCase):
+class TransportPCETopologyTesting(unittest.TestCase):
 
-    testtools_process1 = None
-    testtools_process2 = None
-    testtools_process3 = None
-    testtools_process4 = None
+    honeynode_process1 = None
+    honeynode_process2 = None
+    honeynode_process3 = None
+    honeynode_process4 = None
     odl_process = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
 #START_IGNORE_XTESTING
 
     @classmethod
-    def __start_testtools(cls):
-        executable = ("./netconf/netconf/tools/netconf-testtool/target/"
-                      "netconf-testtool-1.5.0-executable.jar")
-        if os.path.isfile(executable):
-            if not os.path.exists("transportpce_tests/log"):
+    def __init_logfile(cls):
+        if not os.path.exists("transportpce_tests/log"):
                 os.makedirs("transportpce_tests/log")
-            if os.path.isfile("./transportpce_tests/log/response.log"):
-                os.remove("transportpce_tests/log/response.log")
-            with open('transportpce_tests/log/testtools_ROADMA.log', 'w') as outfile1:
-                cls.testtools_process1 = subprocess.Popen(
-                    ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-ROADMA.xml","--starting-port","17831"],
-                    stdout=outfile1)
-            with open('transportpce_tests/log/testtools_ROADMB.log', 'w') as outfile2:
-                cls.testtools_process2 = subprocess.Popen(
-                    ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-ROADMB.xml","--starting-port","17832"],
-                    stdout=outfile2)
-            with open('transportpce_tests/log/testtools_ROADMC.log', 'w') as outfile3:
-                cls.testtools_process3 = subprocess.Popen(
-                    ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-ROADMC.xml","--starting-port","17833"],
-                    stdout=outfile3)
-            with open('transportpce_tests/log/testtools_XPDRA.log', 'w') as outfile4:
-                cls.testtools_process4 = subprocess.Popen(
-                    ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-XPDRA.xml","--starting-port","17830"],
-                    stdout=outfile4)
+        if os.path.isfile("./transportpce_tests/log/response.log"):
+            os.remove("transportpce_tests/log/response.log")
+
+    @classmethod
+    def __start_honeynode1(cls):
+        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+                      "/honeynode-distribution-1.18.01/honeycomb-tpce")
+        if os.path.isfile(executable):
+            with open('honeynode1.log', 'w') as outfile:
+                cls.honeynode_process1 = subprocess.Popen(
+                    [executable, "17830", "sample_configs/openroadm/2.1/oper-XPDRA.xml"],
+                    stdout=outfile)
+
+    @classmethod
+    def __start_honeynode2(cls):
+        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+                      "/honeynode-distribution-1.18.01/honeycomb-tpce")
+        if os.path.isfile(executable):
+            with open('honeynode2.log', 'w') as outfile:
+                cls.honeynode_process2 = subprocess.Popen(
+                    [executable, "17831", "sample_configs/openroadm/2.1/oper-ROADMA.xml"],
+                    stdout=outfile)
+
+    @classmethod
+    def __start_honeynode3(cls):
+        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+                      "/honeynode-distribution-1.18.01/honeycomb-tpce")
+        if os.path.isfile(executable):
+            with open('honeynode3.log', 'w') as outfile:
+                cls.honeynode_process3 = subprocess.Popen(
+                    [executable, "17832", "sample_configs/openroadm/2.1/oper-ROADMB.xml"],
+                    stdout=outfile)
+
+    @classmethod
+    def __start_honeynode4(cls):
+        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+                      "/honeynode-distribution-1.18.01/honeycomb-tpce")
+        if os.path.isfile(executable):
+            with open('honeynode4.log', 'w') as outfile:
+                cls.honeynode_process4 = subprocess.Popen(
+                    [executable, "17833", "sample_configs/openroadm/2.1/oper-ROADMC.xml"],
+                    stdout=outfile)
 
     @classmethod
     def __start_odl(cls):
         executable = "../karaf/target/assembly/bin/karaf"
-        with open('transportpce_tests/log/odl.log', 'w') as outfile:
+        with open('odl.log', 'w') as outfile:
             cls.odl_process = subprocess.Popen(
                 ["bash", executable, "server"], stdout=outfile,
                 stdin=open(os.devnull))
 
     @classmethod
     def setUpClass(cls):
-        cls.__start_testtools()
+        cls.__init_logfile()
+        time.sleep(2)
+        cls.__start_honeynode1()
+        time.sleep(20)
+        cls.__start_honeynode2()
+        time.sleep(20)
+        cls.__start_honeynode3()
+        time.sleep(20)
+        cls.__start_honeynode4()
+        time.sleep(20)
         cls.__start_odl()
-        time.sleep(100)
+        time.sleep(60)
 
     @classmethod
     def tearDownClass(cls):
-        cls.testtools_process1.send_signal(signal.SIGINT)
-        cls.testtools_process1.wait()
-        cls.testtools_process2.send_signal(signal.SIGINT)
-        cls.testtools_process2.wait()
-        cls.testtools_process3.send_signal(signal.SIGINT)
-        cls.testtools_process3.wait()
-        cls.testtools_process4.send_signal(signal.SIGINT)
-        cls.testtools_process4.wait()
         for child in psutil.Process(cls.odl_process.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
         cls.odl_process.send_signal(signal.SIGINT)
         cls.odl_process.wait()
-        print('End of the tear down class')
+        for child in psutil.Process(cls.honeynode_process1.pid).children():
+            child.send_signal(signal.SIGINT)
+            child.wait()
+        cls.honeynode_process1.send_signal(signal.SIGINT)
+        cls.honeynode_process1.wait()
+        for child in psutil.Process(cls.honeynode_process2.pid).children():
+            child.send_signal(signal.SIGINT)
+            child.wait()
+        cls.honeynode_process2.send_signal(signal.SIGINT)
+        cls.honeynode_process2.wait()
+
+        for child in psutil.Process(cls.honeynode_process3.pid).children():
+            child.send_signal(signal.SIGINT)
+            child.wait()
+        cls.honeynode_process3.send_signal(signal.SIGINT)
+        cls.honeynode_process3.wait()
+
+        for child in psutil.Process(cls.honeynode_process4.pid).children():
+            child.send_signal(signal.SIGINT)
+            child.wait()
+        cls.honeynode_process4.send_signal(signal.SIGINT)
+        cls.honeynode_process4.wait()
+
 
     def setUp(self):
-        time.sleep(30)
+        print ("execution of {}".format(self.id().split(".")[-1]))
+        time.sleep(2)
+
 
 #END_IGNORE_XTESTING
 
@@ -346,6 +388,7 @@ class TransportPCEtesting(unittest.TestCase):
              else:
                 self.assertFalse(True)
          self.assertEqual(len(listNode),0)
+
 
     #Connect the tail XPDRA to ROADMA and vice versa
     def test_10_connect_tail_xpdr_rdm(self):
