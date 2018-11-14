@@ -89,6 +89,7 @@ public class PceSendingPceRPCs {
         }
 
         LOG.info("PceGraph ...");
+        LOG.warn("PathComputation: aPceNode '{}' - zPceNode '{}'", nwAnalizer.getaPceNode(), nwAnalizer.getzPceNode());
         PceGraph graph = new PceGraph(
                 nwAnalizer.getaPceNode(),
                 nwAnalizer.getzPceNode(),

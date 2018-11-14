@@ -32,7 +32,7 @@ public class PceLink {
     private boolean isValid = true;
 
     // this member is for XPONDER INPUT/OUTPUT links.
-    // it keeps name of client correcponding to NETWORK TP
+    // it keeps name of client corresponding to NETWORK TP
     private String client = "";
 
     private final LinkId linkId;
