@@ -88,7 +88,7 @@ import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OlmPowerServiceImpl implements OlmPowerService {
+public class  OlmPowerServiceImpl implements OlmPowerService {
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerServiceImpl.class);
     private static final String SUCCESS = "Success";
     private static final String FAILED = "Failed";
