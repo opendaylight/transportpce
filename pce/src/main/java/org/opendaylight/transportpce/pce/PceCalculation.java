@@ -328,7 +328,7 @@ public class PceCalculation {
             return false;
         }
         if (supNodeId.equals(this.anodeId)) {
-            if (endPceNode(nodeType, nodeId, pceNode)) {
+            if (endPceNode(nodeType, nodeId, pceNode, true)) {
                 if (!pceNode.isValid()) {
                     LOG.error("validateNode: There are no available wavelengths in node {}", nodeId.getValue());
                     return false;
@@ -337,7 +337,7 @@ public class PceCalculation {
             }
         }
         if (supNodeId.equals(this.znodeId)) {
-            if (endPceNode(nodeType, nodeId, pceNode)) {
+            if (endPceNode(nodeType, nodeId, pceNode, false)) {
                 if (!pceNode.isValid()) {
                     LOG.error("validateNode: There are no available wavelengths in node {}", nodeId.getValue());
                     return false;
@@ -355,11 +355,11 @@ public class PceCalculation {
         return true;
     }
 
-    private Boolean endPceNode(OpenroadmNodeType openroadmNodeType, NodeId nodeId, PceNode pceNode) {
+    private Boolean endPceNode(OpenroadmNodeType openroadmNodeType, NodeId nodeId, PceNode pceNode, Boolean aend) {
         Boolean add = true;
         switch (openroadmNodeType) {
             case SRG :
-                pceNode.initRdmSrgTps();
+                pceNode.initRdmSrgTps(aend);
                 this.azSrgs.add(nodeId);
                 break;
             case XPONDER :
