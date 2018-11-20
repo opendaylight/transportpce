@@ -57,7 +57,7 @@ public final class ServicehandlerCompliancyCheck {
         String message = "";
         if (!checkString(serviceName)) {
             result = false;
-            message = "Service Name is not set";
+            message = "Service Name (common-id for Temp service) is not set";
         } else if (contype && (conType == null)) {
             result = false;
             message = "Service ConnectionType is not set";

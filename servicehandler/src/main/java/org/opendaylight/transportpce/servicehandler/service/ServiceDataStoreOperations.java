@@ -9,9 +9,11 @@ package org.opendaylight.transportpce.servicehandler.service;
 
 import java.util.Optional;
 import org.opendaylight.transportpce.common.OperationResult;
+import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
 
 /**
@@ -34,6 +36,16 @@ public interface ServiceDataStoreOperations {
     Optional<Services> getService(String serviceName);
 
     /**
+     * get temp service by common-id.
+     *
+     * @param commonId
+     *   unique common-id of the service
+     * @return Optional of Services
+     */
+    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
+        .Services> getTempService(String commonId);
+
+    /**
      * deleteService service by name.
      *
      * @param serviceName
@@ -41,6 +53,15 @@ public interface ServiceDataStoreOperations {
      * @return result of Delete operation
      */
     OperationResult deleteService(String serviceName);
+
+    /**
+     * deleteService service by common-id.
+     *
+     * @param commonId
+     *   unique common-id of the service
+     * @return result of Delete operation
+     */
+    OperationResult deleteTempService(String commonId);
 
     /**
      * modifyService service attributes.
@@ -56,6 +77,16 @@ public interface ServiceDataStoreOperations {
     OperationResult modifyService(String serviceName, State operationalState, State administrativeState);
 
     /**
+     * modify Temp Service.
+     *
+     * @param commonId unique common-id of the service
+     * @param operationalState operational state of service
+     * @param administrativeState administrative state of service
+     * @return result of modifyTempService operation
+     */
+    OperationResult modifyTempService(String commonId, State operationalState, State administrativeState);
+
+    /**
      * create new service entry.
      *
      * @param serviceCreateInput
@@ -69,13 +100,24 @@ public interface ServiceDataStoreOperations {
     /**
      * create new servicePath entry.
      *
-     * @param serviceCreateInput
-     *   serviceCreateInput data for creation of service
+     * @param serviceInput
+     *   ServiceInput data for creation of service
      * @param outputFromPce
      *   output from pce request which is used as input for creating of service.
      * @return result of createServicePath operation
      */
-    OperationResult createServicePath(ServiceCreateInput serviceCreateInput,
+    OperationResult createServicePath(ServiceInput serviceInput, PathComputationRequestOutput outputFromPce);
+
+    /**
+     * create new Temp service entry.
+     *
+     * @param tempServiceCreateInput
+     *   tempServiceCreateInput data for creation of service
+     * @param outputFromPce
+     *   output from pce request which is used as input for creating of service.
+     * @return result of createTempService operation
+     */
+    OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput,
         PathComputationRequestOutput outputFromPce);
 
     /**

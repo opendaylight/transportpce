@@ -10,6 +10,8 @@
 package org.opendaylight.transportpce.servicehandler.stub;
 
 import com.google.common.util.concurrent.ListenableFuture;
+
+import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutputBuilder;
@@ -49,10 +51,11 @@ public final class StubrendererImpl {
         } catch (InterruptedException e) {
             message = "deleting service failed !";
             LOG.error("deleting service failed !", e);
-            responseCode = "500";
+            responseCode = ResponseCodes.RESPONSE_FAILED;
         }
+        responseCode = ResponseCodes.RESPONSE_OK;
         ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
-                .setAckFinalIndicator("yes")
+                .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES)
                 .setRequestId(input.getServiceHandlerHeader().getRequestId())
                 .setResponseCode(responseCode)
                 .setResponseMessage(message);
@@ -73,10 +76,11 @@ public final class StubrendererImpl {
         } catch (InterruptedException e) {
             message = "implementing service failed !";
             LOG.error(message);
-            responseCode = "500";
+            responseCode = ResponseCodes.RESPONSE_FAILED;
         }
+        responseCode = ResponseCodes.RESPONSE_OK;
         ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
-                .setAckFinalIndicator("yes")
+                .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES)
                 .setRequestId(input.getServiceHandlerHeader().getRequestId())
                 .setResponseCode(responseCode)
                 .setResponseMessage(message);

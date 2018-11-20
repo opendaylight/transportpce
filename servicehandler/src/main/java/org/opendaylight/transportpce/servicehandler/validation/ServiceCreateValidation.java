@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.servicehandler.validation;
 
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
+import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.validation.checks.CheckCoherencyHardSoft;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck;
@@ -17,14 +18,13 @@ import org.opendaylight.transportpce.servicehandler.validation.checks.Servicehan
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeader;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class ServiceCreateValidation {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceCreateValidation.class);
 
-    public static OperationResult validateServiceCreateRequest(ServiceCreateInput input) {
+    public static OperationResult validateServiceCreateRequest(ServiceInput input, RpcActions rpcActions) {
         /*
          * Upon receipt of service
          * -create RPC, service header and sdnc
@@ -36,7 +36,7 @@ public final class ServiceCreateValidation {
             SdncRequestHeader sdncRequestHeader = input.getSdncRequestHeader();
             ConnectionType conType = input.getConnectionType();
             ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerCompliancyCheck.check(
-                    serviceNmame, sdncRequestHeader, conType, RpcActions.ServiceCreate, true, true);
+                    serviceNmame, sdncRequestHeader, conType, rpcActions, true, true);
             if (serviceHandlerCheckResult.hasPassed()) {
                 LOG.debug("Service request compliant !");
             } else {
