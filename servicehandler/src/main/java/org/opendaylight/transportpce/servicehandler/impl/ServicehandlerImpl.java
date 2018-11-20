@@ -8,17 +8,20 @@
 package org.opendaylight.transportpce.servicehandler.impl;
 
 import com.google.common.util.concurrent.ListenableFuture;
+
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
+import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
@@ -101,7 +104,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     public ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreate(ServiceCreateInput input) {
         LOG.info("RPC service creation received");
         // Validation
-        OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(input);
+        OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
+                new ServiceInput(input), RpcActions.ServiceCreate);
         if (! validationResult.isSuccess()) {
             LOG.warn("Aborting service create because validation of service create request failed: {}",
                     validationResult.getResultMessage());
@@ -130,8 +134,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     ResponseCodes.RESPONSE_FAILED);
         }
 
-        OperationResult operationServicePathSaveResult = this.serviceDataStoreOperations.createServicePath(input,
-            pceResponse);
+        OperationResult operationServicePathSaveResult = this.serviceDataStoreOperations.createServicePath(
+                new ServiceInput(input), pceResponse);
         if (!operationServicePathSaveResult.isSuccess()) {
             String message = "Service Path not updated in datastore !";
             LOG.info(message);
@@ -140,7 +144,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         }
 
         ServiceImplementationRequestInput serviceImplementationRequest =
-                ModelMappingUtils.createServiceImplementationRequest(input, pceResponse);
+                ModelMappingUtils.createServiceImplementationRequest(new ServiceInput(input), pceResponse);
         ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
             .serviceImplementation(serviceImplementationRequest);
         if (ResponseCodes.RESPONSE_OK
@@ -214,7 +218,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         LOG.debug("Service '{}' present in datastore !", serviceName);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-            .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(input);
+            .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
+                    new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
             .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
 
@@ -362,14 +367,147 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
     @Override
     public ListenableFuture<RpcResult<TempServiceDeleteOutput>> tempServiceDelete(TempServiceDeleteInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        LOG.info("RPC temp serviceDelete request received for {}", input.getCommonId());
+        String message = "";
+
+        /*
+         * Upon receipt of service-deleteService RPC, service header and sdnc-request
+         * header compliancy are verified.
+         */
+        LOG.info("checking Service Compliancy ...");
+        ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerCompliancyCheck.check(input.getCommonId(),
+                null, null, RpcActions.ServiceDelete, false, false);
+        if (serviceHandlerCheckResult.hasPassed()) {
+            LOG.info("Service compliant !");
+        } else {
+            LOG.info("Service is not compliant !");
+            return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                    "Service not compliant !", ResponseCodes.RESPONSE_FAILED);
+        }
+
+        //Check presence of service to be deleted
+        String commonId = input.getCommonId();
+        LOG.info("service common-id : {}", commonId);
+        try {
+            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
+                .Services> service = this.serviceDataStoreOperations.getTempService(commonId);
+            if (!service.isPresent()) {
+                message = "Service '" + commonId + "' does not exist in datastore";
+                LOG.error(message);
+                return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                        message, ResponseCodes.RESPONSE_FAILED);
+            }
+        } catch (NullPointerException e) {
+            LOG.info("failed to get service '{}' from datastore : ", commonId, e);
+        }
+
+        LOG.debug("Service '{}' present in datastore !", commonId);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
+                    new ServiceInput(input));
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
+
+        if (!ResponseCodes.RESPONSE_OK
+                .equals(output.getConfigurationResponseCommon().getResponseCode())) {
+            message = "Service delete failed!";
+            return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES, message,
+                    ResponseCodes.RESPONSE_FAILED);
+        }
+
+        OperationResult deleteServicePathOperationResult =
+                this.serviceDataStoreOperations.deleteServicePath(input.getCommonId());
+        if (!deleteServicePathOperationResult.isSuccess()) {
+            LOG.warn("Service path was not removed from datastore!");
+        }
+
+        OperationResult deleteServiceOperationResult =
+                this.serviceDataStoreOperations.deleteTempService(input.getCommonId());
+        if (!deleteServiceOperationResult.isSuccess()) {
+            LOG.warn("Service was not removed from datastore!");
+        }
+
+        return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                "Service delete was successful!", ResponseCodes.RESPONSE_OK);
     }
 
     @Override
     public ListenableFuture<RpcResult<TempServiceCreateOutput>> tempServiceCreate(TempServiceCreateInput input) {
-        // TODO Auto-generated method stub
-        return null;
+        LOG.info("RPC temp service creation received");
+        // Validation
+        OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
+                new ServiceInput(input), RpcActions.TempServiceCreate);
+        if (! validationResult.isSuccess()) {
+            LOG.warn("Aborting service create because validation of service create request failed: {}",
+                    validationResult.getResultMessage());
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                    validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
+        }
+
+        // Starting service create operation
+        LOG.info("Commencing PCE");
+        //TODO: createService service status into datastore
+        PathComputationRequestOutput pceResponse = this.pceServiceWrapper.performPCE(input, true);
+        String pceResponseCode = pceResponse.getConfigurationResponseCommon().getResponseCode();
+        if (!ResponseCodes.RESPONSE_OK.equals(pceResponseCode)) {
+            LOG.info("PCE calculation failed {}", pceResponseCode);
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                    pceResponse.getConfigurationResponseCommon().getResponseMessage(), ResponseCodes.RESPONSE_FAILED);
+        }
+
+        LOG.info("PCE calculation done OK {}", pceResponseCode);
+
+        OperationResult operationResult = this.serviceDataStoreOperations.createTempService(input, pceResponse);
+        if (!operationResult.isSuccess()) {
+            String message = "Service status not updated in datastore !";
+            LOG.info(message);
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES, message,
+                    ResponseCodes.RESPONSE_FAILED);
+        }
+
+        OperationResult operationServicePathSaveResult = this.serviceDataStoreOperations.createServicePath(
+                new ServiceInput(input), pceResponse);
+        if (!operationServicePathSaveResult.isSuccess()) {
+            String message = "Service Path not updated in datastore !";
+            LOG.info(message);
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES, message,
+                    ResponseCodes.RESPONSE_FAILED);
+        }
+
+        ServiceImplementationRequestInput serviceImplementationRequest =
+                ModelMappingUtils.createServiceImplementationRequest(new ServiceInput(input), pceResponse);
+        ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
+            .serviceImplementation(serviceImplementationRequest);
+        if (ResponseCodes.RESPONSE_OK
+                .equals(serviceImplementationRequestOutput.getConfigurationResponseCommon().getResponseCode())) {
+            String message = "Service rendered successfully !";
+            LOG.info(message);
+            operationResult = this.serviceDataStoreOperations.modifyTempService(input.getCommonId(), State.InService,
+                    State.InService);
+            if (!operationResult.isSuccess()) {
+                LOG.warn("Service status not updated in datastore !");
+            }
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES, message,
+                    ResponseCodes.RESPONSE_OK);
+        } else {
+            String message = "Service rendering has failed !";
+            LOG.warn(message);
+
+            OperationResult deleteServicePathOperationResult =
+                    this.serviceDataStoreOperations.deleteServicePath(input.getCommonId());
+            if (!deleteServicePathOperationResult.isSuccess()) {
+                LOG.warn("Service path was not removed from datastore!");
+            }
+
+            OperationResult deleteServiceOperationResult =
+                    this.serviceDataStoreOperations.deleteService(input.getCommonId());
+            if (!deleteServiceOperationResult.isSuccess()) {
+                LOG.warn("Service was not removed from datastore!");
+            }
+
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES, message,
+                    ResponseCodes.RESPONSE_FAILED);
+        }
     }
 
 }

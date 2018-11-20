@@ -627,7 +627,7 @@ class TransportPCEtesting(unittest.TestCase):
 #             'inService')
 #         time.sleep(1)
 
-    # Delete non existing service
+    # Delete  service
     def test_12_delete_service(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
               .format(self.restconf_baseurl))
@@ -658,6 +658,267 @@ class TransportPCEtesting(unittest.TestCase):
     # Verify 'test' service deleted
     def test_13_get_service(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/test"
+              .format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json',
+        "Accept": "application/json"}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, 404)
+        time.sleep(1)
+
+    # Create Temp Service 'ASATT1234567' with correct parameters
+    def test_14_create_temp_service(self):
+        url = ("{}/operations/org-openroadm-service:temp-service-create"
+              .format(self.restconf_baseurl))
+        data = {
+            "input": {
+                "sdnc-request-header": {
+                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
+                    "rpc-action": "temp-service-create",
+                    "request-system-id": "appname",
+                    "notification-url": "http://localhost:8585/NotificationServer/notify"
+                },
+                "common-id": "ASATT1234567",
+                "connection-type": "infrastructure",
+                "service-a-end": {
+                    "service-rate": "100",
+                    "node-id": "ROADMA",
+                    "service-format": "Ethernet",
+                    "clli": "SNJSCAMCJP8",
+                    "tx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                            "lgx-port-name": "LGX Back.3",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "rx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                            "lgx-port-name": "LGX Back.4",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "optic-type": "gray"
+                },
+                "service-z-end": {
+                    "service-rate": "100",
+                    "node-id": "ROADMC",
+                    "service-format": "Ethernet",
+                    "clli": "SNJSCAMCJT4",
+                    "tx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.29",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "rx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.30",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "optic-type": "gray"
+                },
+                "due-date": "2016-11-28T00:00:01Z",
+                "operator-contact": "pw1234"
+            }
+        }
+        headers = {'content-type': 'application/json',
+        "Accept": "application/json"}
+        response = requests.request(
+            "POST", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn('Service rendered successfully !',
+            res['output']['configuration-response-common']['response-message'])
+        time.sleep(10)
+
+
+    # Create Temp Service not compliant with no common-id
+    def test_15_create_temp_service(self):
+        url = ("{}/operations/org-openroadm-service:temp-service-create"
+              .format(self.restconf_baseurl))
+        data = {
+            "input": {
+                "sdnc-request-header": {
+                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
+                    "rpc-action": "temp-service-create",
+                    "request-system-id": "appname",
+                    "notification-url": "http://localhost:8585/NotificationServer/notify"
+                },
+                "connection-type": "infrastructure",
+                "service-a-end": {
+                    "service-rate": "100",
+                    "node-id": "ROADMA",
+                    "service-format": "Ethernet",
+                    "clli": "SNJSCAMCJP8",
+                    "tx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                            "lgx-port-name": "LGX Back.3",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "rx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                            "lgx-port-name": "LGX Back.4",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "optic-type": "gray"
+                },
+                "service-z-end": {
+                    "service-rate": "100",
+                    "node-id": "ROADMC",
+                    "service-format": "Ethernet",
+                    "clli": "SNJSCAMCJT4",
+                    "tx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.29",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "rx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.30",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "optic-type": "gray"
+                },
+                "due-date": "2016-11-28T00:00:01Z",
+                "operator-contact": "pw1234"
+            }
+        }
+        headers = {'content-type': 'application/json',
+        "Accept": "application/json"}
+        response = requests.request(
+            "POST", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn('Service Name (common-id for Temp service) is not set',
+            res['output']['configuration-response-common']['response-message'])
+        time.sleep(5)
+
+    # Get 'ASATT1234567' temp service created
+    def test_16_get_temp_service(self):
+        url = ("{}/operational/org-openroadm-service:temp-service-list/services/ASATT1234567"
+              .format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json',
+        "Accept": "application/json"}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertEqual(
+            res['services'][0]['administrative-state'],
+            'inService')
+        time.sleep(1)
+
+    # get non existing service
+    def test_17_get_temp_service(self):
+        url = ("{}/operational/org-openroadm-service:temp-service-list/services/test1"
+              .format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json',
+        "Accept": "application/json"}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, 404)
+        time.sleep(1)
+
+    # Delete temp service
+    def test_18_delete_temp_service(self):
+        url = ("{}/operations/org-openroadm-service:temp-service-delete"
+              .format(self.restconf_baseurl))
+        data = {"input": {
+                "common-id": "ASATT1234567"
+            }
+        }
+        headers = {'content-type': 'application/json'}
+        response = requests.request(
+            "POST", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn('Service delete was successful!',
+            res['output']['configuration-response-common']['response-message'])
+        time.sleep(1)
+
+# Verify 'test' service deleted
+    def test_13_verify_temp_service_deleted(self):
+        url = ("{}/operational/org-openroadm-service:service-list/services/ASATT1234567"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}

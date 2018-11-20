@@ -101,8 +101,7 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
     @Test
     public void mappingServicesPathNullServiceCreateInput() {
-        ServicePaths services = ModelMappingUtils.mappingServicePaths(null, null,
-            this.pathComputationRequestOutput);
+        ServicePaths services = ModelMappingUtils.mappingServicePaths(null, this.pathComputationRequestOutput);
         Assert.assertEquals(new ServicePathsBuilder().build(), services);
     }
 
