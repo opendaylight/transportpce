@@ -141,6 +141,59 @@ public final class OpenRoadmNetwork {
     }
 
     /**
+     * Create single node entry for OpenRoadmNetwork.
+     *
+     */
+    public static Node createNode2(String nodeId, Info deviceInfo) {
+        NodeTypes nodeType = deviceInfo.getNodeType();
+
+        // Uses the Node Builder to set the nodeId and Key
+        NodeBuilder nodeBldr = new NodeBuilder();
+        NodeId nwNodeId = new NodeId(nodeId);
+        nodeBldr.setNodeId(nwNodeId);
+        nodeBldr.withKey(new NodeKey(nwNodeId));
+        Node1Builder node1bldr = new Node1Builder();
+
+        /*
+         * Recognize the node type: 1:ROADM, 2:XPONDER
+         */
+        switch (nodeType.getIntValue()) {
+            case 1:
+                node1bldr.setNodeType(OpenroadmNodeType.ROADM);
+                break;
+            case 2:
+                node1bldr.setNodeType(OpenroadmNodeType.XPONDER);
+                break;
+            default:
+                LOG.error("No correponsding type for the value: {}", nodeType.getIntValue());
+                break;
+        }
+
+        String vendor = deviceInfo.getVendor();
+        String model = deviceInfo.getModel();
+        IpAddress ipAddress = deviceInfo.getIpAddress();
+        // Sets IP, Model and Vendor information fetched from the deviceInfo
+        node1bldr.setIp(ipAddress);
+        node1bldr.setModel(model);
+        node1bldr.setVendor(vendor);
+
+        // Sets the value of Network-ref and Node-ref as a part of the supporting node
+        // attribute
+        String clli = deviceInfo.getClli();
+        SupportingNodeBuilder supportbldr = new SupportingNodeBuilder();
+        supportbldr.withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID), new NodeId(clli)));
+        supportbldr.setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID));
+        supportbldr.setNodeRef(new NodeId(clli));
+        nodeBldr.setSupportingNode(ImmutableList.of(supportbldr.build()));
+
+        // Augment to the main node builder
+        nodeBldr.addAugmentation(Node1.class, node1bldr.build());
+        return nodeBldr.build();
+    }
+
+
+
+    /**
      * Create empty OpenROADM network.
      */
     private static Network createOpenRoadmNetwork() {

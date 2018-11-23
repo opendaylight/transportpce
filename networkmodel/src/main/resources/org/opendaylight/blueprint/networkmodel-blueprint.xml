@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- vi: set et smarttab sw=4 tabstop=4: -->
-<!-- Copyright © 2016 Orange and others. All rights reserved. This program and the accompanying materials 
-    are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, 
+<!-- Copyright © 2016 Orange and others. All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution,
     and is available at http://www.eclipse.org/legal/epl-v10.html -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
     odl:use-default-for-reference-types="true">
@@ -12,14 +12,18 @@
     <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
     <reference id="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
     <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
+    <reference id="deviceConfig" interface="org.opendaylight.transportpce.common.mapping.DeviceConfig" />
 
     <bean id="openRoadmTopology" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology">
         <argument ref="dataBroker" />
         <argument ref="deviceTransactionManager" />
+        <argument ref="deviceConfig" />
+        <argument ref="portMapping" />
     </bean>
 
-    <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
+    <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl2">
         <argument ref="dataBroker" />
+        <argument ref="deviceConfig" />
         <argument ref="linkDiscoveryImpl" />
         <argument ref="deviceTransactionManager" />
         <argument ref="openRoadmTopology" />

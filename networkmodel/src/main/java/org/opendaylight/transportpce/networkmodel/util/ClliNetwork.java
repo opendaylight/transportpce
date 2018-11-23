@@ -56,7 +56,7 @@ public final class ClliNetwork {
         try {
             Network clliNetwork = createNetwork();
             InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(
-                       Network.class,new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)));
+                Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)));
             WriteTransaction wrtx = controllerdb.newWriteOnlyTransaction();
             wrtx.put(LogicalDatastoreType.CONFIGURATION, nwIID.build(), clliNetwork);
             wrtx.submit().get(1, TimeUnit.SECONDS);
@@ -75,11 +75,11 @@ public final class ClliNetwork {
      * @return node builder status
      */
     public static Node createNode(DeviceTransactionManager deviceTransactionManager, String deviceId) {
-        //Read clli from the device
+        // Read clli from the device
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
         Optional<Info> deviceInfo = deviceTransactionManager.getDataFromDevice(deviceId,
-                LogicalDatastoreType.OPERATIONAL, infoIID, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.OPERATIONAL, infoIID, Timeouts.DEVICE_READ_TIMEOUT,
+            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         String clli;
         if (deviceInfo.isPresent()) {
             clli = deviceInfo.get().getClli();
@@ -87,17 +87,33 @@ public final class ClliNetwork {
             return null;
         }
         /*
-         * Create node in the CLLI layer of the network model
-         * with nodeId equal to the clli attribute in the device
-         * model's info subtree
+         * Create node in the CLLI layer of the network model with nodeId equal
+         * to the clli attribute in the device model's info subtree
          */
         NodeBuilder nodeBldr = new NodeBuilder();
         NodeId nwNodeId = new NodeId(clli);
         nodeBldr.setNodeId(nwNodeId);
         nodeBldr.withKey(new NodeKey(nwNodeId));
         /*
-         * create clli node augmentation
-         * defined in openroadm-clli-network.yang
+         * create clli node augmentation defined in openroadm-clli-network.yang
+         */
+        Node1Builder clliAugmentationBldr = new Node1Builder();
+        clliAugmentationBldr.setClli(clli);
+        nodeBldr.addAugmentation(Node1.class, clliAugmentationBldr.build());
+        return nodeBldr.build();
+    }
+
+    /**
+     * Other implementation to create single node entry for CLLI topology.
+     *
+     */
+    public static Node createNode2(String clli, String deviceId) {
+        NodeBuilder nodeBldr = new NodeBuilder();
+        NodeId nwNodeId = new NodeId(clli);
+        nodeBldr.setNodeId(nwNodeId);
+        nodeBldr.withKey(new NodeKey(nwNodeId));
+        /*
+         * create clli node augmentation defined in openroadm-clli-network.yang
          */
         Node1Builder clliAugmentationBldr = new Node1Builder();
         clliAugmentationBldr.setClli(clli);
@@ -113,7 +129,7 @@ public final class ClliNetwork {
         NetworkId nwId = new NetworkId(NetworkUtils.CLLI_NETWORK_ID);
         nwBuilder.setNetworkId(nwId);
         nwBuilder.withKey(new NetworkKey(nwId));
-        //set network type to clli
+        // set network type to clli
         NetworkTypes1Builder clliNetworkTypesBldr = new NetworkTypes1Builder();
         clliNetworkTypesBldr.setClliNetwork(new ClliNetworkBuilder().build());
         NetworkTypesBuilder nwTypeBuilder = new NetworkTypesBuilder();

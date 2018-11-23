@@ -148,6 +148,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
 
             if ((netconfNode != null) && !StringConstants.DEFAULT_NETCONF_NODEID.equals(nodeId)) {
                 switch (rootNode.getModificationType()) {
+                    case DELETE:
+                        LOG.info("Node {} deleted from topologies", nodeId);
+                        this.networkModelService.deleteOpenROADMnode(nodeId);
                     case WRITE:
                         LOG.info("Node added: {}", nodeId);
                     case SUBTREE_MODIFIED:

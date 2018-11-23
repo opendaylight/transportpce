@@ -30,6 +30,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="openRoadmInterfaces" />
     </bean>
 
+    <bean id="deviceConfig" class="org.opendaylight.transportpce.common.mapping.DeviceConfigImpl" >
+        <argument ref="deviceTransactionManager" />
+    </bean>
+
     <bean id="crossConnect" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl" >
         <argument ref="deviceTransactionManager" />
     </bean>
@@ -41,5 +45,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <service ref="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
 
     <service ref="crossConnect" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
+
+	<service ref="deviceConfig" interface="org.opendaylight.transportpce.common.mapping.DeviceConfig" />
 
 </blueprint>

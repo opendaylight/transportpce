@@ -8,7 +8,11 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
+import java.util.List;
+
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 
 public interface PortMapping {
 
@@ -42,6 +46,8 @@ public interface PortMapping {
      * @return true/false based on status of operation
      */
     boolean createMappingData(String nodeId);
+
+    boolean createMappingData2(Info deviceInfo, List<Mapping> portMapList);
 
     /**
      * This method removes mapping data from the datastore after disconnecting
@@ -78,4 +84,7 @@ public interface PortMapping {
     Mapping getMapping(String nodeId, String logicalConnPoint);
 
     boolean updateMapping(String nodeId, Mapping mapping);
+
+    Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
+        String logicalConnectionPoint);
 }

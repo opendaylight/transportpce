@@ -137,6 +137,7 @@ public class PortMappingImpl implements PortMapping {
         return postPortMapping(deviceInfo, portMapList, deviceInfo.getNodeType().getIntValue(), null);
     }
 
+
     /**
      * This private method gets the list of external ports on a degree. For each
      * port in the degree, it does a get on port subtree with
@@ -407,7 +408,7 @@ public class PortMappingImpl implements PortMapping {
      * @return true/false based on status of operation
      */
 
-    private Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
+    public Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
         String logicalConnectionPoint) {
         MappingBuilder mpBldr = new MappingBuilder();
         mpBldr.withKey(new MappingKey(logicalConnectionPoint)).setLogicalConnectionPoint(logicalConnectionPoint)
@@ -688,6 +689,12 @@ public class PortMappingImpl implements PortMapping {
         }
         LOG.info("Processiong is done.. now returning..");
         return cpToInterfaceMap;
+    }
+
+    @Override
+    public boolean createMappingData2(Info deviceInfo, List<Mapping> portMapList) {
+        LOG.info("Create Mapping Data 2 for node {}", deviceInfo.getNodeId());
+        return postPortMapping(deviceInfo, portMapList, deviceInfo.getNodeType().getIntValue(), null);
     }
 
 }
