@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.networkmodel.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -40,11 +41,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPorts;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.ConnectionMap;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Degree;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.DegreeKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.connection.map.Destination;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.NetworkTypes1;
@@ -333,15 +336,21 @@ public class OpenRoadmTopology {
             // numOfSrgs));
             LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
             return new TopologyShard(nodes, links, localportMapList);
+
         } else if (NodeTypes.Xpdr.equals(deviceInfo.getNodeType())) {
-            // Check if node is XPONDER
-            XponderPortNumber portNums = getNoOfPorts(nodeId);
+            List<ConnectionMap> connectionMapList = this.deviceConfig.getConnectionMap(nodeId);
+            connectionMapList.sort(Comparator.comparingDouble(ConnectionMap::getConnectionMapNumber));
+            NodeData nodeData = createXpdrNode(nodeId, connectionMapList);
+            if (nodeData != null) {
+                NodeBuilder tempNode = nodeData.getNodeBuilder();
+                nodes.add(tempNode.build());
+                for (Mapping mapping : nodeData.getPortMapList()) {
+                    localportMapList.add(mapping);
+                }
+            }
             List<Link> links = new ArrayList<>();
-            NodeBuilder tempNode = createXpdr(portNums.getNumOfClientPorts(), portNums.getNumOfLinePorts(), nodeId);
-            nodes.add(tempNode.build());
             return new TopologyShard(nodes, links, localportMapList);
         }
-
         return null;
     }
 
@@ -440,6 +449,163 @@ public class OpenRoadmTopology {
         LOG.info("The nodebldr {}", nodebldr);
         return nodebldr;
     }
+
+    private NodeData createXpdrNode(String nodeId, List<ConnectionMap> connectionMapList) {
+        // Create org-openroadm augmentation node
+        Node1Builder node1bldr = new Node1Builder();
+        node1bldr.setNodeType(OpenroadmNodeType.XPONDER);
+
+        // Create a generic Topo Layer node
+        NodeBuilder nodebldr = createTopoLayerNode(nodeId);
+        String nodeIdtopo = new StringBuilder().append(nodeId).append("-XPDR1").toString();
+        nodebldr.setNodeId(new NodeId(nodeIdtopo));
+        nodebldr.withKey(new NodeKey(new NodeId(nodeIdtopo)));
+        nodebldr.addAugmentation(Node1.class, node1bldr.build());
+
+        List<TerminationPoint> tpList = new ArrayList<>();
+        List<Mapping> mappingList = new ArrayList<>();
+
+        // to keep memory of cp+port already handled...
+        List<String> cpIdList = new ArrayList();
+        int portClientIndex = 0;
+        int portNetworkIndex = 0;
+        String srcLcp = null;
+        String destLcp = null;
+        Mapping mapping;
+
+        for (ConnectionMap connectionMap : connectionMapList) {
+            String srcCpId = connectionMap.getSource().getCircuitPackName() + connectionMap.getSource().getPortName()
+                .toString();
+            String destCpId;
+            TerminationPoint1Builder srcTp1Bldr = new TerminationPoint1Builder();
+            TerminationPointBuilder srcTpBldr;
+            boolean srcHandling = false;
+
+            for (Destination dest : connectionMap.getDestination()) {
+                destCpId = dest.getCircuitPackName() + dest.getPortName().toString();
+                TerminationPoint1Builder destTp1Bldr = new TerminationPoint1Builder();
+                TerminationPointBuilder destTpBldr;
+                boolean destHandling = false;
+
+                // handling of connection map source data
+                if (!cpIdList.contains(srcCpId)) {
+                    Ports srcPort = this.deviceConfig.getDevicePorts(nodeId, connectionMap.getSource()
+                        .getCircuitPackName(), connectionMap.getSource().getPortName().toString());
+                    if (srcPort != null && srcPort.getPortQual() != null) {
+                        srcHandling = true;
+                        switch (srcPort.getPortQual().getIntValue()) {
+                            case 4:
+                                portClientIndex++;
+                                srcLcp = "XPDR1-CLIENT" + portClientIndex;
+                                // tp creation
+                                srcTp1Bldr.setTpType(OpenroadmTpType.XPONDERCLIENT);
+                                break;
+                            case 3:
+                                portNetworkIndex++;
+                                srcLcp = "XPDR1-NETWORK" + portNetworkIndex;
+                                // tp creation
+                                srcTp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
+                                break;
+                            default:
+                                break;
+                        }
+                        // mapping creation
+                        mapping = portMapping.createMappingObject(nodeId, srcPort, connectionMap.getSource()
+                            .getCircuitPackName(), srcLcp);
+                        mappingList.add(mapping);
+                        cpIdList.add(srcCpId);
+                    } else {
+                        LOG.error("Error retreiving Port {} of circuit-pack {} from {}", connectionMap.getSource()
+                            .getPortName().toString(), connectionMap.getSource().getCircuitPackName(), nodeId);
+                    }
+                }
+
+                // handling of connection map destination data
+                if (!cpIdList.contains(destCpId)) {
+                    Ports destPort = this.deviceConfig.getDevicePorts(nodeId, dest.getCircuitPackName(), dest
+                        .getPortName().toString());
+                    if (destPort != null && destPort.getPortQual() != null) {
+                        destHandling = true;
+                        switch (destPort.getPortQual().getIntValue()) {
+                            case 4:
+                                portClientIndex++;
+                                destLcp = "XPDR1-CLIENT" + portClientIndex;
+                                // tp creation
+                                destTp1Bldr.setTpType(OpenroadmTpType.XPONDERCLIENT);
+                                break;
+                            case 3:
+                                portNetworkIndex++;
+                                destLcp = "XPDR1-NETWORK" + portNetworkIndex;
+                                // tp creation
+                                destTp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
+                                break;
+                            default:
+                                break;
+                        }
+                        // mapping creation
+                        mapping = portMapping.createMappingObject(nodeId, destPort, dest.getCircuitPackName(), destLcp);
+                        mappingList.add(mapping);
+                        cpIdList.add(destCpId);
+                    } else {
+                        LOG.error("Error retreiving Port {} of circuit-pack {} from {}", connectionMap.getSource()
+                            .getPortName().toString(), connectionMap.getSource().getCircuitPackName(), nodeId);
+                    }
+                }
+
+                // complement TP creations with tail-equipment attributes
+                if (srcHandling) {
+                    switch (srcTp1Bldr.getTpType().getIntValue()) {
+                        case 11:
+                            XpdrClientAttributesBuilder clntAttBldr = new XpdrClientAttributesBuilder()
+                                .setTailEquipmentId(destLcp);
+                            srcTp1Bldr.setXpdrClientAttributes(clntAttBldr.build());
+                            break;
+                        case 10:
+                            XpdrNetworkAttributesBuilder nwtAttBldr = new XpdrNetworkAttributesBuilder()
+                                .setTailEquipmentId(destLcp);
+                            srcTp1Bldr.setXpdrNetworkAttributes(nwtAttBldr.build());
+                            break;
+                        default:
+                            LOG.error("error setting attributes to TP");
+                            break;
+                    }
+                    srcTpBldr = createTpBldr(srcLcp);
+                    srcTpBldr.addAugmentation(TerminationPoint1.class, srcTp1Bldr.build());
+                    tpList.add(srcTpBldr.build());
+                }
+                if (destHandling) {
+                    switch (destTp1Bldr.getTpType().getIntValue()) {
+                        case 11:
+                            XpdrClientAttributesBuilder clntAttBldr = new XpdrClientAttributesBuilder()
+                                .setTailEquipmentId(srcLcp);
+                            destTp1Bldr.setXpdrClientAttributes(clntAttBldr.build());
+                            break;
+                        case 10:
+                            XpdrNetworkAttributesBuilder nwtAttBldr = new XpdrNetworkAttributesBuilder()
+                                .setTailEquipmentId(srcLcp);
+                            destTp1Bldr.setXpdrNetworkAttributes(nwtAttBldr.build());
+                            break;
+                        default:
+                            LOG.error("error setting attributes to TP");
+                            break;
+                    }
+                    destTpBldr = createTpBldr(destLcp);
+                    destTpBldr.addAugmentation(TerminationPoint1.class, destTp1Bldr.build());
+                    tpList.add(destTpBldr.build());
+                }
+
+            }
+        }
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1Builder tpNode1 =
+            new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1Builder();
+        tpNode1.setTerminationPoint(tpList);
+        nodebldr.addAugmentation(
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1.class,
+            tpNode1.build());
+
+        return new NodeData(nodebldr, mappingList);
+    }
+
 
     private NodeData createDegreeNode(String nodeId, int degreeCounter) {
         // Create openroadm-topology-node augmentation in order to add degree

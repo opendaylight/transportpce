@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.common.mapping;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -18,6 +19,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.ConnectionMap;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
@@ -88,6 +90,19 @@ public class DeviceConfigImpl implements DeviceConfig {
             LogicalDatastoreType.OPERATIONAL, cpIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (cpObject.isPresent()) {
             return cpObject.get();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<ConnectionMap> getConnectionMap(String NodeId) {
+        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
+        Optional<OrgOpenroadmDevice> deviceObject = this.deviceTransactionManager.getDataFromDevice(NodeId,
+            LogicalDatastoreType.OPERATIONAL, deviceIID, Timeouts.DEVICE_READ_TIMEOUT,
+            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (deviceObject.isPresent()) {
+            return deviceObject.get().getConnectionMap();
         } else {
             return null;
         }

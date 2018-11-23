@@ -7,8 +7,11 @@
  */
 package org.opendaylight.transportpce.common.mapping;
 
+import java.util.List;
+
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.CircuitPack;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.ConnectionMap;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 
@@ -48,7 +51,7 @@ public interface DeviceConfig {
      *            node ID
      * @param srgNb
      *            String
-      *
+     *
      * @return shared-risk-group container or null if container is absent
      */
     SharedRiskGroup getDeviceSrg(String nodeId, int srgNb);
@@ -61,12 +64,20 @@ public interface DeviceConfig {
      *            node ID
      * @param cpName
      *            String
-      *
+     *
      * @return circuit-pack container or null if container is absent
      */
     CircuitPack getDeviceCp(String nodeId, String cpName);
 
-
-
+    /**
+     * This method retrieves the connection-map list from operational datastore of a
+     * given device.
+     *
+     * @param NodeId
+     *            node ID
+     *
+     * @return connection-map list or null if container is absent
+     */
+    List<ConnectionMap> getConnectionMap(String NodeId);
 
 }
