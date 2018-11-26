@@ -11,7 +11,9 @@ package org.opendaylight.transportpce.networkmodel.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,8 @@ import org.opendaylight.transportpce.common.mapping.DeviceConfig;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.networkmodel.dto.NodeData;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegreeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.node.attributes.AvailableWavelengths;
@@ -40,14 +44,18 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPorts;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.ConnectionMap;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Degree;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.DegreeKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Protocols;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.connection.map.Destination;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfig;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.NetworkTypes1;
@@ -286,18 +294,22 @@ public class OpenRoadmTopology {
             } else {
                 maxDegree = MAX_DEGREE;
             }
+            Map<String, String> interfaceList = getEthInterfaceList(nodeId);
+            interfaceList.forEach((key,val) -> LOG.debug("clé = {}, val = {}", key, val));
+            List<CpToDegree> localcpDegreelist = new ArrayList();
 
             // Starting with degree Number = 1
             Integer degreeCounter = 1;
             while (degreeCounter <= maxDegree) {
                 LOG.info("creating degree node {}/{}", degreeCounter, maxDegree);
-                NodeData nodeData = createDegreeNode(nodeId, degreeCounter);
+                NodeData nodeData = createDegreeNode(nodeId, degreeCounter, interfaceList);
                 if (nodeData != null) {
                     NodeBuilder tempNode = nodeData.getNodeBuilder();
                     nodes.add(tempNode.build());
-                    for (Mapping mapping : nodeData.getPortMapList()) {
-                        localportMapList.add(mapping);
-                    }
+                    localportMapList.addAll(nodeData.getPortMapList());
+                    LOG.debug("mapping added for DEG{}", degreeCounter);
+                    localcpDegreelist.addAll(nodeData.getDegreeCpList());
+                    LOG.debug("globalDegreeCpList = {}", localcpDegreelist.toString());
                     numOfDegrees++;
                 }
                 degreeCounter++;
@@ -319,9 +331,7 @@ public class OpenRoadmTopology {
 
                 if (tempNode != null) {
                     nodes.add(tempNode.getNodeBuilder().build());
-                    for (Mapping mapping : tempNode.getPortMapList()) {
-                        localportMapList.add(mapping);
-                    }
+                    localportMapList.addAll(tempNode.getPortMapList());
                     numOfSrgs++;
                 }
                 srgCounter++;
@@ -335,7 +345,7 @@ public class OpenRoadmTopology {
             // links.addAll(createAddDropLinks2(nodeId, numOfDegrees,
             // numOfSrgs));
             LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
-            return new TopologyShard(nodes, links, localportMapList);
+            return new TopologyShard(nodes, links, localportMapList, localcpDegreelist);
 
         } else if (NodeTypes.Xpdr.equals(deviceInfo.getNodeType())) {
             List<ConnectionMap> connectionMapList = this.deviceConfig.getConnectionMap(nodeId);
@@ -344,12 +354,10 @@ public class OpenRoadmTopology {
             if (nodeData != null) {
                 NodeBuilder tempNode = nodeData.getNodeBuilder();
                 nodes.add(tempNode.build());
-                for (Mapping mapping : nodeData.getPortMapList()) {
-                    localportMapList.add(mapping);
-                }
+                localportMapList.addAll(nodeData.getPortMapList());
             }
             List<Link> links = new ArrayList<>();
-            return new TopologyShard(nodes, links, localportMapList);
+            return new TopologyShard(nodes, links, localportMapList, null);
         }
         return null;
     }
@@ -603,24 +611,33 @@ public class OpenRoadmTopology {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1.class,
             tpNode1.build());
 
-        return new NodeData(nodebldr, mappingList);
+        return new NodeData(nodebldr, mappingList, null);
     }
 
 
-    private NodeData createDegreeNode(String nodeId, int degreeCounter) {
+    private NodeData createDegreeNode(String nodeId, int degreeCounter, Map<String, String> interfList) {
         // Create openroadm-topology-node augmentation in order to add degree
         Node1Builder node1bldr = new Node1Builder();
         // set node type to degree
         node1bldr.setNodeType(OpenroadmNodeType.DEGREE);
 
+        Degree degree;
+        if (this.deviceConfig.getDeviceDegree(nodeId, degreeCounter) == null) {
+            return null;
+        } else {
+            degree = this.deviceConfig.getDeviceDegree(nodeId, degreeCounter);
+        }
+
         // Get connection ports on degree number = degreeCounter in order to get
         // port
         // direction
-        List<ConnectionPorts> degreeConPorts = getDegreePorts(nodeId, degreeCounter);
-        if ((degreeConPorts == null) || degreeConPorts.isEmpty()) {
+        List<ConnectionPorts> degreeConPorts;
+        if (degree.getConnectionPorts() == null) {
+            LOG.info("degree.connectionPort est null");
             return null;
+        } else {
+            degreeConPorts = degree.getConnectionPorts();
         }
-
         DegreeAttributesBuilder degAttBldr = new DegreeAttributesBuilder();
         degAttBldr.setDegreeNumber(degreeCounter);
         degAttBldr.setAvailableWavelengths(create96AvalWaveDegree());
@@ -720,7 +737,23 @@ public class OpenRoadmTopology {
         nodebldr.addAugmentation(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1.class,
             tpNode1.build());
-        return new NodeData(nodebldr, mappingList);
+
+        // complement mapping with cp-to-degree
+        List<CpToDegree> cpList = new ArrayList<>();
+        if (degree.getCircuitPacks() != null) {
+            for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks
+                cp : degree.getCircuitPacks()) {
+                if (interfList.containsKey(cp.getCircuitPackName())) {
+                    CpToDegree cpToDeg = new CpToDegreeBuilder()
+                        .setCircuitPackName(cp.getCircuitPackName())
+                        .setDegreeNumber(Integer.toUnsignedLong(degreeCounter))
+                        .setInterfaceName(interfList.get(cp.getCircuitPackName()))
+                        .build();
+                    cpList.add(cpToDeg);
+                }
+            }
+        }
+        return new NodeData(nodebldr, mappingList, cpList);
     }
 
     private NodeData createSrgNode(String nodeId, int srgCounter) {
@@ -904,31 +937,7 @@ public class OpenRoadmTopology {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1.class,
             tpNode1.build());
 
-        return new NodeData(nodebldr, mappingList);
-    }
-
-    /*
-     * This method will return the TTP ports in the device for a given degree
-     * number to be used by the node to create TTP and CTP termination point on
-     * the device.
-     */
-    private List<ConnectionPorts> getDegreePorts(String deviceId, Integer degreeCounter) {
-        List<ConnectionPorts> degreeConPorts = new ArrayList<>();
-        LOG.info("Getting Connection ports for Degree Number {}", degreeCounter);
-        InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Degree.class,
-            new DegreeKey(degreeCounter));
-
-        Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-            LogicalDatastoreType.CONFIGURATION, deviceIID, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-
-        if (ordmDegreeObject.isPresent()) {
-            degreeConPorts.addAll(new ArrayList<>(ordmDegreeObject.get().getConnectionPorts()));
-        } else {
-            LOG.info("Degree n° {} not present for node {}", degreeCounter, deviceId);
-            return Collections.emptyList();
-        }
-        return degreeConPorts;
+        return new NodeData(nodebldr, mappingList, null);
     }
 
     private int getMaxPp(String deviceId, Integer srgCounter) {
@@ -1364,5 +1373,53 @@ public class OpenRoadmTopology {
             return numOfLinePorts;
         }
     }
+
+    // method copied/pasted from PortMappingImpl.java
+    private Map<String, String> getEthInterfaceList(String nodeId) {
+        Map<String, String> cpToInterfaceMap = new HashMap<>();
+        InstanceIdentifier<Protocols> protocolsIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(Protocols.class);
+        Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
+                LogicalDatastoreType.OPERATIONAL, protocolsIID, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (!protocolObject.isPresent() || (protocolObject.get().augmentation(Protocols1.class) == null)) {
+            LOG.warn("LLDP subtree is missing : isolated openroadm device");
+            return cpToInterfaceMap;
+        }
+        List<PortConfig> portConfigList = protocolObject.get().augmentation(Protocols1.class).getLldp().getPortConfig();
+        if (!portConfigList.isEmpty()) {
+            for (PortConfig portConfig : portConfigList) {
+                if (portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
+                    InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                            .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
+                    Optional<Interface> interfaceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
+                            LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
+                            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                    if (interfaceObject.isPresent()
+                            && (interfaceObject.get().getSupportingCircuitPackName() != null)) {
+                        String supportingCircuitPackName = interfaceObject.get().getSupportingCircuitPackName();
+                        cpToInterfaceMap.put(supportingCircuitPackName, portConfig.getIfName());
+                        InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier
+                                .create(OrgOpenroadmDevice.class).child(CircuitPacks.class,
+                                        new CircuitPacksKey(supportingCircuitPackName));
+                        Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(
+                                nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, Timeouts
+                                                .DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+//                        if (circuitPackObject.isPresent()
+//                                && (circuitPackObject.get().getParentCircuitPack() != null)) {
+//                            cpToInterfaceMap.put(circuitPackObject.get().getParentCircuitPack()
+//                                    .getCircuitPackName(), portConfig.getIfName());
+//                        }
+                    }
+                } else {
+                    LOG.warn("PortConfig Admin Status is not equal Txandrx");
+                }
+            }
+        } else {
+            LOG.warn("Couldnt find port config under LLDP for Node : {}", nodeId);
+        }
+        return cpToInterfaceMap;
+    }
+
 
 }

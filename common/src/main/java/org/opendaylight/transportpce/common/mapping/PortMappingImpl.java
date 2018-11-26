@@ -463,6 +463,7 @@ public class PortMappingImpl implements PortMapping {
             if (degree.getCircuitPacks() != null) {
                 LOG.info("Inside CP to degree list");
                 cpToDegreeList.addAll(degree.getCircuitPacks().stream()
+                    .filter(cp -> interfaceList.containsKey(cp.getCircuitPackName()))
                         .map(cp -> createCpToDegreeObject(cp.getCircuitPackName() ,
                                 degree.getDegreeNumber().toString(), nodeId ,interfaceList))
                         .collect(Collectors.toList()));
@@ -692,9 +693,9 @@ public class PortMappingImpl implements PortMapping {
     }
 
     @Override
-    public boolean createMappingData2(Info deviceInfo, List<Mapping> portMapList) {
+    public boolean createMappingData2(Info deviceInfo, List<Mapping> portMapList, List<CpToDegree> degreeCpList) {
         LOG.info("Create Mapping Data 2 for node {}", deviceInfo.getNodeId());
-        return postPortMapping(deviceInfo, portMapList, deviceInfo.getNodeType().getIntValue(), null);
+        return postPortMapping(deviceInfo, portMapList, deviceInfo.getNodeType().getIntValue(), degreeCpList);
     }
 
 }

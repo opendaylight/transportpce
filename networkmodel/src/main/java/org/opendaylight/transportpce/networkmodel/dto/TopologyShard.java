@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.networkmodel.dto;
 
 import java.util.List;
 
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegree;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.network.Link;
@@ -21,15 +22,14 @@ public class TopologyShard {
     private final List<Node> nodes;
     private final List<Link> links;
     private final List<Mapping> mappings;
+    private final List<CpToDegree> cpToDegreeList;
 
-    public List<Mapping> getMappings() {
-        return mappings;
-    }
 
-    public TopologyShard(List<Node> nodes, List<Link> links, List<Mapping> mappings) {
+    public TopologyShard(List<Node> nodes, List<Link> links, List<Mapping> mappings, List<CpToDegree> cpToDegreeList) {
         this.nodes = nodes;
         this.links = links;
         this.mappings = mappings;
+        this.cpToDegreeList = cpToDegreeList;
     }
 
     public List<Node> getNodes() {
@@ -40,4 +40,11 @@ public class TopologyShard {
         return links;
     }
 
+    public List<CpToDegree> getCpToDegreeList() {
+        return cpToDegreeList;
+    }
+
+    public List<Mapping> getMappings() {
+        return mappings;
+    }
 }

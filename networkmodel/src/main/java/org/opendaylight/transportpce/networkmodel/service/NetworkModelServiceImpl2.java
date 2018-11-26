@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.ClliNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev170929.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkId;
@@ -43,6 +44,8 @@ public class NetworkModelServiceImpl2 implements NetworkModelService {
 
     private final DataBroker dataBroker;
     private final DeviceConfig deviceConfig;
+    private final R2RLinkDiscovery linkDiscovery;
+    private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmTopology openRoadmTopology;
     private final PortMapping portMapping;
     private HashMap<String, TopologyShard> topologyShardMountedDevice;
@@ -53,6 +56,8 @@ public class NetworkModelServiceImpl2 implements NetworkModelService {
         OpenRoadmTopology openRoadmTopology, PortMapping portMapping) {
         this.dataBroker = dataBroker;
         this.deviceConfig = deviceConfig;
+        this.linkDiscovery = linkDiscovery;
+        this.deviceTransactionManager = deviceTransactionManager;
         this.openRoadmTopology = openRoadmTopology;
         this.portMapping = portMapping;
         this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();
@@ -84,9 +89,14 @@ public class NetworkModelServiceImpl2 implements NetworkModelService {
             TopologyShard topologyShard = null;
             if (deviceInfo != null) {
                 topologyShard = this.openRoadmTopology.createTopologyShard2(nodeId, deviceInfo);
-                LOG.info("mapping = {}", topologyShard.getMappings().toString());
-                if (!this.portMapping.createMappingData2(deviceInfo, topologyShard.getMappings())) {
+                LOG.debug("mapping = {}", topologyShard.getMappings().toString());
+                if (!this.portMapping.createMappingData2(deviceInfo, topologyShard.getMappings(),
+                    topologyShard.getCpToDegreeList())) {
                     LOG.error("Error to create mapping data for {}", nodeId);
+                } else {
+                    if (NodeTypes.Rdm.getName().equals(deviceInfo.getNodeType().getName())) {
+                        this.linkDiscovery.readLLDP(new NodeId(nodeId));
+                    }
                 }
             } else {
                 LOG.error("Unable to create topology shard for node {}.", nodeId);
@@ -180,6 +190,7 @@ public class NetworkModelServiceImpl2 implements NetworkModelService {
                             .build();
                     writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink);
                 }
+                this.topologyShardMountedDevice.remove(nodeId);
             } else {
                 LOG.warn("TopologyShard for node '{}' is not present", nodeId);
             }

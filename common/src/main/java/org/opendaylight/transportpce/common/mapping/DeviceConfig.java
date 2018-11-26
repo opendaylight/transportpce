@@ -12,6 +12,7 @@ import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.CircuitPack;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.ConnectionMap;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Degree;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 
@@ -42,6 +43,19 @@ public interface DeviceConfig {
      * @return Ports container or null if Ports container is absent
      */
     Ports getDevicePorts(String nodeId, String circuitPackName, String portName);
+
+    /**
+     * This method retrieves given degree container from operational datastore of a
+     * given device.
+     *
+     * @param nodeId
+     *            node ID
+     * @param degreeNb
+     *            degree number
+     *
+     * @return degree container or null if container is absent
+     */
+    Degree getDeviceDegree(String nodeId, int degreeNb);
 
     /**
      * This method retrieves given srg container from operational datastore of a

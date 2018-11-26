@@ -20,6 +20,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.ConnectionMap;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Degree;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.DegreeKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
@@ -103,6 +105,20 @@ public class DeviceConfigImpl implements DeviceConfig {
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (deviceObject.isPresent()) {
             return deviceObject.get().getConnectionMap();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Degree getDeviceDegree(String nodeId, int degreeNb) {
+        InstanceIdentifier<Degree> degreeIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
+            Degree.class, new DegreeKey(degreeNb));
+        Optional<Degree> degreeObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
+            LogicalDatastoreType.OPERATIONAL, degreeIID, Timeouts.DEVICE_READ_TIMEOUT,
+            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (degreeObject.isPresent()) {
+            return degreeObject.get();
         } else {
             return null;
         }

@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import java.util.List;
 
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegree;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
@@ -47,7 +48,7 @@ public interface PortMapping {
      */
     boolean createMappingData(String nodeId);
 
-    boolean createMappingData2(Info deviceInfo, List<Mapping> portMapList);
+    boolean createMappingData2(Info deviceInfo, List<Mapping> portMapList, List<CpToDegree> degreeCpList);
 
     /**
      * This method removes mapping data from the datastore after disconnecting
