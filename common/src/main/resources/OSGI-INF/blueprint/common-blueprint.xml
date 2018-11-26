@@ -30,16 +30,43 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="openRoadmInterfaces" />
     </bean>
 
-    <bean id="crossConnect" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl" >
+    <bean id="mappingUtils" class="org.opendaylight.transportpce.common.mapping.MappingUtilsImpl" >
+        <argument ref="dataBroker" />
+    </bean>
+
+    <bean id="crossConnect121" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl1_2_1" >
         <argument ref="deviceTransactionManager" />
     </bean>
 
+    <bean id="crossConnect22" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl2_2" >
+        <argument ref="deviceTransactionManager" />
+    </bean>
+
+    <bean id="crossConnectImpl" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl" >
+        <argument ref="deviceTransactionManager" />
+        <argument ref="mappingUtils" />
+        <argument ref="crossConnect121" />
+        <argument ref="crossConnect22" />
+    </bean>
+
+    <bean id="requestProcessor" class="org.opendaylight.transportpce.common.network.RequestProcessor" scope="singleton" >
+        <argument ref="dataBroker" />
+    </bean>
+
+    <bean id="networkTransactionImpl" class="org.opendaylight.transportpce.common.network.NetworkTransactionImpl">
+        <argument ref="requestProcessor" />
+    </bean>
+
+    <bean id="FixedFlexImpl" class="org.opendaylight.transportpce.common.FixedFlex.FixedFlexImpl" >
+    </bean>
+
     <service ref="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
-
+    <service ref="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
+    <service ref="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
     <service ref="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
-
     <service ref="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
-
     <service ref="crossConnect" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
+    <service ref="FixedFlexImpl" interface="org.opendaylight.transportpce.common.FixedFlex.FixedFlexInterface"/>
+
 
 </blueprint>

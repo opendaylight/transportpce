@@ -10,9 +10,6 @@ package org.opendaylight.transportpce.common.openroadminterfaces;
 
 import java.util.Optional;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
-
 public interface OpenRoadmInterfaces {
 
     /**
@@ -32,7 +29,7 @@ public interface OpenRoadmInterfaces {
      * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
      *
      */
-    void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException;
+    <T> void postInterface(String nodeId, T ifBuilder) throws OpenRoadmInterfaceException;
 
     /**
      * This methods does an edit-config operation on the openROADM device in
@@ -62,7 +59,7 @@ public interface OpenRoadmInterfaces {
      *
      * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
      */
-    Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
+    <T> Optional<T> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 
     /**
      * This methods does an edit-config operation on the openROADM device in

@@ -8,33 +8,41 @@ module org-openroadm-common-types {
     "OpenROADM.org";
   description
     "YANG definitions of common types.
-
-      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
+       
+      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016, 
       AT&T Intellectual Property.  All other rights reserved.
-
-      Redistribution and use in source and binary forms, with or without modification,
+      
+      Redistribution and use in source and binary forms, with or without modification, 
       are permitted provided that the following conditions are met:
-
-      * Redistributions of source code must retain the above copyright notice, this
+      
+      * Redistributions of source code must retain the above copyright notice, this 
         list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice,
-        this list of conditions and the following disclaimer in the documentation and/or
+      * Redistributions in binary form must reproduce the above copyright notice, 
+        this list of conditions and the following disclaimer in the documentation and/or 
         other materials provided with the distribution.
-      * Neither the Members of the Open ROADM MSA Agreement nor the names of its
-        contributors may be used to endorse or promote products derived from this software
+      * Neither the Members of the Open ROADM MSA Agreement nor the names of its 
+        contributors may be used to endorse or promote products derived from this software 
         without specific prior written permission.
-
-      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
-      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
-      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
-      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+      
+      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS'' 
+      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT, 
+      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA, 
+      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
+  revision 2017-09-29 {
+    description
+      "Version 2.1";
+  }
   revision 2017-06-26 {
     description
       "Version 2.0";
@@ -44,23 +52,33 @@ module org-openroadm-common-types {
       "Version 1.2";
   }
 
-  grouping physical-location {
-    leaf rack {
-      type string;
-      mandatory false;
-    }
-    leaf shelf {
-      type string;
-      mandatory false;
-    }
-    leaf slot {
-      type string;
-      mandatory false;
-    }
-    leaf subSlot {
-      type string;
-      mandatory false;
-    }
+  identity och-rate-identity {
+    description
+      "A unique och rate identification";
+  }
+
+  identity R200G {
+    base och-rate-identity;
+    description
+      "Identity for 200G Rate";
+  }
+
+  identity R100G {
+    base och-rate-identity;
+    description
+      "Identity for 100G Rate";
+  }
+
+  identity R10.7G {
+    base och-rate-identity;
+    description
+      "Identity for 10.7G Rate";
+  }
+
+  identity R11.1G {
+    base och-rate-identity;
+    description
+      "Identity for 11.1G Rate";
   }
 
   typedef node-types {
@@ -86,6 +104,21 @@ module org-openroadm-common-types {
        4. extplug for external plugable";
   }
 
+  typedef node-id-type {
+    type string {
+      length "7..63";
+      pattern "([a-zA-Z][a-zA-Z0-9-]{5,18}[a-zA-Z0-9])" {
+        error-message
+          "A node-id must be 7 to 63 characters in length.
+           A node-id can contain letters, numbers, and hyphens.
+           The first character must be a letter.
+           The last character must be a letter or number.";
+      }
+    }
+    description
+      "Globally unique identifer for a device.";
+  }
+
   typedef xpdr-node-types {
     type enumeration {
       enum "tpdr" {
@@ -94,94 +127,120 @@ module org-openroadm-common-types {
       enum "mpdr" {
         value 2;
       }
+      enum "switch" {
+        value 3;
+      }
+      enum "regen" {
+        value 4;
+      }
+      enum "regen-uni" {
+        value 5;
+      }
     }
     description
       "Identifier for Xponder node type
        1. Transponder
-       2. Muxponder";
+       2. Muxponder
+       3. OTN switchponder
+       4. Regenerator
+       5. Regenerator based on unidirectional model";
   }
 
   typedef frequency-THz {
-    description
-      "Frequency value in THz.";
     type decimal64 {
       fraction-digits 8;
     }
     units "THz";
+    description
+      "Frequency value in THz.";
   }
 
   typedef frequency-GHz {
-    description
-      "Frequency value in GHz.";
     type decimal64 {
       fraction-digits 5;
     }
     units "GHz";
+    description
+      "Frequency value in GHz.";
   }
 
   typedef power-dBm {
-    description
-      "Power value in dBm.";
     type decimal64 {
       fraction-digits 2;
     }
     units "dBm";
+    description
+      "Power value in dBm.";
   }
 
   typedef ratio-dB {
-    description
-      "Power ratio in dB.";
     type decimal64 {
       fraction-digits 3;
     }
     units "dB";
+    description
+      "Power ratio in dB.";
   }
 
   typedef fiber-pmd {
-    description
-      "Polarization Mode Dispersion expressed in ps/km(1/2).";
     type decimal64 {
       fraction-digits 2;
     }
     units "ps/(km[1/2])";
+    description
+      "Polarization Mode Dispersion expressed in ps/km(1/2).";
   }
 
   typedef amplifier-types {
     type enumeration {
-      enum "std" {
+      enum "standard" {
         value 1;
       }
     }
     description
-      "3 digit identifier for amplifier type
-       1. std for standard amplifier as defined initially
+      "identifier for amplifier type
+       1. standard for amplifier as defined initially in the ROADM MSA specifications
        To be completed if/when additional amplifier types are required ";
   }
 
-  typedef amplifier-operational-mode {
-    description
-      "Operational mode for the amplifier: this parameter will
-       allow modeling different operational modes for switch-gain amplifiers
-       The enum is to be completed/modified when new amplifiers are specified ";
+  typedef line-amplifier-control-mode {
     type enumeration {
-      enum "Mode1" {
-        value 1;
-      }
-      enum "Mode2" {
+      enum "gainLoss" {
         value 2;
       }
-      enum "Mode3" {
+      enum "off" {
         value 3;
       }
-      enum "Mode4" {
+    }
+    description
+      "Identifies the line amplifier control mode, either off or gain.";
+  }
+
+  typedef amplifier-gain-range {
+    type enumeration {
+      enum "gain-range-1" {
+        value 1;
+      }
+      enum "gain-range-2" {
+        value 2;
+      }
+      enum "gain-range-3" {
+        value 3;
+      }
+      enum "gain-range-4" {
         value 4;
       }
     }
+    description
+      "Operational mode for the amplifier:  
+       this parameter allows modeling different operational modes (gain ranges) ,notably for switched-gain amplifiers.
+       It indicates which performance model shall be used by the path feasibility engine. 
+       For standard amplifier, or when performance evaluation is based on incremental noise, use gain-range-1.
+       When performance evaluation is based on advanced parameters, specify used gain-range (1 to 4).
+       Up to release 2.1, only gain-range-1 is to be used (default value) ";
   }
 
   typedef severity {
-    description
-      "Severity, based on X.733 perceived severity";
     type enumeration {
       enum "critical" {
         value 1;
@@ -202,11 +261,11 @@ module org-openroadm-common-types {
         value 6;
       }
     }
+    description
+      "Severity, based on X.733 perceived severity";
   }
 
   typedef activate-notification-type {
-    description
-      "Type of notification on software or database activation events";
     type enumeration {
       enum "activate" {
         value 1;
@@ -216,7 +275,7 @@ module org-openroadm-common-types {
       enum "commit" {
         value 2;
         description
-          "commit the software or database.
+          "commit the software or database. 
            For software activate, this event can happen in the following scenarios:
              1) immediately when user issue db-activate command without rollBackTimer
                 or if the rollBackTimer is specified as 00-00-00;
@@ -232,17 +291,17 @@ module org-openroadm-common-types {
           "cancel the database or software activation operation.
            For software activate, this event can happen in the following cases:
              1) when the rollBackTimer expires;
-             2) when the user issues cancel-rollback-timer with accept=false.
+             2) when the user issues cancel-rollback-timer with accept=false.  
            For database activate, this event can happen in the following cases:
              1) when the rollBackTimer expires;
              2) when the user issues cancel-rollback-timer with accept=false.";
       }
     }
+    description
+      "Type of notification on software or database activation events";
   }
 
   typedef rpc-status {
-    description
-      "status of RPC ";
     type enumeration {
       enum "Successful" {
         value 1;
@@ -251,25 +310,11 @@ module org-openroadm-common-types {
         value 2;
       }
     }
-  }
-
-  grouping rpc-response-status {
-    leaf status {
-      type rpc-status;
-      mandatory true;
-      description
-        "Successful or Failed";
-    }
-    leaf status-message {
-      type string;
-      description
-        "Gives a more detailed status";
-    }
+    description
+      "status of RPC ";
   }
 
   typedef extended-rpc-status {
-    description
-      "status of RPC ";
     type enumeration {
       enum "Successful" {
         value 1;
@@ -281,25 +326,11 @@ module org-openroadm-common-types {
         value 3;
       }
     }
-  }
-
-  grouping extended-rpc-response-status {
-    leaf status {
-      type extended-rpc-status;
-      mandatory true;
-      description
-        "Successful, Failed or In-progress";
-    }
-    leaf status-message {
-      type string;
-      description
-        "Gives a more detailed status.";
-    }
+    description
+      "status of RPC ";
   }
 
   typedef lifecycle-state {
-    description
-      "Lifecycle state.";
     type enumeration {
       enum "deployed" {
         value 1;
@@ -325,12 +356,18 @@ module org-openroadm-common-types {
       enum "draft" {
         value 8;
       }
+      enum "deploy-failed" {
+        value 9;
+      }
+      enum "undeploy-failed" {
+        value 10;
+      }
     }
+    description
+      "Lifecycle state.";
   }
 
   typedef state {
-    description
-      "State that indicates whether the resource is able to provide fullfill its role - carry traffic, etc.";
     type enumeration {
       enum "inService" {
         value 1;
@@ -342,6 +379,8 @@ module org-openroadm-common-types {
         value 3;
       }
     }
+    description
+      "State that indicates whether the resource is able to provide fullfill its role - carry traffic, etc.";
   }
 
   typedef optic-types {
@@ -352,21 +391,6 @@ module org-openroadm-common-types {
       enum "dwdm" {
         value 2;
       }
-    }
-  }
-
-  grouping equipment-type {
-    leaf type {
-      type equipment-type-enum;
-      mandatory true;
-      config false;
-    }
-    leaf extension {
-      description
-        "Populated with equipment type when enum value is set to vendorExtension";
-      type string;
-      mandatory false;
-      config false;
     }
   }
 
@@ -397,8 +421,6 @@ module org-openroadm-common-types {
   }
 
   typedef optical-control-mode {
-    description
-      "Optical Control Mode: identifies specific algorithm related to power management and general optical control.";
     type enumeration {
       enum "power" {
         value 1;
@@ -410,6 +432,8 @@ module org-openroadm-common-types {
         value 3;
       }
     }
+    description
+      "Optical Control Mode: identifies specific algorithm related to power management and general optical control.";
     reference "openroadm.org: Open ROADM MSA Specification.";
   }
 
@@ -445,21 +469,21 @@ module org-openroadm-common-types {
   }
 
   typedef wavelength-duplication-type {
+    type enumeration {
+      enum "one-per-srg" {
+        value 1;
+        description
+          "The SRG cannot handle wavelength duplication. Attempting to provision a connection on this SRG that uses the same wavelength as an existing service will result in failure.";
+      }
+      enum "one-per-degree" {
+        value 2;
+        description
+          "The SRG can handle wavelength duplication, but only one per degree. Attempting to provision a connection on this SRG that uses the same wavelength as an existing service will succeed, so long as the connections are not using the same degree.";
+      }
+    }
     description
       "One per srg is applied to C/D add/drop group
        one per degree is applied to C/D/C add drop group";
-    type enumeration {
-      enum "one-per-srg" {
-        description
-          "The SRG cannot handle wavelength duplication. Attempting to provision a connection on this SRG that uses the same wavelength as an existing service will result in failure.";
-        value 1;
-      }
-      enum "one-per-degree" {
-        description
-          "The SRG can handle wavelength duplication, but only one per degree. Attempting to provision a connection on this SRG that uses the same wavelength as an existing service will succeed, so long as the connections are not using the same degree.";
-        value 2;
-      }
-    }
   }
 
   typedef port-qual {
@@ -492,35 +516,6 @@ module org-openroadm-common-types {
         value 9;
       }
     }
-  }
-
-  identity och-rate-identity {
-    description
-      "A unique och rate identification";
-  }
-
-  identity R200G {
-    base och-rate-identity;
-    description
-      "Identity for 200G Rate";
-  }
-
-  identity R100G {
-    base och-rate-identity;
-    description
-      "Identity for 100G Rate";
-  }
-
-  identity R10.7G {
-    base och-rate-identity;
-    description
-      "Identity for 10.7G Rate";
-  }
-
-  identity R11.1G {
-    base och-rate-identity;
-    description
-      "Identity for 11.1G Rate";
   }
 
   typedef modulation-format {
@@ -578,5 +573,67 @@ module org-openroadm-common-types {
     }
     description
       "Modulation format";
+  }
+
+  grouping physical-location {
+    leaf rack {
+      type string;
+      mandatory false;
+    }
+    leaf shelf {
+      type string;
+      mandatory false;
+    }
+    leaf slot {
+      type string;
+      mandatory false;
+    }
+    leaf subSlot {
+      type string;
+      mandatory false;
+    }
+  }
+
+  grouping rpc-response-status {
+    leaf status {
+      type rpc-status;
+      mandatory true;
+      description
+        "Successful or Failed";
+    }
+    leaf status-message {
+      type string;
+      description
+        "Gives a more detailed status";
+    }
+  }
+
+  grouping extended-rpc-response-status {
+    leaf status {
+      type extended-rpc-status;
+      mandatory true;
+      description
+        "Successful, Failed or In-progress";
+    }
+    leaf status-message {
+      type string;
+      description
+        "Gives a more detailed status.";
+    }
+  }
+
+  grouping equipment-type {
+    leaf type {
+      type equipment-type-enum;
+      config false;
+      mandatory true;
+    }
+    leaf extension {
+      type string;
+      config false;
+      mandatory false;
+      description
+        "Populated with equipment type when enum value is set to vendorExtension";
+    }
   }
 }
