@@ -8,12 +8,10 @@
 
 package org.opendaylight.transportpce.common.crossconnect;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.get.connection.port.trail.output.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 
 public interface CrossConnect {
 
@@ -28,7 +26,7 @@ public interface CrossConnect {
      *
      * @return Roadm connection subtree from the device.
      */
-    Optional<RoadmConnections> getCrossConnect(String deviceId, String connectionNumber);
+    <T> Optional<T> getCrossConnect(String deviceId, String connectionNumber);
 
     /**
      * This method does a post(edit-config) on roadm connection subtree for a
@@ -75,10 +73,25 @@ public interface CrossConnect {
      *            Destination logical connection point.
      *
      * @return list of Ports object type.
-     *
-     * @throws OpenRoadmInterfaceException
-     *            OpenRoadm Interface Exception.
      */
-    List<Ports> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp)
+    <T> List<T> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp)
             throws OpenRoadmInterfaceException;
+
+    /**
+     * This method does an edit-config on roadm connection subtree for a given
+     * connection number in order to set power level for use by the optical
+     * power control.
+     *
+     * @param deviceId
+     *            Device id.
+     * @param mode
+     *            Optical control modelcan be off, power or gainLoss.
+     * @param powerValue
+     *            Power value in DBm.
+     * @param connectionNumber
+     *            Name of the cross connect.
+     * @return true/false based on status of operation.
+     */
+    boolean setPowerLevel(String deviceId, Enum mode, BigDecimal powerValue,
+                          String connectionNumber);
 }
