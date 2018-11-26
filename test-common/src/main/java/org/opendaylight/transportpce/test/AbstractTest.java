@@ -8,6 +8,8 @@
 package org.opendaylight.transportpce.test;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
+import org.opendaylight.controller.md.sal.binding.api.NotificationService;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
 import org.opendaylight.transportpce.test.common.DataStoreContext;
 import org.opendaylight.transportpce.test.common.DataStoreContextImpl;
@@ -30,6 +32,14 @@ public abstract class AbstractTest {
 
     public DataStoreContext getDataStoreContextUtil() {
         return dataStoreContextUtil;
+    }
+
+    public NotificationPublishService getNotificationPublishService() {
+        return dataStoreContextUtil.getNotificationPublishService();
+    }
+
+    public NotificationService getNotificationService() {
+        return dataStoreContextUtil.getNotificationService();
     }
 
 }

@@ -1,30 +1,22 @@
-diff --git a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
-index 3a07abb..f79862d 100644
---- a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
-+++ b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
-@@ -26,6 +26,7 @@ import org.opendaylight.transportpce.servicehandler.ServiceInput;
- import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
- import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
- import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
+diff --git a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java
+index 1c8ddfe..b83b8cc 100644
+--- a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java
++++ b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java
+@@ -18,6 +18,7 @@ import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
+ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+ import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
+ import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 +import org.opendaylight.transportpce.servicehandler.stub.StubRendererServiceOperations;
- import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateValidation;
- import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
- import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck;
-@@ -87,7 +88,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
- 
-     private DataBroker db;
-     private ServiceDataStoreOperations serviceDataStoreOperations;
--    private RendererServiceOperations rendererServiceOperations;
-+    private StubRendererServiceOperations rendererServiceOperations;
-     private PCEServiceWrapper pceServiceWrapper;
- 
-     //TODO: remove private request fields as they are in global scope
-@@ -96,7 +97,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
-             RendererServiceOperations rendererServiceOperations,
-             NetworkModelWavelengthService networkModelWavelengthService) {
-         this.db = databroker;
+ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.TransportpcePceListener;
+ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.TransportpceRendererListener;
+ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.OrgOpenroadmServiceService;
+@@ -55,7 +56,8 @@ public class ServicehandlerProvider {
+         this.rpcRegistry = rpcProviderRegistry;
+         this.notificationService = notificationService;
+         this.pathComputationService = pathComputationService;
 -        this.rendererServiceOperations = rendererServiceOperations;
-+        this.rendererServiceOperations = new StubRendererServiceOperations(networkModelWavelengthService, db);
-         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
-         this.serviceDataStoreOperations.initialize();
-         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService);
++        this.rendererServiceOperations = new StubRendererServiceOperations(networkModelWavelengthService, dataBroker,
++                notificationPublishService);
+         this.networkModelWavelengthService = networkModelWavelengthService;
+         this.notificationPublishService = notificationPublishService;
+     }

@@ -163,7 +163,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
                         .child(Services.class, new ServicesKey(serviceName));
                 Services services = new ServicesBuilder(readService.get()).setOperationalState(operationalState)
-                        .setAdministrativeState(administrativeState).build();
+                        .setAdministrativeState(administrativeState)
+                        .build();
                 writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
                 writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
                 return OperationResult.ok(SUCCESSFUL_MESSAGE);
@@ -213,8 +214,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     }
 
     @Override
-    public OperationResult createService(ServiceCreateInput serviceCreateInput,
-            PathComputationRequestOutput outputFromPce) {
+    public OperationResult createService(ServiceCreateInput serviceCreateInput) {
         LOG.debug("Writing '{}' Service", serviceCreateInput.getServiceName());
         try {
             InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
@@ -232,8 +232,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     }
 
     @Override
-    public OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput,
-            PathComputationRequestOutput outputFromPce) {
+    public OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput) {
         LOG.debug("Writing '{}' Temp Service", tempServiceCreateInput.getCommonId());
         try {
             InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list

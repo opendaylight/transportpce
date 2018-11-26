@@ -216,9 +216,9 @@ class TransportPCEtesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service rendered successfully !',
+        self.assertIn('PCE calculation in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(10)
+        time.sleep(20)
 
     # Create Service 'test' with not compliant parameter : no 'sdnc-request-header' parameter
     def test_08_create_service(self):
@@ -651,9 +651,9 @@ class TransportPCEtesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service delete was successful!',
+        self.assertIn('Renderer service delete in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(1)
+        time.sleep(20)
 
     # Verify 'test' service deleted
     def test_13_get_service(self):
@@ -765,9 +765,9 @@ class TransportPCEtesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service rendered successfully !',
+        self.assertIn('PCE calculation in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(10)
+        time.sleep(20)
 
 
     # Create Temp Service not compliant with no common-id
@@ -912,12 +912,12 @@ class TransportPCEtesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service delete was successful!',
+        self.assertIn('Renderer service delete in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(1)
+        time.sleep(20)
 
 # Verify 'test' service deleted
-    def test_13_verify_temp_service_deleted(self):
+    def test_19_verify_temp_service_deleted(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/ASATT1234567"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',

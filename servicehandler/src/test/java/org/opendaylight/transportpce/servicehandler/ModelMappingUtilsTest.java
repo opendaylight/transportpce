@@ -44,7 +44,7 @@ public class ModelMappingUtilsTest extends AbstractTest {
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         PathComputationService pathComputationService = new PathComputationServiceImpl(getDataBroker(),
             notificationPublishService);
-        pceServiceWrapper = new PCEServiceWrapper(pathComputationService);
+        pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.pathComputationRequestOutput = pceServiceWrapper.performPCE(ServiceDataUtils.buildServiceCreateInput(),
             true);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");

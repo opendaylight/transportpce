@@ -5,10 +5,12 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.servicehandler;
+package org.opendaylight.transportpce.servicehandler.utils;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import org.opendaylight.transportpce.servicehandler.MappingConstraints;
+import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.path.computation.request.input.ServiceAEndBuilder;

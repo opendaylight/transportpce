@@ -16,6 +16,7 @@ public final class ResponseCodes {
 
     public static final String SUCCESS_RESULT = "Success";
     public static final String FAILED_RESULT = "Failed";
+    public static final String IN_PORGRESS_RESULT = "In Progress";
 
     private ResponseCodes() {
     }

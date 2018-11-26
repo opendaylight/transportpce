@@ -19,6 +19,8 @@ import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.transportpce.servicehandler.stub.StubRendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -39,12 +41,16 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         PathComputationService pathComputationService = new PathComputationServiceImpl(getDataBroker(),
             notificationPublishService);
-        this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService);
-        this.rendererServiceOperations =
-                new StubRendererServiceOperations(this.networkModelWavelengthService, getDataBroker(),
-                        notificationPublishService);
+        PceListenerImpl pceListenerImpl = new PceListenerImpl(rendererServiceOperations, pathComputationService,
+                notificationPublishService, null);
+        RendererListenerImpl rendererListenerImpl =
+                new RendererListenerImpl(pathComputationService, notificationPublishService);
+        this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
+        this.rendererServiceOperations = new StubRendererServiceOperations(this.networkModelWavelengthService,
+                null, notificationPublishService);
         this.serviceHandler = new ServicehandlerImpl(getDataBroker(), pathComputationService,
-                this.rendererServiceOperations, this.networkModelWavelengthService);
+                this.rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
+                this.networkModelWavelengthService);
     }
 
 
@@ -56,8 +62,8 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
 
     @Test
     public void modifyIfServiceNotPresent() {
-        OperationResult result = this.serviceDataStoreOperations.modifyService("service 1",
-            State.InService, State.InService);
+        OperationResult result =
+                this.serviceDataStoreOperations.modifyService("service 1", State.InService, State.InService);
         Assert.assertEquals("Service " + "service 1" + " is not present!", result.getResultMessage());
     }
 
@@ -92,8 +98,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
         PathComputationRequestOutput pathComputationRequestOutput = this.pceServiceWrapper.performPCE(createInput,
             true);
-        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput,
-            pathComputationRequestOutput);
+        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput);
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 0);
         Assert.assertEquals(null, result);
@@ -105,8 +110,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
         PathComputationRequestOutput pathComputationRequestOutput = this.pceServiceWrapper.performPCE(createInput,
             true);
-        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput,
-            pathComputationRequestOutput);
+        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput);
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 1);
         Assert.assertEquals(null, result);
@@ -118,8 +122,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
         PathComputationRequestOutput pathComputationRequestOutput = this.pceServiceWrapper.performPCE(createInput,
             true);
-        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput,
-            pathComputationRequestOutput);
+        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput);
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 2);
         Assert.assertEquals(null, result);

@@ -7,49 +7,151 @@
  */
 package org.opendaylight.transportpce.servicehandler.listeners;
 
+import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
+import org.opendaylight.transportpce.common.OperationResult;
+import org.opendaylight.transportpce.pce.service.PathComputationService;
+import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
+import org.opendaylight.transportpce.servicehandler.ServiceInput;
+import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
+import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.ServicePathRpcResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.TransportpcePceListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.service.path.rpc.result.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.RpcStatusEx;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.ServicePathNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.ResponseParameters;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.ResponseParametersBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Deprecated
 public class PceListenerImpl implements TransportpcePceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
 
-    private ServicePathRpcResult servicePathRpcResult = null;
+    private ServicePathRpcResult servicePathRpcResult;
+    private RendererServiceOperations rendererServiceOperations;
+    private ServiceDataStoreOperations serviceDataStoreOperations;
+    private PCEServiceWrapper pceServiceWrapper;
+    private ServiceInput input;
+    private Boolean serviceReconfigure;
+    private Boolean tempService;
+
+    public PceListenerImpl(RendererServiceOperations rendererServiceOperations,
+            PathComputationService pathComputationService, NotificationPublishService notificationPublishService,
+            ServiceDataStoreOperations serviceDataStoreOperations) {
+        this.rendererServiceOperations = rendererServiceOperations;
+        this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
+        this.serviceDataStoreOperations = serviceDataStoreOperations;
+        setServiceReconfigure(false);
+        setInput(null);
+        setTempService(false);
+    }
 
     @Override
     public void onServicePathRpcResult(ServicePathRpcResult notification) {
         if (!compareServicePathRpcResult(notification)) {
             servicePathRpcResult = notification;
-            StringBuilder build = new StringBuilder();
-            build.append(
-                    "Received '" + notification.getNotificationType() + "' StubPce notification " + "from service '"
-                            + notification.getServiceName() + "' " + "with status '" + notification.getStatus() + "'");
-            build.append(" with StatusMessage '" + notification.getStatusMessage() + "'");
-            if ((notification.getStatus() == RpcStatusEx.Successful) && (notification.getNotificationType()
-                    .getIntValue() == ServicePathNotificationTypes.PathComputationRequest.getIntValue())) {
-                build.append(" PathDescription : " + notification.getPathDescription().toString());
-                /*
-                 * switch (action.getIntValue()) { case 1: //service-create case
-                 * 3: //service-delete case 8: //service-reconfigure case 9:
-                 * //service-restoration case 10://service-reversion case
-                 * 11://service-reroute break;
-                 *
-                 * default: break; }
-                 */
+            PathDescription pathDescription = null;
+            switch (servicePathRpcResult.getNotificationType().getIntValue()) {
+                case 1: /** path-computation-request. */
+                    LOG.info("PCE '{}' Notification received : {}",servicePathRpcResult.getNotificationType().getName(),
+                            notification);
+                    if (servicePathRpcResult.getStatus() == RpcStatusEx.Successful) {
+                        LOG.info("PCE calculation done OK !");
+                        if (servicePathRpcResult.getPathDescription() != null) {
+                            pathDescription = new PathDescriptionBuilder()
+                                    .setAToZDirection(servicePathRpcResult.getPathDescription().getAToZDirection())
+                                .setZToADirection(servicePathRpcResult.getPathDescription().getZToADirection()).build();
+                            LOG.info("PathDescription gets : {}", pathDescription);
+                            if (input == null) {
+                                LOG.error("Input is null !");
+                                return;
+                            }
+                            OperationResult operationResult = null;
+                            if (tempService) {
+                                operationResult = this.serviceDataStoreOperations
+                                    .createTempService(input.getTempServiceCreateInput());
+                                if (!operationResult.isSuccess()) {
+                                    LOG.error("Temp Service not created in datastore !");
+                                }
+                            } else {
+                                operationResult = this.serviceDataStoreOperations
+                                    .createService(input.getServiceCreateInput());
+                                if (!operationResult.isSuccess()) {
+                                    LOG.error("Service not created in datastore !");
+                                }
+                            }
+                            ResponseParameters responseParameters = new ResponseParametersBuilder()
+                                    .setPathDescription(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c
+                                            ._interface.service.types.rev171016.response.parameters.sp.response
+                                            .parameters.PathDescriptionBuilder(pathDescription).build())
+                                    .build();
+                            PathComputationRequestOutput pceResponse = new PathComputationRequestOutputBuilder()
+                                    .setResponseParameters(responseParameters).build();
+                            OperationResult operationServicePathSaveResult =
+                                    this.serviceDataStoreOperations.createServicePath(input, pceResponse);
+                            if (!operationServicePathSaveResult.isSuccess()) {
+                                LOG.error("Service Path not created in datastore !");
+                            }
+                            ServiceImplementationRequestInput serviceImplementationRequest =
+                                    ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
+                            LOG.info("Sending serviceImplementation request : {}", serviceImplementationRequest);
+                            this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest);
+                        } else {
+                            LOG.error("'PathDescription' parameter is null ");
+                            return;
+                        }
+                    } else if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
+                        LOG.error("PCE path computation failed !");
+                        return;
+                    }
+                    break;
+                case 2: /** cancel-resource-reserve. */
+                    if (servicePathRpcResult.getStatus() == RpcStatusEx.Successful) {
+                        LOG.info("PCE cancel resource done OK !");
+                        OperationResult deleteServicePathOperationResult =
+                                this.serviceDataStoreOperations.deleteServicePath(input.getServiceName());
+                        if (!deleteServicePathOperationResult.isSuccess()) {
+                            LOG.warn("Service path was not removed from datastore!");
+                        }
+                        OperationResult deleteServiceOperationResult = null;
+                        if (tempService) {
+                            deleteServiceOperationResult =
+                                    this.serviceDataStoreOperations.deleteTempService(input.getServiceName());
+                            if (!deleteServiceOperationResult.isSuccess()) {
+                                LOG.warn("Service was not removed from datastore!");
+                            }
+                        } else {
+                            deleteServiceOperationResult =
+                                    this.serviceDataStoreOperations.deleteService(input.getServiceName());
+                            if (!deleteServiceOperationResult.isSuccess()) {
+                                LOG.warn("Service was not removed from datastore!");
+                            }
+                        }
+                        /**
+                         * if it was an RPC serviceReconfigure, re-launch PCR.
+                         */
+                        if (this.serviceReconfigure) {
+                            LOG.info("cancel resource reserve done, relaunching PCE path computation ...");
+                            this.pceServiceWrapper.performPCE(input.getServiceCreateInput(), true);
+                            this.serviceReconfigure = false;
+                        }
+                    } else if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
+                        LOG.info("PCE cancel resource failed !");
+                    }
+                    break;
+                default:
+                    break;
             }
-
-            LOG.info(build.toString());
         } else {
-            LOG.info("ServicePathRpcResult already wired !");
+            LOG.warn("ServicePathRpcResult already wired !");
         }
     }
 
-    @Deprecated
     private Boolean compareServicePathRpcResult(ServicePathRpcResult notification) {
         Boolean result = true;
         if (servicePathRpcResult == null) {
@@ -69,6 +171,22 @@ public class PceListenerImpl implements TransportpcePceListener {
             }
         }
         return result;
+    }
+
+    public void setInput(ServiceInput serviceInput) {
+        this.input = serviceInput;
+    }
+
+    public void setServiceReconfigure(Boolean serv) {
+        this.serviceReconfigure = serv;
+    }
+
+    public void setserviceDataStoreOperations(ServiceDataStoreOperations serviceData) {
+        this.serviceDataStoreOperations = serviceData;
+    }
+
+    public void setTempService(Boolean tempService) {
+        this.tempService = tempService;
     }
 
 }

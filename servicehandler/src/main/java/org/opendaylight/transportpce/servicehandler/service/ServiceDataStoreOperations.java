@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.servicehandler.service;
 
 import java.util.Optional;
+
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
@@ -89,13 +90,10 @@ public interface ServiceDataStoreOperations {
     /**
      * create new service entry.
      *
-     * @param serviceCreateInput
-     *   serviceCreateInput data for creation of service
-     * @param outputFromPce
-     *   output from pce request which is used as input for creating of service.
+     * @param serviceCreateInput serviceCreateInput data for creation of service
      * @return result of createService operation
      */
-    OperationResult createService(ServiceCreateInput serviceCreateInput, PathComputationRequestOutput outputFromPce);
+    OperationResult createService(ServiceCreateInput serviceCreateInput);
 
     /**
      * create new servicePath entry.
@@ -111,14 +109,11 @@ public interface ServiceDataStoreOperations {
     /**
      * create new Temp service entry.
      *
-     * @param tempServiceCreateInput
-     *   tempServiceCreateInput data for creation of service
-     * @param outputFromPce
-     *   output from pce request which is used as input for creating of service.
+     * @param tempServiceCreateInput tempServiceCreateInput data for creation of
+     *                               service
      * @return result of createTempService operation
      */
-    OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput,
-        PathComputationRequestOutput outputFromPce);
+    OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput);
 
     /**
      * deleteServicePath by name.

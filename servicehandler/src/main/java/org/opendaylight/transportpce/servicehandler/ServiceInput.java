@@ -14,9 +14,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input.ServiceZEndBuilder;
 
 /**
  * Super class of {@link ServiceCreateInput} and {@link TempServiceCreateInput}.
@@ -36,19 +40,6 @@ public class ServiceInput {
     private String customer;
     private String customerContact;
 
-    public ServiceInput(TempServiceCreateInput tempServiceCreateInput) {
-        setServiceName(tempServiceCreateInput.getCommonId());
-        setCommonId(tempServiceCreateInput.getCommonId());
-        setConnectionType(tempServiceCreateInput.getConnectionType());
-        setSdncRequestHeader(tempServiceCreateInput.getSdncRequestHeader());
-        setHardConstraints(tempServiceCreateInput.getHardConstraints());
-        setSoftConstraints(tempServiceCreateInput.getSoftConstraints());
-        setServiceAEnd(tempServiceCreateInput.getServiceAEnd());
-        setServiceZEnd(tempServiceCreateInput.getServiceZEnd());
-        setCustomer(tempServiceCreateInput.getCustomer());
-        setCustomerContact(tempServiceCreateInput.getCustomerContact());
-    }
-
     public ServiceInput(ServiceCreateInput serviceCreateInput) {
         setServiceName(serviceCreateInput.getServiceName());
         setCommonId(serviceCreateInput.getCommonId());
@@ -67,11 +58,48 @@ public class ServiceInput {
         setSdncRequestHeader(serviceDeleteInput.getSdncRequestHeader());
     }
 
+    public ServiceInput(TempServiceCreateInput tempServiceCreateInput) {
+        setServiceName(tempServiceCreateInput.getCommonId());
+        setCommonId(tempServiceCreateInput.getCommonId());
+        setConnectionType(tempServiceCreateInput.getConnectionType());
+        setSdncRequestHeader(tempServiceCreateInput.getSdncRequestHeader());
+        setHardConstraints(tempServiceCreateInput.getHardConstraints());
+        setSoftConstraints(tempServiceCreateInput.getSoftConstraints());
+        setServiceAEnd(tempServiceCreateInput.getServiceAEnd());
+        setServiceZEnd(tempServiceCreateInput.getServiceZEnd());
+        setCustomer(tempServiceCreateInput.getCustomer());
+        setCustomerContact(tempServiceCreateInput.getCustomerContact());
+    }
+
     public ServiceInput(TempServiceDeleteInput tempServiceDeleteInput) {
         String comId = tempServiceDeleteInput.getCommonId();
         setServiceName(comId);
         setCommonId(comId);
         setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId(comId).build());
+    }
+
+    public ServiceCreateInput getServiceCreateInput() {
+        return new ServiceCreateInputBuilder().setServiceName(serviceName)
+                .setCommonId(commonId)
+                .setConnectionType(connectionType)
+                .setSdncRequestHeader(sdncRequestHeader)
+                .setHardConstraints(hardConstraints)
+                .setSoftConstraints(softConstraints)
+                .setServiceAEnd(new ServiceAEndBuilder(serviceAEnd).build())
+                .setServiceZEnd(new ServiceZEndBuilder(serviceZEnd).build())
+                .setCustomer(customer)
+                .setCustomerContact(customerContact).build();
+    }
+
+    public TempServiceCreateInput getTempServiceCreateInput() {
+        return new TempServiceCreateInputBuilder().setCommonId(commonId)
+                .setConnectionType(connectionType).setSdncRequestHeader(sdncRequestHeader)
+                .setHardConstraints(hardConstraints).setSoftConstraints(softConstraints)
+                .setServiceAEnd(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service
+                        .create.input.ServiceAEndBuilder(serviceAEnd).build())
+                .setServiceZEnd(new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service
+                        .create.input.ServiceZEndBuilder(serviceZEnd).build()).setCustomer(customer)
+                .setCustomerContact(customerContact).build();
     }
 
     public String getServiceName() {

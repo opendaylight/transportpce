@@ -24,6 +24,10 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
           interface="org.opendaylight.controller.md.sal.binding.api.NotificationService"
           odl:type="default" />
 
+    <reference id="notificationPublishService"
+          interface="org.opendaylight.controller.md.sal.binding.api.NotificationPublishService"
+          odl:type="default" />
+
     <reference id="pathComputationService"
           interface="org.opendaylight.transportpce.pce.service.PathComputationService"/>
 
@@ -39,6 +43,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="rpcRegistry" />
         <argument ref="dataBroker" />
         <argument ref="notificationService" />
+        <argument ref="notificationPublishService" />
         <argument ref="pathComputationService" />
         <argument ref="rendererServiceOperations" />
         <argument ref="networkModelWavelengthService" />
