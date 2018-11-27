@@ -21,7 +21,7 @@
         <argument ref="portMapping" />
     </bean>
 
-    <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl2">
+    <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
         <argument ref="dataBroker" />
         <argument ref="deviceConfig" />
         <argument ref="linkDiscoveryImpl" />

@@ -98,9 +98,9 @@ public class DeviceConfigImpl implements DeviceConfig {
     }
 
     @Override
-    public List<ConnectionMap> getConnectionMap(String NodeId) {
+    public List<ConnectionMap> getConnectionMap(String nodeId) {
         InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
-        Optional<OrgOpenroadmDevice> deviceObject = this.deviceTransactionManager.getDataFromDevice(NodeId,
+        Optional<OrgOpenroadmDevice> deviceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, deviceIID, Timeouts.DEVICE_READ_TIMEOUT,
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (deviceObject.isPresent()) {

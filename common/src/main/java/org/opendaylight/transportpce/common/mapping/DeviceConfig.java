@@ -87,11 +87,11 @@ public interface DeviceConfig {
      * This method retrieves the connection-map list from operational datastore of a
      * given device.
      *
-     * @param NodeId
+     * @param nodeId
      *            node ID
      *
      * @return connection-map list or null if container is absent
      */
-    List<ConnectionMap> getConnectionMap(String NodeId);
+    List<ConnectionMap> getConnectionMap(String nodeId);
 
 }

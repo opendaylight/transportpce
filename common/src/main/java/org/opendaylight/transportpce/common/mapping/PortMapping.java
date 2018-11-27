@@ -18,37 +18,20 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 public interface PortMapping {
 
     /**
-     * This method creates logical to physical port mapping for a given device.
-     * Instead of parsing all the circuit packs/ports in the device this methods
-     * does a selective read operation on degree/srg subtree to get circuit
-     * packs/ports that map to :
+     * When OpenRoadmTopology creates the logical to physical port mapping for a
+     * given device, this methods has just to store the resulting mapping
+     * operation to datastore.
      *
-     * <p>
-     * 1. DEGn-TTP-TX, DEGn-TTP-RX, DEGn-TTP-TXRX
-     *
-     * <p>
-     * 2. SRGn-PPp-TX, SRGn-PPp-RX, SRGn-PPp-TXRX
-     *
-     * <p>
-     * 3. LINEn
-     *
-     * <p>
-     * 4. CLNTn.
-     *
-     * <p>
-     * If the port is Mw it also store the OMS, OTS interface provisioned on the
-     * port. It skips the logical ports that are internal. If operation is
-     * successful the mapping gets stored in datastore corresponding to
-     * portmapping.yang data model.
-     *
-     * @param nodeId
-     *            node ID
-     *
-     * @return true/false based on status of operation
+     * @param deviceInfo
+     *            deviceInfo
+     * @param portMapList
+     *            The list of discovered mapping for the node
+     * @param degreeCpList
+     *            The list of circuit-packs supporting eth interface with lldp
+     *            protocole
+     * @return true if success to store mapping in datastore, false otherwise.
      */
-    boolean createMappingData(String nodeId);
-
-    boolean createMappingData2(Info deviceInfo, List<Mapping> portMapList, List<CpToDegree> degreeCpList);
+    boolean createMappingData(Info deviceInfo, List<Mapping> portMapList, List<CpToDegree> degreeCpList);
 
     /**
      * This method removes mapping data from the datastore after disconnecting

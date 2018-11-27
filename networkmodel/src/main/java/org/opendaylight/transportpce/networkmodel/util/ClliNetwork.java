@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.networkmodel.util;
 
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -16,15 +15,11 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.common.Timeouts;
-import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.network.network.types.ClliNetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkId;
@@ -67,47 +62,10 @@ public final class ClliNetwork {
     }
 
     /**
-     * Create single node entry for CLLI topology.
-     *
-     * @param deviceTransactionManager device transation manager
-     * @param deviceId device ID
-     *
-     * @return node builder status
-     */
-    public static Node createNode(DeviceTransactionManager deviceTransactionManager, String deviceId) {
-        // Read clli from the device
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
-        Optional<Info> deviceInfo = deviceTransactionManager.getDataFromDevice(deviceId,
-            LogicalDatastoreType.OPERATIONAL, infoIID, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        String clli;
-        if (deviceInfo.isPresent()) {
-            clli = deviceInfo.get().getClli();
-        } else {
-            return null;
-        }
-        /*
-         * Create node in the CLLI layer of the network model with nodeId equal
-         * to the clli attribute in the device model's info subtree
-         */
-        NodeBuilder nodeBldr = new NodeBuilder();
-        NodeId nwNodeId = new NodeId(clli);
-        nodeBldr.setNodeId(nwNodeId);
-        nodeBldr.withKey(new NodeKey(nwNodeId));
-        /*
-         * create clli node augmentation defined in openroadm-clli-network.yang
-         */
-        Node1Builder clliAugmentationBldr = new Node1Builder();
-        clliAugmentationBldr.setClli(clli);
-        nodeBldr.addAugmentation(Node1.class, clliAugmentationBldr.build());
-        return nodeBldr.build();
-    }
-
-    /**
      * Other implementation to create single node entry for CLLI topology.
      *
      */
-    public static Node createNode2(String clli, String deviceId) {
+    public static Node createNode(String clli, String deviceId) {
         NodeBuilder nodeBldr = new NodeBuilder();
         NodeId nwNodeId = new NodeId(clli);
         nodeBldr.setNodeId(nwNodeId);

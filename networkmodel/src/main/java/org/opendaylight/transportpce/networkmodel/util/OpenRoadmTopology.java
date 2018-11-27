@@ -40,7 +40,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.n
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.CircuitPack;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPorts;
@@ -165,114 +164,7 @@ public class OpenRoadmTopology {
         return nwBuilder.build();
     }
 
-    public TopologyShard createTopologyShard(String nodeId) {
-        // int numOfDegrees;
-        // int numOfSrgs;
-        // int portDirectionEnum = DEFAULT_PORT_DIRECTION;
-        //
-        // InstanceIdentifier<Info> infoIID =
-        // InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
-        // java.util.Optional<Info> deviceInfoOpt =
-        // this.deviceTransactionManager.getDataFromDevice(nodeId,
-        // LogicalDatastoreType.OPERATIONAL, infoIID,
-        // Timeouts.DEVICE_READ_TIMEOUT,
-        // Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        // Info deviceInfo;
-        // if (deviceInfoOpt.isPresent()) {
-        // deviceInfo = deviceInfoOpt.get();
-        // } else {
-        // LOG.error("Unable to get device info for device {}!", nodeId);
-        // return null;
-        // }
-        // List<Node> nodes = new ArrayList<>();
-        // List<Mapping> portMapList = new ArrayList<>();
-        //
-        // // Check if node is ROADM
-        // if (NodeTypes.Rdm.equals(deviceInfo.getNodeType())) {
-        //
-        // /*
-        // * Adding Degree Node Get Degree Number -> x then get connection
-        // * ports then find the port directions to decide whether TX/RX/TXRX
-        // * Get value for max degree from info subtree, required for
-        // * iteration if not present assume to be 20 (temporary)
-        // */
-        //
-        // Integer maxDegree;
-        // if (deviceInfo.getMaxDegrees() != null) {
-        // maxDegree = deviceInfo.getMaxDegrees();
-        // } else {
-        // maxDegree = MAX_DEGREE;
-        // }
-        //
-        // // Starting with degree Number = 1
-        // Integer degreeCounter = 1;
-        //
-        // while (degreeCounter <= maxDegree) {
-        // LOG.info("creating degree node {}/{}", degreeCounter, maxDegree);
-        // NodeData nodeData = createDegreeNode(nodeId, degreeCounter,
-        // portMapList);
-        // if (nodeData != null) {
-        // NodeBuilder tempNode = nodeData.getNodeBuilder();
-        // portDirectionEnum = nodeData.getPortDirectionEnum();
-        // nodes.add(tempNode.build());
-        // degreeCounter++;
-        // } else {
-        // // null returned if Degree number= degreeCounter not present
-        // // in the device
-        // break;
-        // }
-        // }
-        // numOfDegrees = degreeCounter - 1;
-        //
-        // Integer maxSrg;
-        // if (deviceInfo.getMaxSrgs() != null) {
-        // maxSrg = deviceInfo.getMaxSrgs();
-        // } else {
-        // maxSrg = MAX_SRG;
-        // }
-        //
-        // // Starting with degree Number = 1
-        // Integer srgCounter = 1;
-        //
-        // while (srgCounter <= maxSrg) {
-        // LOG.info("creating SRG node {}/{}", srgCounter, maxSrg);
-        // NodeBuilder tempNode = createSrgNode(nodeId, srgCounter,
-        // portDirectionEnum);
-        //
-        // if (tempNode != null) {
-        // nodes.add(tempNode.build());
-        // srgCounter++;
-        // } else {
-        // // null returned if Degree number= degreeCounter not present
-        // // in the device
-        // break;
-        // }
-        // }
-        // numOfSrgs = srgCounter - 1;
-        //
-        // LOG.info("adding links numOfDegrees={} numOfSrgs={}", numOfDegrees,
-        // numOfSrgs);
-        // List<Link> links = new ArrayList<>();
-        // links.addAll(createExpressLinks(nodeId, numOfDegrees,
-        // portDirectionEnum));
-        // links.addAll(createAddDropLinks(nodeId, numOfDegrees, numOfSrgs,
-        // portDirectionEnum));
-        // LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
-        // return new TopologyShard(nodes, links);
-        // } else if (NodeTypes.Xpdr.equals(deviceInfo.getNodeType())) {
-        // // Check if node is XPONDER
-        // XponderPortNumber portNums = getNoOfPorts(nodeId);
-        // List<Link> links = new ArrayList<>();
-        // NodeBuilder tempNode = createXpdr(portNums.getNumOfClientPorts(),
-        // portNums.getNumOfLinePorts(), nodeId);
-        // nodes.add(tempNode.build());
-        // return new TopologyShard(nodes, links);
-        // }
-        //
-        return null;
-    }
-
-    public TopologyShard createTopologyShard2(String nodeId, Info deviceInfo) {
+    public TopologyShard createTopologyShard(String nodeId, Info deviceInfo) {
         int numOfDegrees = 0;
         int numOfSrgs = 0;
         List<Node> nodes = new ArrayList<>();
@@ -295,8 +187,8 @@ public class OpenRoadmTopology {
                 maxDegree = MAX_DEGREE;
             }
             Map<String, String> interfaceList = getEthInterfaceList(nodeId);
-            interfaceList.forEach((key,val) -> LOG.debug("clé = {}, val = {}", key, val));
-            List<CpToDegree> localcpDegreelist = new ArrayList();
+            interfaceList.forEach((key, val) -> LOG.debug("clé = {}, val = {}", key, val));
+            List<CpToDegree> localcpDegreelist = new ArrayList<CpToDegree>();
 
             // Starting with degree Number = 1
             Integer degreeCounter = 1;
@@ -341,9 +233,6 @@ public class OpenRoadmTopology {
             LOG.info("adding links numOfDegrees={} numOfSrgs={}", numOfDegrees, numOfSrgs);
             List<Link> links = new ArrayList<>();
             links.addAll(createLinks(nodeId, nodes));
-            // links.addAll(createExpressLinks2(nodeId, numOfDegrees));
-            // links.addAll(createAddDropLinks2(nodeId, numOfDegrees,
-            // numOfSrgs));
             LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
             return new TopologyShard(nodes, links, localportMapList, localcpDegreelist);
 
@@ -363,101 +252,17 @@ public class OpenRoadmTopology {
     }
 
     /**
-     * This private method gets the list of circuit packs on a xponder. For each
-     * circuit pack on a Xponder, it does a get on circuit-pack subtree with
-     * circuit-pack-name as key in order to get the list of ports. It then
-     * iterates over the list of ports to get ports with port-qual as
-     * xpdr-network/xpdr-client. The line and client ports are saved as:
+     * This method creates on xpdr node inside the openroadm-topology according
+     * to the device configuration.
      *
-     * <p>
-     * 1. LINEn
+     * @param nodeId
+     *            device id
+     * @param connectionMapList
+     *            list of connection map from device operational datastore in
+     *            order to associate a client port to the network port
      *
-     * <p>
-     * 2. CLNTn
+     * @author Gilles Thouenon (gilles.thouenon@orange.com)
      */
-    private XponderPortNumber getNoOfPorts(String deviceId) {
-
-        XponderPortNumber xponderPortNumber = new XponderPortNumber();
-        // Creating for Xponder Line and Client Ports
-        InstanceIdentifier<OrgOpenroadmDevice> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class);
-        Optional<OrgOpenroadmDevice> deviceObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-            LogicalDatastoreType.OPERATIONAL, deviceIID, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-
-        // Variable to keep track of number of client ports
-        int client = 0;
-        int line = 0;
-        if (deviceObject.isPresent()) {
-            for (CircuitPacks cp : deviceObject.get().getCircuitPacks()) {
-                if (cp.getPorts() != null) {
-                    for (Ports port : cp.getPorts()) {
-                        if (port.getPortQual() != null) {
-                            if (port.getPortQual().getIntValue() == 4) {
-                                client++;
-                            } else if (port.getPortQual().getIntValue() == 3) {
-                                line++;
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            return xponderPortNumber;
-        }
-        xponderPortNumber.setNumOfClientPorts(client);
-        xponderPortNumber.setNumOfLinePorts(line);
-        return xponderPortNumber;
-    }
-
-    private NodeBuilder createXpdr(Integer clientCounter, Integer lineCounter, String nodeId) {
-        // Create a generic Topo Layer node
-        NodeBuilder nodebldr = createTopoLayerNode(nodeId);
-        // Create augmentation node to inorder to add degree
-        Node1Builder node1bldr = new Node1Builder();
-        TerminationPoint1Builder tp1Bldr = new TerminationPoint1Builder();
-        TerminationPointBuilder tempTpBldr;
-
-        // set node type to Xponder
-        node1bldr.setNodeType(OpenroadmNodeType.XPONDER);
-        List<TerminationPoint> tpList = new ArrayList<>();
-        String nodeIdtopo = new StringBuilder().append(nodeId).append("-XPDR1").toString();
-        // Ad degree node specific augmentation
-        nodebldr.setNodeId(new NodeId(nodeIdtopo));
-        nodebldr.withKey(new NodeKey(new NodeId(nodeIdtopo)));
-        nodebldr.addAugmentation(Node1.class, node1bldr.build());
-        while (clientCounter != 0) {
-            // Create CLNT-TX terminationCannot get available Capabilitiesc
-            tempTpBldr = createTpBldr("XPDR1-CLIENT" + clientCounter);
-            tp1Bldr.setTpType(OpenroadmTpType.XPONDERCLIENT);
-            XpdrClientAttributesBuilder xpdrClntBldr = new XpdrClientAttributesBuilder();
-            xpdrClntBldr.setTailEquipmentId("XPDR1-NETWORK" + clientCounter);
-            tp1Bldr.setXpdrClientAttributes(xpdrClntBldr.build());
-            tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
-            tpList.add(tempTpBldr.build());
-            clientCounter--;
-        }
-        while (lineCounter != 0) {
-            // Create LINE-TX termination
-            tempTpBldr = (createTpBldr("XPDR1-NETWORK" + lineCounter));
-            tp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
-            XpdrNetworkAttributesBuilder xpdrNwAttrBldr = new XpdrNetworkAttributesBuilder();
-            xpdrNwAttrBldr.setTailEquipmentId("XPDR1-CLIENT" + lineCounter);
-            tp1Bldr.setXpdrNetworkAttributes(xpdrNwAttrBldr.build());
-            tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
-            tpList.add(tempTpBldr.build());
-            lineCounter--;
-        }
-        LOG.info("printing tpList {}", tpList);
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1Builder tpNode1 =
-            new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1Builder();
-        tpNode1.setTerminationPoint(tpList);
-        nodebldr.addAugmentation(
-            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1.class,
-            tpNode1.build());
-        LOG.info("The nodebldr {}", nodebldr);
-        return nodebldr;
-    }
-
     private NodeData createXpdrNode(String nodeId, List<ConnectionMap> connectionMapList) {
         // Create org-openroadm augmentation node
         Node1Builder node1bldr = new Node1Builder();
@@ -614,7 +419,19 @@ public class OpenRoadmTopology {
         return new NodeData(nodebldr, mappingList, null);
     }
 
-
+    /**
+     * This method creates a rdm degree node inside the openroadm-topology
+     * according to the device configuration.
+     *
+     * @param nodeId
+     *            device id
+     * @param degreeCounter
+     *            number of the current degree
+     * @param interfList
+     *            list of CpToDegree to be updated for portmapping
+     *
+     * @author Gilles Thouenon (gilles.thouenon@orange.com)
+     */
     private NodeData createDegreeNode(String nodeId, int degreeCounter, Map<String, String> interfList) {
         // Create openroadm-topology-node augmentation in order to add degree
         Node1Builder node1bldr = new Node1Builder();
@@ -741,8 +558,8 @@ public class OpenRoadmTopology {
         // complement mapping with cp-to-degree
         List<CpToDegree> cpList = new ArrayList<>();
         if (degree.getCircuitPacks() != null) {
-            for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks
-                cp : degree.getCircuitPacks()) {
+            for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks cp : degree
+                .getCircuitPacks()) {
                 if (interfList.containsKey(cp.getCircuitPackName())) {
                     CpToDegree cpToDeg = new CpToDegreeBuilder()
                         .setCircuitPackName(cp.getCircuitPackName())
@@ -756,6 +573,17 @@ public class OpenRoadmTopology {
         return new NodeData(nodebldr, mappingList, cpList);
     }
 
+    /**
+     * This method creates a rdm srg node inside the openroadm-topology
+     * according to the device configuration.
+     *
+     * @param nodeId
+     *            device id
+     * @param srgCounter
+     *            number of the current srg
+     *
+     * @author Gilles Thouenon (gilles.thouenon@orange.com)
+     */
     private NodeData createSrgNode(String nodeId, int srgCounter) {
         // Create augmentation node in order to add SRG
         Node1Builder node1bldr = new Node1Builder();
@@ -795,7 +623,7 @@ public class OpenRoadmTopology {
         List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks> srgCpList = srg
             .getCircuitPacks();
         for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks
-            circuitPacks : srgCpList) {
+                circuitPacks : srgCpList) {
             String circuitPackName = circuitPacks.getCircuitPackName();
             CircuitPack cp = this.deviceConfig.getDeviceCp(nodeId, circuitPackName);
             if (cp.getPorts() == null) {
@@ -857,70 +685,6 @@ public class OpenRoadmTopology {
             }
         }
 
-        // for (int i = 1; i <= maxPpPorts; i++) {
-        // if ((portDirectionEnum == 1) || (portDirectionEnum == 2)) {
-        // if (i >= (maxPpPorts / 2)) {
-        // break;
-        // }
-        // // ports are uni Directional on a degree, therefore 4
-        // // termination points
-        // // Create PP-TX termination
-        // tempTpBldr = createTpBldr("SRG" + srgCounter + "-PP" + i + "-TX");
-        // tp1Bldr = new TerminationPoint1Builder();
-        // tp1Bldr.setTpType(OpenroadmTpType.SRGTXPP);
-        // tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
-        // tpList.add(tempTpBldr.build());
-        //
-        // // Create PP-RX termination
-        // tempTpBldr = createTpBldr("SRG" + srgCounter + "-PP" + i + "-RX");
-        // tp1Bldr = new TerminationPoint1Builder();
-        // tp1Bldr.setTpType(OpenroadmTpType.SRGRXPP);
-        // tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
-        // tpList.add(tempTpBldr.build());
-        //
-        // } else if (portDirectionEnum == 3) {
-        // // Ports are bi directional therefore 2 termination points
-        // // Create PP-TXRX termination
-        // tempTpBldr = createTpBldr("SRG" + srgCounter + "-PP" + i + "-TXRX");
-        // tp1Bldr = new TerminationPoint1Builder();
-        // tp1Bldr.setTpType(OpenroadmTpType.SRGTXRXPP);
-        // tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
-        // tpList.add(tempTpBldr.build());
-        // }
-        // }
-
-        // switch (portDirectionEnum) {
-        // case 1: // ports are uni Directional on a degree
-        // // Create CP-TX termination
-        // tempTpBldr = createTpBldr("SRG" + srgCounter + "-CP" + "-TX");
-        // tp1Bldr = new TerminationPoint1Builder();
-        // tp1Bldr.setTpType(OpenroadmTpType.SRGTXCP);
-        // tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
-        // tpList.add(tempTpBldr.build());
-        // break;
-        // case 2:
-        // // Create CP-RX termination
-        // tempTpBldr = createTpBldr("SRG" + srgCounter + "-CP" + "-RX");
-        // tp1Bldr = new TerminationPoint1Builder();
-        // tp1Bldr.setTpType(OpenroadmTpType.SRGRXCP);
-        // tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
-        // tpList.add(tempTpBldr.build());
-        // break;
-        // case 3:
-        // // Ports are bi directional therefore 2 termination points
-        // // Create CP-TXRX termination
-        // tempTpBldr = createTpBldr("SRG" + srgCounter + "-CP" + "-TXRX");
-        // tp1Bldr = new TerminationPoint1Builder();
-        // tp1Bldr.setTpType(OpenroadmTpType.SRGTXRXCP);
-        // tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
-        // tpList.add(tempTpBldr.build());
-        // break;
-        // default:
-        // LOG.error("No correponsding direction to the value: {}",
-        // portDirectionEnum);
-        // break;
-        // }
-
         // Create CP-TXRX termination
         tempTpBldr = createTpBldr("SRG" + srgCounter + "-CP" + "-TXRX");
         tp1Bldr = new TerminationPoint1Builder();
@@ -977,31 +741,6 @@ public class OpenRoadmTopology {
         return nodebldr;
     }
 
-    // Return 0 for null/error values
-    // Return 1 for tx
-    // Return 2 for rx
-    // Return 3 for bi-directional
-
-    private int getPortDirection(String deviceId, String circuitPackName, String portName) {
-        InstanceIdentifier<Ports> portIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-            .child(CircuitPacks.class, new CircuitPacksKey(circuitPackName))
-            .child(Ports.class, new PortsKey(portName));
-        LOG.info("Fetching Port Direction for port {} at circuit pack {}", portName, circuitPackName);
-        Optional<Ports> portObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-            LogicalDatastoreType.OPERATIONAL, portIID, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (portObject.isPresent()) {
-            Ports port = portObject.get();
-            if (port.getPortDirection() != null) {
-                return port.getPortDirection().getIntValue();
-            } else {
-                LOG.warn("Port direction value missing for {} {}", circuitPackName, port.getPortName());
-                return 0;
-            }
-        }
-        return 0;
-    }
-
     // This method returns a generic termination point builder for a given tpid
     private TerminationPointBuilder createTpBldr(String tpId) {
         TerminationPointBuilder tpBldr = new TerminationPointBuilder();
@@ -1042,6 +781,16 @@ public class OpenRoadmTopology {
         return lnkBldr;
     }
 
+    /**
+     * This method creates links between openroadm-topology nodes.
+     *
+     * @param nodeId
+     *            device id
+     * @param nodes
+     *            list of nodes
+     *
+     * @author Gilles Thouenon (gilles.thouenon@orange.com)
+     */
     private List<Link> createLinks(String nodeId, List<Node> nodes) {
         List<Link> links = new ArrayList<>();
         List<Node> listDegeeNodes = nodes.stream().filter(node -> node.getNodeId().toString().contains("DEG")).collect(
@@ -1145,151 +894,6 @@ public class OpenRoadmTopology {
         return links;
     }
 
-    private List<Link> createExpressLinks(String nodeId, int numOfDegrees, int portDirectionEnum) {
-        LOG.info("creating express links {} {} {}", nodeId, numOfDegrees, portDirectionEnum);
-        List<Link> links = new ArrayList<>();
-
-        String srcNode;
-        String destNode;
-
-        String srcTp;
-        String destTp;
-
-        // ports are uni-directional
-        if ((portDirectionEnum == 1) || (portDirectionEnum == 2)) {
-            LOG.info("creating uni-directional express links");
-            for (int i = 1; i <= numOfDegrees; i++) {
-                for (int j = i + 1; j <= numOfDegrees; j++) {
-
-                    srcNode = nodeId + "-DEG" + i;
-                    destNode = nodeId + "-DEG" + j;
-
-                    // AtoZ direction
-                    srcTp = "DEG" + i + "-CTP-TX";
-                    destTp = "DEG" + j + "-CTP-RX";
-
-                    LinkBuilder expLinkBldr = createLink(srcNode, destNode, srcTp, destTp, true);
-
-                    Link1Builder lnk1Bldr = new Link1Builder();
-                    lnk1Bldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
-                    expLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-
-                    links.add(expLinkBldr.build());
-
-                    // ZtoA direction
-                    srcTp = "DEG" + i + "-CTP-RX";
-                    destTp = "DEG" + j + "-CTP-TX";
-
-                    expLinkBldr = createLink(destNode, srcNode, destTp, srcTp, true);
-                    expLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-
-                    links.add(expLinkBldr.build());
-
-                }
-            }
-        }
-
-        // ports are bi-directional
-        if (portDirectionEnum == 3) {
-            LOG.info("creating bi-directional express links");
-            for (int i = 1; i <= numOfDegrees; i++) {
-                for (int j = i + 1; j <= numOfDegrees; j++) {
-
-                    srcNode = nodeId + "-DEG" + i;
-                    destNode = nodeId + "-DEG" + j;
-
-                    // AtoZ direction
-                    srcTp = "DEG" + i + "-CTP-TXRX";
-                    destTp = "DEG" + j + "-CTP-TXRX";
-
-                    Link1Builder lnk1Bldr = new Link1Builder();
-                    lnk1Bldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
-
-                    LinkBuilder expLinkBldr = createLink(srcNode, destNode, srcTp, destTp, true);
-                    expLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    links.add(expLinkBldr.build());
-
-                    // ZtoA direction
-                    expLinkBldr = createLink(destNode, srcNode, destTp, srcTp, true);
-                    expLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    links.add(expLinkBldr.build());
-                }
-            }
-        }
-        return links;
-    }
-
-    private List<Link> createAddDropLinks(String nodeId, int numOfDegrees, int numOfSrgs, int portDirectionEnum) {
-        LOG.info("creating add-drop links {} {} {} {}", nodeId, numOfDegrees, numOfSrgs, portDirectionEnum);
-        List<Link> links = new ArrayList<>();
-
-        String srcNode;
-        String destNode;
-
-        String srcTp;
-        String destTp;
-
-        // ports are uni-directional
-        if ((portDirectionEnum == 1) || (portDirectionEnum == 2)) {
-            LOG.info("creating uni-directional add-drop links");
-            for (int i = 1; i <= numOfDegrees; i++) {
-                for (int j = 1; j <= numOfSrgs; j++) {
-
-                    srcNode = nodeId + "-DEG" + i;
-                    destNode = nodeId + "-SRG" + j;
-
-                    // drop links
-                    srcTp = "DEG" + i + "-CTP-TX";
-                    destTp = "SRG" + j + "-CP-RX";
-
-                    LinkBuilder addDropLinkBldr = createLink(srcNode, destNode, srcTp, destTp, true);
-                    Link1Builder lnk1Bldr = new Link1Builder();
-                    lnk1Bldr.setLinkType(OpenroadmLinkType.DROPLINK);
-                    addDropLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    links.add(addDropLinkBldr.build());
-
-                    // add links direction
-                    srcTp = "DEG" + i + "-CTP-RX";
-                    destTp = "SRG" + j + "-CP-TX";
-
-                    addDropLinkBldr = createLink(destNode, srcNode, destTp, srcTp, true);
-                    lnk1Bldr.setLinkType(OpenroadmLinkType.ADDLINK);
-                    addDropLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    links.add(addDropLinkBldr.build());
-
-                }
-            }
-        }
-        // ports are bi-directional
-        if (portDirectionEnum == 3) {
-            LOG.info("creating bi-directional add-drop links");
-            for (int i = 1; i <= numOfDegrees; i++) {
-                for (int j = 1; j <= numOfSrgs; j++) {
-
-                    srcNode = nodeId + "-DEG" + i;
-                    destNode = nodeId + "-SRG" + j;
-
-                    // drop links
-                    srcTp = "DEG" + i + "-CTP-TXRX";
-                    destTp = "SRG" + j + "-CP-TXRX";
-
-                    LinkBuilder addDropLinkBldr = createLink(srcNode, destNode, srcTp, destTp, true);
-                    Link1Builder lnk1Bldr = new Link1Builder();
-                    lnk1Bldr.setLinkType(OpenroadmLinkType.DROPLINK);
-                    addDropLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    links.add(addDropLinkBldr.build());
-
-                    // add link
-                    addDropLinkBldr = createLink(destNode, srcNode, destTp, srcTp, true);
-                    lnk1Bldr.setLinkType(OpenroadmLinkType.ADDLINK);
-                    addDropLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    links.add(addDropLinkBldr.build());
-                }
-            }
-        }
-        return links;
-    }
-
     // This method returns the linkBuilder object for given source and
     // destination.
     public boolean deleteLink(String srcNode, String dstNode, Integer srcDegId,
@@ -1335,53 +939,25 @@ public class OpenRoadmTopology {
 
         for (int i = 1; i < 97; i++) {
             org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
-                .AvailableWavelengthsBuilder avalBldr =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
-                    .AvailableWavelengthsBuilder();
+                .AvailableWavelengthsBuilder avalBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.srg
+                .rev170929.srg.node.attributes.AvailableWavelengthsBuilder();
             avalBldr.setIndex((long) i);
-            avalBldr.withKey(
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
-                    .AvailableWavelengthsKey((long) i));
+            avalBldr.withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
+                .AvailableWavelengthsKey((long) i));
             waveList.add(avalBldr.build());
         }
 
         return waveList;
     }
 
-    private class XponderPortNumber {
-        private int numOfLinePorts;
-        private int numOfClientPorts;
-
-        XponderPortNumber() {
-            numOfClientPorts = 0;
-            numOfLinePorts = 0;
-        }
-
-        public void setNumOfLinePorts(int numOfLinePorts) {
-            this.numOfLinePorts = numOfLinePorts;
-        }
-
-        public void setNumOfClientPorts(int numOfClientPorts) {
-            this.numOfClientPorts = numOfClientPorts;
-        }
-
-        public int getNumOfClientPorts() {
-            return numOfClientPorts;
-        }
-
-        public int getNumOfLinePorts() {
-            return numOfLinePorts;
-        }
-    }
-
     // method copied/pasted from PortMappingImpl.java
     private Map<String, String> getEthInterfaceList(String nodeId) {
         Map<String, String> cpToInterfaceMap = new HashMap<>();
         InstanceIdentifier<Protocols> protocolsIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Protocols.class);
+            .child(Protocols.class);
         Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-                LogicalDatastoreType.OPERATIONAL, protocolsIID, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            LogicalDatastoreType.OPERATIONAL, protocolsIID, Timeouts.DEVICE_READ_TIMEOUT,
+            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!protocolObject.isPresent() || (protocolObject.get().augmentation(Protocols1.class) == null)) {
             LOG.warn("LLDP subtree is missing : isolated openroadm device");
             return cpToInterfaceMap;
@@ -1391,25 +967,26 @@ public class OpenRoadmTopology {
             for (PortConfig portConfig : portConfigList) {
                 if (portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
                     InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                            .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
+                        .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
                     Optional<Interface> interfaceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-                            LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
-                            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
+                        Timeouts.DEVICE_READ_TIMEOUT_UNIT);
                     if (interfaceObject.isPresent()
-                            && (interfaceObject.get().getSupportingCircuitPackName() != null)) {
+                        && (interfaceObject.get().getSupportingCircuitPackName() != null)) {
                         String supportingCircuitPackName = interfaceObject.get().getSupportingCircuitPackName();
                         cpToInterfaceMap.put(supportingCircuitPackName, portConfig.getIfName());
                         InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier
-                                .create(OrgOpenroadmDevice.class).child(CircuitPacks.class,
-                                        new CircuitPacksKey(supportingCircuitPackName));
+                            .create(OrgOpenroadmDevice.class).child(CircuitPacks.class,
+                                new CircuitPacksKey(supportingCircuitPackName));
                         Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(
-                                nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, Timeouts
-                                                .DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-//                        if (circuitPackObject.isPresent()
-//                                && (circuitPackObject.get().getParentCircuitPack() != null)) {
-//                            cpToInterfaceMap.put(circuitPackObject.get().getParentCircuitPack()
-//                                    .getCircuitPackName(), portConfig.getIfName());
-//                        }
+                            nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, Timeouts.DEVICE_READ_TIMEOUT,
+                            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                        // if (circuitPackObject.isPresent()
+                        // && (circuitPackObject.get().getParentCircuitPack() !=
+                        // null)) {
+                        // cpToInterfaceMap.put(circuitPackObject.get().getParentCircuitPack()
+                        // .getCircuitPackName(), portConfig.getIfName());
+                        // }
                     }
                 } else {
                     LOG.warn("PortConfig Admin Status is not equal Txandrx");
@@ -1420,6 +997,5 @@ public class OpenRoadmTopology {
         }
         return cpToInterfaceMap;
     }
-
 
 }

@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.networkmodel.util;
 
 import com.google.common.collect.ImmutableList;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -17,10 +16,7 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.common.Timeouts;
-import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev170929.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev170929.NetworkTypes1Builder;
@@ -76,75 +72,8 @@ public final class OpenRoadmNetwork {
     /**
      * Create single node entry for OpenRoadmNetwork.
      *
-     * @param nodeId node ID
-     * @param deviceTransactionManager device transaction manager
-     *
-     * @return node builder status
      */
-    public static Node createNode(String nodeId, DeviceTransactionManager deviceTransactionManager) {
-        // Fetches the info from the deviceInfo
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
-        Optional<Info> deviceInfoOpt = deviceTransactionManager.getDataFromDevice(nodeId,
-                LogicalDatastoreType.OPERATIONAL, infoIID, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        Info deviceInfo;
-        if (deviceInfoOpt.isPresent()) {
-            deviceInfo = deviceInfoOpt.get();
-        } else {
-            LOG.error("Unable to get device info from device {}!", nodeId);
-            return null;
-        }
-        NodeTypes nodeType = deviceInfo.getNodeType();
-
-        // Uses the Node Builder to set the nodeId and Key
-        NodeBuilder nodeBldr = new NodeBuilder();
-        NodeId nwNodeId = new NodeId(nodeId);
-        nodeBldr.setNodeId(nwNodeId);
-        nodeBldr.withKey(new NodeKey(nwNodeId));
-        Node1Builder node1bldr = new Node1Builder();
-
-        /*
-         * Recognize the node type: 1:ROADM, 2:XPONDER
-         */
-        switch (nodeType.getIntValue()) {
-            case 1:
-                node1bldr.setNodeType(OpenroadmNodeType.ROADM);
-                break;
-            case 2:
-                node1bldr.setNodeType(OpenroadmNodeType.XPONDER);
-                break;
-            default:
-                LOG.error("No correponsding type for the value: {}", nodeType.getIntValue());
-                break;
-        }
-
-        String vendor = deviceInfo.getVendor();
-        String model = deviceInfo.getModel();
-        IpAddress ipAddress = deviceInfo.getIpAddress();
-        // Sets IP, Model and Vendor information fetched from the deviceInfo
-        node1bldr.setIp(ipAddress);
-        node1bldr.setModel(model);
-        node1bldr.setVendor(vendor);
-
-        // Sets the value of Network-ref and Node-ref as a part of the supporting node
-        // attribute
-        String clli = deviceInfo.getClli();
-        SupportingNodeBuilder supportbldr = new SupportingNodeBuilder();
-        supportbldr.withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID), new NodeId(clli)));
-        supportbldr.setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID));
-        supportbldr.setNodeRef(new NodeId(clli));
-        nodeBldr.setSupportingNode(ImmutableList.of(supportbldr.build()));
-
-        // Augment to the main node builder
-        nodeBldr.addAugmentation(Node1.class, node1bldr.build());
-        return nodeBldr.build();
-    }
-
-    /**
-     * Create single node entry for OpenRoadmNetwork.
-     *
-     */
-    public static Node createNode2(String nodeId, Info deviceInfo) {
+    public static Node createNode(String nodeId, Info deviceInfo) {
         NodeTypes nodeType = deviceInfo.getNodeType();
 
         // Uses the Node Builder to set the nodeId and Key
