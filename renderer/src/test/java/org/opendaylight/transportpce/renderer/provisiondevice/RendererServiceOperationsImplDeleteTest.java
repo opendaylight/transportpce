@@ -8,16 +8,20 @@
 
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
+import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
@@ -34,6 +38,7 @@ import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterf
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
+import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
 import org.opendaylight.transportpce.renderer.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -84,8 +89,9 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         ListeningExecutorService executor =
                 MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
         this.networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(getDataBroker());
+        NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer, olmService,
-                getDataBroker(), this.networkModelWavelengthService);
+                getDataBroker(), this.networkModelWavelengthService, notificationPublishService);
 
     }
 
@@ -99,18 +105,18 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
                 .setRequestId("request1").build());
         Mockito.doReturn(true).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(), Mockito.anyString());
         ServiceDeleteOutput serviceDeleteOutput
-                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build());
+                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK,
                 serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
         Mockito.verify(this.crossConnect, Mockito.times(2)).deleteCrossConnect(Mockito.any(), Mockito.any());
     }
 
     @Test
-    public void serviceDeleteOperationNoDescription() {
+    public void serviceDeleteOperationNoDescription() throws InterruptedException, ExecutionException {
         ServiceDeleteInputBuilder serviceDeleteInputBuilder = new ServiceDeleteInputBuilder();
         serviceDeleteInputBuilder.setServiceName("service 1");
         ServiceDeleteOutput serviceDeleteOutput
-                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build());
+                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
         Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.any(), Mockito.any());
@@ -127,10 +133,11 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         serviceDeleteInputBuilder.setServiceName("service 1");
         serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
                 .setRequestId("request1").build());
-        ServiceDeleteOutput serviceDeleteOutput
-                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build());
+        ListenableFuture<ServiceDeleteOutput> serviceDeleteOutput =
+                this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build());
+        ServiceDeleteOutput output = serviceDeleteOutput.get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
+                output.getConfigurationResponseCommon().getResponseCode());
         Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node1"), Mockito.any());
         Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node2"), Mockito.any());
     }
@@ -150,7 +157,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
                 .setRequestId("request1").build());
         ServiceDeleteOutput serviceDeleteOutput =
-                this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build());
+                this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
         Mockito.verify(this.olmService, Mockito.times(2)).servicePowerTurndown(Mockito.any());

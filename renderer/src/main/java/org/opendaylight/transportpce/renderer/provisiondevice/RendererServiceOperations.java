@@ -7,15 +7,18 @@
  */
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutput;
 
+
 public interface RendererServiceOperations {
 
-    ServiceImplementationRequestOutput serviceImplementation(ServiceImplementationRequestInput input);
+    ListenableFuture<ServiceImplementationRequestOutput> serviceImplementation(ServiceImplementationRequestInput input);
 
-    ServiceDeleteOutput serviceDelete(ServiceDeleteInput input);
+    ListenableFuture<ServiceDeleteOutput> serviceDelete(ServiceDeleteInput input);
 
 }

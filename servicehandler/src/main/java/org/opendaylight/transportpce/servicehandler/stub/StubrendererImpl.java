@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
@@ -28,12 +29,19 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.service.rpc.result.sp.PathTopology;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.service.rpc.result.sp.PathTopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.service.path.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -50,12 +58,24 @@ public class StubrendererImpl {
     /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(StubrendererImpl.class);
     /** check service sdnc-request-header compliancy. */
+    private final NotificationPublishService notificationPublishService;
     private final NetworkModelWavelengthService networkModelWavelengthService;
     private final DataBroker dataBroker;
+    private ServiceRpcResultSp notification = null;
 
-    public StubrendererImpl(NetworkModelWavelengthService networkModelWavelengthService, DataBroker dataBroker) {
+    public StubrendererImpl(NetworkModelWavelengthService networkModelWavelengthService, DataBroker dataBroker,
+            NotificationPublishService notificationPublishService) {
+        this.notificationPublishService = notificationPublishService;
         this.networkModelWavelengthService = networkModelWavelengthService;
         this.dataBroker = dataBroker;
+    }
+
+    private void sendNotifications(Notification notif) {
+        try {
+            notificationPublishService.putNotification(notif);
+        } catch (InterruptedException e) {
+            LOG.info("notification offer rejected : ", e.getMessage());
+        }
     }
 
     public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
@@ -63,9 +83,13 @@ public class StubrendererImpl {
         String serviceName = input.getServiceName();
         String message = "";
         String responseCode = null;
+        notification = new ServiceRpcResultSpBuilder().setNotificationType(ServicePathNotificationTypes.ServiceDelete)
+                .setServiceName(serviceName).setStatus(RpcStatusEx.Pending)
+                .setStatusMessage("Service compliant, submitting serviceDelete Request ...").build();
+        sendNotifications(notification);
         try {
-            LOG.info("Wait for 1s til beginning the Renderer serviceDelete request");
-            Thread.sleep(1000); //sleep for 1s
+            LOG.info("Wait for 10s til beginning the Renderer serviceDelete request");
+            Thread.sleep(10000); // sleep for 1s
         } catch (InterruptedException e) {
             message = "deleting service failed !";
             LOG.error("deleting service failed !", e);
@@ -84,6 +108,11 @@ public class StubrendererImpl {
             responseCode = ResponseCodes.RESPONSE_FAILED;
             message = "failed to get pathDescription for service : " + serviceName;
         }
+        notification = new ServiceRpcResultSpBuilder().setNotificationType(ServicePathNotificationTypes.ServiceDelete)
+                .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Successful)
+                .setStatusMessage("Service deleted").build();
+        sendNotifications(notification);
+        responseCode = ResponseCodes.RESPONSE_OK;
         ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES)
                 .setRequestId(input.getServiceHandlerHeader().getRequestId())
@@ -100,9 +129,14 @@ public class StubrendererImpl {
         LOG.info("serviceImplementation request ...");
         String message = "";
         String responseCode = null;
+        notification = new ServiceRpcResultSpBuilder()
+                .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
+                .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Pending)
+                .setStatusMessage("Service compliant, submitting serviceImplementation Request ...").build();
+        sendNotifications(notification);
         try {
-            LOG.info("Wait for 1s til beginning the Renderer serviceDelete request");
-            Thread.sleep(1000); //sleep for 1s
+            LOG.info("Wait for 10s til beginning the Renderer serviceImplementation request");
+            Thread.sleep(10000); // sleep for 1s
         } catch (InterruptedException e) {
             message = "implementing service failed !";
             LOG.error(message);
@@ -110,6 +144,12 @@ public class StubrendererImpl {
         }
         this.networkModelWavelengthService.useWavelengths(input.getPathDescription());
         message = "service implemented !";
+        PathTopology pathTopology = new PathTopologyBuilder().build();
+        notification = new ServiceRpcResultSpBuilder()
+                .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
+                .setServiceName(input.getServiceName()).setStatus(RpcStatusEx.Successful)
+                .setStatusMessage("Service implemented").setPathTopology(pathTopology).build();
+        sendNotifications(notification);
         responseCode = ResponseCodes.RESPONSE_OK;
         ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES)

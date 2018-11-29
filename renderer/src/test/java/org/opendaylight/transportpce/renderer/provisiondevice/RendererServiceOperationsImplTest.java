@@ -9,12 +9,15 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
+import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
@@ -32,6 +35,7 @@ import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.MountPointUtils;
+import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmInput;
@@ -83,12 +87,11 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect, portMapping);
         Mockito.doNothing().when(this.openRoadmInterfaces).postEquipmentState(Mockito.anyString(),
             Mockito.anyString(), Mockito.anyBoolean());
-
+        NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.olmService = Mockito.spy(this.olmService);
         this.deviceRenderer = Mockito.spy(this.deviceRenderer);
         this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer, this.olmService,
-            getDataBroker(), this.networkModelWavelengthService);
-
+                getDataBroker(), this.networkModelWavelengthService, notificationPublishService);
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
@@ -96,7 +99,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     }
 
     @Test
-    public void serviceImplementationTerminationPointAsResourceTtp() {
+    public void serviceImplementationTerminationPointAsResourceTtp() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.TTP_TOKEN);
@@ -105,13 +108,13 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
             Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationTerminationPointAsResourceTtp2() {
+    public void serviceImplementationTerminationPointAsResourceTtp2() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.TTP_TOKEN);
@@ -122,13 +125,13 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             Mockito.any());
         Mockito.doReturn(RpcResultBuilder.failed().buildFuture()).when(this.olmService)
             .servicePowerSetup(Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationTerminationPointAsResourcePp() {
+    public void serviceImplementationTerminationPointAsResourcePp() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.PP_TOKEN);
@@ -137,13 +140,14 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
             Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationTerminationPointAsResourceNetwork() {
+    public void serviceImplementationTerminationPointAsResourceNetwork()
+            throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
@@ -152,23 +156,25 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
             Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationTerminationPointAsResourceClient() {
+    public void serviceImplementationTerminationPointAsResourceClient()
+            throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.CLIENT_TOKEN);
         writePortMapping(input, OpenRoadmInterfacesImpl.CLIENT_TOKEN);
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
 
     @Test
-    public void serviceImplementationTerminationPointAsResourceNoMapping() {
+    public void serviceImplementationTerminationPointAsResourceNoMapping()
+            throws InterruptedException, ExecutionException {
 
         String[] interfaceTokens = {
             OpenRoadmInterfacesImpl.NETWORK_TOKEN,
@@ -185,7 +191,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         for (String tpToken : interfaceTokens) {
             ServiceImplementationRequestInput input = ServiceDataUtils
                 .buildServiceImplementationRequestInputTerminationPointResource(tpToken);
-            ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+            ServiceImplementationRequestOutput result =
+                    this.rendererServiceOperations.serviceImplementation(input).get();
             Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                     result.getConfigurationResponseCommon().getResponseCode());
         }
@@ -217,14 +224,14 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     }
 
     @Test
-    public void serviceImplementationRollbackAllNecessary() {
+    public void serviceImplementationRollbackAllNecessary() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
         writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
         Mockito.doReturn(RpcResultBuilder.failed().buildFuture()).when(this.olmService)
             .servicePowerSetup(Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
 
     }
@@ -241,7 +248,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     }
 
     @Test
-    public void serviceImplementationServiceInActive() {
+    public void serviceImplementationServiceInActive() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
@@ -254,13 +261,13 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .setNodeId("node1").setMeasurements(measurementsList).build();
         Mockito.doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(this.olmService)
             .getPm(Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationServiceInActive2() {
+    public void serviceImplementationServiceInActive2() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
@@ -276,13 +283,13 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
 
         Mockito.when(this.olmService.getPm(Mockito.any()))
             .thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationServiceInActive3() {
+    public void serviceImplementationServiceInActive3() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
@@ -305,13 +312,13 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .thenReturn(RpcResultBuilder.success(getPmOutput2).buildFuture());
         Mockito.when(this.olmService.getPm(Mockito.eq(getPmInputA)))
             .thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationServiceActive() {
+    public void serviceImplementationServiceActive() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
@@ -325,13 +332,13 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
             Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationServiceActive2() {
+    public void serviceImplementationServiceActive2() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
@@ -343,13 +350,13 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
             Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationServiceInActive4() {
+    public void serviceImplementationServiceInActive4() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
@@ -367,13 +374,13 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
             Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 
     @Test
-    public void serviceImplementationServiceInActive5() {
+    public void serviceImplementationServiceInActive5() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
             .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
@@ -387,7 +394,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
 
         Mockito.doReturn(RpcResultBuilder.success(getPmOutput).buildFuture()).when(this.olmService)
             .getPm(Mockito.any());
-        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input);
+        ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
 
     }

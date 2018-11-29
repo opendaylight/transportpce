@@ -41,7 +41,8 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
             notificationPublishService);
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService);
         this.rendererServiceOperations =
-                new StubRendererServiceOperations(this.networkModelWavelengthService, getDataBroker());
+                new StubRendererServiceOperations(this.networkModelWavelengthService, getDataBroker(),
+                        notificationPublishService);
         this.serviceHandler = new ServicehandlerImpl(getDataBroker(), pathComputationService,
                 this.rendererServiceOperations, this.networkModelWavelengthService);
     }

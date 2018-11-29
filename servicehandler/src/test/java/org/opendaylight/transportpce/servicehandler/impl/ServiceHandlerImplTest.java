@@ -10,13 +10,19 @@ package org.opendaylight.transportpce.servicehandler.impl;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.junit.Assert;
@@ -86,11 +92,13 @@ import org.slf4j.LoggerFactory;
 public class ServiceHandlerImplTest extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceHandlerImplTest.class);
+    private static final int NUMBER_OF_THREADS = 4;
 
     private PathComputationService pathComputationService;
     private RendererServiceOperations rendererServiceOperations;
     private NetworkModelWavelengthService networkModelWavelengthService;
     private ServicehandlerImpl serviceHandler;
+    private ListeningExecutorService executor;
 
     @Mock
     private ServiceDataStoreOperations serviceDataStoreOperationsMock;
@@ -124,7 +132,9 @@ public class ServiceHandlerImplTest extends AbstractTest {
         PceTestUtils.writeTopologyIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 "topologyData/NW-simple-topology.xml");
         this.rendererServiceOperations =
-                new StubRendererServiceOperations(this.networkModelWavelengthService, getDataBroker());
+                new StubRendererServiceOperations(this.networkModelWavelengthService, getDataBroker(),
+                        notificationPublishService);
+        this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
     }
 
     @Test
@@ -149,8 +159,8 @@ public class ServiceHandlerImplTest extends AbstractTest {
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("successful").build();
         Mockito.when(
                 this.rendererServiceOperationsMock.serviceImplementation(any(ServiceImplementationRequestInput.class)))
-                .thenReturn(new ServiceImplementationRequestOutputBuilder()
-                        .setConfigurationResponseCommon(configurationResponseCommon2).build());
+                .thenReturn(returnFuture(new ServiceImplementationRequestOutputBuilder()
+                        .setConfigurationResponseCommon(configurationResponseCommon2).build()));
         Mockito.when(this.serviceDataStoreOperationsMock.modifyService(serviceInput.getServiceName(),
                 State.InService, State.InService)).thenReturn(OperationResult.ok("successful"));
 
@@ -161,6 +171,16 @@ public class ServiceHandlerImplTest extends AbstractTest {
                 ModelMappingUtils.createCreateServiceReply(serviceInput, ResponseCodes.FINAL_ACK_YES,
                         "Service rendered successfully !", ResponseCodes.RESPONSE_OK).get().getResult());
         Assert.assertEquals(0, output0.get().getErrors().size());
+    }
+
+    private <T> ListenableFuture<T> returnFuture(T output) {
+        return executor.submit(new Callable<T>() {
+
+            @Override
+            public T call() throws Exception {
+                return output;
+            }
+        });
     }
 
     @Test
@@ -183,8 +203,8 @@ public class ServiceHandlerImplTest extends AbstractTest {
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("successful").build();
         Mockito.when(
                 this.rendererServiceOperationsMock.serviceImplementation(any(ServiceImplementationRequestInput.class)))
-                .thenReturn(new ServiceImplementationRequestOutputBuilder()
-                        .setConfigurationResponseCommon(configurationResponseCommon2).build());
+                .thenReturn(returnFuture(new ServiceImplementationRequestOutputBuilder()
+                        .setConfigurationResponseCommon(configurationResponseCommon2).build()));
         Mockito.when(this.serviceDataStoreOperationsMock.modifyTempService(serviceInput.getCommonId(), State.InService,
                 State.InService)).thenReturn(OperationResult.ok("successful"));
         Future<RpcResult<TempServiceCreateOutput>> output0 =
@@ -677,11 +697,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ConfigurationResponseCommon configurationResponseCommon2 = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("successful").build();
-
         Mockito.when(
                 this.rendererServiceOperationsMock.serviceImplementation(any(ServiceImplementationRequestInput.class)))
-                .thenReturn(new ServiceImplementationRequestOutputBuilder()
-                        .setConfigurationResponseCommon(configurationResponseCommon2).build());
+                .thenReturn(returnFuture(new ServiceImplementationRequestOutputBuilder()
+                        .setConfigurationResponseCommon(configurationResponseCommon2).build()));
         Mockito.when(this.serviceDataStoreOperationsMock.modifyService(serviceCreateInput.getServiceName(),
                 State.InService, State.InService)).thenReturn(OperationResult.ok("successful"));
         ServiceCreateOutput result = this.serviceHandlerImplMock.serviceCreate(serviceCreateInput).get().getResult();
@@ -710,11 +729,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ConfigurationResponseCommon configurationResponseCommon2 = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("successful").build();
-
         Mockito.when(
                 this.rendererServiceOperationsMock.serviceImplementation(any(ServiceImplementationRequestInput.class)))
-                .thenReturn(new ServiceImplementationRequestOutputBuilder()
-                        .setConfigurationResponseCommon(configurationResponseCommon2).build());
+                .thenReturn(returnFuture(new ServiceImplementationRequestOutputBuilder()
+                        .setConfigurationResponseCommon(configurationResponseCommon2).build()));
         Mockito.when(this.serviceDataStoreOperationsMock.modifyService(serviceCreateInput.getServiceName(),
                 State.InService, State.InService)).thenReturn(OperationResult.failed("failure"));
         ServiceCreateOutput result = this.serviceHandlerImplMock.serviceCreate(serviceCreateInput).get().getResult();
@@ -743,11 +761,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ConfigurationResponseCommon configurationResponseCommon2 = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_FAILED).setResponseMessage("failure").build();
-
         Mockito.when(
                 this.rendererServiceOperationsMock.serviceImplementation(any(ServiceImplementationRequestInput.class)))
-                .thenReturn(new ServiceImplementationRequestOutputBuilder()
-                        .setConfigurationResponseCommon(configurationResponseCommon2).build());
+                .thenReturn(returnFuture(new ServiceImplementationRequestOutputBuilder()
+                        .setConfigurationResponseCommon(configurationResponseCommon2).build()));
         Mockito.when(this.serviceDataStoreOperationsMock.deleteService(serviceCreateInput.getServiceName()))
                 .thenReturn(OperationResult.ok("successful"));
         Mockito.when(this.serviceDataStoreOperationsMock.deleteServicePath(serviceCreateInput.getServiceName()))
@@ -778,11 +795,10 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ConfigurationResponseCommon configurationResponseCommon2 = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO).setRequestId("1")
                 .setResponseCode(ResponseCodes.RESPONSE_FAILED).setResponseMessage("failure").build();
-
         Mockito.when(
                 this.rendererServiceOperationsMock.serviceImplementation(any(ServiceImplementationRequestInput.class)))
-                .thenReturn(new ServiceImplementationRequestOutputBuilder()
-                        .setConfigurationResponseCommon(configurationResponseCommon2).build());
+                .thenReturn(returnFuture(new ServiceImplementationRequestOutputBuilder()
+                        .setConfigurationResponseCommon(configurationResponseCommon2).build()));
         Mockito.when(this.serviceDataStoreOperationsMock.deleteService(serviceCreateInput.getServiceName()))
                 .thenReturn(OperationResult.failed("successful"));
         Mockito.when(this.serviceDataStoreOperationsMock.deleteServicePath(serviceCreateInput.getServiceName()))
@@ -995,7 +1011,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
             .ServiceDeleteOutput output = new ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
-        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
+        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(returnFuture(output));
         ServiceDeleteOutput result = this.serviceHandlerImplMock.serviceDelete(serviceDeleteInput).get().getResult();
         Assert.assertEquals(result.getConfigurationResponseCommon().getAckFinalIndicator(),
                 ResponseCodes.FINAL_ACK_YES);
@@ -1017,7 +1033,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
             .ServiceDeleteOutput output = new ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
-        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
+        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(returnFuture(output));
         Mockito.when(this.serviceDataStoreOperationsMock
                 .deleteServicePath(serviceDeleteInput.getServiceDeleteReqInfo().getServiceName()))
                 .thenReturn(OperationResult.failed("failed"));
@@ -1045,7 +1061,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
             .ServiceDeleteOutput output = new ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
-        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
+        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(returnFuture(output));
         Mockito.when(this.serviceDataStoreOperationsMock
                 .deleteServicePath(serviceDeleteInput.getServiceDeleteReqInfo().getServiceName()))
                 .thenReturn(OperationResult.ok("success"));
@@ -1074,7 +1090,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
             .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer
                 .rev171017.ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
-        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
+        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(returnFuture(output));
         Mockito.when(this.serviceDataStoreOperationsMock
                 .deleteServicePath(serviceDeleteInput.getServiceDeleteReqInfo().getServiceName()))
                 .thenReturn(OperationResult.ok("success"));
@@ -1105,7 +1121,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
             .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer
                 .rev171017.ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
-        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
+        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(returnFuture(output));
         Mockito.when(this.serviceDataStoreOperationsMock
                 .deleteServicePath(serviceDeleteInput.getCommonId()))
                 .thenReturn(OperationResult.ok("success"));
@@ -1149,7 +1165,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
             .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer
                 .rev171017.ServiceDeleteOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
-        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(output);
+        Mockito.when(this.rendererServiceOperationsMock.serviceDelete(input)).thenReturn(returnFuture(output));
         Mockito.when(this.serviceDataStoreOperationsMock
                 .deleteServicePath(serviceDeleteInput.getServiceDeleteReqInfo().getServiceName()))
                 .thenReturn(OperationResult.ok("success"));
@@ -1176,8 +1192,8 @@ public class ServiceHandlerImplTest extends AbstractTest {
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("successful").build();
         Mockito.when(
                 this.rendererServiceOperationsMock.serviceImplementation(any(ServiceImplementationRequestInput.class)))
-                .thenReturn(new ServiceImplementationRequestOutputBuilder()
-                        .setConfigurationResponseCommon(configurationResponseCommon3).build());
+                .thenReturn(returnFuture(new ServiceImplementationRequestOutputBuilder()
+                        .setConfigurationResponseCommon(configurationResponseCommon3).build()));
         Mockito.when(this.serviceDataStoreOperationsMock.modifyService(any(String.class), any(State.class),
                 any(State.class))).thenReturn(OperationResult.ok("successful"));
 

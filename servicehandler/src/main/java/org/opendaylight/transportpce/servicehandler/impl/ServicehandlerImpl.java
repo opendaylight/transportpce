@@ -147,8 +147,13 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         ServiceImplementationRequestInput serviceImplementationRequest =
                 ModelMappingUtils.createServiceImplementationRequest(new ServiceInput(input), pceResponse);
-        ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
-            .serviceImplementation(serviceImplementationRequest);
+        ServiceImplementationRequestOutput serviceImplementationRequestOutput = null;
+        try {
+            serviceImplementationRequestOutput =
+                    this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest).get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Renderer Service implementation failed !");
+        }
         if (ResponseCodes.RESPONSE_OK
                 .equals(serviceImplementationRequestOutput.getConfigurationResponseCommon().getResponseCode())) {
             String message = "Service rendered successfully !";
@@ -223,7 +228,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
                     new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-                .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
+                .ServiceDeleteOutput output = null;
+        try {
+            output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput).get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Renderer Service delete failed !");
+        }
 
         if (!ResponseCodes.RESPONSE_OK
                 .equals(output.getConfigurationResponseCommon().getResponseCode())) {
@@ -408,7 +418,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
                     new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-            .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
+                .ServiceDeleteOutput output = null;
+        try {
+            output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput).get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Renderer Service delete failed ! ");
+        }
 
         if (!ResponseCodes.RESPONSE_OK
                 .equals(output.getConfigurationResponseCommon().getResponseCode())) {
@@ -478,8 +493,13 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         ServiceImplementationRequestInput serviceImplementationRequest =
                 ModelMappingUtils.createServiceImplementationRequest(new ServiceInput(input), pceResponse);
-        ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
-            .serviceImplementation(serviceImplementationRequest);
+        ServiceImplementationRequestOutput serviceImplementationRequestOutput = null;
+        try {
+            serviceImplementationRequestOutput =
+                    this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest).get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Renderer service implementation failed !");
+        }
         if (ResponseCodes.RESPONSE_OK
                 .equals(serviceImplementationRequestOutput.getConfigurationResponseCommon().getResponseCode())) {
             String message = "Service rendered successfully !";

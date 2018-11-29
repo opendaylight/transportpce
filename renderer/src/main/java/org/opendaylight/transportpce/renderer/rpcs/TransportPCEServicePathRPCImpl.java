@@ -8,6 +8,9 @@
 package org.opendaylight.transportpce.renderer.rpcs;
 
 import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.ExecutionException;
+
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput;
@@ -33,8 +36,13 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
     public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service delete request {} {}", serviceName);
-        return ModelMappingUtils
-                .createServiceDeleteRpcResponse(this.rendererServiceOperations.serviceDelete(input));
+        ServiceDeleteOutput output = null;
+        try {
+            output = this.rendererServiceOperations.serviceDelete(input).get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("RPC service delete failed !");
+        }
+        return ModelMappingUtils.createServiceDeleteRpcResponse(output);
     }
 
     @Override
@@ -42,8 +50,13 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
             ServiceImplementationRequestInput input) {
         String serviceName = input.getServiceName();
         LOG.info("Calling RPC service impl request {} {}", serviceName);
-        return ModelMappingUtils
-                .createServiceImplementationRpcResponse(this.rendererServiceOperations.serviceImplementation(input));
+        ServiceImplementationRequestOutput output = null;
+        try {
+            output = this.rendererServiceOperations.serviceImplementation(input).get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("RPC service implementation failed !");
+        }
+        return ModelMappingUtils.createServiceImplementationRpcResponse(output);
     }
 
 }

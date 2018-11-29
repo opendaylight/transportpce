@@ -8,10 +8,15 @@
 package org.opendaylight.transportpce.servicehandler.stub;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput;
@@ -25,36 +30,49 @@ import org.slf4j.LoggerFactory;
 public class StubRendererServiceOperations implements RendererServiceOperations {
     private static final Logger LOG = LoggerFactory.getLogger(StubRendererServiceOperations.class);
     private StubrendererImpl stubrendererImpl;
+    private final ListeningExecutorService executor;
 
     public StubRendererServiceOperations(NetworkModelWavelengthService networkModelWavelengthService,
-            DataBroker dataBroker) {
-        this.stubrendererImpl = new StubrendererImpl(networkModelWavelengthService, dataBroker);
+            DataBroker dataBroker, NotificationPublishService notificationPublishService) {
+        this.stubrendererImpl =
+                new StubrendererImpl(networkModelWavelengthService, dataBroker, notificationPublishService);
+        executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(2));
     }
 
     @Override
-    public ServiceImplementationRequestOutput serviceImplementation(ServiceImplementationRequestInput input) {
-        ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> rpcResultFuture =
-                this.stubrendererImpl.serviceImplementation(input);
-        try {
-            return rpcResultFuture.get().getResult();
-        } catch (InterruptedException e) {
-            LOG.error("RPC serviceImplementation failed !",e);
-        } catch (ExecutionException e) {
-            LOG.error("RPC serviceImplementation failed !",e);
-        }
-        return null;
+    public ListenableFuture<ServiceImplementationRequestOutput>
+            serviceImplementation(ServiceImplementationRequestInput input) {
+        return executor.submit(new Callable<ServiceImplementationRequestOutput>() {
+
+            @Override
+            public ServiceImplementationRequestOutput call() {
+                ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> rpcResultFuture =
+                        stubrendererImpl.serviceImplementation(input);
+                try {
+                    return rpcResultFuture.get().getResult();
+                } catch (InterruptedException | ExecutionException e) {
+                    LOG.error("RPC serviceImplementation failed !", e);
+                }
+                return null;
+            }
+        });
     }
 
     @Override
-    public ServiceDeleteOutput serviceDelete(ServiceDeleteInput input) {
-        ListenableFuture<RpcResult<ServiceDeleteOutput>> rpcResultFuture = this.stubrendererImpl.serviceDelete(input);
-        try {
-            return rpcResultFuture.get().getResult();
-        } catch (InterruptedException e) {
-            LOG.error("RPC serviceDelete failed !",e);
-        } catch (ExecutionException e) {
-            LOG.error("RPC serviceDelete failed !",e);
-        }
-        return null;
+    public ListenableFuture<ServiceDeleteOutput> serviceDelete(ServiceDeleteInput input) {
+        return executor.submit(new Callable<ServiceDeleteOutput>() {
+
+            @Override
+            public ServiceDeleteOutput call() {
+                ListenableFuture<RpcResult<ServiceDeleteOutput>> rpcResultFuture =
+                        stubrendererImpl.serviceDelete(input);
+                try {
+                    return rpcResultFuture.get().getResult();
+                } catch (InterruptedException | ExecutionException e) {
+                    LOG.error("RPC serviceDelete failed !", e);
+                }
+                return null;
+            }
+        });
     }
 }
