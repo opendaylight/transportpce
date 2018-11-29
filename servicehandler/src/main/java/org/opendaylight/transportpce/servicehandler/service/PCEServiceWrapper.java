@@ -7,6 +7,10 @@
  */
 package org.opendaylight.transportpce.servicehandler.service;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.ExecutionException;
+
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.MappingConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
@@ -61,10 +65,16 @@ public class PCEServiceWrapper {
                         mappingConstraints.getServicePathSoftConstraints(), reserveResource, serviceAEnd,
                         serviceZEnd);
         LOG.debug("Calling path computation.");
-        PathComputationRequestOutput pathComputationRequestOutput
+        ListenableFuture<PathComputationRequestOutput> pathComputationRequestOutput
                 = this.pathComputationService.pathComputationRequest(pathComputationRequestInput);
         LOG.debug("Path computation done.");
-        return pathComputationRequestOutput;
+        PathComputationRequestOutput output = null;
+        try {
+            output = pathComputationRequestOutput.get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("PCE RPC path computation failed !");
+        }
+        return output;
     }
 
     private PathComputationRequestInput createPceRequestInput(String serviceName,

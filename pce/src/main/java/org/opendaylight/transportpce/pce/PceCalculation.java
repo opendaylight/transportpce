@@ -152,7 +152,7 @@ public class PceCalculation {
         for (Node node : this.allNodes) {
             validateNode(node);
         }
-        LOG.info("analyzeNw: allPceNodes size {} : {}", this.allPceNodes.size(), this.allPceNodes.toString());
+        LOG.debug("analyzeNw: allPceNodes size {} : {}", this.allPceNodes.size(), this.allPceNodes.toString());
         if ((this.aendPceNode == null) || (this.zendPceNode == null)) {
             LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
             return false;
@@ -188,7 +188,7 @@ public class PceCalculation {
         }
         // remove the SRG from PceNodes, as it is not directly connected to A/Z
         this.allPceNodes.remove(nodeId);
-        LOG.info("analyzeNw: SRG removed {}", nodeId.getValue());
+        LOG.debug("analyzeNw: SRG removed {}", nodeId.getValue());
         return false;
     }
 
@@ -202,7 +202,7 @@ public class PceCalculation {
         }
         // remove the SRG from PceNodes, as it is not directly connected to A/Z
         this.allPceNodes.remove(pcelink.getDestId());
-        LOG.info("analyzeNw: SRG removed {}", nodeId.getValue());
+        LOG.debug("analyzeNw: SRG removed {}", nodeId.getValue());
         return false;
     }
 
@@ -362,7 +362,7 @@ public class PceCalculation {
             return false;
         }
         this.allPceNodes.put(nodeId, pceNode);
-        LOG.info("validateNode: node is saved {}", nodeId.getValue());
+        LOG.debug("validateNode: node is saved {}", nodeId.getValue());
         return true;
     }
 

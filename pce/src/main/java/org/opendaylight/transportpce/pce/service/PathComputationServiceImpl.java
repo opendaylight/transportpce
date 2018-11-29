@@ -7,6 +7,13 @@
  */
 package org.opendaylight.transportpce.pce.service;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
@@ -34,14 +41,15 @@ import org.slf4j.LoggerFactory;
 public class PathComputationServiceImpl implements PathComputationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PathComputationServiceImpl.class);
-
     private final NotificationPublishService notificationPublishService;
     private final DataBroker dataBroker;
+    private final ListeningExecutorService executor;
+    ServicePathRpcResult notification = null;
 
-    public PathComputationServiceImpl(DataBroker dataBroker,
-                                      NotificationPublishService notificationPublishService) {
+    public PathComputationServiceImpl(DataBroker dataBroker, NotificationPublishService notificationPublishService) {
         this.notificationPublishService = notificationPublishService;
         this.dataBroker = dataBroker;
+        this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
     }
 
     public void init() {
@@ -52,154 +60,132 @@ public class PathComputationServiceImpl implements PathComputationService {
         LOG.info("close.");
     }
 
+    private void sendNotifications(ServicePathNotificationTypes servicePathNotificationTypes, String serviceName,
+            RpcStatusEx rpcStatusEx, String message, PathDescription pathDescription) {
+        ServicePathRpcResultBuilder servicePathRpcResultBuilder =
+                new ServicePathRpcResultBuilder().setNotificationType(servicePathNotificationTypes)
+                        .setServiceName(serviceName).setStatus(rpcStatusEx).setStatusMessage(message);
+        if (pathDescription != null) {
+            servicePathRpcResultBuilder.setPathDescription(pathDescription);
+        }
+        this.notification = servicePathRpcResultBuilder.build();
+        try {
+            notificationPublishService.putNotification(this.notification);
+        } catch (InterruptedException e) {
+            LOG.info("notification offer rejected : ", e.getMessage());
+        }
+    }
+
     @Override
-    public CancelResourceReserveOutput cancelResourceReserve(CancelResourceReserveInput input) {
+    public ListenableFuture<CancelResourceReserveOutput> cancelResourceReserve(CancelResourceReserveInput input) {
         LOG.info("cancelResourceReserve");
-        String message = "";
+        return executor.submit(new Callable<CancelResourceReserveOutput>() {
 
-        ServicePathRpcResult notification = new ServicePathRpcResultBuilder()
-                .setNotificationType(ServicePathNotificationTypes.CancelResourceReserve)
-                .setServiceName(input.getServiceName())
-                .setStatus(RpcStatusEx.Pending)
-                .setStatusMessage("Service compliant, submitting cancelResourceReserve Request ...")
-                .build();
-        try {
-            notificationPublishService.putNotification(notification);
-        } catch (InterruptedException e) {
-            LOG.info("notification offer rejected : ", e.getMessage());
-        }
-
-        PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs();
-        sendingPCE.cancelResourceReserve();
-        if (sendingPCE.getSuccess()) {
-            message = "ResourceReserve cancelled !";
-        } else {
-            message = "Cancelling ResourceReserve failed !";
-        }
-        LOG.info(message);
-        ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder();
-        configurationResponseCommon
-                .setAckFinalIndicator("Yes")
-                .setRequestId(input.getServiceHandlerHeader().getRequestId())
-                .setResponseCode("200")
-                .setResponseMessage("")
-                .setResponseMessage(message);
-        CancelResourceReserveOutputBuilder output  = new CancelResourceReserveOutputBuilder();
-        output.setConfigurationResponseCommon(configurationResponseCommon.build());
-        return output.build();
+            @Override
+            public CancelResourceReserveOutput call() throws Exception {
+                String message = "";
+                sendNotifications(ServicePathNotificationTypes.CancelResourceReserve, input.getServiceName(),
+                        RpcStatusEx.Pending, "Service compliant, submitting cancelResourceReserve Request ...", null);
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs();
+                sendingPCE.cancelResourceReserve();
+                if (sendingPCE.getSuccess()) {
+                    message = "ResourceReserve cancelled !";
+                } else {
+                    message = "Cancelling ResourceReserve failed !";
+                }
+                LOG.info(message);
+                sendNotifications(ServicePathNotificationTypes.CancelResourceReserve, input.getServiceName(),
+                        RpcStatusEx.Successful, "cancel Resource Reserve successful!", null);
+                ConfigurationResponseCommonBuilder configurationResponseCommon =
+                        new ConfigurationResponseCommonBuilder();
+                configurationResponseCommon.setAckFinalIndicator("Yes")
+                        .setRequestId(input.getServiceHandlerHeader().getRequestId()).setResponseCode("200")
+                        .setResponseMessage("");
+                CancelResourceReserveOutputBuilder output = new CancelResourceReserveOutputBuilder();
+                output.setConfigurationResponseCommon(configurationResponseCommon.build());
+                return output.build();
+            }
+        });
     }
 
     @Override
-    public PathComputationRequestOutput pathComputationRequest(PathComputationRequestInput input) {
+    public ListenableFuture<PathComputationRequestOutput> pathComputationRequest(PathComputationRequestInput input) {
         LOG.info("pathComputationRequest");
+        return executor.submit(new Callable<PathComputationRequestOutput>() {
 
-        PathComputationRequestOutputBuilder output = new PathComputationRequestOutputBuilder();
-        ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder();
-
-        PceComplianceCheckResult check = PceComplianceCheck.check(input);
-        if (!check.hasPassed()) {
-            configurationResponseCommon
-                    .setAckFinalIndicator("Yes")
-                    .setRequestId(input.getServiceHandlerHeader().getRequestId())
-                    .setResponseCode("Path not calculated")
-                    .setResponseMessage(check.getMessage());
-
-
-            output.setConfigurationResponseCommon(configurationResponseCommon.build())
-                    .setResponseParameters(null);
-
-            return output.build();
-        }
-        ServicePathRpcResult notification = new ServicePathRpcResultBuilder()
-                .setNotificationType(ServicePathNotificationTypes.PathComputationRequest)
-                .setServiceName(input.getServiceName())
-                .setStatus(RpcStatusEx.Pending)
-                .setStatusMessage("Service compliant, submitting pathComputation Request ...")
-                .build();
-        try {
-            notificationPublishService.putNotification(notification);
-        } catch (InterruptedException e) {
-            LOG.info("notification offer rejected : ", e.getMessage());
-        }
-
-        String message = "";
-        String responseCode = "";
-        PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, dataBroker);
-        sendingPCE.pathComputation();
-        message = sendingPCE.getMessage();
-        responseCode = sendingPCE.getResponseCode();
-        PathDescriptionBuilder path = null;
-        path = sendingPCE.getPathDescription();
-
-
-        LOG.info("PCE response: {} {}", message, responseCode);
-        if ((sendingPCE.getSuccess() == false) || (path == null)) {
-            configurationResponseCommon
-                    .setAckFinalIndicator("Yes")
-                    .setRequestId(input.getServiceHandlerHeader().getRequestId())
-                    .setResponseCode(responseCode)
-                    .setResponseMessage(message);
-
-            output.setConfigurationResponseCommon(configurationResponseCommon.build());
-            return output.build();
-        }
-
-        // Path calculator returned Success
-        configurationResponseCommon
-                .setAckFinalIndicator("Yes")
-                .setRequestId(input.getServiceHandlerHeader().getRequestId())
-                .setResponseCode(responseCode)
-                .setResponseMessage(message);
-
-        ServicePathRpcResultBuilder tmp = new ServicePathRpcResultBuilder()
-                .setNotificationType(ServicePathNotificationTypes.PathComputationRequest)
-                .setServiceName(input.getServiceName())
-                .setStatus(RpcStatusEx.Successful)
-                .setStatusMessage(message);
-        PathDescription pathDescription = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce
-                .pce.rev171017.service.path.rpc.result.PathDescriptionBuilder()
-                .setAToZDirection(path.getAToZDirection())
-                .setZToADirection(path.getZToADirection())
-                .build();
-        tmp.setPathDescription(pathDescription);
-
-        notification = tmp.build();
-        try {
-            notificationPublishService.putNotification(notification);
-        } catch (InterruptedException e) {
-            LOG.error("notification offer rejected : {}", e.getMessage());
-        }
-
-        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types
-                .rev171016.response.parameters.sp.response.parameters.PathDescription pathDescription1
-                = new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types
-                .rev171016.response.parameters.sp.response.parameters.PathDescriptionBuilder()
-                .setAToZDirection(path.getAToZDirection())
-                .setZToADirection(path.getZToADirection())
-                .build();
-        ResponseParametersBuilder rpb  = new ResponseParametersBuilder()
-                .setPathDescription(pathDescription1);
-
-        output.setConfigurationResponseCommon(configurationResponseCommon.build())
-              .setResponseParameters(rpb.build());
-
-        //debug prints
-        AToZDirection atoz = pathDescription.getAToZDirection();
-        if ((atoz != null) && (atoz.getAToZ() != null)) {
-            LOG.info("Impl AtoZ Notification: [{}] elements in description", atoz.getAToZ().size());
-            for (int i = 0; i < atoz.getAToZ().size(); i++) {
-                LOG.info("Impl AtoZ Notification: [{}] {}", i, atoz.getAToZ().get(i));
+            @Override
+            public PathComputationRequestOutput call() throws Exception {
+                PathComputationRequestOutputBuilder output = new PathComputationRequestOutputBuilder();
+                ConfigurationResponseCommonBuilder configurationResponseCommon =
+                        new ConfigurationResponseCommonBuilder();
+                PceComplianceCheckResult check = PceComplianceCheck.check(input);
+                if (!check.hasPassed()) {
+                    LOG.error("Path not calculated, service not compliant : {}", check.getMessage());
+                    sendNotifications(ServicePathNotificationTypes.PathComputationRequest, input.getServiceName(),
+                            RpcStatusEx.Failed, "Path not calculated, service not compliant", null);
+                    configurationResponseCommon.setAckFinalIndicator("Yes")
+                            .setRequestId(input.getServiceHandlerHeader().getRequestId())
+                            .setResponseCode("Path not calculated").setResponseMessage(check.getMessage());
+                    output.setConfigurationResponseCommon(configurationResponseCommon.build())
+                            .setResponseParameters(null);
+                    return output.build();
+                }
+                sendNotifications(ServicePathNotificationTypes.PathComputationRequest, input.getServiceName(),
+                        RpcStatusEx.Pending, "Service compliant, submitting pathComputation Request ...", null);
+                String message = "";
+                String responseCode = "";
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, dataBroker);
+                sendingPCE.pathComputation();
+                message = sendingPCE.getMessage();
+                responseCode = sendingPCE.getResponseCode();
+                PathDescriptionBuilder path = null;
+                path = sendingPCE.getPathDescription();
+                LOG.info("PCE response: {} {}", message, responseCode);
+                if ((sendingPCE.getSuccess() == false) || (path == null)) {
+                    configurationResponseCommon.setAckFinalIndicator("Yes")
+                            .setRequestId(input.getServiceHandlerHeader().getRequestId()).setResponseCode(responseCode)
+                            .setResponseMessage(message);
+                    output.setConfigurationResponseCommon(configurationResponseCommon.build());
+                    sendNotifications(ServicePathNotificationTypes.PathComputationRequest, input.getServiceName(),
+                            RpcStatusEx.Failed, "Path not calculated", null);
+                    return output.build();
+                }
+                // Path calculator returned Success
+                configurationResponseCommon.setAckFinalIndicator("Yes")
+                        .setRequestId(input.getServiceHandlerHeader().getRequestId()).setResponseCode(responseCode)
+                        .setResponseMessage(message);
+                PathDescription pathDescription = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce
+                        .pce.rev171017.service.path.rpc.result.PathDescriptionBuilder()
+                                .setAToZDirection(path.getAToZDirection()).setZToADirection(path.getZToADirection())
+                                .build();
+                sendNotifications(ServicePathNotificationTypes.PathComputationRequest, input.getServiceName(),
+                        RpcStatusEx.Successful, message, pathDescription);
+                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response
+                    .parameters.sp.response.parameters.PathDescription pathDescription1 = new org.opendaylight.yang.gen
+                        .v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp
+                        .response.parameters.PathDescriptionBuilder()
+                                .setAToZDirection(path.getAToZDirection()).setZToADirection(path.getZToADirection())
+                                .build();
+                ResponseParametersBuilder rpb = new ResponseParametersBuilder().setPathDescription(pathDescription1);
+                output.setConfigurationResponseCommon(configurationResponseCommon.build())
+                        .setResponseParameters(rpb.build());
+                // debug prints
+                AToZDirection atoz = pathDescription.getAToZDirection();
+                if ((atoz != null) && (atoz.getAToZ() != null)) {
+                    LOG.debug("Impl AtoZ Notification: [{}] elements in description", atoz.getAToZ().size());
+                    for (int i = 0; i < atoz.getAToZ().size(); i++) {
+                        LOG.debug("Impl AtoZ Notification: [{}] {}", i, atoz.getAToZ().get(i));
+                    }
+                }
+                ZToADirection ztoa = pathDescription.getZToADirection();
+                if ((ztoa != null) && (ztoa.getZToA() != null)) {
+                    LOG.debug("Impl ZtoA Notification: [{}] elements in description", ztoa.getZToA().size());
+                    for (int i = 0; i < ztoa.getZToA().size(); i++) {
+                        LOG.debug("Impl ZtoA Notification: [{}] {}", i, ztoa.getZToA().get(i));
+                    }
+                }
+                return output.build();
             }
-        }
-        ZToADirection ztoa = pathDescription.getZToADirection();
-        if ((ztoa != null) && (ztoa.getZToA() != null)) {
-            LOG.info("Impl ZtoA Notification: [{}] elements in description", ztoa.getZToA().size());
-            for (int i = 0; i < ztoa.getZToA().size(); i++) {
-                LOG.info("Impl ZtoA Notification: [{}] {}", i, ztoa.getZToA().get(i));
-            }
-        }
-        //debug prints
-        return output.build();
+        });
     }
-
 }

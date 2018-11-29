@@ -8,6 +8,9 @@
 package org.opendaylight.transportpce.pce.impl;
 
 import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.ExecutionException;
+
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.CancelResourceReserveOutput;
@@ -36,7 +39,13 @@ public class PceServiceRPCImpl implements TransportpcePceService {
     public ListenableFuture<RpcResult<CancelResourceReserveOutput>>
             cancelResourceReserve(CancelResourceReserveInput input) {
         LOG.info("RPC cancelResourceReserve request received");
-        return RpcResultBuilder.success(this.pathComputationService.cancelResourceReserve(input)).buildFuture();
+        CancelResourceReserveOutput output = null;
+        try {
+            output = this.pathComputationService.cancelResourceReserve(input).get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("RPC cancelResourceReserve failed !", e);
+        }
+        return RpcResultBuilder.success(output).buildFuture();
     }
 
 
@@ -44,7 +53,13 @@ public class PceServiceRPCImpl implements TransportpcePceService {
     public ListenableFuture<RpcResult<PathComputationRequestOutput>>
             pathComputationRequest(PathComputationRequestInput input) {
         LOG.info("RPC path computation request received");
-        return RpcResultBuilder.success(this.pathComputationService.pathComputationRequest(input)).buildFuture();
+        PathComputationRequestOutput output = null;
+        try {
+            output = this.pathComputationService.pathComputationRequest(input).get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("RPC cancelResourceReserve failed !", e);
+        }
+        return RpcResultBuilder.success(output).buildFuture();
     }
 
 }

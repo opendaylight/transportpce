@@ -7,6 +7,8 @@
  */
 package org.opendaylight.transportpce.pce.service;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.CancelResourceReserveOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestInput;
@@ -23,7 +25,7 @@ public interface PathComputationService {
      * @param input CancelResourceReserveInput data
      * @return output CancelResourceReserveOutput data
      */
-    CancelResourceReserveOutput cancelResourceReserve(CancelResourceReserveInput input);
+    ListenableFuture<CancelResourceReserveOutput> cancelResourceReserve(CancelResourceReserveInput input);
 
     /**
      * Requests a path compuation.
@@ -31,6 +33,6 @@ public interface PathComputationService {
      * @param input PathComputationRequestInput data
      * @return output PathComputationRequestOutput data
      */
-    PathComputationRequestOutput pathComputationRequest(PathComputationRequestInput input);
+    ListenableFuture<PathComputationRequestOutput> pathComputationRequest(PathComputationRequestInput input);
 
 }

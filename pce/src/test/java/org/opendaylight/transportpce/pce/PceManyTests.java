@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.pce;
 
 import java.util.Arrays;
 import java.util.Collection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -76,7 +77,7 @@ public class PceManyTests extends AbstractTest {
 
         PathComputationService pathComputationService =
             new PathComputationServiceImpl(getDataBroker(), notificationPublishService);
-        PathComputationRequestOutput output = pathComputationService.pathComputationRequest(input);
+        PathComputationRequestOutput output = pathComputationService.pathComputationRequest(input).get();
 
         PceTestUtils.checkConfigurationResponse(output, expectedOutput);
 
