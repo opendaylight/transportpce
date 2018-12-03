@@ -16,7 +16,7 @@ import java.util.TreeMap;
 
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.cp.attributes.UsedWavelengths;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.pp.attributes.UsedWavelength;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NodeId;
@@ -36,14 +36,11 @@ public class PceNode {
     private final OpenroadmNodeType nodeType;
     // wavelength calculation per node type
     private List<Long> availableWLindex = new ArrayList<Long>();
-    // private Set<String> availableSrgPp = new TreeSet<String>();
     private Map<String, OpenroadmTpType> availableSrgPp = new TreeMap<String, OpenroadmTpType>();
     private Map<String, OpenroadmTpType> availableSrgCp = new TreeMap<String, OpenroadmTpType>();
     private List<String> usedXpndrNWTps = new ArrayList<String>();
-    private List<String> usedSrgPP = new ArrayList<String>();
     private List<PceLink> outgoingLinks = new ArrayList<PceLink>();
     private Map<String, String> clientPerNwTp = new HashMap<String, String>();
-    private Map<String, String> clientPerPpTp = new HashMap<String, String>();
 
     public PceNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId) {
         this.node = node;
@@ -55,7 +52,7 @@ public class PceNode {
         }
     }
 
-    public void initSrgTpList() {
+    public void initSrgTps() {
         this.availableSrgPp.clear();
         this.availableSrgCp.clear();
         if (!isValid()) {
@@ -73,28 +70,40 @@ public class PceNode {
             this.valid = false;
             return;
         }
-        boolean used;
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.network.node
                 .TerminationPoint tp : allTps) {
-            used = true;
             TerminationPoint1 tp1 = tp.augmentation(TerminationPoint1.class);
-            try {
-                List<UsedWavelengths> usedWavelengths = tp1.getCpAttributes().getUsedWavelengths();
-                if (usedWavelengths.isEmpty()) {
-                    LOG.info("initSrgTpList: SRG-CP tp = {} found", tp.getTpId().getValue());
-                    used = false;
-                }
-            } catch (NullPointerException e) {
-                LOG.warn("initSrgTpList: 'usedWavelengths' for tp={} is null !", tp.getTpId().getValue());
-                used = false;
-            }
-            if (!used) {
-                if (tp1.getTpType().getName().contains("-PP")) {
-                    LOG.info("initSrgTpList: adding tp '{}'", tp1.getTpType());
-                    this.availableSrgPp.put(tp.getTpId().getValue(), tp1.getTpType());
-                } else if (tp1.getTpType().getName().contains("-CP")) {
+            OpenroadmTpType type = tp1.getTpType();
+            switch (type) {
+                case SRGTXRXCP:
+                case SRGRXCP:
+                case SRGTXCP:
+                    LOG.info("initSrgTpList: adding SRG-CP tp = {} ", tp.getTpId().getValue());
                     this.availableSrgCp.put(tp.getTpId().getValue(), tp1.getTpType());
-                }
+                    break;
+                case SRGRXPP:
+                case SRGTXPP:
+                case SRGTXRXPP:
+                    boolean used = true;
+                    LOG.info("initSrgTpList: SRG-PP tp = {} found", tp.getTpId().getValue());
+                    try {
+                        List<UsedWavelength> usedWavelengths = tp1.getPpAttributes().getUsedWavelength();
+                        if (usedWavelengths.isEmpty()) {
+                            used = false;
+                        }
+                    } catch (NullPointerException e) {
+                        LOG.warn("initSrgTpList: 'usedWavelengths' for tp={} is null !", tp.getTpId().getValue());
+                        used = false;
+                    }
+                    if (!used) {
+                        LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
+                        this.availableSrgPp.put(tp.getTpId().getValue(), tp1.getTpType());
+                    } else {
+                        LOG.warn("initSrgTpList: SRG-PP tp = {} found is busy !!");
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         if (this.availableSrgPp.isEmpty() && this.availableSrgCp.isEmpty()) {
@@ -203,81 +212,47 @@ public class PceNode {
         }
     }
 
-    public void initRdmSrgTps(Boolean aend) {
-        LOG.info("initRdmSrgTps for node : {}", this.nodeId);
-        initSrgTpList();
-        if (!isValid()) {
-            return;
+    public String getRdmSrgClient(String tp, Boolean aend) {
+        LOG.info("getRdmSrgClient: Getting PP client for tp '{}' on node : {}", tp, this.nodeId);
+        OpenroadmTpType srgType = null;
+        OpenroadmTpType cpType = this.availableSrgCp.get(tp);
+        if (cpType == null) {
+            LOG.error("getRdmSrgClient: tp {} not existed in SRG CPterminationPoint list");
+            return null;
         }
-        this.valid = false;
-        Optional<String> optTp = null;
-        OpenroadmTpType srgType = OpenroadmTpType.SRGTXRXPP;
-        OpenroadmTpType oppositeSrgType = null;
-        Optional<String> oppositeTp = null;
-        boolean unidir = false;
-        optTp = this.availableSrgCp.entrySet().stream().filter(cp -> cp.getValue() == OpenroadmTpType.SRGTXRXCP)
-                .map(Map.Entry::getKey).findFirst();
-        if (!optTp.isPresent()) {
-            srgType = null;
-            unidir = true;
-            LOG.info("UNI Directional ports ...");
-            if (aend) {
-                LOG.info("Tx port ...");
-                optTp = this.availableSrgCp.entrySet().stream().filter(cp -> cp.getValue() == OpenroadmTpType.SRGTXCP)
-                        .map(Map.Entry::getKey).findFirst();
+        switch (cpType) {
+            case SRGTXRXCP:
+                LOG.info("getRdmSrgClient: Getting BI Directional PP port ...");
+                srgType = OpenroadmTpType.SRGTXRXPP;
+                break;
+            case SRGTXCP:
+                LOG.info("getRdmSrgClient: Getting UNI Rx PP port ...");
                 srgType = OpenroadmTpType.SRGRXPP;
-                oppositeSrgType = OpenroadmTpType.SRGTXPP;
-                oppositeTp = this.availableSrgCp.entrySet().stream()
-                        .filter(cp -> cp.getValue() == OpenroadmTpType.SRGRXCP).map(Map.Entry::getKey).findFirst();
-            } else {
-                LOG.info("Rx port ...");
-                optTp = this.availableSrgCp.entrySet().stream().filter(cp -> cp.getValue() == OpenroadmTpType.SRGRXCP)
-                        .map(Map.Entry::getKey).findFirst();
+                break;
+            case SRGRXCP:
+                LOG.info("getRdmSrgClient: Getting UNI Tx PP port ...");
                 srgType = OpenroadmTpType.SRGTXPP;
-                oppositeSrgType = OpenroadmTpType.SRGRXPP;
-                oppositeTp = this.availableSrgCp.entrySet().stream()
-                        .filter(cp -> cp.getValue() == OpenroadmTpType.SRGTXCP).map(Map.Entry::getKey).findFirst();
+                break;
+            default:
+                break;
+        }
+        LOG.info("getRdmSrgClient:  Getting client PP for CP '{}'", tp);
+        if (!this.availableSrgPp.isEmpty()) {
+            Optional<String> client = null;
+            final OpenroadmTpType openType = srgType;
+            client = this.availableSrgPp.entrySet().stream().filter(pp -> pp.getValue() == openType)
+                    .map(Map.Entry::getKey)
+                    .sorted(new SortPortsByName())
+                    .findFirst();
+            if (!client.isPresent()) {
+                LOG.error("getRdmSrgClient: ROADM {} doesn't have PP Client for CP {}", this.toString(), tp);
+                return null;
             }
+            LOG.info("getRdmSrgClient: client PP {} for CP {} found !", client, tp);
+            return client.get();
         } else {
-            LOG.info("BI Directional ports ...");
-        }
-        if (optTp.isPresent() && (srgType != null)) {
-            String tp = optTp.get();
-            if (!this.availableSrgPp.isEmpty()) {
-                LOG.info("finding PP for CP {}", optTp.get());
-                Optional<String> client = null;
-                final OpenroadmTpType openType = srgType;
-                client = this.availableSrgPp.entrySet().stream().filter(pp -> pp.getValue() == openType)
-                        .map(Map.Entry::getKey).findFirst();
-                if (!client.isPresent()) {
-                    LOG.error("initRdmSrgTps: ROADM {} doesn't have defined Client {}", this.toString(), tp);
-                    this.valid = false;
-                    return;
-                }
-                if (unidir) {
-                    final OpenroadmTpType oppositeOpType = oppositeSrgType;
-                    String opTp = oppositeTp.get();
-                    Optional<String> oppositeClient = this.availableSrgPp.entrySet().stream()
-                            .filter(pp -> pp.getValue() == oppositeOpType)
-                            .map(Map.Entry::getKey).findFirst();
-                    if (!oppositeClient.isPresent()) {
-                        LOG.error("initRdmSrgTps: ROADM {} doesn't have defined opposite Client {}",
-                                this.toString(), tp);
-                        this.valid = false;
-                        return;
-                    }
-                    this.clientPerPpTp.put(opTp, oppositeClient.get());
-                    LOG.info("initRdmSrgTps: client PP {} for oposite CP {} found !", client, tp);
-                }
-                this.valid = true;
-                this.clientPerPpTp.put(tp, client.get());
-                LOG.info("initRdmSrgTps: client PP {} for CP {} found !", client, tp);
-            }
-        }
-        if (!isValid()) {
-            this.valid = false;
-            LOG.error("initRdmSrgTps: SRG TerminationPoint list is empty for node {}", this.toString());
-            return;
+            LOG.error("getRdmSrgClient: SRG TerminationPoint PP list is not available for node {}", this.toString());
+            return null;
         }
     }
 
@@ -313,11 +288,6 @@ public class PceNode {
 
     public String getXpdrClient(String tp) {
         return this.clientPerNwTp.get(tp);
-    }
-
-    public String getRdmSrgClient(String tp) {
-        LOG.info("Getting ROADM Client PP for CP {} : {}", tp, this.clientPerPpTp.get(tp));
-        return this.clientPerPpTp.get(tp);
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
@@ -128,7 +129,9 @@ public class PceCalculation {
             LOG.error("readMdSal: network is null: {}", nwInstanceIdentifier);
             return false;
         }
-        this.allNodes = nw.getNode();
+        this.allNodes = nw.getNode().stream()
+                .sorted((node1, node2) -> node1.getNodeId().getValue().compareTo(node2.getNodeId().getValue()))
+                .collect(Collectors.toList());
         Network1 nw1 = nw.augmentation(Network1.class);
         this.allLinks = nw1.getLink();
         if ((this.allNodes == null) || this.allNodes.isEmpty()) {
@@ -237,12 +240,12 @@ public class PceCalculation {
                 LOG.info("validateLink: EXPRESS-LINK added to allPceLinks {}", pcelink.toString());
                 break;
             case ADDLINK :
-                pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString()));
+                pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString(), true));
                 this.addLinks.add(pcelink);
-                LOG.debug("validateLink: ADD-LINK saved  {}", pcelink.toString());
+                LOG.info("validateLink: ADD-LINK saved  {}", pcelink.toString());
                 break;
             case DROPLINK :
-                pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString()));
+                pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString(), false));
                 this.dropLinks.add(pcelink);
                 LOG.info("validateLink: DROP-LINK saved  {}", pcelink.toString());
                 break;
@@ -328,21 +331,29 @@ public class PceCalculation {
             return false;
         }
         if (supNodeId.equals(this.anodeId)) {
-            if (endPceNode(nodeType, nodeId, pceNode, true)) {
-                if (!pceNode.isValid()) {
-                    LOG.error("validateNode: There are no available wavelengths in node {}", nodeId.getValue());
-                    return false;
+            if (this.aendPceNode == null) {
+                if (endPceNode(nodeType, nodeId, pceNode, true)) {
+                    if (!pceNode.isValid()) {
+                        LOG.error("validateNode: There are no available wavelengths in node {}", nodeId.getValue());
+                        return false;
+                    }
+                    this.aendPceNode = pceNode;
                 }
-                this.aendPceNode = pceNode;
+            } else {
+                LOG.warn("aendPceNode already gets: {}", this.aendPceNode);
             }
         }
         if (supNodeId.equals(this.znodeId)) {
-            if (endPceNode(nodeType, nodeId, pceNode, false)) {
-                if (!pceNode.isValid()) {
-                    LOG.error("validateNode: There are no available wavelengths in node {}", nodeId.getValue());
-                    return false;
+            if (this.zendPceNode == null) {
+                if (endPceNode(nodeType, nodeId, pceNode, false)) {
+                    if (!pceNode.isValid()) {
+                        LOG.error("validateNode: There are no available wavelengths in node {}", nodeId.getValue());
+                        return false;
+                    }
+                    this.zendPceNode = pceNode;
                 }
-                this.zendPceNode = pceNode;
+            } else {
+                LOG.warn("zendPceNode already gets: {}", this.zendPceNode);
             }
         }
         pceNode.initWLlist();
@@ -359,7 +370,7 @@ public class PceCalculation {
         Boolean add = true;
         switch (openroadmNodeType) {
             case SRG :
-                pceNode.initRdmSrgTps(aend);
+                pceNode.initSrgTps();
                 this.azSrgs.add(nodeId);
                 break;
             case XPONDER :
