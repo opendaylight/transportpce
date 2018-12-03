@@ -9,9 +9,19 @@
 
 package org.opendaylight.transportpce.servicehandler.stub;
 
+import com.google.common.base.Optional;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
+import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.Timeouts;
+import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutputBuilder;
@@ -19,6 +29,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.service.path.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -31,18 +46,21 @@ import org.slf4j.LoggerFactory;
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
-public final class StubrendererImpl {
+public class StubrendererImpl {
     /** Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(StubrendererImpl.class);
     /** check service sdnc-request-header compliancy. */
+    private final NetworkModelWavelengthService networkModelWavelengthService;
+    private final DataBroker dataBroker;
 
-    private StubrendererImpl() {
-
+    public StubrendererImpl(NetworkModelWavelengthService networkModelWavelengthService, DataBroker dataBroker) {
+        this.networkModelWavelengthService = networkModelWavelengthService;
+        this.dataBroker = dataBroker;
     }
 
-
-    public static ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
+    public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         LOG.info("ServiceDelete request ...");
+        String serviceName = input.getServiceName();
         String message = "";
         String responseCode = null;
         try {
@@ -53,7 +71,19 @@ public final class StubrendererImpl {
             LOG.error("deleting service failed !", e);
             responseCode = ResponseCodes.RESPONSE_FAILED;
         }
-        responseCode = ResponseCodes.RESPONSE_OK;
+        // Obtain path description
+        Optional<PathDescription> pathDescriptionOpt = getPathDescriptionFromDatastore(serviceName);
+        PathDescription pathDescription;
+        if (pathDescriptionOpt.isPresent()) {
+            pathDescription = pathDescriptionOpt.get();
+            this.networkModelWavelengthService.freeWavelengths(pathDescription);
+            responseCode = ResponseCodes.RESPONSE_OK;
+            message = "service deleted !";
+        } else {
+            LOG.error("failed to get pathDescription for service : {}", serviceName);
+            responseCode = ResponseCodes.RESPONSE_FAILED;
+            message = "failed to get pathDescription for service : " + serviceName;
+        }
         ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES)
                 .setRequestId(input.getServiceHandlerHeader().getRequestId())
@@ -65,7 +95,7 @@ public final class StubrendererImpl {
         return RpcResultBuilder.success(output).buildFuture();
     }
 
-    public static ListenableFuture<RpcResult<ServiceImplementationRequestOutput>>
+    public ListenableFuture<RpcResult<ServiceImplementationRequestOutput>>
         serviceImplementation(ServiceImplementationRequestInput input) {
         LOG.info("serviceImplementation request ...");
         String message = "";
@@ -78,6 +108,8 @@ public final class StubrendererImpl {
             LOG.error(message);
             responseCode = ResponseCodes.RESPONSE_FAILED;
         }
+        this.networkModelWavelengthService.useWavelengths(input.getPathDescription());
+        message = "service implemented !";
         responseCode = ResponseCodes.RESPONSE_OK;
         ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES)
@@ -88,5 +120,20 @@ public final class StubrendererImpl {
                 .setConfigurationResponseCommon(configurationResponseCommon.build())
                 .build();
         return RpcResultBuilder.success(output).buildFuture();
+    }
+
+    private Optional<PathDescription> getPathDescriptionFromDatastore(String serviceName) {
+        InstanceIdentifier<PathDescription> pathDescriptionIID = InstanceIdentifier.create(ServicePathList.class)
+                .child(ServicePaths.class, new ServicePathsKey(serviceName)).child(PathDescription.class);
+        ReadOnlyTransaction pathDescReadTx = this.dataBroker.newReadOnlyTransaction();
+        try {
+            LOG.debug("Getting path description for service {}", serviceName);
+            return pathDescReadTx.read(LogicalDatastoreType.OPERATIONAL, pathDescriptionIID)
+                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.warn("Exception while getting path description from datastore {} for service {}!", pathDescriptionIID,
+                    serviceName, e);
+            return Optional.absent();
+        }
     }
 }

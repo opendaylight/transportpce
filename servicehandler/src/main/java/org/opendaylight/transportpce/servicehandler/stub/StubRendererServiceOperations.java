@@ -8,7 +8,11 @@
 package org.opendaylight.transportpce.servicehandler.stub;
 
 import com.google.common.util.concurrent.ListenableFuture;
+
 import java.util.concurrent.ExecutionException;
+
+import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput;
@@ -20,11 +24,17 @@ import org.slf4j.LoggerFactory;
 
 public class StubRendererServiceOperations implements RendererServiceOperations {
     private static final Logger LOG = LoggerFactory.getLogger(StubRendererServiceOperations.class);
+    private StubrendererImpl stubrendererImpl;
+
+    public StubRendererServiceOperations(NetworkModelWavelengthService networkModelWavelengthService,
+            DataBroker dataBroker) {
+        this.stubrendererImpl = new StubrendererImpl(networkModelWavelengthService, dataBroker);
+    }
 
     @Override
     public ServiceImplementationRequestOutput serviceImplementation(ServiceImplementationRequestInput input) {
-        ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> rpcResultFuture = StubrendererImpl
-                .serviceImplementation(input);
+        ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> rpcResultFuture =
+                this.stubrendererImpl.serviceImplementation(input);
         try {
             return rpcResultFuture.get().getResult();
         } catch (InterruptedException e) {
@@ -37,7 +47,7 @@ public class StubRendererServiceOperations implements RendererServiceOperations 
 
     @Override
     public ServiceDeleteOutput serviceDelete(ServiceDeleteInput input) {
-        ListenableFuture<RpcResult<ServiceDeleteOutput>> rpcResultFuture = StubrendererImpl.serviceDelete(input);
+        ListenableFuture<RpcResult<ServiceDeleteOutput>> rpcResultFuture = this.stubrendererImpl.serviceDelete(input);
         try {
             return rpcResultFuture.get().getResult();
         } catch (InterruptedException e) {

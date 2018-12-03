@@ -30,6 +30,9 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <reference id="rendererServiceOperations"
              interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
 
+    <reference id="networkModelWavelengthService"
+           interface="org.opendaylight.transportpce.renderer.NetworkModelWavelengthService" />
+
     <bean id="provider"
           class="org.opendaylight.transportpce.servicehandler.impl.ServicehandlerProvider"
           init-method="init" destroy-method="close">
@@ -38,6 +41,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="notificationService" />
         <argument ref="pathComputationService" />
         <argument ref="rendererServiceOperations" />
+        <argument ref="networkModelWavelengthService" />
     </bean>
 
 </blueprint>

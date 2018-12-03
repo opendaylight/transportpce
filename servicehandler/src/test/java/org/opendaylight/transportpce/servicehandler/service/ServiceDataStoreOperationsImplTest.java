@@ -16,6 +16,7 @@ import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
+import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.stub.StubRendererServiceOperations;
@@ -32,15 +33,17 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     private PCEServiceWrapper pceServiceWrapper;
     private ServicehandlerImpl serviceHandler;
     private RendererServiceOperations rendererServiceOperations;
+    private NetworkModelWavelengthService networkModelWavelengthService;
 
     public ServiceDataStoreOperationsImplTest() {
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         PathComputationService pathComputationService = new PathComputationServiceImpl(getDataBroker(),
             notificationPublishService);
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService);
-        this.rendererServiceOperations = new StubRendererServiceOperations();
+        this.rendererServiceOperations =
+                new StubRendererServiceOperations(this.networkModelWavelengthService, getDataBroker());
         this.serviceHandler = new ServicehandlerImpl(getDataBroker(), pathComputationService,
-            this.rendererServiceOperations);
+                this.rendererServiceOperations, this.networkModelWavelengthService);
     }
 
 

@@ -19,6 +19,7 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
+import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
@@ -92,7 +93,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     //TODO: remove private request fields as they are in global scope
 
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
-                              RendererServiceOperations rendererServiceOperations) {
+            RendererServiceOperations rendererServiceOperations,
+            NetworkModelWavelengthService networkModelWavelengthService) {
         this.db = databroker;
         this.rendererServiceOperations = rendererServiceOperations;
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
@@ -221,7 +223,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
                     new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-            .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
+                .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
 
         if (!ResponseCodes.RESPONSE_OK
                 .equals(output.getConfigurationResponseCommon().getResponseCode())) {

@@ -1,8 +1,8 @@
 diff --git a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
-index 44ef53a..810f093 100644
+index 3a07abb..f79862d 100644
 --- a/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
 +++ b/servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java
-@@ -25,6 +25,7 @@ import org.opendaylight.transportpce.servicehandler.ServiceInput;
+@@ -26,6 +26,7 @@ import org.opendaylight.transportpce.servicehandler.ServiceInput;
  import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
  import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
  import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
@@ -10,55 +10,21 @@ index 44ef53a..810f093 100644
  import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateValidation;
  import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
  import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck;
-@@ -87,6 +88,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+@@ -87,7 +88,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+ 
      private DataBroker db;
      private ServiceDataStoreOperations serviceDataStoreOperations;
-     private RendererServiceOperations rendererServiceOperations;
-+    private StubRendererServiceOperations stubRendererServiceOperations;
+-    private RendererServiceOperations rendererServiceOperations;
++    private StubRendererServiceOperations rendererServiceOperations;
      private PCEServiceWrapper pceServiceWrapper;
  
      //TODO: remove private request fields as they are in global scope
-@@ -95,6 +97,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
-                               RendererServiceOperations rendererServiceOperations) {
+@@ -96,7 +97,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
+             RendererServiceOperations rendererServiceOperations,
+             NetworkModelWavelengthService networkModelWavelengthService) {
          this.db = databroker;
-         this.rendererServiceOperations = rendererServiceOperations;
-+        this.stubRendererServiceOperations = new StubRendererServiceOperations();
+-        this.rendererServiceOperations = rendererServiceOperations;
++        this.rendererServiceOperations = new StubRendererServiceOperations(networkModelWavelengthService, db);
          this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
          this.serviceDataStoreOperations.initialize();
          this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService);
-@@ -145,7 +148,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
- 
-         ServiceImplementationRequestInput serviceImplementationRequest =
-                 ModelMappingUtils.createServiceImplementationRequest(new ServiceInput(input), pceResponse);
--        ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
-+        ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.stubRendererServiceOperations
-             .serviceImplementation(serviceImplementationRequest);
-         if (ResponseCodes.RESPONSE_OK
-                 .equals(serviceImplementationRequestOutput.getConfigurationResponseCommon().getResponseCode())) {
-@@ -221,7 +224,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
-             .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
-                     new ServiceInput(input));
-         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
--            .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
-+            .ServiceDeleteOutput output = this.stubRendererServiceOperations.serviceDelete(serviceDeleteInput);
- 
-         if (!ResponseCodes.RESPONSE_OK
-                 .equals(output.getConfigurationResponseCommon().getResponseCode())) {
-@@ -406,7 +409,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
-             .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
-                     new ServiceInput(input));
-         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
--            .ServiceDeleteOutput output = this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
-+            .ServiceDeleteOutput output = this.stubRendererServiceOperations.serviceDelete(serviceDeleteInput);
- 
-         if (!ResponseCodes.RESPONSE_OK
-                 .equals(output.getConfigurationResponseCommon().getResponseCode())) {
-@@ -476,7 +479,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
- 
-         ServiceImplementationRequestInput serviceImplementationRequest =
-                 ModelMappingUtils.createServiceImplementationRequest(new ServiceInput(input), pceResponse);
--        ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.rendererServiceOperations
-+        ServiceImplementationRequestOutput serviceImplementationRequestOutput = this.stubRendererServiceOperations
-             .serviceImplementation(serviceImplementationRequest);
-         if (ResponseCodes.RESPONSE_OK
-                 .equals(serviceImplementationRequestOutput.getConfigurationResponseCommon().getResponseCode())) {
