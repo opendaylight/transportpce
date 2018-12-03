@@ -34,6 +34,7 @@ import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
+import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
@@ -88,6 +89,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     private PathComputationService pathComputationService;
     private RendererServiceOperations rendererServiceOperations;
+    private NetworkModelWavelengthService networkModelWavelengthService;
     private ServicehandlerImpl serviceHandler;
 
     @Mock
@@ -111,8 +113,8 @@ public class ServiceHandlerImplTest extends AbstractTest {
     @Before
     public void setUp() {
         this.serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService,
-                this.rendererServiceOperations);
-        this.serviceHandlerImplMock = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
+                this.rendererServiceOperations, this.networkModelWavelengthService);
+        this.serviceHandlerImplMock = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null, null);
         MockitoAnnotations.initMocks(this);
     }
 
@@ -121,7 +123,8 @@ public class ServiceHandlerImplTest extends AbstractTest {
         this.pathComputationService = new PathComputationServiceImpl(getDataBroker(), notificationPublishService);
         PceTestUtils.writeTopologyIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 "topologyData/NW-simple-topology.xml");
-        this.rendererServiceOperations = new StubRendererServiceOperations();
+        this.rendererServiceOperations =
+                new StubRendererServiceOperations(this.networkModelWavelengthService, getDataBroker());
     }
 
     @Test
@@ -341,7 +344,8 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerNotValidServiceAEndRateIsNull() throws ExecutionException, InterruptedException {
-        ServicehandlerImpl servicehandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
+        ServicehandlerImpl servicehandler =
+                new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null, null);
         ServiceCreateInput notValidServiceAEnd = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(notValidServiceAEnd);
         notValidServiceAEnd = buildInput.setServiceAEnd(ServiceDataUtils.getServiceAEndBuild().setServiceRate(null)
@@ -354,7 +358,8 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     @Test
     public void createServiceHandlerNotValidServiceZEndRateIsNull() throws ExecutionException, InterruptedException {
-        ServicehandlerImpl servicehandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
+        ServicehandlerImpl servicehandler =
+                new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null, null);
         ServiceCreateInput notValidServiceZEnd = ServiceDataUtils.buildServiceCreateInput();
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(notValidServiceZEnd);
         notValidServiceZEnd = buildInput.setServiceZEnd(ServiceDataUtils.getServiceZEndBuild().setServiceRate(null)
@@ -518,7 +523,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
         txDirectionBuilder.setLgx(lgx);
         serviceAEndBuilder.setTxDirection(txDirectionBuilder.build());
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(serviceCreateInput);
-        this.serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
+        this.serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null, null);
         return serviceHandler.serviceCreate(buildInput.setServiceAEnd(serviceAEndBuilder.build()).build()).get()
                 .getResult();
     }
@@ -801,7 +806,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
         rxDirectionBuilder.setLgx(lgx);
         serviceAEndBuilder.setRxDirection(rxDirectionBuilder.build());
         ServiceCreateInputBuilder buildInput = new ServiceCreateInputBuilder(serviceCreateInput);
-        this.serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null);
+        this.serviceHandler = new ServicehandlerImpl(getDataBroker(), this.pathComputationService, null, null);
         return serviceHandler.serviceCreate(buildInput.setServiceAEnd(serviceAEndBuilder.build()).build()).get()
                 .getResult();
     }

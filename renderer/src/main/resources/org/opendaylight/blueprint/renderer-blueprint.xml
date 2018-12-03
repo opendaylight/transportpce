@@ -65,4 +65,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <service ref="rendererServiceOperations"
            interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
 
+  <service ref="networkModelWavelengthService"
+           interface="org.opendaylight.transportpce.renderer.NetworkModelWavelengthService" />
+
 </blueprint>
