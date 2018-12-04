@@ -75,6 +75,8 @@ public final class LinkIdUtil {
      * @param srcTp a source termination point
      * @param destNode a destination node
      * @param destTp a destination termination point
+     * @param checkNode boolean to check node
+     *
      * @return LinkId a link identifier
      */
     public static LinkId getOppositeLinkId(String srcNode, String srcTp, String destNode, String destTp,

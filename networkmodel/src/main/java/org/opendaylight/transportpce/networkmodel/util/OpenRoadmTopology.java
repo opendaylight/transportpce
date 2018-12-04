@@ -101,6 +101,8 @@ public class OpenRoadmTopology {
     /**
      * This public method creates the OpenROADM Topology Layer and posts it to
      * the controller.
+     *
+     * @param controllerdb controller databroker
      */
     public void createTopoLayer(DataBroker controllerdb) {
         try {
