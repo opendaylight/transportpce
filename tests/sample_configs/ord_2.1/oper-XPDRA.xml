@@ -188,7 +188,7 @@
         <cp-slot-name>2</cp-slot-name>
       </parent-circuit-pack>
       <ports>
-        <port-name>2</port-name>
+        <port-name>1</port-name>
         <port-type>CFP2</port-type>
         <port-qual>xpdr-network</port-qual>
         <port-direction>bidirectional</port-direction>
@@ -909,7 +909,7 @@
       <connection-map-number>1</connection-map-number>
       <source>
         <circuit-pack-name>1/0/C1-PLUG-CLIENT</circuit-pack-name>
-        <port-name>1</port-name>
+        <port-name>C1</port-name>
       </source>
       <destination>
         <circuit-pack-name>1/0/1-PLUG-NET</circuit-pack-name>
@@ -924,14 +924,14 @@
       </source>
       <destination>
         <circuit-pack-name>1/0/C1-PLUG-CLIENT</circuit-pack-name>
-        <port-name>1</port-name>
+        <port-name>C1</port-name>
       </destination>
     </connection-map>
     <connection-map>
       <connection-map-number>3</connection-map-number>
       <source>
         <circuit-pack-name>1/0/C3-PLUG-CLIENT</circuit-pack-name>
-        <port-name>1</port-name>
+        <port-name>C3</port-name>
       </source>
       <destination>
         <circuit-pack-name>1/0/2-PLUG-NET</circuit-pack-name>
@@ -946,7 +946,7 @@
       </source>
       <destination>
         <circuit-pack-name>1/0/C3-PLUG-CLIENT</circuit-pack-name>
-        <port-name>1</port-name>
+        <port-name>C3</port-name>
       </destination>
     </connection-map>
   </org-openroadm-device>
