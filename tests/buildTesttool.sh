@@ -14,7 +14,7 @@ netconf/netconf/models/ietf-netconf-notifications/src/main/yang/notifications@20
 
 rm -rf netconf mdsal && git submodule update --init
 (cd netconf && patch -p1 < ../netconf.patch )
-(cd netconf/netconf/tools/netconf-testtool && mvn clean install -DskipTests)
+(cd netconf/netconf/tools/netconf-testtool && mvn clean install -s ../../../../odl_settings.xml -DskipTests -Dmaven.javadoc.skip=true)
 rm -rf schemas && mkdir -p schemas
 cp ordmodels_1.2.1/org-openroadm-* schemas
 cp ${yang} schemas
