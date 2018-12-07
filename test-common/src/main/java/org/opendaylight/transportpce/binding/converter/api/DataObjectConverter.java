@@ -55,6 +55,7 @@ public interface DataObjectConverter {
 
     /**
      * Returns a converter for {@link DataObject} container type.
+     * @param <T> T extends DataObject
      *
      * @return {@link ConvertType} converter for {@link DataContainer}
      */
@@ -62,6 +63,7 @@ public interface DataObjectConverter {
 
     /**
      * Returns converter for {@link DataContainer} rpc type.
+     * @param <T> T extends DataContainer
      *
      * @return {@link ConvertType} converter for {@link DataContainer}
      * representing rpc data
@@ -70,6 +72,7 @@ public interface DataObjectConverter {
 
     /**
      * Return converter for {@link Notification}.
+     * @param <T> T extends Notification
      *
      * @return {@link ConvertType} converter for {@link Notification}
      */
