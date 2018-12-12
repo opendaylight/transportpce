@@ -25,7 +25,6 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
@@ -330,7 +329,7 @@ public class PortMappingVersion121 {
                 .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName());
 
         // Get OMS and OTS interface provisioned on the TTP's
-        if (logicalConnectionPoint.contains(OpenRoadmInterfacesImpl.TTP_TOKEN) && (port.getInterfaces() != null)) {
+        if (logicalConnectionPoint.contains(StringConstants.TTP_TOKEN) && (port.getInterfaces() != null)) {
             for (Interfaces interfaces : port.getInterfaces()) {
                 try {
                     Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
@@ -388,13 +387,20 @@ public class PortMappingVersion121 {
     private Map<String, String> getEthInterfaceList(String nodeId) {
         LOG.info("It is calling get ethernet interface");
         Map<String, String> cpToInterfaceMap = new HashMap<>();
-        InstanceIdentifier<Lldp> lldpIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Protocols.class).augmentation(Protocols1.class).child(Lldp.class);
-        Optional<Lldp> lldpObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.OPERATIONAL, lldpIID,
+        InstanceIdentifier<Protocols> protocolIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(Protocols.class);
+        Optional<Protocols> protocolOptional = this.deviceTransactionManager.getDataFromDevice(nodeId,
+            LogicalDatastoreType.OPERATIONAL, protocolIID,
             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (lldpObject.isPresent() && (lldpObject.get().getPortConfig() != null)) {
-            for (PortConfig portConfig : lldpObject.get().getPortConfig()) {
+        Lldp lldp = null;
+        if (protocolOptional.isPresent()) {
+            lldp = protocolOptional.get().augmentation(Protocols1.class).getLldp();
+        } else {
+            LOG.warn("Couldnt find protocol operational data for Node : {}", nodeId);
+        }
+
+        if (lldp != null && lldp.getPortConfig() != null) {
+            for (PortConfig portConfig : lldp.getPortConfig()) {
                 if (portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
                     InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                             .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
@@ -526,11 +532,11 @@ public class PortMappingVersion121 {
             for (Ports port : cp.getPorts()) {
                 if (Port.PortQual.XpdrNetwork.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                                                        StringConstants.NETWORK_TOKEN + line));
+                            "XPDR1-" + StringConstants.NETWORK_TOKEN + line));
                     line++;
                 } else if (Port.PortQual.XpdrClient.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                                                        StringConstants.CLIENT_TOKEN + client));
+                            "XPDR1-" +  StringConstants.CLIENT_TOKEN + client));
                     client++;
                 } else {
                     LOG.warn("Not supported type of port! Port type: {}", port.getPortQual());

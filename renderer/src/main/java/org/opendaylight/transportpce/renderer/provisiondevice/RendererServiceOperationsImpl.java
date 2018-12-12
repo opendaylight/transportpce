@@ -26,9 +26,10 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
@@ -109,6 +110,58 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         }
     }
 
+/*    @Override
+    public ServiceImplementationRequestOutput serviceImplementation(ServiceImplementationRequestInput input) {
+        LOG.info("Calling service impl request {} {}", input.getServiceName());
+        RollbackProcessor rollbackProcessor = new RollbackProcessor();
+
+        ServicePathInputData servicePathInputDataAtoZ
+                = ModelMappingUtils.rendererCreateServiceInputAToZ(input.getServiceName(),
+                        input.getPathDescription());
+        ServicePathInputData servicePathInputDataZtoA
+                = ModelMappingUtils.rendererCreateServiceInputZToA(input.getServiceName(),
+                        input.getPathDescription());
+        List<DeviceRenderingResult> renderingResults = deviceRendering(rollbackProcessor, servicePathInputDataAtoZ,
+                servicePathInputDataZtoA);
+        if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
+            return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
+        }
+
+        ServicePowerSetupInput olmPowerSetupInputAtoZ = ModelMappingUtils.createServicePowerSetupInput(
+                renderingResults.get(0).getOlmList(), input);
+        ServicePowerSetupInput olmPowerSetupInputZtoA = ModelMappingUtils.createServicePowerSetupInput(
+                renderingResults.get(1).getOlmList(), input);
+        olmPowerSetup(rollbackProcessor, olmPowerSetupInputAtoZ, olmPowerSetupInputZtoA);
+        if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
+            return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
+        }
+
+        // run service activation test twice - once on source node and once on destination node
+        List<Nodes> nodes = servicePathInputDataAtoZ.getServicePathInput().getNodes();
+        Nodes sourceNode = nodes.get(0);
+        Nodes destNode = nodes.get(nodes.size() - 1);
+
+        String srcNetworkTp;
+        String dstNetowrkTp;
+
+        if (sourceNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
+            srcNetworkTp = sourceNode.getDestTp();
+        } else {
+            srcNetworkTp = sourceNode.getSrcTp();
+        }
+        if (destNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
+            dstNetowrkTp = destNode.getDestTp();
+        } else {
+            dstNetowrkTp = destNode.getSrcTp();
+        }
+
+        if (!isServiceActivated(sourceNode.getNodeId(), srcNetworkTp)
+                || !isServiceActivated(destNode.getNodeId(), dstNetowrkTp)) {
+            rollbackProcessor.rollbackAll();
+            return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
+        }
+    } */
+
     @Override
     public ListenableFuture<ServiceImplementationRequestOutput>
             serviceImplementation(ServiceImplementationRequestInput input) {
@@ -149,12 +202,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 Nodes destNode = nodes.get(nodes.size() - 1);
                 String srcNetworkTp;
                 String dstNetowrkTp;
-                if (sourceNode.getDestTp().contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                //if (sourceNode.getDestTp().contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                if (sourceNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
                     srcNetworkTp = sourceNode.getDestTp();
                 } else {
                     srcNetworkTp = sourceNode.getSrcTp();
                 }
-                if (destNode.getDestTp().contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                //if (destNode.getDestTp().contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                if (destNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
                     dstNetowrkTp = destNode.getDestTp();
                 } else {
                     dstNetowrkTp = destNode.getSrcTp();
@@ -174,6 +229,30 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             }
         });
 
+    }
+
+    @SuppressWarnings("checkstyle:IllegalCatch")
+    public OperationResult reserveResource(PathDescription pathDescription) {
+
+        try {
+            LOG.info("Reserving resources in network model");
+            networkModelWavelengthService.useWavelengths(pathDescription);
+        } catch (Exception e) {
+            LOG.warn("Reserving resources in network model failed");
+            return OperationResult.failed("Resources reserve failed in network model");
+        }
+        return OperationResult.ok("Resources reserved successfully in network model");
+    }
+
+    @SuppressWarnings("checkstyle:IllegalCatch")
+    public OperationResult freeResource(PathDescription pathDescription) {
+
+        try {
+            networkModelWavelengthService.freeWavelengths(pathDescription);
+        } catch (Exception e) {
+            return OperationResult.failed("Resources reserve failed in network model");
+        }
+        return OperationResult.ok("Resources reserved successfully in network model");
     }
 
     @Override

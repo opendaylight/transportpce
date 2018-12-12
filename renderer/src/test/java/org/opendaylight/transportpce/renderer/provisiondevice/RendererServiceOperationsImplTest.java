@@ -19,12 +19,15 @@ import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl22;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
+import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
+import org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -38,6 +41,8 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl22;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthServiceImpl;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface22;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
@@ -88,20 +93,24 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl22(deviceTransactionManager);
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
-                openRoadmInterfacesImpl121, openRoadmInterfacesImpl22);
+            openRoadmInterfacesImpl121, openRoadmInterfacesImpl22);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
         this.portMappingVersion22 =
-                new PortMappingVersion22(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
+            new PortMappingVersion22(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 =
-                new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
+            new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.mappingUtils,
-                this.portMappingVersion121);
-        this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(portMapping,
-            openRoadmInterfaces);
+            this.portMappingVersion121);
+        FixedFlexInterface fixedFlexInterface = new FixedFlexImpl();
+        OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
+        OpenRoadmInterface22 openRoadmInterface22 = new OpenRoadmInterface22(portMapping,openRoadmInterfaces,
+            fixedFlexInterface);
+        this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(this.mappingUtils,openRoadmInterface121,
+            openRoadmInterface22);
         this.crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         this.crossConnectImpl22 = new CrossConnectImpl22(deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(deviceTransactionManager, this.mappingUtils, this.crossConnectImpl121,
-                this.crossConnectImpl22);
+            this.crossConnectImpl22);
     }
 
     @Before
@@ -130,8 +139,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationTerminationPointAsResourceTtp() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.TTP_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.TTP_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.TTP_TOKEN);
+        writePortMapping(input, StringConstants.TTP_TOKEN);
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
@@ -145,8 +154,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationTerminationPointAsResourceTtp2() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.TTP_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.TTP_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.TTP_TOKEN);
+        writePortMapping(input, StringConstants.TTP_TOKEN);
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
@@ -162,8 +171,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationTerminationPointAsResourcePp() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.PP_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.PP_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.PP_TOKEN);
+        writePortMapping(input, StringConstants.PP_TOKEN);
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
@@ -178,8 +187,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
         Mockito.doReturn(mockOutputBuilder.build()).when(this.deviceRenderer).setupServicePath(Mockito.any(),
@@ -194,8 +203,10 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.CLIENT_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.CLIENT_TOKEN);
+     //       .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.CLIENT_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.CLIENT_TOKEN);
+     //   writePortMapping(input, OpenRoadmInterfacesImpl.CLIENT_TOKEN);
+        writePortMapping(input, StringConstants.CLIENT_TOKEN);
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
     }
@@ -205,10 +216,10 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         throws InterruptedException, ExecutionException {
 
         String[] interfaceTokens = {
-            OpenRoadmInterfacesImpl.NETWORK_TOKEN,
-            OpenRoadmInterfacesImpl.CLIENT_TOKEN,
-            OpenRoadmInterfacesImpl.TTP_TOKEN,
-            OpenRoadmInterfacesImpl.PP_TOKEN
+            StringConstants.NETWORK_TOKEN,
+            StringConstants.CLIENT_TOKEN,
+            StringConstants.TTP_TOKEN,
+            StringConstants.PP_TOKEN
         };
 
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("failed")
@@ -222,7 +233,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             ServiceImplementationRequestOutput result =
                 this.rendererServiceOperations.serviceImplementation(input).get();
             Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
-                    result.getConfigurationResponseCommon().getResponseCode());
+                result.getConfigurationResponseCommon().getResponseCode());
         }
     }
 
@@ -233,16 +244,16 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             this.deviceTransactionManager
         );
         MountPointUtils.writeMapping(
-                input.getServiceZEnd().getNodeId(),
-                input.getServiceZEnd().getNodeId() + "-"
-                    + input.getServiceAEnd().getNodeId() + "-" + tpToken,
-                this.deviceTransactionManager
+            input.getServiceZEnd().getNodeId(),
+            input.getServiceZEnd().getNodeId() + "-"
+                + input.getServiceAEnd().getNodeId() + "-" + tpToken,
+            this.deviceTransactionManager
         );
         MountPointUtils.writeMapping(
-                input.getServiceAEnd().getNodeId(),
-                input.getServiceAEnd().getNodeId() + "-"
-                    + input.getServiceZEnd().getNodeId() + "-" + tpToken,
-                this.deviceTransactionManager
+            input.getServiceAEnd().getNodeId(),
+            input.getServiceAEnd().getNodeId() + "-"
+                + input.getServiceZEnd().getNodeId() + "-" + tpToken,
+            this.deviceTransactionManager
         );
         MountPointUtils.writeMapping(
             input.getServiceZEnd().getNodeId(),
@@ -255,8 +266,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationRollbackAllNecessary() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         Mockito.doReturn(RpcResultBuilder.failed().buildFuture()).when(this.olmService)
             .servicePowerSetup(Mockito.any());
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
@@ -279,8 +290,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationServiceInActive() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         Measurements measurements = new MeasurementsBuilder().setPmparameterName("FECUncorrectableBlocks")
             .setPmparameterValue("1").build();
         List<Measurements> measurementsList = new ArrayList<Measurements>();
@@ -298,8 +309,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationServiceInActive2() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         Measurements measurements = new MeasurementsBuilder().setPmparameterName("FECUncorrectableBlocks")
             .setPmparameterValue("1").build();
         List<Measurements> measurementsList = new ArrayList<Measurements>();
@@ -320,21 +331,21 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationServiceInActive3() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         Measurements measurements = new MeasurementsBuilder().setPmparameterName("FECUncorrectableBlocks")
             .setPmparameterValue("1").build();
         List<Measurements> measurementsList = new ArrayList<Measurements>();
         measurementsList.add(measurements);
         GetPmOutput getPmOutput = new GetPmOutputBuilder()
-                .setNodeId("node1").setMeasurements(measurementsList).build();
+            .setNodeId("node1").setMeasurements(measurementsList).build();
         GetPmOutput getPmOutput2 = new GetPmOutputBuilder()
-                .setNodeId("node1").setMeasurements(new ArrayList<>()).build();
+            .setNodeId("node1").setMeasurements(new ArrayList<>()).build();
 
         GetPmInput getPmInputZ = createGetPmInput("XPONDER-2-3",
-            OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            StringConstants.NETWORK_TOKEN);
         GetPmInput getPmInputA = createGetPmInput("XPONDER-1-2",
-            OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            StringConstants.NETWORK_TOKEN);
 
         Mockito.when(this.olmService.getPm(Mockito.eq(getPmInputZ)))
             .thenReturn(RpcResultBuilder.success(getPmOutput2).buildFuture());
@@ -349,8 +360,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationServiceActive() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         GetPmOutput getPmOutput = new GetPmOutputBuilder()
             .setNodeId("node1").setMeasurements(new ArrayList<>()).build();
         GetPmOutput getPmOutput1 = null;
@@ -369,8 +380,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationServiceActive2() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         GetPmOutput getPmOutput = new GetPmOutputBuilder().setMeasurements(new ArrayList<>()).build();
         Mockito.when(this.olmService.getPm(Mockito.any())).thenReturn(RpcResultBuilder.success(getPmOutput)
             .buildFuture());
@@ -387,8 +398,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationServiceInActive4() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         Measurements measurements = new MeasurementsBuilder().setPmparameterName("preFECCorrectedErrors")
             .setPmparameterValue("1").build();
         List<Measurements> measurementsList = new ArrayList<Measurements>();
@@ -411,8 +422,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     public void serviceImplementationServiceInActive5() throws InterruptedException, ExecutionException {
 
         ServiceImplementationRequestInput input = ServiceDataUtils
-            .buildServiceImplementationRequestInputTerminationPointResource(OpenRoadmInterfacesImpl.NETWORK_TOKEN);
-        writePortMapping(input, OpenRoadmInterfacesImpl.NETWORK_TOKEN);
+            .buildServiceImplementationRequestInputTerminationPointResource(StringConstants.NETWORK_TOKEN);
+        writePortMapping(input, StringConstants.NETWORK_TOKEN);
         Measurements measurements = new MeasurementsBuilder().setPmparameterName("preFECCorrectedErrors")
             .setPmparameterValue("112000000000d").build();
         List<Measurements> measurementsList = new ArrayList<Measurements>();

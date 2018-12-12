@@ -1,13 +1,13 @@
 /*
- * Copyright © 2017 AT&T and others.  All rights reserved.
+ * Copyright © 2017 Orange, Inc. and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.opendaylight.transportpce.common.mapping;
 import com.google.common.util.concurrent.CheckedFuture;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -26,7 +26,6 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
@@ -56,6 +55,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev171215.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev171215.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev171215.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev171215.port.Interfaces;
+
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpenROADMOpticalMultiplex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpticalTransport;
@@ -184,7 +184,7 @@ public class PortMappingVersion22 {
         int line = 1;
         // Variable to keep track of number of client ports
         int client = 1;
-        if (!deviceObject.isPresent() || (deviceObject.get().getCircuitPacks() == null)) {
+        if (!deviceObject.isPresent() || deviceObject.get().getCircuitPacks() == null) {
             LOG.warn("Circuit Packs are not present for {}", nodeId);
             return false; // TODO return false or continue?
         }
@@ -201,11 +201,11 @@ public class PortMappingVersion22 {
             for (Ports port : cp.getPorts()) {
                 if (Port.PortQual.XpdrNetwork.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                                                        StringConstants.NETWORK_TOKEN + line));
+                            "XPDR1-" + StringConstants.NETWORK_TOKEN + line));
                     line++;
                 } else if (Port.PortQual.XpdrClient.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                                                        StringConstants.CLIENT_TOKEN + client));
+                            "XPDR1-" + StringConstants.CLIENT_TOKEN + client));
                     client++;
                 } else {
                     LOG.warn("Not supported type of port! Port type: {}", port.getPortQual());
@@ -471,12 +471,12 @@ public class PortMappingVersion22 {
                 .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName());
 
         // Get OMS and OTS interface provisioned on the TTP's
-        if (logicalConnectionPoint.contains(OpenRoadmInterfacesImpl.TTP_TOKEN) && (port.getInterfaces() != null)) {
+        if (logicalConnectionPoint.contains(StringConstants.TTP_TOKEN) && (port.getInterfaces() != null)) {
             for (Interfaces interfaces : port.getInterfaces()) {
                 try {
                     Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface>
-                        openRoadmInterface = this.openRoadmInterfaces
-                            .getInterface(nodeId, interfaces.getInterfaceName());
+                        openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
+                        interfaces.getInterfaceName());
                     if (openRoadmInterface.isPresent()) {
                         Class<? extends InterfaceType> interfaceType = (Class<? extends InterfaceType>)
                             openRoadmInterface.get().getType();

@@ -23,6 +23,8 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl22;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
+import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
+import org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -34,6 +36,8 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl22;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface22;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
@@ -67,23 +71,29 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
         this.mappingUtils = Mockito.spy(this.mappingUtils);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
-                openRoadmInterfacesImpl121, openRoadmInterfacesImpl22);
+            openRoadmInterfacesImpl121, openRoadmInterfacesImpl22);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
         this.portMappingVersion22 =
-                new PortMappingVersion22(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
+            new PortMappingVersion22(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 = new PortMappingVersion121(getDataBroker(), deviceTransactionManager,
-                this.openRoadmInterfaces);
+            this.openRoadmInterfaces);
         this.crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         this.crossConnectImpl22 = new CrossConnectImpl22(deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(deviceTransactionManager, this.mappingUtils, this.crossConnectImpl121,
-                this.crossConnectImpl22);
+            this.crossConnectImpl22);
         this.crossConnect = Mockito.spy(this.crossConnect);
         PortMapping portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.mappingUtils,
-                this.portMappingVersion121);
-        OpenRoadmInterfaceFactory openRoadmInterfaceFactory =
-                new OpenRoadmInterfaceFactory(portMapping, this.openRoadmInterfaces);
+            this.portMappingVersion121);
+        FixedFlexInterface fixedFlexInterface = new FixedFlexImpl();
+        OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
+        OpenRoadmInterface22 openRoadmInterface22 = new OpenRoadmInterface22(portMapping,openRoadmInterfaces,
+            fixedFlexInterface);
+        OpenRoadmInterfaceFactory openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(this.mappingUtils,
+            openRoadmInterface121,openRoadmInterface22);
+
+
         this.deviceRendererService = new DeviceRendererServiceImpl(this.getDataBroker(),
-                deviceTransactionManager, openRoadmInterfaceFactory, this.openRoadmInterfaces, this.crossConnect,
+            deviceTransactionManager, openRoadmInterfaceFactory, this.openRoadmInterfaces, this.crossConnect,
             portMapping);
     }
 
@@ -94,7 +104,7 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
         setMountPoint(new MountPointStub(getDataBroker()));
         RendererRollbackInput rendererRollbackInput = ServiceImplementationDataUtils.buildRendererRollbackInput();
         RendererRollbackOutput rendererRollbackOutput =
-                this.deviceRendererService.rendererRollback(rendererRollbackInput);
+            this.deviceRendererService.rendererRollback(rendererRollbackInput);
         Assert.assertTrue(rendererRollbackOutput.isSuccess());
         Assert.assertTrue(rendererRollbackOutput.getFailedToRollback().isEmpty());
     }
@@ -114,9 +124,9 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
         RendererRollbackInputBuilder rendererRollbackInputBuilder = new RendererRollbackInputBuilder();
         rendererRollbackInputBuilder.setNodeInterface(nodeInterfaces);
         Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1).when(this.mappingUtils)
-                .getOpenRoadmVersion("node1");
+            .getOpenRoadmVersion("node1");
         RendererRollbackOutput rendererRollbackOutput =
-                this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
+            this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
         Assert.assertFalse(rendererRollbackOutput.isSuccess());
         Assert.assertEquals(1, rendererRollbackOutput.getFailedToRollback().size());
         Assert.assertEquals("node1", rendererRollbackOutput.getFailedToRollback().get(0).getNodeId());
@@ -139,7 +149,7 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
 
         Mockito.doReturn(true).when(this.crossConnect).deleteCrossConnect("node1", connectionID.get(0));
         RendererRollbackOutput rendererRollbackOutput =
-                this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
+            this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
         Assert.assertTrue("Rollback must success when cross connect returns true", rendererRollbackOutput.isSuccess());
         Assert.assertEquals(1, rendererRollbackOutput.getFailedToRollback().size());
         Assert.assertTrue("There must not be any failed interfaces when cross connect returns true",
@@ -147,7 +157,7 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
 
         Mockito.doReturn(false).when(this.crossConnect).deleteCrossConnect("node1", connectionID.get(0));
         rendererRollbackOutput =
-                this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
+            this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
         Assert.assertFalse("Rollback must fail when cross connect returns false",rendererRollbackOutput.isSuccess());
         Assert.assertEquals(1, rendererRollbackOutput.getFailedToRollback().size());
         Assert.assertFalse(rendererRollbackOutput.getFailedToRollback().get(0).getInterface().isEmpty());
@@ -165,13 +175,13 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
         nodeInterfaceBuilder.withKey(new NodeInterfaceKey("node1"));
         nodeInterfaceBuilder.setConnectionId(new ArrayList<>());
         List<String> oduInterfacesId = new ArrayList<>();
-        oduInterfacesId.add("node1-" + OpenRoadmInterfacesImpl.NETWORK_TOKEN + "-ODU");
+        oduInterfacesId.add("node1-" + StringConstants.NETWORK_TOKEN + "-ODU");
         nodeInterfaceBuilder.setOduInterfaceId(oduInterfacesId);
         List<String> otuInterfacesId = new ArrayList<>();
-        otuInterfacesId.add("node1-" + OpenRoadmInterfacesImpl.NETWORK_TOKEN + "-OTU");
+        otuInterfacesId.add("node1-" + StringConstants.NETWORK_TOKEN + "-OTU");
         nodeInterfaceBuilder.setOtuInterfaceId(otuInterfacesId);
         List<String> ochInterfacesId = new ArrayList<>();
-        ochInterfacesId.add("node1-" + OpenRoadmInterfacesImpl.NETWORK_TOKEN + "-20");
+        ochInterfacesId.add("node1-" + StringConstants.NETWORK_TOKEN + "-20");
         nodeInterfaceBuilder.setOchInterfaceId(ochInterfacesId);
         List<NodeInterface> nodeInterfaces = new ArrayList<>();
         nodeInterfaces.add(nodeInterfaceBuilder.build());
@@ -180,7 +190,7 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
 
         Mockito.doNothing().when(this.openRoadmInterfaces).deleteInterface(Mockito.eq("node1"), Mockito.anyString());
         RendererRollbackOutput rendererRollbackOutput =
-                this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
+            this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
         Assert.assertTrue(rendererRollbackOutput.isSuccess());
         Assert.assertFalse(rendererRollbackOutput.getFailedToRollback().isEmpty());
         Assert.assertTrue(rendererRollbackOutput.getFailedToRollback().get(0).getInterface().isEmpty());
@@ -199,7 +209,7 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
         nodeInterfaceBuilder.withKey(new NodeInterfaceKey("node1"));
         nodeInterfaceBuilder.setConnectionId(new ArrayList<>());
         List<String> ethInterfacesId = new ArrayList<>();
-        ethInterfacesId.add("node1-" + OpenRoadmInterfacesImpl.CLIENT_TOKEN + "-ETHERNET");
+        ethInterfacesId.add("node1-" + StringConstants.CLIENT_TOKEN + "-ETHERNET");
         nodeInterfaceBuilder.setEthInterfaceId(ethInterfacesId);
         List<NodeInterface> nodeInterfaces = new ArrayList<>();
         nodeInterfaces.add(nodeInterfaceBuilder.build());
@@ -209,7 +219,7 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
         Mockito.doThrow(OpenRoadmInterfaceException.class).when(this.openRoadmInterfaces)
             .deleteInterface(Mockito.eq("node1"), Mockito.anyString());
         RendererRollbackOutput rendererRollbackOutput =
-                this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
+            this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
         Assert.assertFalse(rendererRollbackOutput.isSuccess());
         Assert.assertEquals(1,rendererRollbackOutput.getFailedToRollback().size());
         Assert.assertEquals(1, rendererRollbackOutput.getFailedToRollback().get(0).getInterface().size());

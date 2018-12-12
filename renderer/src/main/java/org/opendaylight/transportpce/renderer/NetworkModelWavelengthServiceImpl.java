@@ -20,40 +20,41 @@ import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.Timeouts;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.node.attributes.AvailableWavelengthsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.used.wavelengths.UsedWavelengths;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.used.wavelengths.UsedWavelengthsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.used.wavelengths.UsedWavelengthsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.DegreeAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.DegreeAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.SrgAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.SrgAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.CpAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.CpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.CtpAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.CtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.PpAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.PpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.RxTtpAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.RxTtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.TxTtpAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.TxTtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrClientAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrClientAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrNetworkAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrNetworkAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrPortAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrPortAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.pp.attributes.UsedWavelength;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.pp.attributes.UsedWavelengthBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.pp.attributes.UsedWavelengthKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes.AvailableWavelengthsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev170929.xpdr.port.connection.attributes.Wavelength;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev170929.xpdr.port.connection.attributes.WavelengthBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev171215.degree.node.attributes.AvailableWavelengthsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev171215.degree.used.wavelengths.UsedWavelengths;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev171215.degree.used.wavelengths.UsedWavelengthsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev171215.degree.used.wavelengths.UsedWavelengthsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.DegreeAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.DegreeAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.SrgAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.SrgAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.CpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.CpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.CtpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.CtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.PpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.PpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.RxTtpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.RxTtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.TxTtpAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.TxTtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.XpdrClientAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.XpdrClientAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.XpdrNetworkAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.XpdrNetworkAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.XpdrPortAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.XpdrPortAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.pp.attributes.UsedWavelength;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.pp.attributes.UsedWavelengthBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.pp.attributes.UsedWavelengthKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev171215.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev171215.srg.node.attributes.AvailableWavelengthsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev171215.xpdr.port.connection.attributes.Wavelength;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev171215.xpdr.port.connection.attributes.WavelengthBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToA;
@@ -152,15 +153,14 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608
                         .network.Node.class, new NodeKey(new NodeId(nodeId)))
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929
-                        .Node1.class)
+                .augmentation(Node1.class)
                 .build();
     }
 
     private Optional<Node1> getNode1FromDatastore(String nodeId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1>
+        InstanceIdentifier<Node1>
                 nodeIID = createNode1IID(nodeId);
-        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1> nodeOpt;
+        Optional<Node1> nodeOpt;
         try (ReadOnlyTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
             nodeOpt = nodeReadTx.read(LogicalDatastoreType.CONFIGURATION, nodeIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
@@ -174,9 +174,9 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
     private void addAvailableWL(List<String> nodeIds, Long wavelengthNumber) {
         WriteTransaction nodeWriteTx = this.dataBroker.newWriteOnlyTransaction();
         for (String nodeId : nodeIds) {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1> nodeOpt =
+            Optional<Node1> nodeOpt =
                     getNode1FromDatastore(nodeId);
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1 node;
+            Node1 node;
             if (nodeOpt.isPresent()) {
                 node = nodeOpt.get();
             } else {
@@ -185,9 +185,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 continue;
             }
 
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1Builder
-                    node1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929
-                    .Node1Builder(node);
+            Node1Builder node1Builder = new Node1Builder(node);
 
             switch (node.getNodeType()) {
                 case DEGREE:
@@ -198,14 +196,14 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                     } else {
                         degreeAttributesBuilder = new DegreeAttributesBuilder(degreeAttributes);
                     }
-                    List<org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.node.attributes
+                    List<org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev171215.degree.node.attributes
                             .AvailableWavelengths> availableDegreeWLs =
                             degreeAttributesBuilder.getAvailableWavelengths();
                     if (availableDegreeWLs == null) {
                         availableDegreeWLs = new ArrayList<>();
                         degreeAttributesBuilder.setAvailableWavelengths(availableDegreeWLs);
                     }
-                    availableDegreeWLs.add(new org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree
+                    availableDegreeWLs.add(new org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev171215.degree
                             .node.attributes.AvailableWavelengthsBuilder().setIndex(wavelengthNumber).build());
                     node1Builder.setDegreeAttributes(degreeAttributesBuilder.build());
                     break;
@@ -217,7 +215,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                     } else {
                         srgAttributesBuilder = new SrgAttributesBuilder(srgAttributes);
                     }
-                    List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
+                    List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev171215.srg.node.attributes
                             .AvailableWavelengths> availableSrgWLs = srgAttributesBuilder.getAvailableWavelengths();
                     if (availableSrgWLs == null) {
                         availableSrgWLs = new ArrayList<>();
@@ -243,9 +241,8 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
     private void deleteAvailableWL(List<String> nodeIds, Long wavelengthNumber) {
         WriteTransaction nodeWriteTx = this.dataBroker.newWriteOnlyTransaction();
         for (String nodeId : nodeIds) {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1> nodeOpt =
-                    getNode1FromDatastore(nodeId);
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1 node;
+            Optional<Node1> nodeOpt = getNode1FromDatastore(nodeId);
+            Node1 node;
             if (nodeOpt.isPresent()) {
                 node = nodeOpt.get();
             } else {
@@ -262,16 +259,16 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
             switch (node.getNodeType()) {
                 case DEGREE:
                     availableWlIID = nodeIIDBuilder.child(DegreeAttributes.class)
-                            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.node
+                            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev171215.degree.node
                                     .attributes.AvailableWavelengths.class,
                                     new AvailableWavelengthsKey(wavelengthNumber))
                             .build();
                     break;
                 case SRG:
                     availableWlIID = nodeIIDBuilder.child(SrgAttributes.class)
-                            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
+                            .child(org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev171215.srg.node.attributes
                                             .AvailableWavelengths.class,
-                                    new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node
+                                    new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev171215.srg.node
                                             .attributes.AvailableWavelengthsKey(wavelengthNumber))
                             .build();
                     break;
@@ -354,9 +351,9 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 case SRGRXCP:
                 case SRGTXRXCP:
                     usedWlIID = usedWlIIDBuilder.child(CpAttributes.class).child(org.opendaylight.yang.gen.v1.http.org
-                                    .openroadm.network.topology.rev170929.network.node.termination.point.cp.attributes
+                                    .openroadm.network.topology.rev171215.network.node.termination.point.cp.attributes
                                     .UsedWavelengths.class,
-                            new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node
+                            new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node
                                     .termination.point.cp.attributes.UsedWavelengthsKey(
                                     wavelengthIndex)).build();
                     break;
@@ -473,14 +470,14 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                     } else {
                         cpAttributesBuilder = new CpAttributesBuilder(cpAttributes);
                     }
-                    List<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node
+                    List<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node
                             .termination.point.cp.attributes.UsedWavelengths> usedDegreeCpWls =
                             cpAttributesBuilder.getUsedWavelengths();
                     if (usedDegreeCpWls == null) {
                         usedDegreeCpWls = new ArrayList<>();
                         cpAttributesBuilder.setUsedWavelengths(usedDegreeCpWls);
                     }
-                    usedDegreeCpWls.add(new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929
+                    usedDegreeCpWls.add(new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215
                             .network.node.termination.point.cp.attributes.UsedWavelengthsBuilder()
                             .setIndex(wavelengthIndex).build());
                     tp1Builder.setCpAttributes(cpAttributesBuilder.build());

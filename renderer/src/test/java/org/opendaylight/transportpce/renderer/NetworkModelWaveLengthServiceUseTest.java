@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
@@ -27,23 +28,23 @@ import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
 import org.opendaylight.transportpce.renderer.utils.WaveLengthServiceUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.node.attributes.AvailableWavelengthsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.DegreeAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.SrgAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.CpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.CtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.PpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.RxTtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.TxTtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrClientAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrNetworkAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrPortAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev171215.degree.node.attributes.AvailableWavelengthsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.DegreeAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.SrgAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.CpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.CtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.PpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.RxTtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.TxTtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.XpdrClientAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.XpdrNetworkAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev171215.network.node.termination.point.XpdrPortAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev171215.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev171215.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.service.path.PathDescription;
 
 @RunWith(Parameterized.class)
@@ -75,7 +76,7 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
         List<Object[]> parameters = new ArrayList<>();
 
         PathDescription pathDescription =
-            ServiceDeleteDataUtils.createTransactionPathDescription(OpenRoadmInterfacesImpl.TTP_TOKEN);
+            ServiceDeleteDataUtils.createTransactionPathDescription(StringConstants.TTP_TOKEN);
 
         TerminationPoint1Builder terminationPoint1Builder = new TerminationPoint1Builder();
         terminationPoint1Builder
@@ -97,7 +98,7 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
             .setAvailableWavelengths(Collections.singletonList(new AvailableWavelengthsBuilder().setIndex(20L).build()))
             .build());
         node1Builder.setSrgAttributes((new SrgAttributesBuilder()).setAvailableWavelengths(Collections.singletonList(
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev171215.srg.node.attributes
                 .AvailableWavelengthsBuilder().setIndex(20L).build())).build());
 
         for (OpenroadmNodeType nodeType : Arrays
@@ -119,17 +120,17 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
     @Test
     public void freeWavelengthsTest() throws ExecutionException, InterruptedException {
         WaveLengthServiceUtils
-            .putTerminationPoint1ToDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN,
-                OpenRoadmInterfacesImpl.TTP_TOKEN,
+            .putTerminationPoint1ToDatastore("node1" + StringConstants.TTP_TOKEN,
+            		StringConstants.TTP_TOKEN,
                 this.terminationPoint1, this.deviceTransactionManager);
-        WaveLengthServiceUtils.putNode1ToDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN, this.node1,
+        WaveLengthServiceUtils.putNode1ToDatastore("node1" + StringConstants.TTP_TOKEN, this.node1,
             this.deviceTransactionManager);
         this.networkModelWavelengthService.useWavelengths(this.pathDescription);
-        Node1 updatedNode1 = WaveLengthServiceUtils.getNode1FromDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN,
+        Node1 updatedNode1 = WaveLengthServiceUtils.getNode1FromDatastore("node1" + StringConstants.TTP_TOKEN,
             this.deviceTransactionManager);
         TerminationPoint1 updatedTerminationPoint1 = WaveLengthServiceUtils
-            .getTerminationPoint1FromDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN,
-                OpenRoadmInterfacesImpl.TTP_TOKEN,
+            .getTerminationPoint1FromDatastore("node1" + StringConstants.TTP_TOKEN,
+            		StringConstants.TTP_TOKEN,
                 this.deviceTransactionManager);
 
         switch (updatedTerminationPoint1.getTpType()) {

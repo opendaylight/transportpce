@@ -52,8 +52,8 @@ public class MappingUtilsImpl implements MappingUtils {
                         return StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
                 }
             } else {
-                LOG.warn("Could not find mapping for nodeId {}",
-                        nodeId);
+                LOG.warn("Could not find mapping for nodeId {}", nodeId);
+                return StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
             }
         } catch (InterruptedException | ExecutionException ex) {
             LOG.error("Unable to read mapping for nodeId {}",nodeId, ex);

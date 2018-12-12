@@ -18,12 +18,15 @@ import org.mockito.Mockito;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl22;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
+import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
+import org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -35,6 +38,8 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl22;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface22;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.utils.MountPointUtils;
@@ -74,19 +79,25 @@ public class DeviceRendererServiceImplDeleteTest extends AbstractTest {
         this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl22(this.deviceTransactionManager);
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
-                openRoadmInterfacesImpl121, openRoadmInterfacesImpl22);
+            openRoadmInterfacesImpl121, openRoadmInterfacesImpl22);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
         this.portMappingVersion22 = new PortMappingVersion22(getDataBroker(), this.deviceTransactionManager,
-                this.openRoadmInterfaces);
+            this.openRoadmInterfaces);
         this.portMappingVersion121 = new PortMappingVersion121(getDataBroker(), this.deviceTransactionManager,
-                this.openRoadmInterfaces);
+            this.openRoadmInterfaces);
         PortMapping portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.mappingUtils,
-                this.portMappingVersion121);
-        this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(portMapping, this.openRoadmInterfaces);
+            this.portMappingVersion121);
+        FixedFlexInterface fixedFlexInterface = new FixedFlexImpl();
+        OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
+        OpenRoadmInterface22 openRoadmInterface22 = new OpenRoadmInterface22(portMapping,openRoadmInterfaces,
+            fixedFlexInterface);
+        this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(this.mappingUtils,openRoadmInterface121,
+            openRoadmInterface22);
+
         this.crossConnectImpl121 = new CrossConnectImpl121(this.deviceTransactionManager);
         this.crossConnectImpl22 = new CrossConnectImpl22(this.deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(this.deviceTransactionManager, this.mappingUtils,
-                this.crossConnectImpl121, this.crossConnectImpl22);
+            this.crossConnectImpl121, this.crossConnectImpl22);
         this.crossConnect = Mockito.spy(this.crossConnect);
         this.deviceRendererService = new DeviceRendererServiceImpl(this.getDataBroker(),
             this.deviceTransactionManager, this.openRoadmInterfaceFactory, this.openRoadmInterfaces,
@@ -100,17 +111,17 @@ public class DeviceRendererServiceImplDeleteTest extends AbstractTest {
         ServicePathOutput servicePathOutput = deviceRendererService.deleteServicePath(servicePathInput);
         Assert.assertFalse(servicePathOutput.isSuccess());
         Assert.assertEquals("node1 is not mounted on the controller",
-                servicePathOutput.getResult());
+            servicePathOutput.getResult());
     }
 
     @Test
     public void testDeleteServiceSuccess() throws OpenRoadmInterfaceException {
         setMountPoint(MountPointUtils.getMountPoint(new ArrayList<>(), getDataBroker()));
         String [] interfaceTokens = {
-            OpenRoadmInterfacesImpl.NETWORK_TOKEN,
-            OpenRoadmInterfacesImpl.CLIENT_TOKEN,
-            OpenRoadmInterfacesImpl.TTP_TOKEN,
-            OpenRoadmInterfacesImpl.PP_TOKEN
+            StringConstants.NETWORK_TOKEN,
+            StringConstants.CLIENT_TOKEN,
+            StringConstants.TTP_TOKEN,
+            StringConstants.PP_TOKEN
         };
 
         String nodeId = "node1";
@@ -137,12 +148,10 @@ public class DeviceRendererServiceImplDeleteTest extends AbstractTest {
     public void testDeleteServiceFailure() throws OpenRoadmInterfaceException {
         setMountPoint(MountPointUtils.getMountPoint(new ArrayList<>(), getDataBroker()));
         String [] interfaceTokens = {
-            OpenRoadmInterfacesImpl.NETWORK_TOKEN,
-            OpenRoadmInterfacesImpl.CLIENT_TOKEN,
-            OpenRoadmInterfacesImpl.TTP_TOKEN,
-            OpenRoadmInterfacesImpl.PP_TOKEN
-        };
-
+            StringConstants.NETWORK_TOKEN,
+            StringConstants.CLIENT_TOKEN,
+            StringConstants.TTP_TOKEN,
+            StringConstants.PP_TOKEN };
         String nodeId = "node1";
         Mockito.doReturn(true).when(this.crossConnect).deleteCrossConnect(Mockito.eq(nodeId), Mockito.anyString());
         Mockito.doThrow(OpenRoadmInterfaceException.class).when(this.openRoadmInterfaces)
@@ -171,11 +180,11 @@ public class DeviceRendererServiceImplDeleteTest extends AbstractTest {
         String nodeId = "node1";
         Mockito.doReturn(false).when(this.crossConnect).deleteCrossConnect(Mockito.eq(nodeId), Mockito.anyString());
         Mockito.doThrow(OpenRoadmInterfaceException.class).when(this.openRoadmInterfaces)
-                .deleteInterface(Mockito.eq(nodeId), Mockito.anyString());
+            .deleteInterface(Mockito.eq(nodeId), Mockito.anyString());
 
         List<Nodes> nodes = new ArrayList<>();
         nodes.add(ServiceImplementationDataUtils.createNode(nodeId, null, null));
-        nodes.add(ServiceImplementationDataUtils.createNode(nodeId, "src-" + OpenRoadmInterfacesImpl.PP_TOKEN, null));
+        nodes.add(ServiceImplementationDataUtils.createNode(nodeId, "src-" + StringConstants.PP_TOKEN, null));
         ServicePathInput servicePathInput = ServiceImplementationDataUtils.buildServicePathInputs(nodes);
 
         ServicePathOutput servicePathOutput = deviceRendererService.deleteServicePath(servicePathInput);
@@ -192,8 +201,8 @@ public class DeviceRendererServiceImplDeleteTest extends AbstractTest {
         Mockito.doReturn(false).when(this.crossConnect).deleteCrossConnect(Mockito.eq(nodeId), Mockito.anyString());
         Mockito.doNothing().when(this.openRoadmInterfaces).deleteInterface(Mockito.eq(nodeId), Mockito.anyString());
 
-        String srcTP = "src-" + OpenRoadmInterfacesImpl.TTP_TOKEN;
-        String dstTp = "dst-" + OpenRoadmInterfacesImpl.PP_TOKEN;
+        String srcTP = "src-" + StringConstants.TTP_TOKEN;
+        String dstTp = "dst-" + StringConstants.PP_TOKEN;
 
         List<Nodes> nodes = new ArrayList<>();
         nodes.add(ServiceImplementationDataUtils.createNode(nodeId, srcTP, dstTp));
@@ -215,8 +224,8 @@ public class DeviceRendererServiceImplDeleteTest extends AbstractTest {
         Mockito.doThrow(OpenRoadmInterfaceException.class).when(this.openRoadmInterfaces)
             .deleteInterface(Mockito.eq(nodeId), Mockito.anyString());
 
-        String srcTp = "src-" + OpenRoadmInterfacesImpl.PP_TOKEN;
-        String dstTp = "dst-" + OpenRoadmInterfacesImpl.TTP_TOKEN;
+        String srcTp = "src-" + StringConstants.PP_TOKEN;
+        String dstTp = "dst-" + StringConstants.TTP_TOKEN;
         Long waveNumber = 20L;
 
         String connectionNumber = dstTp + "-" + srcTp + "-" + waveNumber;
@@ -229,7 +238,7 @@ public class DeviceRendererServiceImplDeleteTest extends AbstractTest {
         roadmConnectionsBuilder.setWavelengthNumber(20L);
         roadmConnectionsBuilder.setDestination((new DestinationBuilder()).setDstIf(interfaceName).build());
         InstanceIdentifier<RoadmConnections> xciid = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
+            .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
         TransactionUtils.writeTransaction(this.deviceTransactionManager, nodeId, LogicalDatastoreType.CONFIGURATION,
             xciid, roadmConnectionsBuilder.build());
 

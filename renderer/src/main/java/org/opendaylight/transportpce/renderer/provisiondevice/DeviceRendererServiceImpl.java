@@ -27,13 +27,13 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServiceListTopology;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
@@ -120,7 +120,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     String srcTp = node.getSrcTp();
                     String destTp = node.getDestTp();
                     Long waveNumber = input.getWaveNumber();
-                    if ((destTp != null) && destTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                    if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
@@ -132,13 +132,13 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
                                 destTp, supportingOtuInterface));
                     }
-                    if ((srcTp != null) && srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                    if ((srcTp != null) && srcTp.contains(StringConstants.CLIENT_TOKEN)) {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Client Interfaces
                         createdEthInterfaces.add(
                             this.openRoadmInterfaceFactory.createOpenRoadmEthInterface(nodeId, srcTp));
                     }
-                    if ((srcTp != null) && srcTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                    if ((srcTp != null) && srcTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
@@ -150,21 +150,21 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
                                 srcTp, supportingOtuInterface));
                     }
-                    if ((destTp != null) && destTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                    if ((destTp != null) && destTp.contains(StringConstants.CLIENT_TOKEN)) {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Client Interfaces
                         createdEthInterfaces.add(
                             this.openRoadmInterfaceFactory.createOpenRoadmEthInterface(nodeId, destTp));
                     }
-                    if ((srcTp != null) && (srcTp.contains(OpenRoadmInterfacesImpl.TTP_TOKEN)
-                            || srcTp.contains(OpenRoadmInterfacesImpl.PP_TOKEN))) {
-                        createdOchInterfaces.add(
+                    if ((srcTp != null) && (srcTp.contains(StringConstants.TTP_TOKEN)
+                            || srcTp.contains(StringConstants.PP_TOKEN))) {
+                        createdOchInterfaces.addAll(
                             this.openRoadmInterfaceFactory
                                 .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber));
                     }
-                    if ((destTp != null) && (destTp.contains(OpenRoadmInterfacesImpl.TTP_TOKEN)
-                            || destTp.contains(OpenRoadmInterfacesImpl.PP_TOKEN))) {
-                        createdOchInterfaces.add(
+                    if ((destTp != null) && (destTp.contains(StringConstants.TTP_TOKEN)
+                            || destTp.contains(StringConstants.PP_TOKEN))) {
+                        createdOchInterfaces.addAll(
                             this.openRoadmInterfaceFactory
                                 .createOpenRoadmOchInterface(nodeId, destTp, waveNumber));
                     }
@@ -263,26 +263,26 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             }
             // if the node is currently mounted then proceed.
             if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
-                if (destTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)
-                        || srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)
-                        || srcTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)
-                        || destTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
-                    if (destTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                if (destTp.contains(StringConstants.NETWORK_TOKEN)
+                        || srcTp.contains(StringConstants.CLIENT_TOKEN)
+                        || srcTp.contains(StringConstants.NETWORK_TOKEN)
+                        || destTp.contains(StringConstants.CLIENT_TOKEN)) {
+                    if (destTp.contains(StringConstants.NETWORK_TOKEN)) {
                         interfacesToDelete.add(destTp + "-ODU");
                         interfacesToDelete.add(destTp + "-OTU");
                         interfacesToDelete.add(
                                 this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber));
                     }
-                    if (srcTp.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
+                    if (srcTp.contains(StringConstants.NETWORK_TOKEN)) {
                         interfacesToDelete.add(srcTp + "-ODU");
                         interfacesToDelete.add(srcTp + "-OTU");
                         interfacesToDelete
                                 .add(this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(srcTp, waveNumber));
                     }
-                    if (srcTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                    if (srcTp.contains(StringConstants.CLIENT_TOKEN)) {
                         interfacesToDelete.add(srcTp + "-ETHERNET");
                     }
-                    if (destTp.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                    if (destTp.contains(StringConstants.CLIENT_TOKEN)) {
                         interfacesToDelete.add(destTp + "-ETHERNET");
                     }
                 } else {

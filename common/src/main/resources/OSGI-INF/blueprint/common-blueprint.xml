@@ -8,8 +8,8 @@ terms of the Eclipse Public License v1.0 which accompanies this distribution,
 and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-  xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
-  odl:use-default-for-reference-types="true">
+           xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+           odl:use-default-for-reference-types="true">
 
     <reference id="mountPointService" interface="org.opendaylight.controller.md.sal.binding.api.MountPointService" />
     <reference id="dataBroker" interface="org.opendaylight.controller.md.sal.binding.api.DataBroker" odl:type="default" />
@@ -20,33 +20,29 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument value="15000" />
     </bean>
 
-    <bean id="openRoadmInterfaces" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl" >
-        <argument ref="deviceTransactionManager" />
-    </bean>
-
-    <bean id="portMapping" class="org.opendaylight.transportpce.common.mapping.PortMappingImpl" >
-        <argument ref="dataBroker" />
-        <argument ref="deviceTransactionManager" />
-        <argument ref="openRoadmInterfaces" />
-    </bean>
-
     <bean id="mappingUtils" class="org.opendaylight.transportpce.common.mapping.MappingUtilsImpl" >
         <argument ref="dataBroker" />
     </bean>
 
-    <bean id="crossConnect121" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl1_2_1" >
+    <bean id="openRoadmInterfaces121" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121" >
         <argument ref="deviceTransactionManager" />
     </bean>
 
-    <bean id="crossConnect22" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl2_2" >
+    <bean id="openRoadmInterfaces22" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl22" >
         <argument ref="deviceTransactionManager" />
     </bean>
 
-    <bean id="crossConnectImpl" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl" >
+    <bean id="openRoadmInterfaces" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl" >
         <argument ref="deviceTransactionManager" />
         <argument ref="mappingUtils" />
-        <argument ref="crossConnect121" />
-        <argument ref="crossConnect22" />
+        <argument ref="openRoadmInterfaces121" />
+        <argument ref="openRoadmInterfaces22" />
+    </bean>
+
+    <bean id="portMapping22" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion22" >
+        <argument ref="dataBroker" />
+        <argument ref="deviceTransactionManager" />
+        <argument ref="openRoadmInterfaces" />
     </bean>
 
     <bean id="requestProcessor" class="org.opendaylight.transportpce.common.network.RequestProcessor" scope="singleton" >
@@ -57,16 +53,49 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="requestProcessor" />
     </bean>
 
-    <bean id="FixedFlexImpl" class="org.opendaylight.transportpce.common.FixedFlex.FixedFlexImpl" >
+    <bean id="portMapping121" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion121" >
+        <argument ref="dataBroker" />
+        <argument ref="deviceTransactionManager" />
+        <argument ref="openRoadmInterfaces" />
+    </bean>
+
+    <bean id="portMapping" class="org.opendaylight.transportpce.common.mapping.PortMappingImpl" >
+        <argument ref="dataBroker" />
+        <argument ref="mappingUtils" />
+        <argument ref="portMapping22" />
+        <argument ref="portMapping121" />
+    </bean>
+
+    <bean id="crossConnect121" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121" >
+        <argument ref="deviceTransactionManager" />
+    </bean>
+
+    <bean id="crossConnect22" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl22" >
+        <argument ref="deviceTransactionManager" />
+    </bean>
+
+    <bean id="crossConnectImpl" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl" >
+        <argument ref="deviceTransactionManager" />
+        <argument ref="mappingUtils" />
+        <argument ref="crossConnect121" />
+        <argument ref="crossConnect22" />
+    </bean>
+
+    <bean id="FixedFlexImpl" class="org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl" >
     </bean>
 
     <service ref="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
-    <service ref="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
-    <service ref="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
-    <service ref="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
-    <service ref="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
-    <service ref="crossConnect" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
-    <service ref="FixedFlexImpl" interface="org.opendaylight.transportpce.common.FixedFlex.FixedFlexInterface"/>
 
+    <service ref="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
+
+    <service ref="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
+
+    <service ref="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
+
+    <service ref="crossConnectImpl" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
+
+    <service ref="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
+
+    <service ref="FixedFlexImpl" interface="org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface"/>
 
 </blueprint>

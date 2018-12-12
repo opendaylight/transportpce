@@ -28,13 +28,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     OpenRoadmInterfacesImpl22 openRoadmInterfacesImpl22;
     MappingUtils mappingUtils;
 
-    // TODO move somewhere to constants
-    public static final String NETWORK_TOKEN = "NETWORK";
-    public static final String TTP_TOKEN = "TTP";
-    public static final String CLIENT_TOKEN = "CLIENT";
-    public static final String PP_TOKEN = "PP";
-
-
     public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager,MappingUtils mappingUtils,
         OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121,OpenRoadmInterfacesImpl22 openRoadmInterfacesImpl22) {
         this.deviceTransactionManager = deviceTransactionManager;
