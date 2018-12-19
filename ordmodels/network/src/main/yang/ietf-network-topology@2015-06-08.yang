@@ -14,8 +14,8 @@ module ietf-network-topology {
   contact
     "WILL-BE-DEFINED-LATER";
   description
-    "This module defines a common base model for network topology, 
-     augmenting the base network model with links to connect nodes, 
+    "This module defines a common base model for network topology,
+     augmenting the base network model with links to connect nodes,
      as well as termination points to terminate links on nodes.";
 
   revision 2015-06-08 {
@@ -31,10 +31,10 @@ module ietf-network-topology {
        The identifier may be opaque.
        The identifier SHOULD be chosen such that the same link in a
        real network topology will always be identified through the
-       same identifier, even if the model is instantiated in 
-	   separate datastores. An implementation MAY choose to capture
+       same identifier, even if the model is instantiated in
+       separate datastores. An implementation MAY choose to capture
        semantics in the identifier, for example to indicate the type
-       of link and/or the type of topology that the link is a part 
+       of link and/or the type of topology that the link is a part
        of.";
   }
 
@@ -48,7 +48,7 @@ module ietf-network-topology {
        same identifier, even if the model is instantiated in
        separate datastores. An implementation MAY choose to capture
        semantics in the identifier, for example to indicate the type
-       of TP and/or the type of node and topology that the TP is a 
+       of TP and/or the type of node and topology that the TP is a
        part of.";
   }
 
@@ -86,7 +86,7 @@ module ietf-network-topology {
   }
 
   augment "/nd:network" {
-    description 
+    description
       "Add links to the network model.";
     list link {
       key "link-id";
@@ -185,7 +185,7 @@ module ietf-network-topology {
   }
   augment "/nd:network/nd:node" {
     description
-      "Augment termination points which terminate links.  
+      "Augment termination points which terminate links.
        Termination points can ultimately be mapped to interfaces.";
     list termination-point {
       key "tp-id";

@@ -10,7 +10,7 @@ module org-openroadm-device {
   }
   import ietf-netconf {
     prefix ietf-nc;
-  }     
+  }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
     revision-date 2016-10-14;
@@ -61,45 +61,45 @@ module org-openroadm-device {
     "OpenROADM.org";
   description
     "YANG definitions of ROADM device
-     
-     Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016, 
+
+     Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
      AT&T Intellectual Property.  All other rights reserved.
-     
-     Redistribution and use in source and binary forms, with or without modification, 
+
+     Redistribution and use in source and binary forms, with or without modification,
      are permitted provided that the following conditions are met:
-     
-     * Redistributions of source code must retain the above copyright notice, this 
+
+     * Redistributions of source code must retain the above copyright notice, this
        list of conditions and the following disclaimer.
-     * Redistributions in binary form must reproduce the above copyright notice, 
-       this list of conditions and the following disclaimer in the documentation and/or 
+     * Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation and/or
        other materials provided with the distribution.
-     * Neither the Members of the Open ROADM MSA Agreement nor the names of its 
-       contributors may be used to endorse or promote products derived from this software 
+     * Neither the Members of the Open ROADM MSA Agreement nor the names of its
+       contributors may be used to endorse or promote products derived from this software
        without specific prior written permission.
-     
-     THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS'' 
-     AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-     WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-     IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT, 
-     INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA, 
-     OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-     WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+
+     THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
+     AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+     WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+     IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
+     INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+     OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+     WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.
 
-     Also contains code components extracted from IETF netconf.  These code components 
+     Also contains code components extracted from IETF netconf.  These code components
      are copyrighted and licensed as follows:
-     
-     Copyright (c) 2016 IETF Trust and the persons identified as the document authors. 
-     All rights reserved. 
-     
-     This document is subject to BCP 78 and the IETF Trust’s Legal Provisions Relating 
-     to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of 
-     publication of this document. Please review these documents carefully, as they 
-     describe your rights and restrictions with respect to this document. Code Components 
+
+     Copyright (c) 2016 IETF Trust and the persons identified as the document authors.
+     All rights reserved.
+
+     This document is subject to BCP 78 and the IETF Trust’s Legal Provisions Relating
+     to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of
+     publication of this document. Please review these documents carefully, as they
+     describe your rights and restrictions with respect to this document. Code Components
      extracted from this document must include Simplified BSD License text as described in
-     Section 4.e of the Trust Legal Provisions and are provided without warranty as 
+     Section 4.e of the Trust Legal Provisions and are provided without warranty as
      described in the Simplified BSD License.";
 
   revision 2017-02-06 {
@@ -197,14 +197,14 @@ module org-openroadm-device {
     leaf result-file {
       type string;
     }
-  }                      
- 
-  rpc set-current-datetime {     
+  }
+
+  rpc set-current-datetime {
     description
       "Set the info/current-datetime leaf to the specified value.";
-    input {     
+    input {
      leaf current-datetime {
-        type ietf-yang-types:date-and-time; 
+        type ietf-yang-types:date-and-time;
         mandatory true;
         description
           "The current system date and time in UTC. Format: YYYY-MM-DDTHH:MM:SS";
@@ -214,7 +214,7 @@ module org-openroadm-device {
     output {
       uses org-openroadm-common-types:rpc-response-status;
     }
-  }                   
+  }
 
   grouping device-common {
     leaf node-id {
@@ -226,7 +226,7 @@ module org-openroadm-device {
     leaf node-number {
       type uint32;
       description
-        "Number assigned to a ROADM node at a 
+        "Number assigned to a ROADM node at a
          given office";
     }
     leaf node-type {
@@ -308,11 +308,11 @@ module org-openroadm-device {
         "Template information used in the deployment.";
     }
     leaf current-datetime {
-      type ietf-yang-types:date-and-time; 
+      type ietf-yang-types:date-and-time;
       config false;
       description
         "The current system date and time in UTC. Format: YYYY-MM-DDTHH:MM:SS.mm+ ";
-    }        
+    }
     container geoLocation {
       description
         "GPS location";
@@ -323,7 +323,7 @@ module org-openroadm-device {
         }
         description
           "[From wikipedia] Latitude is an angle (defined below)
-           which ranges from 0° at the Equator to 90° (North or                
+           which ranges from 0° at the Equator to 90° (North or
            South) at the poles";
       }
       leaf longitude {
@@ -332,7 +332,7 @@ module org-openroadm-device {
           range "-180 .. 180";
         }
         description
-          "[From wikipedia] The longitude is measured as the 
+          "[From wikipedia] The longitude is measured as the
            angle east or west from the Prime Meridian, ranging
            from 0° at the Prime Meridian to +180° eastward and
            −180° westward.";
@@ -344,7 +344,7 @@ module org-openroadm-device {
     description
       "slots information. To be populated by NE during retrieval.";
     leaf slot-name {
-      type string; 
+      type string;
       description
         "The name of this slot.";
     }
@@ -359,14 +359,14 @@ module org-openroadm-device {
       }
       description
         "The supported circuit-pack. It will be empty if no provision on this slot.";
-    }                
-  }         
+    }
+  }
   grouping shelves {
     list shelves {
       key "shelf-name";
       uses shelf;
     }
-  }                            
+  }
   grouping shelf {
     leaf shelf-name {
       description
@@ -405,14 +405,14 @@ module org-openroadm-device {
       description
         "due date for the shelf.";
     }
-    list slots {         
+    list slots {
       description
           "List of slots on this shelf. To be populated by NE during retrieval.";
       key "slot-name";
       config false;
       uses slot-info;
-    }                       
-  }                                    
+    }
+  }
 
   grouping circuit-packs {
     list circuit-packs {
@@ -481,7 +481,7 @@ module org-openroadm-device {
       type ietf-yang-types:date-and-time;
       description
         "due date for this circuit-pack.";
-    }     
+    }
     container parent-circuit-pack {
       description
         "In the case of circuit packs that contain other equipment (modules or pluggables), this captures the hierarchy of that equipment.  It is a vendor specific design decision if the ports for single-port pluggables are modeled as children of the parent circuit-pack, or as children of the pluggable circuit-pack contained in the parent circuit-pack.  For modules with multiple ports, it is recommended that ports be children of the module and not the carrier, to help in fault correlation and isolation in the case of a module failure.";
@@ -490,7 +490,7 @@ module org-openroadm-device {
         type string;
         description
           "Slot name on parent-circuit-pack.";
-      }            
+      }
     }
     list cp-slots {
       description
@@ -498,7 +498,7 @@ module org-openroadm-device {
       key "slot-name";
       config false;
       uses slot-info;
-    }                       
+    }
     list ports {
       key "port-name";
       description
@@ -520,10 +520,10 @@ module org-openroadm-device {
           type uint32;
           default "30";
           units "m";
-        }                    
+        }
         leaf port-direction {
           type org-openroadm-common-types:direction;
-        }    
+        }
       }
     }
   }
@@ -625,7 +625,7 @@ module org-openroadm-device {
 
   grouping external-links {
     description
-      "YANG definitions for external links.. 
+      "YANG definitions for external links..
        - physical links between ROADMs and between the ROADMs and XPonders, which can be added and removed maually.";
     list external-link {
       key "external-link-name";
@@ -1172,18 +1172,18 @@ module org-openroadm-device {
          }
        } // choice server-or-user
      } // container changed-by-parms
-  }                                    
+  }
   notification change-notification {
     description
       "The Notification that a resource has been added, modified or removed.
        This notification can be triggered by changes in configuration and operational data.
-       It shall contain the changed field pointed by the xpath. 
-       Typically it is not intended for frequently changing volatile data e.g. PM, power levels";                                        
+       It shall contain the changed field pointed by the xpath.
+       Typically it is not intended for frequently changing volatile data e.g. PM, power levels";
 
     leaf change-time {
       description "The time the change occurs.";
       type ietf-yang-types:date-and-time;
-    }               
+    }
     uses changed-by-parms;
 
     leaf datastore {
