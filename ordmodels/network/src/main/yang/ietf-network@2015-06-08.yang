@@ -11,7 +11,7 @@ module ietf-network {
   contact
     "WILL-BE-DEFINED-LATER";
   description
-    "This module defines a common base model for a collection 
+    "This module defines a common base model for a collection
      of nodes in a network. Node definitions s are further used
      in network topologies and inventories.";
 
@@ -48,7 +48,7 @@ module ietf-network {
   }
 
   grouping node-ref {
-    description 
+    description
       "Contains the information necessary to reference a node.";
     leaf node-ref {
       type leafref {
@@ -56,7 +56,7 @@ module ietf-network {
           "/node/node-id";
       }
       description
-        "Used to reference a node.  
+        "Used to reference a node.
          Nodes are identified relative to the network they are
          contained in.";
     }
@@ -68,12 +68,12 @@ module ietf-network {
     description
       "Describes a network.
        A network typically contains an inventory of nodes,
-       topological information (augmented through 
-       network-topology model), as well as layering 
+       topological information (augmented through
+       network-topology model), as well as layering
        information.";
     container network-types {
       description
-        "Serves as an augmentation target.  
+        "Serves as an augmentation target.
          The network type is indicated through corresponding
          presence containers augmented into this container.";
     }
@@ -87,11 +87,11 @@ module ietf-network {
       config false;
       description
         "Indicates whether the information concerning this
-         particular network is populated by the server 
-         (server-provided true, the general case for network 
-         information discovered from the server), 
-         or whether it is configured by a client 
-         (server-provided true, possible e.g. for 
+         particular network is populated by the server
+         (server-provided true, the general case for network
+         information discovered from the server),
+         or whether it is configured by a client
+         (server-provided true, possible e.g. for
          service overlays managed through a controller).";
     }
     list supporting-network {
@@ -114,21 +114,21 @@ module ietf-network {
       leaf node-id {
         type node-id;
         description
-          "Identifies a node uniquely within the containing 
+          "Identifies a node uniquely within the containing
            network.";
       }
       list supporting-node {
         key "network-ref node-ref";
         description
-          "Represents another node, in an underlay network, that 
-           this node is supported by.  Used to represent layering 
+          "Represents another node, in an underlay network, that
+           this node is supported by.  Used to represent layering
            structure.";
         leaf network-ref {
           type leafref {
             path "../../../supporting-network/network-ref";
           }
           description
-            "References the underlay network that the 
+            "References the underlay network that the
              underlay node is part of.";
         }
         leaf node-ref {
