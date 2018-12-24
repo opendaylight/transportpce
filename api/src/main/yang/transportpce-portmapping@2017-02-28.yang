@@ -62,6 +62,12 @@ module transportpce-portmapping {
           description
           "OTS interface provisioned on the port";
         }
+        leaf port-direction{
+        	type org-openroadm-common-types:direction;
+        	description
+                "used by pce for network port of xpdr to know if unidirectional
+        		or bidirectional path computation requested";
+        }
       }
       list cp-to-degree{
         description

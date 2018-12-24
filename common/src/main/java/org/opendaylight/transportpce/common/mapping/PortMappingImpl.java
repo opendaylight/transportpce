@@ -89,7 +89,11 @@ public class PortMappingImpl implements PortMapping {
         MappingBuilder mpBldr = new MappingBuilder();
         mpBldr.withKey(new MappingKey(logicalConnectionPoint)).setLogicalConnectionPoint(logicalConnectionPoint)
             .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName());
-
+        // Get port-direction if network port of xpdr
+        if (logicalConnectionPoint.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)
+            && (port.getPortDirection() != null)) {
+            mpBldr.setPortDirection(port.getPortDirection());
+        }
         // Get OMS and OTS interface provisioned on the TTP's
         if (logicalConnectionPoint.contains(OpenRoadmInterfacesImpl.TTP_TOKEN) && (port.getInterfaces() != null)) {
             for (Interfaces interfaces : port.getInterfaces()) {
