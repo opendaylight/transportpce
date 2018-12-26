@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.pce.service;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
@@ -37,11 +38,13 @@ public class PathComputationServiceImpl implements PathComputationService {
 
     private final NotificationPublishService notificationPublishService;
     private final DataBroker dataBroker;
+    private final PortMapping portMapping;
 
-    public PathComputationServiceImpl(DataBroker dataBroker,
-                                      NotificationPublishService notificationPublishService) {
+    public PathComputationServiceImpl(DataBroker dataBroker, NotificationPublishService notificationPublishService,
+            PortMapping portMapping) {
         this.notificationPublishService = notificationPublishService;
         this.dataBroker = dataBroker;
+        this.portMapping = portMapping;
     }
 
     public void init() {
@@ -124,7 +127,7 @@ public class PathComputationServiceImpl implements PathComputationService {
 
         String message = "";
         String responseCode = "";
-        PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, dataBroker);
+        PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, dataBroker, portMapping);
         sendingPCE.pathComputation();
         message = sendingPCE.getMessage();
         responseCode = sendingPCE.getResponseCode();

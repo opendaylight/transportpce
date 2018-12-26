@@ -75,7 +75,7 @@ public class PceManyTests extends AbstractTest {
         LOG.info("testPathCalculations");
 
         PathComputationService pathComputationService =
-            new PathComputationServiceImpl(getDataBroker(), notificationPublishService);
+            new PathComputationServiceImpl(getDataBroker(), notificationPublishService, null);
         PathComputationRequestOutput output = pathComputationService.pathComputationRequest(input);
 
         PceTestUtils.checkConfigurationResponse(output, expectedOutput);

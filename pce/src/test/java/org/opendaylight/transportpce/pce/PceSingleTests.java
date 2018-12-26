@@ -84,7 +84,7 @@ public class PceSingleTests extends AbstractTest {
         PceTestUtils.writeTopologyIntoDataStore(getDataBroker(), getDataStoreContextUtil(), this.topologyDataPath);
 
         PathComputationService pathComputationService =
-            new PathComputationServiceImpl(getDataBroker(), this.notificationPublishService);
+            new PathComputationServiceImpl(getDataBroker(), this.notificationPublishService, null);
         PathComputationRequestOutput output = pathComputationService.pathComputationRequest(this.input);
 
         PceTestUtils.checkConfigurationResponse(output, this.expectedOutput);

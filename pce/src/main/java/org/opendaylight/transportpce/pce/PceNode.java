@@ -13,7 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
+import org.opendaylight.transportpce.common.mapping.PortMapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.pp.attributes.UsedWavelength;
@@ -41,8 +45,10 @@ public class PceNode {
     private List<String> usedXpndrNWTps = new ArrayList<String>();
     private List<PceLink> outgoingLinks = new ArrayList<PceLink>();
     private Map<String, String> clientPerNwTp = new HashMap<String, String>();
+    private PortMapping portMapping;
+    private boolean isUnidir;
 
-    public PceNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId) {
+    public PceNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, PortMapping portMapping) {
         this.node = node;
         this.nodeId = nodeId;
         this.nodeType = nodeType;
@@ -50,6 +56,8 @@ public class PceNode {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
+        this.portMapping = portMapping;
+        this.isUnidir = false;
     }
 
     public void initSrgTps() {
@@ -113,6 +121,7 @@ public class PceNode {
         }
         LOG.info("initSrgTpList: availableSrgPp size = {} && availableSrgCp size = {} in {}", this.availableSrgPp
                 .size(), this.availableSrgCp.size(), this.toString());
+        this.isUnidir();
         return;
     }
 
@@ -210,6 +219,41 @@ public class PceNode {
             LOG.error("initXndrTps: XPONDER doesn't have available wavelengths for node  {}", this.toString());
             return;
         }
+        this.isUnidir();
+    }
+
+    private void isUnidir() {
+        LOG.info("isUnidir: getting port direction...");
+        switch (nodeType) {
+            case XPONDER:
+                LOG.info("isUnidir: getting port direction on XPONDER-NETWORK port ...");
+                Optional<String> tp = this.clientPerNwTp.keySet().stream().findFirst();
+                Mapping mapping = this.portMapping.getMapping(node.getSupportingNode().get(0).getNodeRef().getValue(),
+                    tp.get());
+                if (mapping != null) {
+                    if (mapping.getPortDirection().compareTo(Direction.Bidirectional) != 0) {
+                        this.isUnidir = true;
+                        LOG.warn("isUnidir: XPONDER NETWORK have UNIDIR port...");
+                    }
+                } else {
+                    LOG.error("isUnidir: Cannot get mapping for tp '{}'", tp.get());
+                }
+                break;
+            case SRG:
+                LOG.info("isUnidir: getting port direction on ROADM SRG-PP port ...");
+                List<OpenroadmTpType> resultTx = this.availableSrgPp.values().stream()
+                        .filter(pp -> pp == OpenroadmTpType.SRGTXPP).collect(Collectors.toList());
+                List<OpenroadmTpType> resultRx = this.availableSrgPp.values().stream()
+                        .filter(pp -> pp == OpenroadmTpType.SRGRXPP).collect(Collectors.toList());
+                if (!resultTx.isEmpty() && !resultRx.isEmpty()) {
+                    this.isUnidir = true;
+                    LOG.warn("isUnidir: SRG node have UNIDIR port...");
+                }
+                break;
+            default:
+                this.isUnidir = false;
+                break;
+        }
     }
 
     public String getRdmSrgClient(String tp, Boolean aend) {
@@ -222,8 +266,20 @@ public class PceNode {
         }
         switch (cpType) {
             case SRGTXRXCP:
-                LOG.info("getRdmSrgClient: Getting BI Directional PP port ...");
-                srgType = OpenroadmTpType.SRGTXRXPP;
+                LOG.info("getRdmSrgClient: Getting BI or UNI Directional PP port ...");
+                if (this.isUnidir) {
+                    LOG.info("getRdmSrgClient: Getting UNI PP Port");
+                    if (aend) {
+                        LOG.info("getRdmSrgClient: Getting UNI Rx PP port ...");
+                        srgType = OpenroadmTpType.SRGRXPP;
+                    } else {
+                        LOG.info("getRdmSrgClient: Getting UNI Tx PP port ...");
+                        srgType = OpenroadmTpType.SRGTXPP;
+                    }
+                } else {
+                    LOG.info("getRdmSrgClient: Getting BI PP Port");
+                    srgType = OpenroadmTpType.SRGTXRXPP;
+                }
                 break;
             case SRGTXCP:
                 LOG.info("getRdmSrgClient: Getting UNI Rx PP port ...");
@@ -288,6 +344,14 @@ public class PceNode {
 
     public String getXpdrClient(String tp) {
         return this.clientPerNwTp.get(tp);
+    }
+
+    public OpenroadmNodeType getPceNodeType() {
+        return this.nodeType;
+    }
+
+    public boolean getUnidir() {
+        return this.isUnidir;
     }
 
     @Override

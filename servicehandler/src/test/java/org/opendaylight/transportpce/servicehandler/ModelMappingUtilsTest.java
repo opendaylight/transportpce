@@ -11,6 +11,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
@@ -43,7 +44,7 @@ public class ModelMappingUtilsTest extends AbstractTest {
     public ModelMappingUtilsTest() {
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         PathComputationService pathComputationService = new PathComputationServiceImpl(getDataBroker(),
-            notificationPublishService);
+                notificationPublishService, null);
         pceServiceWrapper = new PCEServiceWrapper(pathComputationService);
         this.pathComputationRequestOutput = pceServiceWrapper.performPCE(ServiceDataUtils.buildServiceCreateInput(),
             true);

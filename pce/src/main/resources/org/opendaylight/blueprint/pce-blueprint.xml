@@ -24,11 +24,14 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         interface="org.opendaylight.controller.md.sal.binding.api.NotificationPublishService"
         odl:type="default" />
 
+  <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
+
   <bean id="pceServiceImpl"
         class="org.opendaylight.transportpce.pce.service.PathComputationServiceImpl"
         init-method="init" destroy-method="close">
     <argument ref="dataBroker"/>
     <argument ref="notificationPublishService" />
+    <argument ref="portMapping" />
   </bean>
 
   <bean id="provider"

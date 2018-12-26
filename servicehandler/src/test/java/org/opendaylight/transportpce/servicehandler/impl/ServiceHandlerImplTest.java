@@ -120,7 +120,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
 
     public ServiceHandlerImplTest() throws Exception {
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
-        this.pathComputationService = new PathComputationServiceImpl(getDataBroker(), notificationPublishService);
+        this.pathComputationService = new PathComputationServiceImpl(getDataBroker(), notificationPublishService, null);
         PceTestUtils.writeTopologyIntoDataStore(getDataBroker(), getDataStoreContextUtil(),
                 "topologyData/NW-simple-topology.xml");
         this.rendererServiceOperations =

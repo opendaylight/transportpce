@@ -22,6 +22,7 @@ import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmNodeType;
@@ -41,6 +42,7 @@ public class PceCalculation {
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
     private DataBroker dataBroker = null;
+    private PortMapping portMapping = null;
     ///////////// data parsed from Input/////////////////
     private PathComputationRequestInput input;
     private String anodeId = "";
@@ -72,9 +74,10 @@ public class PceCalculation {
 
     // private static final String NETWORK_ID = "Transport Overlay";
     public PceCalculation(PathComputationRequestInput input, DataBroker dataBroker, PceConstraints pceHardConstraints,
-            PceConstraints pceSoftConstraints, PceResult rc) {
+            PceConstraints pceSoftConstraints, PceResult rc, PortMapping portMapping) {
         this.input = input;
         this.dataBroker = dataBroker;
+        this.portMapping = portMapping;
         this.returnStructure = rc;
         this.pceHardConstraints = pceHardConstraints;
         this.pceSoftConstraints = pceSoftConstraints;
@@ -325,7 +328,7 @@ public class PceCalculation {
             default:
                 break;
         }
-        PceNode pceNode = new PceNode(node, nodeType, nodeId);
+        PceNode pceNode = new PceNode(node, nodeType, nodeId, portMapping);
         if (!pceNode.isValid()) {
             LOG.error(" validateNode: Node is ignored due errors in network data ");
             return false;

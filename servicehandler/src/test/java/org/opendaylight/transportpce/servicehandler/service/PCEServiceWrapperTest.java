@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.servicehandler.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class PCEServiceWrapperTest extends AbstractTest {
 
     public PCEServiceWrapperTest() {
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
-        this.pathComputationService = new PathComputationServiceImpl(getDataBroker(), notificationPublishService);
+        this.pathComputationService = new PathComputationServiceImpl(getDataBroker(), notificationPublishService, null);
     }
 
     @Before
