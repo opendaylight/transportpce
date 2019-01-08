@@ -33,6 +33,7 @@ import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegree;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegreeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.node.attributes.AvailableWavelengths;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.node.attributes.AvailableWavelengthsBuilder;
@@ -623,7 +624,7 @@ public class OpenRoadmTopology {
         List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks> srgCpList = srg
             .getCircuitPacks();
         for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks
-                circuitPacks : srgCpList) {
+            circuitPacks : srgCpList) {
             String circuitPackName = circuitPacks.getCircuitPackName();
             CircuitPack cp = this.deviceConfig.getDeviceCp(nodeId, circuitPackName);
             if (cp.getPorts() == null) {
@@ -631,7 +632,7 @@ public class OpenRoadmTopology {
             }
 
             List<Ports> listPorts = cp.getPorts();
-            Collections.sort(listPorts, new SortByName());
+            Collections.sort(listPorts, new SortPortsByName());
 
             int portIndex = 0;
             for (Ports port : listPorts) {
@@ -753,7 +754,8 @@ public class OpenRoadmTopology {
 
     // This method returns the linkBuilder object for given source and
     // destination.
-    public LinkBuilder createLink(String srcNode, String dstNode, String srcTp, String destTp, boolean opposite) {
+    public LinkBuilder createLink(String srcNode, String dstNode, String srcTp, String destTp) {
+        boolean opposite = false;
         LOG.info("creating link for {}-{}", srcNode, dstNode);
         // Create Destination for link
         DestinationBuilder dstNodeBldr = new DestinationBuilder();
@@ -769,6 +771,22 @@ public class OpenRoadmTopology {
         lnkBldr.setSource(srcNodeBldr.build());
         lnkBldr.setLinkId(LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp));
         lnkBldr.withKey(new LinkKey(lnkBldr.getLinkId()));
+        if (srcTp.contains(LinkIdUtil.NETWORK) || destTp.contains(LinkIdUtil.NETWORK)) {
+            opposite = checkXpdrTpBidr(srcNode, dstNode, srcTp, destTp);
+        }
+        if (srcTp.contains("-PP")) {
+            if (srcTp.endsWith("TXRX")) {
+                opposite = opposite && true;
+            } else {
+                opposite = false;
+            }
+        } else if (destTp.contains("-PP")) {
+            if (destTp.endsWith("TXRX")) {
+                opposite = opposite && true;
+            } else {
+                opposite = false;
+            }
+        }
         if (opposite) {
             org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder lnk1Bldr =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder();
@@ -779,6 +797,28 @@ public class OpenRoadmTopology {
                 lnk1Bldr.build());
         }
         return lnkBldr;
+    }
+
+    /**
+     * This method checks if the tp of an xpdr node is bidirectional or not,
+     * before assigning it an opposite link.
+     *
+     */
+    private boolean checkXpdrTpBidr(String srcNode, String dstNode, String srcTp, String destTp) {
+        Mapping mapping = null;
+        if (srcTp.contains(LinkIdUtil.NETWORK)) {
+            mapping = portMapping.getMapping(srcNode.split("-XPDR")[0], srcTp);
+        } else if (destTp.contains(LinkIdUtil.NETWORK)) {
+            mapping = portMapping.getMapping(dstNode.split("-XPDR")[0], destTp);
+        } else {
+            LOG.error("error with link termination point");
+        }
+        if (mapping != null && mapping.getPortDirection() != null) {
+            if (mapping.getPortDirection() == Direction.Bidirectional) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -817,11 +857,11 @@ public class OpenRoadmTopology {
 
                 Link1Builder oorAzlnkBldr = new Link1Builder();
                 oorAzlnkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
-                LinkBuilder ietfAzlnkBldr = createLink(srcNode, destNode, srcTp, destTp, false);
+                LinkBuilder ietfAzlnkBldr = createLink(srcNode, destNode, srcTp, destTp);
                 ietfAzlnkBldr.addAugmentation(Link1.class, oorAzlnkBldr.build());
 
                 // ZtoA direction
-                LinkBuilder ietfZalnkBldr = createLink(destNode, srcNode, destTp, srcTp, false);
+                LinkBuilder ietfZalnkBldr = createLink(destNode, srcNode, destTp, srcTp);
                 ietfZalnkBldr.addAugmentation(Link1.class, oorAzlnkBldr.build());
 
                 // add opposite link augmentations
@@ -853,22 +893,22 @@ public class OpenRoadmTopology {
                 destNode = listSrgNodes.get(j).getNodeId().getValue();
 
                 // drop links
-                srcTp = listDegeeNodes.get(i).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-                    .ietf.network.topology.rev150608.Node1.class)
+                srcTp = listDegeeNodes.get(i).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf
+                    .network.topology.rev150608.Node1.class)
                     .getTerminationPoint().stream().filter(tp -> tp.getTpId().getValue().contains("CTP")).findFirst()
                     .get().getTpId().getValue();
-                destTp = listSrgNodes.get(j).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-                    .ietf.network.topology.rev150608.Node1.class)
+                destTp = listSrgNodes.get(j).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf
+                    .network.topology.rev150608.Node1.class)
                     .getTerminationPoint().stream().filter(tp -> tp.getTpId().getValue().contains("CP")).findFirst()
                     .get().getTpId().getValue();
 
-                LinkBuilder ietfDropLinkBldr = createLink(srcNode, destNode, srcTp, destTp, false);
+                LinkBuilder ietfDropLinkBldr = createLink(srcNode, destNode, srcTp, destTp);
                 Link1Builder oorlnk1Bldr = new Link1Builder();
                 oorlnk1Bldr.setLinkType(OpenroadmLinkType.DROPLINK);
                 ietfDropLinkBldr.addAugmentation(Link1.class, oorlnk1Bldr.build());
 
                 // add links direction
-                LinkBuilder ietfaddLinkBldr = createLink(destNode, srcNode, destTp, srcTp, false);
+                LinkBuilder ietfaddLinkBldr = createLink(destNode, srcNode, destTp, srcTp);
                 oorlnk1Bldr = new Link1Builder();
                 oorlnk1Bldr.setLinkType(OpenroadmLinkType.ADDLINK);
                 ietfaddLinkBldr.addAugmentation(Link1.class, oorlnk1Bldr.build());
@@ -934,8 +974,8 @@ public class OpenRoadmTopology {
     private List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
         .AvailableWavelengths> create96AvalWaveSrg() {
 
-        List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
-            .AvailableWavelengths> waveList = new ArrayList<>();
+        List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes.AvailableWavelengths>
+            waveList = new ArrayList<>();
 
         for (int i = 1; i < 97; i++) {
             org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes

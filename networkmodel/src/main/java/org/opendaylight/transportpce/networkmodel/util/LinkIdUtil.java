@@ -14,7 +14,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 
 public final class LinkIdUtil {
 
-    private static final String NETWORK = "-NETWORK";
+    public static final String NETWORK = "-NETWORK";
     private static final String TRANSMIT = "-TX";
     private static final String RECEIVE = "-RX";
     private static final String BIDIRECTIONAL = "-TXRX";

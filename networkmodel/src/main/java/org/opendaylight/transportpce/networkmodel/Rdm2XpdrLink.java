@@ -101,7 +101,7 @@ final class Rdm2XpdrLink {
         nwBuilder.setNetworkId(nwId);
         nwBuilder.withKey(new NetworkKey(nwId));
         Link1Builder lnk1bldr = new Link1Builder();
-        LinkBuilder linkBuilder = openRoadmTopology.createLink(srcNode, destNode, srcTp, destTp, true);
+        LinkBuilder linkBuilder = openRoadmTopology.createLink(srcNode, destNode, srcTp, destTp);
         lnk1bldr.setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT);
         linkBuilder.addAugmentation(Link1.class, lnk1bldr.build());
         LOG.info("Link id in the linkbldr {}", linkBuilder.getLinkId());

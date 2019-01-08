@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce;
 
 import java.util.List;
+
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmLinkType;
@@ -104,10 +105,14 @@ public class PceLink {
         LinkId tmpoppositeLink = null;
         org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1 linkOpposite = link
             .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1.class);
-        tmpoppositeLink = linkOpposite.getOppositeLink();
-        LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite.toString());
-        if (tmpoppositeLink == null) {
-            this.isValid = false;
+        try {
+            tmpoppositeLink = linkOpposite.getOppositeLink();
+            LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite.toString());
+            if (tmpoppositeLink == null) {
+                LOG.error("PceLink: Error reading oppositeLink. Link is ignored {}", this.linkId);
+                return null;
+            }
+        } catch (NullPointerException e) {
             LOG.error("PceLink: Error reading oppositeLink. Link is ignored {}", this.linkId);
             return null;
         }
@@ -185,7 +190,7 @@ public class PceLink {
                 power = 0;
                 break;
         }
-        spanOsnrDb = constantA + constantB * power + constantC * loss + constactD * power * loss;
+        spanOsnrDb = constantA + (constantB * power) + (constantC * loss) + (constactD * power * loss);
         if (spanOsnrDb > upperBoundOSNR) {
             spanOsnrDb =  upperBoundOSNR;
         } else if (spanOsnrDb < lowerBoundOSNR) {
@@ -242,9 +247,9 @@ public class PceLink {
     }
 
     public boolean isValid() {
-        if ((this.linkId == null) || (this.linkType == null) || (this.oppositeLink == null)) {
+        if ((this.linkId == null) || (this.linkType == null)) { // || (this.oppositeLink == null)) {
             this.isValid = false;
-            LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", this.linkId);
+            LOG.error("PceLink: No Link type is available. Link is ignored {}", this.linkId);
         }
         if ((this.sourceId == null) || (this.destId == null) || (this.sourceTP == null) || (this.destTP == null)) {
             this.isValid = false;
