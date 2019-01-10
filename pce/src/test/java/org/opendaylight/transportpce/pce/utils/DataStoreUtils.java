@@ -15,7 +15,11 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.*;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.network.NetworkTypesBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.network.NodeBuilder;
@@ -29,6 +33,9 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public final class DataStoreUtils {
 
+    private DataStoreUtils(){
+
+    }
 
     public static void writeTopologyIntoDataStore(DataBroker dataBroker, Network network)
         throws ExecutionException, InterruptedException {
@@ -39,7 +46,7 @@ public final class DataStoreUtils {
         writeOnlyTransaction.submit().get();
     }
 
-    public static Network getEmptyNetwork(){
+    public static Network getEmptyNetwork() {
         Augmentation<Network> aug = new Network1Builder().build();
         Network network = new NetworkBuilder()
             .setNetworkId(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
@@ -49,7 +56,7 @@ public final class DataStoreUtils {
         return network;
     }
 
-    public static Network getNetwork1(){
+    public static Network getNetwork1() {
         List<Node> nodes = new ArrayList<>();
         Node node1 = new NodeBuilder()
             .setNodeId(new NodeId("node 1"))
@@ -65,7 +72,7 @@ public final class DataStoreUtils {
         return network;
     }
 
-    public static Network getNetwork2(){
+    public static Network getNetwork2() {
         List<Node> nodes = new ArrayList<>();
         Augmentation<Network> aug = new Network1Builder().build();
         Network network = new NetworkBuilder()
@@ -77,7 +84,7 @@ public final class DataStoreUtils {
         return network;
     }
 
-    public static Network getNetwork3(){
+    public static Network getNetwork3() {
         List<Link> links = new ArrayList<>();
         List<Node> nodes = new ArrayList<>();
         Augmentation<Network> aug = new Network1Builder().setLink(links).build();
@@ -90,7 +97,7 @@ public final class DataStoreUtils {
         return network;
     }
 
-    public static Network getNetwork4(){
+    public static Network getNetwork4() {
         List<Link> links = new ArrayList<>();
         Link link1 = new LinkBuilder()
             .setLinkId(new LinkId("link1"))

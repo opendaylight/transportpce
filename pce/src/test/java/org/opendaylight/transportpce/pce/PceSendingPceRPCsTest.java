@@ -8,15 +8,9 @@
 
 package org.opendaylight.transportpce.pce;
 
-import java.util.concurrent.ExecutionException;
 import org.junit.Before;
 import org.junit.Test;
-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
-import org.opendaylight.transportpce.pce.impl.PceServiceRPCImpl;
-import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
-import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PathComputationRequestInput;
 
@@ -32,7 +26,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     }
 
     @Test
-    public void test(){
+    public void test() {
 //        PceTestUtils.writeTopologyIntoDataStore(this.getDataBroker(), this.getDataStoreContextUtil()
 //            , "topologyData/NW-for-test-5-4.xml");
         pceSendingPceRPCs.pathComputation();

@@ -10,13 +10,12 @@ package org.opendaylight.transportpce.pce.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.pce.stub.RpcProviderRegistryStub;
-import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev170426.PceService;
 
@@ -37,7 +36,7 @@ public class PceProviderTest extends AbstractTest {
     }
 
     @Test
-    public void testIntialization(){
+    public void testIntialization() {
         pceProvider.init();
         pceProvider.close();
     }
