@@ -80,7 +80,9 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
     private OlmPowerService olmPowerService;
     private OlmPowerServiceRpcImpl olmPowerServiceRpc;
 
-
+    /*
+     * initial setup before test cases
+     */
     @Before
     public void setUp() {
         this.mountPoint = new MountPointStub(this.getDataBroker());
@@ -97,6 +99,11 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         this.olmPowerServiceRpc = new OlmPowerServiceRpcImpl(this.olmPowerService);
     }
 
+    /*
+     * test getPm in the OlmPowerServiceRpcImpl if pm is not present
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
     public void pmIsNotPresentTest() throws ExecutionException, InterruptedException {
         GetPmInput input = OlmPowerServiceRpcImplUtil.getGetPmInput();
@@ -110,6 +117,10 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         Assert.assertEquals(null, output.get().getResult().getResourceType());
     }
 
+    /*
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
     public void testGetPm1() throws ExecutionException, InterruptedException {
         Measurements measurements = new MeasurementsBuilder().setMeasurement(
@@ -211,6 +222,11 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         Assert.assertEquals(null, output.get().getResult().getResourceType());
     }
 
+    /*
+     * test servicePowerSetup function in OlmPowerServiceRpcImpl in case of success
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
     public void testServicePowerSetup1() throws ExecutionException, InterruptedException {
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
@@ -221,7 +237,11 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         Assert.assertEquals(true, output.get().isSuccessful());
     }
 
-
+    /*
+     * test servicePowerTurndown function in OlmPowerServiceRpcImpl in case of success
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
     public void testServicePowerTurndown1() throws ExecutionException, InterruptedException {
         ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
@@ -233,6 +253,11 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         Assert.assertEquals(true, output.get().isSuccessful());
     }
 
+    /*
+     * test calculateSpanlossBase function in OlmPowerServiceRpcImpl in case of failure
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
     public void testCalculateSpanlossBase1() throws ExecutionException, InterruptedException {
         CalculateSpanlossBaseInput input = OlmPowerServiceRpcImplUtil.getCalculateSpanlossBaseInput();
@@ -244,6 +269,11 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         Assert.assertEquals(true, output.get().isSuccessful());
     }
 
+    /*
+     * test calculateSpanlossCurrent function in OlmPowerServiceRpcImpl in case of null output
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
     public void testCalculateSpanlossCurrent1() throws ExecutionException, InterruptedException {
         CalculateSpanlossCurrentInput input = OlmPowerServiceRpcImplUtil.getCalculateSpanlossCurrentInput();
@@ -253,6 +283,11 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         Assert.assertEquals(true, output.get().isSuccessful());
     }
 
+    /*
+     * test servicePowerReset function in OlmPowerServiceRpcImpl in case of null output
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
     public void testServicePowerResetInput() throws ExecutionException, InterruptedException {
         ServicePowerResetInput input = OlmPowerServiceRpcImplUtil.getServicePowerResetInput();

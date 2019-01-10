@@ -13,6 +13,9 @@ import org.junit.Test;
 
 public class RoadmLinksTest {
 
+    /*
+     * test RoadmLinks initialization
+     */
     @Test
     public void test() {
         RoadmLinks roadmlinks0 = new RoadmLinks();

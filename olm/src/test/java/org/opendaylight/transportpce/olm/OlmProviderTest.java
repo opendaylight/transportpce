@@ -44,6 +44,9 @@ public class OlmProviderTest extends AbstractTest {
     private RpcProviderRegistry rpcProviderRegistry;
     private OlmProvider olmProvider;
 
+    /*
+     * initial setup before test cases
+     */
     @Before
     public void setUp() {
         this.mountPoint = new MountPointStub(this.getDataBroker());
@@ -62,14 +65,18 @@ public class OlmProviderTest extends AbstractTest {
 
     }
 
-
+    /*
+     * dummy test for init and close functions using RpcProviderRegistryStub
+     */
     @Test
     public void testInitAndClose() {
         this.olmProvider.init();
         this.olmProvider.close();
     }
 
-
+    /*
+     * dummy test for init and close functions using RpcProviderRegistryStub2
+     */
     @Test
     public void testClose2() {
         this.rpcProviderRegistry = new RpcProviderRegistryStub2();
