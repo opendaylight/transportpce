@@ -79,10 +79,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>org.opendaylight.transportpce</groupId>
-        <artifactId>test-common</artifactId>
-        <version>0.2.1-SNAPSHOT</version>
-        <scope>test</scope>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>test-common</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
