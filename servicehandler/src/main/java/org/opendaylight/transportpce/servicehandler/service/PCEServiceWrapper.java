@@ -36,6 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeader;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
@@ -83,6 +84,21 @@ public class PCEServiceWrapper {
                     tempServiceCreateInput.getCommonId(), tempServiceCreateInput.getSdncRequestHeader(),
                     tempServiceCreateInput.getServiceAEnd(), tempServiceCreateInput.getServiceZEnd(),
                     ServiceNotificationTypes.ServiceCreateResult, reserveResource);
+        } else {
+            return returnPCEFailed();
+        }
+    }
+
+    public PathComputationRequestOutput performPCE(ServiceFeasibilityCheckInput serviceFeasibilityCheckInput,
+            boolean reserveResource) {
+        LOG.info("performing PCE ...");
+        if (validateParams(serviceFeasibilityCheckInput.getCommonId(),
+                serviceFeasibilityCheckInput.getSdncRequestHeader())) {
+            return performPCE(serviceFeasibilityCheckInput.getHardConstraints(),
+                    serviceFeasibilityCheckInput.getSoftConstraints(), serviceFeasibilityCheckInput.getCommonId(),
+                    serviceFeasibilityCheckInput.getSdncRequestHeader(), serviceFeasibilityCheckInput.getServiceAEnd(),
+                    serviceFeasibilityCheckInput.getServiceZEnd(),
+                    ServiceNotificationTypes.ServiceFeasibilityCheckResult, reserveResource);
         } else {
             return returnPCEFailed();
         }

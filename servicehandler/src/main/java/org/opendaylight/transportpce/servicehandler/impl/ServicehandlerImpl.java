@@ -200,12 +200,76 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     @Override
     public ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> serviceFeasibilityCheck(
             ServiceFeasibilityCheckInput input) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        LOG.info("RPC service feasibility check received");
+        // Validation
+        ServiceInput serviceInput = new ServiceInput(input);
+        OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(serviceInput,
+                RpcActions.ServiceFeasibilityCheck);
+        if (! validationResult.isSuccess()) {
+            LOG.warn("Aborting service feasibility check because validation of service create request failed: {}",
+                    validationResult.getResultMessage());
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                    validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
+        }
+        this.pceListenerImpl.setInput(new ServiceInput(input));
+        this.pceListenerImpl.setServiceReconfigure(false);
+        this.pceListenerImpl.setServiceFeasiblity(true);
+        this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
+        this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
+        LOG.info("Commencing PCE");
+        PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
+        if (output != null) {
+            LOG.info("Service compliant, serviceFeasibilityCheck in progress...");
+            ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+            return ModelMappingUtils.createCreateServiceReply(input, common.getAckFinalIndicator(),
+                    common.getResponseMessage(), common.getResponseCode());
+        } else {
+            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+                    "PCE calculation failed", ResponseCodes.RESPONSE_FAILED);
+        }
     }
 
     @Override
     public ListenableFuture<RpcResult<ServiceReconfigureOutput>> serviceReconfigure(ServiceReconfigureInput input) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        LOG.info("RPC service reconfigure received");
+        String message = "";
+        Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(input.getServiceName());
+        if (servicesObject.isPresent()) {
+            LOG.info("Service '{}' is present", input.getServiceName());
+            OperationResult validationResult = ServiceCreateValidation
+                    .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceReconfigure);
+            if (!validationResult.isSuccess()) {
+                LOG.warn("Aborting service reconfigure because validation of service create request failed: {}",
+                        validationResult.getResultMessage());
+                return ModelMappingUtils.createCreateServiceReply(input, validationResult.getResultMessage(),
+                        RpcStatus.Failed);
+            }
+            this.pceListenerImpl.setInput(new ServiceInput(input));
+            this.pceListenerImpl.setServiceReconfigure(true);
+            this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+            this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
+            this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+                    .ServiceDeleteInput serviceDeleteInput =
+                            ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+                    .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
+                            ServiceNotificationTypes.ServiceDeleteResult);
+            if (output != null) {
+                LOG.info("Service compliant, service reconfigure in progress...");
+                ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+                return ModelMappingUtils.createCreateServiceReply(input, common.getResponseMessage(),
+                        RpcStatus.Successful);
+            } else {
+                return ModelMappingUtils.createCreateServiceReply(input, "Renderer service delete failed !",
+                        RpcStatus.Successful);
+            }
+        } else {
+            LOG.error("Service '{}' is not present", input.getServiceName());
+            message = "Service '" + input.getServiceName() + "' is not present";
+            return ModelMappingUtils.createCreateServiceReply(input, message, RpcStatus.Failed);
+        }
     }
 
     @Override

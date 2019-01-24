@@ -118,7 +118,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
     # Create Service 'test' with correct parameters
-    def test_07_create_service(self):
+    def test_07_create_service_success(self):
         url = ("{}/operations/org-openroadm-service:service-create"
               .format(self.restconf_baseurl))
         data = {"input": {
@@ -221,7 +221,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(20)
 
     # Create Service 'test' with not compliant parameter : no 'sdnc-request-header' parameter
-    def test_08_create_service(self):
+    def test_08_create_service_failed(self):
         url = ("{}/operations/org-openroadm-service:service-create"
               .format(self.restconf_baseurl))
         data = {"input": {
@@ -318,7 +318,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     # Create Service 'test' with not compliant parameter : no 'tx-direction' for serviceAEnd
-    def test_09_create_service(self):
+    def test_09_create_service_failed(self):
         url = ("{}/operations/org-openroadm-service:service-create"
               .format(self.restconf_baseurl))
         data = {"input": {
@@ -406,7 +406,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     # Get 'test' service created
-    def test_10_get_service(self):
+    def test_10_verify_service_created(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/test"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
@@ -421,7 +421,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
     # get non existing service
-    def test_11_get_service(self):
+    def test_11_get_non_existing_service(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/test1"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
@@ -431,204 +431,118 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         time.sleep(1)
 
-# These tests is not available in this commit (cf commit message )
-# reconfigure 'test' to be 'test-new'
-#     def test_08_reconfigure_service(self):
-#         url = ("{}/operations/org-openroadm-service:service-reconfigure"
-#               .format(self.restconf_baseurl))
-#         data = {"input": {
-#                 "service-name": "test",
-#                 "new-service-name": "test-new",
-#                 "common-id": "ASATT1234567",
-#                 "connection-type": "infrastructure",
-#                 "service-a-end": {
-#                     "service-rate": "100",
-#                     "node-id": "XPDRA",
-#                     "service-format": "Ethernet",
-#                     "clli": "SNJSCAMCJP8",
-#                     "tx-direction": {
-#                         "port": {
-#                             "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
-#                             "port-type": "router",
-#                             "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
-#                             "port-rack": "000000.00",
-#                             "port-shelf": "00"
-#                         },
-#                         "lgx": {
-#                             "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
-#                             "lgx-port-name": "LGX Back.3",
-#                             "lgx-port-rack": "000000.00",
-#                             "lgx-port-shelf": "00"
-#                         }
-#                     },
-#                     "rx-direction": {
-#                         "port": {
-#                             "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
-#                             "port-type": "router",
-#                             "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
-#                             "port-rack": "000000.00",
-#                             "port-shelf": "00"
-#                         },
-#                         "lgx": {
-#                             "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
-#                             "lgx-port-name": "LGX Back.4",
-#                             "lgx-port-rack": "000000.00",
-#                             "lgx-port-shelf": "00"
-#                         }
-#                     },
-#                     "optic-type": "gray"
-#                 },
-#                 "service-z-end": {
-#                     "service-rate": "100",
-#                     "node-id": "XPDRC",
-#                     "service-format": "Ethernet",
-#                     "clli": "SNJSCAMCJT4",
-#                     "tx-direction": {
-#                         "port": {
-#                             "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
-#                             "port-type": "router",
-#                             "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
-#                             "port-rack": "000000.00",
-#                             "port-shelf": "00"
-#                         },
-#                         "lgx": {
-#                             "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
-#                             "lgx-port-name": "LGX Back.29",
-#                             "lgx-port-rack": "000000.00",
-#                             "lgx-port-shelf": "00"
-#                         }
-#                     },
-#                     "rx-direction": {
-#                         "port": {
-#                             "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
-#                             "port-type": "router",
-#                             "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
-#                             "port-rack": "000000.00",
-#                             "port-shelf": "00"
-#                         },
-#                         "lgx": {
-#                             "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
-#                             "lgx-port-name": "LGX Back.30",
-#                             "lgx-port-rack": "000000.00",
-#                             "lgx-port-shelf": "00"
-#                         }
-#                     },
-#                     "optic-type": "gray"
-#                 },
-#                 "hard-constraints": {
-#                     "diversity": {
-#                         "existing-service": [
-#                             "104/GE100/SNJSCAMCJP8/SNJSCAMCJT4"
-#                         ],
-#                         "existing-service-applicability": {
-#                             "node": "true"
-#                         }
-#                     },
-#                     "exclude": {
-#                         "fiber-bundle": [
-#                             "l(string)"
-#                         ],
-#                         "node-id": [
-#                             "SNJSCAMCJP8_000000.00"
-#                         ]
-#                     },
-#                     "latency": {
-#                         "max-latency": "30"
-#                     }
-#                 }
-#             }
-#         }
-#         headers = {'content-type': 'application/json',
-#         "Accept": "application/json"}
-#         response = requests.request(
-#             "POST", url, data=json.dumps(data), headers=headers,
-#             auth=('admin', 'admin'))
-#         self.assertEqual(response.status_code, requests.codes.ok)
-#         res = response.json()
-#         self.assertIn('in progress',
-#             res['output']['status-message'])
-#         time.sleep(30)
-#
-#     # get new service 'test-new'
-#     def test_09_get_service(self):
-#         url = ("{}/operational/org-openroadm-service:service-list/services/test-new"
-#               .format(self.restconf_baseurl))
-#         headers = {'content-type': 'application/json',
-#         "Accept": "application/json"}
-#         response = requests.request(
-#             "GET", url, headers=headers, auth=('admin', 'admin'))
-#         res = response.json()
-#         self.assertEqual(
-#             res['services'][0]['operational-state'],
-#             'inService')
-#         time.sleep(1)
-#
-#     # Modify 'test-new' state
-#     def test_10_modify_service_state(self):
-#         url = ("{}/operations/servicehandler:service-state-modify"
-#               .format(self.restconf_baseurl))
-#         data = {"input": {
-#                 "service-name": "test-new",
-#                 "operational-state": "outOfService"
-#             }
-#         }
-#         headers = {'content-type': 'application/json'}
-#         response = requests.request(
-#             "POST", url, data=json.dumps(data), headers=headers,
-#             auth=('admin', 'admin'))
-#         res = response.json()
-#         self.assertIn('Service state modified',
-#             res['output']['configuration-response-common']['response-message'])
-#         time.sleep(5)
-#
-#     # get new service 'test-new' state
-#     def test_11_get_service(self):
-#         url = ("{}/operational/org-openroadm-service:service-list/services/test-new"
-#               .format(self.restconf_baseurl))
-#         headers = {'content-type': 'application/json',
-#         "Accept": "application/json"}
-#         response = requests.request(
-#             "GET", url, headers=headers, auth=('admin', 'admin'))
-#         res = response.json()
-#         self.assertEqual(
-#             res['services'][0]['operational-state'],
-#             'outOfService')
-#         time.sleep(1)
-#
-#     # restore service 'test-new'
-#     def test_12_restore_service(self):
-#         url = ("{}/operations/org-openroadm-service:service-restoration"
-#               .format(self.restconf_baseurl))
-#         data = {"input": {
-#                 "service-name": "test-new",
-#                 "option": "permanent"
-#             }
-#         }
-#         headers = {'content-type': 'application/json'}
-#         response = requests.request(
-#             "POST", url, data=json.dumps(data), headers=headers,
-#             auth=('admin', 'admin'))
-#         res = response.json()
-#         self.assertIn('in progress',
-#             res['output']['status-message'])
-#         time.sleep(60)
-#
-#     # get new service 'test-new' state
-#     def test_13_get_service(self):
-#         url = ("{}/operational/org-openroadm-service:service-list/services/test-new"
-#               .format(self.restconf_baseurl))
-#         headers = {'content-type': 'application/json',
-#         "Accept": "application/json"}
-#         response = requests.request(
-#             "GET", url, headers=headers, auth=('admin', 'admin'))
-#         res = response.json()
-#         self.assertEqual(
-#             res['services'][0]['operational-state'],
-#             'inService')
-#         time.sleep(1)
+    #reconfigure 'test' to be 'test-new'
+    def test_12_reconfigure_service_test(self):
+        url = ("{}/operations/org-openroadm-service:service-reconfigure"
+              .format(self.restconf_baseurl))
+        data = {"input": {
+                "service-name": "test",
+                "new-service-name": "test-new",
+                "common-id": "ASATT1234567",
+                "connection-type": "infrastructure",
+                "service-a-end": {
+                    "service-rate": "100",
+                    "node-id": "XPDRA",
+                    "service-format": "Ethernet",
+                    "clli": "SNJSCAMCJP8",
+                    "tx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                            "lgx-port-name": "LGX Back.3",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "rx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                            "lgx-port-name": "LGX Back.4",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "optic-type": "gray"
+                },
+                "service-z-end": {
+                    "service-rate": "100",
+                    "node-id": "XPDRC",
+                    "service-format": "Ethernet",
+                    "clli": "SNJSCAMCJT4",
+                    "tx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.29",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "rx-direction": {
+                        "port": {
+                            "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name": "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.30",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "optic-type": "gray"
+                }
+            }
+        }
+        headers = {'content-type': 'application/json',
+        "Accept": "application/json"}
+        response = requests.request(
+            "POST", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn('Renderer service delete in progress',
+            res['output']['status-message'])
+        time.sleep(30)
+
+    # get new service 'test-new'
+    def test_13_verify_service_reconfigure(self):
+        url = ("{}/operational/org-openroadm-service:service-list/services/test-new"
+              .format(self.restconf_baseurl))
+        headers = {'content-type': 'application/json',
+        "Accept": "application/json"}
+        response = requests.request(
+            "GET", url, headers=headers, auth=('admin', 'admin'))
+        res = response.json()
+        self.assertEqual(
+            res['services'][0]['administrative-state'],
+            'inService')
+        time.sleep(1)
 
     # Delete  service
-    def test_12_delete_service(self):
+    def test_14_delete_service_reconfigure(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
               .format(self.restconf_baseurl))
         data = {"input": {
@@ -639,7 +553,7 @@ class TransportPCEtesting(unittest.TestCase):
                     "notification-url": "http://localhost:8585/NotificationServer/notify"
                 },
                 "service-delete-req-info": {
-                    "service-name": "test",
+                    "service-name": "test-new",
                     "due-date": "2016-11-28T00:00:01Z",
                     "tail-retention": "no"
                 }
@@ -656,8 +570,8 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(20)
 
     # Verify 'test' service deleted
-    def test_13_get_service(self):
-        url = ("{}/operational/org-openroadm-service:service-list/services/test"
+    def test_15_verify_service_reconfigure_deleted(self):
+        url = ("{}/operational/org-openroadm-service:service-list/services/test-new"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -667,7 +581,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
     # Create Temp Service 'ASATT1234567' with correct parameters
-    def test_14_create_temp_service(self):
+    def test_16_create_temp_service_success(self):
         url = ("{}/operations/org-openroadm-service:temp-service-create"
               .format(self.restconf_baseurl))
         data = {
@@ -771,7 +685,7 @@ class TransportPCEtesting(unittest.TestCase):
 
 
     # Create Temp Service not compliant with no common-id
-    def test_15_create_temp_service(self):
+    def test_17_create_temp_service_failed(self):
         url = ("{}/operations/org-openroadm-service:temp-service-create"
               .format(self.restconf_baseurl))
         data = {
@@ -873,7 +787,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     # Get 'ASATT1234567' temp service created
-    def test_16_get_temp_service(self):
+    def test_18_verify_temp_service_created(self):
         url = ("{}/operational/org-openroadm-service:temp-service-list/services/ASATT1234567"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
@@ -888,7 +802,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
     # get non existing service
-    def test_17_get_temp_service(self):
+    def test_19_get_temp_service_non_existed(self):
         url = ("{}/operational/org-openroadm-service:temp-service-list/services/test1"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
@@ -899,7 +813,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
     # Delete temp service
-    def test_18_delete_temp_service(self):
+    def test_20_delete_temp_service_created(self):
         url = ("{}/operations/org-openroadm-service:temp-service-delete"
               .format(self.restconf_baseurl))
         data = {"input": {
@@ -917,7 +831,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(20)
 
 # Verify 'test' service deleted
-    def test_19_verify_temp_service_deleted(self):
+    def test_21_verify_temp_service_deleted(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/ASATT1234567"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',

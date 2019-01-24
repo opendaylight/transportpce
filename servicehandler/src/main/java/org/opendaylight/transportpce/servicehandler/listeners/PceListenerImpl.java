@@ -39,6 +39,7 @@ public class PceListenerImpl implements TransportpcePceListener {
     private ServiceInput input;
     private Boolean serviceReconfigure;
     private Boolean tempService;
+    private Boolean serviceFeasiblity;
 
     public PceListenerImpl(RendererServiceOperations rendererServiceOperations,
             PathComputationService pathComputationService, NotificationPublishService notificationPublishService,
@@ -49,6 +50,7 @@ public class PceListenerImpl implements TransportpcePceListener {
         setServiceReconfigure(false);
         setInput(null);
         setTempService(false);
+        setServiceFeasiblity(false);
     }
 
     @Override
@@ -67,40 +69,44 @@ public class PceListenerImpl implements TransportpcePceListener {
                                     .setAToZDirection(servicePathRpcResult.getPathDescription().getAToZDirection())
                                 .setZToADirection(servicePathRpcResult.getPathDescription().getZToADirection()).build();
                             LOG.info("PathDescription gets : {}", pathDescription);
-                            if (input == null) {
-                                LOG.error("Input is null !");
-                                return;
-                            }
-                            OperationResult operationResult = null;
-                            if (tempService) {
-                                operationResult = this.serviceDataStoreOperations
-                                    .createTempService(input.getTempServiceCreateInput());
-                                if (!operationResult.isSuccess()) {
-                                    LOG.error("Temp Service not created in datastore !");
+                            if (!serviceFeasiblity) {
+                                if (input == null) {
+                                    LOG.error("Input is null !");
+                                    return;
                                 }
+                                OperationResult operationResult = null;
+                                if (tempService) {
+                                    operationResult = this.serviceDataStoreOperations
+                                        .createTempService(input.getTempServiceCreateInput());
+                                    if (!operationResult.isSuccess()) {
+                                        LOG.error("Temp Service not created in datastore !");
+                                    }
+                                } else {
+                                    operationResult = this.serviceDataStoreOperations
+                                        .createService(input.getServiceCreateInput());
+                                    if (!operationResult.isSuccess()) {
+                                        LOG.error("Service not created in datastore !");
+                                    }
+                                }
+                                ResponseParameters responseParameters = new ResponseParametersBuilder()
+                                        .setPathDescription(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c
+                                                ._interface.service.types.rev171016.response.parameters.sp.response
+                                                .parameters.PathDescriptionBuilder(pathDescription).build())
+                                        .build();
+                                PathComputationRequestOutput pceResponse = new PathComputationRequestOutputBuilder()
+                                        .setResponseParameters(responseParameters).build();
+                                OperationResult operationServicePathSaveResult =
+                                        this.serviceDataStoreOperations.createServicePath(input, pceResponse);
+                                if (!operationServicePathSaveResult.isSuccess()) {
+                                    LOG.error("Service Path not created in datastore !");
+                                }
+                                ServiceImplementationRequestInput serviceImplementationRequest =
+                                        ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
+                                LOG.info("Sending serviceImplementation request : {}", serviceImplementationRequest);
+                                this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest);
                             } else {
-                                operationResult = this.serviceDataStoreOperations
-                                    .createService(input.getServiceCreateInput());
-                                if (!operationResult.isSuccess()) {
-                                    LOG.error("Service not created in datastore !");
-                                }
+                                LOG.warn("service-feasibility-check RPC ");
                             }
-                            ResponseParameters responseParameters = new ResponseParametersBuilder()
-                                    .setPathDescription(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c
-                                            ._interface.service.types.rev171016.response.parameters.sp.response
-                                            .parameters.PathDescriptionBuilder(pathDescription).build())
-                                    .build();
-                            PathComputationRequestOutput pceResponse = new PathComputationRequestOutputBuilder()
-                                    .setResponseParameters(responseParameters).build();
-                            OperationResult operationServicePathSaveResult =
-                                    this.serviceDataStoreOperations.createServicePath(input, pceResponse);
-                            if (!operationServicePathSaveResult.isSuccess()) {
-                                LOG.error("Service Path not created in datastore !");
-                            }
-                            ServiceImplementationRequestInput serviceImplementationRequest =
-                                    ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
-                            LOG.info("Sending serviceImplementation request : {}", serviceImplementationRequest);
-                            this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest);
                         } else {
                             LOG.error("'PathDescription' parameter is null ");
                             return;
@@ -187,6 +193,10 @@ public class PceListenerImpl implements TransportpcePceListener {
 
     public void setTempService(Boolean tempService) {
         this.tempService = tempService;
+    }
+
+    public void setServiceFeasiblity(Boolean serviceFeasiblity) {
+        this.serviceFeasiblity = serviceFeasiblity;
     }
 
 }

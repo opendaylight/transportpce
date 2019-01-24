@@ -127,6 +127,17 @@ public class PceListenerImplTest extends AbstractTest {
     }
 
     @Test
+    public void onServicePathRpcResultPCRSuccessFeasabilityCheck() {
+        InjectField.inject(this.pceListenerImplMock, "serviceReconfigure", false);
+        InjectField.inject(this.pceListenerImplMock, "serviceFeasiblity", true);
+        ServicePathRpcResult notification = ServiceDataUtils.buildServicePathRpcResult(
+                ServicePathNotificationTypes.PathComputationRequest, "service 1", RpcStatusEx.Successful, "", true);
+        this.pceListenerImplMock.onServicePathRpcResult(notification);
+        verifyZeroInteractions(this.serviceDataStoreOperationsMock);
+        verifyZeroInteractions(this.rendererServiceOperationsMock);
+    }
+
+    @Test
     public void onServicePathRpcResultCRRSuccessWithNoReconfigure() {
         ServicePathRpcResult notification = ServiceDataUtils.buildServicePathRpcResult(
                 ServicePathNotificationTypes.CancelResourceReserve, "service 1", RpcStatusEx.Successful, "", false);

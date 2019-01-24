@@ -109,7 +109,6 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                         return;
                     }
                     break;
-
                 default:
                     break;
             }

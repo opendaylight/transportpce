@@ -74,6 +74,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
@@ -850,7 +852,7 @@ public class ServiceHandlerImplTest extends AbstractTest {
             .ServiceDeleteInput input = ModelMappingUtils.createServiceDeleteInput(serviceRerouteinput, service.get());
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES).setRequestId("1")
-                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("Service reroute successfully !")
+                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("Renderer service delete in progress")
                 .build();
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
             .ServiceDeleteOutput output = new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer
@@ -862,6 +864,39 @@ public class ServiceHandlerImplTest extends AbstractTest {
         ServiceRerouteOutput result = this.serviceHandlerImplMock.serviceReroute(serviceRerouteinput).get().getResult();
         Assert.assertEquals(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus.Successful,
                 result.getStatus());
-        Assert.assertEquals("Service reroute successfully !", result.getStatusMessage());
+        Assert.assertEquals("Renderer service delete in progress", result.getStatusMessage());
+    }
+
+    @Test
+    public void reConfigureServiceIfserviceNotPresent() throws ExecutionException, InterruptedException {
+        ServiceReconfigureInput input = ServiceDataUtils.buildServiceReconfigureInput();
+        ServiceReconfigureOutput result = this.serviceHandler.serviceReconfigure(input).get().getResult();
+        Assert.assertEquals(result.getStatus(), RpcStatus.Failed);
+        Assert.assertEquals(result.getStatusMessage(), "Service 'service 1' is not present");
+    }
+
+    @Test
+    public void reConfigureServiceIfserviceIsPresent() throws ExecutionException, InterruptedException {
+        ServiceReconfigureInput serviceReconfigureInput = ServiceDataUtils.buildServiceReconfigureInput();
+        Services serviceMock = ModelMappingUtils.mappingServices(null, serviceReconfigureInput);
+        Optional<Services> service = Optional.of(serviceMock);
+        Mockito.when(this.serviceDataStoreOperationsMock.getService(any(String.class))).thenReturn(service);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput input =
+                ModelMappingUtils.createServiceDeleteInput(serviceReconfigureInput);
+        ConfigurationResponseCommon configurationResponseCommon =
+                new ConfigurationResponseCommonBuilder().setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES)
+                        .setRequestId("1").setResponseCode(ResponseCodes.RESPONSE_OK)
+                        .setResponseMessage("Renderer service delete in progress").build();
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput output =
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+                    .ServiceDeleteOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon).build();
+        Mockito.when(
+                this.rendererServiceWrapperMock.performRenderer(input, ServiceNotificationTypes.ServiceDeleteResult))
+                .thenReturn(output);
+        ServiceReconfigureOutput result =
+                this.serviceHandlerImplMock.serviceReconfigure(serviceReconfigureInput).get().getResult();
+        Assert.assertEquals(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus.Successful,
+                result.getStatus());
+        Assert.assertEquals("Renderer service delete in progress", result.getStatusMessage());
     }
 }

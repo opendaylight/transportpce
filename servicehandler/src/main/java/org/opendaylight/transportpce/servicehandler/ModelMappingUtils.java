@@ -30,7 +30,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutputBuilder;
@@ -67,7 +72,11 @@ public final class ModelMappingUtils {
             PathDescription pathDescription) {
         ServiceImplementationRequestInputBuilder serviceImplementationRequestInputBuilder =
                 new ServiceImplementationRequestInputBuilder();
-        serviceImplementationRequestInputBuilder.setServiceName(input.getServiceName());
+        if (input.isServiceReconfigure()) {
+            serviceImplementationRequestInputBuilder.setServiceName(input.getNewServiceName());
+        } else {
+            serviceImplementationRequestInputBuilder.setServiceName(input.getServiceName());
+        }
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.service.implementation
             .request.input.ServiceAEndBuilder serviceAEnd = new org.opendaylight.yang.gen.v1.http.org.opendaylight
                 .transportpce.renderer.rev171017.service.implementation.request.input.ServiceAEndBuilder();
@@ -121,6 +130,16 @@ public final class ModelMappingUtils {
         builder.setServiceName(serviceRerouteinput.getServiceName());
         builder.setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId(
                 services.getSdncRequestHeader().getRequestId()).build());
+        return builder.build();
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput
+            createServiceDeleteInput(ServiceReconfigureInput serviceReconfigureInput) {
+        ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder();
+        String serviceName = serviceReconfigureInput.getServiceName();
+        builder.setServiceName(serviceReconfigureInput.getServiceName());
+        builder.setServiceHandlerHeader(
+                new ServiceHandlerHeaderBuilder().setRequestId(serviceName + "-reconfigure").build());
         return builder.build();
     }
 
@@ -217,6 +236,30 @@ public final class ModelMappingUtils {
         TempServiceCreateOutputBuilder output =
                 new TempServiceCreateOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon.build())
                         .setResponseParameters(responseParameters.build());
+        return RpcResultBuilder.success(output.build()).buildFuture();
+    }
+
+    public static ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> createCreateServiceReply(
+            ServiceFeasibilityCheckInput input, String finalAck, String message, String responseCode) {
+        ResponseParametersBuilder responseParameters = new ResponseParametersBuilder();
+        ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
+        if (input.getSdncRequestHeader() != null) {
+            configurationResponseCommon.setRequestId(input.getSdncRequestHeader().getRequestId());
+        } else {
+            configurationResponseCommon.setRequestId(null);
+        }
+        ServiceFeasibilityCheckOutputBuilder output = new ServiceFeasibilityCheckOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon.build())
+                        .setResponseParameters(responseParameters.build());
+        return RpcResultBuilder.success(output.build()).buildFuture();
+    }
+
+    public static ListenableFuture<RpcResult<ServiceReconfigureOutput>> createCreateServiceReply(
+            ServiceReconfigureInput input, String message, RpcStatus rpcStatus) {
+        ServiceReconfigureOutputBuilder output = new ServiceReconfigureOutputBuilder()
+                .setStatus(rpcStatus)
+                .setStatusMessage(message);
         return RpcResultBuilder.success(output.build()).buildFuture();
     }
 

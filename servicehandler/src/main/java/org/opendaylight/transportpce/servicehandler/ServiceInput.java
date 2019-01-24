@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.servicehandler;
 
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceEndpoint;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeader;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeaderBuilder;
@@ -16,6 +17,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteInput;
@@ -30,6 +33,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
  */
 public class ServiceInput {
     private String serviceName;
+    private String newServiceName;
     private String commonId;
     private ConnectionType connectionType;
     private SdncRequestHeader sdncRequestHeader;
@@ -39,6 +43,7 @@ public class ServiceInput {
     private ServiceEndpoint serviceZEnd;
     private String customer;
     private String customerContact;
+    private boolean serviceReconfigure;
 
     public ServiceInput(ServiceCreateInput serviceCreateInput) {
         setServiceName(serviceCreateInput.getServiceName());
@@ -51,11 +56,30 @@ public class ServiceInput {
         setServiceZEnd(serviceCreateInput.getServiceZEnd());
         setCustomer(serviceCreateInput.getCustomer());
         setCustomerContact(serviceCreateInput.getCustomerContact());
+        setServiceReconfigure(false);
+    }
+
+    public ServiceInput(ServiceReconfigureInput serviceReconfigureInput) {
+        setServiceName(serviceReconfigureInput.getServiceName());
+        setNewServiceName(serviceReconfigureInput.getNewServiceName());
+        setSdncRequestHeader(new SdncRequestHeaderBuilder()
+                .setRequestId(serviceReconfigureInput.getServiceName() + "-reconfigure")
+                .setRpcAction(RpcActions.ServiceReconfigure).build());
+        setCommonId(serviceReconfigureInput.getCommonId());
+        setConnectionType(serviceReconfigureInput.getConnectionType());
+        setHardConstraints(serviceReconfigureInput.getHardConstraints());
+        setSoftConstraints(serviceReconfigureInput.getSoftConstraints());
+        setServiceAEnd(serviceReconfigureInput.getServiceAEnd());
+        setServiceZEnd(serviceReconfigureInput.getServiceZEnd());
+        setCustomer(serviceReconfigureInput.getCustomer());
+        setCustomerContact(serviceReconfigureInput.getCustomerContact());
+        setServiceReconfigure(true);
     }
 
     public ServiceInput(ServiceDeleteInput serviceDeleteInput) {
         setServiceName(serviceDeleteInput.getServiceDeleteReqInfo().getServiceName());
         setSdncRequestHeader(serviceDeleteInput.getSdncRequestHeader());
+        setServiceReconfigure(false);
     }
 
     public ServiceInput(TempServiceCreateInput tempServiceCreateInput) {
@@ -69,6 +93,21 @@ public class ServiceInput {
         setServiceZEnd(tempServiceCreateInput.getServiceZEnd());
         setCustomer(tempServiceCreateInput.getCustomer());
         setCustomerContact(tempServiceCreateInput.getCustomerContact());
+        setServiceReconfigure(false);
+    }
+
+    public ServiceInput(ServiceFeasibilityCheckInput serviceFeasibilityCheckInput) {
+        setServiceName(serviceFeasibilityCheckInput.getCommonId());
+        setCommonId(serviceFeasibilityCheckInput.getCommonId());
+        setConnectionType(serviceFeasibilityCheckInput.getConnectionType());
+        setSdncRequestHeader(serviceFeasibilityCheckInput.getSdncRequestHeader());
+        setHardConstraints(serviceFeasibilityCheckInput.getHardConstraints());
+        setSoftConstraints(serviceFeasibilityCheckInput.getSoftConstraints());
+        setServiceAEnd(serviceFeasibilityCheckInput.getServiceAEnd());
+        setServiceZEnd(serviceFeasibilityCheckInput.getServiceZEnd());
+        setCustomer(serviceFeasibilityCheckInput.getCustomer());
+        setCustomerContact(serviceFeasibilityCheckInput.getCustomerContact());
+        setServiceReconfigure(false);
     }
 
     public ServiceInput(TempServiceDeleteInput tempServiceDeleteInput) {
@@ -76,10 +115,11 @@ public class ServiceInput {
         setServiceName(comId);
         setCommonId(comId);
         setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId(comId).build());
+        setServiceReconfigure(false);
     }
 
     public ServiceCreateInput getServiceCreateInput() {
-        return new ServiceCreateInputBuilder().setServiceName(serviceName)
+        ServiceCreateInputBuilder serviceCreateInputBuilder = new ServiceCreateInputBuilder()
                 .setCommonId(commonId)
                 .setConnectionType(connectionType)
                 .setSdncRequestHeader(sdncRequestHeader)
@@ -88,7 +128,13 @@ public class ServiceInput {
                 .setServiceAEnd(new ServiceAEndBuilder(serviceAEnd).build())
                 .setServiceZEnd(new ServiceZEndBuilder(serviceZEnd).build())
                 .setCustomer(customer)
-                .setCustomerContact(customerContact).build();
+                .setCustomerContact(customerContact);
+        if (isServiceReconfigure()) {
+            serviceCreateInputBuilder.setServiceName(newServiceName);
+        } else {
+            serviceCreateInputBuilder.setServiceName(serviceName);
+        }
+        return serviceCreateInputBuilder.build();
     }
 
     public TempServiceCreateInput getTempServiceCreateInput() {
@@ -180,5 +226,21 @@ public class ServiceInput {
 
     public void setCustomerContact(String customerContact) {
         this.customerContact = customerContact;
+    }
+
+    public String getNewServiceName() {
+        return newServiceName;
+    }
+
+    public void setNewServiceName(String newServiceName) {
+        this.newServiceName = newServiceName;
+    }
+
+    public boolean isServiceReconfigure() {
+        return serviceReconfigure;
+    }
+
+    public void setServiceReconfigure(boolean serviceReconfigure) {
+        this.serviceReconfigure = serviceReconfigure;
     }
 }
