@@ -68,6 +68,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.port.Port;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateOutput;
@@ -78,6 +79,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteInput;
@@ -895,6 +898,54 @@ public class ServiceHandlerImplTest extends AbstractTest {
                 .thenReturn(output);
         ServiceReconfigureOutput result =
                 this.serviceHandlerImplMock.serviceReconfigure(serviceReconfigureInput).get().getResult();
+        Assert.assertEquals(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus.Successful,
+                result.getStatus());
+        Assert.assertEquals("Renderer service delete in progress", result.getStatusMessage());
+    }
+
+    @Test
+    public void restorationServiceIfServiceNotPresent() throws ExecutionException, InterruptedException {
+        ServiceRestorationInput input = ServiceDataUtils.buildServiceRestorationInput();
+        ServiceRestorationOutput result = this.serviceHandler.serviceRestoration(input).get().getResult();
+        Assert.assertEquals(result.getStatus(), RpcStatus.Failed);
+        Assert.assertEquals(result.getStatusMessage(), "Service 'service 1' is not present");
+    }
+
+    @Test
+    public void restorationServiceIfServiceNotDown() throws ExecutionException, InterruptedException {
+        ServiceRestorationInput input = ServiceDataUtils.buildServiceRestorationInput();
+        Services serviceMock = ModelMappingUtils.mappingServices(ServiceDataUtils.buildServiceCreateInput(), null);
+        ServicesBuilder builder = new ServicesBuilder(serviceMock).setAdministrativeState(State.InService)
+                .setOperationalState(State.InService);
+        Optional<Services> service = Optional.of(builder.build());
+        Mockito.when(this.serviceDataStoreOperationsMock.getService(any(String.class))).thenReturn(service);
+        ServiceRestorationOutput result = this.serviceHandlerImplMock.serviceRestoration(input).get().getResult();
+        Assert.assertEquals(RpcStatus.Failed, result.getStatus());
+        Assert.assertEquals("Service 'service 1' is in 'inService' state", result.getStatusMessage());
+    }
+
+    @Test
+    public void restorationServiceIfServicePresentAndDown() throws ExecutionException, InterruptedException {
+        ServiceRestorationInput serviceRestorationInput = ServiceDataUtils.buildServiceRestorationInput();
+        Services serviceMock = ModelMappingUtils.mappingServices(ServiceDataUtils.buildServiceCreateInput(), null);
+        ServicesBuilder builder = new ServicesBuilder(serviceMock).setAdministrativeState(State.OutOfService)
+                .setOperationalState(State.OutOfService);
+        Optional<Services> service = Optional.of(builder.build());
+        Mockito.when(this.serviceDataStoreOperationsMock.getService(any(String.class))).thenReturn(service);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput input =
+                ModelMappingUtils.createServiceDeleteInput(serviceRestorationInput, serviceMock);
+        ConfigurationResponseCommon configurationResponseCommon =
+                new ConfigurationResponseCommonBuilder().setAckFinalIndicator(ResponseCodes.FINAL_ACK_YES)
+                        .setRequestId("1").setResponseCode(ResponseCodes.RESPONSE_OK)
+                        .setResponseMessage("Renderer service delete in progress").build();
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput output =
+                new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+                    .ServiceDeleteOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon).build();
+        Mockito.when(
+                this.rendererServiceWrapperMock.performRenderer(input, ServiceNotificationTypes.ServiceDeleteResult))
+                .thenReturn(output);
+        ServiceRestorationOutput result =
+                this.serviceHandlerImplMock.serviceRestoration(serviceRestorationInput).get().getResult();
         Assert.assertEquals(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus.Successful,
                 result.getStatus());
         Assert.assertEquals("Renderer service delete in progress", result.getStatusMessage());

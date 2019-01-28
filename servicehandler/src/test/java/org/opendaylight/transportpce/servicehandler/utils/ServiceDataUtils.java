@@ -49,6 +49,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInput.Option;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteInput;
@@ -232,6 +235,13 @@ public final class ServiceDataUtils {
     public static ServiceRerouteInput buildServiceRerouteInput() {
         ServiceRerouteInputBuilder builder = new ServiceRerouteInputBuilder();
         builder.setServiceName("service 1");
+        return builder.build();
+    }
+
+    public static ServiceRestorationInput buildServiceRestorationInput() {
+        ServiceRestorationInputBuilder builder = new ServiceRestorationInputBuilder();
+        builder.setServiceName("service 1");
+        builder.setOption(Option.Permanent);
         return builder.build();
     }
 

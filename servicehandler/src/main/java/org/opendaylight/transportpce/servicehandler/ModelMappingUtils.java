@@ -39,6 +39,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateOutputBuilder;
@@ -130,6 +133,16 @@ public final class ModelMappingUtils {
         builder.setServiceName(serviceRerouteinput.getServiceName());
         builder.setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId(
                 services.getSdncRequestHeader().getRequestId()).build());
+        return builder.build();
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+        .ServiceDeleteInput createServiceDeleteInput(ServiceRestorationInput serviceRestorationInput,
+                Services services) {
+        ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder();
+        builder.setServiceName(serviceRestorationInput.getServiceName());
+        builder.setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId(
+            services.getSdncRequestHeader().getRequestId()).build());
         return builder.build();
     }
 
@@ -268,6 +281,14 @@ public final class ModelMappingUtils {
         ServiceRerouteOutputBuilder output = new ServiceRerouteOutputBuilder()
                 .setHardConstraints(null)
                 .setSoftConstraints(null)
+                .setStatus(status)
+                .setStatusMessage(message);
+        return RpcResultBuilder.success(output.build()).buildFuture();
+    }
+
+    public static ListenableFuture<RpcResult<ServiceRestorationOutput>> createRestoreServiceReply(String message,
+            RpcStatus status) {
+        ServiceRestorationOutputBuilder output = new ServiceRestorationOutputBuilder()
                 .setStatus(status)
                 .setStatusMessage(message);
         return RpcResultBuilder.success(output.build()).buildFuture();

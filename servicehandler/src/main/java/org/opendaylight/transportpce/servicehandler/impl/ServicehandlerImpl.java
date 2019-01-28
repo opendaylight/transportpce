@@ -21,6 +21,7 @@ import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
@@ -38,6 +39,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.EquipmentNotificationInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.EquipmentNotificationOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.NetworkReOptimizationInput;
@@ -274,7 +278,77 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
     @Override
     public ListenableFuture<RpcResult<ServiceRestorationOutput>> serviceRestoration(ServiceRestorationInput input) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        LOG.info("RPC service restoration received");
+        String message = "";
+        String serviceName = input.getServiceName();
+        Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
+        if (servicesObject.isPresent()) {
+            Services service = servicesObject.get();
+            State state = service.getOperationalState();
+            if (state != State.InService) {
+                ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder();
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
+                OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
+                DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
+                deleteInputBldr.setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
+                    .setServiceName(serviceName).setDueDate(datetime)
+                    .setTailRetention(TailRetention.No).build());
+                SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder();
+                sdncBuilder.setNotificationUrl(service.getSdncRequestHeader().getNotificationUrl());
+                sdncBuilder.setRequestId(service.getSdncRequestHeader().getRequestId());
+                sdncBuilder.setRequestSystemId(service.getSdncRequestHeader().getRequestSystemId());
+                sdncBuilder.setRpcAction(RpcActions.ServiceDelete);
+                deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
+                ServiceInput serviceInput = new ServiceInput(deleteInputBldr.build());
+                serviceInput.setServiceAEnd(service.getServiceAEnd());
+                serviceInput.setServiceZEnd(service.getServiceZEnd());
+                serviceInput.setConnectionType(service.getConnectionType());
+                HardConstraints hardConstraints = service.getHardConstraints();
+                if (hardConstraints != null) {
+                    SoftConstraints softConstraints = service.getSoftConstraints();
+                    if (softConstraints != null) {
+                        LOG.info("converting hard constraints to soft constraints ...");
+                        serviceInput.setSoftConstraints(
+                                DowngradeConstraints.updateSoftConstraints(hardConstraints, softConstraints));
+                        serviceInput.setHardConstraints(DowngradeConstraints.downgradeHardConstraints(hardConstraints));
+                    } else {
+                        LOG.warn("service '{}' SoftConstraints is not set !", serviceName);
+                        serviceInput.setSoftConstraints(DowngradeConstraints.convertToSoftConstraints(hardConstraints));
+                        serviceInput.setHardConstraints(DowngradeConstraints.downgradeHardConstraints(hardConstraints));
+                    }
+                } else {
+                    LOG.warn("service '{}' HardConstraints is not set !", serviceName);
+                }
+                this.pceListenerImpl.setInput(serviceInput);
+                this.pceListenerImpl.setServiceReconfigure(true);
+                this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+                this.rendererListenerImpl.setServiceInput(serviceInput);
+                this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+                    .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
+                            new ServiceInput(deleteInputBldr.build()));
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+                    .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
+                        ServiceNotificationTypes.ServiceDeleteResult);
+                if (output != null) {
+                    LOG.info("Service present in datastore, service-restore in progress...");
+                    ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+                    return ModelMappingUtils.createRestoreServiceReply(common.getResponseMessage(),
+                            RpcStatus.Successful);
+                } else {
+                    return ModelMappingUtils.createRestoreServiceReply("Renderer service delete failed !",
+                            RpcStatus.Failed);
+                }
+            } else {
+                LOG.error("Service '{}' is in 'inService' state", input.getServiceName());
+                message = "Service '" + input.getServiceName() + "' is in 'inService' state";
+                return ModelMappingUtils.createRestoreServiceReply(message, RpcStatus.Failed);
+            }
+        } else {
+            LOG.error("Service '{}' is not present", input.getServiceName());
+            message = "Service '" + input.getServiceName() + "' is not present";
+            return ModelMappingUtils.createRestoreServiceReply(message, RpcStatus.Failed);
+        }
     }
 
     @Override
