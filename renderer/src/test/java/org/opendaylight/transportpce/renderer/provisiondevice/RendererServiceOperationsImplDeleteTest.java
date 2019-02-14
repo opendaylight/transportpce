@@ -14,7 +14,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -133,8 +132,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         serviceDeleteInputBuilder.setServiceName("service 1");
         serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
                 .setRequestId("request1").build());
-        ListenableFuture<ServiceDeleteOutput> serviceDeleteOutput =
-                this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build());
+        ListenableFuture<ServiceDeleteOutput> serviceDeleteOutput
+                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build());
         ServiceDeleteOutput output = serviceDeleteOutput.get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 output.getConfigurationResponseCommon().getResponseCode());

@@ -109,7 +109,4 @@ public final class ServiceDeleteDataUtils {
                         .setPortSubSlot("port subslot").setPortType("port type").build())
                     .build());
     }
-
-
-
 }

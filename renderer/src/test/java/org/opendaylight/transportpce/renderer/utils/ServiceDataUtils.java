@@ -113,9 +113,11 @@ public final class ServiceDataUtils {
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource
             .resource.resource.NodeBuilder nodesBuilder = new NodeBuilder();
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource
-            .resource.resource.Node node1 = nodesBuilder.setNodeId("XPONDER-1-2").build();
+            .resource.resource.Node node1 = nodesBuilder
+            .setNodeId("XPONDER-1-2").build();
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource
-            .resource.resource.Node node2 = nodesBuilder.setNodeId("XPONDER-1-2").build();
+            .resource.resource.Node node2 = nodesBuilder
+            .setNodeId("XPONDER-1-2").build();
         AToZ atoZ = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
             .setResource(node1).build()).build();
         AToZ atoZ2 = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
@@ -152,7 +154,9 @@ public final class ServiceDataUtils {
         Integer atozId = 1;
         for (String nodeId : nodeIds) {
             for (String otherNodeId : nodeIds) {
-                TerminationPoint terminationPoint = terminationPointBuilder.setTpNodeId(nodeId + '-' + tpId)
+                TerminationPoint terminationPoint = terminationPointBuilder
+                    .setTpNodeId(nodeId + '-'
+                            + tpId)
                         .setTpId(tpId).build();
                 AToZ atoZ = new AToZBuilder().setId(atozId.toString())
                     .withKey(new AToZKey(atozId.toString())).setResource(new ResourceBuilder()
@@ -172,7 +176,9 @@ public final class ServiceDataUtils {
         Integer ztoaId = 1;
         for (String nodeId : nodeIds) {
             for (String otherNodeId : nodeIds) {
-                TerminationPoint terminationPoint = terminationPointBuilder.setTpNodeId(nodeId + '-' + tpId)
+                TerminationPoint terminationPoint = terminationPointBuilder
+                    .setTpNodeId(nodeId + '-'
+                            + tpId)
                         .setTpId(tpId).build();
                 ZToA ztoA = new ZToABuilder().setId(ztoaId.toString())
                     .withKey(new ZToAKey(ztoaId.toString())).setResource(new ResourceBuilder()
@@ -194,6 +200,8 @@ public final class ServiceDataUtils {
 
     private static PathDescription createPathDescriptionLinkResource() {
         List<AToZ> atoZList = new ArrayList<AToZ>();
+//        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource
+//            .resource.resource.NodeBuilder nodesBuilder = new NodeBuilder();
         Link link1 = new LinkBuilder().setLinkId("link 1").build();
         Link link2 = new LinkBuilder().setLinkId("link 2").build();
         AToZ atoZ = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()

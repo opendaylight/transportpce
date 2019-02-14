@@ -14,7 +14,6 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkKey;
@@ -46,7 +45,6 @@ public final class WaveLengthServiceUtils {
     public static void putTerminationPoint1ToDatastore(String nodeId, String tpId, TerminationPoint1 terminationPoint1,
         DeviceTransactionManager deviceTransactionManager)
         throws ExecutionException, InterruptedException {
-        TerminationPoint1Builder terminationPoint1Builder = new TerminationPoint1Builder();
         TransactionUtils
             .writeTransaction(deviceTransactionManager, nodeId, LogicalDatastoreType.CONFIGURATION,
                 createTerminationPoint1IIDBuilder(nodeId, tpId).build(), terminationPoint1);
