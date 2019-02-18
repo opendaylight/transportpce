@@ -23,7 +23,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
 
   <properties>
-    <mdsal.bmodel.version>1.2.6-SNAPSHOT</mdsal.bmodel.version>
+    <mdsal.bmodel.version>1.2.7-SNAPSHOT</mdsal.bmodel.version>
     <mdsal.version>1.9.0-SNAPSHOT</mdsal.version>
     <restconf.version>1.9.0-SNAPSHOT</restconf.version>
     <yangtools.version>2.1.8</yangtools.version>
