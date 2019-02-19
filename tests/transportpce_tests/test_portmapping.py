@@ -96,19 +96,19 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 #        self.assertEqual(res['node'] [0] ['netconf-node-topology:connection-status'],
 #                         'connected')
 
-    def test_02_restconfAPI(self):
-        url = ("{}/config/transportpce-portmapping:network/nodes/controller-config".format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.not_found)
-        res = response.json()
-        self.assertIn(
-            {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist "},
-            res['errors']['error'])
+#     def test_02_restconfAPI(self):
+#         url = ("{}/config/transportpce-portmapping:network/nodes/controller-config".format(self.restconf_baseurl))
+#         headers = {'content-type': 'application/json'}
+#         response = requests.request(
+#             "GET", url, headers=headers, auth=('admin', 'admin'))
+#         self.assertEqual(response.status_code, requests.codes.not_found)
+#         res = response.json()
+#         self.assertIn(
+#             {"error-type":"application", "error-tag":"data-missing",
+#              "error-message":"Request could not be completed because the relevant data model content does not exist "},
+#             res['errors']['error'])
 
-    def test_03_rdm_device_connected(self):
+    def test_01_rdm_device_connected(self):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADMA"
               .format(self.restconf_baseurl))
@@ -127,7 +127,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(20)
 
-    def test_04_rdm_device_connected(self):
+    def test_02_rdm_device_connected(self):
         url = ("{}/operational/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADMA"
                .format(self.restconf_baseurl))
@@ -141,7 +141,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             'connected')
         time.sleep(10)
 
-    def test_05_rdm_portmapping_DEG1_TTP_TXRX(self):
+    def test_03_rdm_portmapping_DEG1_TTP_TXRX(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADMA/mapping/DEG1-TTP-TXRX"
                .format(self.restconf_baseurl))
@@ -155,7 +155,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'logical-connection-point': 'DEG1-TTP-TXRX'},
             res['mapping'])
 
-    def test_06_rdm_portmapping_SRG1_PP7_TXRX(self):
+    def test_04_rdm_portmapping_SRG1_PP7_TXRX(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADMA/mapping/SRG1-PP7-TXRX"
                .format(self.restconf_baseurl))
@@ -169,7 +169,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'logical-connection-point': 'SRG1-PP7-TXRX'},
             res['mapping'])
 
-    def test_07_rdm_portmapping_SRG3_PP1_TXRX(self):
+    def test_05_rdm_portmapping_SRG3_PP1_TXRX(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADMA/mapping/SRG3-PP1-TXRX"
                .format(self.restconf_baseurl))
@@ -183,7 +183,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'logical-connection-point': 'SRG3-PP1-TXRX'},
             res['mapping'])
 
-    def test_08_xpdr_device_connected(self):
+    def test_06_xpdr_device_connected(self):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/XPDRA"
               .format(self.restconf_baseurl))
@@ -202,7 +202,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(20)
 
-    def test_09_xpdr_device_connected(self):
+    def test_07_xpdr_device_connected(self):
         url = ("{}/operational/network-topology:"
                "network-topology/topology/topology-netconf/node/XPDRA"
                .format(self.restconf_baseurl))
@@ -216,7 +216,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             'connected')
         time.sleep(10)
 
-    def test_10_xpdr_portmapping_NETWORK1(self):
+    def test_08_xpdr_portmapping_NETWORK1(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-NETWORK1"
                .format(self.restconf_baseurl))
@@ -230,7 +230,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'logical-connection-point': 'XPDR1-NETWORK1'},
             res['mapping'])
 
-    def test_11_xpdr_portmapping_NETWORK2(self):
+    def test_09_xpdr_portmapping_NETWORK2(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-NETWORK2"
                .format(self.restconf_baseurl))
@@ -240,11 +240,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supporting-port': '2', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
+            {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK2'},
             res['mapping'])
 
-    def test_12_xpdr_portmapping_CLIENT1(self):
+    def test_10_xpdr_portmapping_CLIENT1(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-CLIENT1"
                .format(self.restconf_baseurl))
@@ -259,7 +259,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'logical-connection-point': 'XPDR1-CLIENT1'},
             res['mapping'])
 
-    def test_13_xpdr_portmapping_CLIENT2(self):
+    def test_11_xpdr_portmapping_CLIENT2(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-CLIENT2"
                .format(self.restconf_baseurl))
@@ -274,7 +274,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                  'logical-connection-point': 'XPDR1-CLIENT2'},
             res['mapping'])
 
-    def test_14_xpdr_portmapping_CLIENT4(self):
+    def test_12_xpdr_portmapping_CLIENT4(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDRA/mapping/XPDR1-CLIENT4"
                .format(self.restconf_baseurl))
@@ -289,7 +289,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'logical-connection-point': 'XPDR1-CLIENT4'},
             res['mapping'])
 
-    def test_15_xpdr_device_disconnected(self):
+    def test_13_xpdr_device_disconnected(self):
         url = ("{}/config/network-topology:"
                 "network-topology/topology/topology-netconf/node/XPDRA"
                .format(self.restconf_baseurl))
@@ -300,7 +300,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(20)
 
-    def test_16_xpdr_device_disconnected(self):
+    def test_14_xpdr_device_disconnected(self):
         url = ("{}/operational/network-topology:network-topology/topology/"
                "topology-netconf/node/XPDRA".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -310,10 +310,10 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             "error-message":"Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
-    def test_17_xpdr_device_disconnected(self):
+    def test_15_xpdr_device_disconnected(self):
         url = ("{}/config/transportpce-portmapping:network/nodes/XPDRA".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -322,10 +322,10 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             "error-message":"Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
-    def test_18_rdm_device_disconnected(self):
+    def test_16_rdm_device_disconnected(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -335,7 +335,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(20)
 
-    def test_19_rdm_device_disconnected(self):
+    def test_17_rdm_device_disconnected(self):
         url = ("{}/operational/network-topology:network-topology/topology/topology-netconf/node/ROADMA"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -345,10 +345,10 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             "error-message":"Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
-    def test_20_rdm_device_disconnected(self):
+    def test_18_rdm_device_disconnected(self):
         url = ("{}/config/transportpce-portmapping:network/nodes/ROADMA".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -357,7 +357,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             "error-message":"Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
 
