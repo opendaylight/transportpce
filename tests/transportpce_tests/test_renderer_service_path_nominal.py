@@ -382,7 +382,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
              {"error-type":"application", "error-tag":"data-missing",
-              "error-message":"Request could not be completed because the relevant data model content does not exist "},
+              "error-message":"Request could not be completed because the relevant data model content does not exist"},
              res['errors']['error'])
 
     def test_16_service_path_delete_rdm_check(self):
@@ -396,7 +396,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist"},
              res['errors']['error'])
 
     def test_17_service_path_delete_rdm_check(self):
@@ -410,7 +410,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist"},
              res['errors']['error'])
 
     def test_18_service_path_delete_xpdr_check(self):
@@ -424,7 +424,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist"},
              res['errors']['error'])
 
     def test_19_service_path_delete_xpdr_check(self):
@@ -438,7 +438,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist"},
              res['errors']['error'])
 
     def test_20_service_path_delete_xpdr_check(self):
@@ -452,7 +452,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist"},
              res['errors']['error'])
 
     def test_21_service_path_delete_xpdr_check(self):
@@ -466,7 +466,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist "},
+             {"error-type":"application", "error-tag":"data-missing", "error-message":"Request could not be completed because the relevant data model content does not exist"},
              res['errors']['error'])
 
     def test_22_service_path_delete_xpdr_check(self):
