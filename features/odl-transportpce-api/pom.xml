@@ -23,7 +23,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
 
   <properties>
-    <mdsal.bmodel.version>1.2.6</mdsal.bmodel.version>
     <mdsal.version>1.9.0-SNAPSHOT</mdsal.version>
     <restconf.version>1.9.0-SNAPSHOT</restconf.version>
     <yangtools.version>2.1.8</yangtools.version>
@@ -35,16 +34,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 <name>OpenDaylight :: transportpce :: api</name>
 
   <dependencies>
-    <dependency>
-      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
-      <artifactId>rfc6991-ietf-inet-types</artifactId>
-      <version>${mdsal.bmodel.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
-      <artifactId>rfc6991-ietf-yang-types</artifactId>
-      <version>${mdsal.bmodel.version}</version>
-    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>odl-transportpce-ordmodels</artifactId>

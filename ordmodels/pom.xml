@@ -104,12 +104,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc6991-ietf-inet-types</artifactId>
-      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc6991-ietf-yang-types</artifactId>
-      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
@@ -120,7 +118,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>ietf-access-control-list</artifactId>
-      <version>0.13.6</version>
     </dependency>
     <!--dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
@@ -135,17 +132,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.iana</groupId>
       <artifactId>iana-if-type</artifactId>
-      <version>1.0.6</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc7223</artifactId>
-      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>ietf-packet-fields</artifactId>
-      <version>0.13.6</version>
     </dependency>
   </dependencies>
 
