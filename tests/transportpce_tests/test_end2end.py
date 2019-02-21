@@ -487,9 +487,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service rendered successfully !',
+        self.assertIn('PCE calculation in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(10)
+        time.sleep(300)
 
     def test_14_get_eth_service1(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/service1"
@@ -708,9 +708,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service rendered successfully !',
+        self.assertIn('PCE calculation in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(10)
+        time.sleep(300)
 
     def test_21_get_eth_service2(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/service2"
@@ -916,7 +916,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('No path available',
             res['output']['configuration-response-common']['response-message'])
         self.assertIn('500', res['output']['configuration-response-common']['response-code'])
-        time.sleep(10)
+        time.sleep(300)
 
 # add a test that check the openroadm-service-list still only contains 2 elements
 
@@ -945,7 +945,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Service \'service3\' does not exist in datastore',
             res['output']['configuration-response-common']['response-message'])
         self.assertIn('500', res['output']['configuration-response-common']['response-code'])
-        time.sleep(1)
+        time.sleep(20)
 
     def test_28_delete_eth_service1(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
@@ -969,9 +969,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service delete was successful!',
+        self.assertIn('Renderer service delete in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(1)
+        time.sleep(20)
 
     def test_29_delete_eth_service2(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
@@ -995,9 +995,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service delete was successful!',
+        self.assertIn('Renderer service delete in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(1)
+        time.sleep(20)
 
     def test_30_check_no_xc_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
@@ -1161,9 +1161,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service rendered successfully !',
+        self.assertIn('PCE calculation in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(10)
+        time.sleep(300)
 
     def test_35_get_oc_service1(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/service1"
@@ -1331,9 +1331,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service rendered successfully !',
+        self.assertIn('PCE calculation in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(10)
+        time.sleep(300)
 
     def test_39_get_oc_service2(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/service2"
@@ -1407,9 +1407,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service delete was successful!',
+        self.assertIn('Renderer service delete in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(7)
+        time.sleep(20)
 
     def test_43_delete_oc_service2(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
@@ -1433,9 +1433,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Service delete was successful!',
+        self.assertIn('Renderer service delete in progress',
             res['output']['configuration-response-common']['response-message'])
-        time.sleep(1)
+        time.sleep(20)
 
     def test_44_get_no_oc_services(self):
         print ("start test")
