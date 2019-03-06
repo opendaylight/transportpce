@@ -22,7 +22,6 @@ import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
@@ -120,8 +119,7 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
     @Test
     public void freeWavelengthsTest() throws ExecutionException, InterruptedException {
         WaveLengthServiceUtils
-            .putTerminationPoint1ToDatastore("node1" + StringConstants.TTP_TOKEN,
-            		StringConstants.TTP_TOKEN,
+            .putTerminationPoint1ToDatastore("node1" + StringConstants.TTP_TOKEN, StringConstants.TTP_TOKEN,
                 this.terminationPoint1, this.deviceTransactionManager);
         WaveLengthServiceUtils.putNode1ToDatastore("node1" + StringConstants.TTP_TOKEN, this.node1,
             this.deviceTransactionManager);
@@ -129,8 +127,7 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
         Node1 updatedNode1 = WaveLengthServiceUtils.getNode1FromDatastore("node1" + StringConstants.TTP_TOKEN,
             this.deviceTransactionManager);
         TerminationPoint1 updatedTerminationPoint1 = WaveLengthServiceUtils
-            .getTerminationPoint1FromDatastore("node1" + StringConstants.TTP_TOKEN,
-            		StringConstants.TTP_TOKEN,
+            .getTerminationPoint1FromDatastore("node1" + StringConstants.TTP_TOKEN, StringConstants.TTP_TOKEN,
                 this.deviceTransactionManager);
 
         switch (updatedTerminationPoint1.getTpType()) {

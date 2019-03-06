@@ -22,7 +22,6 @@ import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
@@ -32,7 +31,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.u
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.DegreeAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.DegreeAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.SrgAttributesBuilder;
@@ -133,8 +131,7 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
     @Test
     public void freeWavelengthsTest() throws ExecutionException, InterruptedException {
         WaveLengthServiceUtils.putTerminationPoint1ToDatastore("node1" + StringConstants.TTP_TOKEN,
-        		StringConstants.TTP_TOKEN,
-            this.terminationPoint1, this.deviceTransactionManager);
+            StringConstants.TTP_TOKEN, this.terminationPoint1, this.deviceTransactionManager);
         WaveLengthServiceUtils.putNode1ToDatastore("node1" + StringConstants.TTP_TOKEN, this.node1,
             this.deviceTransactionManager);
         this.networkModelWavelengthService.freeWavelengths(this.pathDescription);
@@ -142,7 +139,7 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
             this.deviceTransactionManager);
         TerminationPoint1 updatedTerminationPoint1 =
             WaveLengthServiceUtils.getTerminationPoint1FromDatastore("node1" + StringConstants.TTP_TOKEN,
-            		StringConstants.TTP_TOKEN, this.deviceTransactionManager);
+                StringConstants.TTP_TOKEN, this.deviceTransactionManager);
         switch (updatedTerminationPoint1.getTpType()) {
             case DEGREETXRXCTP:
             case DEGREETXCTP:
