@@ -26,9 +26,8 @@ public class PceConstraints {
     private List<String> srlgToExclude = new ArrayList<String>();
     private List<String> nodesToInclude = new ArrayList<String>();
     private List<PceNode> pceNodesToInclude = new ArrayList<PceNode>();
-    public static Long constOSNR = 1L;
-    private double maxOSNR = (constOSNR / (Math.pow(10, (24 / 10.0))));
-//  List<String> srlgToInclude = new ArrayList<String>();
+    public static final Long CONST_OSNR = 1L;
+    private double maxOSNR = (CONST_OSNR / (Math.pow(10, (24 / 10.0))));
 
 
     public RoutingConstraintsSp.PceMetric getPceMetrics() {

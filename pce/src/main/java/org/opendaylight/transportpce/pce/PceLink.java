@@ -192,7 +192,7 @@ public class PceLink {
             spanOsnrDb = lowerBoundOSNR;
         }
         spanOsnrLu = Math.pow(10, (spanOsnrDb / 10.0));
-        sum = PceConstraints.constOSNR / spanOsnrLu;
+        sum = PceConstraints.CONST_OSNR / spanOsnrLu;
         linkOsnrLu = sum;
         //link_OSNR_dB = 10 * Math.log10(1 / sum);
         LOG.debug("In retrieveOSNR: link OSNR is {} dB", linkOsnrLu);
