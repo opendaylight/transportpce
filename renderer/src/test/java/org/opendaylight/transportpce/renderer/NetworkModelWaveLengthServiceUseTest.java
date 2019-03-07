@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.opendaylight.controller.md.sal.binding.api.MountPointService;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
@@ -58,7 +57,7 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
 
     @Before
     public void setMountPoint() {
-        MountPointService mountPointService = new MountPointServiceStub(new MountPointStub(this.getDataBroker()));
+        MountPointServiceStub mountPointService = new MountPointServiceStub(new MountPointStub(this.getDataBroker()));
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
         networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(this.getDataBroker());
     }
