@@ -22,6 +22,7 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
@@ -252,5 +253,15 @@ public class StubRendererServiceOperations implements RendererServiceOperations 
 
     public void setIsnetworkModelWlService(Boolean isnetworkModelWlService) {
         this.isnetworkModelWlService = isnetworkModelWlService;
+    }
+
+    @Override
+    public OperationResult reserveResource(PathDescription pathDescription) {
+        return null;
+    }
+
+    @Override
+    public OperationResult freeResource(PathDescription pathDescription) {
+        return null;
     }
 }

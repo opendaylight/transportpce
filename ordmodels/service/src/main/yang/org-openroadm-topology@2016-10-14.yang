@@ -4,6 +4,7 @@ module org-openroadm-topology {
 
   import org-openroadm-resource {
     prefix org-openroadm-resource;
+    revision-date 2016-10-14;
   }
 
   organization

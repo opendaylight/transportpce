@@ -8,234 +8,103 @@
 
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2;
+
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.Timeouts;
-import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
+import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.States;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOdu;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOtu;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.loopback.rev161014.maint.loopback.MaintLoopbackBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.maintenance.testsignal.rev161014.maint.testsignal.MaintTestsignalBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.Interface1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.Interface1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.odu.container.OduBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.otu.container.OtuBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfacesImpl.class);
 
-    // TODO move somewhere to constants
-    public static final String NETWORK_TOKEN = "NETWORK";
-    public static final String TTP_TOKEN = "TTP";
-    public static final String CLIENT_TOKEN = "CLIENT";
-    public static final String PP_TOKEN = "PP";
-
     private final DeviceTransactionManager deviceTransactionManager;
+    OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
+    OpenRoadmInterfacesImpl22 openRoadmInterfacesImpl22;
+    MappingUtils mappingUtils;
 
-    public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager) {
+    public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager,MappingUtils mappingUtils,
+        OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121,OpenRoadmInterfacesImpl22 openRoadmInterfacesImpl22) {
         this.deviceTransactionManager = deviceTransactionManager;
+        this.mappingUtils = mappingUtils;
+        this.openRoadmInterfacesImpl121 = openRoadmInterfacesImpl121;
+        this.openRoadmInterfacesImpl22 = openRoadmInterfacesImpl22;
     }
 
     @Override
-    public void postInterface(String nodeId, InterfaceBuilder ifBuilder) throws OpenRoadmInterfaceException {
-        Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(nodeId);
-        DeviceTransaction deviceTx;
-        try {
-            Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-            if (deviceTxOpt.isPresent()) {
-                deviceTx = deviceTxOpt.get();
-            } else {
-                throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
-                    nodeId));
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
-                nodeId), e);
-        }
+    public <T> void postInterface(String nodeId, T ifBuilder) throws OpenRoadmInterfaceException {
 
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-            Interface.class, new InterfaceKey(ifBuilder.getName()));
-        deviceTx.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
-        ListenableFuture<Void> txSubmitFuture = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
-            Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
-        try {
-            txSubmitFuture.get();
-            LOG.info("Successfully posted interface {} on node {}", ifBuilder.getName(), nodeId);
-        } catch (InterruptedException | ExecutionException e) {
-            throw new OpenRoadmInterfaceException(String.format("Failed to post interface %s on node %s!", ifBuilder
-                .getName(), nodeId), e);
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
+        LOG.info("Interface post request received for node {} with version {}",nodeId,openRoadmVersion);
+        if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+            LOG.info("Device Version is 1.2.1");
+            InterfaceBuilder ifBuilder121 = convertInstanceOfInterface(ifBuilder, InterfaceBuilder.class);
+            openRoadmInterfacesImpl121.postInterface(nodeId,ifBuilder121);
+        }
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev171215.interfaces.grp.InterfaceBuilder
+                ifBuilder22 = convertInstanceOfInterface(ifBuilder, org.opendaylight.yang.gen.v1.http.org.openroadm
+                .device.rev171215.interfaces.grp.InterfaceBuilder.class);
+            openRoadmInterfacesImpl22.postInterface(nodeId,ifBuilder22);
         }
     }
 
     @Override
-    public Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
-        InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-            Interface.class, new InterfaceKey(interfaceName));
-        return this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
-            interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+    public <T> Optional<T>  getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
+        LOG.info("Interface get request received for node {} with version {}",nodeId,openRoadmVersion);
+        if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+            LOG.info("Device Version is 1.2.1");
+            return (Optional<T>) openRoadmInterfacesImpl121.getInterface(nodeId,interfaceName);
+        }
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
+            return (Optional<T>) openRoadmInterfacesImpl22.getInterface(nodeId,interfaceName);
+        }
+        return null;
     }
 
     @Override
-    public void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
-        Optional<Interface> intf2DeleteOpt;
-        try {
-            intf2DeleteOpt = getInterface(nodeId, interfaceName);
-        } catch (OpenRoadmInterfaceException e) {
-            throw new OpenRoadmInterfaceException(String.format("Failed to check if interface %s exists on node %s!",
-                interfaceName, nodeId), e);
+    public void deleteInterface(String nodeId, String interfaceName)
+        throws OpenRoadmInterfaceException {
+
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
+        LOG.info("Interface delete request received for node {} with version {}",nodeId,openRoadmVersion);
+        if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+            LOG.info("Device Version is 1.2.1");
+            openRoadmInterfacesImpl121.deleteInterface(nodeId,interfaceName);
         }
-        if (intf2DeleteOpt.isPresent()) {
-            Interface intf2Delete = intf2DeleteOpt.get();
-            // State admin state to out of service
-            InterfaceBuilder ifBuilder = new InterfaceBuilder(intf2Delete);
-            if (ifBuilder.getType() == OtnOdu.class) {
-                Interface1Builder oduBuilder = new Interface1Builder(intf2Delete.augmentation(Interface1.class));
-                OduBuilder odu = new OduBuilder(oduBuilder.getOdu());
-                if (odu.getMaintTestsignal() != null) {
-                    MaintTestsignalBuilder maintSignalBuilder = new MaintTestsignalBuilder();
-                    maintSignalBuilder.setEnabled(false);
-                    odu.setMaintTestsignal(maintSignalBuilder.build());
-                }
-                oduBuilder.setOdu(odu.build());
-                ifBuilder.addAugmentation(Interface1.class, oduBuilder.build());
-            } else if (ifBuilder.getType() == OtnOtu.class) {
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1Builder
-                    otuBuilder =
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1Builder(
-                        intf2Delete.augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1.class));
-                OtuBuilder otu = new OtuBuilder(otuBuilder.getOtu());
-                if (otu.getMaintLoopback() != null) {
-                    MaintLoopbackBuilder maintLoopBackBuilder = new MaintLoopbackBuilder();
-                    maintLoopBackBuilder.setEnabled(false);
-                    otu.setMaintLoopback(maintLoopBackBuilder.build());
-                }
-                otuBuilder.setOtu(otu.build());
-                ifBuilder.addAugmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1.class,
-                    otuBuilder.build());
-            }
-            ifBuilder.setAdministrativeState(AdminStates.OutOfService);
-            // post interface with updated admin state
-            try {
-                postInterface(nodeId, ifBuilder);
-            } catch (OpenRoadmInterfaceException ex) {
-                throw new OpenRoadmInterfaceException(String.format("Failed to set state of interface %s to %s while"
-                    + " deleting it!", interfaceName, AdminStates.OutOfService), ex);
-            }
-
-            InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-                Interface.class, new InterfaceKey(interfaceName));
-            Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(
-                nodeId);
-            DeviceTransaction deviceTx;
-            try {
-                Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-                if (deviceTxOpt.isPresent()) {
-                    deviceTx = deviceTxOpt.get();
-                } else {
-                    throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
-                        nodeId));
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
-                    nodeId), e);
-            }
-
-            deviceTx.delete(LogicalDatastoreType.CONFIGURATION, interfacesIID);
-            ListenableFuture<Void> submit = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
-                Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
-
-            try {
-                submit.get();
-                LOG.info("Successfully deleted {} on node {}", interfaceName, nodeId);
-            } catch (InterruptedException | ExecutionException e) {
-                throw new OpenRoadmInterfaceException(String.format("Failed to delete interface %s on " + "node %s",
-                    interfaceName, nodeId), e);
-            }
-            // change the equipment state on circuit pack if xpdr node
-            if (intf2Delete.getName().contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN) || intf2Delete.getName().contains(
-                OpenRoadmInterfacesImpl.NETWORK_TOKEN)) {
-                postEquipmentState(nodeId, intf2Delete.getSupportingCircuitPackName(), false);
-            }
-
-        } else {
-            LOG.info("Interface does not exist, cannot delete on node {}", nodeId);
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
+            openRoadmInterfacesImpl22.deleteInterface(nodeId,interfaceName);
         }
     }
 
     @Override
     public void postEquipmentState(String nodeId, String circuitPackName, boolean activate)
         throws OpenRoadmInterfaceException {
+        String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
 
-        InstanceIdentifier<CircuitPacks> circuitPackIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
-            CircuitPacks.class, new CircuitPacksKey(circuitPackName));
-        Optional<CircuitPacks> cpOpt = this.deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.CONFIGURATION, circuitPackIID, Timeouts.DEVICE_READ_TIMEOUT,
-            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        CircuitPacks cp = null;
-        if (cpOpt.isPresent()) {
-            cp = cpOpt.get();
-        } else {
-            throw new OpenRoadmInterfaceException(String.format(
-                "Could not find CircuitPack %s in equipment config datastore for node %s", circuitPackName, nodeId));
+        LOG.info("Interface delete request received for node {} with version {}",nodeId,openRoadmVersion);
+        if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+            LOG.info("Device Version is 1.2.1");
+            openRoadmInterfacesImpl121.postEquipmentState(nodeId, circuitPackName, activate);
         }
-        CircuitPacksBuilder cpBldr = new CircuitPacksBuilder(cp);
-        boolean change = false;
-        if (activate) {
-            if (cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().equals(States.NotReservedInuse)) {
-                cpBldr.setEquipmentState(States.NotReservedInuse);
-                change = true;
-            }
-        } else if (
-            (cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().equals(States.NotReservedAvailable))) {
-            cpBldr.setEquipmentState(States.NotReservedAvailable);
-            change = true;
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
+            openRoadmInterfacesImpl22.postEquipmentState(nodeId, circuitPackName, activate);
         }
-        if (change) {
-            Future<Optional<DeviceTransaction>> deviceTxFuture = this.deviceTransactionManager.getDeviceTransaction(
-                nodeId);
-            DeviceTransaction deviceTx;
-            try {
-                Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
-                if (deviceTxOpt.isPresent()) {
-                    deviceTx = deviceTxOpt.get();
-                } else {
-                    throw new OpenRoadmInterfaceException(String.format("Device transaction was not found for node %s!",
-                        nodeId));
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
-                    nodeId), e);
-            }
-            deviceTx.put(LogicalDatastoreType.CONFIGURATION, circuitPackIID, cpBldr.build());
-            ListenableFuture<Void> txSubmitFuture = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
-                Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
-            try {
-                txSubmitFuture.get();
-                LOG.info("Successfully posted equipment state change on node {}", nodeId);
-            } catch (InterruptedException | ExecutionException e) {
-                throw new OpenRoadmInterfaceException(String.format("Failed to post equipment state on node %s!",
-                    nodeId), e);
-            }
-        }
+
     }
 
+    private <T> T convertInstanceOfInterface(Object object, Class<T> classToCast) {
+        try {
+            return classToCast.cast(object);
+        } catch (ClassCastException e) {
+            return null;
+        }
+    }
 }

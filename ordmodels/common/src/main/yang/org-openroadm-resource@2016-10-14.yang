@@ -4,6 +4,7 @@ module org-openroadm-resource {
 
   import org-openroadm-resource-types {
     prefix org-openroadm-resource-types;
+    revision-date 2016-10-14;
   }
 
   organization "Open ROADM MSA";

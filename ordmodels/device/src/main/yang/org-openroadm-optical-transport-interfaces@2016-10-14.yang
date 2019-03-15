@@ -4,9 +4,11 @@ module org-openroadm-optical-transport-interfaces {
 
   import org-openroadm-device {
     prefix org-openroadm-device;
+    revision-date 2017-02-06;
   }
   import org-openroadm-interfaces {
     prefix openROADM-if;
+    revision-date 2016-10-14;
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;

@@ -19,9 +19,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.opendaylight.controller.md.sal.binding.api.MountPointService;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
@@ -70,7 +70,7 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
         List<Object[]> parameters = new ArrayList<>();
 
         PathDescription pathDescription =
-            ServiceDeleteDataUtils.createTransactionPathDescription(OpenRoadmInterfacesImpl.TTP_TOKEN);
+            ServiceDeleteDataUtils.createTransactionPathDescription(StringConstants.TTP_TOKEN);
 
         TerminationPoint1Builder terminationPoint1Builder = new TerminationPoint1Builder();
         terminationPoint1Builder.setCtpAttributes((new CtpAttributesBuilder()).setUsedWavelengths(Collections
@@ -130,17 +130,16 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
 
     @Test
     public void freeWavelengthsTest() throws ExecutionException, InterruptedException {
-        WaveLengthServiceUtils.putTerminationPoint1ToDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN,
-            OpenRoadmInterfacesImpl.TTP_TOKEN,
-            this.terminationPoint1, this.deviceTransactionManager);
-        WaveLengthServiceUtils.putNode1ToDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN, this.node1,
+        WaveLengthServiceUtils.putTerminationPoint1ToDatastore("node1" + StringConstants.TTP_TOKEN,
+            StringConstants.TTP_TOKEN, this.terminationPoint1, this.deviceTransactionManager);
+        WaveLengthServiceUtils.putNode1ToDatastore("node1" + StringConstants.TTP_TOKEN, this.node1,
             this.deviceTransactionManager);
         this.networkModelWavelengthService.freeWavelengths(this.pathDescription);
-        Node1 updatedNode1 = WaveLengthServiceUtils.getNode1FromDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN,
+        Node1 updatedNode1 = WaveLengthServiceUtils.getNode1FromDatastore("node1" + StringConstants.TTP_TOKEN,
             this.deviceTransactionManager);
         TerminationPoint1 updatedTerminationPoint1 =
-            WaveLengthServiceUtils.getTerminationPoint1FromDatastore("node1" + OpenRoadmInterfacesImpl.TTP_TOKEN,
-                OpenRoadmInterfacesImpl.TTP_TOKEN, this.deviceTransactionManager);
+            WaveLengthServiceUtils.getTerminationPoint1FromDatastore("node1" + StringConstants.TTP_TOKEN,
+                StringConstants.TTP_TOKEN, this.deviceTransactionManager);
         switch (updatedTerminationPoint1.getTpType()) {
             case DEGREETXRXCTP:
             case DEGREETXCTP:

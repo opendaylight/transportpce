@@ -13,7 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
+
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.ServicePathInput;
@@ -215,10 +216,10 @@ public final class ModelMappingUtils {
                     if (tpID.contains("CTP") || tpID.contains("CP")) {
                         continue;
                     }
-                    if (!tpID.contains(OpenRoadmInterfacesImpl.TTP_TOKEN)
-                        && !tpID.contains(OpenRoadmInterfacesImpl.PP_TOKEN)
-                        && !tpID.contains(OpenRoadmInterfacesImpl.NETWORK_TOKEN)
-                        && !tpID.contains(OpenRoadmInterfacesImpl.CLIENT_TOKEN)) {
+                    if (!tpID.contains(StringConstants.TTP_TOKEN)
+                        && !tpID.contains(StringConstants.PP_TOKEN)
+                        && !tpID.contains(StringConstants.NETWORK_TOKEN)
+                        && !tpID.contains(StringConstants.CLIENT_TOKEN)) {
                         continue;
                     }
 

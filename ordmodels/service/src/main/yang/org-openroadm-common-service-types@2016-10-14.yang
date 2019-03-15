@@ -9,18 +9,20 @@ module org-openroadm-common-service-types {
     prefix inet;
   }
   import org-openroadm-routing-constraints {
-     prefix org-openroadm-routing-constraints;
-     revision-date 2016-10-14;
+    prefix org-openroadm-routing-constraints;
+    revision-date 2016-10-14;
   }
   import org-openroadm-topology {
     prefix org-openroadm-topology;
+    revision-date 2016-10-14;
   }
   import org-openroadm-common-types {
-     prefix org-openroadm-common-types;
-     revision-date 2016-10-14;
+    prefix org-openroadm-common-types;
+    revision-date 2016-10-14;
   }
   import org-openroadm-resource-types {
     prefix org-openroadm-resource-types;
+    revision-date 2016-10-14;
   }
 
   organization

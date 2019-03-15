@@ -7,16 +7,20 @@ module org-openroadm-service {
   }
   import org-openroadm-routing-constraints {
     prefix org-openroadm-routing-constraints;
+    revision-date 2016-10-14;
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
     revision-date 2016-10-14;
+
   }
   import org-openroadm-resource-types {
     prefix org-openroadm-resource-types;
+    revision-date 2016-10-14;
   }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
+    revision-date 2016-10-14;
   }
 
   organization

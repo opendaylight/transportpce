@@ -21,13 +21,30 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <reference id="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
   <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
   <reference id="crossConnect" interface="org.opendaylight.transportpce.common.crossconnect.CrossConnect" />
+  <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils"/>
+  <reference id="FixedFlexImpl" interface="org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface"/>
 
   <odl:rpc-service id="olmService"
       interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService"/>
 
-  <bean id="openRoadmInterfaceFactory" class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory" >
-    <argument ref="portMapping" />
-    <argument ref="openRoadmInterfaces" />
+  <bean id="openRoadmInterface121"
+        class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121">
+    <argument ref="portMapping"/>
+    <argument ref="openRoadmInterfaces"/>
+  </bean>
+
+  <bean id="openRoadmInterface22"
+        class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface22">
+    <argument ref="portMapping"/>
+    <argument ref="openRoadmInterfaces"/>
+    <argument ref="FixedFlexImpl"/>
+  </bean>
+
+  <bean id="openRoadmInterfaceFactory"
+        class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory">
+    <argument ref="mappingUtils"/>
+    <argument ref="openRoadmInterface121"/>
+    <argument ref="openRoadmInterface22"/>
   </bean>
 
   <bean id="deviceRenderer" class="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl" >
@@ -39,7 +56,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="portMapping" />
   </bean>
 
-  <bean id="deviceRendererRPCImpl" class="org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl" >
+    <bean id="deviceRendererRPCImpl" class="org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl" >
     <argument ref="deviceRenderer" />
   </bean>
 

@@ -29,6 +29,21 @@ module transportpce-portmapping {
         description
           "Unique identifier for node in the network";
       }
+
+      leaf openroadm-version{
+        type enumeration {
+          enum "1.2.1" {
+            value 1;
+            description
+              "Version 1.2.1";
+            }
+            enum "2.2" {
+              value 2;
+              description
+                "Version 2.2";
+            }
+          }
+        }
       leaf node-type{
         type org-openroadm-common-types:node-types;
         description

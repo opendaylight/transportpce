@@ -12,6 +12,8 @@ import java.util.concurrent.ExecutionException;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
@@ -63,15 +65,14 @@ public final class WaveLengthServiceUtils {
             .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608
                 .network.Node.class, new NodeKey(new NodeId(nodeId)))
-            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929
-                .Node1.class)
+            .augmentation(Node1.class)
             .build();
     }
 
     public static void putNode1ToDatastore(String nodeId, Node1 node1,
         DeviceTransactionManager deviceTransactionManager)
         throws ExecutionException, InterruptedException {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1>
+        InstanceIdentifier<Node1>
             nodeIID = createNode1IID(nodeId);
         TransactionUtils
             .writeTransaction(deviceTransactionManager, nodeId,
@@ -80,7 +81,7 @@ public final class WaveLengthServiceUtils {
 
     public static Node1 getNode1FromDatastore(String nodeId, DeviceTransactionManager deviceTransactionManager)
         throws ExecutionException, InterruptedException {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1>
+        InstanceIdentifier<Node1>
             nodeIID = createNode1IID(nodeId);
         return (Node1) TransactionUtils
             .readTransaction(deviceTransactionManager, nodeId, LogicalDatastoreType.CONFIGURATION, nodeIID);

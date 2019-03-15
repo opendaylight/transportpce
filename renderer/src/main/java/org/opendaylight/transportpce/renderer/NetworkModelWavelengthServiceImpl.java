@@ -25,6 +25,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.u
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.used.wavelengths.UsedWavelengthsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.used.wavelengths.UsedWavelengthsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.DegreeAttributes;
@@ -152,15 +153,14 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608
                         .network.Node.class, new NodeKey(new NodeId(nodeId)))
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929
-                        .Node1.class)
+                .augmentation(Node1.class)
                 .build();
     }
 
     private Optional<Node1> getNode1FromDatastore(String nodeId) {
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1>
+        InstanceIdentifier<Node1>
                 nodeIID = createNode1IID(nodeId);
-        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1> nodeOpt;
+        Optional<Node1> nodeOpt;
         try (ReadOnlyTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
             nodeOpt = nodeReadTx.read(LogicalDatastoreType.CONFIGURATION, nodeIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
@@ -174,9 +174,9 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
     private void addAvailableWL(List<String> nodeIds, Long wavelengthNumber) {
         WriteTransaction nodeWriteTx = this.dataBroker.newWriteOnlyTransaction();
         for (String nodeId : nodeIds) {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1> nodeOpt =
+            Optional<Node1> nodeOpt =
                     getNode1FromDatastore(nodeId);
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1 node;
+            Node1 node;
             if (nodeOpt.isPresent()) {
                 node = nodeOpt.get();
             } else {
@@ -185,9 +185,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 continue;
             }
 
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1Builder
-                    node1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929
-                    .Node1Builder(node);
+            Node1Builder node1Builder = new Node1Builder(node);
 
             switch (node.getNodeType()) {
                 case DEGREE:
@@ -243,9 +241,8 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
     private void deleteAvailableWL(List<String> nodeIds, Long wavelengthNumber) {
         WriteTransaction nodeWriteTx = this.dataBroker.newWriteOnlyTransaction();
         for (String nodeId : nodeIds) {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1> nodeOpt =
-                    getNode1FromDatastore(nodeId);
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1 node;
+            Optional<Node1> nodeOpt = getNode1FromDatastore(nodeId);
+            Node1 node;
             if (nodeOpt.isPresent()) {
                 node = nodeOpt.get();
             } else {

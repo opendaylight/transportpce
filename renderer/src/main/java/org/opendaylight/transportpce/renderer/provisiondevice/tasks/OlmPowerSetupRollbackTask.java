@@ -26,7 +26,7 @@ public class OlmPowerSetupRollbackTask extends RollbackTask {
     private final ServicePowerSetupInput powerSetupInput;
 
     public OlmPowerSetupRollbackTask(String id, boolean isRollbackNecessary, TransportpceOlmService olmService,
-            ServicePowerSetupInput powerSetupInput) {
+                                     ServicePowerSetupInput powerSetupInput) {
         super(id);
         this.isRollbackNecessary = isRollbackNecessary;
         this.olmService = olmService;

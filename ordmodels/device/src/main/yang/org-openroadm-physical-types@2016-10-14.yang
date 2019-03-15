@@ -4,6 +4,7 @@ module org-openroadm-physical-types {
 
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
+    revision-date 2016-10-14;
   }
   import ietf-yang-types {
     prefix yang;

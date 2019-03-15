@@ -7,12 +7,15 @@ module org-openroadm-pm {
   }
   import org-openroadm-resource {
     prefix org-openroadm-resource;
+    revision-date 2016-10-14;
   }
   import org-openroadm-layerRate {
     prefix org-openroadm-layerRate;
+    revision-date 2016-10-14;
   }
   import org-openroadm-pm-types {
     prefix org-openroadm-pm-types;
+    revision-date 2016-10-14;
   }
 
   organization "Open ROADM MSA";

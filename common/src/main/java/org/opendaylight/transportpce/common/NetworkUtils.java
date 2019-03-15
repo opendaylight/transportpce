@@ -13,7 +13,14 @@ public final class NetworkUtils {
     }
 
     public static final String CLLI_NETWORK_ID = "clli-network";
+
     public static final String UNDERLAY_NETWORK_ID = "openroadm-network";
+
     public static final String OVERLAY_NETWORK_ID = "openroadm-topology";
+
+    public enum Operation {
+        CREATE,
+        DELETE
+    }
 
 }

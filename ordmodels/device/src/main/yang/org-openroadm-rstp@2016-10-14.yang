@@ -4,6 +4,7 @@ module org-openroadm-rstp {
 
   import org-openroadm-device {
     prefix org-openroadm-device;
+    revision-date 2017-02-06;
   }
 
   organization "Open ROADM MSA";

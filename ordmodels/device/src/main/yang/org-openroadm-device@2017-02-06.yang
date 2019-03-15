@@ -14,30 +14,46 @@ module org-openroadm-device {
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
     revision-date 2016-10-14;
+
   }
   import org-openroadm-resource-types {
     prefix org-openroadm-resource-types;
+    revision-date 2016-10-14;
+
   }
   import org-openroadm-wavelength-map {
     prefix org-openroadm-wavelength-map;
+    revision-date 2016-10-14;
+
   }
   import org-openroadm-physical-types {
     prefix org-openroadm-physical-types;
+    revision-date 2016-10-14;
+
   }
   import org-openroadm-user-mgmt {
     prefix org-openroadm-user-mgmt;
+    revision-date 2016-10-14;
+
   }
   import org-openroadm-port-types {
     prefix org-openroadm-port-types;
+    revision-date 2017-09-29;
+
   }
   import org-openroadm-interfaces {
     prefix org-openroadm-interfaces;
+    revision-date 2016-10-14;
+
   }
   import org-openroadm-swdl {
     prefix org-openroadm-swdl;
+    revision-date 2016-10-14;
+
   }
   import org-openroadm-equipment-states-types {
     prefix org-openroadm-equipment-states-types;
+    revision-date 2016-10-14;
   }
 
   organization "Open ROADM MSA";
