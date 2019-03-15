@@ -93,10 +93,10 @@ if ((!defined ($simpleproxy))&&(defined ($capabilities))) {
 # you can adapt it to your needs, some examples have been commented.
 my %regex_hash=(
 # replace oo-device v1.2 by v1.2.1
-#	'module=org-openroadm-device&amp;revision=2016-10-14.*<\/capability>'=>'s/&amp;revision=2016-10-14/&amp;revision=2017-02-06/',
+#   'module=org-openroadm-device&amp;revision=2016-10-14.*<\/capability>'=>'s/&amp;revision=2016-10-14/&amp;revision=2017-02-06/',
 #   '<schema><identifier>org-openroadm-device<\/identifier><version>2016-10-14'=>'s@<schema><identifier>org-openroadm-device</identifier><version>2016-10-14@<schema><identifier>org-openroadm-device</identifier><version>2017-02-06@',
 # remove all deviations found
-#	'&amp;deviations=.*<\/capability>'=>'s@&amp;deviations=.*</capability>@</capability>@',
+#   '&amp;deviations=.*<\/capability>'=>'s@&amp;deviations=.*</capability>@</capability>@',
 # add the ietf-netconf capability to the hello handshake - without it, ODL netconf mountpoints can not work
 #    '<\/capabilities>'=>'s@</capabilities>@\n<capability>urn:ietf:params:xml:ns:yang:ietf-netconf?module=ietf-netconf&amp;revision=2011-06-01</capability>\n</capabilities>@',
 # add the right notifications capabilities to the hello handshake + provide another solution for the ietf-netconf capability

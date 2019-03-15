@@ -30,7 +30,7 @@ then
     else
         echo "initial config file doesn't exist !"
     fi
-else 
+else
     echo "honeycomb-tpce port initial-config-xml "
     echo "Eg : honeycomb-tpce 17830 sample-config-ROADM.xml"
 fi

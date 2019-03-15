@@ -20,7 +20,7 @@ module org-openroadm-device {
   }
   import org-openroadm-wavelength-map {
       prefix org-openroadm-wavelength-map;
-      revision-date 2016-10-14; 
+      revision-date 2016-10-14;
   }
   import org-openroadm-physical-types {
     prefix org-openroadm-physical-types;
