@@ -80,7 +80,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>sal-binding-broker-impl</artifactId>
-      <version>1.8.2-SNAPSHOT</version>
+      <version>1.8.3-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
 
