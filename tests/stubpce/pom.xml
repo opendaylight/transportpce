@@ -23,7 +23,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
 
   <groupId>org.opendaylight.transportpce</groupId>
   <artifactId>transportpce-stubpce</artifactId>
-  <version>0.2.2-SNAPSHOT</version>
+  <version>0.2.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <!-- Ajout Fakepce to add fakepce.xml to target/classes -->

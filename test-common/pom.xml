@@ -17,7 +17,7 @@
 
     <groupId>org.opendaylight.transportpce</groupId>
     <artifactId>test-common</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>0.2.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <dependencyManagement>
