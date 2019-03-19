@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "884f2c5f_7dfc9cdf",
+        "filename": "tests/Xtesting/Dockerfile",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-03-19T16:21:52Z",
+      "side": 1,
+      "message": "can be deleted before merge",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 49
+      },
+      "revId": "891f6b0007ee446ae556f1141a0c94e86129245e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71f6d6ed_829a6eec",
+        "filename": "tests/Xtesting/Dockerfile",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-03-19T16:21:52Z",
+      "side": 1,
+      "message": "this won\u0027t work until merged",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "891f6b0007ee446ae556f1141a0c94e86129245e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c19057b2_e7ab9649",
+        "filename": "tests/Xtesting/Dockerfile",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-03-19T16:21:52Z",
+      "side": 1,
+      "message": "can be deleted before merge",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 44
+      },
+      "revId": "891f6b0007ee446ae556f1141a0c94e86129245e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c17393a_7cb4aedd",
+        "filename": "tests/Xtesting/test_portmapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-03-19T16:21:52Z",
+      "side": 1,
+      "message": "can be deleted before merge",
+      "revId": "891f6b0007ee446ae556f1141a0c94e86129245e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
