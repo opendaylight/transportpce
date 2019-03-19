@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5821f3a2_ad8b5ac3",
+        "filename": "tests/Xtesting/DockerSims/start_sims.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-03-19T16:22:46Z",
+      "side": 1,
+      "message": "need to be adapted\n\nworks only for portmapping",
+      "revId": "891f6b0007ee446ae556f1141a0c94e86129245e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "884f2c5f_7dfc9cdf",
         "filename": "tests/Xtesting/Dockerfile",
         "patchSetId": 3
