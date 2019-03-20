@@ -8,10 +8,15 @@
 package org.opendaylight.transportpce.networkmodel;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
 import javax.annotation.Nonnull;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification.ModificationType;
@@ -39,6 +44,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.r
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.netconf.Streams;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.netconf.node.connection.status.available.capabilities.AvailableCapability;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -154,14 +160,17 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                         NetconfNodeConnectionStatus.ConnectionStatus connectionStatus =
                                 netconfNode.getConnectionStatus();
                         try {
-                            long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
-                                .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
-                                .count();
-                            if (count > 0) {
+                            List<AvailableCapability> deviceCapabilities = netconfNode.getAvailableCapabilities()
+                                .getAvailableCapability().stream().filter(cp -> cp.getCapability()
+                                .contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME)).collect(Collectors.toList());
+                            if (!deviceCapabilities.isEmpty()) {
+                                Collections.sort(deviceCapabilities, (cp0, cp1) -> cp1.getCapability()
+                                    .compareTo(cp0.getCapability()));
                                 LOG.info("OpenROADM node detected: {} {}", nodeId, connectionStatus.name());
                                 switch (connectionStatus) {
                                     case Connected:
-                                        this.networkModelService.createOpenROADMnode(nodeId);
+                                        this.networkModelService.createOpenROADMnode(nodeId, deviceCapabilities.get(0)
+                                            .getCapability());
                                         onDeviceConnected(nodeId);
                                         break;
                                     case Connecting:
@@ -174,6 +183,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                                         break;
                                 }
                             }
+                            LOG.error("Not an openROADM node");
                         } catch (NullPointerException e) {
                             LOG.error("Cannot get available Capabilities");
                         }

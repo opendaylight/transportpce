@@ -84,7 +84,7 @@ public class PortMappingVersion121 {
 
     public boolean createMappingData(String nodeId) {
 
-        LOG.info("Create Mapping Data for node {}", nodeId);
+        LOG.info("Create Mapping Data for node 1.2.1 {}", nodeId);
         List<Mapping> portMapList = new ArrayList<>();
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(nodeId,
