@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
 
 public interface PortMapping {
@@ -41,7 +42,7 @@ public interface PortMapping {
      *
      * @return true/false based on status of operation
      */
-    boolean createMappingData(String nodeId);
+    boolean createMappingData(String nodeId, String nodeVersion);
 
     /**
      * This method removes mapping data from the datastore after disconnecting
@@ -78,4 +79,17 @@ public interface PortMapping {
     Mapping getMapping(String nodeId, String logicalConnPoint);
 
     boolean updateMapping(String nodeId, Mapping mapping);
+
+    /**
+     * This method returns all Mapping informations already stored in the MD-SAL
+     * data store for a given openroadm device. Beyound the list of mappings, it
+     * gives access to general node information as its version or its node type,
+     * etc.
+     *
+     * @param nodeId
+     *            Unique Identifier for the node of interest.
+     *
+     * @return node data if success otherwise null.
+     */
+    Nodes getNode(String nodeId);
 }

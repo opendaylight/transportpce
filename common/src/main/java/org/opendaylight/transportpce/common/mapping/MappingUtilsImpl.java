@@ -49,11 +49,10 @@ public class MappingUtilsImpl implements MappingUtils {
                     case _121:
                         return StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
                     default:
-                        return StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
+                        LOG.warn("unknown openROADM device version");
                 }
             } else {
                 LOG.warn("Could not find mapping for nodeId {}", nodeId);
-                return StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
             }
         } catch (InterruptedException | ExecutionException ex) {
             LOG.error("Unable to read mapping for nodeId {}",nodeId, ex);

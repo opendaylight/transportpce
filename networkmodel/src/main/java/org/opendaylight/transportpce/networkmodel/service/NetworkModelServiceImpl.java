@@ -64,70 +64,74 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     @Override
-    public void createOpenROADMnode(String nodeId) {
+    public void createOpenROADMnode(String nodeId, String nodeVersion) {
         try {
             LOG.info("createOpenROADMNode: {} ", nodeId);
 
-            this.portMapping.createMappingData(nodeId);
-            this.linkDiscovery.readLLDP(new NodeId(nodeId));
+            boolean isPortMapping = this.portMapping.createMappingData(nodeId, nodeVersion);
+            if (isPortMapping && "1.2.1".equals(this.portMapping.getNode(nodeId).getOpenroadmVersion().getName())) {
+                this.linkDiscovery.readLLDP(new NodeId(nodeId));
 
-            Node clliNode = ClliNetwork.createNode(this.deviceTransactionManager, nodeId);
-            if (clliNode == null) {
-                LOG.error("Unable to create clli node! Node id: {}", nodeId);
-                return;
-            }
+                Node clliNode = ClliNetwork.createNode(this.deviceTransactionManager, nodeId);
+                if (clliNode == null) {
+                    LOG.error("Unable to create clli node! Node id: {}", nodeId);
+                    return;
+                }
 
-            Node openRoadmNode = OpenRoadmNetwork.createNode(nodeId, this.deviceTransactionManager);
-            if (openRoadmNode == null) {
-                LOG.error("Unable to create OpenRoadm node! Node id: {}", nodeId);
-                return;
-            }
+                Node openRoadmNode = OpenRoadmNetwork.createNode(nodeId, this.deviceTransactionManager);
+                if (openRoadmNode == null) {
+                    LOG.error("Unable to create OpenRoadm node! Node id: {}", nodeId);
+                    return;
+                }
 
-            TopologyShard topologyShard = this.openRoadmTopology.createTopologyShard(nodeId);
-            if (topologyShard == null) {
-                LOG.error("Unable to create topology shard for node {}!", nodeId);
-                return;
-            }
-            this.topologyShardMountedDevice.put(nodeId, topologyShard);
+                TopologyShard topologyShard = this.openRoadmTopology.createTopologyShard(nodeId);
+                if (topologyShard == null) {
+                    LOG.error("Unable to create topology shard for node {}!", nodeId);
+                    return;
+                }
+                this.topologyShardMountedDevice.put(nodeId, topologyShard);
 
-            WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
-            LOG.info("creating node in {}", NetworkUtils.CLLI_NETWORK_ID);
-            InstanceIdentifier<Node> iiClliNode = InstanceIdentifier
-                    .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
-                    .child(Node.class, clliNode.key())
-                    .build();
-            writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiClliNode, clliNode,
-                    CREATE_MISSING_PARENTS);
-            LOG.info("creating node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
-            InstanceIdentifier<Node> iiOpenRoadmNode = InstanceIdentifier
-                    .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
-                    .child(Node.class, openRoadmNode.key())
-                    .build();
-            writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmNode, openRoadmNode,
-                    CREATE_MISSING_PARENTS);
-            for (Node openRoadmTopologyNode: topologyShard.getNodes()) {
-                LOG.info("creating node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
-                InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier
-                        .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .child(Node.class, openRoadmTopologyNode.key())
+                WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
+                LOG.info("creating node in {}", NetworkUtils.CLLI_NETWORK_ID);
+                InstanceIdentifier<Node> iiClliNode = InstanceIdentifier
+                        .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
+                        .child(Node.class, clliNode.key())
                         .build();
-                writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
-                        openRoadmTopologyNode, CREATE_MISSING_PARENTS);
-            }
-            for (Link openRoadmTopologyLink: topologyShard.getLinks()) {
-                LOG.info("creating link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
-                InstanceIdentifier<Link> iiOpenRoadmTopologyLink = InstanceIdentifier
-                        .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .augmentation(Network1.class)
-                        .child(Link.class, openRoadmTopologyLink.key())
+                writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiClliNode, clliNode,
+                        CREATE_MISSING_PARENTS);
+                LOG.info("creating node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
+                InstanceIdentifier<Node> iiOpenRoadmNode = InstanceIdentifier
+                        .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
+                        .child(Node.class, openRoadmNode.key())
                         .build();
-                writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink,
-                        openRoadmTopologyLink, CREATE_MISSING_PARENTS);
+                writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmNode, openRoadmNode,
+                        CREATE_MISSING_PARENTS);
+                for (Node openRoadmTopologyNode: topologyShard.getNodes()) {
+                    LOG.info("creating node {} in {}", openRoadmTopologyNode.getNodeId().getValue(),
+                            NetworkUtils.OVERLAY_NETWORK_ID);
+                    InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier
+                            .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                            .child(Node.class, openRoadmTopologyNode.key())
+                            .build();
+                    writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
+                            openRoadmTopologyNode, CREATE_MISSING_PARENTS);
+                }
+                for (Link openRoadmTopologyLink: topologyShard.getLinks()) {
+                    LOG.info("creating link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
+                            NetworkUtils.OVERLAY_NETWORK_ID);
+                    InstanceIdentifier<Link> iiOpenRoadmTopologyLink = InstanceIdentifier
+                            .builder(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                            .augmentation(Network1.class)
+                            .child(Link.class, openRoadmTopologyLink.key())
+                            .build();
+                    writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink,
+                            openRoadmTopologyLink, CREATE_MISSING_PARENTS);
+                }
+                writeTransaction.submit().get();
+                LOG.info("all nodes and links created");
+            } else {
+                LOG.warn("openroadm-topology is not managed yet with openROADM device 2.2");
             }
-            writeTransaction.submit().get();
-            LOG.info("all nodes and links created");
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("ERROR: ", e);
         }

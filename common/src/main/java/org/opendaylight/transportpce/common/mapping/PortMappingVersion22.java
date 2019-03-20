@@ -86,7 +86,7 @@ public class PortMappingVersion22 {
 
     public boolean createMappingData(String nodeId) {
 
-        LOG.info("Create Mapping Data for node {}", nodeId);
+        LOG.info("Create Mapping Data for node 2.2 {}", nodeId);
         List<Mapping> portMapList = new ArrayList<>();
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager
@@ -199,16 +199,16 @@ public class PortMappingVersion22 {
                 continue;
             }
             for (Ports port : cp.getPorts()) {
-                if (Port.PortQual.XpdrNetwork.equals(port.getPortQual())) {
+                if (Port.PortQual.XpdrNetwork.getName().equals(port.getPortQual().getName())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
                             "XPDR1-" + StringConstants.NETWORK_TOKEN + line));
                     line++;
-                } else if (Port.PortQual.XpdrClient.equals(port.getPortQual())) {
+                } else if (Port.PortQual.XpdrClient.getName().equals(port.getPortQual().getName())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
                             "XPDR1-" + StringConstants.CLIENT_TOKEN + client));
                     client++;
                 } else {
-                    LOG.warn("Not supported type of port! Port type: {}", port.getPortQual());
+                    LOG.warn("Not supported type of port! Port type: {}", port.getPortQual().getName());
                 }
             }
         }
@@ -236,7 +236,7 @@ public class PortMappingVersion22 {
             InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                     .child(SharedRiskGroup.class, new SharedRiskGroupKey(srgCounter));
             Optional<SharedRiskGroup> ordmSrgObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-                LogicalDatastoreType.CONFIGURATION, srgIID,
+                LogicalDatastoreType.OPERATIONAL, srgIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmSrgObject.isPresent()) {
                 srgCps.addAll(ordmSrgObject.get().getCircuitPacks());
@@ -352,7 +352,7 @@ public class PortMappingVersion22 {
             InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                     .child(Degree.class, new DegreeKey(degreeCounter));
             Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
-                LogicalDatastoreType.CONFIGURATION, deviceIID,
+                LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmDegreeObject.isPresent()) {
                 degrees.add(ordmDegreeObject.get());
@@ -425,7 +425,7 @@ public class PortMappingVersion22 {
         NodesBuilder nodesBldr = new NodesBuilder();
         nodesBldr.withKey(new NodesKey(deviceInfo.getNodeId().getValue())).setNodeId(deviceInfo.getNodeId().getValue());
         nodesBldr.setNodeType(NodeTypes.forValue(nodeType));
-        nodesBldr.setOpenroadmVersion(Nodes.OpenroadmVersion._121);
+        nodesBldr.setOpenroadmVersion(Nodes.OpenroadmVersion._22);
         if (portMapList != null) {
             nodesBldr.setMapping(portMapList);
         }
