@@ -29,6 +29,8 @@ class TransportPCEtesting(unittest.TestCase):
     odl_process = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
+#START_IGNORE_XTESTING
+
     @classmethod
     def __start_testtools(cls):
         executable = ("./netconf/netconf/tools/netconf-testtool/target/"
@@ -41,22 +43,22 @@ class TransportPCEtesting(unittest.TestCase):
             with open('transportpce_tests/log/testtools_ROADMA.log', 'w') as outfile1:
                 cls.testtools_process1 = subprocess.Popen(
                     ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/nodes_config/sample-config-ROADMA.xml","--starting-port","17831"],
+                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-ROADMA.xml","--starting-port","17831"],
                     stdout=outfile1)
             with open('transportpce_tests/log/testtools_ROADMB.log', 'w') as outfile2:
                 cls.testtools_process2 = subprocess.Popen(
                     ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/nodes_config/sample-config-ROADMB.xml","--starting-port","17832"],
+                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-ROADMB.xml","--starting-port","17832"],
                     stdout=outfile2)
             with open('transportpce_tests/log/testtools_ROADMC.log', 'w') as outfile3:
                 cls.testtools_process3 = subprocess.Popen(
                     ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/nodes_config/sample-config-ROADMC.xml","--starting-port","17833"],
+                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-ROADMC.xml","--starting-port","17833"],
                     stdout=outfile3)
             with open('transportpce_tests/log/testtools_XPDRA.log', 'w') as outfile4:
                 cls.testtools_process4 = subprocess.Popen(
                     ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/nodes_config/sample-config-XPDRA.xml","--starting-port","17830"],
+                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-XPDRA.xml","--starting-port","17830"],
                     stdout=outfile4)
 
     @classmethod
@@ -92,6 +94,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     def setUp(self):
         time.sleep(30)
+
+#END_IGNORE_XTESTING
 
     def test_01_connect_ROADMA(self):
         #Config ROADMA

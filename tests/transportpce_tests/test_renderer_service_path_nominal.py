@@ -28,6 +28,8 @@ class TransportPCERendererTesting(unittest.TestCase):
     odl_process = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
+#START_IGNORE_XTESTING
+
     @classmethod
     def __start_honeynode1(cls):
         executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
@@ -35,7 +37,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode1.log', 'w') as outfile:
                 cls.honeynode_process1 = subprocess.Popen(
-                    [executable, "17830", "sample_configs/ord_2.1/oper-ROADMA.xml"],
+                    [executable, "17830", "sample_configs/openroadm/2.1/oper-ROADMA.xml"],
                     stdout=outfile)
 
     @classmethod
@@ -45,7 +47,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode2.log', 'w') as outfile:
                 cls.honeynode_process2 = subprocess.Popen(
-                    [executable, "17831", "sample_configs/ord_2.1/oper-XPDRA.xml"],
+                    [executable, "17831", "sample_configs/openroadm/2.1/oper-XPDRA.xml"],
                     stdout=outfile)
 
     @classmethod
@@ -86,6 +88,8 @@ class TransportPCERendererTesting(unittest.TestCase):
     def setUp(self):
         print ("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(10)
+
+#END_IGNORE_XTESTING
 
     def test_01_rdm_device_connected(self):
         url = ("{}/config/network-topology:"
