@@ -27,6 +27,8 @@ class TransportPCEtesting(unittest.TestCase):
     odl_process = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
+#START_IGNORE_XTESTING
+
     @classmethod
     def __start_testtools(cls):
         executable = ("./netconf/netconf/tools/netconf-testtool/target/"
@@ -39,12 +41,12 @@ class TransportPCEtesting(unittest.TestCase):
             with open('transportpce_tests/log/testtools_ROADMA.log', 'w') as outfile1:
                 cls.testtools_process1 = subprocess.Popen(
                     ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/nodes_config/sample-config-ROADMA.xml","--starting-port","17831"],
+                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-ROADMA.xml","--starting-port","17831"],
                     stdout=outfile1)
             with open('transportpce_tests/log/testtools_XPDRA.log', 'w') as outfile2:
                 cls.testtools_process2 = subprocess.Popen(
                     ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/nodes_config/sample-config-XPDRA.xml","--starting-port","17830"],
+                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-XPDRA.xml","--starting-port","17830"],
                     stdout=outfile2)
 
     @classmethod
@@ -75,6 +77,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     def setUp(self):
         time.sleep(10)
+
+#END_IGNORE_XTESTING
 
     #Connect the ROADMA
     def test_01_connect_roadma(self):

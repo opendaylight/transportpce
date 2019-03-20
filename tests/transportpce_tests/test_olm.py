@@ -30,6 +30,8 @@ class TransportOlmTesting(unittest.TestCase):
     odl_process = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
+#START_IGNORE_XTESTING
+
     @classmethod
     def __start_honeynode1(cls):
         executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
@@ -37,7 +39,7 @@ class TransportOlmTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode1.log', 'w') as outfile:
                 cls.honeynode_process1 = subprocess.Popen(
-                    [executable, "17830", "sample_configs/ord_2.1/oper-ROADMA-full.xml"],
+                    [executable, "17840", "sample_configs/openroadm/2.1/oper-ROADMA-full.xml"],
                     stdout=outfile)
 
     @classmethod
@@ -47,7 +49,7 @@ class TransportOlmTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode2.log', 'w') as outfile:
                 cls.honeynode_process2 = subprocess.Popen(
-                    [executable, "17831", "sample_configs/ord_2.1/oper-XPDRA.xml"],
+                    [executable, "17831", "sample_configs/openroadm/2.1/oper-XPDRA.xml"],
                     stdout=outfile)
 
     @classmethod
@@ -57,7 +59,7 @@ class TransportOlmTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode3.log', 'w') as outfile:
                 cls.honeynode_process3 = subprocess.Popen(
-                    [executable, "17833", "sample_configs/ord_2.1/oper-ROADMC-full.xml"],
+                    [executable, "17843", "sample_configs/openroadm/2.1/oper-ROADMC-full.xml"],
                     stdout=outfile)
     @classmethod
     def __start_honeynode4(cls):
@@ -66,7 +68,7 @@ class TransportOlmTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode4.log', 'w') as outfile:
                 cls.honeynode_process4 = subprocess.Popen(
-                    [executable, "17834", "sample_configs/ord_2.1/oper-XPDRC.xml"],
+                    [executable, "17834", "sample_configs/openroadm/2.1/oper-XPDRC.xml"],
                     stdout=outfile)
 
     @classmethod
@@ -122,6 +124,8 @@ class TransportOlmTesting(unittest.TestCase):
         print ("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(1)
 
+#END_IGNORE_XTESTING
+
     def test_01_xpdrA_device_connected(self):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/XPDRA"
@@ -169,7 +173,7 @@ class TransportOlmTesting(unittest.TestCase):
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17830",
+             "netconf-node-topology:port": "17840",
              "netconf-node-topology:tcp-only": "false",
              "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -188,7 +192,7 @@ class TransportOlmTesting(unittest.TestCase):
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17833",
+             "netconf-node-topology:port": "17843",
              "netconf-node-topology:tcp-only": "false",
              "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
