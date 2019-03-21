@@ -48,16 +48,13 @@ public class PortMappingImpl implements PortMapping {
     }
 
     @Override
-    public boolean createMappingData(String nodeId) {
-
-        String openROADMversion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (openROADMversion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+    public boolean createMappingData(String nodeId, String nodeVersion) {
+        if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
             return portMappingVersion121.createMappingData(nodeId);
         }
-        else if (openROADMversion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
+        else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
             return portMappingVersion22.createMappingData(nodeId);
         }
-
         else {
             return false;
         }
@@ -125,6 +122,26 @@ public class PortMappingImpl implements PortMapping {
         else {
             return false;
         }
+    }
+
+    @Override
+    public Nodes getNode(String nodeId) {
+        InstanceIdentifier<Nodes> nodePortMappingIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
+            new NodesKey(nodeId)).build();
+        try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<Nodes> nodePortMapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID)
+                .get().toJavaUtil();
+            if (nodePortMapObject.isPresent()) {
+                Nodes node = nodePortMapObject.get();
+                LOG.info("Found node {} in portmapping.", nodeId);
+                return node;
+            } else {
+                LOG.warn("Could not find node {} in portmapping.", nodeId);
+            }
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.error("Unable to get node {} in portmapping", nodeId);
+        }
+        return null;
     }
 
 
