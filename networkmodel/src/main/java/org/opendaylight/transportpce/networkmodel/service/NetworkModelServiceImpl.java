@@ -130,7 +130,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 writeTransaction.submit().get();
                 LOG.info("all nodes and links created");
             } else {
-                LOG.warn("openroadm-topology is not managed yet with openROADM device 2.2");
+                LOG.warn("openroadm-topology is not managed yet with openROADM device 2.2.1");
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("ERROR: ", e);

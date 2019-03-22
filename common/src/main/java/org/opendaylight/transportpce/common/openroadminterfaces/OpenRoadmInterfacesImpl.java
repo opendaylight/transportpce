@@ -9,7 +9,7 @@
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 
 import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -25,15 +25,15 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
     private final DeviceTransactionManager deviceTransactionManager;
     OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
-    OpenRoadmInterfacesImpl22 openRoadmInterfacesImpl22;
+    OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     MappingUtils mappingUtils;
 
-    public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager,MappingUtils mappingUtils,
-        OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121,OpenRoadmInterfacesImpl22 openRoadmInterfacesImpl22) {
+    public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
+                                   OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121, OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221) {
         this.deviceTransactionManager = deviceTransactionManager;
         this.mappingUtils = mappingUtils;
         this.openRoadmInterfacesImpl121 = openRoadmInterfacesImpl121;
-        this.openRoadmInterfacesImpl22 = openRoadmInterfacesImpl22;
+        this.openRoadmInterfacesImpl221 = openRoadmInterfacesImpl221;
     }
 
     @Override
@@ -46,11 +46,11 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             InterfaceBuilder ifBuilder121 = convertInstanceOfInterface(ifBuilder, InterfaceBuilder.class);
             openRoadmInterfacesImpl121.postInterface(nodeId,ifBuilder121);
         }
-        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
-            org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev171215.interfaces.grp.InterfaceBuilder
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder
                 ifBuilder22 = convertInstanceOfInterface(ifBuilder, org.opendaylight.yang.gen.v1.http.org.openroadm
-                .device.rev171215.interfaces.grp.InterfaceBuilder.class);
-            openRoadmInterfacesImpl22.postInterface(nodeId,ifBuilder22);
+                .device.rev181019.interfaces.grp.InterfaceBuilder.class);
+            openRoadmInterfacesImpl221.postInterface(nodeId,ifBuilder22);
         }
     }
 
@@ -63,8 +63,8 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             LOG.info("Device Version is 1.2.1");
             return (Optional<T>) openRoadmInterfacesImpl121.getInterface(nodeId,interfaceName);
         }
-        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
-            return (Optional<T>) openRoadmInterfacesImpl22.getInterface(nodeId,interfaceName);
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+            return (Optional<T>) openRoadmInterfacesImpl221.getInterface(nodeId,interfaceName);
         }
         return null;
     }
@@ -79,8 +79,8 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             LOG.info("Device Version is 1.2.1");
             openRoadmInterfacesImpl121.deleteInterface(nodeId,interfaceName);
         }
-        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
-            openRoadmInterfacesImpl22.deleteInterface(nodeId,interfaceName);
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+            openRoadmInterfacesImpl221.deleteInterface(nodeId,interfaceName);
         }
     }
 
@@ -94,8 +94,8 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             LOG.info("Device Version is 1.2.1");
             openRoadmInterfacesImpl121.postEquipmentState(nodeId, circuitPackName, activate);
         }
-        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
-            openRoadmInterfacesImpl22.postEquipmentState(nodeId, circuitPackName, activate);
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+            openRoadmInterfacesImpl221.postEquipmentState(nodeId, circuitPackName, activate);
         }
 
     }

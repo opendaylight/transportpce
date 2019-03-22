@@ -20,7 +20,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
-import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl22;
+import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl221;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
@@ -28,11 +28,11 @@ import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion121;
-import org.opendaylight.transportpce.common.mapping.PortMappingVersion22;
+import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
-import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl22;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
 import org.opendaylight.transportpce.olm.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.olm.stub.MountPointStub;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
@@ -52,11 +52,11 @@ public class PowerMgmtTest extends AbstractTest {
     private PowerMgmt powerMgmt;
     private MappingUtils mappingUtils;
     private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
-    private OpenRoadmInterfacesImpl22 openRoadmInterfacesImpl22;
-    private PortMappingVersion22 portMappingVersion22;
+    private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
+    private PortMappingVersion221 portMappingVersion22;
     private PortMappingVersion121 portMappingVersion121;
     private CrossConnectImpl121 crossConnectImpl121;
-    private CrossConnectImpl22 crossConnectImpl22;
+    private CrossConnectImpl221 crossConnectImpl221;
 
     @Before
     public void setUp() {
@@ -66,15 +66,15 @@ public class PowerMgmtTest extends AbstractTest {
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
         this.mappingUtils = Mockito.spy(this.mappingUtils);
         this.crossConnectImpl121 = new CrossConnectImpl121(this.deviceTransactionManager);
-        this.crossConnectImpl22 = new CrossConnectImpl22(this.deviceTransactionManager);
+        this.crossConnectImpl221 = new CrossConnectImpl221(this.deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(this.deviceTransactionManager, this.mappingUtils,
-                this.crossConnectImpl121, this.crossConnectImpl22);
+                this.crossConnectImpl121, this.crossConnectImpl221);
         this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(this.deviceTransactionManager);
-        this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl22(this.deviceTransactionManager);
+        this.openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(this.deviceTransactionManager);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
-                openRoadmInterfacesImpl121, openRoadmInterfacesImpl22);
+                openRoadmInterfacesImpl121, openRoadmInterfacesImpl221);
         this.portMappingVersion22 =
-                new PortMappingVersion22(getDataBroker(), this.deviceTransactionManager, this.openRoadmInterfaces);
+                new PortMappingVersion221(getDataBroker(), this.deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 =
                 new PortMappingVersion121(getDataBroker(), this.deviceTransactionManager, this.openRoadmInterfaces);
         this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.mappingUtils,

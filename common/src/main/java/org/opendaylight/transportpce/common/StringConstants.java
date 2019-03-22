@@ -14,7 +14,7 @@ public final class StringConstants {
 
     public static final String DEFAULT_NETCONF_NODEID = "controller-config";
 
-    public static final String OPENROADM_DEVICE_VERSION_2_2 = "(http://org/openroadm/device?revision=2017-12-15)org-openroadm-device";
+    public static final String OPENROADM_DEVICE_VERSION_2_2_1 = "(http://org/openroadm/device?revision=2018-10-19)org-openroadm-device";
 
     public static final String OPENROADM_DEVICE_VERSION_1_2_1 = "(http://org/openroadm/device?revision=2017-02-06)org-openroadm-device";
 
