@@ -28,7 +28,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="deviceTransactionManager" />
     </bean>
 
-    <bean id="openRoadmInterfaces22" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl22" >
+    <bean id="openRoadmInterfaces221" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221" >
         <argument ref="deviceTransactionManager" />
     </bean>
 
@@ -36,10 +36,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="deviceTransactionManager" />
         <argument ref="mappingUtils" />
         <argument ref="openRoadmInterfaces121" />
-        <argument ref="openRoadmInterfaces22" />
+        <argument ref="openRoadmInterfaces221" />
     </bean>
 
-    <bean id="portMapping22" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion22" >
+    <bean id="portMapping221" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion221" >
         <argument ref="dataBroker" />
         <argument ref="deviceTransactionManager" />
         <argument ref="openRoadmInterfaces" />
@@ -62,7 +62,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bean id="portMapping" class="org.opendaylight.transportpce.common.mapping.PortMappingImpl" >
         <argument ref="dataBroker" />
         <argument ref="mappingUtils" />
-        <argument ref="portMapping22" />
+        <argument ref="portMapping221" />
         <argument ref="portMapping121" />
     </bean>
 
@@ -70,7 +70,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="deviceTransactionManager" />
     </bean>
 
-    <bean id="crossConnect22" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl22" >
+    <bean id="crossConnect221" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl221" >
         <argument ref="deviceTransactionManager" />
     </bean>
 
@@ -78,7 +78,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="deviceTransactionManager" />
         <argument ref="mappingUtils" />
         <argument ref="crossConnect121" />
-        <argument ref="crossConnect22" />
+        <argument ref="crossConnect221" />
     </bean>
 
     <bean id="FixedFlexImpl" class="org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl" >

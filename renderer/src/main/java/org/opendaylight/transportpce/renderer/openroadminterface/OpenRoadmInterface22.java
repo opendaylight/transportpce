@@ -17,18 +17,18 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev171215.FrequencyGHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev171215.FrequencyTHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev171215.ModulationFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev171215.PowerDBm;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev171215.R100G;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev171215.interfaces.grp.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev171215.interfaces.grp.InterfaceKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PowerDBm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.R100G;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev171215.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev171215.EthAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev171215.Interface1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev171215.Interface1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev171215.ethernet.container.EthernetBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.EthAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.Interface1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.Interface1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.ethernet.container.EthernetBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.EthernetCsmacd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.MediaChannelTrailTerminationPoint;
@@ -38,19 +38,19 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.Opti
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpticalTransport;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnOdu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnOtu;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev171215.mc.ttp.container.McTtpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev171215.nmc.ctp.container.NmcCtpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev171215.och.container.OchBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev171215.OtsAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev171215.ots.container.OtsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.mc.ttp.container.McTtpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019.nmc.ctp.container.NmcCtpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev181019.och.container.OchBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.OtsAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.ots.container.OtsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.OTU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.PayloadTypeDef;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev171215.OduAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev171215.odu.container.OduBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev171215.opu.OpuBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev171215.OtuAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev171215.otu.container.OtuBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.OduAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.odu.container.OduBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.opu.OpuBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.OtuAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.otu.container.OtuBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -142,12 +142,12 @@ public class OpenRoadmInterface22 {
         mcTtpBuilder.setMaxFreq(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getStop())));
 
         // Create Interface1 type object required for adding as augmentation
-        org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev171215.Interface1Builder
+        org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.Interface1Builder
             interface1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel
-            .interfaces.rev171215.Interface1Builder();
+            .interfaces.rev181019.Interface1Builder();
         interface1Builder.setMcTtp(mcTtpBuilder.build());
         mcInterfaceBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel
-            .interfaces.rev171215.Interface1.class,interface1Builder.build());
+            .interfaces.rev181019.Interface1.class,interface1Builder.build());
 
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, mcInterfaceBldr);
@@ -178,12 +178,12 @@ public class OpenRoadmInterface22 {
         nmcCtpIfBuilder.setWidth(FrequencyGHz.getDefaultInstance(String.valueOf(fixedFlex.getWavelength())));
 
         // Create Interface1 type object required for adding as augmentation
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev171215
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019
             .Interface1Builder nmcCtpI1fBuilder = new org.opendaylight.yang.gen.v1.http
-            .org.openroadm.network.media.channel.interfaces.rev171215.Interface1Builder();
+            .org.openroadm.network.media.channel.interfaces.rev181019.Interface1Builder();
         nmcCtpI1fBuilder.setNmcCtp(nmcCtpIfBuilder.build());
         nmcInterfaceBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network
-            .media.channel.interfaces.rev171215.Interface1.class,nmcCtpI1fBuilder.build());
+            .media.channel.interfaces.rev181019.Interface1.class,nmcCtpI1fBuilder.build());
 
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, nmcInterfaceBldr);
@@ -206,7 +206,7 @@ public class OpenRoadmInterface22 {
         OchBuilder ocIfBuilder = new OchBuilder();
 
         ocIfBuilder.setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())));
-        ocIfBuilder.setWidth(FrequencyGHz.getDefaultInstance(String.valueOf(fixedFlex.getWavelength())));
+        //ocIfBuilder.setWidth(FrequencyGHz.getDefaultInstance(String.valueOf(fixedFlex.getWavelength())));
         ocIfBuilder.setModulationFormat(ModulationFormat.DpQpsk);
         ocIfBuilder.setRate(R100G.class);
         ocIfBuilder.setTransmitPower(new PowerDBm(new BigDecimal("-5")));
@@ -216,11 +216,11 @@ public class OpenRoadmInterface22 {
             createOpenRoadmOchInterfaceName(logicalConnPoint, waveNumber));
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev171215.Interface1Builder
+        org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev181019.Interface1Builder
                 ochIf1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces
-                .rev171215.Interface1Builder();
+                .rev181019.Interface1Builder();
         ochInterfaceBldr.addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev171215.Interface1.class,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev181019.Interface1.class,
                 ochIf1Builder.setOch(ocIfBuilder.build()).build());
 
         // Post interface on the device
@@ -253,10 +253,10 @@ public class OpenRoadmInterface22 {
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev171215.Interface1Builder oduIf1Builder =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev171215.Interface1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder oduIf1Builder =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
         oduInterfaceBldr.addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev171215.Interface1.class,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
                 oduIf1Builder.setOdu(oduIfBuilder.build()).build());
 
         // Post interface on the device
@@ -283,10 +283,10 @@ public class OpenRoadmInterface22 {
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev171215.Interface1Builder otuIf1Builder =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev171215.Interface1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder otuIf1Builder =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder();
         otuInterfaceBldr.addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev171215.Interface1.class,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1.class,
                 otuIf1Builder.setOtu(otuIfBuilder.build()).build());
 
         // Post interface on the device
@@ -343,12 +343,12 @@ public class OpenRoadmInterface22 {
 
             // Create Interface1 type object required for adding as
             // augmentation
-            org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev171215
+            org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019
                     .Interface1Builder otsIf1Builder = new org.opendaylight.yang.gen.v1.http.org
                     .openroadm.optical.transport
-                    .interfaces.rev171215.Interface1Builder();
+                    .interfaces.rev181019.Interface1Builder();
             otsInterfaceBldr.addAugmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev171215
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019
                     .Interface1.class,
                     otsIf1Builder.setOts(otsIfBuilder.build()).build());
             this.openRoadmInterfaces.postInterface(nodeId, otsInterfaceBldr);

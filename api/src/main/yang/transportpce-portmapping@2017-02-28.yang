@@ -37,10 +37,10 @@ module transportpce-portmapping {
             description
               "Version 1.2.1";
             }
-            enum "2.2" {
+            enum "2.2.1" {
               value 2;
               description
-                "Version 2.2";
+                "Version 2.2.1";
             }
           }
         }

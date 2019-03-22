@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.common.mapping;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -35,10 +35,10 @@ public class PortMappingImpl implements PortMapping {
 
     private final DataBroker dataBroker;
     private final MappingUtils mappingUtils;
-    private final PortMappingVersion22 portMappingVersion22;
+    private final PortMappingVersion221 portMappingVersion22;
     private final PortMappingVersion121 portMappingVersion121;
 
-    public PortMappingImpl(DataBroker dataBroker,PortMappingVersion22 portMappingVersion22,MappingUtils mappingUtils,
+    public PortMappingImpl(DataBroker dataBroker, PortMappingVersion221 portMappingVersion22, MappingUtils mappingUtils,
                            PortMappingVersion121 portMappingVersion121) {
 
         this.dataBroker = dataBroker;
@@ -52,7 +52,7 @@ public class PortMappingImpl implements PortMapping {
         if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
             return portMappingVersion121.createMappingData(nodeId);
         }
-        else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
+        else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             return portMappingVersion22.createMappingData(nodeId);
         }
         else {
@@ -115,7 +115,7 @@ public class PortMappingImpl implements PortMapping {
         if (openROADMversion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
             return portMappingVersion121.updateMapping(nodeId,oldMapping);
         }
-        else if (openROADMversion.equals(OPENROADM_DEVICE_VERSION_2_2)) {
+        else if (openROADMversion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             return portMappingVersion22.updateMapping(nodeId,oldMapping);
         }
 
