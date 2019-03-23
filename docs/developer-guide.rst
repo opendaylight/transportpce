@@ -53,19 +53,18 @@ Module description
 ServiceHandler
 ^^^^^^^^^^^^^^
 
-Service Handler handles request coming from a higher level controller or an
-orchestrator through the northbound API, as defined in the Open ROADM service
-model. Current implementation addresses the following rpcs: service-create,
-service–delete, service-reroute.
-It checks the request consistency and trigs path calculation sending rpcs to the
-PCE. If a valid path is returned by the PCE, path configuration is initiated
-relying on Renderer and OLM.
-At the confirmation of a successful service creation, the Service Handler
-updates the service-list in the MD-SAL.
-For service deletion, the Service Handler relies on the Renderer and the OLM to
-delete connections and reset power levels associated with the service.
-The service-list is updated following a successful service deletion.
-
+Service Handler handles request coming from a higher level controller or an orchestrator
+through the northbound API, as defined in the Open ROADM service model. Current
+implementation addresses the following rpcs: service-create, temp-service-create,
+service–delete, temp-service-delete, service-reroute, and service-restoration. It checks the
+request consistency and trigs path calculation sending rpcs to the PCE. If a valid path is
+returned by the PCE, path configuration is initiated relying on Renderer and OLM. At the
+confirmation of a successful service creation, the Service Handler updates the service-
+list/temp-service-list in the MD-SAL. For service deletion, the Service Handler relies on the
+Renderer and the OLM to delete connections and reset power levels associated with the
+service. The service-list is updated following a successful service deletion. In Neon SR0 is
+added the support for service from ROADM to ROADM, which brings additional flexibility and
+notably allows reserving resources when transponders are not in place at day one.
 
 PCE
 ^^^^^^^^^^^^^^
@@ -80,10 +79,11 @@ requested by the client module. An interface to the Topology Management module
 allows keeping PCE aligned with the latest changes in the topology. Information
 about current and planned services is available in the MD-SAL data store.
 
-Current implementation of PCE allows finding the shortest path, minimizing
-either the hop count (default) or the propagation delay. Wavelength is assigned
-considering a fixed grid of 96 wavelengths. Current PCE handles the following
-constraints as hard constraints:
+Current implementation of PCE allows finding the shortest path, minimizing either the hop
+count (default) or the propagation delay. Wavelength is assigned considering a fixed grid of
+96 wavelengths. In Neon SR0, the PCE calculates the OSNR, on the base of incremental
+noise specifications provided in Open RAODM MSA. The support of unidirectional ports is
+also added. PCE handles the following constraints as hard constraints:
 
 -   **Node exclusion**
 -   **SRLG exclusion**
@@ -110,17 +110,25 @@ containers from client to line cards is not currently implemented.
 Renderer
 ^^^^^^^^
 
-The Renderer module, on request coming from the Service Handler through a
-service-implementation-request /service delete rpc, sets/deletes the path
-corresponding to a specific service between A and Z ends.
-It first checks what are the existing interfaces on the ports of the different
-nodes that the path crosses. It then creates missing interfaces. After all
-needed interfaces have been created it sets the connections required in the
-nodes and notifies the Service Handler on the status of the path creation.
-Path is created in 2 steps (from A to Z and Z to A). In case the path between
-A and Z could not be fully created, a rollback function is called to set the
-equipment on the path back to their initial configuration (as they were before
-invoking the Renderer).
+The Renderer module, on request coming from the Service Handler through a service-
+implementation-request /service delete rpc, sets/deletes the path corresponding to a specific
+service between A and Z ends. The path description provided by the service-handler to the
+renderer is based on abstracted resources (nodes, links and termination-points), as provided
+by the PCE module. The renderer converts this path-description in a path topology based on
+device resources (circuit-packs, ports,…). The conversion from abstracted resources to
+device resources is performed relying on the portmapping module which maintains the
+connections between these different resource types. In Neon (SR0), portmapping modules
+has been enriched to support both openroadm 1.2.1 and 2.2 device models. The full support
+of openroadm 2.2 device models (both in the topology management and the rendering
+function) is planned at a later step (ORD2.2 full support is targeted for Neon SR1).
+
+After the path is provided, the renderer first checks what are the existing interfaces on the
+ports of the different nodes that the path crosses. It then creates missing interfaces. After all
+needed interfaces have been created it sets the connections required in the nodes and
+notifies the Service Handler on the status of the path creation. Path is created in 2 steps
+(from A to Z and Z to A). In case the path between A and Z could not be fully created, a
+rollback function is called to set the equipment on the path back to their initial configuration
+(as they were before invoking the Renderer).
 
 OLM
 ^^^^^^^^
@@ -165,9 +173,16 @@ ServiceHandler Service
 
    -  service-reroute (given service-name, service-aend, service-zend)
 
+   -  service-restoration (given service-name, service-aend, service-zend)
+
+   -  temp-service-create (given common-id, service-aend, service-zend)
+
+   -  temp-service-delete (given common-id)
+
 -  Data structure
 
-   -  service list : composed of services
+   -  service list : made of services
+   -  temp-service list : made of temporary services
    -  service : composed of service-name, topology wich describes the detailed path (list of used resources)
 
 -  Notification
@@ -258,6 +273,13 @@ OLM Service
 
    -  calculate-spanloss-current
 
+odl-transportpce-stubmodels
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+   -  This feature provides function to be able to stub some of TransportPCE modules, pce and
+      renderer (Stubpce and Stubrenderer).
+      Stubs are used for development purposes and can be used for some of the functionnal tests.
+
 
 Running transportPCE project
 ----------------------------
@@ -322,6 +344,13 @@ analyzed.
 Use the following JSON RPC to check that function internally named *portMapping*.
 
 **REST API** : *GET /restconf/config/portmapping:network*
+
+.. note::
+
+    in Neon SR0, the support of openroadm 2.2 device model is added. Thus 2.2 nodes can be
+    discovered and added to the portmapping node list. However, full topology management
+    support (and notably link discovery) is not provided for 2.2 nodes. The support for link
+    discovery and full topology management with 1.2.1 and 2.2 nodes will be added in a next release.
 
 .. note::
 

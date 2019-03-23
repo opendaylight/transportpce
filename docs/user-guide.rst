@@ -53,12 +53,6 @@ TransportPCE User-Facing Features
 
    -  This feature contains all OpenROADM models : Common, Device, Network and Service models.
 
--  **odl-transportpce-stubmodels**
-
-   -  This feature provides function to be able to stub some of TransportPCE modules, pce and
-      renderer (Stubpce and Stubrenderer).
-      Stubs are used for development purposes and required for some of the functionnal tests.
-
 
 How To Start
 ------------
@@ -67,7 +61,8 @@ Preparing for Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Devices must support the standard OpenROADM Models more precisely versions
-   1.2.1 and 2.1.
+   1.2.1 and 2.1. Experimental support is provided for 2.2 and 2.2.1 devices
+   (portmapping only at this moment).
 
 2. Devices must support configuration through NETCONF protocol/API.
 
