@@ -1,0 +1,14 @@
+---
+- hosts:
+    - 127.0.0.1
+  roles:
+    - role: collivier.xtesting
+      project: transportpce
+      repo: 127.0.0.1
+      dport: 5000
+      gerrit: git.opendaylight.org
+      gerrit_project: transportpce
+      suites:
+        - container: transportpce
+          tests:
+            - portmapping

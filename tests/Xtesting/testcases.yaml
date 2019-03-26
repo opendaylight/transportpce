@@ -1,0 +1,19 @@
+---
+tiers:
+    -
+        name: transportpce
+        order: 1
+        description: ''
+        testcases:
+            -
+                case_name: transportpce
+                project_name: transportpce
+                criteria: 100
+                blocking: true
+                clean_flag: false
+                description: ''
+                run:
+                    name: 'bashfeature'
+                    args:
+                        cmd: 'tox -e buildcontroller'
+                        console: true
