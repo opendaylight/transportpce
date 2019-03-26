@@ -1,0 +1,24 @@
+FROM openjdk:8-jdk-alpine
+
+RUN apk add --update --no-cache bash procps maven git \
+  && mkdir /opt/sims \
+  && cd /root \
+  && git clone -b master https://git.opendaylight.org/gerrit/transportpce \
+  && cd transportpce/tests \
+  && ./buildHoneynode.sh \
+  && mv honeynode/ /opt/sims/ \
+  && echo -e '#/bin/sh\n\ncd /opt/sims\n./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc/honeynode-distribution-1.18.01/honeycomb-tpce $@\n'>/usr/bin/honeynode \
+  && chmod +x /usr/bin/honeynode \
+#  && ./buildTesttool.sh \
+#  && mv netconf/netconf/tools/netconf-testtool/target/netconf-testtool-1.5.0-executable.jar /opt/sims/ \
+#  && mv schemas /opt/sims/ \
+#  && echo -e '#/bin/sh\n\ncd /opt/sims\njava -jar /opt/sims/netconf-testtool-1.5.0-executable.jar $@\n'>/usr/bin/testtool \
+#  && chmod +x /usr/bin/testtool \
+  && mv sample_configs/ /opt/sims/ \
+  && cd ../.. \
+  && rm -rf transportpce/ .m2/ \
+  && apk del git maven
+
+
+#CMD honeynode 830 sample_configs/openroadm/2.1/oper-ROADMA.xml
+#CMD testtool --schemas-dir schemas  --initial-config-xml sample_configs/openroadm/1.2.1/sample-config-ROADMA.xml --starting-port 17830
