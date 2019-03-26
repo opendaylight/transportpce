@@ -1,0 +1,2 @@
+xtesting
+requests!=2.12.2,>=2.10.0 # Apache License 2.0
