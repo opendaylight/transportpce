@@ -9,13 +9,14 @@ package org.opendaylight.transportpce.networkmodel;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.ListenableFuture;
+
 import java.util.concurrent.ExecutionException;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
+import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.DeleteLinkInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.DeleteLinkOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.DeleteLinkOutputBuilder;
@@ -46,11 +47,11 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkUtilsImpl.class);
     private final DataBroker dataBroker;
-    private final OpenRoadmTopology openRoadmTopology;
+    private final OpenRoadmFactory openRoadmFactory;
 
-    public NetworkUtilsImpl(DataBroker dataBroker, OpenRoadmTopology openRoadmTopology) {
+    public NetworkUtilsImpl(DataBroker dataBroker, OpenRoadmFactory openRoadmFactory) {
         this.dataBroker = dataBroker;
-        this.openRoadmTopology = openRoadmTopology;
+        this.openRoadmFactory = openRoadmFactory;
     }
 
     @Override
@@ -58,9 +59,11 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
 
         LinkId linkId = new LinkId(input.getLinkId());
         // Building link instance identifier
-        InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Network.class,
-            new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
+        InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier
+            .builder(Network.class,
+                new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
+
 
         //Check if link exists
         try {
@@ -100,7 +103,7 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
     @Override
     public ListenableFuture<RpcResult<InitRoadmNodesOutput>> initRoadmNodes(InitRoadmNodesInput input) {
         boolean createRdmLinks = OrdLink.createRdm2RdmLinks(input,
-                this.openRoadmTopology,this.dataBroker);
+            this.openRoadmFactory,this.dataBroker);
         if (createRdmLinks) {
             return RpcResultBuilder
                 .success(new InitRoadmNodesOutputBuilder().setResult(
@@ -114,8 +117,9 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
     @Override
     public ListenableFuture<RpcResult<InitXpdrRdmLinksOutput>> initXpdrRdmLinks(InitXpdrRdmLinksInput input) {
         // Assigns user provided input in init-network-view RPC to nodeId
+        LOG.info("Xpdr to Roadm links rpc called");
         boolean createXpdrRdmLinks = Rdm2XpdrLink.createXpdrRdmLinks(input.getLinksInput(),
-                this.openRoadmTopology,this.dataBroker);
+            this.openRoadmFactory,this.dataBroker);
         if (createXpdrRdmLinks) {
             return RpcResultBuilder
                 .success(new InitXpdrRdmLinksOutputBuilder().setResult("Xponder Roadm Link created successfully"))
@@ -128,7 +132,7 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
     @Override
     public ListenableFuture<RpcResult<InitRdmXpdrLinksOutput>> initRdmXpdrLinks(InitRdmXpdrLinksInput input) {
         boolean createRdmXpdrLinks = Rdm2XpdrLink.createRdmXpdrLinks(input.getLinksInput(),
-                this.openRoadmTopology,this.dataBroker);
+            this.openRoadmFactory,this.dataBroker);
         if (createRdmXpdrLinks) {
             return RpcResultBuilder
                 .success(new InitRdmXpdrLinksOutputBuilder().setResult("Roadm Xponder links created successfully"))

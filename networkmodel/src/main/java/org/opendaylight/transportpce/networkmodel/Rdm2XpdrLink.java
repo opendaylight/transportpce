@@ -15,10 +15,12 @@ import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
+import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
+import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.links.input.grouping.LinksInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1Builder;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkBuilder;
@@ -31,23 +33,25 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 final class Rdm2XpdrLink {
 
     private static final Logger LOG = LoggerFactory.getLogger(Rdm2XpdrLink.class);
 
-    public static boolean createXpdrRdmLinks(LinksInput linksInput, OpenRoadmTopology openRoadmTopology,
-        DataBroker dataBroker) {
+    public static boolean createXpdrRdmLinks(LinksInput linksInput, OpenRoadmFactory openRoadmFactory,
+                                             DataBroker dataBroker) {
         String srcNode =
-                new StringBuilder(linksInput.getXpdrNode()).append("-XPDR").append(linksInput.getXpdrNum()).toString();
+            new StringBuilder(linksInput.getXpdrNode()).append("-XPDR").append(linksInput.getXpdrNum()).toString();
         String srcTp = new StringBuilder("XPDR").append(linksInput.getXpdrNum()).append("-NETWORK")
-                .append(linksInput.getNetworkNum()).toString();
+            .append(linksInput.getNetworkNum()).toString();
         String destNode =
-                new StringBuilder(linksInput.getRdmNode()).append("-SRG").append(linksInput.getSrgNum()).toString();
+            new StringBuilder(linksInput.getRdmNode()).append("-SRG").append(linksInput.getSrgNum()).toString();
         String destTp = linksInput.getTerminationPointNum();
 
         Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, false,
-                openRoadmTopology).build();
-        InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Network.class,
+            openRoadmFactory).build();
+        InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID =
+            InstanceIdentifier.builder(Network.class,
                 new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
@@ -67,18 +71,19 @@ final class Rdm2XpdrLink {
     }
 
     public static boolean createRdmXpdrLinks(LinksInput linksInput,
-                                             OpenRoadmTopology openRoadmTopology, DataBroker dataBroker) {
+                                             OpenRoadmFactory openRoadmFactory, DataBroker dataBroker) {
         String srcNode =
-                new StringBuilder(linksInput.getRdmNode()).append("-SRG").append(linksInput.getSrgNum()).toString();
+            new StringBuilder(linksInput.getRdmNode()).append("-SRG").append(linksInput.getSrgNum()).toString();
         String srcTp = linksInput.getTerminationPointNum();
         String destNode =
-                new StringBuilder(linksInput.getXpdrNode()).append("-XPDR").append(linksInput.getXpdrNum()).toString();
+            new StringBuilder(linksInput.getXpdrNode()).append("-XPDR").append(linksInput.getXpdrNum()).toString();
         String destTp = new StringBuilder("XPDR").append(linksInput.getXpdrNum()).append("-NETWORK")
-                .append(linksInput.getNetworkNum()).toString();
+            .append(linksInput.getNetworkNum()).toString();
 
         Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, true,
-                openRoadmTopology).build();
-        InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Network.class,
+            openRoadmFactory).build();
+        InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID =
+            InstanceIdentifier.builder(Network.class,
                 new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
@@ -95,17 +100,26 @@ final class Rdm2XpdrLink {
     }
 
     private static NetworkBuilder createNetworkBuilder(String srcNode, String srcTp, String destNode, String destTp,
-            boolean isXponderInput, OpenRoadmTopology openRoadmTopology) {
+                                                       boolean isXponderInput, OpenRoadmFactory openRoadmFactory) {
         NetworkId nwId = new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID);
         NetworkBuilder nwBuilder = new NetworkBuilder();
         nwBuilder.setNetworkId(nwId);
         nwBuilder.withKey(new NetworkKey(nwId));
+//        Link1Builder lnk1bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+//                .rev181130.Link1Builder();
         Link1Builder lnk1bldr = new Link1Builder();
-        LinkBuilder linkBuilder = openRoadmTopology.createLink(srcNode, destNode, srcTp, destTp);
+        LinkBuilder linkBuilder = openRoadmFactory.createLink(srcNode, destNode, srcTp, destTp);
         lnk1bldr.setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder lnk2bldr = new org
+            .opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder();
+        lnk2bldr.setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
         linkBuilder.addAugmentation(Link1.class, lnk1bldr.build());
+        linkBuilder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1
+            .class, lnk2bldr.build());
+
         LOG.info("Link id in the linkbldr {}", linkBuilder.getLinkId());
-        LOG.info("Link with oppo link {}", linkBuilder.augmentation(Link1.class));
+        LOG.info("Link with oppo link {}", linkBuilder.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm
+            .opposite.links.rev170929.Link1.class));
         Network1Builder nwBldr1 = new Network1Builder();
         nwBldr1.setLink(ImmutableList.of(linkBuilder.build()));
         nwBuilder.addAugmentation(Network1.class, nwBldr1.build());

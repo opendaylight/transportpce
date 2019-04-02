@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.networkmodel.util;
 
 import com.google.common.collect.ImmutableList;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -17,16 +16,12 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev170929.NetworkTypes1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev170929.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev170929.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev170929.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev170929.network.network.types.OpenroadmNetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.NetworkTypes1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.NetworkTypes1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.network.types.OpenroadmTopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
@@ -44,6 +39,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.InstanceIdentifierBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public final class OpenRoadmNetwork {
 
@@ -63,7 +59,7 @@ public final class OpenRoadmNetwork {
         try {
             Network openRoadmNetwork = createOpenRoadmNetwork();
             InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Network.class,
-                    new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)));
+                new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)));
             WriteTransaction wrtx = controllerdb.newWriteOnlyTransaction();
             wrtx.put(LogicalDatastoreType.CONFIGURATION, nwIID.build(), openRoadmNetwork);
             wrtx.submit().get(1, TimeUnit.SECONDS);
@@ -81,20 +77,34 @@ public final class OpenRoadmNetwork {
      *
      * @return node builder status
      */
-    public static Node createNode(String nodeId, DeviceTransactionManager deviceTransactionManager) {
-        // Fetches the info from the deviceInfo
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
-        Optional<Info> deviceInfoOpt = deviceTransactionManager.getDataFromDevice(nodeId,
-                LogicalDatastoreType.OPERATIONAL, infoIID, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        Info deviceInfo;
-        if (deviceInfoOpt.isPresent()) {
-            deviceInfo = deviceInfoOpt.get();
+    public static Node createNode(String nodeId, DeviceTransactionManager deviceTransactionManager,
+                                  String openRoadmVersion) {
+
+        InfoSubtree infoSubtree = new InfoSubtree(openRoadmVersion);
+        String clli;
+        String vendor;
+        String model;
+        IpAddress ipAddress;
+        int nodeType;
+
+        if (infoSubtree.getDeviceInfo(nodeId,deviceTransactionManager)) {
+
+            clli = infoSubtree.getClli();
+
+            /**
+             * TODO : Uncomment when real when testing on real device
+             * vendor = infoSubtree.getVendor();
+             * model = infoSubtree.getModel();
+             **/
+            vendor = infoSubtree.getVendor();
+            clli = infoSubtree.getClli();
+            model = infoSubtree.getModel();
+            ipAddress = infoSubtree.getIpAddress();
+            nodeType = infoSubtree.getNodeType();
+
         } else {
-            LOG.error("Unable to get device info from device {}!", nodeId);
             return null;
         }
-        NodeTypes nodeType = deviceInfo.getNodeType();
 
         // Uses the Node Builder to set the nodeId and Key
         NodeBuilder nodeBldr = new NodeBuilder();
@@ -106,7 +116,7 @@ public final class OpenRoadmNetwork {
         /*
          * Recognize the node type: 1:ROADM, 2:XPONDER
          */
-        switch (nodeType.getIntValue()) {
+        switch (nodeType) {
             case 1:
                 node1bldr.setNodeType(OpenroadmNodeType.ROADM);
                 break;
@@ -114,13 +124,11 @@ public final class OpenRoadmNetwork {
                 node1bldr.setNodeType(OpenroadmNodeType.XPONDER);
                 break;
             default:
-                LOG.error("No correponsding type for the value: {}", nodeType.getIntValue());
+                LOG.error("No correponsding type for the value: {}", nodeType);
                 break;
         }
 
-        String vendor = deviceInfo.getVendor();
-        String model = deviceInfo.getModel();
-        IpAddress ipAddress = deviceInfo.getIpAddress();
+
         // Sets IP, Model and Vendor information fetched from the deviceInfo
         node1bldr.setIp(ipAddress);
         node1bldr.setModel(model);
@@ -128,7 +136,7 @@ public final class OpenRoadmNetwork {
 
         // Sets the value of Network-ref and Node-ref as a part of the supporting node
         // attribute
-        String clli = deviceInfo.getClli();
+
         SupportingNodeBuilder supportbldr = new SupportingNodeBuilder();
         supportbldr.withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID), new NodeId(clli)));
         supportbldr.setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID));
@@ -150,7 +158,7 @@ public final class OpenRoadmNetwork {
         openrdmnwBuilder.withKey(new NetworkKey(nwId));
         // sets network type to OpenRoadmNetwork
         NetworkTypes1Builder openRoadmNetworkTypesBldr = new NetworkTypes1Builder();
-        openRoadmNetworkTypesBldr.setOpenroadmNetwork(new OpenroadmNetworkBuilder().build());
+        openRoadmNetworkTypesBldr.setOpenroadmTopology(new OpenroadmTopologyBuilder().build());
         NetworkTypesBuilder openrdmnwTypeBuilder = new NetworkTypesBuilder();
         openrdmnwTypeBuilder.addAugmentation(NetworkTypes1.class, openRoadmNetworkTypesBldr.build());
         openrdmnwBuilder.setNetworkTypes(openrdmnwTypeBuilder.build());

@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.networkmodel.util;
 
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -16,15 +15,12 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev170626.network.network.types.ClliNetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkId;
@@ -55,8 +51,8 @@ public final class ClliNetwork {
     public static void createClliLayer(DataBroker controllerdb) {
         try {
             Network clliNetwork = createNetwork();
-            InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(
-                       Network.class,new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)));
+            InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Network.class,
+                new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)));
             WriteTransaction wrtx = controllerdb.newWriteOnlyTransaction();
             wrtx.put(LogicalDatastoreType.CONFIGURATION, nwIID.build(), clliNetwork);
             wrtx.submit().get(1, TimeUnit.SECONDS);
@@ -74,18 +70,20 @@ public final class ClliNetwork {
      *
      * @return node builder status
      */
-    public static Node createNode(DeviceTransactionManager deviceTransactionManager, String deviceId) {
+    public static Node createNode(DeviceTransactionManager deviceTransactionManager, String deviceId,
+                                  String openRoadmVersion) {
         //Read clli from the device
-        InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
-        Optional<Info> deviceInfo = deviceTransactionManager.getDataFromDevice(deviceId,
-                LogicalDatastoreType.OPERATIONAL, infoIID, Timeouts.DEVICE_READ_TIMEOUT,
-                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        InfoSubtree infoSubtree = new InfoSubtree(openRoadmVersion);
         String clli;
-        if (deviceInfo.isPresent()) {
-            clli = deviceInfo.get().getClli();
+
+        if (infoSubtree.getDeviceInfo(deviceId,deviceTransactionManager)) {
+
+            clli = infoSubtree.getClli();
         } else {
+            LOG.info("Unable for get Info subtree from the device");
             return null;
         }
+
         /*
          * Create node in the CLLI layer of the network model
          * with nodeId equal to the clli attribute in the device

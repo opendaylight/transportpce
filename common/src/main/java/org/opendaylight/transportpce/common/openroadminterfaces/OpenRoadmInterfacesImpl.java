@@ -29,7 +29,8 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     MappingUtils mappingUtils;
 
     public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
-                                   OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121, OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221) {
+                                   OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121,
+                                   OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221) {
         this.deviceTransactionManager = deviceTransactionManager;
         this.mappingUtils = mappingUtils;
         this.openRoadmInterfacesImpl121 = openRoadmInterfacesImpl121;
