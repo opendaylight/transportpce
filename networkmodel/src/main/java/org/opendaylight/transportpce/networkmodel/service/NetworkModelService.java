@@ -14,9 +14,9 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev15
  */
 public interface NetworkModelService {
 
+
     /**
-     * Create new OpenROADM node in all OpenROADM topologies.
-     *
+        * Create new OpenROADM node in all OpenROADM topologies.
      * @param nodeId
      *   unique node ID of new OpenROADM node
      * @param nodeVersion
@@ -27,10 +27,10 @@ public interface NetworkModelService {
     /**
      * Delete OpenROADM node mapping and topologies.
      *
-     * @param nodeId unique node ID of OpenROADM node
+     * @param nodeId unique node ID of OpenROADM node.
      *
      */
-    void deleteOpenROADMnode(String nodeId);
+    void deleteOpenRoadmnode(String nodeId);
 
     /**
      * Set/update connection status of OpenROADM node.
@@ -40,6 +40,6 @@ public interface NetworkModelService {
      * @param connectionStatus
      *   connection status of the node
      */
-    void setOpenROADMnodeStatus(String nodeId, NetconfNodeConnectionStatus.ConnectionStatus connectionStatus);
+    void setOpenRoadmNodeStatus(String nodeId, NetconfNodeConnectionStatus.ConnectionStatus connectionStatus);
 
 }

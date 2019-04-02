@@ -10,49 +10,54 @@
         odl:type="default" />
     <reference id="rpcProviderRegistry" interface="org.opendaylight.controller.sal.binding.api.RpcProviderRegistry" />
     <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
-    <reference id="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
     <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
+    <reference id="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
+    <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
 
-    <bean id="openRoadmTopology" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology">
-        <argument ref="dataBroker" />
+    <bean id="openRoadmFactory" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory">
+        <argument ref="mappingUtils" />
+        <argument ref="openRoadmTopology121" />
+        <argument ref="openRoadmTopology22" />
+    </bean>
+
+    <bean id="openRoadmTopology121" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology121">
+        <argument ref="networkTransactionImpl" />
         <argument ref="deviceTransactionManager" />
     </bean>
 
-    <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
-        <argument ref="dataBroker" />
-        <argument ref="linkDiscoveryImpl" />
+    <bean id="openRoadmTopology22" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology22">
+        <argument ref="networkTransactionImpl" />
         <argument ref="deviceTransactionManager" />
-        <argument ref="openRoadmTopology" />
+    </bean>
+
+
+    <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
+        <argument ref="networkTransactionImpl" />
+        <argument ref="deviceTransactionManager" />
+        <argument ref="openRoadmFactory" />
         <argument ref="portMapping" />
     </bean>
 
     <bean id="provider" class="org.opendaylight.transportpce.networkmodel.NetworkModelProvider"
         init-method="init" destroy-method="close">
+        <argument ref="networkTransactionImpl" />
         <argument ref="dataBroker" />
         <argument ref="rpcProviderRegistry" />
         <argument ref="networkutilsServiceImpl" />
         <argument ref="netconfTopologyListener" />
-        <argument ref="openRoadmTopology" />
+        <argument ref="openRoadmFactory" />
     </bean>
 
     <bean id="netconfTopologyListener" class="org.opendaylight.transportpce.networkmodel.NetConfTopologyListener">
         <argument ref="networkModelService" />
         <argument ref="dataBroker" />
-        <argument ref="linkDiscoveryImpl" />
         <argument ref="deviceTransactionManager" />
     </bean>
 
     <bean id="networkutilsServiceImpl" class="org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl">
         <argument ref="dataBroker" />
-        <argument ref="openRoadmTopology" />
+        <argument ref="openRoadmFactory" />
     </bean>
-
-    <bean id="linkDiscoveryImpl" class="org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery">
-        <argument ref="dataBroker" />
-        <argument ref="deviceTransactionManager" />
-        <argument ref="openRoadmTopology" />
-        <argument ref="openRoadmInterfaces" />
-   </bean>
 
     <service ref="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService" />
 

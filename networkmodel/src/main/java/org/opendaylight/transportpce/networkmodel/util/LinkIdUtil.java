@@ -12,6 +12,7 @@ import java.text.MessageFormat;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.InitRoadmNodesInput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.LinkId;
 
+
 public final class LinkIdUtil {
 
     private static final String NETWORK = "-NETWORK";
