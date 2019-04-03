@@ -51,11 +51,10 @@ public class PortMappingImpl implements PortMapping {
     public boolean createMappingData(String nodeId, String nodeVersion) {
         if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
             return portMappingVersion121.createMappingData(nodeId);
-        }
-        else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+        } else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             return portMappingVersion22.createMappingData(nodeId);
-        }
-        else {
+        } else {
+            LOG.error("Unable to create mapping data for unmanaged openroadm device version");
             return false;
         }
     }
