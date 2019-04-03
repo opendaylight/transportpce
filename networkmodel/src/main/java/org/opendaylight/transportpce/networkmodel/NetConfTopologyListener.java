@@ -229,7 +229,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             nodeRegistration.getAccessAlarmNotificationListenerRegistration().close();
             nodeRegistration.getAccessDeOperationasNotificationListenerRegistration().close();
             nodeRegistration.getAccessDeviceNotificationListenerRegistration().close();
-            nodeRegistration.getAccessLldpNotificationListenerRegistration().close();
+//            nodeRegistration.getAccessLldpNotificationListenerRegistration().close();
             nodeRegistration.getAccessTcaNotificationListenerRegistration().close();
         }
     }

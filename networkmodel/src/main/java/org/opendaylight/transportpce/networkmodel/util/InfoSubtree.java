@@ -115,7 +115,6 @@ public class InfoSubtree {
         //this.model = deviceInfo.getModel();
         this.ipAddress = deviceInfo.getIpAddress();
         this.nodeType = deviceInfo.getNodeType().getIntValue();
-
         return true;
     }
 

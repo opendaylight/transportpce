@@ -145,7 +145,7 @@ public class OpenRoadmTopology22 {
 
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
         java.util.Optional<Info> deviceInfoOpt =
-                deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, infoIID,
+                deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         Info deviceInfo;
         if (deviceInfoOpt.isPresent()) {
@@ -155,9 +155,8 @@ public class OpenRoadmTopology22 {
             return null;
         }
         List<Node> nodes = new ArrayList<>();
-
         // Check if node is ROADM
-        if (NodeTypes.Rdm.equals(deviceInfo.getNodeType())) {
+        if (NodeTypes.Rdm.getName().equals(deviceInfo.getNodeType().getName())) {
 
             /*
              * Adding Degree Node Get Degree Number -> x then get connection ports then find the port directions
@@ -222,7 +221,7 @@ public class OpenRoadmTopology22 {
             links.addAll(createAddDropLinks(nodeId, numOfDegrees, numOfSrgs, portDirectionEnum));
             LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
             return new TopologyShard(nodes, links);
-        } else if (NodeTypes.Xpdr.equals(deviceInfo.getNodeType())) {
+        } else if (NodeTypes.Xpdr.getName().equals(deviceInfo.getNodeType().getName())) {
             // Check if node is XPONDER
             Integer clientport = getNoOfClientPorts(nodeId);
             List<Link> links = new ArrayList<>();
@@ -240,7 +239,7 @@ public class OpenRoadmTopology22 {
             }
             return new TopologyShard(nodes, links);
         }
-
+        LOG.error("Device node Type not managed yet");
         return null;
     }
 
@@ -499,7 +498,6 @@ public class OpenRoadmTopology22 {
                 tpList.add(tempTpBldr.build());
             }
         }
-
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608
                 .Node1Builder tpNode1 =
                 new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf
@@ -544,7 +542,7 @@ public class OpenRoadmTopology22 {
         InstanceIdentifier<SharedRiskGroup> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(SharedRiskGroup.class, new SharedRiskGroupKey(srgCounter));
         Optional<SharedRiskGroup> ordmSrgObject =
-                deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.CONFIGURATION, deviceIID,
+                deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (ordmSrgObject.isPresent()) {
             if (ordmSrgObject.get().getMaxAddDropPorts() != null) {
@@ -585,7 +583,7 @@ public class OpenRoadmTopology22 {
                 .child(Ports.class, new PortsKey(portName));
         LOG.info("Fetching Port Direction for port {} at circuit pack {}", portName, circuitPackName);
         Optional<Ports> portObject =
-                deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.CONFIGURATION, portIID,
+                deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, portIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (portObject.isPresent()) {
             Ports port = portObject.get();

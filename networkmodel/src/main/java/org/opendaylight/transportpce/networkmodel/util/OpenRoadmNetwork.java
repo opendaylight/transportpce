@@ -87,7 +87,7 @@ public final class OpenRoadmNetwork {
         IpAddress ipAddress;
         int nodeType;
 
-        if (infoSubtree.getDeviceInfo(nodeId,deviceTransactionManager)) {
+        if (infoSubtree.getDeviceInfo(nodeId, deviceTransactionManager)) {
 
             clli = infoSubtree.getClli();
 
