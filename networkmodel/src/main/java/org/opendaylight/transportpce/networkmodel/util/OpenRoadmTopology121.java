@@ -46,7 +46,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev17092
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.link.OMSAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.network.types.OpenroadmTopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.DegreeAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.SrgAttributesBuilder;
@@ -445,9 +444,9 @@ public class OpenRoadmTopology121 {
 
 
     private NodeBuilder createSrgNode(String nodeId, int srgCounter, int portDirectionEnum) {
-        // Create augmentation node to inorder to add degree
+        // Create augmentation node to in order to add srg
         Node1Builder node1bldr = new Node1Builder();
-        // set node type to degree
+        // set node type to SRG
         node1bldr.setNodeType(OpenroadmNodeType.SRG);
 
         node1bldr.setNodeType(OpenroadmNodeType.SRG);
@@ -482,14 +481,14 @@ public class OpenRoadmTopology121 {
                     break;
                 }
                 // ports are uni Directional on a degree, therefore 4 termination points
-                // Create TTP-TX termination
+                // Create PP-TX termination
                 tempTpBldr = createTpBldr("SRG" + srgCounter + "-PP" + i + "-TX");
                 tp1Bldr = new TerminationPoint1Builder();
                 tp1Bldr.setTpType(OpenroadmTpType.SRGTXPP);
                 tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
                 tpList.add(tempTpBldr.build());
 
-                // Create TTP-RX termination
+                // Create PP-RX termination
                 tempTpBldr = createTpBldr("SRG" + srgCounter + "-PP" + i + "-RX");
                 tp1Bldr = new TerminationPoint1Builder();
                 tp1Bldr.setTpType(OpenroadmTpType.SRGRXPP);
@@ -498,7 +497,7 @@ public class OpenRoadmTopology121 {
 
             } else if (portDirectionEnum == 3) {
                 // Ports are bi directional therefore 2 termination points
-                // Create TTP-TXRX termination
+                // Create PP-TXRX termination
                 tempTpBldr = createTpBldr("SRG" + srgCounter + "-PP" + i + "-TXRX");
                 tp1Bldr = new TerminationPoint1Builder();
                 tp1Bldr.setTpType(OpenroadmTpType.SRGTXRXPP);
@@ -507,15 +506,44 @@ public class OpenRoadmTopology121 {
             }
         }
 
+        switch (portDirectionEnum) {
+            case 1: // ports are uni Directional on a degree
+            case 2:
+                // Create CP-TX termination
+                tempTpBldr = createTpBldr("SRG" + srgCounter + "-CP" + "-TX");
+                tp1Bldr = new TerminationPoint1Builder();
+                tp1Bldr.setTpType(OpenroadmTpType.SRGTXCP);
+                tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
+                tpList.add(tempTpBldr.build());
+                // Create CP-RX termination
+                tempTpBldr = createTpBldr("SRG" + srgCounter + "-CP" + "-RX");
+                tp1Bldr = new TerminationPoint1Builder();
+                tp1Bldr.setTpType(OpenroadmTpType.SRGRXCP);
+                tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
+                tpList.add(tempTpBldr.build());
+                break;
+            case 3:
+                // Ports are bi directional therefore 2 termination points
+                // Create CP-TXRX termination
+                tempTpBldr = createTpBldr("SRG" + srgCounter + "-CP" + "-TXRX");
+                tp1Bldr = new TerminationPoint1Builder();
+                tp1Bldr.setTpType(OpenroadmTpType.SRGTXRXCP);
+                tempTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
+                tpList.add(tempTpBldr.build());
+                break;
+            default:
+                LOG.error("No correponsding direction to the value: {}", portDirectionEnum);
+                break;
+        }
+
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1Builder tpNode1 =
-                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology
-                        .rev150608.Node1Builder();
+            new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1Builder();
 
         tpNode1.setTerminationPoint(tpList);
 
         nodebldr.addAugmentation(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1.class,
-                tpNode1.build());
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1.class,
+            tpNode1.build());
 
         return nodebldr;
     }
@@ -631,13 +659,13 @@ public class OpenRoadmTopology121 {
         lnkBldr.setSource(srcNodeBldr.build());
         lnkBldr.setLinkId(LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp));
         lnkBldr.withKey(new LinkKey(lnkBldr.getLinkId()));
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1Builder lnk1Bldr =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1Builder();
-        OMSAttributesBuilder omsAttributesBuilder = new OMSAttributesBuilder();
+
+        org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder lnk1Bldr =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder();
         LinkId oppositeLinkId = LinkIdUtil.getOppositeLinkId(srcNode, srcTp, dstNode, destTp);
-        omsAttributesBuilder.setOppositeLink(oppositeLinkId);
-        lnk1Bldr.setOMSAttributes(omsAttributesBuilder.build());
-        lnkBldr.addAugmentation(Link1.class,lnk1Bldr.build());
+        lnk1Bldr.setOppositeLink(oppositeLinkId);
+        lnkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1.class,
+            lnk1Bldr.build());
         return lnkBldr;
     }
 
@@ -670,12 +698,7 @@ public class OpenRoadmTopology121 {
 
                     Link1Builder lnk1Bldr = new Link1Builder();
                     lnk1Bldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder lnk2Bldr =
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder();
-                    lnk2Bldr.setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
                     expLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    expLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929
-                        .Link1.class, lnk2Bldr.build());
                     links.add(expLinkBldr.build());
 
                     // ZtoA direction
@@ -707,12 +730,7 @@ public class OpenRoadmTopology121 {
                     Link1Builder lnk1Bldr = new Link1Builder();
                     lnk1Bldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
                     LinkBuilder expLinkBldr = createLink(srcNode, destNode, srcTp, destTp);
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder lnk2Bldr =
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder();
-                    lnk2Bldr.setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
                     expLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    expLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929
-                        .Link1.class, lnk2Bldr.build());
                     links.add(expLinkBldr.build());
 
                     // ZtoA direction
@@ -725,8 +743,7 @@ public class OpenRoadmTopology121 {
         return links;
     }
 
-    private List<Link> createAddDropLinks(String nodeId, int numOfDegrees, int numOfSrgs,
-                                          int portDirectionEnum) {
+    private List<Link> createAddDropLinks(String nodeId, int numOfDegrees, int numOfSrgs, int portDirectionEnum) {
         LOG.info("creating add-drop links {} {} {} {}", nodeId, numOfDegrees, numOfSrgs, portDirectionEnum);
         List<Link> links = new ArrayList<>();
 
@@ -752,12 +769,7 @@ public class OpenRoadmTopology121 {
                     LinkBuilder addDropLinkBldr = createLink(srcNode, destNode, srcTp, destTp);
                     Link1Builder lnk1Bldr = new Link1Builder();
                     lnk1Bldr.setLinkType(OpenroadmLinkType.DROPLINK);
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder lnk2Bldr =
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder();
-                    lnk2Bldr.setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
                     addDropLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    addDropLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links
-                        .rev170929.Link1.class, lnk2Bldr.build());
                     links.add(addDropLinkBldr.build());
 
                     // add links direction
@@ -788,12 +800,7 @@ public class OpenRoadmTopology121 {
                     LinkBuilder addDropLinkBldr = createLink(srcNode, destNode, srcTp, destTp);
                     Link1Builder lnk1Bldr = new Link1Builder();
                     lnk1Bldr.setLinkType(OpenroadmLinkType.DROPLINK);
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder lnk2Bldr =
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder();
-                    lnk2Bldr.setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
                     addDropLinkBldr.addAugmentation(Link1.class, lnk1Bldr.build());
-                    addDropLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links
-                        .rev170929.Link1.class, lnk2Bldr.build());
 
                     links.add(addDropLinkBldr.build());
 

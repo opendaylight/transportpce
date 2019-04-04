@@ -372,15 +372,17 @@ public class PortMappingVersion221 {
     private Map<String, String> getEthInterfaceList(String nodeId) {
         LOG.info("It is calling get ethernet interface");
         Map<String, String> cpToInterfaceMap = new HashMap<>();
-        InstanceIdentifier<Lldp> lldpIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Protocols.class).augmentation(Protocols1.class).child(Lldp.class);
-        Optional<Lldp> lldpObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-            LogicalDatastoreType.OPERATIONAL, lldpIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (lldpObject.isPresent() && (lldpObject.get().getPortConfig() != null)) {
-            for (PortConfig portConfig : lldpObject.get().getPortConfig()) {
+        InstanceIdentifier<Protocols> protocoliid = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+            .child(Protocols.class);
+        Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
+            LogicalDatastoreType.OPERATIONAL, protocoliid, Timeouts.DEVICE_READ_TIMEOUT,
+            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (protocolObject.isPresent() && protocolObject.get().augmentation(Protocols1.class).getLldp() != null) {
+            Lldp lldp = protocolObject.get().augmentation(Protocols1.class).getLldp();
+            for (PortConfig portConfig : lldp.getPortConfig()) {
                 if (portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
                     InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                            .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
+                        .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
                     Optional<Interface> interfaceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
                         Timeouts.DEVICE_READ_TIMEOUT_UNIT);

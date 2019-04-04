@@ -33,6 +33,7 @@
 
     <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
         <argument ref="networkTransactionImpl" />
+        <argument ref="linkDiscoveryImpl" />
         <argument ref="deviceTransactionManager" />
         <argument ref="openRoadmFactory" />
         <argument ref="portMapping" />
@@ -58,6 +59,13 @@
         <argument ref="dataBroker" />
         <argument ref="openRoadmFactory" />
     </bean>
+
+    <bean id="linkDiscoveryImpl" class="org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery">
+        <argument ref="dataBroker" />
+        <argument ref="deviceTransactionManager" />
+        <argument ref="openRoadmFactory" />
+        <argument ref="networkTransactionImpl" />
+   </bean>
 
     <service ref="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService" />
 

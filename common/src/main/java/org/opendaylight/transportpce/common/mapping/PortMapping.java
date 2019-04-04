@@ -81,6 +81,7 @@ public interface PortMapping {
     boolean updateMapping(String nodeId, Mapping mapping);
 
     /**
+     * Returns all Mapping informations for a given ordm device.
      * This method returns all Mapping informations already stored in the MD-SAL
      * data store for a given openroadm device. Beyound the list of mappings, it
      * gives access to general node information as its version or its node type,
