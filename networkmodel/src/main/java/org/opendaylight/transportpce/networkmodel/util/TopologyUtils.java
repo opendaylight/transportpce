@@ -14,12 +14,9 @@ import java.util.concurrent.TimeoutException;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev170929.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.link.OMSAttributesBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkKey;
@@ -63,16 +60,12 @@ public  final class TopologyUtils {
         lnkBldr.setLinkId(LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp));
         lnkBldr.withKey(new LinkKey(lnkBldr.getLinkId()));
 
-        //set Oms Attributes
-        Link1Builder lnk1Bldr =
-            new Link1Builder();
-        OMSAttributesBuilder omsAttributesBuilder = new OMSAttributesBuilder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder lnk1Bldr =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1Builder();
         LinkId oppositeLinkId = LinkIdUtil.getOppositeLinkId(srcNode, srcTp, dstNode, destTp);
-        omsAttributesBuilder.setOppositeLink(oppositeLinkId);
-        lnk1Bldr.setOMSAttributes(omsAttributesBuilder.build());
-        lnkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929
-                .Link1.class,lnk1Bldr.build());
-
+        lnk1Bldr.setOppositeLink(oppositeLinkId);
+        lnkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1.class,
+            lnk1Bldr.build());
         return lnkBldr;
     }
 

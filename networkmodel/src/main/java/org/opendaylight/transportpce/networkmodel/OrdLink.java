@@ -63,8 +63,8 @@ final class OrdLink {
         LinkBuilder linkBuilder = openRoadmFactory.createLink(srcNode, destNode, srcTp, destTp);
 
         linkBuilder.addAugmentation(Link1.class,link1Builder.build());
-        linkBuilder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1
-            .class, oppsiteLinkBuilder.build());
+        linkBuilder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929
+            .Link1.class, oppsiteLinkBuilder.build());
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
 
         // Building link instance identifier

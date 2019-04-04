@@ -18,6 +18,7 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.ClliNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
@@ -43,17 +44,18 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
     private NetworkTransactionService networkTransactionService;
     //private final R2RLinkDiscoveryFactoryMethod linkDiscovery;
+    private final R2RLinkDiscovery linkDiscovery;
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmFactory openRoadmFactory;
     private final PortMapping portMapping;
     private HashMap<String,TopologyShard> topologyShardMountedDevice;
 
     public NetworkModelServiceImpl(final NetworkTransactionService networkTransactionService,
-                                   DeviceTransactionManager deviceTransactionManager,
-                                   OpenRoadmFactory openRoadmFactory, PortMapping portMapping) {
+        final R2RLinkDiscovery linkDiscovery, DeviceTransactionManager deviceTransactionManager,
+            OpenRoadmFactory openRoadmFactory, PortMapping portMapping) {
 
         this.networkTransactionService = networkTransactionService;
-        //this.linkDiscovery = linkDiscovery;
+        this.linkDiscovery = linkDiscovery;
         this.deviceTransactionManager = deviceTransactionManager;
         this.openRoadmFactory = openRoadmFactory;
         this.portMapping = portMapping;
@@ -76,7 +78,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 LOG.warn("Could not generate port mapping for {} skipping network model creation", nodeId);
                 return;
             }
-            //this.linkDiscovery.readLLDP(new NodeId(nodeId));
+            this.linkDiscovery.readLLDP(new NodeId(nodeId), openRoadmVersion);
 
             Node clliNode = ClliNetwork.createNode(this.deviceTransactionManager, nodeId, openRoadmVersion);
             if (clliNode == null) {
