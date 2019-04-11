@@ -1,26 +1,31 @@
-module org-openroadm-degree {
-  namespace "http://org/openroadm/degree";
-  prefix dgr;
+module org-openroadm-external-pluggable {
+  yang-version 1.1;
+  namespace "http://org/openroadm/external/pluggable";
+  prefix plg;
 
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-    revision-date 2017-09-29;
+  import org-openroadm-common-equipment-types {
+    prefix org-openroadm-common-equipment-types;
+    revision-date 2018-11-30;
   }
-  import org-openroadm-network-types {
-    prefix org-openroadm-network-types;
-    revision-date 2017-09-29;
+  import org-openroadm-common-state-types {
+    prefix org-openroadm-common-state-types;
+    revision-date 2018-11-30;
+  }
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+    revision-date 2018-11-30;
   }
 
   organization
-    "Open ROADM MSA";
+    "OPEN ROADM MSA";
   contact
     "OpenROADM.org.";
   description
-    "YANG definitions for a Degree in Network Model
+    "YANG definitions for External Pluggable
 
 
      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-     AT&T Intellectual Property.  All other rights reserved.
+     All other rights reserved.
 
      Redistribution and use in source and binary forms, with or without modification,
      are permitted provided that the following conditions are met:
@@ -45,6 +50,26 @@ module org-openroadm-degree {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-05-30 {
+    description
+      "Version 3.1.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
   revision 2017-09-29 {
     description
       "Version 2.1";
@@ -62,48 +87,49 @@ module org-openroadm-degree {
       "Version 1.2";
   }
 
-  grouping degree-used-wavelengths {
-    description
-      "This list is created to accommodate fixed grid (1.2.1) as well as flex grid (2.0 above). In case of fixed grid
-       index number will refer to one of the 96 WL defined in the wavelength map file. In case of flex grid this
-      will hold list of used spectrums";
-    list used-wavelengths {
-      key "index";
-      uses org-openroadm-network-types:wavelengths;
-
+  grouping pluggable-node-attributes {
+    leaf pluggable-id {
+      type string;
+      description
+        "Network-wide unique identifier for a pluggable";
+    }
+    leaf customer-code {
+      type string;
+      description
+        "Owner of the pluggable";
+    }
+    container tail {
+      leaf client-equipment {
+        type string;
+      }
+      leaf client-equipment-id {
+        type string;
+      }
+      leaf clfi {
+        type string;
+      }
     }
   }
 
-  grouping degree-node-attributes {
-    description
-      "Defines the group of degree attributes";
-    leaf degree-number {
-      type uint16;
-    }
-    leaf max-wavelengths {
-      type uint32;
+  grouping pluggable-tp-attributes {
+    leaf rate {
+      type identityref {
+        base org-openroadm-common-optical-channel-types:och-rate-identity;
+      }
       description
-        "maximum # of wavelengths";
+        "rate";
     }
-    list available-wavelengths {
-      key "index";
-      uses org-openroadm-network-types:wavelengths;
-     description
-        "This list is created to accommodate fixed grid (1.2.1) as well as flex grid (2.0 above). In case of fixed grid
-      index number will refer to one of the 96 WL defined in the wavelength map file. In case of flex grid this
-      will hold list of available spectrums";
+    leaf modulation-format {
+      type org-openroadm-common-optical-channel-types:modulation-format;
     }
-    leaf ingress-span-loss-aging-margin {
-      type org-openroadm-common-types:ratio-dB;
+    leaf optic {
+      type org-openroadm-common-equipment-types:optic-types;
+    }
+    leaf state {
+      type org-openroadm-common-state-types:state;
       description
-        "Span-loss margin extracted from corresponding device OTS interface container, optional";
-      config true;
-    }
-    leaf eol-max-load-pIn {
-      type org-openroadm-common-types:power-dBm;
-      description
-        "End Of Life Total input power at maximum load extracted from corresponding device OTS interface container";
-      config true;
+        "A xponder can be in one of the following
+               states";
     }
   }
 }

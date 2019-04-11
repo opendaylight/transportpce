@@ -1,21 +1,17 @@
-module org-openroadm-clli-network {
-  namespace "http://org/openroadm/clli/network";
-  prefix cn;
-
-  import ietf-network {
-    prefix nd;
-    revision-date 2015-06-08;
-  }
+module org-openroadm-roadm {
+  yang-version 1.1;
+  namespace "http://org/openroadm/roadm";
+  prefix roadm;
 
   organization
-    "Open ROADM MSA";
+    "OPEN ROADM MSA";
   contact
     "OpenROADM.org.";
   description
-    "YANG definitions for a CLLI Network
+    "YANG definitions for network view of a ROADM
 
      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-     AT&T Intellectual Property.  All other rights reserved.
+     All other rights reserved.
 
      Redistribution and use in source and binary forms, with or without modification,
      are permitted provided that the following conditions are met:
@@ -40,29 +36,47 @@ module org-openroadm-clli-network {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
+  revision 2017-09-29 {
+    description
+      "Version 2.1";
+  }
   revision 2017-06-26 {
     description
       "Version 2.0";
   }
-
-  augment "/nd:network/nd:network-types" {
+  revision 2016-10-14 {
     description
-      "Introduce new network type for the Open ROADM optical network";
-    container clli-network {
-      presence "indicates optical network of Open ROADMs";
-      description
-        "The presence of the container node indicates Open ROADM
-         network";
-    }
+      "Version 1.2";
   }
-  augment "/nd:network/nd:node" {
-    when "../nd:network-types/clli-network";
-    description
-      "Augment the generic network node with Open ROADM attributes.";
-    leaf clli {
-      type string;
+
+  grouping roadm-node-attributes {
+    leaf max-degrees {
+      type uint16;
       description
-        "CLLI identifier";
+        "Max no. of degrees supported by the node";
+    }
+    leaf max-srgs {
+      type uint16;
+      description
+        "Max no. of SRGs supported by the node";
+    }
+    leaf current-degrees {
+      type uint16;
+      description
+        "Current no. of degrees supported by the node";
+    }
+    leaf current-srgs {
+      type uint16;
+      description
+        "Current no. of SRGs supported by the node";
     }
   }
 }

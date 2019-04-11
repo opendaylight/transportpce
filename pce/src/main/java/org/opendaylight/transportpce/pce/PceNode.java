@@ -14,13 +14,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.pp.attributes.UsedWavelength;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NodeId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.network.Node;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.pp.attributes.UsedWavelength;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,19 +59,19 @@ public class PceNode {
             return;
         }
         LOG.info("initSrgTpList: getting SRG tps from ROADM node {}", this.nodeId);
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1 nodeTp =
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 nodeTp =
                 this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology
-                                .rev150608.Node1.class);
-        List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.network.node
-            .TerminationPoint> allTps =
+                                .rev180226.Node1.class);
+        List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .node.TerminationPoint> allTps =
                 nodeTp.getTerminationPoint();
         if (allTps == null) {
             LOG.error("initSrgTpList: ROADM TerminationPoint list is empty for node {}", this.toString());
             this.valid = false;
             return;
         }
-        for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.network.node
-                .TerminationPoint tp : allTps) {
+        for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .node.TerminationPoint tp : allTps) {
             TerminationPoint1 tp1 = tp.augmentation(TerminationPoint1.class);
             OpenroadmTpType type = tp1.getTpType();
             switch (type) {
@@ -124,7 +124,7 @@ public class PceNode {
         Node1 node1 = this.node.augmentation(Node1.class);
         switch (this.nodeType) {
             case SRG :
-                List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
+                List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
                     .AvailableWavelengths> srgAvailableWL =
                         node1.getSrgAttributes().getAvailableWavelengths();
                 if (srgAvailableWL == null) {
@@ -132,21 +132,21 @@ public class PceNode {
                     LOG.error("initWLlist: SRG AvailableWavelengths is empty for node  {}", this.toString());
                     return;
                 }
-                for (org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev170929.srg.node.attributes
+                for (org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
                         .AvailableWavelengths awl : srgAvailableWL) {
                     this.availableWLindex.add(awl.getIndex());
                     LOG.debug("initWLlist: SRG next = {} in {}", awl.getIndex(), this.toString());
                 }
                 break;
             case DEGREE :
-                List<org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.node.attributes
+                List<org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes
                     .AvailableWavelengths> degAvailableWL = node1.getDegreeAttributes().getAvailableWavelengths();
                 if (degAvailableWL == null) {
                     this.valid = false;
                     LOG.error("initWLlist: DEG AvailableWavelengths is empty for node  {}", this.toString());
                     return;
                 }
-                for (org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.node.attributes
+                for (org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes
                             .AvailableWavelengths awl : degAvailableWL) {
                     this.availableWLindex.add(awl.getIndex());
                     LOG.debug("initWLlist: DEGREE next = {} in {}", awl.getIndex(), this.toString());
@@ -175,19 +175,19 @@ public class PceNode {
         if (!isValid()) {
             return;
         }
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Node1 nodeTp =
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 nodeTp =
                 this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology
-                        .rev150608.Node1.class);
-        List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.network.node
-            .TerminationPoint> allTps = nodeTp.getTerminationPoint();
+                        .rev180226.Node1.class);
+        List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .node.TerminationPoint> allTps = nodeTp.getTerminationPoint();
         if (allTps == null) {
             this.valid = false;
             LOG.error("initXndrTps: XPONDER TerminationPoint list is empty for node {}", this.toString());
             return;
         }
         this.valid = false;
-        for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.network.node
-                    .TerminationPoint tp : allTps) {
+        for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .node.TerminationPoint tp : allTps) {
             TerminationPoint1 tp1 = tp.augmentation(TerminationPoint1.class);
             if (tp1.getTpType() == OpenroadmTpType.XPONDERNETWORK) {
                 if (tp1.getXpdrNetworkAttributes().getWavelength() != null) {
@@ -240,7 +240,7 @@ public class PceNode {
         if (!this.availableSrgPp.isEmpty()) {
             Optional<String> client = null;
             final OpenroadmTpType openType = srgType;
-            client = this.availableSrgPp.entrySet().stream().filter(pp -> pp.getValue() == openType)
+            client = this.availableSrgPp.entrySet().stream().filter(pp -> pp.getValue().getName() == openType.getName())
                     .map(Map.Entry::getKey)
                     .sorted(new SortPortsByName())
                     .findFirst();

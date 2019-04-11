@@ -22,7 +22,7 @@ public interface NetworkModelService {
      * @param nodeVersion
      *   OpenROADM node version
      */
-    void createOpenROADMnode(String nodeId, String nodeVersion);
+    void createOpenRoadmNode(String nodeId, String nodeVersion);
 
     /**
      * Delete OpenROADM node mapping and topologies.

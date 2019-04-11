@@ -30,6 +30,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <scope>import</scope>
         <type>pom</type>
       </dependency>
+      <!--dependency>
+        <groupId>org.opendaylight.mdsal</groupId>
+        <artifactId>mdsal-artifacts</artifactId>
+        <version>3.0.6</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency-->
     </dependencies>
   </dependencyManagement>
 
@@ -50,26 +57,27 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc6991-ietf-yang-types</artifactId>
     </dependency>
-    <!--dependency>
+
+    <!-- to upgrade topology to 4.1 -->
+    <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345</artifactId>
+      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network</artifactId>
+      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network-topology</artifactId>
+      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network-topology-state</artifactId>
+      <version>1.2.6</version>
     </dependency>
-    <dependency>
-      <groupId>org.opendaylight.mdsal.model</groupId>
-      <artifactId>ietf-network-2015-06-08</artifactId>
-      <version>1.6.1-SNAPSHOT</version>
-    </dependency-->
   </dependencies>
 </project>
