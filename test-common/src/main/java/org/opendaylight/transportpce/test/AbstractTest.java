@@ -26,6 +26,11 @@ public abstract class AbstractTest {
         return dataStoreContextUtil.getDataBroker();
     }
 
+    public DataBroker getNewDataBroker() {
+        DataStoreContext dataStoreContext = new DataStoreContextImpl();
+        return dataStoreContext.getDataBroker();
+    }
+
     public DOMDataBroker getDOMDataBroker() {
         return dataStoreContextUtil.getDOMDataBroker();
     }

@@ -10,60 +10,45 @@ package org.opendaylight.transportpce.servicehandler.service;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations;
-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
+import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.OperationResult;
-import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
-import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
-import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
-import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
-import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
-import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
-import org.opendaylight.transportpce.servicehandler.stub.StubRendererServiceOperations;
+import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.ResponseParameters;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.response.parameters.PathDescriptionBuilder;
+
+import java.util.Optional;
 
 
 public class ServiceDataStoreOperationsImplTest extends AbstractTest {
 
     private ServiceDataStoreOperationsImpl serviceDataStoreOperations;
-    private PCEServiceWrapper pceServiceWrapper;
-    private ServicehandlerImpl serviceHandler;
-    private RendererServiceOperations rendererServiceOperations;
-    private NetworkModelWavelengthService networkModelWavelengthService;
-
-    public ServiceDataStoreOperationsImplTest() {
-        NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
-        PathComputationService pathComputationService = new PathComputationServiceImpl(getDataBroker(),
-            notificationPublishService);
-        PceListenerImpl pceListenerImpl = new PceListenerImpl(rendererServiceOperations, pathComputationService,
-                notificationPublishService, null);
-        RendererListenerImpl rendererListenerImpl =
-                new RendererListenerImpl(pathComputationService, notificationPublishService);
-        this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
-        this.rendererServiceOperations = new StubRendererServiceOperations(this.networkModelWavelengthService,
-                null, notificationPublishService);
-        this.serviceHandler = new ServicehandlerImpl(getDataBroker(), pathComputationService,
-                this.rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-                this.networkModelWavelengthService);
-    }
 
 
     @Before
     public void init() {
-        this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.getDataBroker());
-        MockitoAnnotations.initMocks(this);
+        DataBroker dataBroker = this.getNewDataBroker();
+        this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
     }
 
     @Test
     public void modifyIfServiceNotPresent() {
         OperationResult result =
                 this.serviceDataStoreOperations.modifyService("service 1", State.InService, State.InService);
+        Assert.assertFalse(result.isSuccess());
         Assert.assertEquals("Service " + "service 1" + " is not present!", result.getResultMessage());
     }
 
@@ -71,61 +56,215 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     public void writeOrModifyOrDeleteServiceListNotPresentWithNoWriteChoice() {
 
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        PathComputationRequestOutput pathComputationRequestOutput = this.pceServiceWrapper.performPCE(createInput,
-            true);
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
+        PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon).build();
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("serviceCreateInput",
             createInput, pathComputationRequestOutput, 3);
 
         Assert.assertEquals("Service is not present ! ", result);
-
     }
 
     @Test
     public void writeOrModifyOrDeleteServiceListNotPresentWithWriteChoice() {
 
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        PathComputationRequestOutput pathComputationRequestOutput = this.pceServiceWrapper.performPCE(createInput,
-            true);
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
+        PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon).build();
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 2);
 
-        Assert.assertEquals(null, result);
-
+        Assert.assertNull(result);
     }
 
     @Test
     public void writeOrModifyOrDeleteServiceListPresentWithModifyChoice() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        PathComputationRequestOutput pathComputationRequestOutput = this.pceServiceWrapper.performPCE(createInput,
-            true);
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
+        PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon).build();
         OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput);
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 0);
-        Assert.assertEquals(null, result);
-
+        Assert.assertNull(result);
     }
 
     @Test
     public void writeOrModifyOrDeleteServiceListPresentWithDeleteChoice() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        PathComputationRequestOutput pathComputationRequestOutput = this.pceServiceWrapper.performPCE(createInput,
-            true);
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
+        PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon).build();
         OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput);
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 1);
-        Assert.assertEquals(null, result);
-
+        Assert.assertNull(result);
     }
 
     @Test
     public void writeOrModifyOrDeleteServiceListPresentWithNoValidChoice() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        PathComputationRequestOutput pathComputationRequestOutput = this.pceServiceWrapper.performPCE(createInput,
-            true);
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
+        PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon).build();
         OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput);
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 2);
-        Assert.assertEquals(null, result);
+        Assert.assertNull(result);
 
+    }
+
+    @Test
+    public void getServiceFromEmptyDataStoreShouldBeEmpty() {
+        Optional<Services> oService = this.serviceDataStoreOperations.getService("service 1");
+        Assert.assertFalse(oService.isPresent());
+    }
+
+    @Test
+    public void createServiceShouldBeSuccessForValidInput() {
+        ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+        OperationResult result = this.serviceDataStoreOperations.createService(createInput);
+        Assert.assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void getServiceShouldReturnTheCorrectServiceForTheCreatedService() {
+        ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+        this.serviceDataStoreOperations.createService(createInput);
+
+        Optional<Services> oService = this.serviceDataStoreOperations.getService(createInput.getServiceName());
+        Assert.assertTrue(oService.isPresent());
+        Assert.assertEquals(createInput.getServiceName(), oService.get().getServiceName());
+    }
+
+    @Test
+    public void deleteServiceShouldBeSuccessfulForDeletingService() {
+        ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+        this.serviceDataStoreOperations.createService(createInput);
+        OperationResult result = this.serviceDataStoreOperations.deleteService(createInput.getServiceName());
+        Assert.assertTrue(result.isSuccess());
+    }
+
+//    @Test
+//    public void deleteServiceShouldBeFailedIfServiceDoNotExists() {
+//        OperationResult result = this.serviceDataStoreOperations.deleteService("Any service");
+//        Assert.assertFalse(result.isSuccess());
+//    }
+
+    @Test
+    public void modifyServiceIsSuccessfulForPresentService() {
+        ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+        this.serviceDataStoreOperations.createService(createInput);
+        OperationResult result =
+                this.serviceDataStoreOperations.modifyService(createInput.getServiceName(), State.InService, State.InService);
+        Assert.assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void getTempServiceFromEmptyDataStoreShouldBeEmpty() {
+        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
+                .Services> oService = this.serviceDataStoreOperations.getTempService("service 1");
+        Assert.assertFalse(oService.isPresent());
+    }
+
+    @Test
+    public void createTempServiceShouldBeSuccessForValidInput() {
+        TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
+        OperationResult result = this.serviceDataStoreOperations.createTempService(createInput);
+        Assert.assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void getTempServiceShouldReturnTheCorrectTempServiceForTheCreatedService() {
+        TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
+        this.serviceDataStoreOperations.createTempService(createInput);
+
+        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
+                .Services> oService = this.serviceDataStoreOperations.getTempService(createInput.getCommonId());
+        Assert.assertTrue(oService.isPresent());
+        Assert.assertEquals(createInput.getCommonId(), oService.get().getCommonId());
+    }
+
+    @Test
+    public void deleteTempServiceShouldBeSuccessfulForDeletingTempService() {
+        TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
+        this.serviceDataStoreOperations.createTempService(createInput);
+        OperationResult result = this.serviceDataStoreOperations.deleteTempService(createInput.getCommonId());
+        Assert.assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void modifyTempServiceIsSuccessfulForPresentTempService() {
+        TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
+        this.serviceDataStoreOperations.createTempService(createInput);
+        OperationResult result =
+                this.serviceDataStoreOperations.modifyTempService(createInput.getCommonId(), State.InService, State.InService);
+        Assert.assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void createServicePathShouldBeSuccessfulForValidInput() {
+        ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+        this.serviceDataStoreOperations.createService(createInput);
+        ServiceInput serviceInput = new ServiceInput(createInput);
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
+        ResponseParameters responseParameters = new ResponseParametersBuilder()
+                .setPathDescription(new PathDescriptionBuilder()
+                        .setAToZDirection(new AToZDirectionBuilder().setAToZWavelengthNumber(1L).setRate(1L).build())
+                        .setZToADirection(new ZToADirectionBuilder().setZToAWavelengthNumber(1L).setRate(1L).build()).build()).build();
+        PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon).setResponseParameters(responseParameters).build();
+        OperationResult result =
+                this.serviceDataStoreOperations.createServicePath(serviceInput, pathComputationRequestOutput);
+        Assert.assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void createServicePathShouldFailForInvalidInput() {
+        ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+        this.serviceDataStoreOperations.createService(createInput);
+        ServiceInput serviceInput = new ServiceInput(createInput);
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
+        ResponseParameters responseParameters = new ResponseParametersBuilder().build();
+        PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon).setResponseParameters(responseParameters).build();
+        OperationResult result =
+                this.serviceDataStoreOperations.createServicePath(serviceInput, pathComputationRequestOutput);
+        Assert.assertFalse(result.isSuccess());
+    }
+
+    @Test
+    public void deleteServicePathShouldBeSuccessForDeletingServicePath() {
+        ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+        this.serviceDataStoreOperations.createService(createInput);
+        ServiceInput serviceInput = new ServiceInput(createInput);
+        ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
+                .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
+                .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
+        ResponseParameters responseParameters = new ResponseParametersBuilder()
+                .setPathDescription(new PathDescriptionBuilder()
+                        .setAToZDirection(new AToZDirectionBuilder().setAToZWavelengthNumber(1L).setRate(1L).build())
+                        .setZToADirection(new ZToADirectionBuilder().setZToAWavelengthNumber(1L).setRate(1L).build()).build()).build();
+        PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
+                .setConfigurationResponseCommon(configurationResponseCommon).setResponseParameters(responseParameters).build();
+        this.serviceDataStoreOperations.createServicePath(serviceInput, pathComputationRequestOutput);
+
+        OperationResult result = this.serviceDataStoreOperations.deleteServicePath(serviceInput.getServiceName());
+        Assert.assertTrue(result.isSuccess());
     }
 }
