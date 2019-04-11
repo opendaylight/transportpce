@@ -1,25 +1,27 @@
-module org-openroadm-srg {
-  namespace "http://org/openroadm/srg";
-  prefix srg;
+module org-openroadm-degree {
+  yang-version 1.1;
+  namespace "http://org/openroadm/degree";
+  prefix dgr;
 
+  import org-openroadm-common-link-types {
+    prefix org-openroadm-common-link-types;
+    revision-date 2018-11-30;
+  }
   import org-openroadm-network-types {
     prefix org-openroadm-network-types;
-    revision-date 2017-09-29;
-  }
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-    revision-date 2017-09-29;
+    revision-date 2018-11-30;
   }
 
   organization
-    "OPEN ROADM MSA";
+    "Open ROADM MSA";
   contact
     "OpenROADM.org.";
   description
-    "YANG definitions for an Add/Drop group in Network Model
+    "YANG definitions for a Degree in Network Model
+
 
      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-     AT&T Intellectual Property.  All other rights reserved.
+     All other rights reserved.
 
      Redistribution and use in source and binary forms, with or without modification,
      are permitted provided that the following conditions are met:
@@ -44,6 +46,26 @@ module org-openroadm-srg {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-05-30 {
+    description
+      "Version 3.1.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
   revision 2017-09-29 {
     description
       "Version 2.1";
@@ -61,30 +83,47 @@ module org-openroadm-srg {
       "Version 1.2";
   }
 
-  grouping srg-node-attributes {
-    leaf srg-number {
+  grouping degree-used-wavelengths {
+    description
+      "This list is created to accommodate fixed grid (1.2.1) as well as flex grid (2.0 above). In case of fixed grid
+       index number will refer to one of the 96 WL defined in the wavelength map file. In case of flex grid this
+       will hold list of used spectra";
+    list used-wavelengths {
+      key "index";
+      uses org-openroadm-network-types:wavelengths;
+    }
+  }
+
+  grouping degree-node-attributes {
+    description
+      "Defines the group of degree attributes";
+    leaf degree-number {
       type uint16;
     }
-    leaf max-pp {
+    leaf max-wavelengths {
       type uint32;
       description
-        "Maximum number of add/drop port pairs in an SRG";
-    }
-    leaf current-provisioned-pp {
-      type uint32;
-      description
-        "current provisioned number of port pair in a given SRG";
+        "maximum # of wavelengths";
     }
     list available-wavelengths {
       key "index";
+      description
+        "This list is created to accommodate fixed grid (1.2.1) as well as flex grid (2.0 above). In case of fixed grid
+         index number will refer to one of the 96 WL defined in the wavelength map file. In case of flex grid this
+         will hold list of available spectra";
       uses org-openroadm-network-types:wavelengths;
-     description
-        "This list is created to accommodate fix grid (1.2.1) as well as flex grid (2.0 above). In case of fixed grid
-      index number will refer to one of the 96 WL defined in the wavelength map file. In case of flex grid this
-      will hold list of available spectrums";
     }
-    leaf wavelength-duplication {
-      type org-openroadm-common-types:wavelength-duplication-type;
+    leaf ingress-span-loss-aging-margin {
+      type org-openroadm-common-link-types:ratio-dB;
+      config true;
+      description
+        "Span-loss margin extracted from corresponding device OTS interface container, optional";
+    }
+    leaf eol-max-load-pIn {
+      type org-openroadm-common-link-types:power-dBm;
+      config true;
+      description
+        "End Of Life Total input power at maximum load extracted from corresponding device OTS interface container";
     }
   }
 }

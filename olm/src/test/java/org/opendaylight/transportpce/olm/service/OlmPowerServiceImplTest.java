@@ -54,10 +54,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.Network;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NetworkKey;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.Network1;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,7 +179,8 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
     @Test
     public void testCalculateSpanlossBase2() {
         NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
-        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Network.class, overlayTopologyKey)
+        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, overlayTopologyKey)
             .augmentation(Network1.class)
             .build();
         Network1 network = TransactionUtils.getNetwork();
@@ -197,7 +199,8 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
     @Test
     public void testCalculateSpanlossBase3() {
         NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
-        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Network.class, overlayTopologyKey)
+        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, overlayTopologyKey)
             .augmentation(Network1.class)
             .build();
         Network1 network = TransactionUtils.getNetwork();
@@ -217,7 +220,8 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
     @Test
     public void testCalculateSpanlossBase4() {
         NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
-        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Network.class, overlayTopologyKey)
+        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, overlayTopologyKey)
             .augmentation(Network1.class)
             .build();
         Network1 network = TransactionUtils.getEmptyNetwork();
@@ -236,7 +240,8 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
     @Test
     public void testCalculateSpanlossBase5() {
         NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
-        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Network.class, overlayTopologyKey)
+        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, overlayTopologyKey)
             .augmentation(Network1.class)
             .build();
         Network1 network = TransactionUtils.getNullNetwork();
@@ -316,7 +321,8 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
     @Test
     public void testCalculateSpanlossCurrent2() {
         NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
-        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Network.class, overlayTopologyKey)
+        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Networks.class)
+            .child(Network.class, overlayTopologyKey)
             .augmentation(Network1.class)
             .build();
         Network1 network = TransactionUtils.getNetwork();

@@ -18,8 +18,7 @@ import java.util.Map;
 import org.apache.commons.collections15.Transformer;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.PceResult.LocalCause;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NodeId;
-//import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -168,10 +167,10 @@ public class PceGraph {
             PceNode pcenode = node.getValue();
             List<PceLink> links = pcenode.getOutgoingLinks();
 
-            LOG.debug("In populateGraph: use node for graph {}", pcenode.toString());
+            LOG.info("In populateGraph: use node for graph {}", pcenode.toString());
 
             for (PceLink link : links) {
-                LOG.debug("In populateGraph: add edge to graph {}", link.toString());
+                LOG.info("In populateGraph: add edge to graph {}", link.toString());
                 addLinkToGraph(link);
 
             }

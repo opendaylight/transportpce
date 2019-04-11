@@ -9,12 +9,14 @@
 package org.opendaylight.transportpce.pce;
 
 import java.util.List;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.link.oms.attributes.Span;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NodeId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.LinkId;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev150608.network.Link;
+
+import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,11 +81,12 @@ public class PceLink {
     }
 
     private OpenroadmLinkType calcType(Link link) {
-        Link1 link1 = null;
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.@Nullable Link1 link1 = null;
         OpenroadmLinkType tmplType = null;
 
         // ID and type
-        link1 = link.augmentation(Link1.class);
+        link1 = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
+            .Link1.class);
         if (link1 == null) {
             this.isValid = false;
             LOG.error("PceLink: No Link augmentation available. Link is ignored {}", this.linkId);
@@ -102,9 +105,12 @@ public class PceLink {
     private LinkId calcOpposite(Link link) {
         // opposite link
         LinkId tmpoppositeLink = null;
-        org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1 linkOpposite = link
-            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.opposite.links.rev170929.Link1.class);
-        tmpoppositeLink = linkOpposite.getOppositeLink();
+        Link1 linkOpposite = link.augmentation(Link1.class);
+        if (linkOpposite.getOppositeLink() != null) {
+            tmpoppositeLink = linkOpposite.getOppositeLink();
+        } else {
+            LOG.error("link {} has no opposite link", link.getLinkId().getValue());
+        }
         LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite.toString());
         if (tmpoppositeLink == null) {
             this.isValid = false;

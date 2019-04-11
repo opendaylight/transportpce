@@ -1,6 +1,6 @@
-module org-openroadm-switching-pool-types {
-  namespace "http://org/openroadm/switching-pool-types";
-  prefix org-openroadm-switching-pool-types;
+module org-openroadm-common-state-types {
+  namespace "http://org/openroadm/common-state-types";
+  prefix org-openroadm-common-state-types;
 
   organization
     "Open ROADM MSA";
@@ -10,9 +10,11 @@ module org-openroadm-switching-pool-types {
     "YANG definitions of common types.
 
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-      AT&T Intellectual Property.  All other rights reserved.
+      All other rights reserved.
 
       Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
       * Redistributions of source code must retain the above copyright notice, this
         list of conditions and the following disclaimer.
       * Redistributions in binary form must reproduce the above copyright notice,
@@ -33,23 +35,75 @@ module org-openroadm-switching-pool-types {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-  revision 2017-12-15 {
+  revision 2018-11-30 {
     description
-      "Version 2.2";
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
   }
 
-  typedef switching-pool-types {
+  typedef lifecycle-state {
     type enumeration {
-      enum "non-blocking" {
+      enum "deployed" {
         value 1;
-        description
-          "Single non-blocking element";
       }
-      enum "blocking" {
+      enum "planned" {
         value 2;
-        description
-          "Multiple connected non-blocking lists";
+      }
+      enum "maintenance" {
+        value 3;
+      }
+      enum "deploying" {
+        value 4;
+      }
+      enum "undeploying" {
+        value 5;
+      }
+      enum "undeployed" {
+        value 6;
+      }
+      enum "proposed" {
+        value 7;
+      }
+      enum "draft" {
+        value 8;
+      }
+      enum "deploy-failed" {
+        value 9;
+      }
+      enum "undeploy-failed" {
+        value 10;
+      }
+      enum "deployed-augmented" {
+        value 11;
+      }
+      enum "deployed-updating" {
+        value 12;
       }
     }
+    description
+      "Lifecycle state.";
+  }
+
+  typedef state {
+    type enumeration {
+      enum "inService" {
+        value 1;
+      }
+      enum "outOfService" {
+        value 2;
+      }
+      enum "degraded" {
+        value 3;
+      }
+    }
+    description
+      "State that indicates whether the resource is able to provide fulfill its role - carry traffic, etc.";
   }
 }

@@ -122,7 +122,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
 //            final ListenerRegistration<OrgOpenroadmLldpListener> accessLldpNotificationListenerRegistration =
 //                notificationService.get().registerNotificationListener(lldpListener);
 
-            final OrgOpenroadmTcaListener tcaListener = new TcaListener();
+            TcaListener tcaListener = new TcaListener();
             LOG.info("Registering notification listener on OrgOpenroadmTcaListener for node: {}", nodeId);
             final ListenerRegistration<OrgOpenroadmTcaListener> accessTcaNotificationListenerRegistration =
                 notificationService.get().registerNotificationListener(tcaListener);
@@ -275,7 +275,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                                 LOG.info("OpenROADM node detected: {} {}", nodeId, connectionStatus.name());
                                 switch (connectionStatus) {
                                     case Connected:
-                                        this.networkModelService.createOpenROADMnode(nodeId, deviceCapabilities.get(0)
+                                        this.networkModelService.createOpenRoadmNode(nodeId, deviceCapabilities.get(0)
                                             .getCapability());
                                         onDeviceConnected(nodeId,deviceCapabilities.get(0).getCapability());
                                         break;

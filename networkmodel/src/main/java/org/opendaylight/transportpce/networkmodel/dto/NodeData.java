@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.networkmodel.dto;
 
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.network.NodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
 
 public class NodeData {
 

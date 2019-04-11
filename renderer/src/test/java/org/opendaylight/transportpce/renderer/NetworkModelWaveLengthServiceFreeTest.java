@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.renderer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,30 +22,33 @@ import org.junit.runners.Parameterized;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
+import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
 import org.opendaylight.transportpce.renderer.utils.WaveLengthServiceUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev170929.degree.used.wavelengths.UsedWavelengthsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.DegreeAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.SrgAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.CpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.CtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.PpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.RxTtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.TxTtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrClientAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrNetworkAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.XpdrPortAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network.node.termination.point.pp.attributes.UsedWavelengthBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev170929.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev170929.xpdr.port.connection.attributes.WavelengthBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev181130.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev181130.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.used.wavelengths.UsedWavelengthsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.SrgAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.CpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.CtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.PpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.RxTtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.TxTtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrClientAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrPortAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.pp.attributes.UsedWavelengthBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev181130.xpdr.port.connection.attributes.WavelengthBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.PathDescription;
 
 @RunWith(Parameterized.class)
@@ -75,8 +79,8 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
         terminationPoint1Builder.setCtpAttributes((new CtpAttributesBuilder()).setUsedWavelengths(Collections
             .singletonList((new UsedWavelengthsBuilder()).setIndex(WAVE_LENGTH).build())).build());
         terminationPoint1Builder.setCpAttributes((new CpAttributesBuilder()).setUsedWavelengths(Collections
-            .singletonList((new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev170929.network
-                .node.termination.point.cp.attributes.UsedWavelengthsBuilder())
+            .singletonList((new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks
+                .network.node.termination.point.cp.attributes.UsedWavelengthsBuilder())
                 .setIndex(WAVE_LENGTH).build())).build());
         terminationPoint1Builder.setTxTtpAttributes((new TxTtpAttributesBuilder()).setUsedWavelengths(Collections
             .singletonList((new UsedWavelengthsBuilder()).setIndex(WAVE_LENGTH).build())).build());
@@ -84,12 +88,21 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
             .singletonList((new UsedWavelengthsBuilder()).setIndex(WAVE_LENGTH).build())).build());
         terminationPoint1Builder.setPpAttributes((new PpAttributesBuilder()).setUsedWavelength(Collections
             .singletonList((new UsedWavelengthBuilder()).setIndex(WAVE_LENGTH).build())).build());
+
+        FixedFlexImpl fixedFlex = new FixedFlexImpl();
+        fixedFlex = fixedFlex.getFixedFlexWaveMapping(WAVE_LENGTH);
+        FrequencyGHz frequencyGHz = new FrequencyGHz(new BigDecimal(fixedFlex.getWavelength()));
+        FrequencyTHz frequencyTHz = new FrequencyTHz(new BigDecimal(fixedFlex.getCenterFrequency()));
+
         terminationPoint1Builder.setXpdrClientAttributes((new XpdrClientAttributesBuilder())
-            .setWavelength((new WavelengthBuilder()).setIndex(WAVE_LENGTH).build()).build());
+            .setWavelength((new WavelengthBuilder()).setFrequency(frequencyTHz).setWidth(frequencyGHz)
+            .build()).build());
         terminationPoint1Builder.setXpdrNetworkAttributes((new XpdrNetworkAttributesBuilder())
-            .setWavelength((new WavelengthBuilder()).setIndex(WAVE_LENGTH).build()).build());
+            .setWavelength((new WavelengthBuilder()).setFrequency(frequencyTHz).setWidth(frequencyGHz)
+            .build()).build());
         terminationPoint1Builder.setXpdrPortAttributes((new XpdrPortAttributesBuilder())
-            .setWavelength((new WavelengthBuilder()).setIndex(WAVE_LENGTH).build()).build());
+            .setWavelength((new WavelengthBuilder()).setFrequency(frequencyTHz).setWidth(frequencyGHz)
+            .build()).build());
 
         Node1Builder node1Builder = new Node1Builder();
         node1Builder.setDegreeAttributes((new DegreeAttributesBuilder()).setAvailableWavelengths(new ArrayList<>())

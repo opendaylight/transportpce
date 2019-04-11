@@ -1,14 +1,23 @@
 module org-openroadm-link {
+  yang-version 1.1;
   namespace "http://org/openroadm/link";
   prefix link;
 
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-    revision-date 2017-09-29;
+  import org-openroadm-equipment-states-types {
+    prefix org-openroadm-equipment-states-types;
+    revision-date 2018-11-30;
+  }
+  import org-openroadm-common-link-types {
+    prefix org-openroadm-common-link-types;
+    revision-date 2018-11-30;
+  }
+  import org-openroadm-common-node-types {
+    prefix org-openroadm-common-node-types;
+    revision-date 2018-11-30;
   }
   import org-openroadm-amplifier {
     prefix org-openroadm-amplifier;
-    revision-date 2017-09-29;
+    revision-date 2018-11-30;
   }
 
   organization
@@ -20,7 +29,7 @@ module org-openroadm-link {
 
 
      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2017,
-     AT&T Intellectual Property.  All other rights reserved.
+     All other rights reserved.
 
      Redistribution and use in source and binary forms, with or without modification,
      are permitted provided that the following conditions are met:
@@ -45,6 +54,22 @@ module org-openroadm-link {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
   revision 2017-09-29 {
     description
       "Version 2.1";
@@ -61,12 +86,14 @@ module org-openroadm-link {
   grouping OMS-attributes {
     leaf TE-metric {
       type uint32;
+      status deprecated;
     }
   }
 
   grouping span-attributes {
-    leaf clfi  {
+    leaf clfi {
       type string;
+      status deprecated;
     }
     leaf auto-spanloss {
       type boolean;
@@ -75,19 +102,24 @@ module org-openroadm-link {
         "Flag to enable/disable automatic spanloss measurement";
     }
     leaf spanloss-base {
-      type org-openroadm-common-types:ratio-dB;
+      type org-openroadm-common-link-types:ratio-dB;
       description
         "Baseline ROADM span loss measured and accepted during
-         degree turn-up.";
+         degree turn-up. May be re-set to current value after a fiber repair or change.";
     }
     leaf spanloss-current {
-      type org-openroadm-common-types:ratio-dB;
+      type org-openroadm-common-link-types:ratio-dB;
       description
         "Current ROADM span loss measured and accepted during
-         degree turn-up.";
+         degree turn-up. Updated periodically if auto-spanloss is enabled.";
+    }
+    leaf spanloss-last-measured {
+      type org-openroadm-common-link-types:ratio-dB;
+      description
+        "Last measured ROADM span loss, may or may not have been accepted and pushed to the NE.";
     }
     leaf engineered-spanloss {
-      type org-openroadm-common-types:ratio-dB;
+      type org-openroadm-common-link-types:ratio-dB;
       description
         "ROADM span loss provided by an external system";
     }
@@ -148,7 +180,7 @@ module org-openroadm-link {
           "fiber length in meters";
       }
       leaf pmd {
-        type org-openroadm-common-types:fiber-pmd;
+        type org-openroadm-common-link-types:fiber-pmd;
         description
           "Total PMD";
       }
@@ -157,9 +189,9 @@ module org-openroadm-link {
 
   grouping amplified-link-attributes {
     list amplified-link {
+      key "section-elt-number";
       description
         "defines the spans and the amplifier blocks of the amplified lines";
-      key "section-elt-number";
       leaf section-elt-number {
         type uint16;
         description
@@ -171,15 +203,13 @@ module org-openroadm-link {
             container ila {
               uses org-openroadm-amplifier:amplifier-node-attributes;
               leaf node-id {
-                type org-openroadm-common-types:node-id-type;
+                type org-openroadm-common-node-types:node-id-type;
                 mandatory true;
                 description
                   "Node id corresponding to the amplifier ";
               }
               leaf administrative-state {
-                type org-openroadm-common-types:state;
-                description
-                  "according to RFC3630 definition";
+                type org-openroadm-equipment-states-types:admin-states;
               }
             }
           }
@@ -187,9 +217,7 @@ module org-openroadm-link {
             container span {
               uses link:span-attributes;
               leaf administrative-state {
-                type org-openroadm-common-types:state;
-                description
-                  "according to RFC3630 definition";
+                type org-openroadm-equipment-states-types:admin-states;
               }
             }
           }

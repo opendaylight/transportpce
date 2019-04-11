@@ -1,18 +1,20 @@
-module org-openroadm-switching-pool-types {
-  namespace "http://org/openroadm/switching-pool-types";
-  prefix org-openroadm-switching-pool-types;
+module org-openroadm-common-node-types {
+  namespace "http://org/openroadm/common-node-types";
+  prefix org-openroadm-common-node-types;
 
   organization
     "Open ROADM MSA";
   contact
     "OpenROADM.org";
   description
-    "YANG definitions of common types.
+    "YANG definitions of common node types.
 
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-      AT&T Intellectual Property.  All other rights reserved.
+      All other rights reserved.
 
       Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
       * Redistributions of source code must retain the above copyright notice, this
         list of conditions and the following disclaimer.
       * Redistributions in binary form must reproduce the above copyright notice,
@@ -33,23 +35,31 @@ module org-openroadm-switching-pool-types {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-  revision 2017-12-15 {
+  revision 2018-11-30 {
     description
-      "Version 2.2";
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
   }
 
-  typedef switching-pool-types {
-    type enumeration {
-      enum "non-blocking" {
-        value 1;
-        description
-          "Single non-blocking element";
-      }
-      enum "blocking" {
-        value 2;
-        description
-          "Multiple connected non-blocking lists";
+  typedef node-id-type {
+    type string {
+      length "7..63";
+      pattern "([a-zA-Z][a-zA-Z0-9-]{5,61}[a-zA-Z0-9])" {
+        error-message
+          "A node-id must be 7 to 63 characters in length.
+           A node-id can contain letters, numbers, and hyphens.
+           The first character must be a letter.
+           The last character must be a letter or number.";
       }
     }
+    description
+      "Globally unique identifier for a device.";
   }
 }

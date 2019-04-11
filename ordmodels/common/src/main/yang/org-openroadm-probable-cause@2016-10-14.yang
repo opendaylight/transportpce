@@ -4,6 +4,7 @@ module org-openroadm-probable-cause {
 
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
+    revision-date 2016-10-14;
   }
 
   organization "Open ROADM MSA";

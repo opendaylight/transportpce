@@ -13,31 +13,31 @@ module org-openroadm-resource-types {
     "OpenROADM.org";
   description
     "YANG definitions of common resource types.
-       
-      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016, 
+
+      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
       AT&T Intellectual Property.  All other rights reserved.
-      
-      Redistribution and use in source and binary forms, with or without modification, 
+
+      Redistribution and use in source and binary forms, with or without modification,
       are permitted provided that the following conditions are met:
-      
-      * Redistributions of source code must retain the above copyright notice, this 
+
+      * Redistributions of source code must retain the above copyright notice, this
         list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above copyright notice, 
-        this list of conditions and the following disclaimer in the documentation and/or 
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation and/or
         other materials provided with the distribution.
-      * Neither the Members of the Open ROADM MSA Agreement nor the names of its 
-        contributors may be used to endorse or promote products derived from this software 
+      * Neither the Members of the Open ROADM MSA Agreement nor the names of its
+        contributors may be used to endorse or promote products derived from this software
         without specific prior written permission.
-      
-      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS'' 
-      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT, 
-      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA, 
-      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+
+      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
+      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
+      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
   revision 2018-10-19 {
@@ -197,7 +197,7 @@ module org-openroadm-resource-types {
     leaf node-id {
       type org-openroadm-common-types:node-id-type;
       description
-        "Node Id is a globally unique identifier for a device. 
+        "Node Id is a globally unique identifier for a device.
          Same as leafref value in model, if applicable.";
     }
   }
@@ -217,7 +217,7 @@ module org-openroadm-resource-types {
     leaf port-name {
       type string;
       description
-        "Port identifier. Unique within the context of a circuit-pack. 
+        "Port identifier. Unique within the context of a circuit-pack.
          Same as leafref value in model, if applicable.";
     }
   }
@@ -227,7 +227,7 @@ module org-openroadm-resource-types {
       type string;
       mandatory true;
       description
-        "Physical Link identifier. Unique within the context of a device. 
+        "Physical Link identifier. Unique within the context of a device.
          Same as leafref value in model, if applicable.";
     }
   }
@@ -237,7 +237,7 @@ module org-openroadm-resource-types {
       type string;
       mandatory true;
       description
-        "Internal Link identifier. Unique within the context of a device. 
+        "Internal Link identifier. Unique within the context of a device.
          Same as leafref value in model, if applicable.";
     }
   }
@@ -246,7 +246,7 @@ module org-openroadm-resource-types {
     leaf connection-name {
       type string;
       description
-        "Connection name. Unique within the context of a device. 
+        "Connection name. Unique within the context of a device.
          Same as leafref value in model, if applicable.";
     }
   }
@@ -255,7 +255,7 @@ module org-openroadm-resource-types {
     leaf degree-number {
       type uint16;
       description
-        "Degree identifier. Unique within the context of a device. 
+        "Degree identifier. Unique within the context of a device.
          Same as leafref value in model, if applicable.";
     }
   }
@@ -264,7 +264,7 @@ module org-openroadm-resource-types {
     leaf srg-number {
       type uint16;
       description
-        "Shared Risk Group identifier. Unique within the context of a device. 
+        "Shared Risk Group identifier. Unique within the context of a device.
          Same as leafref value in model, if applicable.";
     }
   }
@@ -274,7 +274,7 @@ module org-openroadm-resource-types {
       type string;
       mandatory true;
       description
-        "Shelf-id identifier. Unique within the context of a device.  
+        "Shelf-id identifier. Unique within the context of a device.
          Same as leafref value in model, if applicable.";
     }
   }
@@ -284,7 +284,7 @@ module org-openroadm-resource-types {
       type string;
       mandatory true;
       description
-        "Service identifier. Unique within the context of a network.  
+        "Service identifier. Unique within the context of a network.
          Same as leafref value in model, if applicable.";
     }
   }
@@ -294,7 +294,7 @@ module org-openroadm-resource-types {
       type string;
       mandatory true;
       description
-        "Service identifier. Unique within the context of a network.  
+        "Service identifier. Unique within the context of a network.
          Same as leafref value in model, if applicable.";
     }
     leaf version-number {
@@ -310,7 +310,7 @@ module org-openroadm-resource-types {
       type string;
       mandatory true;
       description
-        "Service identifier. Unique within the context of a network.  
+        "Service identifier. Unique within the context of a network.
          Same as leafref value in model, if applicable.";
     }
   }

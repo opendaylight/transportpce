@@ -12,7 +12,7 @@ import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.LldpNbrInfoChange;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.OrgOpenroadmLldpListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceNotificationType;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

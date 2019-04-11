@@ -1,30 +1,39 @@
 module org-openroadm-network {
+  yang-version 1.1;
   namespace "http://org/openroadm/network";
   prefix net;
 
   import ietf-network {
     prefix nd;
-    revision-date 2015-06-08;
+    revision-date 2018-02-26;
   }
   import org-openroadm-network-types {
     prefix nt;
-    revision-date 2017-09-29;
+    revision-date 2018-11-30;
   }
   import org-openroadm-roadm {
     prefix roadm;
-    revision-date 2017-09-29;
+    revision-date 2018-11-30;
   }
   import org-openroadm-external-pluggable {
     prefix plg;
-    revision-date 2017-09-29;
+    revision-date 2018-11-30;
   }
   import org-openroadm-xponder {
     prefix xpdr;
-    revision-date 2017-09-29;
+    revision-date 2018-11-30;
   }
   import ietf-inet-types {
     prefix inet;
     revision-date 2013-07-15;
+  }
+  import org-openroadm-common-types {
+    prefix org-openroadm-common-types;
+    revision-date 2018-11-30;
+  }
+  import org-openroadm-common-network {
+    prefix cnet;
+    revision-date 2018-11-30;
   }
 
   organization
@@ -33,7 +42,7 @@ module org-openroadm-network {
     "www.OpenROADM.org.";
   description
     "Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-     AT&T Intellectual Property.  All other rights reserved.
+     All other rights reserved.
 
      Redistribution and use in source and binary forms, with or without modification,
      are permitted provided that the following conditions are met:
@@ -58,6 +67,26 @@ module org-openroadm-network {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-05-30 {
+    description
+      "Version 3.1.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
   revision 2017-09-29 {
     description
       "Version 2.1";
@@ -75,7 +104,19 @@ module org-openroadm-network {
       "Version 1.2";
   }
 
-  augment "/nd:network/nd:network-types" {
+  deviation "/nd:networks/nd:network/nd:node/cnet:node-type" {
+    deviate add {
+      must
+        "(not /nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-network) or
+         (/nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-network and
+         (../cnet:node-type = 'ROADM' or ../cnet:node-type = 'XPONDER' or ../cnet:node-type = 'EXT-PLUGGABLE'))" {
+        error-message "Invalid node type for openroadm-network";
+        description
+          "The valid node types in the ROADM network are XPONDER, EXT-PLUGGABLE and ROADM.";
+      }
+    }
+  }
+  augment "/nd:networks/nd:network/nd:network-types/cnet:openroadm-common-network" {
     description
       "Introduce new network type for the Open ROADM optical network";
     container openroadm-network {
@@ -85,21 +126,20 @@ module org-openroadm-network {
          network";
     }
   }
-  augment "/nd:network/nd:node" {
-    when "../nd:network-types/openroadm-network";
+  augment "/nd:networks/nd:network/nd:node" {
+    when "../nd:network-types/cnet:openroadm-common-network/openroadm-network";
     description
       "Augment the generic network node with Open ROADM attributes.";
     leaf node-type {
       type nt:openroadm-node-type;
+      must "(../node-type = 'ROADM' or ../node-type = 'XPONDER' or ../node-type = 'EXT-PLUGGABLE')" {
+        error-message "Invalid node type for openroadm-network";
+      }
+      status deprecated;
       description
         "A component of the network topology.
          Valid node types are XPONDER, EXT-PLUGGABLE and ROADM.
          Once the node-type is configured, it should not be modified.";
-    }
-    leaf node-mount-status {
-      type nt:openroadm-node-mount-status;
-      description
-        "Mount status of a node";
     }
     leaf software-version {
       type string;
@@ -107,7 +147,7 @@ module org-openroadm-network {
         "Vendor software version";
     }
     leaf openroadm-version {
-      type string;
+      type org-openroadm-common-types:openroadm-version-type;
       description
         "OpenROADM software version";
     }
@@ -141,26 +181,30 @@ module org-openroadm-network {
     }
     leaf node-status {
       type nt:openroadm-node-status;
+      status deprecated;
+    }
+    leaf node-connection-status {
+      type nt:openroadm-node-connection-status;
     }
     container roadm-attributes {
-      when "../node-type = 'ROADM'";
+      when "../cnet:node-type = 'ROADM'";
       description
         "Attributes for the ROADM Node.";
       uses roadm:roadm-node-attributes;
     }
     container xpdr-attributes {
-      when "../node-type = 'XPONDER'";
+      when "../cnet:node-type = 'XPONDER'";
       uses xpdr:xpdr-node-attributes;
     }
     container pluggable-attributes {
-      when "../node-type = 'EXT-PLUGGABLE'";
+      when "../cnet:node-type = 'EXT-PLUGGABLE'";
       uses plg:pluggable-node-attributes;
     }
     container plan-due-dates {
       uses nt:node-due-date-list;
     }
     container node-maintenance-schedule {
-       uses nt:node-due-date-list;
+      uses nt:node-due-date-list;
     }
   }
 }
