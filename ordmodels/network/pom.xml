@@ -30,13 +30,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <scope>import</scope>
         <type>pom</type>
       </dependency>
-      <!--dependency>
-        <groupId>org.opendaylight.mdsal</groupId>
-        <artifactId>mdsal-artifacts</artifactId>
-        <version>3.0.6</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency-->
     </dependencies>
   </dependencyManagement>
 
@@ -64,20 +57,17 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>rfc8345</artifactId>
       <version>1.2.6</version>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network</artifactId>
-      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network-topology</artifactId>
-      <version>1.2.6</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
       <artifactId>rfc8345-ietf-network-topology-state</artifactId>
-      <version>1.2.6</version>
-    </dependency>
+    </dependency-->
   </dependencies>
 </project>
