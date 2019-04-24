@@ -70,7 +70,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Load honeynode topology
     def test_02_load_honeynode_topology(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology"
               .format(self.restconf_baseurl))
         body = self.honeynode_topo
         headers = {'content-type': 'application/xml',
@@ -82,7 +82,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     def test_03_check_link_xpdra_roadma(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/link/"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/link/"
                "XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))
@@ -91,7 +91,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
     def test_04_check_link_xpdrc_roadmc(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/link/"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/link/"
                "XPDRC-XPDR1-XPDR1-NETWORK1toROADMC-SRG1-SRG1-PP1-TXRX".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))
@@ -100,7 +100,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
     def test_05_check_link_roadma_xpdra(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/link/"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/link/"
                "ROADMA-SRG1-SRG1-PP1-TXRXtoXPDRA-XPDR1-XPDR1-NETWORK1".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))
@@ -109,7 +109,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(1)
 
     def test_06_check_link_roadmc_xpdrc(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/link/"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/link/"
                "ROADMC-SRG1-SRG1-PP1-TXRXtoXPDRC-XPDR1-XPDR1-NETWORK1".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))

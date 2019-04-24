@@ -69,11 +69,11 @@ class TransportPCEtesting(unittest.TestCase):
 
      # Load simple bidirectional topology
     def test_01_load_simple_topology_bi(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology"
               .format(self.restconf_baseurl))
         body = self.simple_topo_bi_dir_data
         headers = {'content-type': 'application/xml',
-        "Accept": "application/json"}
+        "Accept": "application/xml"}
         response = requests.request(
             "PUT", url, data=body, headers=headers,
             auth=('admin', 'admin'))
@@ -82,7 +82,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing nodeId
     def test_02_get_nodeId(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/node/ROADMA-SRG1"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -96,7 +96,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing linkId
     def test_03_get_linkId(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/link/XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/link/XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -179,7 +179,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Delete topology
     def test_06_delete_simple_topology_bi(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/xml',
         "Accept": "application/json"}
@@ -190,7 +190,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test deleted topology
     def test_07_test_topology_simple_bi_deleted(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/node/ROADMA-SRG1"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -201,11 +201,11 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Load simple bidirectional topology
     def test_08_load_simple_topology_uni(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology"
               .format(self.restconf_baseurl))
         body = self.simple_topo_uni_dir_data
         headers = {'content-type': 'application/xml',
-        "Accept": "application/json"}
+        "Accept": "application/xml"}
         response = requests.request(
             "PUT", url, data=body, headers=headers,
             auth=('admin', 'admin'))
@@ -214,7 +214,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing nodeId
     def test_09_get_nodeId(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/node/XPONDER-1-2"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPONDER-1-2"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -229,7 +229,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing linkId
     def test_10_get_linkId(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/link/XPONDER-1-2XPDR-NW1-TX-toOpenROADM-1-2-SRG1-SRG1-PP1-RX"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/link/XPONDER-1-2XPDR-NW1-TX-toOpenROADM-1-2-SRG1-SRG1-PP1-RX"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -324,7 +324,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Delete topology
     def test_13_delete_simple_topology(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/xml',
         "Accept": "application/json"}
@@ -335,7 +335,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test deleted topology
     def test_14_test_topology_simple_deleted(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/node/XPONDER-1-2"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPONDER-1-2"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -346,7 +346,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Load simple topology
     def test_15_load_complex_topology(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology"
               .format(self.restconf_baseurl))
         body = self.complex_topo_uni_dir_data
         headers = {'content-type': 'application/xml',
@@ -359,7 +359,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing nodeId
     def test_16_get_nodeId(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/node/XPONDER-3-2"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPONDER-3-2"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -573,7 +573,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Delete complex topology
     def test_21_delete_complex_topology(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/xml',
         "Accept": "application/json"}
@@ -584,7 +584,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test deleted complex topology
     def test_22_test_topology_complex_deleted(self):
-        url = ("{}/config/ietf-network:network/openroadm-topology/node/XPONDER-3-2"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPONDER-3-2"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}

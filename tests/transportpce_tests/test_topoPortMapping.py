@@ -104,7 +104,7 @@ class TransportPCEtesting(unittest.TestCase):
         #Verify the termination points related to the SRGs
         nbSrg=1
         for s in range(1,nbSrg+1):
-            url_topo="{}/config/ietf-network:network/openroadm-topology/node/ROADMA-SRG"+`s`
+            url_topo="{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG"+`s`
             with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
                 outfile1.write('Config: '+`s`+' : '+url_topo+'\n')
             url = (url_topo.format(self.restconf_baseurl))
@@ -129,7 +129,7 @@ class TransportPCEtesting(unittest.TestCase):
         #Verify the termination points related to the degrees
         nbDeg=2
         for d in range(1,nbDeg+1):
-            url_topo="{}/config/ietf-network:network/openroadm-topology/node/ROADMA-DEG"+`d`
+            url_topo="{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-DEG"+`d`
             with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
                 outfile1.write(url_topo+'\n')
             url = (url_topo.format(self.restconf_baseurl))
@@ -164,7 +164,7 @@ class TransportPCEtesting(unittest.TestCase):
              auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         #Delete in the openroadm-network
-        url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMA"
+        url = ("{}/config/ietf-network:networks/network/openroadm-network/node/ROADMA"
                .format(self.restconf_baseurl))
         data = {}
         headers = {'content-type': 'application/json'}
@@ -203,7 +203,7 @@ class TransportPCEtesting(unittest.TestCase):
         for p in(1,nbXPDR+1):
             if(p > nbXPDR):
                 break;
-            url_topo = "{}/config/ietf-network:network/openroadm-topology/node/XPDRA-XPDR"+`p`
+            url_topo = "{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA-XPDR"+`p`
             with open('./transportpce_tests/log/topoPortMap.log', 'a') as outfile1:
                 outfile1.write('Config: '+`p`+' : '+url_topo+'\n')
             url = (url_topo.format(self.restconf_baseurl))
@@ -258,7 +258,7 @@ class TransportPCEtesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         #Delete in the openroadm-network
-        url = ("{}/config/ietf-network:network/openroadm-network/node/XPDRA"
+        url = ("{}/config/ietf-network:networks/network/openroadm-network/node/XPDRA"
                .format(self.restconf_baseurl))
         data = {}
         headers = {'content-type': 'application/json'}

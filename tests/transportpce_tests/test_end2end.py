@@ -560,7 +560,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(5)
 
     def test_17_check_topo_XPDRA(self):
-        url1 = ("{}/config/ietf-network:network/openroadm-topology/node/XPDRA-XPDR1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA-XPDR1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -579,7 +579,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(3)
 
     def test_18_check_topo_ROADMA_SRG1(self):
-        url1 = ("{}/config/ietf-network:network/openroadm-topology/node/ROADMA-SRG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -595,7 +595,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(3)
 
     def test_19_check_topo_ROADMA_DEG1(self):
-        url1 = ("{}/config/ietf-network:network/openroadm-topology/node/ROADMA-DEG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-DEG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -755,7 +755,7 @@ class TransportPCEFulltesting(unittest.TestCase):
              res['roadm-connections'][0]['destination'])
 
     def test_23_check_topo_XPDRA(self):
-        url1 = ("{}/config/ietf-network:network/openroadm-topology/node/XPDRA-XPDR1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA-XPDR1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -774,7 +774,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_24_check_topo_ROADMA_SRG1(self):
-        url1 = ("{}/config/ietf-network:network/openroadm-topology/node/ROADMA-SRG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -796,7 +796,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
 
     def test_25_check_topo_ROADMA_DEG1(self):
-        url1 = ("{}/config/ietf-network:network/openroadm-topology/node/ROADMA-DEG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-DEG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -1011,7 +1011,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_31_check_topo_XPDRA(self):
-        url1 = ("{}/config/ietf-network:network/openroadm-topology/node/XPDRA-XPDR1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA-XPDR1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -1026,7 +1026,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_32_check_topo_ROADMA_SRG1(self):
-        url1 = ("{}/config/ietf-network:network/openroadm-topology/node/ROADMA-SRG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -1045,7 +1045,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_33_check_topo_ROADMA_DEG1(self):
-        url1 = ("{}/config/ietf-network:network/openroadm-topology/node/ROADMA-DEG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-DEG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
