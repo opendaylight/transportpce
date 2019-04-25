@@ -15,9 +15,9 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.opendaylight.odlparent</groupId>
-    <artifactId>bundle-parent</artifactId>
-    <version>4.0.10</version>
+    <groupId>org.opendaylight.mdsal</groupId>
+    <artifactId>binding-parent</artifactId>
+    <version>3.0.8</version>
     <relativePath/>
   </parent>
 
@@ -56,6 +56,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.opendaylight.controller.thirdparty</groupId>
       <artifactId>net.sf.jung2</artifactId>
       <version>2.0.1</version>
@@ -72,6 +77,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>test-common</artifactId>
@@ -84,7 +90,10 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <version>1.9.2-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.opendaylight.mdsal</groupId>
+      <artifactId>mdsal-binding-dom-codec</artifactId>
+    </dependency>
   </dependencies>
 
 </project>
