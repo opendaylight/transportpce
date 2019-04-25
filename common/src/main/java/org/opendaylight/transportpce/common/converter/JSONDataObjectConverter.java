@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.binding.converter;
+package org.opendaylight.transportpce.common.converter;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -18,8 +18,8 @@ import java.io.Writer;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
-import org.opendaylight.transportpce.binding.converter.api.DataObjectConverter;
-import org.opendaylight.transportpce.test.common.DataStoreContext;
+import org.opendaylight.transportpce.common.DataStoreContext;
+import org.opendaylight.transportpce.common.converter.api.DataObjectConverter;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;

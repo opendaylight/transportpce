@@ -70,5 +70,10 @@
             <artifactId>yang-data-codec-gson</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>transportpce-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

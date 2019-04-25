@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.binding.converter;
+package org.opendaylight.transportpce.common.converter;
 
 import com.google.common.base.Preconditions;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
-import org.opendaylight.transportpce.binding.converter.api.DataObjectConverter;
+import org.opendaylight.transportpce.common.converter.api.DataObjectConverter;
 import org.opendaylight.yangtools.yang.binding.DataContainer;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;

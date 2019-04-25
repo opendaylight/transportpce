@@ -158,25 +158,17 @@ public class PceGraph {
     private boolean populateGraph(Map<NodeId, PceNode> allNodes) {
 
         cleanupGraph();
-
         Iterator<Map.Entry<NodeId, PceNode>> nodes = allNodes.entrySet().iterator();
         while (nodes.hasNext()) {
-
             Map.Entry<NodeId, PceNode> node = nodes.next();
-
             PceNode pcenode = node.getValue();
             List<PceLink> links = pcenode.getOutgoingLinks();
-
             LOG.info("In populateGraph: use node for graph {}", pcenode.toString());
-
             for (PceLink link : links) {
                 LOG.info("In populateGraph: add edge to graph {}", link.toString());
                 addLinkToGraph(link);
-
             }
-
         }
-
         return true;
     }
 
@@ -186,13 +178,10 @@ public class PceGraph {
 
         for (PceNode node : allNodes) {
             List<PceLink> links = node.getOutgoingLinks();
-
             LOG.debug("In populateGraph: use node for graph {}", node.toString());
-
             for (PceLink link : links) {
                 LOG.debug("In populateGraph: add edge to graph {}", link.toString());
                 addLinkToGraph(link);
-
             }
 
         }
