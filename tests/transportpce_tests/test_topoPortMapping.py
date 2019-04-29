@@ -164,15 +164,15 @@ class TransportPCEtesting(unittest.TestCase):
              auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         #Delete in the openroadm-network
-        url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMA"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        time.sleep(5)
+#        url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMA"
+#                .format(self.restconf_baseurl))
+#         data = {}
+#         headers = {'content-type': 'application/json'}
+#         response = requests.request(
+#              "DELETE", url, data=json.dumps(data), headers=headers,
+#              auth=('admin', 'admin'))
+#         self.assertEqual(response.status_code, requests.codes.ok)
+#         time.sleep(5)
 
     #Connect the XPDRA
     def test_04_connect_xpdr(self):
@@ -258,14 +258,14 @@ class TransportPCEtesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         #Delete in the openroadm-network
-        url = ("{}/config/ietf-network:network/openroadm-network/node/XPDRA"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+#       url = ("{}/config/ietf-network:network/openroadm-network/node/XPDRA"
+#                .format(self.restconf_baseurl))
+#         data = {}
+#         headers = {'content-type': 'application/json'}
+#         response = requests.request(
+#              "DELETE", url, data=json.dumps(data), headers=headers,
+#              auth=('admin', 'admin'))
+#         self.assertEqual(response.status_code, requests.codes.ok)
 
 
 if __name__ == "__main__":

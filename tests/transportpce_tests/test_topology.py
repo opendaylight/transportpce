@@ -840,14 +840,14 @@ class TransportPCETopologyTesting(unittest.TestCase):
              auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         #Delete in the openroadm-network
-        url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMB"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+#         url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMB"
+#                .format(self.restconf_baseurl))
+#         data = {}
+#         headers = {'content-type': 'application/json'}
+#         response = requests.request(
+#              "DELETE", url, data=json.dumps(data), headers=headers,
+#              auth=('admin', 'admin'))
+#         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_23_disconnect_ROADMC(self):
         #Delete in the topology-netconf
@@ -870,14 +870,14 @@ class TransportPCETopologyTesting(unittest.TestCase):
              auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         #Delete in the openroadm-network
-        url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMC"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+#         url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMC"
+#                .format(self.restconf_baseurl))
+#         data = {}
+#         headers = {'content-type': 'application/json'}
+#         response = requests.request(
+#              "DELETE", url, data=json.dumps(data), headers=headers,
+#              auth=('admin', 'admin'))
+#         self.assertEqual(response.status_code, requests.codes.ok)
 
 #    def test_24_getLinks_OpenRoadmTopology(self):
 #        url = ("{}/config/ietf-network:network/openroadm-topology"
@@ -1046,14 +1046,14 @@ class TransportPCETopologyTesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         #Delete in the openroadm-network
-        url = ("{}/config/ietf-network:network/openroadm-network/node/XPDRA"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+#         url = ("{}/config/ietf-network:network/openroadm-network/node/XPDRA"
+#                .format(self.restconf_baseurl))
+#         data = {}
+#         headers = {'content-type': 'application/json'}
+#         response = requests.request(
+#              "DELETE", url, data=json.dumps(data), headers=headers,
+#              auth=('admin', 'admin'))
+#         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_29_getClliNetwork(self):
         url = ("{}/config/ietf-network:network/clli-network"
@@ -1206,15 +1206,15 @@ class TransportPCETopologyTesting(unittest.TestCase):
              auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         #Delete in the openroadm-network
-        url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMA"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
-        time.sleep(5)
+#         url = ("{}/config/ietf-network:network/openroadm-network/node/ROADMA"
+#                .format(self.restconf_baseurl))
+#         data = {}
+#         headers = {'content-type': 'application/json'}
+#         response = requests.request(
+#              "DELETE", url, data=json.dumps(data), headers=headers,
+#              auth=('admin', 'admin'))
+#         self.assertEqual(response.status_code, requests.codes.ok)
+#         time.sleep(5)
 
     def test_35_getClliNetwork(self):
         url = ("{}/config/ietf-network:network/clli-network"
