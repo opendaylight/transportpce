@@ -43,9 +43,9 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OlmUtils1_2_1 {
+final class OlmUtils121 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OlmUtils1_2_1.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OlmUtils121.class);
 
     /**
      * This method retrieves list of current PMs for given nodeId,
@@ -64,7 +64,7 @@ public class OlmUtils1_2_1 {
      * @return Result of the request list of PM readings
      */
     public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager) {
-        LOG.debug("Getting PM Data for 1.2.1 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
+        LOG.info("Getting PM Data for 1.2.1 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
                 input.getResourceType(), input.getResourceIdentifier());
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
         InstanceIdentifier<CurrentPmlist> currentPmsIID = InstanceIdentifier.create(CurrentPmlist.class);
@@ -85,15 +85,14 @@ public class OlmUtils1_2_1 {
             if (input.getDirection() != null) {
                 direction = input.getDirection();
             }
+            PmNamesEnum pmName = null;
             List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm
                 .rev170418.get.pm.output.Measurements>
                 measurements = extractWantedMeasurements(currentPmList.get(),
                 ResourceTypeEnum.forValue(input.getResourceType().getIntValue()),
                 input.getResourceIdentifier(),
                 PmGranularity.forValue(input.getGranularity().getIntValue()),
-                PmNamesEnum.forValue(input.getPmNameType().getIntValue()),
-                pmExtension, location,
-                direction);
+                pmName, pmExtension, location, direction);
             if (measurements.isEmpty()) {
                 LOG.error("No Matching PM data found for node: {}, " + "resource type: {}, resource name: {}",
                         input.getNodeId(), input.getResourceType(),
@@ -291,6 +290,9 @@ public class OlmUtils1_2_1 {
             return Optional.of((T) resource);
         }
         return Optional.empty();
+    }
+
+    private OlmUtils121() {
     }
 
 }

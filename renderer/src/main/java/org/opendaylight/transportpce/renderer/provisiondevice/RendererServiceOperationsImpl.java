@@ -472,7 +472,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             if ((getPmOutput != null) && (getPmOutput.getNodeId() != null)) {
                 LOG.info("successfully finished calling OLM's get PM");
                 return getPmOutput.getMeasurements(); // may return null
-
             } else {
                 LOG.warn("OLM's get PM failed for node {} and tp {}", nodeId, tp);
             }

@@ -48,7 +48,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev18113
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.TxTtpAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.TxTtpAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrClientAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrClientAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrNetworkAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrPortAttributes;
@@ -526,18 +525,18 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                             .build());
                     break;
                 case XPONDERCLIENT:
-                    XpdrClientAttributes xpdrClientAttributes = tp.getXpdrClientAttributes();
-                    XpdrClientAttributesBuilder xpdrClientAttributesBuilder;
-                    if (xpdrClientAttributes == null) {
-                        xpdrClientAttributesBuilder = new XpdrClientAttributesBuilder();
-                    } else {
-                        xpdrClientAttributesBuilder = new XpdrClientAttributesBuilder(xpdrClientAttributes);
-                    }
-                    Wavelength usedXpdrClientWl = new WavelengthBuilder().setWidth(frequencyGHz)
-                        .setFrequency(frequencyTHz).build();
-                    tp1Builder.setXpdrClientAttributes(xpdrClientAttributesBuilder
-                            .setWavelength(usedXpdrClientWl)
-                            .build());
+//                    XpdrClientAttributes xpdrClientAttributes = tp.getXpdrClientAttributes();
+//                    XpdrClientAttributesBuilder xpdrClientAttributesBuilder;
+//                    if (xpdrClientAttributes == null) {
+//                        xpdrClientAttributesBuilder = new XpdrClientAttributesBuilder();
+//                    } else {
+//                        xpdrClientAttributesBuilder = new XpdrClientAttributesBuilder(xpdrClientAttributes);
+//                    }
+//                    Wavelength usedXpdrClientWl = new WavelengthBuilder().setWidth(frequencyGHz)
+//                        .setFrequency(frequencyTHz).build();
+//                    tp1Builder.setXpdrClientAttributes(xpdrClientAttributesBuilder
+//                            .setWavelength(usedXpdrClientWl)
+//                            .build());
                     break;
                 case XPONDERPORT:
                     XpdrPortAttributes xpdrPortAttributes = tp.getXpdrPortAttributes();

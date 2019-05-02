@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.renderer.openroadminterface;
 import java.util.List;
 
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
@@ -145,8 +146,17 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
-
-
+    public boolean isUsedbyXc(String nodeId, String interfaceName, String xc,
+        DeviceTransactionManager deviceTransactionManager) {
+        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
+                return openRoadmInterface121.isUsedByXc(nodeId, interfaceName, xc, deviceTransactionManager);
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                return openRoadmInterface221.isUsedByXc(nodeId, interfaceName, xc, deviceTransactionManager);
+            default:
+                return false;
+        }
+    }
 
 
 }

@@ -12,6 +12,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import org.junit.Assert;
@@ -139,7 +140,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         serviceDeleteInputBuilder.setServiceName("service 1");
         serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
             .setRequestId("request1").build());
-        Mockito.doReturn(true).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
+            Mockito.anyString());
         ServiceDeleteOutput serviceDeleteOutput
                 = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK,
@@ -160,7 +162,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
 
     @Test
     public void serviceDeleteOperationTearDownFailedAtoZ() throws ExecutionException, InterruptedException {
-        Mockito.doReturn(true).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
+            Mockito.anyString());
         Mockito.doReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
             .setResult("Failed").build()).buildFuture()).when(this.olmService).servicePowerTurndown(Mockito.any());
 
@@ -180,7 +183,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
 
     @Test
     public void serviceDeleteOperationTearDownFailedZtoA() throws ExecutionException, InterruptedException {
-        Mockito.doReturn(true).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(), Mockito.anyString());
+        Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
+            Mockito.anyString());
         Mockito.when(this.olmService.servicePowerTurndown(Mockito.any()))
             .thenReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
                 .setResult("Success").build()).buildFuture())

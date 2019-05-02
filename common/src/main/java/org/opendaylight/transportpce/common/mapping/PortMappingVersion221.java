@@ -476,7 +476,7 @@ public class PortMappingVersion221 {
         if (logicalConnectionPoint.contains(StringConstants.TTP_TOKEN) && (port.getInterfaces() != null)) {
             for (Interfaces interfaces : port.getInterfaces()) {
                 try {
-                    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface>
+                    Optional<Interface>
                         openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
                         interfaces.getInterfaceName());
                     if (openRoadmInterface.isPresent()) {

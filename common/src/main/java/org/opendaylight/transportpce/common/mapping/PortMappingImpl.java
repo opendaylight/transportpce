@@ -74,7 +74,7 @@ public class PortMappingImpl implements PortMapping {
                 .toJavaUtil();
             if (mapObject.isPresent()) {
                 Mapping mapping = mapObject.get();
-                LOG.info("Found mapping for the logical port {}. Mapping: {}", logicalConnPoint, mapping.toString());
+                LOG.info("Found mapping for {} - {}. Mapping: {}", nodeId, logicalConnPoint, mapping.toString());
                 return mapping;
             } else {
                 LOG.warn("Could not find mapping for logical connection point {} for nodeId {}", logicalConnPoint,

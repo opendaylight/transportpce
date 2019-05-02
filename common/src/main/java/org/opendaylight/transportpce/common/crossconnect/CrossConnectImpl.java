@@ -70,7 +70,7 @@ public class CrossConnectImpl implements CrossConnect {
     }
 
 
-    public boolean deleteCrossConnect(String nodeId, String connectionNumber) {
+    public List<String> deleteCrossConnect(String nodeId, String connectionNumber) {
 
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
@@ -79,7 +79,7 @@ public class CrossConnectImpl implements CrossConnect {
         else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber);
         }
-        return false;
+        return null;
     }
 
     public List<?> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp)

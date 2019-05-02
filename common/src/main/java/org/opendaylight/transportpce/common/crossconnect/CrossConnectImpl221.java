@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.common.crossconnect;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -63,9 +64,9 @@ public class CrossConnectImpl221 {
 
         rdmConnBldr.setOpticalControlMode(OpticalControlMode.Off);
 
-        rdmConnBldr.setSource(new SourceBuilder().setSrcIf(srcTp + "-" + waveNumber.toString()).build());
+        rdmConnBldr.setSource(new SourceBuilder().setSrcIf(srcTp + "-nmc").build());
 
-        rdmConnBldr.setDestination(new DestinationBuilder().setDstIf(destTp + "-" + waveNumber.toString()).build());
+        rdmConnBldr.setDestination(new DestinationBuilder().setDstIf(destTp + "-nmc").build());
 
 
         InstanceIdentifier<RoadmConnections> rdmConnectionIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
@@ -101,12 +102,20 @@ public class CrossConnectImpl221 {
     }
 
 
-    public boolean deleteCrossConnect(String deviceId, String connectionName) {
-
+    public List<String> deleteCrossConnect(String deviceId, String connectionName) {
+        List<String> interfList = new ArrayList<>();
+        Optional<RoadmConnections> xc = getCrossConnect(deviceId, connectionName);
         //Check if cross connect exists before delete
-        if (!getCrossConnect(deviceId, connectionName).isPresent()) {
+        if (xc.isPresent()) {
+            String name = xc.get().getSource().getSrcIf();
+            name.replace("nmc", "mc");
+            interfList.add(xc.get().getSource().getSrcIf());
+            interfList.add(xc.get().getDestination().getDstIf());
+            interfList.add(xc.get().getSource().getSrcIf().replace("nmc", "mc"));
+            interfList.add(xc.get().getDestination().getDstIf().replace("nmc", "mc"));
+        } else {
             LOG.warn("Cross connect does not exist, halting delete");
-            return false;
+            return null;
         }
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx;
@@ -116,11 +125,11 @@ public class CrossConnectImpl221 {
                 deviceTx = deviceTxOpt.get();
             } else {
                 LOG.error("Device transaction for device {} was not found!", deviceId);
-                return false;
+                return null;
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Unable to obtain device transaction for device {}!", deviceId, e);
-            return false;
+            return null;
         }
 
         // post the cross connect on the device
@@ -129,12 +138,12 @@ public class CrossConnectImpl221 {
                 deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
             submit.get();
-            LOG.info("Roadm connection successfully deleted ");
-            return true;
+            LOG.info("Roadm connection {} successfully deleted on {}", connectionName, deviceId);
+            return interfList;
         } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to delete {}", connectionName, e);
         }
-        return false;
+        return null;
     }
 
 
