@@ -41,13 +41,13 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     public <T> void postInterface(String nodeId, T ifBuilder) throws OpenRoadmInterfaceException {
 
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        LOG.info("Interface post request received for node {} with version {}",nodeId,openRoadmVersion);
         if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
-            LOG.info("Device Version is 1.2.1");
+            LOG.info("postInterface for 1.2.1 device {}", nodeId);
             InterfaceBuilder ifBuilder121 = convertInstanceOfInterface(ifBuilder, InterfaceBuilder.class);
             openRoadmInterfacesImpl121.postInterface(nodeId,ifBuilder121);
         }
         else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+            LOG.info("postInterface for 2.2.1 device {}", nodeId);
             org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder
                 ifBuilder22 = convertInstanceOfInterface(ifBuilder, org.opendaylight.yang.gen.v1.http.org.openroadm
                 .device.rev181019.interfaces.grp.InterfaceBuilder.class);
@@ -61,10 +61,11 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         LOG.info("Interface get request received for node {} with version {}",nodeId,openRoadmVersion);
         if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
-            LOG.info("Device Version is 1.2.1");
+            LOG.info("getInterface for 1.2.1 device {}", nodeId);
             return (Optional<T>) openRoadmInterfacesImpl121.getInterface(nodeId,interfaceName);
         }
         else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+            LOG.info("getInterface for 2.2.1 device {}", nodeId);
             return (Optional<T>) openRoadmInterfacesImpl221.getInterface(nodeId,interfaceName);
         }
         return null;

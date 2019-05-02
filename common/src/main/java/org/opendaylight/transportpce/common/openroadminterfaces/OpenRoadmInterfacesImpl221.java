@@ -66,6 +66,8 @@ public class OpenRoadmInterfacesImpl221 {
 
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
             Interface.class, new InterfaceKey(ifBuilder.getName()));
+        LOG.info("POST INTERF for {} : InterfaceBuilder : name = {} \t type = {}", nodeId, ifBuilder.getName(),
+            ifBuilder.getType().toString());
         deviceTx.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
         ListenableFuture<Void> txSubmitFuture = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
             Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
@@ -82,12 +84,13 @@ public class OpenRoadmInterfacesImpl221 {
     public Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName));
-        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
             interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
 
     public void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
+        LOG.info("deleting interface {} on device221 {}", interfaceName, nodeId);
         Optional<Interface> intf2DeleteOpt;
         try {
             intf2DeleteOpt = getInterface(nodeId, interfaceName);

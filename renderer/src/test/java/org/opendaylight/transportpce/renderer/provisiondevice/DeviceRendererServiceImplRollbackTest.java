@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
@@ -147,7 +148,8 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
         RendererRollbackInputBuilder rendererRollbackInputBuilder = new RendererRollbackInputBuilder();
         rendererRollbackInputBuilder.setNodeInterface(nodeInterfaces);
 
-        Mockito.doReturn(true).when(this.crossConnect).deleteCrossConnect("node1", connectionID.get(0));
+        Mockito.doReturn(Collections.emptyList()).when(this.crossConnect)
+            .deleteCrossConnect("node1", connectionID.get(0));
         RendererRollbackOutput rendererRollbackOutput =
             this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
         Assert.assertTrue("Rollback must success when cross connect returns true", rendererRollbackOutput.isSuccess());
@@ -155,7 +157,7 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
         Assert.assertTrue("There must not be any failed interfaces when cross connect returns true",
             rendererRollbackOutput.getFailedToRollback().get(0).getInterface().isEmpty());
 
-        Mockito.doReturn(false).when(this.crossConnect).deleteCrossConnect("node1", connectionID.get(0));
+        Mockito.doReturn(null).when(this.crossConnect).deleteCrossConnect("node1", connectionID.get(0));
         rendererRollbackOutput =
             this.deviceRendererService.rendererRollback(rendererRollbackInputBuilder.build());
         Assert.assertFalse("Rollback must fail when cross connect returns false",rendererRollbackOutput.isSuccess());

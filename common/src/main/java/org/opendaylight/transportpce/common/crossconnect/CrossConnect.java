@@ -56,7 +56,7 @@ public interface CrossConnect {
      * @return true/false based on status of operation.
      */
 
-    boolean deleteCrossConnect(String deviceId, String connectionNumber);
+    List<String> deleteCrossConnect(String deviceId, String connectionNumber);
 
     /**
      * This public method returns the list of ports (port-trail) for a roadm's

@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.common.crossconnect;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -93,11 +94,16 @@ public class CrossConnectImpl121 {
         return Optional.empty();
     }
 
-    public boolean deleteCrossConnect(String deviceId, String connectionNumber) {
+    public List<String> deleteCrossConnect(String deviceId, String connectionNumber) {
+        List<String> interfList = new ArrayList<>();
+        Optional<RoadmConnections> xc = getCrossConnect(deviceId, connectionNumber);
         //Check if cross connect exists before delete
-        if (!getCrossConnect(deviceId, connectionNumber).isPresent()) {
+        if (xc.isPresent()) {
+            interfList.add(xc.get().getSource().getSrcIf());
+            interfList.add(xc.get().getDestination().getDstIf());
+        } else {
             LOG.warn("Cross connect does not exist, halting delete");
-            return false;
+            return null;
         }
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx;
@@ -107,11 +113,11 @@ public class CrossConnectImpl121 {
                 deviceTx = deviceTxOpt.get();
             } else {
                 LOG.error("Device transaction for device {} was not found!", deviceId);
-                return false;
+                return null;
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Unable to obtain device transaction for device {}!", deviceId, e);
-            return false;
+            return null;
         }
 
         // post the cross connect on the device
@@ -121,11 +127,11 @@ public class CrossConnectImpl121 {
         try {
             submit.get();
             LOG.info("Roadm connection successfully deleted ");
-            return true;
+            return interfList;
         } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to delete {}", connectionNumber, e);
         }
-        return false;
+        return null;
     }
 
 

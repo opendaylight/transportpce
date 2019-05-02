@@ -80,7 +80,7 @@ public class OlmPowerServiceRpcImpl implements TransportpceOlmService {
      */
     @Override
     public ListenableFuture<RpcResult<ServicePowerSetupOutput>> servicePowerSetup(
-        ServicePowerSetupInput input) {
+            ServicePowerSetupInput input) {
         return RpcResultBuilder.success(this.olmPowerService.servicePowerSetup(input)).buildFuture();
     }
 
@@ -106,7 +106,7 @@ public class OlmPowerServiceRpcImpl implements TransportpceOlmService {
      */
     @Override
     public ListenableFuture<RpcResult<ServicePowerTurndownOutput>>
-            servicePowerTurndown(ServicePowerTurndownInput input) {
+        servicePowerTurndown(ServicePowerTurndownInput input) {
         return RpcResultBuilder.success(this.olmPowerService.servicePowerTurndown(input)).buildFuture();
     }
 
@@ -134,7 +134,7 @@ public class OlmPowerServiceRpcImpl implements TransportpceOlmService {
      */
     @Override
     public ListenableFuture<RpcResult<CalculateSpanlossBaseOutput>>
-            calculateSpanlossBase(CalculateSpanlossBaseInput input) {
+        calculateSpanlossBase(CalculateSpanlossBaseInput input) {
         return RpcResultBuilder.success(this.olmPowerService.calculateSpanlossBase(input)).buildFuture();
     }
 

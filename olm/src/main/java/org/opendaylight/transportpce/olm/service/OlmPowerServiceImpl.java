@@ -13,8 +13,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -54,6 +58,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.calculate.spanloss.base.output.Spans;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.calculate.spanloss.base.output.SpansBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
@@ -68,7 +74,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfa
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.Ots;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
-
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.PmNamesEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.olm.get.pm.input.ResourceIdentifierBuilder;
@@ -84,7 +89,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
-
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import org.slf4j.Logger;
@@ -132,12 +136,11 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         } else {
             openroadmVersion = org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping
                 .rev170228.network.Nodes.OpenroadmVersion._221;
-            LOG.info("Device version is 2.2");
+            LOG.info("Device version is 2.2.1");
         }
         LOG.info("Now calling get pm data");
         GetPmOutputBuilder pmOutputBuilder = OlmUtils.pmFetch(pmInput, deviceTransactionManager,
             openroadmVersion);
-
         return pmOutputBuilder.build();
     }
 
@@ -173,7 +176,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         LOG.info("CalculateSpanlossBase Request received for source type {}", spanlossBaseInput.getSrcType());
         List<RoadmLinks> roadmLinks = new ArrayList<>();
         CalculateSpanlossBaseOutputBuilder spanLossBaseBuilder = new CalculateSpanlossBaseOutputBuilder();
-        boolean spanLossResult = false;
+        Map<LinkId, BigDecimal> spanLossResult = null;
         //Depending on the source type do the calculation
         switch (spanlossBaseInput.getSrcType()) {
             case Link:
@@ -222,10 +225,20 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 }
                 spanLossResult = getLinkSpanloss(roadmLinks);
                 break;
+            default:
+                LOG.info("Invalid input in request");
         }
 
-        if (spanLossResult) {
+        if (spanLossResult != null && !spanLossResult.isEmpty()) {
             spanLossBaseBuilder.setResult(ResponseCodes.SUCCESS_RESULT);
+            List<Spans> listSpans = new ArrayList<>();
+            Set<Entry<LinkId, BigDecimal>> spanLossResultSet = spanLossResult.entrySet();
+            for (Entry<LinkId, BigDecimal> entry : spanLossResultSet) {
+                Spans span = new SpansBuilder().setLinkId(entry.getKey()).setSpanloss(entry.getValue().toString())
+                    .build();
+                listSpans.add(span);
+            }
+            spanLossBaseBuilder.setSpans(listSpans);
             return spanLossBaseBuilder.build();
         } else {
             LOG.warn("Spanloss calculation failed");
@@ -255,9 +268,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             if (OpenroadmLinkType.ROADMTOROADM.equals(roadmLinkAugmentation.getLinkType())) {
                 // Only calculate spanloss for Roadm-to-Roadm links
                 RoadmLinks roadmLink = new RoadmLinks();
-                roadmLink.setSrcNodeId(link.getSource().getSourceNode().toString());
+                roadmLink.setSrcNodeId(link.getSource().getSourceNode().getValue());
                 roadmLink.setSrcTpId(link.getSource().getSourceTp().toString());
-                roadmLink.setDestNodeId(link.getDestination().getDestNode().toString());
+                roadmLink.setDestNodeId(link.getDestination().getDestNode().getValue());
                 roadmLink.setDestTpid(link.getDestination().getDestTp().toString());
                 roadmLinks.add(roadmLink);
             }
@@ -268,9 +281,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             return null;
         }
 
-        boolean spanLossResult = getLinkSpanloss(roadmLinks);
+        Map<LinkId, BigDecimal> spanLossResult = getLinkSpanloss(roadmLinks);
         CalculateSpanlossCurrentOutputBuilder spanLossCurrentBuilder = new CalculateSpanlossCurrentOutputBuilder();
-        if (spanLossResult) {
+        if (spanLossResult != null && !spanLossResult.isEmpty()) {
             spanLossCurrentBuilder.setResult(ResponseCodes.SUCCESS_RESULT);
             return spanLossCurrentBuilder.build();
         } else {
@@ -379,8 +392,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
      * @param direction for which spanloss is calculated.It can be either Tx or Rx
      * @return true/false
      */
-    private boolean setSpanLoss(String nodeId, String interfaceName, BigDecimal spanLoss, String direction,
-                                LinkId linkId) {
+    private boolean setSpanLoss(String nodeId, String interfaceName, BigDecimal spanLoss, String direction) {
         String realNodeId = getRealNodeId(nodeId);
         BigDecimal initialSpanloss = new BigDecimal(0);
         try {
@@ -496,14 +508,12 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             }
         } catch (OpenRoadmInterfaceException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("OpenRoadmInterfaceException occured {}",e);
         } /**catch (InterruptedException e) {
          // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+         } catch (ExecutionException e) {
          // TODO Auto-generated catch block
-            e.printStackTrace();
-        }**/
+         }**/
         return false;
     }
 
@@ -520,35 +530,34 @@ public class OlmPowerServiceImpl implements OlmPowerService {
      *            reference to list of RoadmLinks
      * @return map with list of spans with their spanloss value
      */
-    private boolean getLinkSpanloss(List<RoadmLinks> roadmLinks) {
+    private Map<LinkId, BigDecimal> getLinkSpanloss(List<RoadmLinks> roadmLinks) {
+        Map<LinkId, BigDecimal> map = new HashMap<LinkId, BigDecimal>();
         LOG.info("Executing GetLinkSpanLoss");
         BigDecimal spanLoss = new BigDecimal(0);
-
-        for (int i = 0; i < roadmLinks.size(); i++) {
-            //TODO Add logic to check PM measurement for 3 times
-            OtsPmHolder srcOtsPmHoler = getPmMeasurements(roadmLinks.get(i).getSrcNodeId(),
-                roadmLinks.get(i).getSrcTpId(), "OpticalPowerOutput");
-            OtsPmHolder destOtsPmHoler = getPmMeasurements(roadmLinks.get(i).getDestNodeId(),
-                roadmLinks.get(i).getDestTpid(), "OpticalPowerInput");
+        for (RoadmLinks link : roadmLinks) {
+            String sourceNodeId = link.getSrcNodeId().toString();
+            String sourceTpId = link.getSrcTpId();
+            String destNodeId = link.getDestNodeId().toString();
+            String destTpId = link.getDestTpid();
+            OtsPmHolder srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutput");
+            OtsPmHolder destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
             spanLoss = new BigDecimal(srcOtsPmHoler.getOtsParameterVal() - destOtsPmHoler.getOtsParameterVal())
                 .setScale(0, RoundingMode.HALF_UP);
             LOG.info("Spanloss Calculated as :" + spanLoss + "=" + srcOtsPmHoler.getOtsParameterVal() + "-"
                 + destOtsPmHoler.getOtsParameterVal());
-            //TODO make it 3 times in here
-            if (spanLoss.doubleValue() < 28 && spanLoss.doubleValue() > 0) {
-                if (!setSpanLoss(roadmLinks.get(i).getSrcNodeId(), srcOtsPmHoler.getOtsInterfaceName(), spanLoss,
-                    "TX", roadmLinks.get(i).getLinkId())) {
-                    LOG.info("Setting spanLoss failed for " + roadmLinks.get(i).getSrcNodeId());
-                    return false;
+            if ((spanLoss.doubleValue() < 28) && (spanLoss.doubleValue() > 0)) {
+                if (!setSpanLoss(sourceNodeId, srcOtsPmHoler.getOtsInterfaceName(), spanLoss, "TX")) {
+                    LOG.info("Setting spanLoss failed for " + sourceNodeId);
+                    return null;
                 }
-                if (!setSpanLoss(roadmLinks.get(i).getDestNodeId(), destOtsPmHoler.getOtsInterfaceName(), spanLoss,
-                    "RX",roadmLinks.get(i).getLinkId())) {
-                    LOG.info("Setting spanLoss failed for " + roadmLinks.get(i).getDestNodeId());
-                    return false;
+                if (!setSpanLoss(destNodeId, destOtsPmHoler.getOtsInterfaceName(), spanLoss, "RX")) {
+                    LOG.info("Setting spanLoss failed for " + destNodeId);
+                    return null;
                 }
+                map.put(link.getLinkId(), spanLoss);
             }
         }
-        return true;
+        return map;
     }
 
     private String getRealNodeId(String mappedNodeId) {
@@ -562,6 +571,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             throw new IllegalStateException(e);
         }
         if (!realNode.isPresent() || (realNode.get().getSupportingNode() == null)) {
+            LOG.error("supporting node is null");
             throw new IllegalArgumentException(
                 String.format("Could not find node %s, or supporting node is not present", mappedNodeId));
         }
@@ -575,6 +585,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 collect.size(), mappedNodeId));
 
         }
+        LOG.info("getRealNodeId - return {}", collect.iterator().next().getNodeRef().getValue());
         return collect.iterator().next().getNodeRef().getValue();
     }
 

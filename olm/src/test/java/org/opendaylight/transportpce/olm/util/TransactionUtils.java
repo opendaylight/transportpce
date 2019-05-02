@@ -18,6 +18,7 @@ import java.util.Optional;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesBuilder;
@@ -32,6 +33,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev1811
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.SectionElementBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationBuilder;
@@ -43,6 +45,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev18113
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1Builder;
@@ -106,6 +113,53 @@ public final class TransactionUtils {
         return network;
     }
 
+    public static org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+            .rev180226.networks.Network getOverLayNetwork() {
+        NodeBuilder node1Builder = new NodeBuilder();
+        node1Builder.setNodeId(new NodeId("node 1"));
+        node1Builder.withKey(new NodeKey(new NodeId("node 1")));
+        List<SupportingNode> supportingNodes1 = new ArrayList<>();
+        supportingNodes1.add(new SupportingNodeBuilder().setNodeRef(new NodeId("node 1"))
+                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)).build());
+        node1Builder.setSupportingNode(supportingNodes1);
+        List<Node> nodes = new ArrayList<>();
+        nodes.add(node1Builder.build());
+        NodeBuilder node2Builder = new NodeBuilder();
+        node2Builder.setNodeId(new NodeId("node 2"));
+        node2Builder.withKey(new NodeKey(new NodeId("node 2")));
+        List<SupportingNode> supportingNodes = new ArrayList<>();
+        supportingNodes.add(new SupportingNodeBuilder().setNodeRef(new NodeId("node 2"))
+                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)).build());
+        node2Builder.setSupportingNode(supportingNodes);
+        nodes.add(node2Builder.build());
+        NodeBuilder node3Builder = new NodeBuilder();
+        node3Builder.setNodeId(new NodeId("node 3"));
+        node3Builder.withKey(new NodeKey(new NodeId("node 3")));
+        List<SupportingNode> supportingNodes3 = new ArrayList<>();
+        supportingNodes3.add(new SupportingNodeBuilder().setNodeRef(new NodeId("node 3"))
+                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)).build());
+        node3Builder.setSupportingNode(supportingNodes3);
+        nodes.add(node3Builder.build());
+        NodeBuilder node4Builder = new NodeBuilder();
+        node4Builder.setNodeId(new NodeId("node 4"));
+        node4Builder.withKey(new NodeKey(new NodeId("node 4")));
+        List<SupportingNode> supportingNodes4 = new ArrayList<>();
+        supportingNodes4.add(new SupportingNodeBuilder().setNodeRef(new NodeId("node 4"))
+                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)).build());
+        node4Builder.setSupportingNode(supportingNodes4);
+        nodes.add(node4Builder.build());
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                .networks.NetworkBuilder networkBuilder =
+                new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+                        .rev180226.networks.NetworkBuilder();
+        networkBuilder.setNode(nodes);
+        networkBuilder.setNetworkId(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226
+                .networks.Network network = networkBuilder.build();
+        Optional.of(network);
+        return network;
+    }
+
     public static Network1 getNetwork() {
         List<SupportingLink> supportingLinks = new ArrayList<>();
         SupportingLink supportingLink1 = new SupportingLinkBuilder().setLinkRef("ref1")
@@ -151,11 +205,11 @@ public final class TransactionUtils {
             .build();
         linkConcentationValues.add(linkConcatenation);
         linkConcentationValues.add(linkConcatenation2);
-        List<org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink>
+        List<AmplifiedLink>
             amplifiedLinkValues = new ArrayList<>();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al = new
-            org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
-                .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
+                    .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
                 .setSectionElement(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
                     .attributes.amplified.link.section.element.section.element.SpanBuilder()
                         .setSpan(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link

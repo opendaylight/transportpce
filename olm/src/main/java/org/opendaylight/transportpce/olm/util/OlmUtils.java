@@ -79,13 +79,13 @@ public final class OlmUtils {
      */
     public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager,
                                              Nodes.OpenroadmVersion openRoadmVersion) {
-        LOG.debug("Getting PM Data for NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
+        LOG.info("Getting PM Data for NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
             input.getResourceType(), input.getResourceIdentifier());
         GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
         if (openRoadmVersion.equals(Nodes.OpenroadmVersion._121)) {
-            pmOutputBuilder = OlmUtils1_2_1.pmFetch(input, deviceTransactionManager);
+            pmOutputBuilder = OlmUtils121.pmFetch(input, deviceTransactionManager);
         } else {
-            pmOutputBuilder = OlmUtils2_2.pmFetch(input, deviceTransactionManager);
+            pmOutputBuilder = OlmUtils22.pmFetch(input, deviceTransactionManager);
         }
         return pmOutputBuilder;
     }

@@ -10,6 +10,7 @@ module transportpce-olm {
 
   import ietf-network-topology {
      prefix ietf-network-topology;
+     revision-date 2018-02-26;
   }
 
  organization
