@@ -11,6 +11,7 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.co.routing.or.general.CoRoutingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.co.routing.or.general.GeneralBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraints;
@@ -20,76 +21,89 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161
 
 public class MappingConstraintsTest {
 
-    private MappingConstraints mappingConstraints;
-    private HardConstraints hardConstraints;
-    private SoftConstraints softConstraints;
+    private HardConstraints buildHardConstraintWithCoRouting() {
+        return new HardConstraintsBuilder()
+                .setCoRoutingOrGeneral(new CoRoutingBuilder()
+                        .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
+                                .constrains.rev161014.constraints.co.routing.or.general.co.routing
+                                .CoRoutingBuilder().setExistingService(
+                                Arrays.asList("Some existing-service")).build())
+                        .build())
+                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .build();
+    }
 
+    private HardConstraints buildHardConstraintWithGeneral() {
+        return new HardConstraintsBuilder()
+                .setCoRoutingOrGeneral(new GeneralBuilder().build())
+                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .build();
+    }
 
-    public MappingConstraintsTest() {
-        this.hardConstraints = new HardConstraintsBuilder()
-        .setCoRoutingOrGeneral(new CoRoutingBuilder()
-        .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-            .constrains.rev161014.constraints.co.routing.or.general.co.routing
-            .CoRoutingBuilder().setExistingService(
-            Arrays.asList("Some existing-service")).build())
-        .build())
-        .setCustomerCode(Arrays.asList("Some customer-code"))
-        .build();
-
-        this.softConstraints = new SoftConstraintsBuilder()
-            .setCoRoutingOrGeneral(new CoRoutingBuilder()
-                .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                    .constrains.rev161014.constraints.co.routing.or.general.co.routing
-                    .CoRoutingBuilder().setExistingService(
-                    Arrays.asList("Some existing-service")).build())
-                .build())
-            .setCustomerCode(Arrays.asList("Some customer-code"))
-            .build();
-
-        this.mappingConstraints = new MappingConstraints(hardConstraints, softConstraints);
+    private SoftConstraints buildSoftConstraintWithCoRouting() {
+        return new SoftConstraintsBuilder()
+                .setCoRoutingOrGeneral(new CoRoutingBuilder()
+                        .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
+                                .constrains.rev161014.constraints.co.routing.or.general.co.routing
+                                .CoRoutingBuilder().setExistingService(
+                                Arrays.asList("Some existing-service")).build())
+                        .build())
+                .setCustomerCode(Arrays.asList("Some customer-code"))
+                .build();
     }
 
     @Test
-    public void serviceToServicePathConstarintsNullHardConstraints() {
-        this.mappingConstraints = new MappingConstraints(null, softConstraints);
-        this.mappingConstraints.serviceToServicePathConstarints();
-        Assert.assertEquals(null, this.mappingConstraints.getServiceHardConstraints());
-        Assert.assertEquals(null, this.mappingConstraints.getServicePathHardConstraints());
+    public void serviceToServicePathConstraintsNullHardConstraints() {
+        MappingConstraints mappingConstraints = new MappingConstraints(null, buildSoftConstraintWithCoRouting());
+        mappingConstraints.serviceToServicePathConstarints();
+        Assert.assertNull(mappingConstraints.getServiceHardConstraints());
+        Assert.assertNull(mappingConstraints.getServicePathHardConstraints());
     }
 
     @Test
-    public void serviceToServicePathConstarintsNullSoftConstraints() {
-        this.mappingConstraints = new MappingConstraints(hardConstraints, null);
-        this.mappingConstraints.serviceToServicePathConstarints();
-        Assert.assertEquals(null, this.mappingConstraints.getServiceSoftConstraints());
-        Assert.assertEquals(null, this.mappingConstraints.getServicePathSoftConstraints());
+    public void serviceToServicePathConstraintsNullSoftConstraints() {
+        MappingConstraints mappingConstraints = new MappingConstraints(buildHardConstraintWithGeneral(), null);
+        mappingConstraints.serviceToServicePathConstarints();
+        Assert.assertNull(mappingConstraints.getServiceSoftConstraints());
+        Assert.assertNull(mappingConstraints.getServicePathSoftConstraints());
     }
 
     @Test
-    public void serviceToServicePathConstarintsNullConstraints() {
-        this.mappingConstraints = new MappingConstraints(hardConstraints, softConstraints);
-        this.mappingConstraints.setServiceHardConstraints(null);
-        this.mappingConstraints.setServiceSoftConstraints(null);
-        this.mappingConstraints.serviceToServicePathConstarints();
-        Assert.assertEquals(null, this.mappingConstraints.getServiceHardConstraints());
-        Assert.assertEquals(null, this.mappingConstraints.getServicePathHardConstraints());
-        Assert.assertEquals(null, this.mappingConstraints.getServiceSoftConstraints());
-        Assert.assertEquals(null, this.mappingConstraints.getServicePathSoftConstraints());
+    public void serviceToServicePathConstraintsNullSoftConstraintsGeneral() {
+        MappingConstraints mappingConstraints = new MappingConstraints(buildHardConstraintWithCoRouting(), null);
+        mappingConstraints.serviceToServicePathConstarints();
+        Assert.assertNull(mappingConstraints.getServiceSoftConstraints());
+        Assert.assertNull(mappingConstraints.getServicePathSoftConstraints());
     }
 
     @Test
-    public void serviceToServicePathConstarintsNotNullConstraints() {
-        this.mappingConstraints = new MappingConstraints(hardConstraints, softConstraints);
-        this.mappingConstraints.serviceToServicePathConstarints();
-        Assert.assertEquals(this.hardConstraints.getCoRoutingOrGeneral(), this.mappingConstraints
+    public void serviceToServicePathConstraintsNullConstraints() {
+        MappingConstraints mappingConstraints =
+            new MappingConstraints(buildHardConstraintWithCoRouting(), buildSoftConstraintWithCoRouting());
+        mappingConstraints.setServiceHardConstraints(null);
+        mappingConstraints.setServiceSoftConstraints(null);
+        mappingConstraints.serviceToServicePathConstarints();
+        Assert.assertNull(mappingConstraints.getServiceHardConstraints());
+        Assert.assertNull(mappingConstraints.getServicePathHardConstraints());
+        Assert.assertNull(mappingConstraints.getServiceSoftConstraints());
+        Assert.assertNull(mappingConstraints.getServicePathSoftConstraints());
+    }
+
+    @Test
+    public void serviceToServicePathConstraintsNotNullConstraints() {
+        HardConstraints hardConstraints = buildHardConstraintWithCoRouting();
+        SoftConstraints softConstraints = buildSoftConstraintWithCoRouting();
+        MappingConstraints mappingConstraints = new MappingConstraints(hardConstraints, softConstraints);
+        mappingConstraints.serviceToServicePathConstarints();
+        Assert.assertEquals(hardConstraints.getCoRoutingOrGeneral(), mappingConstraints
             .getServiceHardConstraints().getCoRoutingOrGeneral());
-        Assert.assertEquals(softConstraints, this.mappingConstraints.getServiceSoftConstraints());
-        Assert.assertEquals(null, this.mappingConstraints.getServicePathSoftConstraints());
+        Assert.assertEquals(softConstraints, mappingConstraints.getServiceSoftConstraints());
+        Assert.assertNull(mappingConstraints.getServicePathSoftConstraints());
     }
 
     @Test
-    public void serviceToServicePathConstarintsParameterizedConstructor() {
-        this.mappingConstraints = new MappingConstraints(
+    public void serviceToServicePathConstraintsParameterizedConstructor() {
+        MappingConstraints mappingConstraints = new MappingConstraints(
             new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
             .routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder()
             .setCustomerCode(Arrays.asList("Some customer-code"))
@@ -111,14 +125,14 @@ public class MappingConstraintsTest {
                         .build())
                     .build()).build());
 
-        this.mappingConstraints.serviceToServicePathConstarints();
+        mappingConstraints.serviceToServicePathConstarints();
         Assert.assertEquals(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
             .constraints.rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder()
             .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
                 .constraints.rev171017.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
                 .setExistingService(Arrays.asList("Some existing-service"))
                 .build())
-            .build(), this.mappingConstraints.getServicePathHardConstraints().getCoRoutingOrGeneral());
+            .build(), mappingConstraints.getServicePathHardConstraints().getCoRoutingOrGeneral());
         Assert.assertEquals(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
             .routing.constraints.rev171017.routing.constraints.sp.SoftConstraintsBuilder()
             .setCustomerCode(Arrays.asList("Some customer-code"))
@@ -128,8 +142,6 @@ public class MappingConstraintsTest {
                     .constraints.rev171017.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
                     .setExistingService(Arrays.asList("Some existing-service"))
                     .build())
-                .build()).build(), this.mappingConstraints.getServicePathSoftConstraints());
-
+                .build()).build(), mappingConstraints.getServicePathSoftConstraints());
     }
-
 }

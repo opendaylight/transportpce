@@ -39,6 +39,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.endpoint.TxDirection;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.lgx.LgxBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
@@ -92,6 +94,60 @@ public final class ServiceDataUtils {
         builtInput.setServiceZEnd(serviceZEnd);
         builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
             .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build());
+
+        return builtInput.build();
+    }
+
+    public static ServiceCreateInput buildServiceCreateInputWithHardConstraints() {
+
+        ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+                .ServiceAEnd serviceAEnd = getServiceAEndBuild()
+                .build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+                .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
+                .create.input.ServiceZEndBuilder()
+                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-3-2")
+                .setTxDirection(getTxDirection())
+                .setRxDirection(getRxDirection())
+                .build();
+
+        builtInput.setCommonId("commonId");
+        builtInput.setConnectionType(ConnectionType.Service);
+        builtInput.setCustomer("Customer");
+        builtInput.setServiceName("service 1");
+        builtInput.setServiceAEnd(serviceAEnd);
+        builtInput.setServiceZEnd(serviceZEnd);
+        builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
+                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build());
+        builtInput.setHardConstraints(new HardConstraintsBuilder().build());
+
+        return builtInput.build();
+    }
+
+    public static ServiceCreateInput buildServiceCreateInputWithSoftConstraints() {
+
+        ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+                .ServiceAEnd serviceAEnd = getServiceAEndBuild()
+                .build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+                .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
+                .create.input.ServiceZEndBuilder()
+                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-3-2")
+                .setTxDirection(getTxDirection())
+                .setRxDirection(getRxDirection())
+                .build();
+
+        builtInput.setCommonId("commonId");
+        builtInput.setConnectionType(ConnectionType.Service);
+        builtInput.setCustomer("Customer");
+        builtInput.setServiceName("service 1");
+        builtInput.setServiceAEnd(serviceAEnd);
+        builtInput.setServiceZEnd(serviceZEnd);
+        builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
+                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build());
+        builtInput.setSoftConstraints(new SoftConstraintsBuilder().build());
 
         return builtInput.build();
     }

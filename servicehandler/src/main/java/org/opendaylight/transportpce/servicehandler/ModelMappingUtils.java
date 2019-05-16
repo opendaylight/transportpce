@@ -406,12 +406,13 @@ public final class ModelMappingUtils {
             servicePathBuilder.setServicePathName(serviceInput.getServiceName());
             servicePathBuilder.setServiceHandlerHeader(new ServiceHandlerHeaderBuilder()
                     .setRequestId(serviceInput.getSdncRequestHeader().getRequestId()).build());
+            if (output.getResponseParameters().getPathDescription() != null) {
+                PathDescriptionBuilder pathDescBuilder =
+                        new PathDescriptionBuilder(output.getResponseParameters().getPathDescription());
+                servicePathBuilder.setPathDescription(pathDescBuilder.build());
+            }
         }
-        if (output.getResponseParameters().getPathDescription() != null) {
-            PathDescriptionBuilder pathDescBuilder =
-                    new PathDescriptionBuilder(output.getResponseParameters().getPathDescription());
-            servicePathBuilder.setPathDescription(pathDescBuilder.build());
-        }
+
         return servicePathBuilder.build();
     }
 }

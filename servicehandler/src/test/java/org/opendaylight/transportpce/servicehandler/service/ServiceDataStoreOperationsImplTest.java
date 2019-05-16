@@ -37,7 +37,6 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
 
     private ServiceDataStoreOperationsImpl serviceDataStoreOperations;
 
-
     @Before
     public void init() {
         DataBroker dataBroker = this.getNewDataBroker();
