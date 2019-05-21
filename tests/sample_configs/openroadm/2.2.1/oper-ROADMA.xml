@@ -770,7 +770,7 @@
       <direction>rx</direction>
       <measurement>
         <granularity>15min</granularity>
-        <pmParameterValue>-45.1</pmParameterValue>
+        <pmParameterValue>-21.1</pmParameterValue>
         <pmParameterUnit>dBm</pmParameterUnit>
         <validity>complete</validity>
       </measurement>
