@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2015 Cisco and/or its affiliates.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at:
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>io.fd.honeycomb.common</groupId>
+        <artifactId>minimal-distribution-parent</artifactId>
+        <version>1.18.01</version>
+        <relativePath/>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.fd.honeycomb.transportpce</groupId>
+    <artifactId>minimal-distribution</artifactId>
+    <name>${project.artifactId}</name>
+    <version>1.18.01</version>
+
+    <properties>
+        <main.class>io.fd.honeycomb.infra.distro.Main</main.class>
+        <distribution.modules>
+            io.fd.honeycomb.infra.distro.schema.YangBindingProviderModule,
+            io.fd.honeycomb.infra.distro.schema.SchemaModule,
+            io.fd.honeycomb.infra.distro.data.ConfigAndOperationalPipelineModule,
+            io.fd.honeycomb.infra.distro.data.context.ContextPipelineModule,
+            io.fd.honeycomb.infra.distro.initializer.InitializerPipelineModule,
+            io.fd.honeycomb.northbound.CredentialsModule,
+            io.fd.honeycomb.northbound.netconf.NetconfModule,
+            io.fd.honeycomb.northbound.netconf.NetconfReadersModule,
+            //io.fd.honeycomb.northbound.restconf.RestconfModule,
+            io.fd.honeycomb.infra.distro.cfgattrs.CfgAttrsModule,
+            // io.fd.honeycomb.infra.bgp.BgpModule,
+            // io.fd.honeycomb.infra.bgp.BgpReadersModule,
+            // io.fd.honeycomb.infra.bgp.BgpWritersModule,
+            // io.fd.honeycomb.northbound.bgp.extension.EvpnModule,
+            // io.fd.honeycomb.northbound.bgp.extension.InetModule,
+            // io.fd.honeycomb.northbound.bgp.extension.L3VpnV4Module,
+            // io.fd.honeycomb.northbound.bgp.extension.L3VpnV6Module,
+            // io.fd.honeycomb.northbound.bgp.extension.LabeledUnicastModule,
+            // io.fd.honeycomb.northbound.bgp.extension.LinkstateModule,
+            // io.fd.honeycomb.footprint.FootprintModule
+        </distribution.modules>
+    </properties>
+
+    <dependencies>
+        <!-- DI-->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+
+        <!-- TPCE Distribution core -->
+        <dependency>
+            <groupId>io.fd.honeycomb.transportpce</groupId>
+            <artifactId>minimal-distribution-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.fd.honeycomb.transportpce</groupId>
+            <artifactId>restconf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.fd.honeycomb.transportpce</groupId>
+            <artifactId>netconf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Northbound interfaces -->
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- <dependency>
+            <groupId>io.fd.honeycomb.northbound</groupId>
+            <artifactId>restconf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound</groupId>
+            <artifactId>netconf</artifactId>
+            <version>${project.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound</groupId>
+            <artifactId>bgp</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Bgp extension modules -->
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound.bgp</groupId>
+            <artifactId>extension-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound.bgp</groupId>
+            <artifactId>evpn</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound.bgp</groupId>
+            <artifactId>inet</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound.bgp</groupId>
+            <artifactId>l3-vpn-v4</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound.bgp</groupId>
+            <artifactId>l3-vpn-v6</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound.bgp</groupId>
+            <artifactId>linkstate</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.fd.honeycomb.northbound.bgp</groupId>
+            <artifactId>labeled-unicast</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Footprint api -->
+        <dependency>
+            <groupId>io.fd.honeycomb.footprint</groupId>
+            <artifactId>impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

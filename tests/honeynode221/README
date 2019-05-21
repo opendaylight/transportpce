@@ -1,0 +1,30 @@
+= This is a Honeycomb distribution
+
+Built from: io.fd.honeycomb.transportpce/honeynode-distribution
+Version: 1.18.01
+
+https://wiki.fd.io/view/Honeycomb
+
+== Structure
+(under folder honeynode-distribution/target/honeynode-distribution-1.18.0.1-hc/honeynode-distribution-1.18.0.1)
+
+Structure of the distribution:
+
+=== Config
+Folder config contains any configuration that's exposed by Honeycomb and its plugins
+
+=== Cert
+Keystore/Truststore for Restconf's HTTPS endpoint
+
+=== Modules
+Folder modules contains text files with list of modules to be installed into Honeycomb.
+Those modules bring up Honeycomb's infrastructure as well as modules.
+
+=== Shell scripts
+honeycomb - Start Honeycomb
+honeycomb-debug - Start Honeycomb with JVM remote debug capabilities
+honeycomb-start - Start Honeycomb in background
+honeycomb-kill - Kill all running Honeycomb instances
+honeycomb-tpce - Start Honeycomb with port and initial config files options
+Eg : honeycomb-tpce 17830 sample-config-ROADM.xml
+
