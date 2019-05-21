@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <parent>
+    <groupId>io.fd.honeycomb.common</groupId>
+    <artifactId>minimal-distribution-parent</artifactId>
+    <version>1.18.01</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>io.fd.honeycomb.transportpce</groupId>
+  <artifactId>honeynode-distribution</artifactId>
+  <version>1.18.01</version>
+
+  <properties>
+    <exec.parameters>-Xms128m -Xmx128m</exec.parameters>
+    <main.class>io.fd.honeycomb.infra.distro.Main</main.class>
+    <interfaces.mapping.version>1.18.01</interfaces.mapping.version>
+    <honeycomb.min.distro.version>1.18.01</honeycomb.min.distro.version>
+    <!--
+       Defines list of specific modules provided by the distribution
+       (adds them to base modules like NetconfModule and RestconfModule).
+
+       Module configuration is placed in 'modules' subdir of the target distro folder.
+       Modules can be disabled by commenting them out in the pom.xml
+       or modules configuration file.
+     -->
+    <distribution.modules>
+        io.fd.honeycomb.transportpce.device.DeviceModule,
+        io.fd.honeycomb.transportpce.device.DeviceWriterModule,
+        io.fd.honeycomb.transportpce.device.DeviceReaderModule,
+        io.fd.honeycomb.transportpce.device.DeviceRpcModule,
+        io.fd.honeycomb.transportpce.device.DeviceNotificationModule,
+    </distribution.modules>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.gmaven</groupId>
+        <artifactId>groovy-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!-- Dependency on honeynode plugin -->
+    <dependency>
+      <groupId>io.fd.honeycomb.transportpce</groupId>
+      <artifactId>honeynode-plugin-impl</artifactId>
+      <version>${interfaces.mapping.version}</version>
+    </dependency>
+    <!-- Dependency on TPCE distribution base -->
+    <dependency>
+      <groupId>io.fd.honeycomb.transportpce</groupId>
+      <artifactId>minimal-distribution</artifactId>
+      <version>${honeycomb.min.distro.version}</version>
+    </dependency>
+
+  </dependencies>
+</project>
+

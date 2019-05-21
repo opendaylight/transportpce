@@ -1,0 +1,3 @@
+= minimal-distribution-core
+
+Project contains core modules for minimal distribution
