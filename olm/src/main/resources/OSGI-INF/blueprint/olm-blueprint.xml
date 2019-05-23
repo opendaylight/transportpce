@@ -24,6 +24,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
   <reference id="portMapping"
         interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
+  <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
 
   <bean id="olmPowerServiceImpl"
         class="org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl"
@@ -32,9 +33,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="powerMgmt" />
     <argument ref="deviceTransactionManager" />
     <argument ref="portMapping" />
+    <argument ref="mappingUtils" />
+    <argument ref="openRoadmInterfaces" />
   </bean>
 
-  <bean id="powerMgmt" class="org.opendaylight.transportpce.olm.power.PowerMgmt" >
+  <bean id="powerMgmt" class="org.opendaylight.transportpce.olm.power.PowerMgmtImpl" >
     <argument ref="dataBroker" />
     <argument ref="openRoadmInterfaces" />
     <argument ref="crossConnect" />

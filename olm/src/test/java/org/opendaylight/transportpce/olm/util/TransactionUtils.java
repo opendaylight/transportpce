@@ -287,6 +287,7 @@ public final class TransactionUtils {
             .setNodeType(NodeTypes.Xpdr)
             .setCpToDegree(cpList)
             .setMapping(mappingList)
+            .setOpenroadmVersion(Nodes.OpenroadmVersion._121)
             .build();
         return nodes;
     }
@@ -318,6 +319,7 @@ public final class TransactionUtils {
             .setNodeType(null)
             .setCpToDegree(cpList)
             .setMapping(mappingList)
+            .setOpenroadmVersion(Nodes.OpenroadmVersion._121)
             .build();
         return nodes;
     }
@@ -349,6 +351,7 @@ public final class TransactionUtils {
             .setNodeType(NodeTypes.Rdm)
             .setCpToDegree(cpList)
             .setMapping(mappingList)
+            .setOpenroadmVersion(Nodes.OpenroadmVersion._121)
             .build();
         return nodes;
     }

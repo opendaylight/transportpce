@@ -45,7 +45,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthServiceImpl;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121;
-import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface22;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface221;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
@@ -107,10 +107,10 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         this.crossConnect = Mockito.spy(crossConnect);
         FixedFlexInterface fixedFlexInterface = new FixedFlexImpl();
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
-        OpenRoadmInterface22 openRoadmInterface22 = new OpenRoadmInterface22(portMapping,openRoadmInterfaces,
+        OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping,openRoadmInterfaces,
             fixedFlexInterface);
         OpenRoadmInterfaceFactory openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(this.mappingUtils,
-             openRoadmInterface121,openRoadmInterface22);
+             openRoadmInterface121,openRoadmInterface221);
 
         this.deviceRenderer = new DeviceRendererServiceImpl(this.getDataBroker(),
             this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect,
