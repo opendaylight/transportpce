@@ -21,14 +21,14 @@ public class OpenRoadmInterfaceFactory {
 
     private final MappingUtils mappingUtils;
     private final OpenRoadmInterface121 openRoadmInterface121;
-    private final OpenRoadmInterface22 openRoadmInterface22;
+    private final OpenRoadmInterface221 openRoadmInterface221;
 
 
     public OpenRoadmInterfaceFactory(MappingUtils mappingUtils, OpenRoadmInterface121 openRoadmInterface121,
-        OpenRoadmInterface22 openRoadmInterface22) {
+        OpenRoadmInterface221 openRoadmInterface221) {
         this.mappingUtils = mappingUtils;
         this.openRoadmInterface121 = openRoadmInterface121;
-        this.openRoadmInterface22 = openRoadmInterface22;
+        this.openRoadmInterface221 = openRoadmInterface221;
     }
 
     public String createOpenRoadmEthInterface(String nodeId,
@@ -38,7 +38,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface22.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
+                return openRoadmInterface221.createOpenRoadmEthInterface(nodeId, logicalConnPoint);
             default:
                 return null;
         }
@@ -60,7 +60,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint,waveNumber);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface22.createFlexOCH(nodeId, logicalConnPoint,waveNumber);
+                return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint,waveNumber);
             default:
                 return null;
         }
@@ -74,7 +74,7 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber,
                     rate, format);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface22.createOpenRoadmOchInterface(nodeId,logicalConnPoint,waveNumber);
+                return openRoadmInterface221.createOpenRoadmOchInterface(nodeId,logicalConnPoint,waveNumber);
             default:
                 return null;
         }
@@ -93,7 +93,7 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface121.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint,
                     supportingOtuInterface);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface22.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint,
+                return openRoadmInterface221.createOpenRoadmOdu4Interface(nodeId, logicalConnPoint,
                     supportingOtuInterface);
             default:
                 return null;
@@ -113,7 +113,7 @@ public class OpenRoadmInterfaceFactory {
                 return openRoadmInterface121.createOpenRoadmOtu4Interface(nodeId,
                     logicalConnPoint,supportOchInterface);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface22.createOpenRoadmOtu4Interface(nodeId,logicalConnPoint, supportOchInterface);
+                return openRoadmInterface221.createOpenRoadmOtu4Interface(nodeId,logicalConnPoint, supportOchInterface);
             default:
                 return null;
         }
@@ -128,7 +128,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOmsInterface(nodeId,mapping);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface22.createOpenRoadmOmsInterface(nodeId,mapping);
+                return openRoadmInterface221.createOpenRoadmOmsInterface(nodeId,mapping);
             default:
                 return null;
         }
@@ -139,7 +139,7 @@ public class OpenRoadmInterfaceFactory {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOtsInterface(nodeId,mapping);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface22.createOpenRoadmOtsInterface(nodeId,mapping);
+                return openRoadmInterface221.createOpenRoadmOtsInterface(nodeId,mapping);
             default:
                 return null;
         }

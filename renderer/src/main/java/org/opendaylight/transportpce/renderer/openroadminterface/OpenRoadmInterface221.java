@@ -19,7 +19,6 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PowerDBm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.R100G;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
@@ -56,13 +55,13 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class OpenRoadmInterface22 {
+public class OpenRoadmInterface221 {
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private FixedFlexInterface fixedFlex;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfaceFactory.class);
 
-    public OpenRoadmInterface22(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces,
+    public OpenRoadmInterface221(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces,
         FixedFlexInterface fixedFlex) {
         this.portMapping = portMapping;
         this.openRoadmInterfaces = openRoadmInterfaces;
@@ -207,7 +206,7 @@ public class OpenRoadmInterface22 {
 
         ocIfBuilder.setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())));
         //ocIfBuilder.setWidth(FrequencyGHz.getDefaultInstance(String.valueOf(fixedFlex.getWavelength())));
-        ocIfBuilder.setModulationFormat(ModulationFormat.DpQpsk);
+        //ocIfBuilder.setModulationFormat(ModulationFormat.DpQpsk);
         ocIfBuilder.setRate(R100G.class);
         ocIfBuilder.setTransmitPower(new PowerDBm(new BigDecimal("-5")));
 
