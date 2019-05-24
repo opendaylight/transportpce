@@ -210,6 +210,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             LOG.error("Error while setting up service paths!", e);
         }
         forkJoinPool.shutdown();
+
         if (success.get()) {
             results.add("Roadm-connection successfully created for nodes: " + String.join(", ", nodesProvisioned));
         }
@@ -454,15 +455,17 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             throw e;
         }
         if (services.isPresent()) {
+            LOG.info("service {} already exists", name);
             servicesBuilder = new ServicesBuilder(services.get());
+            servicesBuilder.setTopology(topo);
+            WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
+            writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, servicesBuilder.build());
+            writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } else {
-            servicesBuilder = new ServicesBuilder();
-            servicesBuilder.withKey(serviceKey);
+            LOG.warn("Service {} does not exist - topology can not be updated", name);
+//            servicesBuilder = new ServicesBuilder();
+//            servicesBuilder.withKey(serviceKey);
         }
-        servicesBuilder.setTopology(topo);
-        WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
-        writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, servicesBuilder.build());
-        writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
     }
 
     @Override

@@ -181,7 +181,6 @@ public class OpenRoadmInterfacesImpl221 {
 
     public void postEquipmentState(String nodeId, String circuitPackName, boolean activate)
         throws OpenRoadmInterfaceException {
-
         InstanceIdentifier<CircuitPacks> circuitPackIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
             CircuitPacks.class, new CircuitPacksKey(circuitPackName));
         Optional<CircuitPacks> cpOpt = this.deviceTransactionManager.getDataFromDevice(nodeId,
@@ -197,12 +196,13 @@ public class OpenRoadmInterfacesImpl221 {
         CircuitPacksBuilder cpBldr = new CircuitPacksBuilder(cp);
         boolean change = false;
         if (activate) {
-            if (cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().equals(States.NotReservedInuse)) {
+            if (cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().getName()
+                .equals(States.NotReservedInuse)) {
                 cpBldr.setEquipmentState(States.NotReservedInuse);
                 change = true;
             }
-        } else if (
-            (cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().equals(States.NotReservedAvailable))) {
+        } else if ((cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().getName()
+            .equals(States.NotReservedAvailable))) {
             cpBldr.setEquipmentState(States.NotReservedAvailable);
             change = true;
         }

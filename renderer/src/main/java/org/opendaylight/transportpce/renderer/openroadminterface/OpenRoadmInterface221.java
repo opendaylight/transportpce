@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface;
@@ -98,6 +99,10 @@ public class OpenRoadmInterface221 {
 
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, ethInterfaceBldr);
+
+        // Post the equipment-state change on the device circuit-pack
+        openRoadmInterfaces.postEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
+
         return ethInterfaceBldr.getName();
     }
 
@@ -229,6 +234,12 @@ public class OpenRoadmInterface221 {
 
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, ochInterfaceBldr);
+
+        // Post the equipment-state change on the device circuit-pack if xpdr node
+        if (portMap.getLogicalConnectionPoint().contains(StringConstants.NETWORK_TOKEN)) {
+            this.openRoadmInterfaces.postEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
+        }
+
         return ochInterfaceBldr.getName();
     }
 
