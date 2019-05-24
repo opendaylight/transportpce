@@ -91,9 +91,9 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         throws OpenRoadmInterfaceException {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
 
-        LOG.info("Interface delete request received for node {} with version {}",nodeId,openRoadmVersion);
+        LOG.info("Request received for node {} with version {} to change equipment-state of cp {}.",
+            nodeId,openRoadmVersion, circuitPackName);
         if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
-            LOG.info("Device Version is 1.2.1");
             openRoadmInterfacesImpl121.postEquipmentState(nodeId, circuitPackName, activate);
         }
         else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
