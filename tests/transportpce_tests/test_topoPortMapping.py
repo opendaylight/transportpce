@@ -22,32 +22,41 @@ import logging
 
 class TransportPCEtesting(unittest.TestCase):
 
-    testtools_process1 = None
-    testtools_process2 = None
+    honeynode_process1 = None
+    honeynode_process2 = None
     odl_process = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
 #START_IGNORE_XTESTING
 
     @classmethod
-    def __start_testtools(cls):
-        executable = ("./netconf/netconf/tools/netconf-testtool/target/"
-                      "netconf-testtool-1.5.0-executable.jar")
-        if os.path.isfile(executable):
-            if not os.path.exists("transportpce_tests/log"):
+    def __init_logfile(cls):
+        if not os.path.exists("transportpce_tests/log"):
                 os.makedirs("transportpce_tests/log")
-            if os.path.isfile("./transportpce_tests/log/topoPortMap.log"):
-                os.remove("transportpce_tests/log/topoPortMap.log")
-            with open('transportpce_tests/log/testtools_ROADMA.log', 'w') as outfile1:
-                cls.testtools_process1 = subprocess.Popen(
-                    ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-ROADMA.xml","--starting-port","17831"],
-                    stdout=outfile1)
-            with open('transportpce_tests/log/testtools_XPDRA.log', 'w') as outfile2:
-                cls.testtools_process2 = subprocess.Popen(
-                    ["java", "-jar", executable, "--schemas-dir", "schemas",
-                     "--initial-config-xml", "sample_configs/openroadm/1.2.1/sample-config-XPDRA.xml","--starting-port","17830"],
-                    stdout=outfile2)
+        if os.path.isfile("./transportpce_tests/log/topoPortMap.log"):
+            os.remove("transportpce_tests/log/topoPortMap.log")
+
+    @classmethod
+    def __start_honeynode1(cls):
+        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+                      "/honeynode-distribution-1.18.01/honeycomb-tpce")
+        if os.path.isfile(executable):
+            with open('honeynode1.log', 'w') as outfile:
+                cls.honeynode_process1 = subprocess.Popen(
+                    [executable, "17830", "sample_configs/openroadm/2.1/oper-XPDRA.xml"],
+                    stdout=outfile)
+
+
+    @classmethod
+    def __start_honeynode2(cls):
+        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+                      "/honeynode-distribution-1.18.01/honeycomb-tpce")
+        if os.path.isfile(executable):
+            with open('honeynode2.log', 'w') as outfile:
+                cls.honeynode_process2 = subprocess.Popen(
+                    [executable, "17831", "sample_configs/openroadm/2.1/oper-ROADMA.xml"],
+                    stdout=outfile)
+
 
     @classmethod
     def __start_odl(cls):
@@ -59,21 +68,32 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.__start_testtools()
+        cls.__init_logfile()
+        time.sleep(2)
+        cls.__start_honeynode1()
+        time.sleep(20)
+        cls.__start_honeynode2()
+        time.sleep(20)
         cls.__start_odl()
-        time.sleep(40)
+        time.sleep(60)
 
     @classmethod
     def tearDownClass(cls):
-        cls.testtools_process1.send_signal(signal.SIGINT)
-        cls.testtools_process1.wait()
-        cls.testtools_process2.send_signal(signal.SIGINT)
-        cls.testtools_process2.wait()
         for child in psutil.Process(cls.odl_process.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
         cls.odl_process.send_signal(signal.SIGINT)
         cls.odl_process.wait()
+        for child in psutil.Process(cls.honeynode_process1.pid).children():
+            child.send_signal(signal.SIGINT)
+            child.wait()
+        cls.honeynode_process1.send_signal(signal.SIGINT)
+        cls.honeynode_process1.wait()
+        for child in psutil.Process(cls.honeynode_process2.pid).children():
+            child.send_signal(signal.SIGINT)
+            child.wait()
+        cls.honeynode_process2.send_signal(signal.SIGINT)
+        cls.honeynode_process2.wait()
 
     def setUp(self):
         time.sleep(10)
