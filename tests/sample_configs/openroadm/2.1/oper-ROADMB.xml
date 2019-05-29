@@ -838,7 +838,7 @@
         <logical-connection-point>SRG1-CP-TXRX</logical-connection-point>
       </ports>
     </circuit-packs>
-	<circuit-packs>
+    <circuit-packs>
       <circuit-pack-name>5/0</circuit-pack-name>
       <circuit-pack-type>ADDDROP</circuit-pack-type>
       <administrative-state>inService</administrative-state>
@@ -3667,7 +3667,7 @@
         <circuit-pack-name>4/0</circuit-pack-name>
       </circuit-packs>
     </shared-risk-group>
-	<shared-risk-group>
+    <shared-risk-group>
       <srg-number>3</srg-number>
       <max-add-drop-ports>16</max-add-drop-ports>
       <wavelengthDuplication>onePerSRG</wavelengthDuplication>

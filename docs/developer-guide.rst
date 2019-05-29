@@ -308,20 +308,20 @@ To connect a node, use the following JSON RPC
         "node": [
             {
                 "node-id": "<node-id>",
-        		"netconf-node-topology:tcp-only": "false",
-        		"netconf-node-topology:reconnect-on-changed-schema": "false",
-        		"netconf-node-topology:host": "<node-ip-address>",
-        		"netconf-node-topology:default-request-timeout-millis": "120000",
-        		"netconf-node-topology:max-connection-attempts": "0",
-    			"netconf-node-topology:sleep-factor": "1.5",
-        		"netconf-node-topology:actor-response-wait-time": "5",
-        		"netconf-node-topology:concurrent-rpc-limit": "0",
-        		"netconf-node-topology:between-attempts-timeout-millis": "2000",
-        		"netconf-node-topology:port": "<netconf-port>",
-        		"netconf-node-topology:connection-timeout-millis": "20000",
-        		"netconf-node-topology:username": "<node-username>",
-        		"netconf-node-topology:password": "<node-password>",
-        		"netconf-node-topology:keepalive-delay": "300"
+                "netconf-node-topology:tcp-only": "false",
+                "netconf-node-topology:reconnect-on-changed-schema": "false",
+                "netconf-node-topology:host": "<node-ip-address>",
+                "netconf-node-topology:default-request-timeout-millis": "120000",
+                "netconf-node-topology:max-connection-attempts": "0",
+                "netconf-node-topology:sleep-factor": "1.5",
+                "netconf-node-topology:actor-response-wait-time": "5",
+                "netconf-node-topology:concurrent-rpc-limit": "0",
+                "netconf-node-topology:between-attempts-timeout-millis": "2000",
+                "netconf-node-topology:port": "<netconf-port>",
+                "netconf-node-topology:connection-timeout-millis": "20000",
+                "netconf-node-topology:username": "<node-username>",
+                "netconf-node-topology:password": "<node-password>",
+                "netconf-node-topology:keepalive-delay": "300"
             }
         ]
     }
@@ -464,92 +464,92 @@ nodes.
 .. code:: json
 
     {
-    	"input": {
-    		"sdnc-request-header": {
-    			"request-id": "request-1",
-    			"rpc-action": "service-create",
-    			"request-system-id": "appname"
-    		},
-    		"service-name": "test1",
-    		"common-id": "commonId",
-    		"connection-type": "service",
-    		"service-a-end": {
-    			"service-rate": "100",
-    			"node-id": "<xpdr-node-id>",
-    			"service-format": "Ethernet",
-    			"clli": "<ccli-name>",
-    			"tx-direction": {
-    				"port": {
-    					"port-device-name": "<xpdr-client-port>",
-    					"port-type": "fixed",
-    					"port-name": "<xpdr-client-port-number>",
-    					"port-rack": "000000.00",
-    					"port-shelf": "Chassis#1"
-    				},
-    				"lgx": {
-    					"lgx-device-name": "Some lgx-device-name",
-    					"lgx-port-name": "Some lgx-port-name",
-    					"lgx-port-rack": "000000.00",
-    					"lgx-port-shelf": "00"
-    				}
-    			},
-    			"rx-direction": {
-    				"port": {
-    					"port-device-name": "<xpdr-client-port>",
-    					"port-type": "fixed",
-    					"port-name": "<xpdr-client-port-number>",
-    					"port-rack": "000000.00",
-    					"port-shelf": "Chassis#1"
-    				},
-    				"lgx": {
-    					"lgx-device-name": "Some lgx-device-name",
-    					"lgx-port-name": "Some lgx-port-name",
-    					"lgx-port-rack": "000000.00",
-    					"lgx-port-shelf": "00"
-    				}
-    			},
-    			"optic-type": "gray"
-    		},
-    		"service-z-end": {
-    			"service-rate": "100",
-    			"node-id": "<xpdr-node-id>",
-    			"service-format": "Ethernet",
-    			"clli": "<ccli-name>",
-    			"tx-direction": {
-    				"port": {
-    					"port-device-name": "<xpdr-client-port>",
-    					"port-type": "fixed",
-    					"port-name": "<xpdr-client-port-number>",
-    					"port-rack": "000000.00",
-    					"port-shelf": "Chassis#1"
-    				},
-    				"lgx": {
-    					"lgx-device-name": "Some lgx-device-name",
-    					"lgx-port-name": "Some lgx-port-name",
-    					"lgx-port-rack": "000000.00",
-    					"lgx-port-shelf": "00"
-    				}
-    			},
-    			"rx-direction": {
-    				"port": {
-    					"port-device-name": "<xpdr-client-port>",
-    					"port-type": "fixed",
-    					"port-name": "<xpdr-client-port-number>",
-    					"port-rack": "000000.00",
-    					"port-shelf": "Chassis#1"
-    				},
-    				"lgx": {
-    					"lgx-device-name": "Some lgx-device-name",
-    					"lgx-port-name": "Some lgx-port-name",
-    					"lgx-port-rack": "000000.00",
-    					"lgx-port-shelf": "00"
-    				}
-    			},
-    			"optic-type": "gray"
-    		},
-    		"due-date": "yyyy-mm-ddT00:00:01Z",
-    		"operator-contact": "some-contact-info"
-    	}
+        "input": {
+            "sdnc-request-header": {
+                "request-id": "request-1",
+                "rpc-action": "service-create",
+                "request-system-id": "appname"
+            },
+            "service-name": "test1",
+            "common-id": "commonId",
+            "connection-type": "service",
+            "service-a-end": {
+                "service-rate": "100",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "Ethernet",
+                "clli": "<ccli-name>",
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-client-port>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-client-port-number>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-client-port>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-client-port-number>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "service-z-end": {
+                "service-rate": "100",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "Ethernet",
+                "clli": "<ccli-name>",
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-client-port>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-client-port-number>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-client-port>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-client-port-number>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "due-date": "yyyy-mm-ddT00:00:01Z",
+            "operator-contact": "some-contact-info"
+        }
     }
 
 Most important parameters for this REST RPC are the identification of the two physical client ports
@@ -570,18 +570,18 @@ connectivity service.
 .. code:: json
 
     {
-    	"input": {
-    		"sdnc-request-header": {
-    			"request-id": "request-1",
-    			"rpc-action": "service-delete",
-    			"request-system-id": "appname",
-    			"notification-url": "http://localhost:8585/NotificationServer/notify"
-    		},
-    		"service-delete-req-info": {
-    			"service-name": "test1",
-    			"tail-retention": "no"
-    		}
-    	}
+        "input": {
+            "sdnc-request-header": {
+                "request-id": "request-1",
+                "rpc-action": "service-delete",
+                "request-system-id": "appname",
+                "notification-url": "http://localhost:8585/NotificationServer/notify"
+            },
+            "service-delete-req-info": {
+                "service-name": "test1",
+                "tail-retention": "no"
+            }
+        }
     }
 
 Most important parameters for this REST RPC is the *service-name*.
