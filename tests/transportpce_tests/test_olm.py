@@ -34,7 +34,7 @@ class TransportOlmTesting(unittest.TestCase):
 
     @classmethod
     def __start_honeynode1(cls):
-        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+        executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
                       "/honeynode-distribution-1.18.01/honeycomb-tpce")
         if os.path.isfile(executable):
             with open('honeynode1.log', 'w') as outfile:
@@ -44,7 +44,7 @@ class TransportOlmTesting(unittest.TestCase):
 
     @classmethod
     def __start_honeynode2(cls):
-        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+        executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
                       "/honeynode-distribution-1.18.01/honeycomb-tpce")
         if os.path.isfile(executable):
             with open('honeynode2.log', 'w') as outfile:
@@ -54,7 +54,7 @@ class TransportOlmTesting(unittest.TestCase):
 
     @classmethod
     def __start_honeynode3(cls):
-        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+        executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
                       "/honeynode-distribution-1.18.01/honeycomb-tpce")
         if os.path.isfile(executable):
             with open('honeynode3.log', 'w') as outfile:
@@ -63,7 +63,7 @@ class TransportOlmTesting(unittest.TestCase):
                     stdout=outfile)
     @classmethod
     def __start_honeynode4(cls):
-        executable = ("./honeynode/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+        executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
                       "/honeynode-distribution-1.18.01/honeycomb-tpce")
         if os.path.isfile(executable):
             with open('honeynode4.log', 'w') as outfile:
