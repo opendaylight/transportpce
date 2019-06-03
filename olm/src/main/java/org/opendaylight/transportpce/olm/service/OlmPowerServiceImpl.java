@@ -444,7 +444,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     .rev181019.RatioDB spanLossTx;
                 Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
                     .interfaces.grp.Interface> interfaceObject =
-                        openRoadmInterfaces.getInterface(nodeId, interfaceName);
+                        openRoadmInterfaces.getInterface(realNodeId, interfaceName);
                 if (interfaceObject.isPresent()) {
                     InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
                         .interfaces.grp.Interface> interfacesIID =

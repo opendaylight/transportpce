@@ -167,7 +167,7 @@ final class OlmUtils22 {
                 if (measurements.getGranularity().getIntValue() == org.opendaylight.yang.gen.v1.http.org.openroadm.pm
                     .types.rev171215.PmGranularity.forValue(wantedGranularity.getIntValue()).getIntValue()) {
                     MeasurementsBuilder pmMeasureBuilder = new MeasurementsBuilder();
-                    pmMeasureBuilder.setPmparameterName(pm.getType().getName());
+                    pmMeasureBuilder.setPmparameterName(pm.getType().name());
                     pmMeasureBuilder.setPmparameterValue(measurements.getPmParameterValue().stringValue());
                     olmMeasurements.add(pmMeasureBuilder.build());
                 }
