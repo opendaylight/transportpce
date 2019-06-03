@@ -84,7 +84,7 @@ public class OpenRoadmInterfacesImpl221 {
     public Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName));
-        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL,
+        return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
             interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
