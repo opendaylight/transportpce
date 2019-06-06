@@ -129,7 +129,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                                     LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
                                     try {
                                         LOG.info("Now going in sleep mode");
-                                        Thread.sleep(120000);
+                                        Thread.sleep(OlmUtils.OLM_TIMER_1);
                                     } catch (InterruptedException e) {
                                         LOG.info("Transponder warmup failed for OCH connection: {}", interfaceName, e);
                                     }
@@ -146,7 +146,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                             if (callSetTransponderPower(nodeId, interfaceName, new BigDecimal(-5),openroadmVersion)) {
                                 LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
                                 try {
-                                    Thread.sleep(120000);
+                                    Thread.sleep(OlmUtils.OLM_TIMER_1);
                                 } catch (InterruptedException e) {
                                     // TODO Auto-generated catch block
                                     LOG.info("Transponder warmup failed for OCH connection: {}", interfaceName, e);
@@ -238,7 +238,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 //The value recommended by the white paper is 20 seconds and not 60.
                                 //TODO - commented code because one vendor is not supporting
                                 //GainLoss with target-output-power
-                                Thread.sleep(120000);
+                                Thread.sleep(OlmUtils.OLM_TIMER_1);
                                 crossConnect.setPowerLevel(nodeId, OpticalControlMode.GainLoss, powerValue,
                                         connectionNumber);
                             } else {
@@ -300,7 +300,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         LOG.warn("Power down failed for Roadm-connection: {}", connectionNumber);
                         return false;
                     }
-                    Thread.sleep(20000);
+                    Thread.sleep(OlmUtils.OLM_TIMER_2);
                     if (! crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off , null, connectionNumber)) {
                         LOG.warn("Setting power-control mode off failed for Roadm-connection: {}", connectionNumber);
                         return false;
@@ -412,7 +412,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         openroadmVersion)) {
                     LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
                     try {
-                        Thread.sleep(120000);
+                        Thread.sleep(OlmUtils.OLM_TIMER_1);
                         return true;
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
@@ -523,7 +523,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         LOG.info("Roadm-connection: {} updated ");
                         //TODO - commented code because one vendor is not supporting
                         //GainLoss with target-output-power
-                        Thread.sleep(20000);
+                        Thread.sleep(OlmUtils.OLM_TIMER_2);
                         crossConnect.setPowerLevel(nodeId,
                                 OpticalControlMode.GainLoss, powerValue,connectionNumber);
                         return true;
@@ -554,7 +554,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         LOG.info("Roadm-connection: {} updated ");
                         //TODO - commented code because one vendor is not supporting
                         //GainLoss with target-output-power
-                        Thread.sleep(20000);
+                        Thread.sleep(OlmUtils.OLM_TIMER_2);
                         crossConnect.setPowerLevel(nodeId,
                                 OpticalControlMode.GainLoss, powerValue,connectionNumber);
                         return true;
