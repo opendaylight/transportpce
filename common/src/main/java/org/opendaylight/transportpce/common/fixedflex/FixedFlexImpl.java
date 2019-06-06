@@ -35,6 +35,14 @@ public final class FixedFlexImpl implements FixedFlexInterface {
         this.wavelength = 0;
     }
 
+    public FixedFlexImpl(long wlIndex) {
+        this.index = wlIndex;
+        this.centerFrequency = 196.1 - (wlIndex - 1) * 0.05;
+        this.start = this.centerFrequency - 0.025;
+        this.stop = this.centerFrequency + 0.025;
+        this.wavelength = 1528.77 + ((wlIndex - 1) * 0.39);
+    }
+
     @Override
     /**
      * @param index Wavelength number

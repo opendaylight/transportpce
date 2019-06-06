@@ -394,11 +394,9 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
 
     private void addUsedWL(long wavelengthIndex, List<NodeIdPair> tpIds) {
         WriteTransaction addUsedWlTx = this.dataBroker.newWriteOnlyTransaction();
-        FixedFlexImpl fixedFlex = new FixedFlexImpl();
-        fixedFlex.getFixedFlexWaveMapping(wavelengthIndex);
+        FixedFlexImpl fixedFlex = new FixedFlexImpl(wavelengthIndex);
         FrequencyGHz frequencyGHz = new FrequencyGHz(new BigDecimal(fixedFlex.getWavelength()));
         FrequencyTHz frequencyTHz = new FrequencyTHz(new BigDecimal(fixedFlex.getCenterFrequency()));
-
         for (NodeIdPair idPair : tpIds) {
             Optional<TerminationPoint1> tpOpt = getTerminationPoint1FromDatastore(idPair.getNodeID(), idPair.getTpID());
 
