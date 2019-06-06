@@ -74,6 +74,8 @@ public final class OlmUtils {
      *            Input parameter from the olm yang model get-pm rpc
      * @param deviceTransactionManager
      *            Device tx manager
+     * @param openRoadmVersion
+     *            OpenRoadm version number
      *
      * @return Result of the request list of PM readings
      */

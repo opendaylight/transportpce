@@ -76,6 +76,7 @@ public final class OpenRoadmNetwork {
      *
      * @param nodeId node ID
      * @param deviceTransactionManager device transaction manager
+     * @param openRoadmVersion OpenRoadm version number
      *
      * @return node builder status
      */

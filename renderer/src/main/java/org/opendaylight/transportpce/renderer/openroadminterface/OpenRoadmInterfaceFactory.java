@@ -50,7 +50,11 @@ public class OpenRoadmInterfaceFactory {
      * This methods creates an OCH interface on the given termination point on
      * Roadm.
      *
+     * @param nodeId node ID
+     * @param logicalConnPoint logical connection point
      * @param waveNumber wavelength number of the OCH interface.
+     * @throws OpenRoadmInterfaceException OpenRoadm interface exception
+     *
      * @return Name of the interface if successful, otherwise return null.
      */
 
@@ -84,6 +88,11 @@ public class OpenRoadmInterfaceFactory {
     /**
      * This methods creates an ODU interface on the given termination point.
      *
+     * @param nodeId node ID
+     * @param logicalConnPoint logical connection point
+     * @param supportingOtuInterface supporting OTU interface
+     * @throws OpenRoadmInterfaceException OpenRoadm interface exception
+     *
      * @return Name of the interface if successful, otherwise return null.
      */
 
@@ -103,6 +112,11 @@ public class OpenRoadmInterfaceFactory {
 
     /**
      * This methods creates an OTU interface on the given termination point.
+     *
+     * @param nodeId node ID
+     * @param logicalConnPoint logical connection point
+     * @param supportOchInterface supporting OCH interface
+     * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      *
      * @return Name of the interface if successful, otherwise return null.
      */
