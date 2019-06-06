@@ -191,75 +191,73 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_06_service_path_create_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                 "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-                "interface/DEG1-TTP-TXRX-nmc"
+                "interface/DEG1-TTP-TXRX-nmc-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
              "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset({'name': 'DEG1-TTP-TXRX-nmc', 'administrative-state': 'inService',
+        self.assertDictContainsSubset({'name': 'DEG1-TTP-TXRX-nmc-7', 'administrative-state': 'inService',
               'supporting-circuit-pack-name': '1/0',
               'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
               'supporting-port': 'L1'}, res['interface'][0])
         self.assertDictEqual(
-             {u'frequency': 195.79999999999998, u'width': 1531.11},
+             {u'frequency': 191.65, u'width': 40},
              res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
 
     def test_07_service_path_create_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                 "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-                "interface/DEG1-TTP-TXRX-mc"
+                "interface/DEG1-TTP-TXRX-mc-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
              "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset({'name': 'DEG1-TTP-TXRX-mc', 'administrative-state': 'inService',
+        self.assertDictContainsSubset({'name': 'DEG1-TTP-TXRX-mc-7', 'administrative-state': 'inService',
               'supporting-circuit-pack-name': '1/0',
               'type': 'org-openroadm-interfaces:mediaChannelTrailTerminationPoint',
               'supporting-port': 'L1'}, res['interface'][0])
         self.assertDictEqual(
-             {u'min-freq': 195.77499999999998, u'max-freq': 195.825},
+             {u'min-freq': 191.625, u'max-freq': 191.67499999999998},
              res['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'])
 
 
     def test_08_service_path_create_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                 "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-                "interface/SRG1-PP3-TXRX-nmc"
+                "interface/SRG1-PP3-TXRX-nmc-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
              "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset({'name': 'SRG1-PP3-TXRX-nmc', 'administrative-state': 'inService',
+        self.assertDictContainsSubset({'name': 'SRG1-PP3-TXRX-nmc-7', 'administrative-state': 'inService',
               'supporting-circuit-pack-name': '3/0',
               'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
               'supporting-port': 'C3'}, res['interface'][0])
         self.assertDictEqual(
-             {u'frequency': 195.79999999999998, u'width': 1531.11},
+             {u'frequency': 191.65, u'width': 40},
              res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
 
+    # -mc supporting interfaces must not be created for SRG, only degrees
     def test_09_service_path_create_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                 "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-                "interface/SRG1-PP3-TXRX-mc"
+                "interface/SRG1-PP3-TXRX-mc-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
              "GET", url, headers=headers, auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+        self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
-        self.assertDictContainsSubset({'name': 'SRG1-PP3-TXRX-mc', 'administrative-state': 'inService',
-              'supporting-circuit-pack-name': '3/0',
-              'type': 'org-openroadm-interfaces:mediaChannelTrailTerminationPoint',
-              'supporting-port': 'C3'}, res['interface'][0])
-        self.assertDictEqual(
-             {u'min-freq': 195.77499999999998, u'max-freq': 195.825},
-             res['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'])
+        self.assertIn(
+             {"error-type":"application", "error-tag":"data-missing",
+              "error-message":"Request could not be completed because the relevant data model content does not exist"},
+             res['errors']['error'])
 
     def test_10_service_path_create_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
@@ -276,10 +274,10 @@ class TransportPCERendererTesting(unittest.TestCase):
               'opticalControlMode': 'off'},
              res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP3-TXRX-nmc'},
+             {'src-if': 'SRG1-PP3-TXRX-nmc-7'},
              res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG1-TTP-TXRX-nmc'},
+             {'dst-if': 'DEG1-TTP-TXRX-nmc-7'},
              res['roadm-connections'][0]['destination'])
 
     def test_11_service_path_create_xpdr_check(self):
@@ -301,7 +299,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertDictEqual(
              {u'rate': u'org-openroadm-common-types:R100G',
               u'transmit-power':-5,
-              u'frequency': 195.79999999999998},
+              u'frequency': 191.65},
              res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_12_service_path_create_xpdr_check(self):
@@ -367,11 +365,7 @@ class TransportPCERendererTesting(unittest.TestCase):
               'supporting-port': 'C1'},
              res['interface'][0])
         self.assertDictEqual(
-             {'speed': 100000,
-              'mtu': 9000,
-              'auto-negotiation': 'enabled',
-              'duplex': 'full',
-              'fec': 'off'},
+             {u'fec': u'off', u'speed': 100000},
              res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
 
     def test_15_service_path_create_xpdr_check(self):
@@ -422,7 +416,7 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_18_service_path_delete_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                 "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-                "interface/DEG1-TTP-TXRX-mc"
+                "interface/DEG1-TTP-TXRX-mc-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -437,7 +431,7 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_19_service_path_delete_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                 "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-                "interface/DEG1-TTP-TXRX-nmc"
+                "interface/DEG1-TTP-TXRX-nmc-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -452,7 +446,7 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_20_service_path_delete_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/SRG1-PP3-TXRX-mc"
+               "interface/SRG1-PP3-TXRX-mc-7"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -466,7 +460,7 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_21_service_path_delete_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/SRG1-PP3-TXRX-nmc"
+               "interface/SRG1-PP3-TXRX-nmc-7"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
