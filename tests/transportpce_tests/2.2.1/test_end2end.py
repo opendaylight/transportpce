@@ -443,10 +443,10 @@ class TransportPCEFulltesting(unittest.TestCase):
               'target-output-power': -3.0},
              res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP1-TXRX-nmc'},
+             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
              res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG2-TTP-TXRX-nmc'},
+             {'dst-if': 'DEG2-TTP-TXRX-nmc-1'},
              res['roadm-connections'][0]['destination'])
         time.sleep(5)
 
@@ -466,10 +466,10 @@ class TransportPCEFulltesting(unittest.TestCase):
               'target-output-power': -3.0},
              res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP1-TXRX-nmc'},
+             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
              res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG1-TTP-TXRX-nmc'},
+             {'dst-if': 'DEG1-TTP-TXRX-nmc-1'},
              res['roadm-connections'][0]['destination'])
         time.sleep(5)
 
@@ -753,10 +753,10 @@ class TransportPCEFulltesting(unittest.TestCase):
               'opticalControlMode': 'power'},
              res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'DEG2-TTP-TXRX-nmc'},
+             {'src-if': 'DEG2-TTP-TXRX-nmc-2'},
              res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'SRG1-PP2-TXRX-nmc'},
+             {'dst-if': 'SRG1-PP2-TXRX-nmc-2'},
              res['roadm-connections'][0]['destination'])
 
     def test_23_check_topo_XPDRA(self):
@@ -1206,10 +1206,10 @@ class TransportPCEFulltesting(unittest.TestCase):
               'target-output-power': -3.0},
              res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP1-TXRX-nmc'},
+             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
              res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG2-TTP-TXRX-nmc'},
+             {'dst-if': 'DEG2-TTP-TXRX-nmc-1'},
              res['roadm-connections'][0]['destination'])
         time.sleep(7)
 
@@ -1229,10 +1229,10 @@ class TransportPCEFulltesting(unittest.TestCase):
               'target-output-power': -3.0},
              res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP1-TXRX-nmc'},
+             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
              res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG1-TTP-TXRX-nmc'},
+             {'dst-if': 'DEG1-TTP-TXRX-nmc-1'},
              res['roadm-connections'][0]['destination'])
         time.sleep(7)
 
@@ -1374,10 +1374,10 @@ class TransportPCEFulltesting(unittest.TestCase):
               'target-output-power': -3.0},
              res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP2-TXRX-nmc'},
+             {'src-if': 'SRG1-PP2-TXRX-nmc-2'},
              res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG2-TTP-TXRX-nmc'},
+             {'dst-if': 'DEG2-TTP-TXRX-nmc-2'},
              res['roadm-connections'][0]['destination'])
         time.sleep(2)
 

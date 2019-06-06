@@ -38,7 +38,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CircuitPack;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.PortsKey;
@@ -198,18 +198,23 @@ public class PortMappingVersion221 {
                 LOG.warn("Ports were not found for circuit pack: {}", circuitPackName);
                 continue;
             }
+
             for (Ports port : cp.getPorts()) {
-                if (Port.PortQual.XpdrNetwork.getName().equals(port.getPortQual().getName())) {
+                if (port.getPortQual() == null) {
+                    continue;
+                }
+                if (PortQual.XpdrNetwork.getName().equals(port.getPortQual().getName()))  {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
                             "XPDR1-" + StringConstants.NETWORK_TOKEN + line));
                     line++;
-                } else if (Port.PortQual.XpdrClient.getName().equals(port.getPortQual().getName())) {
+                } else if (PortQual.XpdrClient.getName().equals(port.getPortQual().getName())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
                             "XPDR1-" + StringConstants.CLIENT_TOKEN + client));
                     client++;
                 } else {
                     LOG.warn("Not supported type of port! Port type: {}", port.getPortQual().getName());
                 }
+                LOG.info("portMapList Is {} {}",portMapList.size(),portMapList.get(0));
             }
         }
         return true;
@@ -277,7 +282,7 @@ public class PortMappingVersion221 {
                                          .getPortName(),
                                  logicalConnectionPoint);
                         portMapList.add(createMappingObject(nodeId, port, circuitPackName, logicalConnectionPoint));
-                    } else if (Port.PortQual.RoadmInternal.equals(port.getPortQual())) {
+                    } else if (PortQual.RoadmInternal.equals(port.getPortQual())) {
                         LOG.info("Port is internal, skipping Logical Connection Point missing for {} {}",
                                  circuitPackName,
                                  port.getPortName());

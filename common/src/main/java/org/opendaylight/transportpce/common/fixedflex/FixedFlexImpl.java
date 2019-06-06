@@ -46,10 +46,10 @@ public final class FixedFlexImpl implements FixedFlexInterface {
      **/
     public FixedFlexImpl getFixedFlexWaveMapping(long wlIndex) {
         FixedFlexImpl fixedFlex = new FixedFlexImpl();
-        fixedFlex.centerFrequency = 196.1 - (wlIndex - 1) * 0.05;
-        fixedFlex.wavelength = 1528.77 + ((wlIndex - 1) * 0.39);
-        fixedFlex.start = fixedFlex.centerFrequency - 0.025;
-        fixedFlex.stop = fixedFlex.centerFrequency + 0.025;
+        long mappedWL = wlIndex - 36;
+        fixedFlex.centerFrequency = 193.1 + (50.0 / 1000.0) * mappedWL;
+        fixedFlex.start = 193.1 + (50.0 * mappedWL - 25) / 1000.0;
+        fixedFlex.stop = 193.1 + (50.0 * mappedWL + 25) / 1000.0;
         return fixedFlex;
     }
 

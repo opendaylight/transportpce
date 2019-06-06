@@ -64,9 +64,9 @@ public class CrossConnectImpl221 {
 
         rdmConnBldr.setOpticalControlMode(OpticalControlMode.Off);
 
-        rdmConnBldr.setSource(new SourceBuilder().setSrcIf(srcTp + "-nmc").build());
+        rdmConnBldr.setSource(new SourceBuilder().setSrcIf(srcTp + "-nmc-" + waveNumber).build());
 
-        rdmConnBldr.setDestination(new DestinationBuilder().setDstIf(destTp + "-nmc").build());
+        rdmConnBldr.setDestination(new DestinationBuilder().setDstIf(destTp + "-nmc-" + waveNumber).build());
 
 
         InstanceIdentifier<RoadmConnections> rdmConnectionIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)

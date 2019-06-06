@@ -85,11 +85,11 @@ public class OpenRoadmInterface221 {
 
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder();
-        ethIfBuilder.setAutoNegotiation(EthAttributes.AutoNegotiation.Enabled);
-        ethIfBuilder.setDuplex(EthAttributes.Duplex.Full);
+        //ethIfBuilder.setAutoNegotiation(EthAttributes.AutoNegotiation.Enabled);
+        //ethIfBuilder.setDuplex(EthAttributes.Duplex.Full);
         ethIfBuilder.setFec(EthAttributes.Fec.Off);
         ethIfBuilder.setSpeed(100000L);
-        ethIfBuilder.setMtu(9000L);
+        //ethIfBuilder.setMtu(9000L);
 
         InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.class,
             logicalConnPoint + "-ETHERNET");
@@ -123,11 +123,13 @@ public class OpenRoadmInterface221 {
 
         List<String> interfacesCreated = new ArrayList<>();
 
+        if (logicalConnPoint.contains("DEG")) {
+            String mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, waveNumber);
+            interfacesCreated.add(mcInterfaceCreated);
+        }
+
         String nmcInterfaceCreated = createNMCInterface(nodeId, logicalConnPoint, waveNumber);
         interfacesCreated.add(nmcInterfaceCreated);
-
-        String mcInterfaceCreated = createMCInterface(nodeId, logicalConnPoint, waveNumber);
-        interfacesCreated.add(mcInterfaceCreated);
 
         return interfacesCreated;
     }
@@ -141,14 +143,15 @@ public class OpenRoadmInterface221 {
 
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
 
         // TODO : Check this method
 
         InterfaceBuilder mcInterfaceBldr = createGenericInterfaceBuilder(portMap,
-            MediaChannelTrailTerminationPoint.class, logicalConnPoint + "-mc");
+            MediaChannelTrailTerminationPoint.class, logicalConnPoint + "-mc" + "-" + waveNumber);
         mcInterfaceBldr.setSupportingInterface(portMap.getSupportingOms());
 
         McTtpBuilder mcTtpBuilder = new McTtpBuilder();
@@ -157,8 +160,8 @@ public class OpenRoadmInterface221 {
 
         // Create Interface1 type object required for adding as augmentation
         org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.Interface1Builder
-            interface1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019
-            .Interface1Builder();
+            interface1Builder =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.Interface1Builder();
         interface1Builder.setMcTtp(mcTtpBuilder.build());
         mcInterfaceBldr.addAugmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.Interface1.class,
@@ -178,26 +181,36 @@ public class OpenRoadmInterface221 {
 
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
 
-        // TODO : Check this method
+        LOG.info(" Freq Start {} and Freq End {} and center-Freq {}",
+            String.valueOf(fixedFlex.getStart()), String.valueOf(fixedFlex.getStop()),
+            String.valueOf(fixedFlex.getCenterFrequency()));
+        //TODO : Check this method
         InterfaceBuilder nmcInterfaceBldr = createGenericInterfaceBuilder(portMap,
-            NetworkMediaChannelConnectionTerminationPoint.class, logicalConnPoint + "-nmc");
-        nmcInterfaceBldr.setSupportingInterface(logicalConnPoint + "-mc");
+            NetworkMediaChannelConnectionTerminationPoint.class, logicalConnPoint + "-nmc" + "-" + waveNumber);
+        if (logicalConnPoint.contains("DEG")) {
+            nmcInterfaceBldr.setSupportingInterface(logicalConnPoint + "-mc" + "-" + waveNumber);
+        }
+
         NmcCtpBuilder nmcCtpIfBuilder = new NmcCtpBuilder();
 
         nmcCtpIfBuilder.setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())));
-        nmcCtpIfBuilder.setWidth(FrequencyGHz.getDefaultInstance(String.valueOf(fixedFlex.getWavelength())));
+        nmcCtpIfBuilder.setWidth(FrequencyGHz.getDefaultInstance("40"));
+
         // Create Interface1 type object required for adding as augmentation
         org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019.Interface1Builder
-            nmcCtpI1fBuilder = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces
-            .rev181019.Interface1Builder();
+            nmcCtpI1fBuilder = new
+             org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019
+                .Interface1Builder();
         nmcCtpI1fBuilder.setNmcCtp(nmcCtpIfBuilder.build());
         nmcInterfaceBldr.addAugmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019.Interface1.class,
             nmcCtpI1fBuilder.build());
+
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, nmcInterfaceBldr);
         return nmcInterfaceBldr.getName();
@@ -211,8 +224,9 @@ public class OpenRoadmInterface221 {
 
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node %s and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
 
         // OCH interface specific data
@@ -249,8 +263,9 @@ public class OpenRoadmInterface221 {
         throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(portMap, OtnOdu.class,
             logicalConnPoint + "-ODU");
@@ -269,9 +284,8 @@ public class OpenRoadmInterface221 {
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder
-            oduIf1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019
-            .Interface1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder oduIf1Builder =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
         oduInterfaceBldr.addAugmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
             oduIf1Builder.setOdu(oduIfBuilder.build()).build());
@@ -285,8 +299,9 @@ public class OpenRoadmInterface221 {
         throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
         // Create generic interface
         InterfaceBuilder otuInterfaceBldr = createGenericInterfaceBuilder(portMap, OtnOtu.class,
@@ -300,9 +315,8 @@ public class OpenRoadmInterface221 {
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder
-            otuIf1Builder = new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019
-            .Interface1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder otuIf1Builder =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder();
         otuInterfaceBldr.addAugmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1.class,
             otuIf1Builder.setOtu(otuIfBuilder.build()).build());
