@@ -34,6 +34,8 @@ public final class OlmUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(OlmUtils.class);
     private static long DATABROKER_READ_TIMEOUT_SECONDS = 120;
+    public static long OLM_TIMER_1 = 120000; //nominal value is 120000 - functional test value may be 3000
+    public static long OLM_TIMER_2 = 20000; //nominal value is 20000 - functional test value may be 2000
     private static final InstanceIdentifier<Topology> NETCONF_TOPO_IID =
         InstanceIdentifier
             .create(NetworkTopology.class)
