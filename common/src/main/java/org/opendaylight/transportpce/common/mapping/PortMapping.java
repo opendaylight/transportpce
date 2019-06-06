@@ -39,6 +39,8 @@ public interface PortMapping {
      *
      * @param nodeId
      *            node ID
+     * @param nodeVersion
+     *            node version
      *
      * @return true/false based on status of operation
      */

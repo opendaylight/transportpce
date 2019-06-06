@@ -23,8 +23,8 @@ public interface OpenRoadmInterfaces {
      * </p>
      *
      * @param nodeId node ID
-     *
      * @param ifBuilder Builder object containing the data to post.
+     * @param <T> generic
      *
      * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
      *
@@ -54,6 +54,8 @@ public interface OpenRoadmInterfaces {
      *
      * @param interfaceName
      *            Name of the interface
+     * @param <T>
+     *            generic
      *
      * @return Optional of Interface from datastore
      *

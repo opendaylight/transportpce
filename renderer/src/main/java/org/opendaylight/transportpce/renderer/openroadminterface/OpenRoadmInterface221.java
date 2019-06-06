@@ -110,7 +110,11 @@ public class OpenRoadmInterface221 {
      * This methods creates an OCH interface on the given termination point on
      * Roadm.
      *
+     * @param nodeId node ID
+     * @param logicalConnPoint logical connection point
      * @param waveNumber wavelength number of the OCH interface.
+     * @throws OpenRoadmInterfaceException OpenRoadm interface exception
+     *
      * @return Name of the interface if successful, otherwise return null.
      */
 

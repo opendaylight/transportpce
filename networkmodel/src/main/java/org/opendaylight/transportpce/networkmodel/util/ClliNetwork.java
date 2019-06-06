@@ -68,6 +68,7 @@ public final class ClliNetwork {
      *
      * @param deviceTransactionManager device transation manager
      * @param deviceId device ID
+     * @param openRoadmVersion OpenRoadm Version number
      *
      * @return node builder status
      */

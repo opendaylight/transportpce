@@ -141,6 +141,11 @@ public final class PowerMgmtVersion121 {
      *            OCH interface name carrying WL
      * @param txPower
      *            Calculated transmit power
+     * @param interfaceObj
+     *            Interface object
+     * @param deviceTransactionManager
+     *            Device Transaction Manager
+     *
      * @return true/false based on status of operation
      */
     public static boolean setTransponderPower(String nodeId, String interfaceName, BigDecimal txPower,
@@ -202,6 +207,11 @@ public final class PowerMgmtVersion121 {
      *            Power value in DBm.
      * @param connectionNumber
      *            Name of the cross connect.
+     * @param crossConnect
+     *            cross connect.
+     * @param deviceTransactionManager
+     *            Device Transaction Manager.
+     *
      * @return true/false based on status of operation.
      */
     public static boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue,
