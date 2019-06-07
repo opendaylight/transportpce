@@ -496,7 +496,8 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
-        time.sleep(40)
+        #time.sleep(40)
+        time.sleep(10)
 
     def test_18_servicePath_create_ZToA(self):
         url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
@@ -537,7 +538,8 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
-        time.sleep(40)
+        #time.sleep(40)
+        time.sleep(10)
 
     def test_19_service_power_setup_XPDRA_XPDRC(self):
         url = "{}/operations/transportpce-olm:service-power-setup".format(self.restconf_baseurl)
@@ -892,7 +894,8 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
-        time.sleep(40)
+        #time.sleep(40)
+        time.sleep(10)
 
     def test_34_get_interface_XPDRA_XPDR1_NETWORK2(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA/yang-ext:mount/"
