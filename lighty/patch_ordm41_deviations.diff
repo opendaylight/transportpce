@@ -1,0 +1,141 @@
+diff --git ordmodels/network/src/main/yang/org-openroadm-network-topology@2018-11-30.yang ordmodels/network/src/main/yang/org-openroadm-network-topology@2018-11-30.yang
+index 9928281..3ad3749 100644
+--- ordmodels/network/src/main/yang/org-openroadm-network-topology@2018-11-30.yang
++++ ordmodels/network/src/main/yang/org-openroadm-network-topology@2018-11-30.yang
+@@ -110,64 +110,6 @@ module org-openroadm-network-topology {
+       "Version 2.0";
+   }
+
+-  deviation "/nd:networks/nd:network/nd:node/cnet:node-type" {
+-    deviate add {
+-      must
+-        "(not /nd:networks/nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-topology) or
+-         (/nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-topology and
+-         (../cnet:node-type = 'DEGREE' or ../cnet:node-type = 'SRG' or ../cnet:node-type = 'TPDR' or ../cnet:node-type = 'SWITCH' or
+-          ../cnet:node-type = 'REGEN' or ../cnet:node-type = 'REGEN-UNI' or ../cnet:node-type = 'EXT-PLUGGABLE' or
+-          ../cnet:node-type = 'MUXPDR'))" {
+-        error-message "Invalid node type for openroadm-topology";
+-        description
+-          "The valid node types in the ROADM topology are 'SRG', 'DEGREE',
+-           'TPDR', 'SWITCH', 'REGEN', 'REGEN-UNI', 'EXT-PLUGGABLE' and 'MUXPDR'";
+-      }
+-    }
+-  }
+-  deviation "/nd:networks/nd:network/nd:node/nwt:termination-point/cnet:tp-type" {
+-    description
+-      "Defines which TP types can be instantiated on which Node types";
+-    deviate add {
+-      must
+-        "/nd:network/nd:node/cnet:node-type != 'DEGREE' or (../../cnet:node-type = 'DEGREE'  and
+-         (../cnet:tp-type = 'DEGREE-TX-TTP' or ../cnet:tp-type = 'DEGREE-RX-TTP' or  ../cnet:tp-type = 'DEGREE-TXRX-TTP' or
+-         ../cnet:tp-type = 'DEGREE-TX-CTP' or ../cnet:tp-type = 'DEGREE-RX-CTP' or ../cnet:tp-type = 'DEGREE-TXRX-CTP'))" {
+-        error-message "Invalid TP for node type 'DEGREE'";
+-      }
+-      must
+-        "/nd:network/nd:node/cnet:node-type != 'SRG' or (../../cnet:node-type = 'SRG' and
+-         (../cnet:tp-type = 'SRG-TX-CP' or ../cnet:tp-type = 'SRG-RX-CP' or ../cnet:tp-type = 'SRG-TXRX-CP' or
+-         ../cnet:tp-type = 'SRG-RX-PP' or ../cnet:tp-type = 'SRG-TX-PP' or ../cnet:tp-type = 'SRG-TXRX-PP'))" {
+-        error-message "Invalid TP for node type 'SRG'";
+-      }
+-      must
+-        " (/nd:network/nd:node/cnet:node-type != 'TPDR' and ../../cnet:node-type != 'MUXPDR' and ../../cnet:node-type != 'REGEN' and
+-         ../../cnet:node-type != 'REGEN-UNI' and ../../cnet:node-type != 'SWITCH')
+-         or ((../../cnet:node-type = 'TPDR' or ../../cnet:node-type = 'MUXPDR' or ../../cnet:node-type = 'REGEN' or
+-         ../../cnet:node-type = 'REGEN-UNI' or ../../cnet:node-type = 'SWITCH') and
+-         (../cnet:tp-type = 'XPONDER-NETWORK' or ../cnet:tp-type = 'XPONDER-CLIENT' or ../cnet:tp-type = 'XPONDER-PORT'))" {
+-        error-message "Invalid TP for node type 'XPONDER'";
+-      }
+-      must "/nd:network/nd:node/cnet:node-type != 'EXT-PLUGGABLE' or (../../cnet:node-type = 'EXT-PLUGGABLE' and ../cnet:tp-type = 'EXT-PLUGGABLE-TP')" {
+-        error-message "Invalid TP for node type 'EXT-PLUGGABLE'";
+-      }
+-    }
+-  }
+-  deviation "/nd:networks/nd:network/nwt:link/cnet:link-type" {
+-    deviate add {
+-      must
+-        "(not /nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-topology) or
+-         (/nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-topology and
+-         (../cnet:link-type = 'ROADM-TO-ROADM' or ../cnet:link-type = 'ADD-LINK' or ../cnet:link-type = 'DROP-LINK' or
+-          ../cnet:link-type = 'EXPRESS-LINK' or ../cnet:link-type = 'XPONDER-INPUT' or ../cnet:link-type = 'XPONDER-OUTPUT'))" {
+-        error-message "Invalid link type for openroadm-topology";
+-        description
+-          "The valid link types in the ROADM topology are 'ROADM-TO-ROADM', 'ADD-LINK',
+-           'DROP-LINK', 'EXPRESS-LINK', 'XPONDER-INPUT', 'XPONDER-OUTPUT'";
+-      }
+-    }
+-  }
+   augment "/nd:networks/nd:network/nd:network-types/cnet:openroadm-common-network" {
+     description
+       "Introduce new network type for the Open ROADM optical
+diff --git ordmodels/network/src/main/yang/org-openroadm-network@2018-11-30.yang ordmodels/network/src/main/yang/org-openroadm-network@2018-11-30.yang
+index a236b88..ce5a8d9 100644
+--- ordmodels/network/src/main/yang/org-openroadm-network@2018-11-30.yang
++++ ordmodels/network/src/main/yang/org-openroadm-network@2018-11-30.yang
+@@ -104,18 +104,6 @@ module org-openroadm-network {
+       "Version 1.2";
+   }
+
+-  deviation "/nd:networks/nd:network/nd:node/cnet:node-type" {
+-    deviate add {
+-      must
+-        "(not /nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-network) or
+-         (/nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-network and
+-         (../cnet:node-type = 'ROADM' or ../cnet:node-type = 'XPONDER' or ../cnet:node-type = 'EXT-PLUGGABLE'))" {
+-        error-message "Invalid node type for openroadm-network";
+-        description
+-          "The valid node types in the ROADM network are XPONDER, EXT-PLUGGABLE and ROADM.";
+-      }
+-    }
+-  }
+   augment "/nd:networks/nd:network/nd:network-types/cnet:openroadm-common-network" {
+     description
+       "Introduce new network type for the Open ROADM optical network";
+diff --git ordmodels/network/src/main/yang/org-openroadm-otn-network-topology@2018-11-30.yang ordmodels/network/src/main/yang/org-openroadm-otn-network-topology@2018-11-30.yang
+index 756f4df..fd2d1f1 100644
+--- ordmodels/network/src/main/yang/org-openroadm-otn-network-topology@2018-11-30.yang
++++ ordmodels/network/src/main/yang/org-openroadm-otn-network-topology@2018-11-30.yang
+@@ -90,44 +90,6 @@ module org-openroadm-otn-network-topology {
+       "Version 2.1";
+   }
+
+-  deviation "/nd:networks/nd:network/nd:node/cnet:node-type" {
+-    deviate add {
+-      must
+-        "(not /nd:network/nd:network-types/cnet:openroadm-common-network/otn-topology) or
+-         (/nd:network/nd:network-types/cnet:openroadm-common-network/otn-topology and
+-         (../cnet:node-type = 'SWITCH' or ../cnet:node-type = 'MUXPDR' or ../cnet:node-type = 'TPDR' or
+-          ../cnet:node-type = 'REGEN' or ../cnet:node-type = 'REGEN-UNI'))" {
+-        error-message "Invalid node type for otn-topology";
+-        description
+-          "The type of a node in the OTN topology. Valid node types are 'MUXPDR', 'TPDR' and 'SWITCH'";
+-      }
+-    }
+-  }
+-  deviation "/nd:networks/nd:network/nd:node/nwt:termination-point/cnet:tp-type" {
+-    description
+-      "Defines which TP types can be instantiated on which Node types";
+-    deviate add {
+-      must
+-        "(/nd:network/nd:node/cnet:node-type != 'MUXPDR' and ../../cnet:node-type != 'SWITCH' and ../../cnet:node-type != 'TPDR'
+-         and ../cnet:node-type != 'REGEN' and ../cnet:node-type != 'REGEN-UNI') or
+-         ((../../cnet:node-type = 'MUXPDR' or ../../cnet:node-type = 'SWITCH' or ../../cnet:node-type = 'TPDR' or
+-         ../cnet:node-type = 'REGEN' or ../cnet:node-type = 'REGEN-UNI') and
+-         (../cnet:tp-type = 'XPONDER-NETWORK' or ../cnet:tp-type = 'XPONDER-CLIENT' or ../cnet:tp-type = 'XPONDER-PORT'))" {
+-        error-message "Invalid TP for node type Xponder";
+-      }
+-    }
+-  }
+-  deviation "/nd:networks/nd:network/nwt:link/cnet:link-type" {
+-    deviate add {
+-      must
+-        "(not /nd:network/nd:network-types/cnet:openroadm-common-network/otn-topology) or
+-         (/nd:network/nd:network-types/cnet:openroadm-common-network/otn-topology and ../cnet:link-type = 'OTN-LINK')" {
+-        error-message "Invalid link type for otn-topology";
+-        description
+-          "The valid link type in the OTN topology is 'OTN-LINK'";
+-      }
+-    }
+-  }
+   augment "/nd:networks/nd:network/nd:network-types/cnet:openroadm-common-network" {
+     description
+       "Introduce new network type for the Open ROADM OTN network topology";

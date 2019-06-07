@@ -44,6 +44,7 @@ unzip lighty-transportpce-10.0.1-SNAPSHOT-bin.zip
 cd lighty-transportpce-10.0.1-SNAPSHOT
 ./start-controller.sh
 ```
+* The whole build process described here and in the previous section can be performed automatically by launching the script build.sh from lighty folder.
 
 ## TransportPCE lighty.io - karaf comparison
 
