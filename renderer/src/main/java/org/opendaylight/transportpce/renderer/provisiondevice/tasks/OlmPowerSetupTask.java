@@ -9,6 +9,8 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+
+import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.renderer.provisiondevice.OLMRenderingResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupOutput;
@@ -39,7 +41,7 @@ public class OlmPowerSetupTask implements Callable<OLMRenderingResult> {
         }
 
         LOG.debug("Result: {}", result.getResult());
-        if (result.isSuccessful()) {
+        if (ResponseCodes.SUCCESS_RESULT.equals(result.getResult().getResult())) {
             LOG.info("OLM power setup finished successfully");
             return OLMRenderingResult.ok();
         } else {

@@ -9,6 +9,8 @@ package org.opendaylight.transportpce.renderer.stub;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
+
+import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.CalculateSpanlossBaseOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.CalculateSpanlossCurrentInput;
@@ -61,6 +63,7 @@ public class OlmServiceStub implements TransportpceOlmService {
 
     @Override public ListenableFuture<RpcResult<ServicePowerSetupOutput>> servicePowerSetup(
             ServicePowerSetupInput input) {
-        return RpcResultBuilder.success(new ServicePowerSetupOutputBuilder().build()).buildFuture();
+        return RpcResultBuilder.success(new ServicePowerSetupOutputBuilder()
+            .setResult(ResponseCodes.SUCCESS_RESULT).build()).buildFuture();
     }
 }

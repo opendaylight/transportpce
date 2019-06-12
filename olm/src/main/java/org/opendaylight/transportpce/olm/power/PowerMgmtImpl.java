@@ -140,8 +140,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 LOG.info("SRG Power Range not found");
                             }
                         } else {
-                            LOG.info("Tranponder range not available seting to default "
-                                    + "power for nodeId: {}", nodeId);
+                            LOG.info("Tranponder range not available setting to default power for nodeId: {}", nodeId);
                             String interfaceName = destTpId + "-" + input.getWaveNumber();
                             if (callSetTransponderPower(nodeId, interfaceName, new BigDecimal(-5),openroadmVersion)) {
                                 LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
@@ -194,8 +193,14 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 return false;
                             }
                             if (interfaceOpt.isPresent()) {
-                                spanLossTx = interfaceOpt.get().augmentation(Interface1.class).getOts()
-                                    .getSpanLossTransmit().getValue();
+                                if (interfaceOpt.get().augmentation(Interface1.class).getOts()
+                                    .getSpanLossTransmit() != null) {
+                                    spanLossTx = interfaceOpt.get().augmentation(Interface1.class).getOts()
+                                            .getSpanLossTransmit().getValue();
+                                    LOG.info("Spanloss TX is {}", spanLossTx);
+                                } else {
+                                    LOG.error("interface {} has no spanloss value", interfaceOpt.get().getName());
+                                }
                             } else {
                                 LOG.error("Interface {} on node {} is not present!", portMapping.getSupportingOts(),
                                     nodeId);
@@ -217,18 +222,39 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 return false;
                             }
                             if (interfaceOpt.isPresent()) {
-                                spanLossTx = interfaceOpt.get().augmentation(org.opendaylight.yang.gen.v1.http.org
-                                    .openroadm.optical.transport.interfaces.rev181019.Interface1.class).getOts()
-                                    .getSpanLossTransmit().getValue();
+                                if (interfaceOpt.get().augmentation(org.opendaylight.yang.gen.v1.http.org
+                                        .openroadm.optical.transport.interfaces.rev181019.Interface1.class).getOts()
+                                        .getSpanLossTransmit() != null) {
+                                    spanLossTx = interfaceOpt.get().augmentation(org.opendaylight.yang.gen.v1.http.org
+                                            .openroadm.optical.transport.interfaces.rev181019.Interface1.class).getOts()
+                                            .getSpanLossTransmit().getValue();
+                                    LOG.info("Spanloss TX is {}", spanLossTx);
+                                } else {
+                                    LOG.error("interface {} has no spanloss value", interfaceOpt.get().getName());
+                                }
                             } else {
                                 LOG.error("Interface {} on node {} is not present!", portMapping.getSupportingOts(),
                                     nodeId);
                                 return false;
                             }
                         }
-                        LOG.info("Spanloss TX is {}", spanLossTx);
-                        BigDecimal powerValue = BigDecimal.valueOf(Math.min(spanLossTx.doubleValue() - 9, 2));
-                        LOG.info("Power Value is {}", powerValue);
+
+                        BigDecimal powerValue =  null;
+                        if (spanLossTx != null &&  spanLossTx.intValue() <= 28 && spanLossTx.intValue() > 0) {
+                            powerValue = BigDecimal.valueOf(Math.min(spanLossTx.doubleValue() - 9, 2));
+                            LOG.info("Power Value is {}", powerValue);
+                        } else if (spanLossTx.intValue() > 28) {
+                            LOG.error(
+                                "Power Value is null - spanLossTx > 28dB not compliant with openROADM specifications");
+                            return false;
+                        } else if (spanLossTx.intValue() <= 0) {
+                            LOG.error(
+                                "Power Value is null - spanLossTx <= 0 dB not compliant with openROADM specifications");
+                            return false;
+                        } else {
+                            LOG.error("Power Value is null - spanLossTx is null");
+                            return false;
+                        }
                         try {
                             Boolean setXconnPowerSuccessVal = crossConnect.setPowerLevel(nodeId,
                                     OpticalControlMode.Power, powerValue, connectionNumber);
@@ -353,8 +379,7 @@ public class PowerMgmtImpl implements PowerMgmt {
             }
             LOG.info("Transponder power range is fine");
             if (!txPowerRangeMap.isEmpty()) {
-                LOG.info("Transponder power range is not null {}, {}",
-                        nextNodeId,srgId);
+                LOG.info("Transponder power range is not null {}, {}", nextNodeId,srgId);
                 //Transponder range is not empty then check SRG Range
 
                 Optional<Mapping> mappingObjectSRG = OlmUtils.getNode(nextNodeId, db)
@@ -405,8 +430,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                     return false;
                 }
             } else {
-                LOG.info("Tranponder range not available seting to default "
-                        + "power for nodeId: {}", nodeId);
+                LOG.info("Tranponder range not available seting to default power for nodeId: {}", nodeId);
                 String interfaceName = destTpId + "-" + waveLength;
                 if (callSetTransponderPower(nodeId,interfaceName,new BigDecimal(-5),
                         openroadmVersion)) {
@@ -528,13 +552,11 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 OpticalControlMode.GainLoss, powerValue,connectionNumber);
                         return true;
                     } else {
-                        LOG.info("Set Power failed for Roadm-connection: {} on Node: {}", connectionNumber,
-                                nodeId);
+                        LOG.info("Set Power failed for Roadm-connection: {} on Node: {}", connectionNumber, nodeId);
                         return false;
                     }
                 } else {
-                    LOG.error("Interface {} on node {} is not present!", interfaceName,
-                            nodeId);
+                    LOG.error("Interface {} on node {} is not present!", interfaceName, nodeId);
                     return false;
                 }
             } else if (openroadmVersion.equals(Nodes.OpenroadmVersion._221)) {
@@ -559,15 +581,13 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 OpticalControlMode.GainLoss, powerValue,connectionNumber);
                         return true;
                     } else {
-                        LOG.info("Set Power failed for Roadm-connection: {} on Node: {}", connectionNumber,
-                                nodeId);
+                        LOG.info("Set Power failed for Roadm-connection: {} on Node: {}", connectionNumber, nodeId);
                         return false;
                     }
                 }
             }
         } catch (OpenRoadmInterfaceException | InterruptedException ex) {
-            LOG.error("Error during power setup on Roadm nodeId: {} for connection: {}",
-                    nodeId, connectionNumber, ex);
+            LOG.error("Error during power setup on Roadm nodeId: {} for connection: {}", nodeId, connectionNumber, ex);
             return false;
         }
         return false;
