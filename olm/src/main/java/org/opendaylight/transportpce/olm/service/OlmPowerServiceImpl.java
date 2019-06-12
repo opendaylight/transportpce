@@ -145,7 +145,6 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     public ServicePowerSetupOutput servicePowerSetup(ServicePowerSetupInput powerSetupInput) {
         ServicePowerSetupOutputBuilder powerSetupOutput = new ServicePowerSetupOutputBuilder();
         boolean successValPowerCalculation = powerMgmt.setPower(powerSetupInput);
-
         if (successValPowerCalculation) {
             powerSetupOutput.setResult(ResponseCodes.SUCCESS_RESULT);
         } else {
@@ -426,8 +425,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     LOG.info("Spanloss Value update completed successfully");
                     return true;
                 } else {
-                    LOG.error("Interface not found for nodeId: {} and interfaceName: {}",
-                        nodeId,interfaceName);
+                    LOG.error("Interface not found for nodeId: {} and interfaceName: {}", nodeId, interfaceName);
                     return false;
                 }
             } else if (mappingUtils.getOpenRoadmVersion(realNodeId)
@@ -488,8 +486,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     LOG.info("Spanloss Value update completed successfully");
                     return true;
                 } else {
-                    LOG.error("Interface not found for nodeId: {} and interfaceName: {}",
-                        nodeId,interfaceName);
+                    LOG.error("Interface not found for nodeId: {} and interfaceName: {}", nodeId,interfaceName);
                     return false;
                 }
             }
@@ -530,19 +527,20 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             OtsPmHolder destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
             spanLoss = new BigDecimal(srcOtsPmHoler.getOtsParameterVal() - destOtsPmHoler.getOtsParameterVal())
                 .setScale(0, RoundingMode.HALF_UP);
-            LOG.info("Spanloss Calculated as :" + spanLoss + "=" + srcOtsPmHoler.getOtsParameterVal() + "-"
-                + destOtsPmHoler.getOtsParameterVal());
-            if ((spanLoss.doubleValue() < 28) && (spanLoss.doubleValue() > 0)) {
-                if (!setSpanLoss(sourceNodeId, srcOtsPmHoler.getOtsInterfaceName(), spanLoss, "TX")) {
-                    LOG.info("Setting spanLoss failed for " + sourceNodeId);
-                    return null;
-                }
-                if (!setSpanLoss(destNodeId, destOtsPmHoler.getOtsInterfaceName(), spanLoss, "RX")) {
-                    LOG.info("Setting spanLoss failed for " + destNodeId);
-                    return null;
-                }
-                map.put(link.getLinkId(), spanLoss);
+            LOG.info("Spanloss Calculated as :{}={}-{}",
+                spanLoss, srcOtsPmHoler.getOtsParameterVal(), destOtsPmHoler.getOtsParameterVal());
+            if (spanLoss.doubleValue() > 28) {
+                LOG.warn("Span Loss is out of range of OpenROADM specifications");
             }
+            if (!setSpanLoss(sourceNodeId, srcOtsPmHoler.getOtsInterfaceName(), spanLoss, "TX")) {
+                LOG.info("Setting spanLoss failed for {}", sourceNodeId);
+                return null;
+            }
+            if (!setSpanLoss(destNodeId, destOtsPmHoler.getOtsInterfaceName(), spanLoss, "RX")) {
+                LOG.info("Setting spanLoss failed for {}", destNodeId);
+                return null;
+            }
+            map.put(link.getLinkId(), spanLoss);
         }
         return map;
     }
