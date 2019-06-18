@@ -141,7 +141,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 PathDescriptionBuilder path = null;
                 path = sendingPCE.getPathDescription();
                 LOG.info("PCE response: {} {}", message, responseCode);
-                if ((sendingPCE.getSuccess() == false) || (path == null)) {
+                if (!(sendingPCE.getSuccess()) || (path == null)) {
                     configurationResponseCommon.setAckFinalIndicator("Yes")
                             .setRequestId(input.getServiceHandlerHeader().getRequestId()).setResponseCode(responseCode)
                             .setResponseMessage(message);

@@ -267,10 +267,8 @@ public class OpenRoadmTopology121 {
             for (CircuitPacks cp : deviceObject.get().getCircuitPacks()) {
                 if (cp.getPorts() != null) {
                     for (Ports port : cp.getPorts()) {
-                        if (port.getPortQual() != null) {
-                            if (port.getPortQual().getIntValue() == 4) {
-                                client++;
-                            }
+                        if ((port.getPortQual() != null) && (port.getPortQual().getIntValue() == 4)) {
+                            client++;
                         }
                     }
                 }

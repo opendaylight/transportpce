@@ -257,17 +257,11 @@ public class PceNode {
     }
 
     public boolean checkTP(String tp) {
-        if (this.usedXpndrNWTps.contains(tp)) {
-            return false;
-        }
-        return true;
+        return !(this.usedXpndrNWTps.contains(tp));
     }
 
     public boolean checkWL(long index) {
-        if (this.availableWLindex.contains(index)) {
-            return true;
-        }
-        return false;
+        return (this.availableWLindex.contains(index));
     }
 
     public boolean isValid() {
