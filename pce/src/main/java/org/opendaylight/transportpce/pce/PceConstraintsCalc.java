@@ -145,11 +145,9 @@ public class PceConstraintsCalc {
         }
 
         Diversity diversity = tmpGeneral.getDiversity();
-        if (diversity != null) {
-            if (diversity.getExistingServiceApplicability().isNode()) {
-                LOG.info("in readGeneralContrains {}", diversity.toString());
-                readDiversityNodes(diversity.getExistingService(), constraints);
-            }
+        if ((diversity != null) && (diversity.getExistingServiceApplicability().isNode())) {
+            LOG.info("in readGeneralContrains {}", diversity.toString());
+            readDiversityNodes(diversity.getExistingService(), constraints);
         }
 
     }

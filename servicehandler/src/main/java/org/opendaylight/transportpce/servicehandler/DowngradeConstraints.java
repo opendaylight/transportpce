@@ -106,7 +106,7 @@ public final class DowngradeConstraints {
         return result.build();
     }
 
-    private static Exclude updateExclude(Exclude hard, Exclude soft) throws NullPointerException {
+    private static Exclude updateExclude(Exclude hard, Exclude soft) {
         ExcludeBuilder result = new ExcludeBuilder(soft);
         if (hard != null) {
             result.getFiberBundle().addAll(hard.getFiberBundle());
@@ -117,7 +117,7 @@ public final class DowngradeConstraints {
         return result.build();
     }
 
-    private static Diversity updateDiveristy(Diversity hard, Diversity soft) throws NullPointerException {
+    private static Diversity updateDiveristy(Diversity hard, Diversity soft) {
         DiversityBuilder result = new DiversityBuilder(soft);
         if (hard != null) {
             result.getExistingService().addAll(hard.getExistingService());
@@ -141,7 +141,7 @@ public final class DowngradeConstraints {
         .or.general.co.routing.CoRouting updateCoCoRouting(org.opendaylight.yang.gen.v1.http.org.openroadm.routing
                 .constrains.rev161014.constraints.co.routing.or.general.co.routing.CoRouting hard, org.opendaylight
                     .yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.co.routing.or.general.co
-                        .routing.CoRouting soft) throws NullPointerException {
+                        .routing.CoRouting soft) {
         org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.constraints.co.routing.or.general
             .co.routing.CoRoutingBuilder result = new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
                 .constrains.rev161014.constraints.co.routing.or.general.co.routing.CoRoutingBuilder(soft);
