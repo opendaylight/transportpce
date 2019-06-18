@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;
@@ -32,13 +34,13 @@ import org.slf4j.LoggerFactory;
 
 public class PcePathDescription {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PcePathDescription.class);
 
     private List<PceLink> pathAtoZ = null;
     private PceResult rc;
 
     public PceResult getReturnStructure() {
-        return this.rc;
+        return rc;
     }
 
     private Map<LinkId, PceLink> allPceLinks = null;
@@ -53,34 +55,38 @@ public class PcePathDescription {
     }
 
     public PceResult buildDescriptions() {
-        LOG.info("In buildDescriptions: AtoZ {}", this.pathAtoZ.toString());
+        LOG.info("In buildDescriptions: AtoZ {}", pathAtoZ.toString());
         List<AToZ> atozList = new ArrayList<AToZ>();
-        if (this.pathAtoZ == null) {
-            this.rc.setRC(ResponseCodes.RESPONSE_FAILED);
+        if (pathAtoZ == null) {
+            rc.setRC(ResponseCodes.RESPONSE_FAILED);
             LOG.error("In buildDescriptions: there is empty AtoZ path");
-            return this.rc;
+            return rc;
         }
 
-        buildAtoZ(atozList, this.pathAtoZ);
+        buildAtoZ(atozList, pathAtoZ);
 
-        this.rc.setAtoZDirection(new AToZDirectionBuilder().setRate(this.rc.getRate())
-                .setAToZWavelengthNumber(this.rc.getResultWavelength()).setAToZ(atozList).build());
+        rc.setAtoZDirection(new AToZDirectionBuilder()
+            .setRate(rc.getRate())
+            .setAToZWavelengthNumber(rc.getResultWavelength())
+            .setAToZ(atozList).build());
 
-        this.pathZtoA = ImmutableList.copyOf(this.pathAtoZ).reverse();
-        LOG.info("In buildDescriptions: ZtoA {}", this.pathZtoA.toString());
+        pathZtoA = ImmutableList.copyOf(pathAtoZ).reverse();
+        LOG.info("In buildDescriptions: ZtoA {}", pathZtoA.toString());
 
         List<ZToA> ztoaList = new ArrayList<ZToA>();
-        if (this.pathZtoA == null) {
-            this.rc.setRC(ResponseCodes.RESPONSE_FAILED);
+        if (pathZtoA == null) {
+            rc.setRC(ResponseCodes.RESPONSE_FAILED);
             LOG.error("In buildDescriptions: there is empty ZtoA path");
-            return this.rc;
+            return rc;
         }
-        buildZtoA(ztoaList, this.pathZtoA);
+        buildZtoA(ztoaList, pathZtoA);
 
-        this.rc.setZtoADirection(new ZToADirectionBuilder().setRate(this.rc.getRate())
-                .setZToAWavelengthNumber(this.rc.getResultWavelength()).setZToA(ztoaList).build());
+        rc.setZtoADirection(new ZToADirectionBuilder()
+            .setRate(rc.getRate())
+            .setZToAWavelengthNumber(rc.getResultWavelength())
+            .setZToA(ztoaList).build());
 
-        return this.rc;
+        return rc;
     }
 
     private void buildAtoZ(List<AToZ> etoeList, List<PceLink> path) {
@@ -100,13 +106,9 @@ public class PcePathDescription {
         Resource clientResource = new ResourceBuilder().setResource(stp).build();
         AToZ firstResource = new AToZBuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
         etoeList.add(firstResource);
-
         index++;
-
         for (PceLink pcelink : path) {
-
             String srcName = pcelink.getSourceId().getValue();
-
             // Nodes
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
                 .resource.resource.resource.Node sourceNode = new NodeBuilder()
@@ -152,8 +154,8 @@ public class PcePathDescription {
             // target TP
             tpName = pcelink.getDestTP().toString();
             TerminationPoint dtp = new TerminationPointBuilder()
-                    .setTpNodeId(destName).setTpId(tpName)
-                    .build();
+                .setTpNodeId(destName).setTpId(tpName)
+                .build();
 
             // Resource
             AToZKey destTPKey = new AToZKey(index.toString());

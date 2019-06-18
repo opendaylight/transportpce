@@ -149,8 +149,9 @@ public class GnpyResult {
                 NoPathCase noPathCase = (NoPathCase) response.getResponseType();
                 String noPathType = noPathCase.getNoPath().getNoPath();
                 LOG.info("GNPy: No path - {}",noPathType);
-                if (((noPathType == "NO_FEASIBLE_BAUDRATE_WITH_SPACING") && (noPathType == "NO_FEASIBLE_MODE"))
-                        && ((noPathType ==  "MODE_NOT_FEASIBLE") && (noPathType == "NO_SPECTRUM"))) {
+                if (((noPathType.equals("NO_FEASIBLE_BAUDRATE_WITH_SPACING"))
+                        && (noPathType.equals("NO_FEASIBLE_MODE"))) && ((noPathType.equals("MODE_NOT_FEASIBLE"))
+                        && (noPathType.equals("NO_SPECTRUM")))) {
                     List<PathMetric> pathMetricList = noPathCase.getNoPath().getPathProperties().getPathMetric();
                     LOG.info("GNPy : path is not feasible : {}", noPathType);
                     for (PathMetric pathMetric : pathMetricList) {

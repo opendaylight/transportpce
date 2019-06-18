@@ -6,16 +6,16 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.pce;
+package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PceResult {
-    /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceResult.class);
     private String calcMessage = "503 Calculator Unavailable";
     private boolean calcStatus = false;
@@ -38,41 +38,41 @@ public class PceResult {
 
     public void setRC(String rc) {
         switch (rc) {
-            case ResponseCodes.RESPONSE_OK:
-                this.calcMessage = "Path is calculated";
-                this.calcStatus = true;
-                this.responseCode = ResponseCodes.RESPONSE_OK;
+            case ResponseCodes.RESPONSE_OK :
+                calcMessage = "Path is calculated";
+                calcStatus = true;
+                responseCode = ResponseCodes.RESPONSE_OK;
                 break;
-            case ResponseCodes.RESPONSE_FAILED:
-                this.responseCode = ResponseCodes.RESPONSE_FAILED;
-                this.calcStatus = false;
-                this.calcMessage = "No path available";
+            case ResponseCodes.RESPONSE_FAILED :
+                responseCode = ResponseCodes.RESPONSE_FAILED;
+                calcStatus = false;
+                calcMessage = "No path available";
                 break;
             default:
                 LOG.error("setRC: RespondeCodes unknown");
         }
     }
 
-    @Override
     public String toString() {
-        return ("[" + this.calcMessage + "] code:[" + this.responseCode + "] wavelength=" + this.resultWavelength
-                + " localCause=" + this.localCause + " rate=" + this.rate);
+        return ("[" + calcMessage + "] code:[" + responseCode + "] wavelength="
+                + resultWavelength + " localCause=" + localCause + " rate="
+                + rate);
     }
 
     public boolean getStatus() {
-        return this.calcStatus;
+        return calcStatus;
     }
 
     public String getMessage() {
-        return this.calcMessage;
+        return calcMessage;
     }
 
     public String getResponseCode() {
-        return this.responseCode;
+        return responseCode;
     }
 
     public long getResultWavelength() {
-        return this.resultWavelength;
+        return resultWavelength;
     }
 
     public void setResultWavelength(long resultWavelength) {
@@ -80,23 +80,23 @@ public class PceResult {
     }
 
     public AToZDirection getAtoZDirection() {
-        return this.atozdirection;
+        return atozdirection;
     }
 
     public ZToADirection getZtoADirection() {
-        return this.ztoadirection;
+        return ztoadirection;
     }
 
-    public void setAtoZDirection(AToZDirection atozdirectionIn) {
-        this.atozdirection = atozdirectionIn;
+    public void setAtoZDirection(AToZDirection atozDirection) {
+        this.atozdirection = atozDirection;
     }
 
-    public void setZtoADirection(ZToADirection ztoadirectionIn) {
-        this.ztoadirection = ztoadirectionIn;
+    public void setZtoADirection(ZToADirection ztoaDirection) {
+        this.ztoadirection = ztoaDirection;
     }
 
     public long getRate() {
-        return this.rate;
+        return rate;
     }
 
     public void setRate(long rate) {
@@ -104,21 +104,20 @@ public class PceResult {
     }
 
     public LocalCause getLocalCause() {
-        return this.localCause;
+        return localCause;
     }
 
     public void setLocalCause(LocalCause lc) {
         // For now keep the very first fatal problem
-        // TODO. Later this value might become history of algo if all significant problems are added here as to List
-        if (this.localCause == LocalCause.NONE) {
+        // TODO. Later this value might become history of algo if all
+        // significant problems are added here as to List
+        if (localCause == LocalCause.NONE) {
             this.localCause = lc;
         }
     }
 
-
     public void setCalcMessage(String calcMessage) {
         this.calcMessage = calcMessage;
     }
-
 
 }

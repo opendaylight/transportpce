@@ -10,12 +10,16 @@ package org.opendaylight.transportpce.pce;
 
 import java.util.List;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.transportpce.pce.PceResult.LocalCause;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.pce.constraints.PceConstraints;
+import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.gnpy.ConnectToGnpyServer;
 import org.opendaylight.transportpce.pce.gnpy.ExtractTopoDataStoreImpl;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
 import org.opendaylight.transportpce.pce.gnpy.ServiceDataStoreOperationsImpl;
+import org.opendaylight.transportpce.pce.graph.PceGraph;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceCalculation;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApiBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.gnpy.api.ServiceFileBuilder;
@@ -54,7 +58,7 @@ public class PceSendingPceRPCs {
      */
     private PathDescriptionBuilder pathDescription;
     private PathComputationRequestInput input;
-    private DataBroker dataBroker;
+    private NetworkTransactionService networkTransaction;
     private PceConstraints pceHardConstraints = new PceConstraints();
     private PceConstraints pceSoftConstraints = new PceConstraints();
     private Long gnpyRequestId = new Long(0);
@@ -64,17 +68,18 @@ public class PceSendingPceRPCs {
     public PceSendingPceRPCs() {
         setPathDescription(null);
         this.input = null;
-        this.dataBroker = null;
+        this.networkTransaction = null;
         this.gnpyAtoZ = null;
         this.gnpyZtoA = null;
     }
 
-    public PceSendingPceRPCs(PathComputationRequestInput input, DataBroker dataBroker) {
+    public PceSendingPceRPCs(PathComputationRequestInput input,
+            NetworkTransactionService networkTransaction) {
         setPathDescription(null);
 
         // TODO compliance check to check that input is not empty
         this.input = input;
-        this.dataBroker = dataBroker;
+        this.networkTransaction = networkTransaction;
     }
 
     public void cancelResourceReserve() {
@@ -89,21 +94,65 @@ public class PceSendingPceRPCs {
     }
 
     public void pathComputation() throws Exception {
-        // Comput the path according to the constraints of PCE
-        rc = pathComputationPCE();
+        LOG.info("PathComputation ...");
+
+        PceConstraintsCalc constraints = new PceConstraintsCalc(input,networkTransaction);
+        pceHardConstraints = constraints.getPceHardConstraints();
+        pceSoftConstraints = constraints.getPceSoftConstraints();
+        LOG.info("nwAnalizer ...");
+        PceCalculation nwAnalizer =
+            new PceCalculation(input,networkTransaction, pceHardConstraints, pceSoftConstraints, rc);
+        nwAnalizer.calcPath();
+        rc = nwAnalizer.getReturnStructure();
+        if (!rc.getStatus()) {
+            LOG.error("In pathComputation nwAnalizer: result = {}", rc.toString());
+            return;
+        }
+
+        LOG.info("PceGraph ...");
+        PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(),
+                nwAnalizer.getzendPceNode(), nwAnalizer.getAllPceNodes(),
+                pceHardConstraints, pceSoftConstraints, rc);
+        graph.calcPath();
+        rc = graph.getReturnStructure();
+        if (!rc.getStatus()) {
+            LOG.warn("In pathComputation : Graph return without Path ");
+            // TODO fix. This is quick workaround for algorithm problem
+            if ((rc.getLocalCause() == PceResult.LocalCause.TOO_HIGH_LATENCY)
+                    && (pceHardConstraints.getPceMetrics() == PceMetric.HopCount)
+                    && (pceHardConstraints.getMaxLatency() != -1)) {
+                pceHardConstraints.setPceMetrics(PceMetric.PropagationDelay);
+                graph = patchRerunGraph(graph);
+            }
+
+            if (!rc.getStatus()) {
+                LOG.error("In pathComputation graph.calcPath: result = {}", rc.toString());
+                return;
+            }
+        }
+
+        LOG.info("PcePathDescription ...");
+        PcePathDescription description = new PcePathDescription(graph.getPathAtoZ(), nwAnalizer.getAllPceLinks(), rc);
+        description.buildDescriptions();
+        rc = description.getReturnStructure();
+        if (!rc.getStatus()) {
+            LOG.error("In pathComputation description: result = {}", rc.toString());
+            return;
+        }
 
         LOG.info("setPathDescription ...");
         AToZDirection atoz = rc.getAtoZDirection();
         ZToADirection ztoa = rc.getZtoADirection();
         ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
-        if ((atoz == null) || (atoz.getAToZ() == null)) {
+        if (atoz == null || atoz.getAToZ() == null) {
             rc.setRC("400");
-            LOG.warn("In PCE pathComputation: empty atoz path after description: result = {}", rc.toString());
+            LOG.error("In pathComputation empty atoz path after description: result = {}", rc.toString());
             return;
         } else {
             // Send the computed path A-to-Z to GNPY tool
             if (connectToGnpy.isGnpyURLExist()) {
-                ExtractTopoDataStoreImpl xtrTopo = new ExtractTopoDataStoreImpl(dataBroker, input, atoz, gnpyRequestId);
+                ExtractTopoDataStoreImpl xtrTopo = new ExtractTopoDataStoreImpl(networkTransaction, input, atoz,
+                        gnpyRequestId);
                 gnpyRequestId++;
                 List<Elements> elementsList1 = xtrTopo.getElements();
                 List<Connections> connectionsList1 = xtrTopo.getConnections();
@@ -123,14 +172,15 @@ public class PceSendingPceRPCs {
             }
         }
 
-        if ((ztoa == null) || (ztoa.getZToA() == null)) {
+        if (ztoa == null || ztoa.getZToA() == null) {
             rc.setRC("400");
             LOG.error("In pathComputation empty ztoa path after description: result = {}", rc.toString());
             return;
         } else {
             // Send the computed path Z-to-A to GNPY tool
             if (connectToGnpy.isGnpyURLExist()) {
-                ExtractTopoDataStoreImpl xtrTopo = new ExtractTopoDataStoreImpl(dataBroker, input, ztoa, gnpyRequestId);
+                ExtractTopoDataStoreImpl xtrTopo = new ExtractTopoDataStoreImpl(networkTransaction, input, ztoa,
+                        gnpyRequestId);
                 gnpyRequestId++;
                 List<Elements> elementsList2 = xtrTopo.getElements();
                 List<Connections> connectionsList2 = xtrTopo.getConnections();
@@ -149,57 +199,9 @@ public class PceSendingPceRPCs {
                 }
             }
         }
-        // Set the description of the path
+
         setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
         LOG.info("In pathComputation Graph is Found");
-    }
-
-    public PceResult pathComputationPCE() {
-        LOG.info("PathComputation ...");
-
-        PceConstraintsCalc constraints = new PceConstraintsCalc(input, dataBroker);
-        pceHardConstraints = constraints.getPceHardConstraints();
-        pceSoftConstraints = constraints.getPceSoftConstraints();
-
-        LOG.info("nwAnalizer ...");
-        PceCalculation nwAnalizer = new PceCalculation(input, dataBroker, pceHardConstraints, pceSoftConstraints, rc);
-        nwAnalizer.calcPath();
-        rc = nwAnalizer.getReturnStructure();
-        if (!rc.getStatus()) {
-            LOG.error("In pathComputation nwAnalizer: result = {}", rc.toString());
-            return null;
-        }
-
-        LOG.info("PceGraph ...");
-        LOG.warn("PathComputation: aPceNode '{}' - zPceNode '{}'", nwAnalizer.getaPceNode(), nwAnalizer.getzPceNode());
-        PceGraph graph = new PceGraph(nwAnalizer.getaPceNode(), nwAnalizer.getzPceNode(), nwAnalizer.getAllPceNodes(),
-                pceHardConstraints, pceSoftConstraints, rc);
-        graph.calcPath();
-        rc = graph.getReturnStructure();
-        if (!rc.getStatus()) {
-            LOG.warn("In pathComputation : Graph return without Path ");
-            // TODO fix. This is quick workaround for algorithm problem
-            if ((rc.getLocalCause() == LocalCause.TOO_HIGH_LATENCY)
-                    && (pceHardConstraints.getPceMetrics() == PceMetric.HopCount)
-                    && (pceHardConstraints.getMaxLatency() != -1)) {
-                pceHardConstraints.setPceMetrics(PceMetric.PropagationDelay);
-                graph = patchRerunGraph(graph);
-            }
-            if (!rc.getStatus()) {
-                LOG.error("In pathComputation graph.calcPath: result = {}", rc.toString());
-                return null;
-            }
-        }
-
-        LOG.info("PcePathDescription ...");
-        PcePathDescription description = new PcePathDescription(graph.getPathAtoZ(), nwAnalizer.getAllPceLinks(), rc);
-        description.buildDescriptions();
-        rc = description.getReturnStructure();
-        if (!rc.getStatus()) {
-            LOG.error("In pathComputation description: result = {}", rc.toString());
-            return null;
-        }
-        return rc;
     }
 
     private String getGnpyResponse(List<Elements> elementsList, List<Connections> connectionsList,
@@ -210,7 +212,7 @@ public class PceSendingPceRPCs {
                 .setServiceFile(new ServiceFileBuilder().setPathRequest(pathRequestList).build()).build();
         InstanceIdentifier<GnpyApi> idGnpyApi = InstanceIdentifier.builder(GnpyApi.class).build();
         String gnpyJson;
-        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(dataBroker);
+        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(networkTransaction);
         gnpyJson = sd.createJsonStringFromDataObject(idGnpyApi, gnpyApi);
         LOG.debug("GNPy  Id: {} / json created : {}", idGnpyApi, gnpyJson);
         ConnectToGnpyServer connect = new ConnectToGnpyServer();
@@ -225,7 +227,6 @@ public class PceSendingPceRPCs {
         graph.setConstrains(pceHardConstraints, pceSoftConstraints);
         graph.calcPath();
         return graph;
-
     }
 
     public PathDescriptionBuilder getPathDescription() {

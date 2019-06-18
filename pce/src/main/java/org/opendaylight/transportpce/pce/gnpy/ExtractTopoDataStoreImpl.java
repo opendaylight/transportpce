@@ -17,10 +17,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Coordinate;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Km;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.edfa.params.Operational;
@@ -103,7 +102,7 @@ import org.slf4j.LoggerFactory;
 
 public class ExtractTopoDataStoreImpl {
     private static final Logger LOG = LoggerFactory.getLogger(ExtractTopoDataStoreImpl.class);
-    private final DataBroker dataBroker;
+    private final NetworkTransactionService networkTransactionService;
     private List<Elements> elements = new ArrayList<>();
     private List<Connections> connections = new ArrayList<>();
     private List<PathRequest> pathRequest = new ArrayList<>();
@@ -118,9 +117,9 @@ public class ExtractTopoDataStoreImpl {
      * Construct the ExtractTopoDataStoreImpl.
      */
     @SuppressWarnings("unchecked")
-    public ExtractTopoDataStoreImpl(final DataBroker dataBroker, PathComputationRequestInput input, AToZDirection atoz,
-            Long requestId) {
-        this.dataBroker = dataBroker;
+    public ExtractTopoDataStoreImpl(final NetworkTransactionService networkTransactionService,
+            PathComputationRequestInput input,AToZDirection atoz, Long requestId) {
+        this.networkTransactionService = networkTransactionService;
         Map<String, List<?>> map = extractTopo();
         if (map.containsKey("Elements")) {
             elements = (List<Elements>) map.get("Elements");
@@ -137,9 +136,9 @@ public class ExtractTopoDataStoreImpl {
         synchronization = extractSynchronization(requestId);
     }
 
-    public ExtractTopoDataStoreImpl(final DataBroker dataBroker, PathComputationRequestInput input, ZToADirection ztoa,
-            Long requestId) {
-        this.dataBroker = dataBroker;
+    public ExtractTopoDataStoreImpl(final NetworkTransactionService networkTransactionService,
+            PathComputationRequestInput input, ZToADirection ztoa, Long requestId) {
+        this.networkTransactionService = networkTransactionService;
         Map<String, List<?>> map = extractTopo();
         if (map.containsKey("Elements")) {
             elements = (List<Elements>) map.get("Elements");
@@ -174,15 +173,14 @@ public class ExtractTopoDataStoreImpl {
         InstanceIdentifier<Network> insIdrOpenRoadmNet = InstanceIdentifier
                 .builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))).build();
-        ReadOnlyTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction();
         // Read the data broker
         try {
-            // Initialize the reading of the data broker
+            // Initialize the reading of the networkTransactionService
             // read the configuration part of the data broker that concerns
             // the openRoadm topology and get all the nodes
-            java.util.Optional<Network> openRoadmTopo = readOnlyTransaction
+            java.util.Optional<Network> openRoadmTopo = this.networkTransactionService
                     .read(LogicalDatastoreType.CONFIGURATION, insIdOpenRoadmTopo).get().toJavaUtil();
-            java.util.Optional<Network> openRoadmNet = readOnlyTransaction
+            java.util.Optional<Network> openRoadmNet = this.networkTransactionService
                     .read(LogicalDatastoreType.CONFIGURATION, insIdrOpenRoadmNet).get().toJavaUtil();
             if (openRoadmNet.isPresent()) {
                 List<Node> openRoadmNetNodeList = openRoadmNet.get().getNode();
@@ -387,9 +385,9 @@ public class ExtractTopoDataStoreImpl {
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("Error reading the topology", e);
-            readOnlyTransaction.close();
+            this.networkTransactionService.close();
         }
-        readOnlyTransaction.close();
+        this.networkTransactionService.close();
         map.put("Elements", topoElements);
         map.put("Connections", topoConnections);
         return map;

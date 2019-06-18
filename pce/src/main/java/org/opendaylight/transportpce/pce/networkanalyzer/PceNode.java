@@ -5,7 +5,8 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.pce;
+
+package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+import org.opendaylight.transportpce.pce.SortPortsByName;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.pp.attributes.UsedWavelength;
@@ -30,10 +32,15 @@ public class PceNode {
     ////////////////////////// NODES ///////////////////////////
     /*
      */
+
     private boolean valid = true;
+
     private final Node node;
     private final NodeId nodeId;
     private final OpenroadmNodeType nodeType;
+    private final String supNodeId;
+    private final String clli;
+
     // wavelength calculation per node type
     private List<Long> availableWLindex = new ArrayList<Long>();
     private Map<String, OpenroadmTpType> availableSrgPp = new TreeMap<String, OpenroadmTpType>();
@@ -46,6 +53,9 @@ public class PceNode {
         this.node = node;
         this.nodeId = nodeId;
         this.nodeType = nodeType;
+        this.supNodeId = getSupNodeId(node);
+        this.clli = MapUtils.getCLLI(node);
+
         if ((node == null) || (nodeId == null) || (nodeType == null)) {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
@@ -116,6 +126,26 @@ public class PceNode {
         return;
     }
 
+
+
+/*    public PceNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId,
+            String supNodeId, String clli) {
+        this.node = node;
+        this.nodeId = nodeId;
+        this.nodeType = nodeType;
+        this.supNodeId = supNodeId;
+        this.clli = clli;
+
+        if ((node == null) || (nodeId == null) || (nodeType == null)
+                || (supNodeId == null) || (clli == null)) {
+            LOG.error(
+                    "PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
+            valid = false;
+        }
+
+        LOG.debug(" PceNode built :{}", this.toString());
+    }
+*/
     public void initWLlist() {
         this.availableWLindex.clear();
         if (!isValid()) {
@@ -256,6 +286,42 @@ public class PceNode {
         }
     }
 
+    private String getSupNodeId(Node inputNode) {
+        String tempSupId = "";
+        // TODO: supporting IDs exist as a List. this code takes just the
+        // first element
+        tempSupId = MapUtils.getSupNode(inputNode);
+        if (tempSupId.equals("")) {
+            LOG.error("getSupNodeId: Empty Supporting node for node: [{}]. Node is ignored", inputNode.getNodeId());
+        }
+        return tempSupId;
+    }
+
+    public void validateAZxponder(String anodeId, String znodeId) {
+        if (!isValid()) {
+            return;
+        }
+
+        if (this.nodeType != OpenroadmNodeType.XPONDER) {
+            return;
+        }
+
+        // Detect A and Z
+        if (this.supNodeId.equals(anodeId) || (this.supNodeId.equals(znodeId))) {
+
+            LOG.info("validateAZxponder: A or Z node detected == {}", nodeId.getValue());
+            initXndrTps();
+            return;
+        }
+
+        LOG.debug("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
+        valid = false;
+    }
+
+    public String getXpdrClient(String tp) {
+        return this.clientPerNwTp.get(tp);
+    }
+
     public boolean checkTP(String tp) {
         return !(this.usedXpndrNWTps.contains(tp));
     }
@@ -265,11 +331,15 @@ public class PceNode {
     }
 
     public boolean isValid() {
-        return this.valid;
+        if ((node == null) || (nodeId == null) || (nodeType == null) || (supNodeId == null) || (clli == null)) {
+            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
+            valid = false;
+        }
+        return valid;
     }
 
     public List<Long> getAvailableWLs() {
-        return this.availableWLindex;
+        return availableWLindex;
     }
 
     public void addOutgoingLink(PceLink outLink) {
@@ -277,15 +347,31 @@ public class PceNode {
     }
 
     public List<PceLink> getOutgoingLinks() {
-        return this.outgoingLinks;
+        return outgoingLinks;
     }
 
-    public String getXpdrClient(String tp) {
-        return this.clientPerNwTp.get(tp);
+    public String getClient(String tp) {
+        return clientPerNwTp.get(tp);
     }
 
-    @Override
+    public NodeId getNodeId() {
+        return nodeId;
+    }
+
+    public String getSupNodeIdPceNode() {
+        return supNodeId;
+    }
+
+    public String getCLLI() {
+        return clli;
+    }
+
     public String toString() {
-        return "PceNode type=" + this.nodeType + " ID=" + this.nodeId.getValue();
+        return "PceNode type=" + nodeType + " ID=" + nodeId.getValue() + " CLLI=" + clli;
     }
+
+    public void printLinksOfNode() {
+        LOG.info(" outgoing links of node {} : {} ", nodeId.getValue(), this.getOutgoingLinks().toString());
+    }
+
 }

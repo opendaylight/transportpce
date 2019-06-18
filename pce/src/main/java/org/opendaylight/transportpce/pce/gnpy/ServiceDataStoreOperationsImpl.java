@@ -21,7 +21,6 @@ import java.util.Optional;
 
 import javassist.ClassPool;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.dom.codec.gen.impl.StreamWriterGenerator;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
 import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
@@ -30,6 +29,7 @@ import org.opendaylight.mdsal.binding.generator.util.JavassistUtils;
 import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yangtools.yang.binding.BindingStreamEventWriter;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -53,7 +53,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceDataStoreOperationsImpl.class);
 
-    public ServiceDataStoreOperationsImpl(DataBroker dataBroker) {
+    public ServiceDataStoreOperationsImpl(NetworkTransactionService networkTransactionService) {
     }
 
     public void createXMLFromDevice(DataStoreContext dataStoreContextUtil, OrgOpenroadmDevice device, String output) {

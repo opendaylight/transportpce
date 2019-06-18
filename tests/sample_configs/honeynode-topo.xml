@@ -130,8 +130,23 @@
         </source>
         <OMS-attributes xmlns="http://org/openroadm/network/topology">
             <opposite-link>ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX</opposite-link>
+            <TE-metric>10</TE-metric>
+            <span>
+                <clfi>fiber1</clfi>
+                <auto-spanloss>true</auto-spanloss>
+                <spanloss-base>11.4</spanloss-base>
+                <spanloss-current>12</spanloss-current>
+                <engineered-spanloss>12.2</engineered-spanloss>
+                <link-concatenation>
+                    <SRLG-Id>0</SRLG-Id>
+                    <fiber-type>smf</fiber-type>
+                    <SRLG-length>100000</SRLG-length>
+                    <pmd>0.5</pmd>
+                </link-concatenation>
+            </span>
         </OMS-attributes>
         <link-type xmlns="http://org/openroadm/network/topology">ROADM-TO-ROADM</link-type>
+        <link-latency xmlns="http://org/openroadm/common/network">0</link-latency>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <link-id>ROADMA-SRG1-SRG1-PP1-TXRXtoXPDRA-XPDR1-XPDR1-NETWORK1</link-id>
@@ -159,8 +174,23 @@
         </source>
         <OMS-attributes xmlns="http://org/openroadm/network/topology">
             <opposite-link>ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX</opposite-link>
+            <TE-metric>10</TE-metric>
+            <span>
+                <clfi>fiber2</clfi>
+                <auto-spanloss>true</auto-spanloss>
+                <spanloss-base>11.4</spanloss-base>
+                <spanloss-current>12</spanloss-current>
+                <engineered-spanloss>12.2</engineered-spanloss>
+                <link-concatenation>
+                    <SRLG-Id>0</SRLG-Id>
+                    <fiber-type>smf</fiber-type>
+                    <SRLG-length>100000</SRLG-length>
+                    <pmd>0.5</pmd>
+                </link-concatenation>
+            </span>
         </OMS-attributes>
         <link-type xmlns="http://org/openroadm/network/topology">ROADM-TO-ROADM</link-type>
+        <link-latency xmlns="http://org/openroadm/common/network">0</link-latency>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <link-id>ROADMC-DEG1-DEG1-CTP-TXRXtoROADMC-SRG1-SRG1-CP-TXRX</link-id>
