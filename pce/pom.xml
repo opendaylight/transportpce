@@ -61,9 +61,9 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.controller.thirdparty</groupId>
-      <artifactId>net.sf.jung2</artifactId>
-      <version>2.0.1</version>
+      <groupId>org.jgrapht</groupId>
+      <artifactId>jgrapht-core</artifactId>
+      <version>1.1.1-SNAPSHOT</version>
     </dependency>
 
     <!-- Testing Dependencies -->
@@ -95,5 +95,13 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>mdsal-binding-dom-codec</artifactId>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>browserid-snapshots</id>
+      <name>browserid-snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+  </repositories>
 
 </project>

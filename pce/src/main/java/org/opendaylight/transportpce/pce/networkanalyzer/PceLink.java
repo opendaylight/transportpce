@@ -6,11 +6,12 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.pce;
+package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
@@ -23,7 +24,7 @@ import org.slf4j.LoggerFactory;
 public class PceLink {
 
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PceLink.class);
 
     ///////////////////////// LINKS ////////////////////
     /*
@@ -35,7 +36,7 @@ public class PceLink {
     private boolean isValid = true;
 
     // this member is for XPONDER INPUT/OUTPUT links.
-    // it keeps name of client corresponding to NETWORK TP
+    // it keeps name of client correcponding to NETWORK TP
     private String client = "";
 
     private final LinkId linkId;
@@ -44,13 +45,17 @@ public class PceLink {
     private final NodeId destId;
     private final Object sourceTP;
     private final Object destTP;
+    private final String sourceSupNodeId;
+    private final String destSupNodeId;
+    private final String sourceCLLI;
+    private final String destCLLI;
     private final LinkId oppositeLink;
     private final Long latency;
-    private final List<Long> srlg;
+    private final List<Long> srlgList;
     private final double osnr;
     private final Span omsAttributesSpan;
 
-    public PceLink(Link link) {
+    public PceLink(Link link, PceNode source, PceNode dest) {
         LOG.debug("PceLink: : PceLink start ");
 
         this.linkId = link.getLinkId();
@@ -61,27 +66,34 @@ public class PceLink {
         this.sourceTP = link.getSource().getSourceTp();
         this.destTP = link.getDestination().getDestTp();
 
-        this.linkType = calcType(link);
+        this.sourceSupNodeId = source.getSupNodeIdPceNode();
+        this.destSupNodeId = dest.getSupNodeIdPceNode();
+
+        this.sourceCLLI = source.getCLLI();
+        this.destCLLI = dest.getCLLI();
+
+        this.linkType = MapUtils.calcType(link);
 
         this.oppositeLink = calcOpposite(link);
         this.latency = calcLatency(link);
 
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
             this.omsAttributesSpan = MapUtils.getOmsAttributesSpan(link);
-            this.srlg = MapUtils.getSRLG(link);
+            this.srlgList = MapUtils.getSRLG(link);
             this.osnr = retrieveOSNR();
         } else {
             this.omsAttributesSpan = null;
-            this.srlg = null;
-            this.osnr = 0L;
+            this.srlgList = null;
+            this.osnr = 0.0;
         }
+
 
         LOG.debug("PceLink: created PceLink  {}", toString());
     }
 
     private OpenroadmLinkType calcType(Link link) {
         org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.@Nullable Link1 link1 = null;
-        OpenroadmLinkType tmplType = null;
+        OpenroadmLinkType tmplinkType = null;
 
         // ID and type
         link1 = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
@@ -92,44 +104,37 @@ public class PceLink {
             return null;
         }
 
-        tmplType = link1.getLinkType();
-        if (tmplType == null) {
+        tmplinkType = link1.getLinkType();
+        if (tmplinkType == null) {
             this.isValid = false;
             LOG.error("PceLink: No Link type available. Link is ignored {}", this.linkId);
             return null;
         }
-        return tmplType;
+        return tmplinkType;
     }
 
     private LinkId calcOpposite(Link link) {
         // opposite link
-        LinkId tmpoppositeLink = null;
-        Link1 linkOpposite = link.augmentation(Link1.class);
-        if (linkOpposite.getOppositeLink() != null) {
-            tmpoppositeLink = linkOpposite.getOppositeLink();
-        } else {
-            LOG.error("link {} has no opposite link", link.getLinkId().getValue());
-        }
-        LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite.toString());
+
+        LinkId tmpoppositeLink = MapUtils.extractOppositeLink(link);
         if (tmpoppositeLink == null) {
-            this.isValid = false;
-            LOG.error("PceLink: Error reading oppositeLink. Link is ignored {}", this.linkId);
-            return null;
+            LOG.error("PceLink: Error calcOpposite. Link is ignored {}", link.getLinkId().getValue());
+            isValid = false;
         }
         return tmpoppositeLink;
     }
 
     private Long calcLatency(Link link) {
-        Long tmplatency = (long)0;
+        Long tmplatency = 1L;
         Link1 link1 = null;
         // latency
         link1 = link.augmentation(Link1.class);
-        tmplatency = link1.getLinkLatency();
-        if (tmplatency == null) {
-            tmplatency = (long) 0;
+        try {
+            tmplatency = link1.getLinkLatency();
+        } catch (NullPointerException e) {
+            LOG.debug("the latency does not exist for this link");
         }
         return tmplatency;
-
     }
 
     @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
@@ -154,8 +159,8 @@ public class PceLink {
         double constantB = 0.72782;
         double constantC = -0.532331;
         double constactD = -0.019549;
-        double upperBoundOSNR = 33;
-        double lowerBoundOSNR = 0.1;
+        double upperBoundosnr = 33;
+        double lowerBoundosnr = 0.1;
 
         if (omsAttributesSpan ==  null) {
             // indicates no data or N/A
@@ -200,49 +205,49 @@ public class PceLink {
                 break;
         }
         spanOsnrDb = constantA + constantB * power + constantC * loss + constactD * power * loss;
-        if (spanOsnrDb > upperBoundOSNR) {
-            spanOsnrDb =  upperBoundOSNR;
-        } else if (spanOsnrDb < lowerBoundOSNR) {
-            spanOsnrDb = lowerBoundOSNR;
+        if (spanOsnrDb > upperBoundosnr) {
+            spanOsnrDb =  upperBoundosnr;
+        } else if (spanOsnrDb < lowerBoundosnr) {
+            spanOsnrDb = lowerBoundosnr;
         }
         spanOsnrLu = Math.pow(10, (spanOsnrDb / 10.0));
         sum = PceConstraints.CONST_OSNR / spanOsnrLu;
         linkOsnrLu = sum;
-        LOG.debug("In retrieveOSNR: link OSNR is {} dB", linkOsnrLu);
+        //link_osnr_dB = 10 * Math.log10(1 / sum);
+        LOG.debug("In retrieveosnr: link osnr is {} dB", linkOsnrLu);
         return linkOsnrLu;
     }
 
-
     public LinkId getOppositeLink() {
-        return this.oppositeLink;
+        return oppositeLink;
     }
 
     public Object getSourceTP() {
-        return this.sourceTP;
+        return sourceTP;
     }
 
     public Object getDestTP() {
-        return this.destTP;
+        return destTP;
     }
 
-    public OpenroadmLinkType getLinkType() {
-        return this.linkType;
+    public OpenroadmLinkType getlinkType() {
+        return linkType;
     }
 
     public LinkId getLinkId() {
-        return this.linkId;
+        return linkId;
     }
 
     public NodeId getSourceId() {
-        return this.sourceId;
+        return sourceId;
     }
 
     public NodeId getDestId() {
-        return this.destId;
+        return destId;
     }
 
     public String getClient() {
-        return this.client;
+        return client;
     }
 
     public void setClient(String client) {
@@ -251,25 +256,66 @@ public class PceLink {
 
     // Double for transformer of JUNG graph
     public Double getLatency() {
-        return this.latency.doubleValue();
+        return latency.doubleValue();
+    }
+
+    public String getsourceSupNodeId() {
+        return sourceSupNodeId;
+    }
+
+    public String getdestSupNodeId() {
+        return destSupNodeId;
+    }
+
+    public List<Long> getsrlgList() {
+        return srlgList;
+    }
+
+    public double getosnr() {
+        return osnr;
+    }
+
+    public String getsourceCLLI() {
+        return sourceCLLI;
+    }
+
+    public String getdestCLLI() {
+        return destCLLI;
     }
 
     public boolean isValid() {
-        if ((this.linkId == null) || (this.linkType == null) || (this.oppositeLink == null)) {
-            this.isValid = false;
-            LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", this.linkId);
+        if ((this.linkId == null) || (this.linkType == null)
+                || (this.oppositeLink == null)) {
+            isValid = false;
+            LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
         }
-        if ((this.sourceId == null) || (this.destId == null) || (this.sourceTP == null) || (this.destTP == null)) {
-            this.isValid = false;
-            LOG.error("PceLink: No Link source or destination is available. Link is ignored {}", this.linkId);
+        if ((this.sourceId == null) || (this.destId == null)
+                || (this.sourceTP == null) || (this.destTP == null)) {
+            isValid = false;
+            LOG.error("PceLink: No Link source or destination is available. Link is ignored {}", linkId);
         }
-
-        return this.isValid;
+        if ((this.sourceSupNodeId.equals("")) || (this.destSupNodeId.equals(""))) {
+            isValid = false;
+            LOG.error("PceLink: No Link source SuppNodeID or destination SuppNodeID is available. Link is ignored {}",
+                linkId);
+        }
+        if ((this.sourceCLLI.equals("")) || (this.destCLLI.equals(""))) {
+            isValid = false;
+            LOG.error("PceLink: No Link source CLLI or destination CLLI is available. Link is ignored {}", linkId);
+        }
+        if ((this.omsAttributesSpan == null) && (this.linkType == OpenroadmLinkType.ROADMTOROADM)) {
+            isValid = false;
+            LOG.error("PceLink: Error reading Span for OMS link. Link is ignored {}", linkId);
+        }
+        if ((this.srlgList != null) && (this.srlgList.isEmpty())) {
+            isValid = false;
+            LOG.error("PceLink: Empty srlgList for OMS link. Link is ignored {}", linkId);
+        }
+        return isValid;
     }
 
-    @Override
     public String toString() {
-        return "PceLink type=" + this.linkType + " ID=" + this.linkId.toString() + " latecy=" + this.latency;
+        return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latecy=" + latency;
     }
 
 }

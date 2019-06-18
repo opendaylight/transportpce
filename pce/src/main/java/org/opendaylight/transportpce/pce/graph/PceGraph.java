@@ -6,30 +6,36 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.pce;
+package org.opendaylight.transportpce.pce.graph;
 
-import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.collections15.Transformer;
+
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
+import org.jgrapht.alg.shortestpath.PathValidator;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.opendaylight.transportpce.common.ResponseCodes;
-import org.opendaylight.transportpce.pce.PceResult.LocalCause;
+import org.opendaylight.transportpce.pce.constraints.PceConstraints;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceResult.LocalCause;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class PceGraph {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PceGraph.class);
 
     ////////////////////////// for Graph ///////////////////////////
-    private DirectedSparseMultigraph<PceNode, PceLink> nwGraph = new DirectedSparseMultigraph<PceNode, PceLink>();
-    private DijkstraShortestPath<PceNode, PceLink> shortestPath = null;
+    int kpathsToBring = 10; // how many paths to bring
+    int mhopsPerPath = 50; // max #hops
 
     // input
     private Map<NodeId, PceNode> allPceNodes = new HashMap<NodeId, PceNode>();
@@ -43,20 +49,10 @@ public class PceGraph {
     private PceResult pceResult = null;
     private List<PceLink> shortestPathAtoZ = null;
 
-    // TODO hard-coded 96
-    private static final int MAX_WAWELENGTH = 96;
-
     // for path calculation
-    private List<PceLink> pathAtoZ = null;
-    private int minFoundDistance;
-    private int tmpAtozDistance = 0;
-    private int tmpAtozLatency = 0;
-    private int bestDistance;
-    private boolean noPathExists = false;
+    List<GraphPath<String, PceGraphEdge>> allWPaths = null;
 
-    private boolean foundButTooHighLatency = false;
-
-    private List<ListOfNodes> listOfNodesPerWL = new ArrayList<ListOfNodes>();
+    private List<PceLink> pathAtoZ = new ArrayList<PceLink>();
 
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
             PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult pceResult) {
@@ -68,373 +64,199 @@ public class PceGraph {
         this.pceHardConstraints = pceHardConstraints;
         this.pceSoftConstraints = pceSoftConstraints;
 
-        // TODO - fix the assumption that wavelengths are from 1 to 96 and can be used
-        // as index
-        this.listOfNodesPerWL.add(new ListOfNodes());
-        for (int i = 1; i <= MAX_WAWELENGTH; i++) {
-            // create list of nodes per wavelength
-            ListOfNodes wls = new ListOfNodes();
-            this.listOfNodesPerWL.add(wls);
-        }
+        LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode.toString(), zendNode.toString());
+        LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes.toString());
 
-        LOG.debug("In GraphCalculator: A and Z = {} / {}", aendNode.toString(), zendNode.toString());
-        LOG.debug("In GraphCalculator: allPceNodes = {}", allPceNodes.toString());
+        // PceCalculation.printNodesInfo(allPceNodes);
+
     }
 
     public boolean calcPath() {
 
-        LOG.info("In calcPath: metric {} is used ", this.pceHardConstraints.getPceMetrics());
+        LOG.info(" In PCE GRAPH calcPath : K SHORT PATHS algorithm ");
 
-        populateGraph(this.allPceNodes);
+        DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph =
+                new DefaultDirectedWeightedGraph<String, PceGraphEdge>(PceGraphEdge.class);
+        populateWithNodes(weightedGraph);
+        populateWithLinks(weightedGraph);
 
-        LOG.info(" In PCE GRAPH : QUICK algorithm ");
-
-        // quick algorithm
-        if (runGraph()) {
-
-            this.bestDistance = this.tmpAtozDistance;
-
-            if (chooseWavelength()) {
-                this.pceResult.setRC(ResponseCodes.RESPONSE_OK);
-                this.shortestPathAtoZ = this.pathAtoZ;
-                LOG.info("In GraphCalculator QUICK CalcPath: AtoZ {}", this.pathAtoZ.toString());
-                LOG.info("In GraphCalculator QUICK CalcPath: pceResult {}", this.pceResult.toString());
-                return true;
-            }
-
-            // continue work per wavelength
-            LOG.warn(" In PCE GRAPH : QUICK algorithm didn't find shared wavelength over the shortest path");
-
-        }
-
-        LOG.warn(" In PCE GRAPH : QUICK algorithm didn't find shortest path with single wavelength");
-        if (this.noPathExists) {
-            // quick algo looks for path independently on wavelength. therefore no path
-            // means fatal problem
-            LOG.warn(" In PCE GRAPH : QUICK algorithm didn't find any path");
-            this.pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+        if (!runKgraphs(weightedGraph)) {
+            LOG.info("In calcPath : pceResult {}", pceResult.toString());
             return false;
         }
 
-        // rearrange all nodes per the relevant wavelength indexes
-        extractWLs(this.allPceNodes);
+        // validate found paths
+        pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+        for (GraphPath<String, PceGraphEdge> path : allWPaths) {
 
-        this.pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
-        boolean firstPath = true;
+            PostAlgoPathValidator papv = new PostAlgoPathValidator();
+            pceResult = papv.checkPath(path, allPceNodes, pceResult);
+            LOG.info("In calcPath after PostAlgoPathValidator {} {}",
+                    pceResult.getResponseCode(), ResponseCodes.RESPONSE_OK);
 
-        for (int i = 1; i <= MAX_WAWELENGTH; i++) {
-            LOG.info(" In PCE GRAPH : FUll algorithm for WL {}", i);
-            List<PceNode> nodes = this.listOfNodesPerWL.get(i).getNodes();
-            populateGraph(nodes);
-
-            if (!runGraph()) {
+            if (!pceResult.getResponseCode().equals(ResponseCodes.RESPONSE_OK)) {
+                LOG.info("In calcPath: post algo validations DROPPED the path {}", path.toString());
                 continue;
             }
 
-            if (firstPath) {
-                // set minFoundDistance for the first time
-                rememberPath(i);
-                firstPath = false;
+            // build pathAtoZ
+            pathAtoZ.clear();
+            for (PceGraphEdge edge : path.getEdgeList()) {
+                pathAtoZ.add(edge.link());
             }
 
-            if (this.tmpAtozDistance < this.minFoundDistance) {
-                rememberPath(i);
-            }
-
-            if (this.tmpAtozDistance == this.bestDistance) {
-                // optimization: stop on the first WL with result == the best
-                break;
-            }
+            shortestPathAtoZ = new ArrayList<>(pathAtoZ);
+            LOG.info("In calcPath Path FOUND path for wl [{}], hops {}, distance per metrics {}, path AtoZ {}",
+                    pceResult.getResultWavelength(), pathAtoZ.size(), path.getWeight(), pathAtoZ.toString());
+            break;
         }
 
-        // return codes can come in different orders. this method fixes it a bit
-        // TODO build it better
-        analyzeResult();
-
-        LOG.info("In GraphCalculator FUll CalcPath: pceResult {}", this.pceResult.toString());
-        return (this.pceResult.getStatus());
+        if (shortestPathAtoZ != null) {
+            LOG.info("In calcPath CHOOSEN PATH for wl [{}], hops {}, path AtoZ {}",
+                    pceResult.getResultWavelength(), shortestPathAtoZ.size(), shortestPathAtoZ.toString());
+        }
+        LOG.info("In calcPath : pceResult {}", pceResult.toString());
+        return (pceResult.getStatus());
     }
 
-    private boolean populateGraph(Map<NodeId, PceNode> allNodes) {
+    private boolean runKgraphs(DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph) {
 
-        cleanupGraph();
-        Iterator<Map.Entry<NodeId, PceNode>> nodes = allNodes.entrySet().iterator();
+        if (weightedGraph.edgeSet().isEmpty() || weightedGraph.vertexSet().isEmpty()) {
+            return false;
+        }
+
+        PathValidator<String, PceGraphEdge> wpv = new InAlgoPathValidator(pceHardConstraints, zpceNode);
+
+        // local optimization. if 'include' constraint exists then increase amount of paths to return.
+        // it's because this constraint is checked at the last step when part of good paths
+        // are dropped by other constraints
+        if (!pceHardConstraints.getListToInclude().isEmpty()) {
+            kpathsToBring = kpathsToBring * 10;
+            LOG.info("k = {}",kpathsToBring);
+        }
+
+        // KShortestPaths on weightedGraph
+        KShortestPaths<String, PceGraphEdge> swp =
+            new KShortestPaths<String, PceGraphEdge>(weightedGraph, kpathsToBring, mhopsPerPath, wpv);
+
+        allWPaths = swp.getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue());
+
+        if (allWPaths.isEmpty()) {
+            LOG.info(" In runKgraphs : algorithm didn't find any path");
+            pceResult.setLocalCause(LocalCause.NO_PATH_EXISTS);
+            pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
+            return false;
+        }
+
+        // debug print
+        for (GraphPath<String, PceGraphEdge> path : allWPaths) {
+            LOG.info("path Weight: {} : {}", path.getWeight(), path.getVertexList().toString());
+        }
+        // debug print
+
+        return true;
+    }
+
+    private boolean validateLinkforGraph(PceLink pcelink) {
+
+        PceNode source = allPceNodes.get(pcelink.getSourceId());
+        PceNode dest = allPceNodes.get(pcelink.getDestId());
+
+        if (source == null) {
+            LOG.error("In addLinkToGraph link source node is null : {}", pcelink.toString());
+            return false;
+        }
+        if (dest == null) {
+            LOG.error("In addLinkToGraph link dest node is null : {}", pcelink.toString());
+            return false;
+        }
+
+        LOG.debug("In addLinkToGraph link to nodes : {}{} {}", pcelink.toString(), source.toString(), dest.toString());
+        return true;
+
+    }
+
+    private void populateWithNodes(DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph) {
+        Iterator<Map.Entry<NodeId, PceNode>> nodes = allPceNodes.entrySet().iterator();
         while (nodes.hasNext()) {
             Map.Entry<NodeId, PceNode> node = nodes.next();
+            weightedGraph.addVertex(node.getValue().getNodeId().getValue());
+            LOG.debug("In populateWithNodes in node :  {}", node.getValue().toString());
+        }
+    }
+
+    private boolean populateWithLinks(DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph) {
+
+        Iterator<Map.Entry<NodeId, PceNode>> nodes = allPceNodes.entrySet().iterator();
+        while (nodes.hasNext()) {
+
+            Map.Entry<NodeId, PceNode> node = nodes.next();
+
             PceNode pcenode = node.getValue();
             List<PceLink> links = pcenode.getOutgoingLinks();
-            LOG.info("In populateGraph: use node for graph {}", pcenode.toString());
+
+            LOG.debug("In populateGraph: use node for graph {}", pcenode.toString());
+
             for (PceLink link : links) {
-                LOG.info("In populateGraph: add edge to graph {}", link.toString());
-                addLinkToGraph(link);
+                LOG.debug("In populateGraph node {} : add edge to graph {}", pcenode.toString(), link.toString());
+
+                if (!validateLinkforGraph(link)) {
+                    continue;
+                }
+
+                PceGraphEdge graphLink = new PceGraphEdge(link);
+                weightedGraph.addEdge(link.getSourceId().getValue(), link.getDestId().getValue(), graphLink);
+
+                weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
             }
         }
         return true;
     }
 
-    private boolean populateGraph(List<PceNode> allNodes) {
+    private double chooseWeight(PceLink link) {
 
-        cleanupGraph();
-
-        for (PceNode node : allNodes) {
-            List<PceLink> links = node.getOutgoingLinks();
-            LOG.debug("In populateGraph: use node for graph {}", node.toString());
-            for (PceLink link : links) {
-                LOG.debug("In populateGraph: add edge to graph {}", link.toString());
-                addLinkToGraph(link);
-            }
-
-        }
-
-        return true;
-    }
-
-    private boolean runGraph() {
-        LOG.info("In runGraph Vertices: {}; Eges: {} ", this.nwGraph.getVertexCount(), this.nwGraph.getEdgeCount());
-
-        this.pathAtoZ = null;
-
-        try {
-            this.shortestPath = calcAlgo();
-
-            if (this.shortestPath == null) {
-                this.noPathExists = true;
-                LOG.error("In runGraph: shortest path alg is null ");// ,
-                return false;
-            }
-
-            this.pathAtoZ = this.shortestPath.getPath(this.apceNode, this.zpceNode);
-
-            if ((this.pathAtoZ == null) || (this.pathAtoZ.size() == 0)) {
-                LOG.info("In runGraph: AtoZ path is empty");
-                this.pceResult.setLocalCause(LocalCause.NO_PATH_EXISTS);
-                return false;
-            }
-
-            pathMetricsToCompare();
-
-            return compareMaxLatency();
-
-        } catch (IllegalArgumentException e) {
-            LOG.error("In runGraph: can't calculate the path. A or Z node don't have any links {}", e);
-            this.noPathExists = true;
-            return false;
-
-        }
-    }
-
-    private DijkstraShortestPath<PceNode, PceLink> calcAlgo() {
-
-        Transformer<PceLink, Double> wtTransformer = new Transformer<PceLink, Double>() {
-            @Override
-            public Double transform(PceLink link) {
-                return link.getLatency();
-            }
-        };
-
-        this.shortestPath = null;
-
-        switch (this.pceHardConstraints.getPceMetrics()) {
-            case PropagationDelay:
-                this.shortestPath = new DijkstraShortestPath<>(this.nwGraph, wtTransformer);
-                LOG.debug("In calcShortestPath: PropagationDelay method run ");
+        // HopCount is default
+        double weight = 1;
+        switch (pceHardConstraints.getPceMetrics()) {
+            case IGPMetric :
+                // TODO implement IGPMetric - low priority.
+                LOG.warn("In PceGraph not implemented IGPMetric. HopCount works as a default");
                 break;
-            case HopCount:
-                this.shortestPath = new DijkstraShortestPath<>(this.nwGraph);
-                LOG.debug("In calcShortestPath: HopCount method run ");
+
+            case TEMetric :
+                // TODO implement TEMetric - low priority
+                LOG.warn("In PceGraph not implemented TEMetric. HopCount works as a default");
+                break;
+
+            case HopCount :
+                weight = 1;
+                LOG.debug("In PceGraph HopCount is used as a metrics. {}", link.toString());
+                break;
+
+            case PropagationDelay :
+                weight = link.getLatency();
+                LOG.debug("In PceGraph PropagationDelay is used as a metrics. {}", link.toString());
                 break;
 
             default:
-                this.shortestPath = new DijkstraShortestPath<>(this.nwGraph);
-                LOG.warn("In calcShortestPath: instead IGPMetric/TEMetric method Hop-Count runs as a default ");
                 break;
         }
 
-        return this.shortestPath;
-
+        return weight;
     }
 
-    private void addLinkToGraph(PceLink pcelink) {
-
-        PceNode source = this.allPceNodes.get(pcelink.getSourceId());
-        PceNode dest = this.allPceNodes.get(pcelink.getDestId());
-
-        if (source == null) {
-            LOG.error("In addLinkToGraph link source node is null  :   {}", pcelink.toString());
-            return;
-        }
-        if (dest == null) {
-            LOG.error("In addLinkToGraph link dest node is null  :   {}", pcelink.toString());
-            return;
-        }
-
-        LOG.debug("In addLinkToGraph link and nodes :  {} ; {} / {}", pcelink.toString(), source.toString(),
-                dest.toString());
-        this.nwGraph.addEdge(pcelink, source, dest);
-
-    }
-
-    /*
-     * "QUICK" approach build shortest path. and then look for a single wavelength
-     * on it
-     */
-    private boolean chooseWavelength() {
-        for (long i = 1; i <= MAX_WAWELENGTH; i++) {
-            boolean completed = true;
-            for (PceLink link : this.pathAtoZ) {
-                PceNode pceNode = this.allPceNodes.get(link.getSourceId());
-                if (!pceNode.checkWL(i)) {
-                    completed = false;
-                    break;
-                }
-            }
-            if (completed) {
-                this.pceResult.setResultWavelength(i);
-                break;
-            }
-        }
-        return (this.pceResult.getResultWavelength() > 0);
-    }
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public List<PceLink> getPathAtoZ() {
-        return this.shortestPathAtoZ;
+        return shortestPathAtoZ;
     }
 
     public PceResult getReturnStructure() {
-        return this.pceResult;
+        return pceResult;
     }
 
-    // TODO build ordered set ordered per the index. Current assumption is that
-    // wavelenght serves as an index
-    private class ListOfNodes {
-        private List<PceNode> listOfNodes = new ArrayList<PceNode>();
-
-        private void addNodetoWL(PceNode node) {
-            this.listOfNodes.add(node);
-        }
-
-        private List<PceNode> getNodes() {
-            return this.listOfNodes;
-        }
-
-    }
-
-    private boolean extractWLs(Map<NodeId, PceNode> allNodes) {
-
-        Iterator<Map.Entry<NodeId, PceNode>> nodes = allNodes.entrySet().iterator();
-        while (nodes.hasNext()) {
-
-            Map.Entry<NodeId, PceNode> node = nodes.next();
-
-            PceNode pcenode = node.getValue();
-            List<Long> wls = pcenode.getAvailableWLs();
-
-            LOG.debug("In extractWLs wls in node : {} {}", pcenode.toString(), wls.size());
-            LOG.debug("In extractWLs listOfWLs total :   {}", this.listOfNodesPerWL.size());
-            for (Long i : wls) {
-                LOG.debug("In extractWLs i in wls :  {}", i);
-                ListOfNodes lwl = this.listOfNodesPerWL.get(i.intValue());
-                lwl.addNodetoWL(pcenode);
-            }
-        }
-
-        return true;
-    }
-
-    private void cleanupGraph() {
-        LOG.debug("In cleanupGraph remove {} nodes ", this.nwGraph.getEdgeCount());
-        Iterable<PceNode> toRemove = new ArrayList<PceNode>(this.nwGraph.getVertices());
-        for (PceNode node : toRemove) {
-            this.nwGraph.removeVertex(node);
-        }
-        LOG.debug("In cleanupGraph after {} removed ", this.nwGraph.getEdgeCount());
-    }
-
-    private void analyzeResult() {
-        // very simple for the start
-
-        if (this.pceResult.getStatus()) {
-            return;
-        }
-
-        // if request is rejected but at least once there was path found, try to save
-        // the real reason of reject
-        if (this.foundButTooHighLatency) {
-            this.pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
-            this.pceResult.setLocalCause(LocalCause.TOO_HIGH_LATENCY);
-            this.pceResult.setCalcMessage("No path available due to constraint Hard/Latency");
-        }
-        return;
-    }
-
-    private boolean compareMaxLatency() {
-
-        Long latencyConstraint = this.pceHardConstraints.getMaxLatency();
-
-        if ((latencyConstraint > 0) && (this.tmpAtozLatency > latencyConstraint)) {
-            this.foundButTooHighLatency = true;
-            this.pceResult.setLocalCause(LocalCause.TOO_HIGH_LATENCY);
-            LOG.info("In validateLatency: AtoZ path has too high LATENCY {} > {}", this.tmpAtozLatency,
-                latencyConstraint);
-            return false;
-        }
-        LOG.info("In validateLatency: AtoZ path  is {}", this.pathAtoZ.toString());
-        return true;
-    }
-
-    private void pathMetricsToCompare() {
-
-        this.tmpAtozDistance = this.shortestPath.getDistance(this.apceNode, this.zpceNode).intValue();
-
-        // TODO this code is for HopCount. excluded from switch for not implemented
-        // IGPMetric and TEMetric
-        this.tmpAtozLatency = 0;
-        for (PceLink pcelink : this.pathAtoZ) {
-            this.tmpAtozLatency = this.tmpAtozLatency + pcelink.getLatency().intValue();
-        }
-
-        switch (this.pceHardConstraints.getPceMetrics()) {
-            case IGPMetric:
-                // TODO implement IGPMetric - low priority
-                LOG.error("In PceGraph not implemented IGPMetric. HopCount works as a default");
-                break;
-
-            case TEMetric:
-                // TODO implement TEMetric - low priority
-                LOG.error("In PceGraph not implemented TEMetric. HopCount works as a default");
-                break;
-
-            case HopCount:
-                break;
-
-            case PropagationDelay:
-                this.tmpAtozLatency = this.tmpAtozDistance;
-                break;
-
-            default:
-                LOG.error("In PceGraph {}: unknown metric. ", this.pceHardConstraints.getPceMetrics());
-                break;
-        }
-
-        LOG.info("In runGraph: AtoZ size {}, distance {}, latency {} ", this.pathAtoZ.size(), this.tmpAtozDistance,
-                this.tmpAtozLatency);
-        LOG.debug("In runGraph: AtoZ {}", this.pathAtoZ.toString());
-
-        return;
-    }
-
-    private void rememberPath(int index) {
-        this.minFoundDistance = this.tmpAtozDistance;
-        this.shortestPathAtoZ = this.pathAtoZ;
-        this.pceResult.setResultWavelength(Long.valueOf(index));
-        this.pceResult.setRC(ResponseCodes.RESPONSE_OK);
-        LOG.info("In GraphCalculator FUll CalcPath for wl [{}]: found AtoZ {}", index, this.pathAtoZ.toString());
-
-    }
-
-    public void setConstrains(PceConstraints pceHardConstraintsIn, PceConstraints pceSoftConstraintsIn) {
-        this.pceHardConstraints = pceHardConstraintsIn;
-        this.pceSoftConstraints = pceSoftConstraintsIn;
+    public void setConstrains(PceConstraints pceHardConstraintsInput, PceConstraints pceSoftConstraintsInput) {
+        this.pceHardConstraints = pceHardConstraintsInput;
+        this.pceSoftConstraints = pceSoftConstraintsInput;
     }
 
 }

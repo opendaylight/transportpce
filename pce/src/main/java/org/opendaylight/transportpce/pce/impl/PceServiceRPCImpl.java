@@ -56,7 +56,7 @@ public class PceServiceRPCImpl implements TransportpcePceService {
         try {
             output = this.pathComputationService.pathComputationRequest(input).get();
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("RPC cancelResourceReserve failed !", e);
+            LOG.error("RPC path computation request failed !", e);
         }
         return RpcResultBuilder.success(output).buildFuture();
     }

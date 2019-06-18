@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
+import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
@@ -57,13 +57,14 @@ public class PathComputationServiceImpl implements PathComputationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PathComputationServiceImpl.class);
     private final NotificationPublishService notificationPublishService;
-    private final DataBroker dataBroker;
+    private NetworkTransactionService networkTransactionService;
     private final ListeningExecutorService executor;
     ServicePathRpcResult notification = null;
 
-    public PathComputationServiceImpl(DataBroker dataBroker, NotificationPublishService notificationPublishService) {
+    public PathComputationServiceImpl(NetworkTransactionService networkTransactionService,
+                                      NotificationPublishService notificationPublishService) {
         this.notificationPublishService = notificationPublishService;
-        this.dataBroker = dataBroker;
+        this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
     }
 
@@ -149,7 +150,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         RpcStatusEx.Pending, "Service compliant, submitting pathComputation Request ...", null);
                 String message = "";
                 String responseCode = "";
-                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, dataBroker);
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, networkTransactionService);
                 sendingPCE.pathComputation();
                 message = sendingPCE.getMessage();
                 responseCode = sendingPCE.getResponseCode();
@@ -185,7 +186,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 output.setConfigurationResponseCommon(configurationResponseCommon.build())
                         .setResponseParameters(rpb.build());
 
-                //add the GNPy result
+              //add the GNPy result
                 GnpyResult gnpyAtoZ = sendingPCE.getGnpy_AtoZ();
                 GnpyResult gnpyZtoA = sendingPCE.getGnpy_ZtoA();
                 List<GnpyResponse> listResponse = new ArrayList<>();
@@ -256,4 +257,5 @@ public class PathComputationServiceImpl implements PathComputationService {
                 .setFeasibility(feasible).build();
         return gnpypResp;
     }
+
 }

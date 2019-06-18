@@ -22,21 +22,23 @@ public final class PceComplianceCheck {
     }
 
     /*
-     * Check if a String is not
-     * null and not equal to ''.
+     * Check if a String is not null and not equal to ''.
      *
      * @param value String value
+     *
      * @return  true  if String ok
      *          false if not
      */
     public static boolean checkString(String value) {
-        return ((value != null) && (value.compareTo("") != 0));
+        return (value != null) && (value.compareTo("") != 0);
     }
 
     public static PceComplianceCheckResult check(PathComputationRequestInput input) {
         String message = "";
         Boolean result = true;
         if (input != null) {
+            LOG.info("New request {} for new service {}",
+                    input.getServiceHandlerHeader().getRequestId(), input.getServiceName());
             if (!checkString(input.getServiceName())) {
                 result = false;
                 message = "Service Name is not set";
@@ -55,4 +57,3 @@ public final class PceComplianceCheck {
     }
 
 }
-
