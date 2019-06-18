@@ -48,13 +48,14 @@ public class DeviceTransactionManagerImpl implements DeviceTransactionManager {
     private static final int NUMBER_OF_THREADS = 4;
     private static final long GET_DATA_SUBMIT_TIMEOUT = 3000;
     private static final TimeUnit GET_DATA_SUBMIT_TIME_UNIT = TimeUnit.MILLISECONDS;
+    private static final TimeUnit MAX_DURATION_TO_SUBMIT_TIMEUNIT = TimeUnit.MILLISECONDS;
 
     private final MountPointService mountPointService;
     private final ScheduledExecutorService checkingExecutor;
     private final ListeningExecutorService listeningExecutor;
     private final ConcurrentMap<String, CountDownLatch> deviceLocks;
-    private final long maxDurationToSubmitTransaction; // TODO set reasonable value in blueprint
-    private final TimeUnit maxDurationToSubmitTransactionTimeUnit = TimeUnit.MILLISECONDS;
+    // TODO set reasonable value in blueprint for maxDurationToSubmitTransaction
+    private final long maxDurationToSubmitTransaction;
 
     public DeviceTransactionManagerImpl(MountPointService mountPointService, long maxDurationToSubmitTransaction) {
         this.mountPointService = mountPointService;
@@ -66,7 +67,7 @@ public class DeviceTransactionManagerImpl implements DeviceTransactionManager {
 
     @Override
     public Future<Optional<DeviceTransaction>> getDeviceTransaction(String deviceId) {
-        return getDeviceTransaction(deviceId, maxDurationToSubmitTransaction, maxDurationToSubmitTransactionTimeUnit);
+        return getDeviceTransaction(deviceId, maxDurationToSubmitTransaction, MAX_DURATION_TO_SUBMIT_TIMEUNIT);
     }
 
     @Override
