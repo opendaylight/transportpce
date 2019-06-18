@@ -219,8 +219,6 @@ public class OpenRoadmInterface221 {
         OchBuilder ocIfBuilder = new OchBuilder();
 
         ocIfBuilder.setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())));
-        // ocIfBuilder.setWidth(FrequencyGHz.getDefaultInstance(String.valueOf(fixedFlex.getWavelength())));
-        // ocIfBuilder.setModulationFormat(ModulationFormat.DpQpsk);
         ocIfBuilder.setRate(R100G.class);
         ocIfBuilder.setTransmitPower(new PowerDBm(new BigDecimal("-5")));
 

@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.pce;
 import com.google.common.base.Optional;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -208,8 +207,6 @@ public class PceConstraintsCalc {
                     result = Optional.of(path);
                 }
             }
-//            return pathDescReadTx.read(LogicalDatastoreType.CONFIGURATION, pathDescriptionIID)
-//                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn(
                 "PCE diversity constraints: Exception while getting path description from datastore {} for service {}!",

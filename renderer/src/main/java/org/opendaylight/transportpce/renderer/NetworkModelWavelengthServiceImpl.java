@@ -523,18 +523,6 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                             .build());
                     break;
                 case XPONDERCLIENT:
-//                    XpdrClientAttributes xpdrClientAttributes = tp.getXpdrClientAttributes();
-//                    XpdrClientAttributesBuilder xpdrClientAttributesBuilder;
-//                    if (xpdrClientAttributes == null) {
-//                        xpdrClientAttributesBuilder = new XpdrClientAttributesBuilder();
-//                    } else {
-//                        xpdrClientAttributesBuilder = new XpdrClientAttributesBuilder(xpdrClientAttributes);
-//                    }
-//                    Wavelength usedXpdrClientWl = new WavelengthBuilder().setWidth(frequencyGHz)
-//                        .setFrequency(frequencyTHz).build();
-//                    tp1Builder.setXpdrClientAttributes(xpdrClientAttributesBuilder
-//                            .setWavelength(usedXpdrClientWl)
-//                            .build());
                     break;
                 case XPONDERPORT:
                     XpdrPortAttributes xpdrPortAttributes = tp.getXpdrPortAttributes();

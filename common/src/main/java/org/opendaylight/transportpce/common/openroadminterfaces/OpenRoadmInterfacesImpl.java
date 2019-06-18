@@ -23,7 +23,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfacesImpl.class);
 
-    private final DeviceTransactionManager deviceTransactionManager;
     OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
     OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     MappingUtils mappingUtils;
@@ -31,7 +30,6 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
                                    OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121,
                                    OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221) {
-        this.deviceTransactionManager = deviceTransactionManager;
         this.mappingUtils = mappingUtils;
         this.openRoadmInterfacesImpl121 = openRoadmInterfacesImpl121;
         this.openRoadmInterfacesImpl221 = openRoadmInterfacesImpl221;
