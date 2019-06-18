@@ -65,8 +65,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1;
@@ -127,7 +125,6 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     public GetPmOutput getPm(GetPmInput pmInput) {
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping
             .rev170228.network.Nodes.OpenroadmVersion openroadmVersion;
-        //LOG.info("Version returbed by mapping util is "+ mappingUtils.getOpenROADMVersion(pmInput.getNodeId()));
         if (mappingUtils.getOpenRoadmVersion(pmInput.getNodeId())
             .equals(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1)) {
             LOG.info("Device version is 1.2.1");
@@ -394,7 +391,6 @@ public class OlmPowerServiceImpl implements OlmPowerService {
      */
     private boolean setSpanLoss(String nodeId, String interfaceName, BigDecimal spanLoss, String direction) {
         String realNodeId = getRealNodeId(nodeId);
-        BigDecimal initialSpanloss = new BigDecimal(0);
         try {
             LOG.info("Setting Spanloss in device for {}, InterfaceName: {}", realNodeId, interfaceName);
             if (mappingUtils.getOpenRoadmVersion(realNodeId)
@@ -405,8 +401,6 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 Optional<Interface> interfaceObject;
                 interfaceObject = openRoadmInterfaces.getInterface(realNodeId, interfaceName);
                 if (interfaceObject.isPresent()) {
-                    InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                        .child(Interface.class, new InterfaceKey(interfaceName));
                     InterfaceBuilder interfaceBuilder = new InterfaceBuilder(interfaceObject.get());
                     OtsBuilder otsBuilder = new OtsBuilder();
                     Interface intf = interfaceObject.get();
@@ -446,13 +440,6 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     .interfaces.grp.Interface> interfaceObject =
                         openRoadmInterfaces.getInterface(realNodeId, interfaceName);
                 if (interfaceObject.isPresent()) {
-                    InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019
-                        .interfaces.grp.Interface> interfacesIID =
-                        InstanceIdentifier.create(org.opendaylight.yang.gen.v1.http.org.openroadm
-                            .device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice.class)
-                            .child(org.opendaylight.yang.gen.v1.http.org.openroadm
-                                .device.rev181019.interfaces.grp.Interface.class, new org.opendaylight.yang.gen
-                                .v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey(interfaceName));
                     org.opendaylight.yang.gen.v1.http.org.openroadm.device
                         .rev181019.interfaces.grp.InterfaceBuilder interfaceBuilder =
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.device

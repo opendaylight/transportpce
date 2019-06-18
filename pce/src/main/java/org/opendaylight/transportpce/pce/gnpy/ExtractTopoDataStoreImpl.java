@@ -21,8 +21,6 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-//import org.opendaylight.yang.gen.v1.gnpy.gnpy.eqpt.config.rev181119.EdfaVariety;
-//import org.opendaylight.yang.gen.v1.gnpy.gnpy.eqpt.config.rev181119.FiberVariety;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Coordinate;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Km;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.edfa.params.Operational;
@@ -106,8 +104,6 @@ import org.slf4j.LoggerFactory;
 public class ExtractTopoDataStoreImpl {
     private static final Logger LOG = LoggerFactory.getLogger(ExtractTopoDataStoreImpl.class);
     private final DataBroker dataBroker;
-    // private final OpenRoadmTopology openRoadmTopology;
-    // private final OpenRoadmInterfaces openRoadmInterfaces;
     private List<Elements> elements = new ArrayList<>();
     private List<Connections> connections = new ArrayList<>();
     private List<PathRequest> pathRequest = new ArrayList<>();
@@ -241,8 +237,8 @@ public class ExtractTopoDataStoreImpl {
                     // Create the list of connections
                     Network1 nw1 = openRoadmTopo.get().augmentation(Network1.class);
                     List<Link> linksList = nw1.getLink();
-                    // 1:EXPRESS-LINK ; 2:ADD-LINK ; 3:DROP-LINK ;
-                    // 4:ROADM-To-ROADM ; 5:XPONDER-INPUT ; 6:XPONDER-OUTPUT
+                    // 1:EXPRESS-LINK    2:ADD-LINK       3:DROP-LINK
+                    // 4:ROADM-To-ROADM  5:XPONDER-INPUT  6:XPONDER-OUTPUT
                     int[] externalLink = {4,5,6};
                     int idFiber = 0;
                     int nbEDFA = 0;
@@ -276,8 +272,6 @@ public class ExtractTopoDataStoreImpl {
                                                     nbEDFA++;
                                                     mapDisgNodeRefNode.put(nodeId, nodeId);
                                                     mapNodeRefIp.put(nodeId, ipEdfa);
-                                                    // class std_medium_gain
-                                                    // implements EdfaVariety {}
                                                     element1 = addElementsEdfa(2, 0, "RLD", "Lannion_CAS",
                                                             ila.getGain().getValue(), ila.getTilt().getValue(),
                                                             ila.getOutVoaAtt().getValue(), "std_medium_gain",
@@ -293,8 +287,6 @@ public class ExtractTopoDataStoreImpl {
                                                     mapLinkFiber.put(link.getLinkId().getValue(), clfi);
                                                     mapFiberIp.put(clfi, ipFiber);
                                                     idFiber++;
-                                                    // class SSMF implements
-                                                    // FiberVariety {}
                                                     element1 = addElementsFiber(2, 0, "RLD", "Lannion_CAS",
                                                             ipFiber.getIpv4Address().getValue(), 20, 0, 0.2, 0, 0,
                                                             "SSMF");
@@ -361,7 +353,6 @@ public class ExtractTopoDataStoreImpl {
                                         mapFiberIp.put(clfi, ipFiber);
                                         idFiber++;
                                         // Create a new element
-                                        // class SSMF implements FiberVariety {}
                                         Elements element1 = addElementsFiber(2, 0, "RLD", "Lannion_CAS",
                                                 ipFiber.getIpv4Address().getValue(), 20, 0, 0.2, 0, 0, "SSMF");
                                         topoElements.add(element1);
@@ -409,27 +400,15 @@ public class ExtractTopoDataStoreImpl {
         // List of A to Z
         List<AToZ> listAtoZ = atoz.getAToZ();
         int atozSize = listAtoZ.size();
-        // String modulationFormat = atoz.getModulationFormat();
         // Create the path request
         List<PathRequest> pathRequestList = new ArrayList<>();
-        // Define the instance identifier
-        // InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier
-        // .builder(Network.class, new NetworkKey(new
-        // NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
 
-        // read the configuration part of the data broker that concerns the
-        // nodes ID and get all the nodes
-        // java.util.Optional<Network> networkObject = readOnlyTransaction
-        // .read(LogicalDatastoreType.CONFIGURATION,
-        // nwInstanceIdentifier).get().toJavaUtil();
         // 1.1 Create explicitRouteObjects
         // 1.1.1. create RouteObjectIncludeExclude list
         List<RouteObjectIncludeExclude> routeObjectIncludeExcludes = new ArrayList<>();
         IpAddress ipAddressCurrent = null;
         Long index = (long) 0;
-        //ReadOnlyTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction();
         for (int i = 0; i < atozSize; i++) {
-            // String idAtoZ = listAtoZ.get(i).getId();
             String nodeId = null;
             if (listAtoZ.get(i).getResource()
                     .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
@@ -444,7 +423,6 @@ public class ExtractTopoDataStoreImpl {
                     IpAddress ipAddress = mapNodeRefIp.get(nodeRef);
                     for (Elements element : elements) {
                         if (element.getUid().contains(ipAddress.getIpv4Address().getValue().toString())) {
-                            String type = element.getType().getName();
                             if ((ipAddressCurrent == null) || (ipAddressCurrent != ipAddress)) {
                                 ipAddressCurrent = ipAddress;
                                 // Fill in routeObjectIncludeExcludes
@@ -459,14 +437,7 @@ public class ExtractTopoDataStoreImpl {
                 } else {
                     LOG.warn("node ID is null");
                 }
-            } else if (listAtoZ.get(i).getResource()
-                    .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                    .pathdescription.rev171017.pce.resource.resource.resource.TerminationPoint) {
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
-                        .resource.resource.resource.TerminationPoint tp = (org.opendaylight.yang.gen.v1.http.org
-                        .transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource
-                        .TerminationPoint) listAtoZ.get(i).getResource().getResource();
-                // Not used in this version
+            //TODO else if termination point not implemented in this version
             } else if (listAtoZ.get(i).getResource()
                     .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
                     .pathdescription.rev171017.pce.resource.resource.resource.Link) {
@@ -490,13 +461,11 @@ public class ExtractTopoDataStoreImpl {
 
         // 1. Create the path request element 1
         // Find parameters
-        // String serviceName = input.getServiceName();
         String sourceNode = input.getServiceAEnd().getNodeId();
         String destNode = input.getServiceZEnd().getNodeId();
 
         // 1.2 Create a path constraints
         Long rate = atoz.getRate();
-        // Long wavelengthNumber = atoz.getAToZWavelengthNumber();
         // Create EffectiveFreqSlot
         List<EffectiveFreqSlot> effectiveFreqSlot = new ArrayList<>();
         EffectiveFreqSlot effectiveFreqSlot1 = new EffectiveFreqSlotBuilder().setM(5).setN(8).build();
@@ -505,23 +474,12 @@ public class ExtractTopoDataStoreImpl {
         TeBandwidth teBandwidth = new TeBandwidthBuilder().setPathBandwidth(new BigDecimal(rate))
                 .setTechnology("flexi-grid").setTrxType("openroadm-beta1").setTrxMode("W100G")
                 .setEffectiveFreqSlot(effectiveFreqSlot).setSpacing(new BigDecimal(50000000000.0)).build();
-        // .setMaxNbOfChannel(new Long(80)).setOutputPower(new
-        // BigDecimal(0.0012589254117941673))
         PathConstraints pathConstraints = new PathConstraintsBuilder().setTeBandwidth(teBandwidth).build();
-        // PathRequest pathRequest1 = new
-        // PathRequestBuilder().setRequestId(new
-        // Long(0)).setSource(mapNodeRefIp.get(sourceNode))
-        // .setDestination(mapNodeRefIp.get(destNode)).setSrcTpId(input.getServiceAEnd().getTxDirection()
-        //      .getPort().getPortName().getBytes())
-        // .setDstTpId(input.getServiceAEnd().getRxDirection().getPort().getPortName().getBytes())
-        //      .setPathConstraints(pathConstraints)
-        // .setExplicitRouteObjects(explicitRouteObjects).build();
         PathRequest pathRequest1 = new PathRequestBuilder().setRequestId(requestId)
                 .setSource(mapNodeRefIp.get(sourceNode)).setDestination(mapNodeRefIp.get(destNode))
                 .setSrcTpId("srcTpId".getBytes()).setDstTpId("dstTpId".getBytes()).setPathConstraints(pathConstraints)
                 .setExplicitRouteObjects(explicitRouteObjects).build();
         pathRequestList.add(pathRequest1);
-        //readOnlyTransaction.close();
         return pathRequestList;
     }
 
@@ -529,27 +487,15 @@ public class ExtractTopoDataStoreImpl {
         // List of A to Z
         List<ZToA> listZToA = ztoa.getZToA();
         int ztoaSize = listZToA.size();
-        // String modulationFormat = ztoa.getModulationFormat();
         // Create the path request
         List<PathRequest> servicePathRequest = new ArrayList<>();
-        // Define the instance identifier
-        InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier
-                .builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
-        //ReadOnlyTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction();
 
-        // read the configuration part of the data broker that concerns the
-        // nodes ID and get all the nodes
-        // java.util.Optional<Network> networkObject = readOnlyTransaction
-        // .read(LogicalDatastoreType.CONFIGURATION,
-        // nwInstanceIdentifier).get().toJavaUtil();
         // 1.1 Create explicitRouteObjects
         // 1.1.1. create RouteObjectIncludeExclude list
         List<RouteObjectIncludeExclude> routeObjectIncludeExcludes = new ArrayList<>();
         IpAddress ipAddressCurrent = null;
         Long index = (long) 0;
         for (int i = 0; i < ztoaSize; i++) {
-            // String idZtoA = listZToA.get(i).getId();
             String nodeId = null;
             if (listZToA.get(i).getResource()
                     .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
@@ -564,7 +510,6 @@ public class ExtractTopoDataStoreImpl {
                     IpAddress ipAddress = mapNodeRefIp.get(nodeRef);
                     for (Elements element : elements) {
                         if (element.getUid().contains(ipAddress.getIpv4Address().getValue().toString())) {
-                            // String type = element.getType().getName();
                             if ((ipAddressCurrent == null) || (ipAddressCurrent != ipAddress)) {
                                 ipAddressCurrent = ipAddress;
                                 // Fill in routeObjectIncludeExcludes
@@ -579,14 +524,7 @@ public class ExtractTopoDataStoreImpl {
                 } else {
                     LOG.warn("node ID is null");
                 }
-            } else if (listZToA.get(i).getResource()
-                    .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                    .pathdescription.rev171017.pce.resource.resource.resource.TerminationPoint) {
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
-                    .resource.resource.resource.TerminationPoint tp = (org.opendaylight.yang.gen.v1.http.org
-                    .transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource
-                    .TerminationPoint) listZToA.get(i).getResource().getResource();
-                // Not used in this version
+            //TODO else if termination point not implemented in this version
             } else if (listZToA.get(i).getResource()
                     .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
                     .pathdescription.rev171017.pce.resource.resource.resource.Link) {
@@ -610,13 +548,11 @@ public class ExtractTopoDataStoreImpl {
 
         // 1. Create the path request element 1
         // Find parameters
-        // String serviceName = input.getServiceName();
         String sourceNode = input.getServiceZEnd().getNodeId();
         String destNode = input.getServiceAEnd().getNodeId();
 
         // 1.2 Create a path constraints
         Long rate = ztoa.getRate();
-        // Long wavelengthNumber = ztoa.getZToAWavelengthNumber();
         // Create EffectiveFreqSlot
         List<EffectiveFreqSlot> effectiveFreqSlot = new ArrayList<>();
         EffectiveFreqSlot effectiveFreqSlot1 = new EffectiveFreqSlotBuilder().setM(5).setN(8).build();
@@ -625,23 +561,12 @@ public class ExtractTopoDataStoreImpl {
         TeBandwidth teBandwidth = new TeBandwidthBuilder().setPathBandwidth(new BigDecimal(rate))
                 .setTechnology("flexi-grid").setTrxType("openroadm-beta1").setTrxMode("W100G")
                 .setEffectiveFreqSlot(effectiveFreqSlot).setSpacing(new BigDecimal(50000000000.0)).build();
-        // .setMaxNbOfChannel(new Long(80)).setOutputPower(new
-        // BigDecimal(0.0012589254117941673))
         PathConstraints pathConstraints = new PathConstraintsBuilder().setTeBandwidth(teBandwidth).build();
-        // PathRequest pathRequest1 = new
-        // PathRequestBuilder().setRequestId(new
-        // Long(0)).setSource(mapNodeRefIp.get(sourceNode))
-        // .setDestination(mapNodeRefIp.get(destNode)).setSrcTpId(input.getServiceAEnd().getTxDirection()
-        //      .getPort().getPortName().getBytes())
-        // .setDstTpId(input.getServiceAEnd().getRxDirection().getPort().getPortName().getBytes())
-        //      .setPathConstraints(pathConstraints)
-        // .setExplicitRouteObjects(explicitRouteObjects).build();
         PathRequest pathRequest1 = new PathRequestBuilder().setRequestId(requestId)
                 .setSource(mapNodeRefIp.get(sourceNode)).setDestination(mapNodeRefIp.get(destNode))
                 .setSrcTpId("srcTpId".getBytes()).setDstTpId("dstTpId".getBytes()).setPathConstraints(pathConstraints)
                 .setExplicitRouteObjects(explicitRouteObjects).build();
         servicePathRequest.add(pathRequest1);
-        //readOnlyTransaction.close();
         return servicePathRequest;
     }
 
@@ -677,7 +602,6 @@ public class ExtractTopoDataStoreImpl {
                 .setAttIn(new BigDecimal(attIn)).setLossCoef(new BigDecimal(lossCoef)).setConIn(new BigDecimal(connIn))
                 .setConOut(new BigDecimal(connOut)).build();
         Params params1 = new ParamsBuilder().setFiberroadm(fiber).build();
-        // TypeElement Fiber = ; //new TypeElement(Fiber);
         Elements element1 = new ElementsBuilder().setUid(clfi)
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Fiber.class)
                 .setTypeVariety(typeVariety).setMetadata(metadata1)
@@ -699,7 +623,6 @@ public class ExtractTopoDataStoreImpl {
         Operational operational = new OperationalBuilder().setGainTarget(gainTarget).setTiltTarget(tiltTarget)
                 .setOutVoa(outVoa).build();
         Edfa edfa = new EdfaBuilder()
-                // .setTypeVariety(typeVariety)
                 .setOperational(operational).build();
         Elements element1 = new ElementsBuilder().setUid(uidEdfa) // Choose an
                                                                   // ip
@@ -763,14 +686,6 @@ public class ExtractTopoDataStoreImpl {
         return routeObjectIncludeExclude1;
     }
 
-    private String fromToNodeForConnection(String id, IpAddress ip) {
-        String fromToNode = id;
-        if (ip != null) {
-            fromToNode = ip.getIpv4Address().getValue().toString();
-        }
-        return (fromToNode);
-    }
-
     private Connections createNewConnection(String srcId, IpAddress srcIp, String destId, IpAddress destIp) {
         String fromNode = srcId;
         String toNode = destId;
@@ -817,16 +732,11 @@ public class ExtractTopoDataStoreImpl {
     }
 
     public List<PathRequest> createEmptyPathRequest(PathComputationRequestInput input, AToZDirection atoz) {
-        // List of A to Z
-        // List<AToZ> listAtoZ = atoz.getAToZ();
-        // int atozSize = listAtoZ.size();
-
         // Create the path request
         List<PathRequest> pathRequestList = new ArrayList<>();
 
         // 1. Create the path request element 1
         // Find parameters
-        // String serviceName = input.getServiceName();
         String sourceNode = input.getServiceAEnd().getNodeId();
         String destNode = input.getServiceZEnd().getNodeId();
 

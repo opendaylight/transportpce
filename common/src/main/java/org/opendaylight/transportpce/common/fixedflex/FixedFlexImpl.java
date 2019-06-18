@@ -8,11 +8,7 @@
 
 package org.opendaylight.transportpce.common.fixedflex;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public final class FixedFlexImpl implements FixedFlexInterface {
-    private static final Logger LOG = LoggerFactory.getLogger(FixedFlexImpl.class);
     private long index;
     private double centerFrequency;
     private double start;

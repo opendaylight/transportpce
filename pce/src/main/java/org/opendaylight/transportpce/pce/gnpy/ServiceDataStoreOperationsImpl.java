@@ -52,10 +52,8 @@ import org.slf4j.LoggerFactory;
 public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperations {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceDataStoreOperationsImpl.class);
-    private final DataBroker dataBroker;
 
     public ServiceDataStoreOperationsImpl(DataBroker dataBroker) {
-        this.dataBroker = dataBroker;
     }
 
     public void createXMLFromDevice(DataStoreContext dataStoreContextUtil, OrgOpenroadmDevice device, String output) {
@@ -98,7 +96,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             // Prepare the variables
             final ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
             Iterable<? extends YangModuleInfo> moduleInfos = Collections
-                    .singleton(BindingReflections.getModuleInfo(object.getClass()));// TransportpceGnpyData.class));
+                    .singleton(BindingReflections.getModuleInfo(object.getClass()));
             moduleContext.addModuleInfos(moduleInfos);
             SchemaContext schemaContext = moduleContext.tryToCreateSchemaContext().get();
             BindingRuntimeContext bindingContext;
@@ -119,8 +117,6 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             // The write part
             final BindingStreamEventWriter bindingWriter = codecRegistry.newWriter(id, domWriter);
             codecRegistry.getSerializer(id.getTargetType()).serialize(object, bindingWriter);
-            // file.write(writer.toString());
-            // file.close();
             writer.close();
         } catch (IOException e) {
             LOG.error("GNPy: writer error ");
@@ -128,8 +124,6 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             LOG.warn("GNPy: exception {} occured during json file creation", e.getMessage(), e);
         } catch (ReactorException e) {
             LOG.warn("GNPy: exception {} occured during json file creation", e.getMessage(), e);
-//        } catch (Exception e) {
-//            LOG.warn("An error {} occured during json file creation", e.getMessage(), e);
         }
         return writer.toString();
     }

@@ -209,7 +209,6 @@ public class PceSendingPceRPCs {
         ConnectToGnpyServer connect = new ConnectToGnpyServer();
         String gnpyJsonModified = gnpyJson.replace("gnpy-eqpt-config:", "")
                 .replace("gnpy-path-computation-simplified:", "").replace("gnpy-network-topology:", "");
-        //sd.writeStringFile(gnpyJsonModified);
         String gnpyResponse = connect.gnpyCnx(gnpyJsonModified);
         return gnpyResponse;
     }

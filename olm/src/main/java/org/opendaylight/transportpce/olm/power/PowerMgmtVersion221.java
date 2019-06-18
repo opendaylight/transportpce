@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
 
 public final class PowerMgmtVersion221 {
     private static final Logger LOG = LoggerFactory.getLogger(PowerMgmtVersion221.class);
-    private static final long DATA_STORE_READ_TIMEOUT = 120;
 
     private PowerMgmtVersion221() {
     }
