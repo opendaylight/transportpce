@@ -76,7 +76,8 @@ public class PceSendingPceRPCs {
     public void cancelResourceReserve() {
         LOG.info("Wait for 10s til beginning the PCE cancelResourceReserve request");
         try {
-            Thread.sleep(10000); // sleep for 10s
+            // sleep for 10s
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             LOG.error(e.toString());
         }

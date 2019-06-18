@@ -21,7 +21,8 @@ public class PceResult {
     private boolean calcStatus = false;
     private String responseCode = ResponseCodes.RESPONSE_FAILED;
     private long resultWavelength = -1;
-    private long rate = -1; // for now it is constant returned as received from A-end
+    // for now it is constant returned as received from A-end
+    private long rate = -1;
 
     public enum LocalCause {
         NONE, TOO_HIGH_LATENCY, NO_PATH_EXISTS, INT_PROBLEM;
@@ -48,7 +49,7 @@ public class PceResult {
                 this.calcMessage = "No path available";
                 break;
             default:
-                LOG.error("setRC: RespondeCodes unknown");//requires sl4j but not imported
+                LOG.error("setRC: RespondeCodes unknown");
         }
     }
 
