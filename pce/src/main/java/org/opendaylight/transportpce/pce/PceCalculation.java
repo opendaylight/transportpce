@@ -71,7 +71,6 @@ public class PceCalculation {
         NONE, HARD_EXCLUDE, HARD_INCLUDE, HARD_DIVERSITY, SOFT_EXCLUDE, SOFT_INCLUDE, SOFT_DIVERSITY;
     }
 
-    // private static final String NETWORK_ID = "Transport Overlay";
     public PceCalculation(PathComputationRequestInput input, DataBroker dataBroker, PceConstraints pceHardConstraints,
             PceConstraints pceSoftConstraints, PceResult rc) {
         this.input = input;

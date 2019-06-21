@@ -11,9 +11,7 @@ package org.opendaylight.transportpce.pce.gnpy;
 import com.google.common.base.Preconditions;
 import com.google.gson.stream.JsonReader;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -84,8 +82,6 @@ public class GnpyResult {
 
     public GnpyResult(String gnpyResponseString) throws Exception {
 
-        // try {
-        // Optional<DataObject> dataObject;
         // Create the schema context
         final ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
         Iterable<? extends YangModuleInfo> moduleInfos;
@@ -255,28 +251,6 @@ public class GnpyResult {
         moduleContext.addModuleInfos(moduleInfos);
         schemaContext = moduleContext.tryToCreateSchemaContext().get();
         return schemaContext;
-    }
-
-    private String readResultFromFile(String fileName) {
-        BufferedReader br = null;
-        FileReader fr = null;
-        StringBuilder sb = new StringBuilder();
-        String gnpyResponse;
-
-        try {
-            fr = new FileReader(fileName);
-            br = new BufferedReader(fr);
-            String currentLine;
-            while ((currentLine = br.readLine()) != null) {
-                LOG.info(currentLine);
-                sb.append(currentLine);
-            }
-            fr.close();
-        } catch (IOException e) {
-            LOG.warn("GNPy: exception {} occured during the reading of results", e.getMessage());
-        }
-        gnpyResponse = sb.toString();
-        return gnpyResponse;
     }
 
     /**

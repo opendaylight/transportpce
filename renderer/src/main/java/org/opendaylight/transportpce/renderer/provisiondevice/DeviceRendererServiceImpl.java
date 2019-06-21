@@ -171,14 +171,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                                 this.crossConnect.postCrossConnect(nodeId, waveNumber, srcTp, destTp);
                         if (connectionNameOpt.isPresent()) {
                             nodesProvisioned.add(nodeId);
-//                            List<Ports> ports =
-//                                    this.crossConnect.getConnectionPortTrail(nodeId, waveNumber, srcTp, destTp);
-//                            if (ServicePathDirection.A_TO_Z.equals(direction)) {
-//                                topology.updateAtoZTopologyList(ports, nodeId);
-//                            }
-//                            if (ServicePathDirection.Z_TO_A.equals(direction)) {
-//                                topology.updateZtoATopologyList(ports, nodeId);
-//                            }
                             createdConnections.add(connectionNameOpt.get());
                         } else {
                             processErrorMessage("Unable to post Roadm-connection for node " + nodeId, forkJoinPool,
@@ -463,8 +455,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } else {
             LOG.warn("Service {} does not exist - topology can not be updated", name);
-//            servicesBuilder = new ServicesBuilder();
-//            servicesBuilder.withKey(serviceKey);
         }
     }
 

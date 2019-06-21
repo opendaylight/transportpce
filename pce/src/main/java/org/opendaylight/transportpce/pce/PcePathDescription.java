@@ -127,7 +127,8 @@ public class PcePathDescription {
                     .build();
 
             // Resource
-            AToZKey srcTPKey = new AToZKey(index.toString());// tpName);
+            AToZKey srcTPKey = new AToZKey(index.toString());
+            // tpName);
             Resource tpResource1 = new ResourceBuilder().setResource(stp).build();
             AToZ stpResource = new AToZBuilder().setId(tpName).withKey(srcTPKey).setResource(tpResource1).build();
             index++;

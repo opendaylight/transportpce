@@ -25,7 +25,6 @@ public class CrossConnectImpl implements CrossConnect {
 
     private static final Logger LOG = LoggerFactory.getLogger(CrossConnectImpl.class);
 
-    private final DeviceTransactionManager deviceTransactionManager;
     protected CrossConnect crossConnect;
     private final MappingUtils mappingUtils;
     private CrossConnectImpl121 crossConnectImpl121;
@@ -34,7 +33,6 @@ public class CrossConnectImpl implements CrossConnect {
     public CrossConnectImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
                             CrossConnectImpl121 crossConnectImpl121,
                             CrossConnectImpl221 crossConnectImpl221) {
-        this.deviceTransactionManager = deviceTransactionManager;
         this.mappingUtils = mappingUtils;
         this.crossConnectImpl121 = crossConnectImpl121;
         this.crossConnectImpl221 = crossConnectImpl221;
