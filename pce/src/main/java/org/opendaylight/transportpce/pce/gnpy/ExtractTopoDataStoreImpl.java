@@ -323,12 +323,13 @@ public class ExtractTopoDataStoreImpl {
                                         double connOut = 0;
                                         String typeVariety = "SSMF";
 
-                                        double length = 0; //convert to kilometer
+                                        double length = 0;
                                         // Compute the length of the link
                                         List<LinkConcatenation> linkConcatenationList = span.getLinkConcatenation();
                                         for (LinkConcatenation linkConcatenation : linkConcatenationList) {
                                             double srlgLength = linkConcatenation.getSRLGLength();
-                                            length += srlgLength / convertKmM; //convert to kilometer
+                                            //convert to kilometer
+                                            length += srlgLength / convertKmM;
                                         }
 
                                         Elements element1 = addElementsFiber(2, 0, "RLD", "Lannion_CAS",
@@ -624,9 +625,8 @@ public class ExtractTopoDataStoreImpl {
                 .setOutVoa(outVoa).build();
         Edfa edfa = new EdfaBuilder()
                 .setOperational(operational).build();
-        Elements element1 = new ElementsBuilder().setUid(uidEdfa) // Choose an
-                                                                  // ip
-                                                                  // address
+        Elements element1 = new ElementsBuilder().setUid(uidEdfa)
+                // Choose an ip address
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Edfa.class)
                 .setMetadata(metadata1).setElementType(edfa).setTypeVariety(typeVariety).build();
         return element1;

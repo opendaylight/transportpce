@@ -134,14 +134,22 @@ public class PceLink {
 
     @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     public double retrieveOSNR() {
-        double sum = 0;        // sum of 1 over the span OSNRs (linear units)
-        double linkOsnrDb;     // link OSNR, in dB
-        double linkOsnrLu;     // link OSNR, in dB
-        double spanOsnrDb;     // span OSNR, in dB
-        double spanOsnrLu;     // span OSNR, in linear units
-        double ampNoise = 5.5; // default amplifier noise value, in dB
-        double loss;           // fiber span measured loss, in dB
-        double power;          // launch power, in dB
+        // sum of 1 over the span OSNRs (linear units)
+        double sum = 0;
+        // link OSNR, in dB
+        double linkOsnrDb;
+        // link OSNR, in dB
+        double linkOsnrLu;
+        // span OSNR, in dB
+        double spanOsnrDb;
+        // span OSNR, in linear units
+        double spanOsnrLu;
+        // default amplifier noise value, in dB
+        double ampNoise = 5.5;
+        // fiber span measured loss, in dB
+        double loss;
+        // launch power, in dB
+        double power;
         double constantA = 38.97293;
         double constantB = 0.72782;
         double constantC = -0.532331;
@@ -150,7 +158,8 @@ public class PceLink {
         double lowerBoundOSNR = 0.1;
 
         if (omsAttributesSpan ==  null) {
-            return 0L; // indicates no data or N/A
+            // indicates no data or N/A
+            return 0L;
         }
         loss = omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue();
         switch (omsAttributesSpan.getLinkConcatenation().get(0).getFiberType()) {
