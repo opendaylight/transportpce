@@ -47,9 +47,9 @@ public class InfoSubtree {
     public boolean getDeviceInfo(String nodeId, DeviceTransactionManager deviceTransactionManager) {
         switch (this.openRoadmVersion) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return getDeviceInfo1_2_1(nodeId, deviceTransactionManager);
+                return getDeviceInfo121(nodeId, deviceTransactionManager);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return getDeviceInfo2_2_1(nodeId, deviceTransactionManager);
+                return getDeviceInfo221(nodeId, deviceTransactionManager);
             default:
                 LOG.info("Device version {} not supported",this.openRoadmVersion);
                 return false;
@@ -57,7 +57,7 @@ public class InfoSubtree {
 
     }
 
-    private boolean getDeviceInfo1_2_1(String nodeId, DeviceTransactionManager deviceTransactionManager) {
+    private boolean getDeviceInfo121(String nodeId, DeviceTransactionManager deviceTransactionManager) {
 
         //Read clli from the device
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
@@ -85,7 +85,7 @@ public class InfoSubtree {
 
     }
 
-    private boolean getDeviceInfo2_2_1(String nodeId, DeviceTransactionManager deviceTransactionManager) {
+    private boolean getDeviceInfo221(String nodeId, DeviceTransactionManager deviceTransactionManager) {
 
         //TODO : change back to operational when testing on real device
         //Read clli from the device

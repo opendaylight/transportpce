@@ -371,14 +371,12 @@ public class PceGraph {
 
         Long latencyConstraint = this.pceHardConstraints.getMaxLatency();
 
-        if (latencyConstraint > 0) {
-            if (this.tmpAtozLatency > latencyConstraint) {
-                this.foundButTooHighLatency = true;
-                this.pceResult.setLocalCause(LocalCause.TOO_HIGH_LATENCY);
-                LOG.info("In validateLatency: AtoZ path has too high LATENCY {} > {}", this.tmpAtozLatency,
-                        latencyConstraint);
-                return false;
-            }
+        if ((latencyConstraint > 0) && (this.tmpAtozLatency > latencyConstraint)) {
+            this.foundButTooHighLatency = true;
+            this.pceResult.setLocalCause(LocalCause.TOO_HIGH_LATENCY);
+            LOG.info("In validateLatency: AtoZ path has too high LATENCY {} > {}", this.tmpAtozLatency,
+                latencyConstraint);
+            return false;
         }
         LOG.info("In validateLatency: AtoZ path  is {}", this.pathAtoZ.toString());
         return true;
