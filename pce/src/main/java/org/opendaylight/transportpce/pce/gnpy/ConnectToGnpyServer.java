@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public class ConnectToGnpyServer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConnectToGnpyServer.class);
-    static final String URL_GNPY = "http://127.0.0.1:5000/gnpy/api/v1.0/files";
+    static final String URL_GNPY = "http://127.0.0.1:8008/gnpy/api/v1.0/files";
 
     public String gnpyCnx(String jsonTxt) {
         String jsonRespTxt = null;
