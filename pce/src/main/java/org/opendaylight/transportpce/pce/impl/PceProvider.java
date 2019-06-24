@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.pce.impl;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.TransportpcePceService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.TransportpcePceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

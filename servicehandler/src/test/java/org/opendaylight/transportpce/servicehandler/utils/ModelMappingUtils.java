@@ -11,12 +11,12 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import org.opendaylight.transportpce.servicehandler.MappingConstraints;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.path.computation.request.input.ServiceAEnd;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.path.computation.request.input.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.path.computation.request.input.ServiceZEnd;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.path.computation.request.input.ServiceZEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.path.computation.request.input.ServiceAEnd;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.path.computation.request.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.path.computation.request.input.ServiceZEnd;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.path.computation.request.input.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInputBuilder;

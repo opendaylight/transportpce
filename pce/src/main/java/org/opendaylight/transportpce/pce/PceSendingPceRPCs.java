@@ -24,8 +24,8 @@ import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Co
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Elements;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.service.PathRequest;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.Synchronization;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.service.path.rpc.result.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
@@ -58,11 +58,15 @@ public class PceSendingPceRPCs {
     private PceConstraints pceHardConstraints = new PceConstraints();
     private PceConstraints pceSoftConstraints = new PceConstraints();
     private Long gnpyRequestId = new Long(0);
+    private GnpyResult gnpyAtoZ;
+    private GnpyResult gnpyZtoA;
 
     public PceSendingPceRPCs() {
         setPathDescription(null);
         this.input = null;
         this.dataBroker = null;
+        this.gnpyAtoZ = null;
+        this.gnpyZtoA = null;
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input, DataBroker dataBroker) {
@@ -109,9 +113,10 @@ public class PceSendingPceRPCs {
                     synchronizationList1);
                 // Analyze the response
                 if (gnpyResponse1 != null) {
-                    GnpyResult gnpyResult = new GnpyResult(gnpyResponse1);
+                    GnpyResult result = new GnpyResult(gnpyResponse1);
                     LOG.debug("GNPy result created");
-                    gnpyResult.analyzeResult();
+                    result.analyzeResult();
+                    this.gnpyAtoZ = result;
                 } else {
                     LOG.error("No response from the GNPy server");
                 }
@@ -135,9 +140,10 @@ public class PceSendingPceRPCs {
                         synchronizationList2);
                 // Analyze the response
                 if (gnpyResponse2 != null) {
-                    GnpyResult gnpyResult = new GnpyResult(gnpyResponse2);
+                    GnpyResult result = new GnpyResult(gnpyResponse2);
                     LOG.debug("GNPy result created");
-                    gnpyResult.analyzeResult();
+                    result.analyzeResult();
+                    this.gnpyZtoA = result;
                 } else {
                     LOG.info("No response from the GNPy server");
                 }
@@ -242,4 +248,11 @@ public class PceSendingPceRPCs {
         return rc.getResponseCode();
     }
 
+    public GnpyResult getGnpy_AtoZ() {
+        return gnpyAtoZ;
+    }
+
+    public GnpyResult getGnpy_ZtoA() {
+        return gnpyZtoA;
+    }
 }

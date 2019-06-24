@@ -18,7 +18,7 @@ import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.TransportpcePceListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.OrgOpenroadmServiceService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
