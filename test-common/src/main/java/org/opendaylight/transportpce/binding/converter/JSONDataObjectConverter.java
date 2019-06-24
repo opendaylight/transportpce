@@ -105,7 +105,8 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
         JsonWriter jsonWriter = new JsonWriter(writer);
         JSONCodecFactory jsonCodecFactory = JSONCodecFactory.createLazy(getSchemaContext());
         NormalizedNodeStreamWriter create =
-                JSONNormalizedNodeStreamWriter.createExclusiveWriter(jsonCodecFactory, null, null, jsonWriter);
+            JSONNormalizedNodeStreamWriter.createExclusiveWriter(jsonCodecFactory,
+            (org.opendaylight.yangtools.yang.model.api.DataNodeContainer)null, null, jsonWriter);
 
         try (NormalizedNodeWriter normalizedNodeWriter = NormalizedNodeWriter.forStreamWriter(create);) {
             normalizedNodeWriter
