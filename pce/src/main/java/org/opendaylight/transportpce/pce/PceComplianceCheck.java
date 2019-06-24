@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.pce;
 
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev171017.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.PathComputationRequestInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

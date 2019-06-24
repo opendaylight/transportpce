@@ -295,4 +295,8 @@ public class GnpyResult {
         }
         return Optional.ofNullable((T) bindingNodeEntry.getValue());
     }
+
+    public Response getResponse() {
+        return response;
+    }
 }

@@ -20,6 +20,10 @@ module transportpce-pce {
     prefix transportpce-pathDescription;
     revision-date 2017-10-17;
   }
+  import gnpy-path-computation-simplified {
+    prefix "gnpypc";
+    revision-date 2019-05-02;
+  }
 
   organization
     "transportPCE";
@@ -66,6 +70,11 @@ module transportpce-pce {
       "Version 1.6";
   }
 
+  revision 2019-06-24 {
+    description
+      "Version 1.6.1";
+  }
+
   rpc path-computation-request {
     input {
       leaf service-name {
@@ -93,6 +102,7 @@ module transportpce-pce {
     output {
       uses org-openroadm-common-service-types:configuration-response-common;
       uses transportpce-common-service-path-types:response-parameters-sp;
+      uses gnpy;
     }
   }
 
@@ -139,6 +149,56 @@ notification service-path-rpc-result {
     list pathDescriptions {
       key "path-name";
       uses stubpce-path-description;
+    }
+  }
+
+  grouping gnpy {
+    list gnpy-response {
+      key path-dir;
+      config false;
+      description "GNPy response";
+      leaf path-dir{
+        type string;
+        description "A-to-Z or Z-to-A";
+      }
+      leaf feasibility {
+        type boolean;
+        description
+          "true : feasible path / False : non-feasible.";
+      }
+      choice response-type {
+        config false;
+        description "response-type";
+        case no-path-case {
+          uses gnpypc:no-path-info;
+        }
+        case path-case {
+          uses path-performance;
+          description "Path computation service.";
+        }
+      }
+    }
+  }
+
+  grouping path-performance {
+    description "TE generic path properties grouping";
+    container path-properties {
+      config false;
+      description "The TE path properties";
+      list path-metric {
+        key metric-type;
+        description "TE path metric type";
+        leaf metric-type {
+          type identityref {
+            base gnpypc:path-metric-type;
+          }
+        }
+        leaf accumulative-value {
+          type decimal64 {
+            fraction-digits 2;
+          }
+        }
+      }
     }
   }
 }
