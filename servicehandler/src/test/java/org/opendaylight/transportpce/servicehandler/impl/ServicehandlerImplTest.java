@@ -40,6 +40,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
@@ -190,4 +193,55 @@ public class ServicehandlerImplTest extends AbstractTest  {
         Assert.assertEquals(
             ResponseCodes.RESPONSE_OK, rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
     }
+
+
+    @Test
+    public void serviceFeasibilityCheckShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+        ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> result =
+                servicehandlerImpl.serviceFeasibilityCheck(new ServiceFeasibilityCheckInputBuilder().build());
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<ServiceFeasibilityCheckOutput> rpcResult = result.get();
+        Assert.assertEquals(
+            ResponseCodes.RESPONSE_FAILED, rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
+    }
+
+    @Test
+    public void serviceFeasibilityCheckShouldBeSuccessfulWhenPreformPCESuccessful()
+            throws ExecutionException, InterruptedException {
+        ServiceFeasibilityCheckInput input = ServiceDataUtils.buildServiceFeasibilityCheckInput();
+        Mockito.when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+        ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> result =
+            servicehandlerImpl.serviceFeasibilityCheck(input);
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<ServiceFeasibilityCheckOutput> rpcResult = result.get();
+        Assert.assertEquals(
+                ResponseCodes.RESPONSE_OK, rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
+    }
+
+
+
 }
