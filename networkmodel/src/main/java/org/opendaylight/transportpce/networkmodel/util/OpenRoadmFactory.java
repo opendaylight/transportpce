@@ -7,10 +7,10 @@
  */
 package org.opendaylight.transportpce.networkmodel.util;
 
-import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,14 +33,15 @@ public class OpenRoadmFactory {
 
     }
 
-    public TopologyShard createTopologyShardVersionControl(String nodeId) {
-        LOG.info("Create topology called for {}",nodeId);
-        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
-            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                return openRoadmTopology121.createTopologyShard(nodeId);
-            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                LOG.info("Creating openroadm topology v2.2 node for {}",nodeId);
-                return openRoadmTopology22.createTopologyShard(nodeId);
+    public TopologyShard createTopologyShardVersionControl(Nodes mappingNode) {
+        LOG.info("Create topology called for {} - version", mappingNode.getNodeId(),
+            mappingNode.getOpenroadmVersion().getName());
+        switch (mappingNode.getOpenroadmVersion().getName()) {
+            case "1.2.1":
+                return openRoadmTopology121.createTopologyShard(mappingNode.getNodeId());
+            case "2.2.1":
+                LOG.info("Creating openroadm topology v2.2 node for {}",mappingNode.getNodeId());
+                return openRoadmTopology22.createTopologyShard(mappingNode);
             default:
                 return null;
 
