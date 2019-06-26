@@ -111,8 +111,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmNode, openRoadmNode,
                 CREATE_MISSING_PARENTS);
 
-
-            TopologyShard topologyShard = openRoadmFactory.createTopologyShardVersionControl(nodeId);
+            TopologyShard topologyShard =
+                openRoadmFactory.createTopologyShardVersionControl(portMapping.getNode(nodeId));
 
             if (topologyShard == null) {
                 LOG.error("Unable to create topology shard for node {}!", nodeId);

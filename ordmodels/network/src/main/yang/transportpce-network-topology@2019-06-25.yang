@@ -1,0 +1,39 @@
+module transportpce-topology {
+    namespace "http://transportpce/topology";
+    prefix "tpce-topo";
+
+    import ietf-network {
+        prefix nd;
+        revision-date 2018-02-26;
+      }
+    import ietf-network-topology {
+        prefix nwt;
+        revision-date 2018-02-26;
+      }
+    import org-openroadm-common-network {
+        prefix cnet;
+        revision-date 2018-11-30;
+      }
+
+    organization
+        "TransportPCE team";
+      contact
+        "TransportPCE team";
+
+    revision 2019-06-25 {
+        description "Initial revision";
+    }
+
+    augment "/nd:networks/nd:network/nd:node/nwt:termination-point" {
+        when "../../nd:network-types/cnet:openroadm-common-network/openroadm-topology";
+        description
+          "Defines associated logical-connection-point for XPDR port.";
+        leaf associated-connection-map-port {
+          when
+            "../cnet:tp-type = 'XPONDER-CLIENT' or ../cnet:tp-type = 'XPONDER-NETWORK'";
+          type string;
+          description
+            "The xpdr port connectable regarding the device connection-map";
+        }
+      }
+}

@@ -77,6 +77,23 @@ module transportpce-portmapping {
           description
           "OTS interface provisioned on the port";
         }
+        leaf port-direction{
+          type string;
+          description
+            "Useful for line port of XPDR, for which there is no
+            indication in its logical-termination-point naming";
+        }
+        leaf port-qual{
+          type string;
+          description
+            "Useful to identify from portmapping client from network ports of XPDR";
+        }
+        leaf associated-lcp{
+          type string;
+          description
+            "For XPDR, associate two logical-connection-points
+            from device/connnection-map data";
+        }
       }
       list cp-to-degree{
         description
