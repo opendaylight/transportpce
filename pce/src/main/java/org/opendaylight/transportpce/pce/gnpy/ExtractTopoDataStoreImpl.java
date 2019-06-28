@@ -127,11 +127,12 @@ public class ExtractTopoDataStoreImpl {
         } else {
             elements = null;
         }
-        if (map.containsKey("Elements")) {
+        if (map.containsKey("Connections")) {
             connections = (List<Connections>) map.get("Connections");
         } else {
             connections = null;
         }
+
         pathRequest = extractPathRequest(input, atoz, requestId);
         synchronization = extractSynchronization(requestId);
     }
@@ -145,7 +146,7 @@ public class ExtractTopoDataStoreImpl {
         } else {
             elements = null;
         }
-        if (map.containsKey("Elements")) {
+        if (map.containsKey("Connections")) {
             connections = (List<Connections>) map.get("Connections");
         } else {
             connections = null;
@@ -243,7 +244,7 @@ public class ExtractTopoDataStoreImpl {
                     int idFiber = 0;
                     int nbEDFA = 0;
                     if (!linksList.isEmpty()) {
-                        LOG.warn("The link list is not empty");
+                        LOG.debug("The link list is not empty");
                         for (Link link : linksList) {
                             Link1 link1 = link.augmentation(Link1.class);
                             int linkType = link1.getLinkType().getIntValue();
@@ -317,8 +318,7 @@ public class ExtractTopoDataStoreImpl {
                                         mapFiberIp.put(clfi, ipFiber);
                                         idFiber++;
 
-                                        double attIn = span.getSpanlossCurrent().getValue().doubleValue();
-                                        double lossCoef = 0.2;
+                                        double attIn = 0;
                                         double connIn = 0;
                                         double connOut = 0;
                                         String typeVariety = "SSMF";
@@ -331,6 +331,7 @@ public class ExtractTopoDataStoreImpl {
                                             //convert to kilometer
                                             length += srlgLength / convertKmM;
                                         }
+                                        double lossCoef = span.getSpanlossCurrent().getValue().doubleValue() / length;
 
                                         Elements element1 = addElementsFiber(2, 0, "RLD", "Lannion_CAS",
                                                 ipFiber.getIpv4Address().getValue(), length, attIn, lossCoef, connIn,
@@ -577,7 +578,7 @@ public class ExtractTopoDataStoreImpl {
     public List<Synchronization> extractSynchronization(Long requestId) {
         // Create RequestIdNumber
         List<Long> requestIdNumber = new ArrayList<>();
-        requestIdNumber.add(0, new Long(0));
+        requestIdNumber.add(requestId);
         // Create a synchronization
         Svec svec = new SvecBuilder().setRelaxable(true).setDisjointness(new TePathDisjointness(true, true, false))
                 .setRequestIdNumber(requestIdNumber).build();
