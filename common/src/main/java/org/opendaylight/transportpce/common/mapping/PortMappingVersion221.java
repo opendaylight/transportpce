@@ -297,21 +297,21 @@ public class PortMappingVersion221 {
                     LOG.warn("{} : Circuit pack {} not found or without ports.", nodeId, circuitPackName);
                     continue; // TODO continue or return false?
                 }
-                CircuitPacks circuitPack = circuitPackObject.get();
-                for (Ports port : circuitPack.getPorts()) {
-                    if (port.getLogicalConnectionPoint() != null) {
-                        String logicalConnectionPoint = getLogicalConnectionPort(port, srgIndex);
-                        LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId, circuitPackName, port
-                                         .getPortName(),
-                                 logicalConnectionPoint);
+                List<Ports> portList = circuitPackObject.get().getPorts();
+                portList.sort(Comparator.comparing(Ports::getPortName));
+                int portIndex = 1;
+                for (Ports port : portList) {
+                    if (port.getPortQual() == null) {
+                        continue;
+                    } else if (PortQual.RoadmExternal.getIntValue() == port.getPortQual().getIntValue()) {
+                        String logicalConnectionPoint = createLogicalConnectionPort(port, srgIndex, portIndex);
+                        LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId, circuitPackName,
+                            port.getPortName(), logicalConnectionPoint);
                         portMapList.add(createMappingObject(nodeId, port, circuitPackName, logicalConnectionPoint));
-                    } else if (PortQual.RoadmInternal.equals(port.getPortQual())) {
-                        LOG.info("Port is internal, skipping Logical Connection Point missing for {} {}",
-                                 circuitPackName,
-                                 port.getPortName());
-                    } else if (port.getLogicalConnectionPoint() == null) {
-                        LOG.info("Value missing, Skipping Logical Connection Point missing for {} {}", circuitPackName,
-                                 port.getPortName());
+                        portIndex++;
+                    } else {
+                        LOG.info("{} : port {} on {} is not roadm-external. No logicalConnectionPoint for this port.",
+                            nodeId, port.getPortName(), circuitPackName);
                     }
                 }
             }
@@ -362,6 +362,23 @@ public class PortMappingVersion221 {
         return null; // TODO return false or continue?
     }
 
+    private String createLogicalConnectionPort(Ports port, int srgIndex, int portIndex) {
+        String lcp = null;
+        switch (port.getPortDirection()) {
+            case Tx:
+                lcp = "SRG" + srgIndex + "-PP" + portIndex + "-TX";
+                break;
+            case Rx:
+                lcp = "SRG" + srgIndex + "-PP" + portIndex + "-RX";
+                break;
+            case Bidirectional:
+                lcp = "SRG" + srgIndex + "-PP" + portIndex + "-TXRX";
+                break;
+            default:
+                LOG.error("Unsupported port direction for port {} : {}", port, port.getPortDirection());
+        }
+        return lcp;
+    }
 
     private List<Degree> getDegrees(String deviceId, Info ordmInfo) {
         List<Degree> degrees = new ArrayList<>();
@@ -384,10 +401,8 @@ public class PortMappingVersion221 {
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmDegreeObject.isPresent()) {
                 degrees.add(ordmDegreeObject.get());
-            } else {
-                LOG.info("Device has {} degree", degreeCounter - 1);
-                break;
             }
+            LOG.info("Device {} has {} degree", degrees.size());
         }
         return degrees;
     }
@@ -498,7 +513,8 @@ public class PortMappingVersion221 {
         String logicalConnectionPoint) {
         MappingBuilder mpBldr = new MappingBuilder();
         mpBldr.withKey(new MappingKey(logicalConnectionPoint)).setLogicalConnectionPoint(logicalConnectionPoint)
-                .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName());
+                .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName())
+                .setPortDirection(port.getPortDirection().getName());
 
         // Get OMS and OTS interface provisioned on the TTP's
         if (logicalConnectionPoint.contains(StringConstants.TTP_TOKEN) && (port.getInterfaces() != null)) {

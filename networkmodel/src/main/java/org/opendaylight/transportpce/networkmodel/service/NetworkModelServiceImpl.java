@@ -79,7 +79,10 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 LOG.warn("Could not generate port mapping for {} skipping network model creation", nodeId);
                 return;
             }
-            this.linkDiscovery.readLLDP(new NodeId(nodeId), openRoadmVersion);
+
+            if (portMapping.getNode(nodeId).getNodeType().getIntValue() == 1) {
+                this.linkDiscovery.readLLDP(new NodeId(nodeId), openRoadmVersion);
+            }
 
             Node clliNode = ClliNetwork.createNode(this.deviceTransactionManager, nodeId, openRoadmVersion);
             if (clliNode == null) {
