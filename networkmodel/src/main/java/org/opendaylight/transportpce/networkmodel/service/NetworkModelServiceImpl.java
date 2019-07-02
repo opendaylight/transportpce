@@ -177,13 +177,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
 
             NodeKey nodeIdKey = new NodeKey(new NodeId(nodeId));
 
-            LOG.info("deleting node in {}", NetworkUtils.CLLI_NETWORK_ID);
-            InstanceIdentifier<Node> iiClliNode = InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
-                .child(Node.class, nodeIdKey)
-                .build();
-            this.networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION, iiClliNode);
-
             LOG.info("deleting node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
             InstanceIdentifier<Node> iiOpenRoadmNode = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
