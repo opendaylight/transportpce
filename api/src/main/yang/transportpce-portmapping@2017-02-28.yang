@@ -49,6 +49,11 @@ module transportpce-portmapping {
         description
           "Identifier for node-type e.g Roadm, xponder";
       }
+      leaf clli{
+          type string;
+          description
+            "Common Language Location Identifier read from device";
+      }
       list mapping{
         description
           "Mapping for Physical circuit pack/port/parent interfaces
@@ -94,6 +99,12 @@ module transportpce-portmapping {
             "For XPDR, associate two logical-connection-points
             from device/connnection-map data";
         }
+        leaf partner-lcp{
+            type string;
+            description
+              "For XPDR unidirectional NETWORK port, associate two logical-connection-points
+              from device/partner port data";
+          }
       }
       list cp-to-degree{
         description
