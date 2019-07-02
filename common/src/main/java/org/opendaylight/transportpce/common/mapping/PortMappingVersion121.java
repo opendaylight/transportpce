@@ -530,6 +530,11 @@ public class PortMappingVersion121 {
                 continue;
             }
             for (Ports port : cp.getPorts()) {
+                if (port.getPortQual() == null) {
+                    LOG.warn("PortQual was not found for port {} on circuit pack: {}", port.getPortName(),
+                        circuitPackName);
+                    continue;
+                }
                 if (Port.PortQual.XpdrNetwork.equals(port.getPortQual())) {
                     portMapList.add(createMappingObject(nodeId, port, circuitPackName,
                             "XPDR1-" + StringConstants.NETWORK_TOKEN + line));
