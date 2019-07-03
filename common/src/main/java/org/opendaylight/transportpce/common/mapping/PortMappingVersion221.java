@@ -26,18 +26,20 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.NetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegree;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegreeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegreeKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.CpToDegreeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.CpToDegreeKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CircuitPack;
@@ -89,18 +91,21 @@ public class PortMappingVersion221 {
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType
             .OPERATIONAL, infoIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-
         Info deviceInfo;
+        NodeInfo nodeInfo;
         if (deviceInfoOptional.isPresent()) {
             deviceInfo = deviceInfoOptional.get();
+            nodeInfo = createNodeInfo(deviceInfo);
+            if (nodeInfo == null) {
+                return false;
+            } else {
+                postPortMapping(nodeId, nodeInfo, null, null);
+            }
         } else {
             LOG.warn("Device info subtree is absent for {}", nodeId);
             return false;
         }
-        if (deviceInfo.getNodeType() == null) {
-            LOG.error("Node type field is missing"); // TODO make mandatory in yang
-            return false;
-        }
+
         switch (deviceInfo.getNodeType()) {
 
             case Rdm:
@@ -129,7 +134,7 @@ public class PortMappingVersion221 {
                 break;
 
         }
-        return postPortMapping(deviceInfo, portMapList, deviceInfo.getNodeType().getIntValue(), null);
+        return postPortMapping(nodeId, nodeInfo, portMapList, null);
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
@@ -554,12 +559,13 @@ public class PortMappingVersion221 {
         return cpToDegreeList;
     }
 
-    private boolean postPortMapping(Info deviceInfo, List<Mapping> portMapList, Integer nodeType,
+    private boolean postPortMapping(String nodeId, NodeInfo nodeInfo, List<Mapping> portMapList,
         List<CpToDegree> cp2DegreeList) {
         NodesBuilder nodesBldr = new NodesBuilder();
-        nodesBldr.withKey(new NodesKey(deviceInfo.getNodeId().getValue())).setNodeId(deviceInfo.getNodeId().getValue());
-        nodesBldr.setNodeType(NodeTypes.forValue(nodeType));
-        nodesBldr.setOpenroadmVersion(Nodes.OpenroadmVersion._221);
+        nodesBldr.withKey(new NodesKey(nodeId)).setNodeId(nodeId);
+        if (nodeInfo != null) {
+            nodesBldr.setNodeInfo(nodeInfo);
+        }
         if (portMapList != null) {
             nodesBldr.setMapping(portMapList);
         }
@@ -665,8 +671,7 @@ public class PortMappingVersion221 {
         Map<String, String> interfaceList = getEthInterfaceList(nodeId);
         List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees, nodeId, interfaceList);
         LOG.info("Map looks like this {}", interfaceList);
-
-        postPortMapping(deviceInfo, null, deviceInfo.getNodeType().getIntValue(), cpToDegreeList);
+        postPortMapping(nodeId, null, null, cpToDegreeList);
 
         Map<Integer, List<ConnectionPorts>> connectionPortMap = getPerDegreePorts(nodeId, deviceInfo);
         for (Integer k : connectionPortMap.keySet()) {
@@ -785,6 +790,34 @@ public class PortMappingVersion221 {
             }
         }
         return true;
+    }
+
+    private NodeInfo createNodeInfo(Info deviceInfo) {
+        NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder();
+        if (deviceInfo.getNodeType() != null) {
+            nodeInfoBldr = new NodeInfoBuilder()
+                .setOpenroadmVersion(OpenroadmVersion._221)
+                .setNodeType(deviceInfo.getNodeType());
+            if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
+                nodeInfoBldr.setNodeClli(deviceInfo.getClli());
+            } else {
+                nodeInfoBldr.setNodeClli("defaultCLLI");
+            }
+            if (deviceInfo.getModel() != null) {
+                nodeInfoBldr.setNodeModel(deviceInfo.getModel());
+            }
+            if (deviceInfo.getVendor() != null) {
+                nodeInfoBldr.setNodeVendor(deviceInfo.getVendor());
+            }
+            if (deviceInfo.getIpAddress() != null) {
+                nodeInfoBldr.setNodeIpAddress(deviceInfo.getIpAddress());
+            }
+        } else {
+         // TODO make mandatory in yang
+            LOG.error("Node type field is missing");
+            return null;
+        }
+        return nodeInfoBldr.build();
     }
 
 }

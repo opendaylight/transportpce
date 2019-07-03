@@ -15,7 +15,7 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.Node1;
@@ -66,26 +66,13 @@ public final class ClliNetwork {
     /**
      * Create single node entry for CLLI topology.
      *
-     * @param deviceTransactionManager device transation manager
      * @param deviceId device ID
-     * @param openRoadmVersion OpenRoadm Version number
+     * @param nodeInfo Some important and general data from device
      *
      * @return node builder status
      */
-    public static Node createNode(DeviceTransactionManager deviceTransactionManager, String deviceId,
-                                  String openRoadmVersion) {
-        //Read clli from the device
-        InfoSubtree infoSubtree = new InfoSubtree(openRoadmVersion);
-        String clli;
-
-        if (infoSubtree.getDeviceInfo(deviceId,deviceTransactionManager)) {
-
-            clli = infoSubtree.getClli();
-        } else {
-            LOG.info("Unable for get Info subtree from the device");
-            return null;
-        }
-
+    public static Node createNode(String deviceId, NodeInfo nodeInfo) {
+        String clli = nodeInfo.getNodeClli();
         /*
          * Create node in the CLLI layer of the network model
          * with nodeId equal to the clli attribute in the device

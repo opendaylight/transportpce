@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.common.mapping;
 import com.google.common.util.concurrent.CheckedFuture;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -25,18 +26,17 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.NetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegree;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegreeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegreeKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.CpToDegreeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.CpToDegreeKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.CircuitPack;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
@@ -136,8 +136,10 @@ public class PortMappingVersion121 {
                                     List<CpToDegree> cp2DegreeList) {
         NodesBuilder nodesBldr = new NodesBuilder();
         nodesBldr.withKey(new NodesKey(deviceInfo.getNodeId())).setNodeId(deviceInfo.getNodeId());
-        nodesBldr.setNodeType(NodeTypes.forValue(nodeType));
-        nodesBldr.setOpenroadmVersion(Nodes.OpenroadmVersion._121);
+//        if (deviceInfo.getNodeType().getIntValue() == 1) {
+//            nodesBldr.setNodeType(NodeTypes.Rdm);
+//        }
+
         if (portMapList != null) {
             nodesBldr.setMapping(portMapList);
         }

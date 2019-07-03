@@ -14,7 +14,7 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.RateIdentity;
 
@@ -32,8 +32,8 @@ public class OpenRoadmInterfaceFactory {
         this.openRoadmInterface221 = openRoadmInterface221;
     }
 
-    public String createOpenRoadmEthInterface(String nodeId,
-                                              String logicalConnPoint) throws OpenRoadmInterfaceException {
+    public String createOpenRoadmEthInterface(String nodeId, String logicalConnPoint)
+        throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:

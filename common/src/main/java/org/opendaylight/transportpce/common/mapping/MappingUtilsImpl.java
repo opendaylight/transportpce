@@ -13,9 +13,10 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,14 +37,14 @@ public class MappingUtilsImpl implements MappingUtils {
         /*
          * Getting physical mapping corresponding to logical connection point
          */
-        InstanceIdentifier<Nodes> portMappingIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
-                new NodesKey(nodeId)).build();
+        InstanceIdentifier<NodeInfo> nodeInfoIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
+                new NodesKey(nodeId)).child(NodeInfo.class).build();
         try (ReadOnlyTransaction readTx = dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> mapObject =
-                    readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get().toJavaUtil();
-            if (mapObject.isPresent()) {
-                Nodes mapping = mapObject.get();
-                switch (mapping.getOpenroadmVersion()) {
+            Optional<NodeInfo> nodeInfoObj =
+                    readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get().toJavaUtil();
+            if (nodeInfoObj.isPresent()) {
+                NodeInfo nodInfo = nodeInfoObj.get();
+                switch (nodInfo.getOpenroadmVersion()) {
                     case _221:
                         return StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
                     case _121:
