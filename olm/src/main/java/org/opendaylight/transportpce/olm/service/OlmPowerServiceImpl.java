@@ -61,7 +61,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.calculate.spanloss.base.output.Spans;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.calculate.spanloss.base.output.SpansBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
@@ -123,16 +124,13 @@ public class OlmPowerServiceImpl implements OlmPowerService {
 
     @Override
     public GetPmOutput getPm(GetPmInput pmInput) {
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping
-            .rev170228.network.Nodes.OpenroadmVersion openroadmVersion;
+        OpenroadmVersion openroadmVersion;
         if (mappingUtils.getOpenRoadmVersion(pmInput.getNodeId())
             .equals(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1)) {
             LOG.info("Device version is 1.2.1");
-            openroadmVersion = org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping
-                .rev170228.network.Nodes.OpenroadmVersion._121;
+            openroadmVersion = OpenroadmVersion._121;
         } else {
-            openroadmVersion = org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping
-                .rev170228.network.Nodes.OpenroadmVersion._221;
+            openroadmVersion = OpenroadmVersion._221;
             LOG.info("Device version is 2.2.1");
         }
         LOG.info("Now calling get pm data");

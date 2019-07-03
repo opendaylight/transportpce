@@ -24,8 +24,8 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.networks.network.network.types.OpenroadmCommonNetworkBuilder;
@@ -137,7 +137,7 @@ public class OpenRoadmTopology22 {
         List<Link> links = new ArrayList<>();
 
         // Check if node is ROADM
-        if (NodeTypes.Rdm.getIntValue() == mappingNode.getNodeType().getIntValue()) {
+        if (NodeTypes.Rdm.getIntValue() == mappingNode.getNodeInfo().getNodeType().getIntValue()) {
             LOG.info("creating rdm node in openroadmtopology for node {}", mappingNode.getNodeId());
             // transform flat mapping list to per degree and per srg mapping lists
             Map<String, List<Mapping>> mapDeg = new HashMap();
@@ -182,7 +182,7 @@ public class OpenRoadmTopology22 {
             links.addAll(createNewLinks(nodes));
             LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
             return new TopologyShard(nodes, links);
-        } else if (NodeTypes.Xpdr.getIntValue() ==  mappingNode.getNodeType().getIntValue()) {
+        } else if (NodeTypes.Xpdr.getIntValue() ==  mappingNode.getNodeInfo().getNodeType().getIntValue()) {
             // Check if node is XPONDER
             LOG.info("creating xpdr node in openroadmtopology for node {}", mappingNode.getNodeId());
             NodeBuilder ietfNode = createXpdr(mappingNode);

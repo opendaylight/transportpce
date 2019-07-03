@@ -83,7 +83,7 @@ public class DeviceRendererServiceImplRollbackTest extends AbstractTest {
         this.crossConnect = new CrossConnectImpl(deviceTransactionManager, this.mappingUtils, this.crossConnectImpl121,
             this.crossConnectImpl221);
         this.crossConnect = Mockito.spy(this.crossConnect);
-        PortMapping portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.mappingUtils,
+        PortMapping portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22,
             this.portMappingVersion121);
         FixedFlexInterface fixedFlexInterface = new FixedFlexImpl();
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);

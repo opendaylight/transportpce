@@ -23,7 +23,8 @@ import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.ClliNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -79,37 +80,25 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 LOG.warn("Could not generate port mapping for {} skipping network model creation", nodeId);
                 return;
             }
-
-            if (portMapping.getNode(nodeId).getNodeType().getIntValue() == 1) {
+            NodeInfo nodeInfo = portMapping.getNode(nodeId).getNodeInfo();
+            if (nodeInfo.getNodeType().getIntValue() == 1) {
                 this.linkDiscovery.readLLDP(new NodeId(nodeId), openRoadmVersion);
             }
 
-            Node clliNode = ClliNetwork.createNode(this.deviceTransactionManager, nodeId, openRoadmVersion);
-            if (clliNode == null) {
-                LOG.error("Unable to create clli node! Node id: {}", nodeId);
-                return;
-            }
-
+            Node clliNode = ClliNetwork.createNode(nodeId, nodeInfo);
             InstanceIdentifier<Node> iiClliNode = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)))
                 .child(Node.class, clliNode.key())
                 .build();
-
-
             LOG.info("creating node in {}", NetworkUtils.CLLI_NETWORK_ID);
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiClliNode, clliNode,
                 CREATE_MISSING_PARENTS);
 
-            Node openRoadmNode = OpenRoadmNetwork.createNode(nodeId, this.deviceTransactionManager, openRoadmVersion);
-            if (openRoadmNode == null) {
-                LOG.error("Unable to create OpenRoadm node! Node id: {}", nodeId);
-                return;
-            }
+            Node openRoadmNode = OpenRoadmNetwork.createNode(nodeId, nodeInfo);
             InstanceIdentifier<Node> iiOpenRoadmNode = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)))
                 .child(Node.class, openRoadmNode.key())
                 .build();
-
             LOG.info("creating node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmNode, openRoadmNode,
                 CREATE_MISSING_PARENTS);
@@ -174,7 +163,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     public void deleteOpenRoadmnode(String nodeId) {
         try {
             @Nullable
-            OpenroadmVersion deviceVersion = this.portMapping.getNode(nodeId).getOpenroadmVersion();
+            OpenroadmVersion deviceVersion = this.portMapping.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
             LOG.info("deleteOpenROADMnode: {} version {}", nodeId, deviceVersion.getName());
             this.portMapping.deleteMappingData(nodeId);
 

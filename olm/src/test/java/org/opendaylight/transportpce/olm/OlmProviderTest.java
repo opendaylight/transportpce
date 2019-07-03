@@ -81,7 +81,7 @@ public class OlmProviderTest extends AbstractTest {
                 new PortMappingVersion221(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 =
                 new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
-        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.mappingUtils,
+        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22,
                 this.portMappingVersion121);
         this.portMapping = Mockito.spy(this.portMapping);
         this.powerMgmt = new PowerMgmtImpl(this.getDataBroker(), this.openRoadmInterfaces, this.crossConnect,

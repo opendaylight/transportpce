@@ -17,14 +17,13 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.networks.network.network.types.OpenroadmCommonNetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev181130.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -75,41 +74,12 @@ public final class OpenRoadmNetwork {
      * Create single node entry for OpenRoadmNetwork.
      *
      * @param nodeId node ID
-     * @param deviceTransactionManager device transaction manager
-     * @param openRoadmVersion OpenRoadm version number
+     * @param nodeInfo some important and general data from device
      *
-     * @return node builder status
+     * @return node
      */
-    public static Node createNode(String nodeId, DeviceTransactionManager deviceTransactionManager,
-                                  String openRoadmVersion) {
+    public static Node createNode(String nodeId, NodeInfo nodeInfo) {
 
-        InfoSubtree infoSubtree = new InfoSubtree(openRoadmVersion);
-        String clli;
-        String vendor;
-        String model;
-        IpAddress ipAddress;
-        int nodeType;
-
-        if (infoSubtree.getDeviceInfo(nodeId, deviceTransactionManager)) {
-
-            clli = infoSubtree.getClli();
-
-            /**
-             * TODO : Uncomment when real when testing on real device
-             * vendor = infoSubtree.getVendor();
-             * model = infoSubtree.getModel();
-             **/
-            vendor = infoSubtree.getVendor();
-            clli = infoSubtree.getClli();
-            model = infoSubtree.getModel();
-            ipAddress = infoSubtree.getIpAddress();
-            nodeType = infoSubtree.getNodeType();
-
-        } else {
-            return null;
-        }
-
-        // Uses the Node Builder to set the nodeId and Key
         NodeBuilder nodeBldr = new NodeBuilder();
         NodeId nwNodeId = new NodeId(nodeId);
         nodeBldr.setNodeId(nwNodeId);
@@ -119,7 +89,7 @@ public final class OpenRoadmNetwork {
         /*
          * Recognize the node type: 1:ROADM, 2:XPONDER
          */
-        switch (nodeType) {
+        switch (nodeInfo.getNodeType().getIntValue()) {
             case 1:
                 node1bldr.setNodeType(OpenroadmNodeType.ROADM);
                 break;
@@ -127,23 +97,28 @@ public final class OpenRoadmNetwork {
                 node1bldr.setNodeType(OpenroadmNodeType.XPONDER);
                 break;
             default:
-                LOG.error("No correponsding type for the value: {}", nodeType);
+                LOG.error("No correponsding type for the value: {}", nodeInfo.getNodeType().getName());
                 break;
         }
 
-
         // Sets IP, Model and Vendor information fetched from the deviceInfo
-        node1bldr.setIp(ipAddress);
-        node1bldr.setModel(model);
-        node1bldr.setVendor(vendor);
+        if (nodeInfo.getNodeIpAddress() != null) {
+            node1bldr.setIp(nodeInfo.getNodeIpAddress());
+        }
+        if (nodeInfo.getNodeModel() != null) {
+            node1bldr.setModel(nodeInfo.getNodeModel());
+        }
+        if (nodeInfo.getNodeVendor() != null) {
+            node1bldr.setVendor(nodeInfo.getNodeVendor());
+        }
 
         // Sets the value of Network-ref and Node-ref as a part of the supporting node
         // attribute
-
         SupportingNodeBuilder supportbldr = new SupportingNodeBuilder();
-        supportbldr.withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID), new NodeId(clli)));
+        supportbldr.withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID),
+            new NodeId(nodeInfo.getNodeClli())));
         supportbldr.setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID));
-        supportbldr.setNodeRef(new NodeId(clli));
+        supportbldr.setNodeRef(new NodeId(nodeInfo.getNodeClli()));
         nodeBldr.setSupportingNode(ImmutableList.of(supportbldr.build()));
 
         // Augment to the main node builder

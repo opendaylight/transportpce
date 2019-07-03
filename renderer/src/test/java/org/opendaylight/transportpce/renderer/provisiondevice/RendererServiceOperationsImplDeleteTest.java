@@ -99,7 +99,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
             new PortMappingVersion221(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 =
             new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
-        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.mappingUtils,
+        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22,
             this.portMappingVersion121);
         this.crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         this.crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);

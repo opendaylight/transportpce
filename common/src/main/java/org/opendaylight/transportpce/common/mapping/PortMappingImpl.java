@@ -19,11 +19,13 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +36,13 @@ public class PortMappingImpl implements PortMapping {
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingImpl.class);
 
     private final DataBroker dataBroker;
-    private final MappingUtils mappingUtils;
     private final PortMappingVersion221 portMappingVersion22;
     private final PortMappingVersion121 portMappingVersion121;
 
-    public PortMappingImpl(DataBroker dataBroker, PortMappingVersion221 portMappingVersion22, MappingUtils mappingUtils,
-                           PortMappingVersion121 portMappingVersion121) {
+    public PortMappingImpl(DataBroker dataBroker, PortMappingVersion221 portMappingVersion22,
+        PortMappingVersion121 portMappingVersion121) {
 
         this.dataBroker = dataBroker;
-        this.mappingUtils = mappingUtils;
         this.portMappingVersion22 = portMappingVersion22;
         this.portMappingVersion121 = portMappingVersion121;
     }
@@ -108,14 +108,36 @@ public class PortMappingImpl implements PortMapping {
 
     @Override
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
-
-
-        String openROADMversion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (openROADMversion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+        OpenroadmVersion openROADMversion = this.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
+        if (openROADMversion.getIntValue() == 1) {
             return portMappingVersion121.updateMapping(nodeId,oldMapping);
         }
-        else if (openROADMversion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
-            return portMappingVersion22.updateMapping(nodeId,oldMapping);
+        else if (openROADMversion.getIntValue() == 2) {
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes
+                .MappingBuilder oldMapping2Bldr = new MappingBuilder().setLogicalConnectionPoint(oldMapping
+                .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
+            if (oldMapping.getAssociatedLcp() != null) {
+                oldMapping2Bldr.setAssociatedLcp(oldMapping.getAssociatedLcp());
+            }
+            if (oldMapping.getPartnerLcp() != null) {
+                oldMapping2Bldr.setPartnerLcp(oldMapping.getPartnerLcp());
+            }
+            if (oldMapping.getPortQual() != null) {
+                oldMapping2Bldr.setPortQual(oldMapping.getPortQual());
+            }
+            if (oldMapping.getSupportingCircuitPackName() != null) {
+                oldMapping2Bldr.setSupportingCircuitPackName(oldMapping.getSupportingCircuitPackName());
+            }
+            if (oldMapping.getSupportingOms() != null) {
+                oldMapping2Bldr.setSupportingOms(oldMapping.getSupportingOms());
+            }
+            if (oldMapping.getSupportingOts() != null) {
+                oldMapping2Bldr.setSupportingOts(oldMapping.getSupportingOts());
+            }
+            if (oldMapping.getSupportingPort() != null) {
+                oldMapping2Bldr.setSupportingPort(oldMapping.getSupportingPort());
+            }
+            return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr.build());
         }
 
         else {

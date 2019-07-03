@@ -61,7 +61,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <bean id="portMapping" class="org.opendaylight.transportpce.common.mapping.PortMappingImpl" >
         <argument ref="dataBroker" />
-        <argument ref="mappingUtils" />
         <argument ref="portMapping221" />
         <argument ref="portMapping121" />
     </bean>

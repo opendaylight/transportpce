@@ -99,7 +99,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
             new PortMappingVersion221(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 =
             new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
-        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.mappingUtils,
+        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22,
             this.portMappingVersion121);
         FixedFlexInterface fixedFlexInterface = new FixedFlexImpl();
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
