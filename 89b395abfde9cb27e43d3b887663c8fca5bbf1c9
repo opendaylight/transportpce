@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0fe3f2bd_a4e0d346",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T12:59:50Z",
+      "side": 1,
+      "message": "not imported by the openconfig models here",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 96,
+        "endChar": 17
+      },
+      "revId": "89b395abfde9cb27e43d3b887663c8fca5bbf1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f042432_e98fc88a",
         "filename": "ocmodels/pom.xml",
         "patchSetId": 2
@@ -13,6 +36,30 @@
       "writtenOn": "2019-07-05T09:47:31Z",
       "side": 1,
       "message": "This change contains already iana-if-type@2017-01-19.yang \nWhich one should we use ?\nI suspect we don\u0027t need this dependency or that we should use another one.",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 54
+      },
+      "revId": "89b395abfde9cb27e43d3b887663c8fca5bbf1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f4678273_0e64c310",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T12:59:50Z",
+      "side": 1,
+      "message": "no version forced in the models here.",
+      "parentUuid": "9f042432_e98fc88a",
       "range": {
         "startLine": 98,
         "startChar": 0,
@@ -64,6 +111,29 @@
         "startChar": 18,
         "endLine": 107,
         "endChar": 33
+      },
+      "revId": "89b395abfde9cb27e43d3b887663c8fca5bbf1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6b9b87ec_036ccdf3",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T12:59:50Z",
+      "side": 1,
+      "message": "not imported by the openconfig models here",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 17
       },
       "revId": "89b395abfde9cb27e43d3b887663c8fca5bbf1c9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
