@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c5b2ade_c80a92eb",
+        "filename": "ocmodels/src/main/yang/LICENSE",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T12:59:50Z",
+      "side": 1,
+      "message": "please confirm this is the correct license for all the openconfig models here.",
+      "revId": "f53162c9ce4aca6b52d3df27f1b75152c7b3348e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
