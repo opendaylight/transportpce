@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.CheckedFuture;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +86,6 @@ public class PortMappingVersion221 {
     }
 
     public boolean createMappingData(String nodeId) {
-
         LOG.info("Create Mapping Data for node 2.2.1 {}", nodeId);
         List<Mapping> portMapList = new ArrayList<>();
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
@@ -339,6 +339,7 @@ public class PortMappingVersion221 {
         return cpPerSrg;
     }
 
+    @SuppressWarnings("checkstyle:linelength")  //last LOG info message in this method is too long
     private boolean createPpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for SRG's PP
         HashMap<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.srg.CircuitPacks>> srgCps
@@ -358,10 +359,10 @@ public class PortMappingVersion221 {
 
                 if (!circuitPackObject.isPresent() || (circuitPackObject.get().getPorts() == null)) {
                     LOG.warn("{} : Circuit pack {} not found or without ports.", nodeId, circuitPackName);
-                    continue; // TODO continue or return false?
+                    continue;
                 }
                 List<Ports> portList = circuitPackObject.get().getPorts();
-                portList.sort(Comparator.comparing(Ports::getPortName));
+                Collections.sort(portList, new SortPort221ByName());
                 int portIndex = 1;
                 for (Ports port : portList) {
                     String currentKey = circuitPackName + "-" + port.getPortName();
@@ -390,8 +391,9 @@ public class PortMappingVersion221 {
                         Optional<Ports> port2Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
                             LogicalDatastoreType.OPERATIONAL, port2ID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                        if (port2Object.isPresent() && port2Object.get().getPortQual().getIntValue() ==
-                            Port.PortQual.RoadmExternal.getIntValue()) {
+                        if (port2Object.isPresent()
+                            && port2Object.get().getPortQual().getIntValue()
+                                == Port.PortQual.RoadmExternal.getIntValue()) {
                             Ports port2 = port2Object.get();
                             if ((port.getPortDirection().getIntValue() == Direction.Rx.getIntValue()
                                 && port2.getPortDirection().getIntValue() == Direction.Tx.getIntValue()
@@ -425,8 +427,7 @@ public class PortMappingVersion221 {
                             continue;
                         }
                     } else {
-                        LOG.info("{} : port {} on {} is not roadm-external or has already been handled."
-                            + "No logicalConnectionPoint assignment for this port.",
+                        LOG.info("{} : port {} on {} is not roadm-external or has already been handled. No logicalConnectionPoint assignment for this port.",
                             nodeId, port.getPortName(), circuitPackName);
                     }
                 }
@@ -664,7 +665,7 @@ public class PortMappingVersion221 {
         return mpBldr.build();
     }
 
-    @SuppressWarnings("checkstyle:linelength")  //log error message in lines 696 and 766 is too long
+    @SuppressWarnings("checkstyle:linelength")  //some LOG messages are too long
     private boolean createTtpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for degree TTP's
         List<Degree> degrees = getDegrees(nodeId, deviceInfo);
@@ -728,8 +729,8 @@ public class PortMappingVersion221 {
                     InstanceIdentifier<Ports> port2ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                         .child(CircuitPacks.class, new CircuitPacksKey(cp2Name))
                         .child(Ports.class, new PortsKey(connectionPortMap.get(k).get(1).getPortName().toString()));
-                    LOG.info("Fetching connection-port {} at circuit pack {}", connectionPortMap.get(k).get(1)
-                        .getPortName().toString(), cp2Name);
+                    LOG.info("Fetching connection-port {} at circuit pack {}",
+                        connectionPortMap.get(k).get(1).getPortName().toString(), cp2Name);
                     Optional<Ports> port2Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, port2ID, Timeouts.DEVICE_READ_TIMEOUT,
                         Timeouts.DEVICE_READ_TIMEOUT_UNIT);
