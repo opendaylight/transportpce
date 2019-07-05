@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25b2c189_ae1a5362",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "maybe \"adding an openconfig models bundle\" ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c1f16c33_24df7b13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "please explain why this bundle is needed and what it prepares.\nIt only contains YANG model and no java code.\nThere are Nokia specific extensions, why do we need them ?",
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "16870607_f78e3332",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "please remove useless comments",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 17
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ee35225_8af4a467",
+        "filename": "ocmodels/src/main/yang/iana-if-type@2017-01-19.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "please remove trailing blanks",
+      "range": {
+        "startLine": 70,
+        "startChar": 3,
+        "endLine": 70,
+        "endChar": 5
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "55e1158d_e78532a0",
+        "filename": "ocmodels/src/main/yang/nokia-openconfig-exttypes@2017-10-26.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "no clue of a licence anywhere. \nSo we assume it is ODL default licence \u003d EPL ?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 55
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6ac33898_11ce74c5",
+        "filename": "ocmodels/src/main/yang/nokia-openconfig-exttypes@2017-10-26.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "please remove tabs",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 1
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b86df663_cb6789e6",
+        "filename": "ocmodels/src/main/yang/nokia-openconfig-userlabel-ext@2017-12-10.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "no clue of a licence anywhere. \nSo we assume it is ODL default licence \u003d EPL ?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 55
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "179360da_bf1232dc",
+        "filename": "ocmodels/src/main/yang/nokia-openconfig-userlabel-ext@2017-12-10.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "please remove tabs",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 1
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e847af3e_9235dc81",
+        "filename": "ocmodels/src/main/yang/nokia-security@2017-05-10.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "no clue of a licence anywhere. \nSo we assume it is ODL default licence \u003d EPL ?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 17
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "709790f2_09644488",
+        "filename": "ocmodels/src/main/yang/nokia-security@2017-05-10.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "please remove trailing blanks",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 2
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c51c7f9e_0d8a8a34",
+        "filename": "ocmodels/src/main/yang/nokia-security@2017-05-10.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T08:53:52Z",
+      "side": 1,
+      "message": "I assume this describes a nokia specific authentication system as published in the onos project change https://gerrit.onosproject.org/#/c/21237/ with the same namespace\nalthough this YANG model was not published with it (nor anywhere else yet it seems)\n\nThis would make sense for a netconf over raw TCP session but its use is strongly unadvised because by nature considered insecure. Without encryption, this extension can potentially disclose the device credentials...\n(Standard Netconf over)SSH already embeds a (better) standard authentication mechanism. So why should we use this nokia specific one instead?\nIt does not bring more security, nor better access rights management.\nAlso, device authentication is not managed by the TransportPCE project but by our upstream dependency ODL netconf project...\nSo why should we publish it here ?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 3
+      },
+      "revId": "30d5fb71bae5075d72d19d3a8b8e3c12b2c66eb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
