@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f042432_e98fc88a",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T09:47:31Z",
+      "side": 1,
+      "message": "This change contains already iana-if-type@2017-01-19.yang \nWhich one should we use ?\nI suspect we don\u0027t need this dependency or that we should use another one.",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 54
+      },
+      "revId": "89b395abfde9cb27e43d3b887663c8fca5bbf1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "57f06588_73d8ea76",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T09:47:31Z",
+      "side": 1,
+      "message": "This change contains ietf-inet-types@2013-07-15.yang.\nWe probably don\u0027t need this file if we import the dependency.",
+      "range": {
+        "startLine": 103,
+        "startChar": 18,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "89b395abfde9cb27e43d3b887663c8fca5bbf1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9be08760_54edb1c2",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-07-05T09:47:31Z",
+      "side": 1,
+      "message": "This change contains ietf-interfaces@2014-05-08.yang ...",
+      "range": {
+        "startLine": 107,
+        "startChar": 18,
+        "endLine": 107,
+        "endChar": 33
+      },
+      "revId": "89b395abfde9cb27e43d3b887663c8fca5bbf1c9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
