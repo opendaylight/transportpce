@@ -170,7 +170,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['network-ref'],'clli-network')
         self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['node-ref'],'NodeA')
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:node-type'],'ROADM')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:model'],'')
+        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:model'],'model2')
 
     def test_04_getLinks_OpenroadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
@@ -182,13 +182,17 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         #Tests related to links
         nbLink=len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink,6)
+        self.assertEqual(nbLink,10)
         expressLink=['ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX',
                      'ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX']
         addLink=['ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX',
-                 'ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX']
+                 'ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX',
+                 'ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX',
+                 'ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX']
         dropLink=['ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX',
-                  'ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX']
+                  'ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX',
+                  'ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX',
+                  'ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX']
         for i in range(0,nbLink):
             linkId = res['network'][0]['ietf-network-topology:link'][i]['link-id']
             if (res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-network-topology:link-type']=='EXPRESS-LINK'):
@@ -218,11 +222,9 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         #Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
-        with open('./transportpce_tests/log/response.log', 'a') as outfile1:
-            outfile1.write(str(len(res['network'][0]['node'])))
         nbNode=len(res['network'][0]['node'])
-        self.assertEqual(nbNode,3)
-        listNode=['ROADM-A1-SRG1','ROADM-A1-DEG1','ROADM-A1-DEG2']
+        self.assertEqual(nbNode,4)
+        listNode=['ROADM-A1-SRG1', 'ROADM-A1-SRG3','ROADM-A1-DEG1','ROADM-A1-DEG2']
         for i in range(0,nbNode):
             self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
                           res['network'][0]['node'][i]['supporting-node'])
@@ -235,6 +237,15 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
+                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                listNode.remove(nodeId)
+            elif(nodeId=='ROADM-A1-SRG3'):
+                #Test related to SRG1
+                self.assertEqual(nodeType,'SRG')
+                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']),5)
+                self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
+                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 listNode.remove(nodeId)
             elif(nodeId=='ROADM-A1-DEG1'):
@@ -303,10 +314,10 @@ class TransportPCEtesting(unittest.TestCase):
              nodeId=res['network'][0]['node'][i]['node-id']
              if(nodeId=='XPDR-A1'):
                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:node-type'],'XPONDER')
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'')
+                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'model2')
              elif(nodeId=='ROADM-A1'):
                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:node-type'],'ROADM')
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'')
+                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'model2')
              else:
                 self.assertFalse(True)
 
@@ -319,11 +330,9 @@ class TransportPCEtesting(unittest.TestCase):
          res = response.json()
          #Tests related to nodes
          self.assertEqual(response.status_code, requests.codes.ok)
-         with open('./transportpce_tests/log/response.log', 'a') as outfile1:
-             outfile1.write(str(len(res['network'][0]['node'])))
          nbNode=len(res['network'][0]['node'])
-         self.assertEqual(nbNode,4)
-         listNode=['XPDR-A1-XPDR1','ROADM-A1-SRG1','ROADM-A1-DEG1','ROADM-A1-DEG2']
+         self.assertEqual(nbNode,5)
+         listNode=['XPDR-A1-XPDR1','ROADM-A1-SRG1','ROADM-A1-SRG3','ROADM-A1-DEG1','ROADM-A1-DEG2']
          for i in range(0,nbNode):
              nodeType=res['network'][0]['node'][i]['org-openroadm-network-topology:node-type']
              nodeId=res['network'][0]['node'][i]['node-id']
@@ -333,17 +342,24 @@ class TransportPCEtesting(unittest.TestCase):
                                res['network'][0]['node'][i]['supporting-node'])
                  self.assertEqual(nodeType,'XPONDER')
                  nbTps=len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                 self.assertTrue(nbTps >= 4)
                  client = 0
                  network = 0
                  for j in range(0,nbTps):
                      tpType=res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-network-topology:tp-type']
+                     tpId=res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                      if (tpType=='XPONDER-CLIENT'):
                          client += 1
                      elif (tpType=='XPONDER-NETWORK'):
                          network += 1
-                 self.assertTrue(client >= 2)
-                 self.assertTrue(network >= 2)
+                     if (tpId == 'XPDR1-NETWORK2'):
+                         self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                          ['transportpce-topology:associated-connection-map-port'],'XPDR1-CLIENT2')
+                     if (tpId == 'XPDR1-CLIENT2'):
+                         self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                          ['transportpce-topology:associated-connection-map-port'],'XPDR1-NETWORK2')
+
+                 self.assertTrue(client == 2)
+                 self.assertTrue(network == 2)
                  listNode.remove(nodeId)
              elif(nodeId=='ROADM-A1-SRG1'):
                  #Test related to SRG1
@@ -352,6 +368,17 @@ class TransportPCEtesting(unittest.TestCase):
                  self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
                                res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                  self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
+                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+                               res['network'][0]['node'][i]['supporting-node'])
+                 listNode.remove(nodeId)
+             elif(nodeId=='ROADM-A1-SRG3'):
+                 #Test related to SRG1
+                 self.assertEqual(nodeType,'SRG')
+                 self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']),5)
+                 self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
+                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                 self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
                                res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                  self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
                                res['network'][0]['node'][i]['supporting-node'])
@@ -435,10 +462,12 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         #Tests related to links
         nbLink=len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink,8)
+        self.assertEqual(nbLink,12)
         expressLink=['ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX','ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX']
-        addLink=['ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX','ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX',]
-        dropLink=['ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX','ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX']
+        addLink=['ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX','ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX',
+                 'ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX','ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX']
+        dropLink=['ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX','ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX',
+                  'ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX','ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX']
         XPDR_IN=['ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1']
         XPDR_OUT=['XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX']
         for i in range(0,nbLink):
@@ -531,17 +560,17 @@ class TransportPCEtesting(unittest.TestCase):
             if(nodeId=='XPDR-A1'):
                 self.assertEqual(res['network'][0]['node'][i]['supporting-node'][0]['node-ref'],'NodeA')
                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:node-type'],'XPONDER')
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'')
+                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'model2')
                 listNode.remove(nodeId)
             elif(nodeId=='ROADM-A1'):
                 self.assertEqual(res['network'][0]['node'][i]['supporting-node'][0]['node-ref'],'NodeA')
                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:node-type'],'ROADM')
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'')
+                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'model2')
                 listNode.remove(nodeId)
             elif(nodeId=='ROADM-C1'):
                 self.assertEqual(res['network'][0]['node'][i]['supporting-node'][0]['node-ref'],'NodeC')
                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:node-type'],'ROADM')
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'')
+                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network:model'],'model2')
                 listNode.remove(nodeId)
             else:
                 self.assertFalse(True)
@@ -557,12 +586,14 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         #Tests related to links
         nbLink=len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink,16)
+        self.assertEqual(nbLink,20)
         expressLink=['ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX','ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX',
                      'ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX','ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX']
         addLink=['ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX','ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX',
+                 'ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX','ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX',
                  'ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX','ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX']
         dropLink=['ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX','ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX',
+                  'ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX','ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX',
                   'ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX','ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX']
         R2RLink=['ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX','ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX']
         XPDR_IN=['ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1']
@@ -613,9 +644,9 @@ class TransportPCEtesting(unittest.TestCase):
          #Tests related to nodes
          self.assertEqual(response.status_code, requests.codes.ok)
          nbNode=len(res['network'][0]['node'])
-         self.assertEqual(nbNode,7)
+         self.assertEqual(nbNode,8)
          listNode=['XPDR-A1-XPDR1',
-                   'ROADM-A1-SRG1','ROADM-A1-DEG1','ROADM-A1-DEG2',
+                   'ROADM-A1-SRG1','ROADM-A1-SRG3','ROADM-A1-DEG1','ROADM-A1-DEG2',
                    'ROADM-C1-SRG1','ROADM-C1-DEG1', 'ROADM-C1-DEG2']
          #************************Tests related to XPDRA nodes
          for i in range(0,nbNode):
@@ -635,8 +666,8 @@ class TransportPCEtesting(unittest.TestCase):
                          client += 1
                      elif (tpType=='XPONDER-NETWORK'):
                          network += 1
-                 self.assertTrue(client > 2)
-                 self.assertTrue(network > 2)
+                 self.assertTrue(client == 2)
+                 self.assertTrue(network == 2)
                  listNode.remove(nodeId)
              elif(nodeId=='ROADM-A1-SRG1'):
                  #Test related to SRG1
@@ -644,6 +675,17 @@ class TransportPCEtesting(unittest.TestCase):
                  self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
                                res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                  self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
+                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+                               res['network'][0]['node'][i]['supporting-node'])
+                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-network-topology:node-type'],'SRG')
+                 listNode.remove(nodeId)
+             elif(nodeId=='ROADM-A1-SRG3'):
+                 #Test related to SRG1
+                 self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']),5)
+                 self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
+                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                 self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
                                res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                  self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
                                res['network'][0]['node'][i]['supporting-node'])
@@ -776,12 +818,9 @@ class TransportPCEtesting(unittest.TestCase):
              "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        #Write the response in the log
-        with open('./transportpce_tests/log/response.log', 'a') as outfile1:
-            outfile1.write(str(res))
         #Tests related to links
         nbLink=len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink,22)
+        self.assertEqual(nbLink,26)
         for i in range(0,nbLink):
             link_id=res['network'][0]['ietf-network-topology:link'][i]['link-id']
             link_type=res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-network-topology:link-type']
@@ -923,11 +962,9 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         #Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
-        with open('./transportpce_tests/log/response.log', 'a') as outfile1:
-            outfile1.write(str(len(res['network'][0]['node'])))
         nbNode=len(res['network'][0]['node'])
-        self.assertEqual(nbNode,4)
-        listNode=['XPDR-A1-XPDR1','ROADM-A1-SRG1','ROADM-A1-DEG1','ROADM-A1-DEG2']
+        self.assertEqual(nbNode,5)
+        listNode=['XPDR-A1-XPDR1','ROADM-A1-SRG1', 'ROADM-A1-SRG3','ROADM-A1-DEG1','ROADM-A1-DEG2']
         for i in range(0,nbNode):
             nodeType=res['network'][0]['node'][i]['org-openroadm-network-topology:node-type']
             nodeId=res['network'][0]['node'][i]['node-id']
@@ -952,6 +989,17 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
+                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                listNode.remove(nodeId)
+            elif(nodeId=='ROADM-A1-SRG3'):
+                #Test related to SRG1
+                self.assertEqual(nodeType,'SRG')
+                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']),5)
+                self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
+                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
                               res['network'][0]['node'][i]['supporting-node'])
@@ -997,6 +1045,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(nbNode,2)
         for i in range(0,nbNode-1):
             self.assertNotEqual(res['network'][0]['node'][i]['node-id'],'ROADM-C1')
+            self.assertNotEqual(res['network'][0]['node'][i]['node-id'],'ROADM-B1')
 
     def test_27_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
@@ -1057,8 +1106,8 @@ class TransportPCEtesting(unittest.TestCase):
         #Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
         nbNode=len(res['network'][0]['node'])
-        self.assertEqual(nbNode,3)
-        listNode=['ROADM-A1-SRG1','ROADM-A1-DEG1','ROADM-A1-DEG2']
+        self.assertEqual(nbNode,4)
+        listNode=['ROADM-A1-SRG1','ROADM-A1-SRG3','ROADM-A1-DEG1','ROADM-A1-DEG2']
         for i in range(0,nbNode):
             self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
                           res['network'][0]['node'][i]['supporting-node'])
@@ -1071,6 +1120,15 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
+                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                listNode.remove(nodeId)
+            elif(nodeId=='ROADM-A1-SRG3'):
+                #Test related to SRG1
+                self.assertEqual(nodeType,'SRG')
+                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']),5)
+                self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-CP'},
+                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-network-topology:tp-type': 'SRG-TXRX-PP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 listNode.remove(nodeId)
             elif(nodeId=='ROADM-A1-DEG1'):
@@ -1124,10 +1182,12 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbLink=len(res['network'][0]['ietf-network-topology:link'])
-        self.assertEqual(nbLink, 12)
+        self.assertEqual(nbLink, 16)
         expressLink=['ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX','ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX']
-        addLink=['ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX','ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX']
-        dropLink=['ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX','ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX']
+        addLink=['ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX','ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX',
+                 'ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX','ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX']
+        dropLink=['ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX','ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX',
+                  'ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX','ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX']
         roadmtoroadmLink = 0
         for i in range(0,nbLink):
             if (res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-network-topology:link-type']=='EXPRESS-LINK'):
@@ -1208,6 +1268,4 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(nbLink, 6)
 
 if __name__ == "__main__":
-    #logging.basicConfig(filename='./transportpce_tests/log/response.log',filemode='w',level=logging.DEBUG)
-    #logging.debug('I am there')
     unittest.main(verbosity=2)
