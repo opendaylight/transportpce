@@ -31,22 +31,22 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def __start_honeynode1(cls):
-        executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+        executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
                       "/honeynode-distribution-1.18.01/honeycomb-tpce")
         if os.path.isfile(executable):
             with open('honeynode1.log', 'w') as outfile:
                 cls.honeynode_process1 = subprocess.Popen(
-                    [executable, "17830", "sample_configs/openroadm/2.1/oper-XPDRA.xml"],
+                    [executable, "17840", "sample_configs/openroadm/2.2.1/oper-XPDRA.xml"],
                     stdout=outfile)
 
     @classmethod
     def __start_honeynode2(cls):
-        executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+        executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
                       "/honeynode-distribution-1.18.01/honeycomb-tpce")
         if os.path.isfile(executable):
             with open('honeynode2.log', 'w') as outfile:
                 cls.honeynode_process2 = subprocess.Popen(
-                    [executable, "17831", "sample_configs/openroadm/2.1/oper-ROADMA.xml"],
+                    [executable, "17841", "sample_configs/openroadm/2.2.1/oper-ROADMA.xml"],
                     stdout=outfile)
 
     @classmethod
@@ -93,14 +93,14 @@ class TransportPCEtesting(unittest.TestCase):
     def test_01_connect_rdm(self):
         #Config ROADMA
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMA"
+                "network-topology/topology/topology-netconf/node/ROADM-A1"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADMA",
+             "node-id": "ROADM-A1",
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17831",
+             "netconf-node-topology:port": "17841",
              "netconf-node-topology:tcp-only": "false",
              "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -123,7 +123,9 @@ class TransportPCEtesting(unittest.TestCase):
         nbMappings = 0
         for i in range(0, nbNode):
             nodeId = resTopo['network'][0]['node'][i]['node-id']
-            nodeMapId = nodeId.split("-")[0]
+            print("nodeId={}".format(nodeId))
+            nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
+            print("nodeMapId={}".format(nodeMapId))
             urlMapList = "{}/config/transportpce-portmapping:network/nodes/" + nodeMapId
             urlMapListFull = urlMapList.format(self.restconf_baseurl)
             responseMapList = requests.request(
@@ -150,7 +152,7 @@ class TransportPCEtesting(unittest.TestCase):
     #Disconnect the ROADMA
     def test_03_disconnect_rdm(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMA"
+                "network-topology/topology/topology-netconf/node/ROADM-A1"
                .format(self.restconf_baseurl))
         data = {}
         headers = {'content-type': 'application/json'}
@@ -163,14 +165,14 @@ class TransportPCEtesting(unittest.TestCase):
     def test_04_connect_xpdr(self):
          #Config XPDRA
          url = ("{}/config/network-topology:"
-                 "network-topology/topology/topology-netconf/node/XPDRA"
+                 "network-topology/topology/topology-netconf/node/XPDR-A1"
                 .format(self.restconf_baseurl))
          data = {"node": [{
-              "node-id": "XPDRA",
+              "node-id": "XPDR-A1",
               "netconf-node-topology:username": "admin",
               "netconf-node-topology:password": "admin",
               "netconf-node-topology:host": "127.0.0.1",
-              "netconf-node-topology:port": "17830",
+              "netconf-node-topology:port": "17840",
               "netconf-node-topology:tcp-only": "false",
               "netconf-node-topology:pass-through": {}}]}
          headers = {'content-type': 'application/json'}
@@ -187,7 +189,7 @@ class TransportPCEtesting(unittest.TestCase):
     #Disconnect the XPDRA
     def test_06_disconnect_device(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDRA"
+               "network-topology/topology/topology-netconf/node/XPDR-A1"
               .format(self.restconf_baseurl))
         data = {}
         headers = {'content-type': 'application/json'}
