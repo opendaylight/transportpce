@@ -288,6 +288,12 @@ public final class ServiceDataUtils {
         return deleteInputBldr.build();
     }
 
+    public static TempServiceDeleteInput buildTempServiceDeleteInput(String commonId) {
+        TempServiceDeleteInputBuilder deleteInputBldr = new TempServiceDeleteInputBuilder();
+        deleteInputBldr.setCommonId(commonId);
+        return deleteInputBldr.build();
+    }
+
     public static ServiceRerouteInput buildServiceRerouteInput() {
         ServiceRerouteInputBuilder builder = new ServiceRerouteInputBuilder();
         builder.setServiceName("service 1");

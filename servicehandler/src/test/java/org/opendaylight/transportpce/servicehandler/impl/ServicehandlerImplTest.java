@@ -47,9 +47,18 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
@@ -388,7 +397,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
         //mocking
         // serviceRestoration is calling service delete method in renderer
         Mockito.when(rendererServiceOperations.serviceDelete(any())).thenReturn(Futures.immediateFuture(any()));
-        //create service to reconfigure
+        //create service to restore
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
@@ -396,9 +405,9 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
         serviceDataStoreOperations.createService(createInput);
 
-        //service reconfigure test action
+        //service Restoration test action
         ServiceRestorationInput input = ServiceDataUtils.buildServiceRestorationInput();
-        //ServiceReconfigureInput is created with the same service information that is created before
+        //ServiceRestorationInput is created with the same service information that is created before
         ListenableFuture<RpcResult<ServiceRestorationOutput>> result = servicehandlerImpl.serviceRestoration(input);
         result.addListener(new Runnable() {
             @Override
@@ -413,6 +422,216 @@ public class ServicehandlerImplTest extends AbstractTest  {
         RpcResult<ServiceRestorationOutput> rpcResult = result.get();
         Assert.assertEquals(
                 RpcStatus.Successful, rpcResult.getResult().getStatus());
+    }
+
+    @Test
+    public void serviceRerouteShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+        ListenableFuture<RpcResult<ServiceRerouteOutput>> result =
+                servicehandlerImpl.serviceReroute(new ServiceRerouteInputBuilder().setServiceName("").build());
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<ServiceRerouteOutput> rpcResult = result.get();
+        Assert.assertEquals(
+                RpcStatus.Failed, rpcResult.getResult().getStatus());
+    }
+
+    @Test
+    public void serviceRerouteShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+        ServiceRerouteInput input = ServiceDataUtils.buildServiceRerouteInput();
+
+        //action -> service reconfigure
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+        ListenableFuture<RpcResult<ServiceRerouteOutput>> result = servicehandlerImpl.serviceReroute(input);
+
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<ServiceRerouteOutput> rpcResult = result.get();
+        //ServiceRerouteOutput doesn't have ConfigurationResponseCommon but have RpcStatus directly
+        Assert.assertEquals(
+                RpcStatus.Failed, rpcResult.getResult().getStatus());
+    }
+
+    @Test
+    public void serviceRerouteShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+        DataBroker dataBroker = getNewDataBroker();
+
+        //mocking
+        // serviceReroute is calling service delete method in renderer
+        Mockito.when(rendererServiceOperations.serviceDelete(any())).thenReturn(Futures.immediateFuture(any()));
+        //create service to be rerouted later
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+        ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
+        ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+        serviceDataStoreOperations.createService(createInput);
+
+        //service reroute test action
+        ServiceRerouteInput input = ServiceDataUtils.buildServiceRerouteInput();
+        //ServiceRerouteInput is created with the same service information that is created before
+        ListenableFuture<RpcResult<ServiceRerouteOutput>> result = servicehandlerImpl.serviceReroute(input);
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<ServiceRerouteOutput> rpcResult = result.get();
+        Assert.assertEquals(
+                RpcStatus.Successful, rpcResult.getResult().getStatus());
+    }
+
+    @Test
+    public void tempServiceDeleteShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+        ListenableFuture<RpcResult<TempServiceDeleteOutput>> result =
+                servicehandlerImpl.tempServiceDelete(new TempServiceDeleteInputBuilder()
+                        .setCommonId("").build());
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<TempServiceDeleteOutput> rpcResult = result.get();
+        Assert.assertEquals(
+            ResponseCodes.RESPONSE_FAILED, rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
+        Assert.assertEquals(
+            "Service not compliant !", rpcResult.getResult().getConfigurationResponseCommon().getResponseMessage());
+    }
+
+    @Test
+    public void tempServiceDeleteShouldBeFailedWithNonExistService() throws ExecutionException, InterruptedException {
+        TempServiceDeleteInput input = ServiceDataUtils.buildTempServiceDeleteInput();
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+        ListenableFuture<RpcResult<TempServiceDeleteOutput>> result = servicehandlerImpl.tempServiceDelete(input);
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<TempServiceDeleteOutput> rpcResult = result.get();
+        Assert.assertEquals(
+            ResponseCodes.RESPONSE_FAILED, rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
+    }
+
+    @Test
+    public void tempServiceDeleteShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
+        DataBroker dataBroker = getNewDataBroker();
+        Mockito.when(rendererServiceOperations.serviceDelete(any())).thenReturn(Futures.immediateFuture(any()));
+
+        //create temp service to delete in the temp delete action
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+        ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
+        TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
+        serviceDataStoreOperations.createTempService(createInput);
+
+
+        TempServiceDeleteInput input = ServiceDataUtils.buildTempServiceDeleteInput(createInput.getCommonId());
+        ListenableFuture<RpcResult<TempServiceDeleteOutput>> result = servicehandlerImpl.tempServiceDelete(input);
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<TempServiceDeleteOutput> rpcResult = result.get();
+        Assert.assertEquals(
+                ResponseCodes.RESPONSE_OK, rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
+    }
+
+    @Test
+    public void tempServiceCreateShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+        ListenableFuture<RpcResult<TempServiceCreateOutput>> result =
+                servicehandlerImpl.tempServiceCreate(new TempServiceCreateInputBuilder().build());
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<TempServiceCreateOutput> rpcResult = result.get();
+        Assert.assertEquals(
+            ResponseCodes.RESPONSE_FAILED, rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
+    }
+
+
+    @Test
+    public void tempServiceCreateShouldBeSuccessfulWhenPreformPCESuccessful()
+            throws ExecutionException, InterruptedException {
+        TempServiceCreateInput input = ServiceDataUtils.buildTempServiceCreateInput();
+        Mockito.when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
+
+        ServicehandlerImpl servicehandlerImpl =
+                new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+
+        ListenableFuture<RpcResult<TempServiceCreateOutput>> result =  servicehandlerImpl.tempServiceCreate(input);
+        result.addListener(new Runnable() {
+            @Override
+            public void run() {
+                callbackRan = true;
+                endSignal.countDown();
+            }
+        }, executorService);
+
+        endSignal.await();
+
+        RpcResult<TempServiceCreateOutput> rpcResult = result.get();
+
+        Assert.assertEquals(
+                ResponseCodes.RESPONSE_OK, rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
     }
 
 }
