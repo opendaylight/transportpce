@@ -140,11 +140,11 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
              {'supporting-port': 'L1', 'supporting-circuit-pack-name': '2/0',
-              'logical-connection-point': 'DEG1-TTP-TXRX'},
+              'logical-connection-point': 'DEG1-TTP-TXRX', 'port-direction': 'bidirectional'},
              res['nodes'][0]['mapping'])
         self.assertIn(
              {'supporting-port': 'C7', 'supporting-circuit-pack-name': '4/0',
-              'logical-connection-point': 'SRG1-PP7-TXRX'},
+              'logical-connection-point': 'SRG1-PP7-TXRX', 'port-direction': 'bidirectional'},
              res['nodes'][0]['mapping'])
 
     def test_04_xpdr_portmapping(self):
@@ -158,12 +158,14 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
              {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
-              'logical-connection-point': 'XPDR1-NETWORK1'},
+              'logical-connection-point': 'XPDR1-NETWORK1', 'port-direction': 'bidirectional',
+              'associated-lcp': 'XPDR1-CLIENT1', 'port-qual': 'xpdr-network'},
              res['nodes'][0]['mapping'])
         self.assertIn(
              {'supporting-port': 'C1',
               'supporting-circuit-pack-name': '1/0/C1-PLUG-CLIENT',
-              'logical-connection-point': 'XPDR1-CLIENT1'},
+              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
+              'associated-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
              res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
