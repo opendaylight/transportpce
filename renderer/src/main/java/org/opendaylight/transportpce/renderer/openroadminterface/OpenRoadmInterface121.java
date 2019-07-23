@@ -206,9 +206,10 @@ public class OpenRoadmInterface121 {
      * @param nodeId node ID
      * @param logicalConnPoint logical connection point
      * @param waveNumber wavelength number of the OCH interface.
-     * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      *
      * @return Name of the interface if successful, otherwise return null.
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      */
 
     public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber)
