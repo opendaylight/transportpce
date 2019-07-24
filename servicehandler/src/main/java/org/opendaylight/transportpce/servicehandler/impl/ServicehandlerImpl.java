@@ -514,7 +514,6 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         this.rendererListenerImpl.setTempService(true);
-        this.pceServiceWrapper.performPCE(input, true);
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
         if (output != null) {
             LOG.info("Service compliant, temp serviceCreate in progress...");
