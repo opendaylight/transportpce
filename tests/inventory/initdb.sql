@@ -1,0 +1,826 @@
+
+CREATE TABLE `inv_dev_CP_port_capabilities_otn_cap_if_protection` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `if_cap_type` varchar(100) DEFAULT NULL,
+  `if_protection_capability` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_circuit_pack` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `circuit_pack_type` varchar(100) DEFAULT NULL,
+  `circuit_pack_product_code` varchar(100) DEFAULT NULL,
+  `administrative_state` varchar(100) DEFAULT NULL,
+  `vendor` varchar(100) DEFAULT NULL,
+  `model` varchar(100) DEFAULT NULL,
+  `serial_id` varchar(100) DEFAULT NULL,
+  `type` varchar(100) DEFAULT NULL,
+  `product_code` varchar(100) DEFAULT NULL,
+  `manufacture_date` varchar(50) DEFAULT NULL,
+  `clei` varchar(100) DEFAULT NULL,
+  `hardware_version` varchar(100) DEFAULT NULL,
+  `operational_state` varchar(100) DEFAULT NULL,
+  `cpc_type` tinyint(4) DEFAULT NULL,
+  `cpc_extension` varchar(100) DEFAULT NULL,
+  `equipment_state` varchar(100) DEFAULT NULL,
+  `circuit_pack_mode` varchar(100) DEFAULT NULL,
+  `shelf` varchar(100) DEFAULT NULL,
+  `slot` varchar(100) DEFAULT NULL,
+  `subSlot` varchar(100) DEFAULT NULL,
+  `is_pluggable_optics` varchar(10) DEFAULT NULL,
+  `due_date` varchar(50) DEFAULT NULL,
+  `pcp_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `pcp_cp_slot_name` varchar(100) DEFAULT NULL,
+  `software_load_version` varchar(100) DEFAULT NULL,
+  `cpf_f_description` varchar(100) DEFAULT NULL,
+  `cpf_f_activated` varchar(10) DEFAULT NULL,
+  `cpc_c_name` varchar(100) DEFAULT NULL,
+  `cpc_c_current_version` varchar(100) DEFAULT NULL,
+  `cpc_c_version_to_appy` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_connection_map` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `connection_map_number` varchar(100) DEFAULT NULL,
+  `source_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `source_port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_connection_map_dest` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `connection_map_number` int(11) DEFAULT NULL,
+  `dest_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `dest_port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_cp_port_capabilities` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `if_cap_type` varchar(100) DEFAULT NULL,
+  `otn_capability_proactive_dmp` varchar(10) DEFAULT NULL,
+  `otn_capability_tcm_capable` varchar(10) DEFAULT NULL,
+  `otn_capability_proactive_dmt` varchar(10) DEFAULT NULL,
+  `otn_capability_tcm_direction_capability` varchar(100) DEFAULT NULL,
+  `otn_capability_mpdr_cr_network_ho_odu_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `otn_capability_mpdr_cr_network_ho_odu_port_name` varchar(100) DEFAULT NULL,
+  `otn_capability_mpdr_cr_odtu_type` varchar(100) DEFAULT NULL,
+  `otn_capability_mpdr_cr_network_ho_odu_trib_port_number` smallint(6) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_cp_port_mpdr_cr_network_slots` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `if_cap_type` varchar(100) DEFAULT NULL,
+  `ho_odu_trib_slots` smallint(6) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_cp_port_otn_cap_mpdr_cr_odu_mux_hie_supp_lo_odu_type` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `if_cap_type` varchar(100) DEFAULT NULL,
+  `stage_number` tinyint(4) DEFAULT NULL,
+  `ho_odu_type` varchar(100) DEFAULT NULL,
+  `ho_odu_payload_type` varchar(2) DEFAULT NULL,
+  `supported_lo_odu_type` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_cp_port_otn_capability_mpdr_cr_odu_mux_hierarchy` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `if_cap_type` varchar(100) DEFAULT NULL,
+  `stage_number` tinyint(4) DEFAULT NULL,
+  `ho_odu_type` varchar(100) DEFAULT NULL,
+  `ho_odu_payload_type` varchar(2) DEFAULT NULL,
+  `lo_odu_proactive_DMp` varchar(10) DEFAULT NULL,
+  `lo_odu_tcm_capable` varchar(10) DEFAULT NULL,
+  `lo_odu_proactive_DMt` varchar(10) DEFAULT NULL,
+  `lo_odu_tcm_direction_capability` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_cp_port_otn_capability_opu_payload_type_mapping` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `if_cap_type` varchar(100) DEFAULT NULL,
+  `opu_payload_type_mapping` varchar(2) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_cp_ports` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `port_type` varchar(100) DEFAULT NULL,
+  `port_qual` varchar(100) DEFAULT NULL,
+  `port_wavelength_type` varchar(100) DEFAULT NULL,
+  `port_direction` varchar(100) DEFAULT NULL,
+  `label` varchar(100) DEFAULT NULL,
+  `circuit_id` varchar(100) DEFAULT NULL,
+  `administrative_state` varchar(100) DEFAULT NULL,
+  `operational_state` varchar(100) DEFAULT NULL,
+  `logical_connection_point` varchar(100) DEFAULT NULL,
+  `partner_port_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `partner_port_port_name` varchar(100) DEFAULT NULL,
+  `parent_port_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `parent_port_port_name` varchar(100) DEFAULT NULL,
+  `roadm_port_port_power_capability_min_rx` varchar(100) DEFAULT NULL,
+  `roadm_port_port_power_capability_min_tx` varchar(100) DEFAULT NULL,
+  `roadm_port_port_power_capability_max_rx` varchar(100) DEFAULT NULL,
+  `roadm_port_port_power_capability_max_tx` varchar(100) DEFAULT NULL,
+  `roadm_port_capable_wavelengths` varchar(100) DEFAULT NULL,
+  `roadm_port_available_wavelengths` varchar(100) DEFAULT NULL,
+  `roadm_port_used_wavelengths` varchar(100) DEFAULT NULL,
+  `transponder_port_port_power_capability_min_rx` varchar(100) DEFAULT NULL,
+  `transponder_port_port_power_capability_min_tx` varchar(100) DEFAULT NULL,
+  `transponder_port_port_power_capability_max_rx` varchar(100) DEFAULT NULL,
+  `transponder_port_port_power_capability_max_tx` varchar(100) DEFAULT NULL,
+  `transponder_port_capable_wavelengths` varchar(100) DEFAULT NULL,
+  `otdr_port_launch_cable_length` varchar(100) DEFAULT NULL,
+  `otdr_port_port_direction` varchar(100) DEFAULT NULL,
+  `ila_port_port_power_capability_mix_rx` varchar(100) DEFAULT NULL,
+  `ila_port_port_power_capability_mix_tx` varchar(100) DEFAULT NULL,
+  `ila_port_port_power_capability_max_rx` varchar(100) DEFAULT NULL,
+  `ila_port_port_power_capability_max_tx` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_cp_slots` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `slot_name` varchar(100) DEFAULT NULL,
+  `label` varchar(100) DEFAULT NULL,
+  `provisioned_circuit_pack` varchar(100) DEFAULT NULL,
+  `slot_status` varchar(100) DEFAULT NULL,
+  `slot_type` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_degree` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `degree_number` smallint(6) DEFAULT NULL,
+  `max_wavelengths` smallint(6) DEFAULT NULL,
+  `otdr_port_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `otdr_port_port_name` varchar(100) DEFAULT NULL,
+  `mc_capabilities_slot_width_granularity` varchar(100) DEFAULT NULL,
+  `mc_capabilities_center_freq_granularity` varchar(100) DEFAULT NULL,
+  `mc_capabilities_min_slots` int(11) DEFAULT NULL,
+  `mc_capabilities_max_slots` int(11) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_degree_circuit_packs` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `degree_number` smallint(6) DEFAULT NULL,
+  `cktpk_index` int(11) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_degree_connection_ports` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `degree_number` smallint(6) DEFAULT NULL,
+  `conn_port_index` int(11) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_external_link` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `external_link_name` varchar(100) DEFAULT NULL,
+  `source_node_id` varchar(100) DEFAULT NULL,
+  `source_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `source_port_name` varchar(100) DEFAULT NULL,
+  `destination_node_id` varchar(100) DEFAULT NULL,
+  `destination_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `destination_port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_info` (
+  `node_id` varchar(100) NOT NULL,
+  `node_number` int(11) DEFAULT NULL,
+  `node_type` varchar(100) DEFAULT NULL,
+  `clli` varchar(11) DEFAULT NULL,
+  `vendor` varchar(100) DEFAULT NULL,
+  `model` varchar(100) DEFAULT NULL,
+  `serial_id` varchar(100) DEFAULT NULL,
+  `ipAddress` varchar(20) DEFAULT NULL,
+  `prefix_length` tinyint(4) DEFAULT NULL,
+  `default_gateway` varchar(20) DEFAULT NULL,
+  `source` varchar(100) DEFAULT NULL,
+  `current_ipAddress` varchar(20) DEFAULT NULL,
+  `current_prefix_length` tinyint(4) DEFAULT NULL,
+  `current_default_gateway` varchar(20) DEFAULT NULL,
+  `macAddress` varchar(50) DEFAULT NULL,
+  `software_version` varchar(100) DEFAULT NULL,
+  `openroadm_version` varchar(100) DEFAULT NULL,
+  `template` varchar(100) DEFAULT NULL,
+  `current_datetime` varchar(50) DEFAULT NULL,
+  `geo_latitude` float DEFAULT NULL,
+  `geo_longitude` float DEFAULT NULL,
+  `max_degrees` smallint(6) DEFAULT NULL,
+  `max_srgs` smallint(6) DEFAULT NULL,
+  `max_num_bin_15min_historical_pm` smallint(6) DEFAULT NULL,
+  `max_num_bin_24hour_historical_pm` smallint(6) DEFAULT NULL,
+  `sw_version` varchar(100) DEFAULT NULL,
+  `sw_validation_timer` varchar(100) DEFAULT NULL,
+  `activation_date_time` varchar(50) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `raw_json` json DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_interface_odu_opu_exp_msi` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `interface_name` varchar(100) DEFAULT NULL,
+  `trib_slot` smallint(6) DEFAULT NULL,
+  `odtu_type` varchar(100) DEFAULT NULL,
+  `trib_port` smallint(6) DEFAULT NULL,
+  `trib_port_payload` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_interface_odu_opu_msi` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `interface_name` varchar(100) DEFAULT NULL,
+  `txMsi_trib_slot` varchar(100) DEFAULT NULL,
+  `txMsi_odtu_type` varchar(100) DEFAULT NULL,
+  `txMsi_trib_port` varchar(100) DEFAULT NULL,
+  `txMsi_trib_port_payload` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_interface_odu_opu_rx_msi` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `interface_name` varchar(100) DEFAULT NULL,
+  `trib_slot` smallint(6) DEFAULT NULL,
+  `odtu_type` varchar(100) DEFAULT NULL,
+  `trib_port` smallint(6) DEFAULT NULL,
+  `trib_port_payload` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_interface_odu_opu_tx_msi` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `interface_name` varchar(100) DEFAULT NULL,
+  `trib_slot` smallint(6) DEFAULT NULL,
+  `odtu_type` varchar(100) DEFAULT NULL,
+  `trib_port` smallint(6) DEFAULT NULL,
+  `trib_port_payload` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_interface_odu_tcm` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `interface_name` varchar(100) DEFAULT NULL,
+  `layer` tinyint(4) DEFAULT NULL,
+  `monitoring_mode` varchar(100) DEFAULT NULL,
+  `ltc_act_enabled` varchar(10) DEFAULT NULL,
+  `proactive_delay_measurement_enabled` varchar(10) DEFAULT NULL,
+  `tcm_direction` varchar(100) DEFAULT NULL,
+  `tx_sapi` varchar(100) DEFAULT NULL,
+  `tx_dapi` varchar(100) DEFAULT NULL,
+  `tx_operator` varchar(100) DEFAULT NULL,
+  `accepted_sapi` varchar(100) DEFAULT NULL,
+  `accepted_dapi` varchar(100) DEFAULT NULL,
+  `accepted_operator` varchar(100) DEFAULT NULL,
+  `expected_sapi` varchar(100) DEFAULT NULL,
+  `expected_dapi` varchar(100) DEFAULT NULL,
+  `tim_act_enabled` varchar(10) DEFAULT NULL,
+  `tim_detect_mode` varchar(100) DEFAULT NULL,
+  `degm_intervals` tinyint(4) DEFAULT NULL,
+  `degthr_percentage` smallint(6) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+CREATE TABLE `inv_dev_interfaces` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `type` varchar(100) DEFAULT NULL,
+  `administrative_state` varchar(100) DEFAULT NULL,
+  `operational_state` tinyint(4) DEFAULT NULL,
+  `circuit_id` varchar(100) DEFAULT NULL,
+  `supporting_interface` varchar(100) DEFAULT NULL,
+  `supporting_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `supporting_port` varchar(100) DEFAULT NULL,
+  `ethernet_speed` int(11) DEFAULT NULL,
+  `ethernet_fec` varchar(20) DEFAULT NULL,
+  `ethernet_duplex` varchar(100) DEFAULT NULL,
+  `ethernet_mtu` int(11) DEFAULT NULL,
+  `ethernet_auto_negotiation` varchar(100) DEFAULT NULL,
+  `ethernet_curr_speed` varchar(100) DEFAULT NULL,
+  `ethernet_curr_duplex` varchar(100) DEFAULT NULL,
+  `mci_mcttp_min_freq` varchar(100) DEFAULT NULL,
+  `mci_mcttp_max_freq` varchar(100) DEFAULT NULL,
+  `mci_mcttp_center_freq` varchar(100) DEFAULT NULL,
+  `mci_mcttp_slot_width` varchar(100) DEFAULT NULL,
+  `mci_nmc_ctp_frequency` varchar(100) DEFAULT NULL,
+  `mci_nmc_ctp_width` varchar(100) DEFAULT NULL,
+  `och_rate` varchar(100) DEFAULT NULL,
+  `och_frequency` varchar(100) DEFAULT NULL,
+  `och_width` varchar(100) DEFAULT NULL,
+  `och_wavelength_number` varchar(100) DEFAULT NULL,
+  `och_modulation_format` varchar(100) DEFAULT NULL,
+  `och_transmit_power` varchar(100) DEFAULT NULL,
+  `ots_fiber_type` varchar(100) DEFAULT NULL,
+  `ots_span_loss_receive` varchar(100) DEFAULT NULL,
+  `ots_span_loss_transmit` varchar(100) DEFAULT NULL,
+  `ots_ingress_span_loss_aging_margin` varchar(100) DEFAULT NULL,
+  `ots_eol_max_load_pin` varchar(100) DEFAULT NULL,
+  `odu_rate` varchar(100) DEFAULT NULL,
+  `odu_function` varchar(100) DEFAULT NULL,
+  `odu_monitoring_mode` varchar(100) DEFAULT NULL,
+  `odu_no_oam_function` varchar(1) DEFAULT NULL,
+  `odu_proactive_delay_measurement_enabled` varchar(10) DEFAULT NULL,
+  `odu_poa_trib_port_number` smallint(6) DEFAULT NULL,
+  `odu_tx_sapi` varchar(100) DEFAULT NULL,
+  `odu_tx_dapi` varchar(100) DEFAULT NULL,
+  `odu_tx_operator` varchar(100) DEFAULT NULL,
+  `odu_accepted_sapi` varchar(100) DEFAULT NULL,
+  `odu_accepted_dapi` varchar(100) DEFAULT NULL,
+  `odu_accepted_operator` varchar(100) DEFAULT NULL,
+  `odu_expected_sapi` varchar(100) DEFAULT NULL,
+  `odu_expected_dapi` varchar(100) DEFAULT NULL,
+  `odu_tim_act_enabled` varchar(10) DEFAULT NULL,
+  `odu_tim_detect_mode` varchar(100) DEFAULT NULL,
+  `odu_degm_intervals` tinyint(4) DEFAULT NULL,
+  `odu_degthr_percentage` smallint(6) DEFAULT NULL,
+  `opu_payload_type` varchar(2) DEFAULT NULL,
+  `opu_rx_payload_type` varchar(2) DEFAULT NULL,
+  `opu_exp_payload_type` varchar(2) DEFAULT NULL,
+  `opu_payload_interface` varchar(100) DEFAULT NULL,
+  `maint_testsignal_enabled` varchar(10) DEFAULT NULL,
+  `maint_testsignal_testpattern` varchar(100) DEFAULT NULL,
+  `maint_testsignal_type` varchar(100) DEFAULT NULL,
+  `maint_testsignal_biterrors` int(11) DEFAULT NULL,
+  `maint_testsignal_biterrorsterminal` int(11) DEFAULT NULL,
+  `maint_testsignal_syncseconds` varchar(100) DEFAULT NULL,
+  `maint_testsignal_syncsecondsterminal` varchar(100) DEFAULT NULL,
+  `otu_rate` varchar(100) DEFAULT NULL,
+  `otu_fec` varchar(100) DEFAULT NULL,
+  `otu_tx_sapi` varchar(100) DEFAULT NULL,
+  `otu_tx_dapi` varchar(100) DEFAULT NULL,
+  `otu_tx_operator` varchar(100) DEFAULT NULL,
+  `otu_accepted_sapi` varchar(100) DEFAULT NULL,
+  `otu_accepted_dapi` varchar(100) DEFAULT NULL,
+  `otu_accepted_operator` varchar(100) DEFAULT NULL,
+  `otu_expected_sapi` varchar(100) DEFAULT NULL,
+  `otu_expected_dapi` varchar(100) DEFAULT NULL,
+  `otu_tim_act_enabled` varchar(10) DEFAULT NULL,
+  `otu_tim_detect_mode` varchar(100) DEFAULT NULL,
+  `otu_degm_intervals` tinyint(4) DEFAULT NULL,
+  `otu_degthr_percentage` smallint(6) DEFAULT NULL,
+  `otu_maint_loopback_enabled` varchar(10) DEFAULT NULL,
+  `otu_maint_type` varchar(100) DEFAULT NULL,
+  `mt_otu_rate` varchar(100) DEFAULT NULL,
+  `mt_otu_fec` varchar(100) DEFAULT NULL,
+  `mt_otu_maint_loopback` varchar(100) DEFAULT NULL,
+  `mt_otu_enabled` varchar(100) DEFAULT NULL,
+  `mt_otu_type` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_interfaces_odu_alloc_trib` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `odu_poa_trib_port_slots` smallint(6) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_internal_link` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `internal_link_name` varchar(100) DEFAULT NULL,
+  `source_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `source_port_name` varchar(100) DEFAULT NULL,
+  `destination_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `destination_port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_line_amplifier` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `amp_number` tinyint(4) DEFAULT NULL,
+  `amp_type` varchar(100) DEFAULT NULL,
+  `control_mode` varchar(100) DEFAULT NULL,
+  `amp_gain_range` varchar(100) DEFAULT NULL,
+  `target_gain` varchar(100) DEFAULT NULL,
+  `target_tilt` varchar(100) DEFAULT NULL,
+  `egress_average_channel_power` varchar(100) DEFAULT NULL,
+  `out_voa_att` varchar(100) DEFAULT NULL,
+  `partner_amp` tinyint(4) DEFAULT NULL,
+  `ila_direction_label` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_line_amplifier_circuit_pack` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `amp_number` tinyint(4) DEFAULT NULL,
+  `cktpk_index` int(11) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_line_amplifier_line_port` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `amp_number` tinyint(4) DEFAULT NULL,
+  `port_direction` varchar(100) DEFAULT NULL,
+  `tx_instance_port_direction_label` varchar(100) DEFAULT NULL,
+  `rx_instance_port_direction_label` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_line_amplifier_osc_port` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `amp_number` tinyint(4) DEFAULT NULL,
+  `port_direction` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_line_amplifier_otdr_port` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `amp_number` tinyint(4) DEFAULT NULL,
+  `otdr_direction` varchar(100) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_odu_connection` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `connection_name` varchar(100) DEFAULT NULL,
+  `direction` varchar(100) DEFAULT NULL,
+  `src_if` varchar(100) DEFAULT NULL,
+  `dst_if` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_odu_switching_pools_nbl` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `switching_pool_number` smallint(6) DEFAULT NULL,
+  `swithching_pool_type_` varchar(100) DEFAULT NULL,
+  `nbl_number` smallint(6) DEFAULT NULL,
+  `interconnect_bandwidth_unit` int(11) DEFAULT NULL,
+  `interconnect_bandwidth` int(11) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_odu_switching_pools_nbl_ckt_pk` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `switching_pool_number` smallint(6) DEFAULT NULL,
+  `nbl_number` smallint(6) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_odu_switching_pools_nbl_pohl` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `switching_pool_number` smallint(6) DEFAULT NULL,
+  `nbl_number` smallint(6) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `slot_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_physical_link` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `physical_link_name` varchar(100) DEFAULT NULL,
+  `source_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `source_port_name` varchar(100) DEFAULT NULL,
+  `destination_circuit_pack_name` varchar(100) DEFAULT NULL,
+  `destination_port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_port_group_restriction_poh_list` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `port_sharing_id` smallint(6) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `slot_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_port_group_restriction_port_list` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `port_sharing_id` smallint(6) DEFAULT NULL,
+  `shared_bandwidth` smallint(6) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_port_group_restriction_pp_pit_config` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `port_sharing_id` smallint(6) DEFAULT NULL,
+  `config_id` smallint(6) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_port_group_restriction_pp_sit_config` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `port_sharing_id` smallint(6) DEFAULT NULL,
+  `config_id` smallint(6) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `slot_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `port_if_type` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_protection_grps` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `level` varchar(100) DEFAULT NULL,
+  `prot_type` varchar(100) DEFAULT NULL,
+  `switching_direction` varchar(100) DEFAULT NULL,
+  `revertive` varchar(10) DEFAULT NULL,
+  `mode` varchar(100) DEFAULT NULL,
+  `protection_trigger_level` varchar(100) DEFAULT NULL,
+  `wait_to_restore` tinyint(4) DEFAULT NULL,
+  `holdoff_timer_holdoff` tinyint(4) DEFAULT NULL,
+  `holdoff_timer_holdoff_multiplier` tinyint(4) DEFAULT NULL,
+  `working_if` varchar(100) DEFAULT NULL,
+  `active_if` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_protection_grps_interfaces` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `pg_interfaces` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_proto_lldp` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `adminstatus` varchar(100) DEFAULT NULL,
+  `msgtxinterval` smallint(6) DEFAULT NULL,
+  `msgtxholdmultiplier` tinyint(4) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_proto_lldp_nbr_lst` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `ifname` varchar(100) DEFAULT NULL,
+  `remotesysname` varchar(100) DEFAULT NULL,
+  `remotemgmtaddresssubtype` varchar(100) DEFAULT NULL,
+  `remotemgmtaddress` varchar(100) DEFAULT NULL,
+  `remoteportidsubtype` varchar(100) DEFAULT NULL,
+  `remoteportid` varchar(100) DEFAULT NULL,
+  `remotechassisidsubtype` varchar(100) DEFAULT NULL,
+  `remotechassisid` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_proto_lldp_port_config` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `ifname` varchar(100) DEFAULT NULL,
+  `adminstatus` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_proto_rstp` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `bridge_name` varchar(100) DEFAULT NULL,
+  `bridge_priority` int(11) DEFAULT NULL,
+  `shutdown` varchar(1) DEFAULT NULL,
+  `hold_time` int(11) DEFAULT NULL,
+  `hello_time` int(11) DEFAULT NULL,
+  `max_age` int(11) DEFAULT NULL,
+  `forward_delay` int(11) DEFAULT NULL,
+  `transmit_hold_count` int(11) DEFAULT NULL,
+  `root_bridge_port` int(11) DEFAULT NULL,
+  `root_path_cost` int(11) DEFAULT NULL,
+  `root_bridge_priority` int(11) DEFAULT NULL,
+  `root_bridge_id` varchar(100) DEFAULT NULL,
+  `root_hold_time` int(11) DEFAULT NULL,
+  `root_hello_time` int(11) DEFAULT NULL,
+  `root_max_age` int(11) DEFAULT NULL,
+  `root_forward_delay` int(11) DEFAULT NULL,
+  `bridge_id` varchar(100) DEFAULT NULL,
+  `topo_change_count` int(11) DEFAULT NULL,
+  `time_since_topo_change` int(11) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_proto_rstp_bridge_port` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `bridge_name` varchar(100) DEFAULT NULL,
+  `ifname` varchar(100) DEFAULT NULL,
+  `cost` int(11) DEFAULT NULL,
+  `priority` int(11) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_proto_rstp_bridge_port_attr` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `bridge_name` varchar(100) DEFAULT NULL,
+  `ifname` varchar(100) DEFAULT NULL,
+  `bridge_port_state` varchar(100) DEFAULT NULL,
+  `bridge_port_role` varchar(100) DEFAULT NULL,
+  `bridge_port_id` int(11) DEFAULT NULL,
+  `open_edge_bridge_port` varchar(1) DEFAULT NULL,
+  `designated_bridge_port` int(11) DEFAULT NULL,
+  `designated_bridgeid` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_roadm_connections` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `connection_name` varchar(100) DEFAULT NULL,
+  `connection_number` varchar(100) DEFAULT NULL,
+  `wavelength_number` varchar(100) DEFAULT NULL,
+  `opticalcontrolmode` varchar(100) DEFAULT NULL,
+  `target_output_power` varchar(100) DEFAULT NULL,
+  `src_if` varchar(100) DEFAULT NULL,
+  `dst_if` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_shelf` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `shelf_name` varchar(100) DEFAULT NULL,
+  `shelf_type` varchar(100) DEFAULT NULL,
+  `rack` varchar(100) DEFAULT NULL,
+  `shelf_position` varchar(100) DEFAULT NULL,
+  `administrative_state` varchar(100) DEFAULT NULL,
+  `vendor` varchar(100) DEFAULT NULL,
+  `model` varchar(100) DEFAULT NULL,
+  `serial_id` varchar(100) DEFAULT NULL,
+  `type` varchar(100) DEFAULT NULL,
+  `product_code` varchar(100) DEFAULT NULL,
+  `manufacture_date` varchar(50) DEFAULT NULL,
+  `clei` varchar(100) DEFAULT NULL,
+  `hardware_version` varchar(100) DEFAULT NULL,
+  `operational_state` tinyint(4) DEFAULT NULL,
+  `equipment_state` tinyint(4) DEFAULT NULL,
+  `due_date` varchar(50) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_shelf_slot` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `shelf_name` varchar(100) DEFAULT NULL,
+  `slot_name` varchar(100) DEFAULT NULL,
+  `label` varchar(100) DEFAULT NULL,
+  `provisioned_circuit_pack` varchar(100) DEFAULT NULL,
+  `slot_status` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_srg` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `max_add_drop_ports` smallint(6) DEFAULT NULL,
+  `current_provisioned_add_drop_ports` smallint(6) DEFAULT NULL,
+  `srg_number` smallint(6) DEFAULT NULL,
+  `wavelength_duplication` varchar(100) DEFAULT NULL,
+  `mc_cap_slot_width_granularity` varchar(100) DEFAULT NULL,
+  `mc_cap_center_freq_granularity` varchar(100) DEFAULT NULL,
+  `mc_cap_min_slots` int(11) DEFAULT NULL,
+  `mc_cap_max_slots` int(11) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_srg_circuit_pack` (
+  `node_id` varchar(100) NOT NULL,
+  `srg_number` smallint(6) NOT NULL,
+  `ckptk_index` int(11) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_user` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `user_id` varchar(100) DEFAULT NULL,
+  `user_password` varchar(100) DEFAULT NULL,
+  `user_group` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `inv_dev_wavelength_map` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `wavelength_number` int(11) DEFAULT NULL,
+  `center_frequency` varchar(100) DEFAULT NULL,
+  `wavelength` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_xponder` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `xpdr_number` smallint(6) DEFAULT NULL,
+  `xpdr_type` varchar(100) DEFAULT NULL,
+  `recolor` varchar(10) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `inv_dev_xponder_port` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `xpdr_number` smallint(6) DEFAULT NULL,
+  `xpdr_index` int(11) DEFAULT NULL,
+  `circuit_pack_name` varchar(100) DEFAULT NULL,
+  `port_name` varchar(100) DEFAULT NULL,
+  `eqpt_srg_id` int(11) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+

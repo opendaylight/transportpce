@@ -1,0 +1,8 @@
+FROM mariadb:10.3
+#ENV MYSQL_ALLOW_EMPTY_PASSWORD true
+ENV MYSQL_ROOT_PASSWORD root
+ENV MYSQL_DATABASE transportpce
+ENV MYSQL_USER tpce
+ENV MYSQL_PASSWORD tpce
+ADD initdb.sql /docker-entrypoint-initdb.d
+EXPOSE 3306
