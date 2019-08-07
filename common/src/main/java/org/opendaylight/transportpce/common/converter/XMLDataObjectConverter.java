@@ -17,7 +17,6 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.FactoryConfigurationError;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -192,8 +191,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
              XmlParserStream xmlParser = XmlParserStream.create(streamWriter, getSchemaContext(), parentSchemaNode)) {
             xmlParser.parse(reader);
-        } catch (XMLStreamException | URISyntaxException | IOException | ParserConfigurationException
-                | SAXException e) {
+        } catch (XMLStreamException | URISyntaxException | IOException | SAXException e) {
             LOG.warn("An error {} occured during parsing XML input stream", e.getMessage(), e);
             return Optional.empty();
         }

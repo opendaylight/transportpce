@@ -126,7 +126,7 @@ public final class ModelMappingUtils {
         String sortId = "";
         while (iterator.hasNext()) {
             ZToA pathDesObj = iterator.next();
-            resourceType = pathDesObj.getResource().getResource().getImplementedInterface().getSimpleName();
+            resourceType = pathDesObj.getResource().getResource().implementedInterface().getSimpleName();
             LOG.info("Inside ZtoA {}", resourceType);
 
             try {
@@ -201,7 +201,7 @@ public final class ModelMappingUtils {
 
         while (iterator.hasNext()) {
             AToZ pathDesObj = iterator.next();
-            resourceType = pathDesObj.getResource().getResource().getImplementedInterface().getSimpleName();
+            resourceType = pathDesObj.getResource().getResource().implementedInterface().getSimpleName();
             LOG.info("Inside AtoZ {}", resourceType);
             try {
                 if (TERMINATION_POINT.equals(resourceType)) {
