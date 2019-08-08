@@ -171,9 +171,18 @@ public class PceConstraints {
             this.name = name;
         }
 
-        public ResourceType type = ResourceType.NODE;
+        private ResourceType type = ResourceType.NODE;
 
-        public String name = "";
+        private String name = "";
+
+        public ResourceType getType() {
+            return type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
     }
 
     public List<ResourcePair> getListToInclude() {

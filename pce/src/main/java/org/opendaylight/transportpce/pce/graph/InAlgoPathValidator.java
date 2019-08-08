@@ -155,32 +155,32 @@ public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> 
         // validation: check each type for each element
         for (ResourcePair next : listToInclude) {
             int indx = -1;
-            switch (next.type) {
+            switch (next.getType()) {
                 case NODE:
-                    if (listOfElementsSubNode.contains(next.name)) {
-                        indx = listOfElementsSubNode.indexOf(next.name);
+                    if (listOfElementsSubNode.contains(next.getName())) {
+                        indx = listOfElementsSubNode.indexOf(next.getName());
                     }
                     break;
                 case SRLG:
-                    if (listOfElementsSRLG.contains(next.name)) {
-                        indx = listOfElementsSRLG.indexOf(next.name);
+                    if (listOfElementsSRLG.contains(next.getName())) {
+                        indx = listOfElementsSRLG.indexOf(next.getName());
                     }
                     break;
                 case CLLI:
-                    if (listOfElementsCLLI.contains(next.name)) {
-                        indx = listOfElementsCLLI.indexOf(next.name);
+                    if (listOfElementsCLLI.contains(next.getName())) {
+                        indx = listOfElementsCLLI.indexOf(next.getName());
                     }
                     break;
                 default:
-                    LOG.warn(" in checkInclude vertex list unsupported resource type: [{}]", next.type);
+                    LOG.warn(" in checkInclude vertex list unsupported resource type: [{}]", next.getType());
             }
 
             if (indx < 0) {
-                LOG.debug(" in checkInclude stopped : {} ", next.name);
+                LOG.debug(" in checkInclude stopped : {} ", next.getName());
                 return false;
             }
 
-            LOG.debug(" in checkInclude next found {} in {}", next.name, partialPath.getVertexList());
+            LOG.debug(" in checkInclude next found {} in {}", next.getName(), partialPath.getVertexList());
 
             listOfElementsSubNode.subList(0, indx).clear();
             listOfElementsCLLI.subList(0, indx).clear();
