@@ -120,7 +120,7 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         CreateOtsOmsInput input = CreateOtsOmsDataUtils.buildCreateOtsOms();
         writePortMapping(input);
         CreateOtsOmsOutput result = this.deviceRendererService.createOtsOms(input);
-        Assert.assertFalse(result.isSuccess());
+        Assert.assertTrue(result.isSuccess());
     }
 
     private void writePortMapping(CreateOtsOmsInput input) {
