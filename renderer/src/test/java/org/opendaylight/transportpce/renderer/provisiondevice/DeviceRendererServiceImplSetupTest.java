@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.controller.md.sal.binding.api.MountPoint;
@@ -153,7 +152,6 @@ public class DeviceRendererServiceImplSetupTest extends AbstractTest {
         Assert.assertFalse(servicePathOutput.isSuccess());
     }
 
-    @Ignore("need to be reviewed")
     @Test
     public void testSetupService() throws OpenRoadmInterfaceException {
         setMountPoint(MountPointUtils.getMountPoint(new ArrayList<>(), getDataBroker()));
