@@ -34,8 +34,10 @@ public class PceGraph {
     private static final Logger LOG = LoggerFactory.getLogger(PceGraph.class);
 
     ////////////////////////// for Graph ///////////////////////////
-    int kpathsToBring = 10; // how many paths to bring
-    int mhopsPerPath = 50; // max #hops
+    // how many paths to bring
+    int kpathsToBring = 10;
+    // max #hops
+    int mhopsPerPath = 50;
 
     // input
     private Map<NodeId, PceNode> allPceNodes = new HashMap<NodeId, PceNode>();
@@ -66,8 +68,6 @@ public class PceGraph {
 
         LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode.toString(), zendNode.toString());
         LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes.toString());
-
-        // PceCalculation.printNodesInfo(allPceNodes);
 
     }
 

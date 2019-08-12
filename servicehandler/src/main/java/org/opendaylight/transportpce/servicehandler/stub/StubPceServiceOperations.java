@@ -79,7 +79,7 @@ public class StubPceServiceOperations implements PathComputationService {
                 CancelResourceReserveOutput output = null;
                 try {
                     LOG.info("Wait for 5s til beginning the PCE cancel resource request");
-                    Thread.sleep(5000); // sleep for 1s
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     message = "path computation service failed !";
                     LOG.error("path computation service failed !", e);
@@ -143,7 +143,7 @@ public class StubPceServiceOperations implements PathComputationService {
                 PathComputationRequestOutput output = null;
                 try {
                     LOG.info("Wait for 5s til beginning the PCE pathComputation request");
-                    Thread.sleep(5000); // sleep for 1s
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     message = "path computation service failed !";
                     LOG.error("path computation service failed !", e);

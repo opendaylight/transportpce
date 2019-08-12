@@ -331,8 +331,6 @@ public class PceConstraintsCalc {
                     result = Optional.of(path);
                 }
             }
-//            return pathDescReadTx.read(LogicalDatastoreType.CONFIGURATION, pathDescriptionIID)
-//                    .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn(
                 "PCE diversity constraints: Exception while getting path description from datastore {} for service {}!",

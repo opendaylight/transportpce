@@ -293,7 +293,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 success.set(false);
                 LOG.warn(result);
                 forkJoinPool.shutdown();
-                return; // TODO should deletion end here?
+                return;
+                //TODO should deletion end here?
             }
             for (String interfaceId : interfacesToDelete) {
                 try {

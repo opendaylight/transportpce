@@ -295,7 +295,7 @@ public class ExtractTopoDataStoreImpl {
                                                     destId = element1.getUid();
                                                     destIp = null;
                                                     // Create a new link
-                                                    if (srcId != destId) {
+                                                    if (!destId.equals(srcId)) {
                                                         Connections connection = createNewConnection(srcId, srcIp,
                                                                 destId, destIp);
                                                         topoConnections.add(connection);
@@ -339,7 +339,7 @@ public class ExtractTopoDataStoreImpl {
                                         // Create a new link
                                         destId = element1.getUid();
                                         destIp = null;
-                                        if (srcId != destId) {
+                                        if (!destId.equals(srcId)) {
                                             Connections connection = createNewConnection(srcId, srcIp, destId, destIp);
                                             topoConnections.add(connection);
                                             srcId = destId;
@@ -359,7 +359,7 @@ public class ExtractTopoDataStoreImpl {
                                         // Create a new link
                                         destId = element1.getUid();
                                         destIp = null;
-                                        if (srcId != destId) {
+                                        if (!destId.equals(srcId)) {
                                             Connections connection = createNewConnection(srcId, srcIp, destId, destIp);
                                             topoConnections.add(connection);
                                             srcId = destId;
@@ -423,7 +423,7 @@ public class ExtractTopoDataStoreImpl {
                     IpAddress ipAddress = mapNodeRefIp.get(nodeRef);
                     for (Elements element : elements) {
                         if (element.getUid().contains(ipAddress.getIpv4Address().getValue().toString())) {
-                            if ((ipAddressCurrent == null) || (ipAddressCurrent != ipAddress)) {
+                            if ((ipAddressCurrent == null) || (!ipAddress.equals(ipAddressCurrent))) {
                                 ipAddressCurrent = ipAddress;
                                 // Fill in routeObjectIncludeExcludes
                                 RouteObjectIncludeExclude routeObjectIncludeExclude1 = addRouteObjectIncludeExclude(
@@ -510,7 +510,7 @@ public class ExtractTopoDataStoreImpl {
                     IpAddress ipAddress = mapNodeRefIp.get(nodeRef);
                     for (Elements element : elements) {
                         if (element.getUid().contains(ipAddress.getIpv4Address().getValue().toString())) {
-                            if ((ipAddressCurrent == null) || (ipAddressCurrent != ipAddress)) {
+                            if ((ipAddressCurrent == null) || (!ipAddress.equals(ipAddressCurrent))) {
                                 ipAddressCurrent = ipAddress;
                                 // Fill in routeObjectIncludeExcludes
                                 RouteObjectIncludeExclude routeObjectIncludeExclude1 = addRouteObjectIncludeExclude(

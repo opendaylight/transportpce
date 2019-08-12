@@ -189,7 +189,8 @@ public class PortMappingVersion121 {
         int client = 1;
         if (!deviceObject.isPresent() || deviceObject.get().getCircuitPacks() == null) {
             LOG.warn("Circuit Packs are not present for {}", nodeId);
-            return false; // TODO return false or continue?
+            return false;
+            // TODO return false or continue?
         }
         Map<String, String> lcpMap = new HashMap<>();
         Map<String, Mapping> mappingMap = new HashMap<>();
@@ -342,7 +343,8 @@ public class PortMappingVersion121 {
         return cpPerSrg;
     }
 
-    @SuppressWarnings("checkstyle:linelength")  //last LOG info message in this method is too long
+    //last LOG info message in this method is too long
+    @SuppressWarnings("checkstyle:linelength")
     private boolean createPpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for SRG's PP
         HashMap<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks>> srgCps
@@ -670,7 +672,8 @@ public class PortMappingVersion121 {
         return mpBldr.build();
     }
 
-    @SuppressWarnings("checkstyle:linelength")  // some LOG messages are too long
+    // some LOG messages are too long
+    @SuppressWarnings("checkstyle:linelength")
     private boolean createTtpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for degree TTP's
         List<Degree> degrees = getDegrees(nodeId, deviceInfo);

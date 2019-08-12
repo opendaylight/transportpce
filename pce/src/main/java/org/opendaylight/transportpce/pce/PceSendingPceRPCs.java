@@ -249,11 +249,11 @@ public class PceSendingPceRPCs {
         return rc.getResponseCode();
     }
 
-    public GnpyResult getGnpy_AtoZ() {
+    public GnpyResult getGnpyAtoZ() {
         return gnpyAtoZ;
     }
 
-    public GnpyResult getGnpy_ZtoA() {
+    public GnpyResult getGnpyZtoA() {
         return gnpyZtoA;
     }
 }

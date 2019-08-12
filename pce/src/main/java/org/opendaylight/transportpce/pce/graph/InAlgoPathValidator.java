@@ -42,17 +42,13 @@ public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> 
         LOG.debug("InAlgoPathValidator: partialPath size: {} prev edge {} new edge {}",
             size, edge.link().getlinkType(), partialPath.getEdgeList().get(size - 1).link().getlinkType());
 
-        if (!checkTurn(partialPath.getEdgeList().get(size - 1).link().getlinkType(), edge.link().getlinkType())) {
+        if ((!checkTurn(partialPath.getEdgeList().get(size - 1).link().getlinkType(), edge.link().getlinkType()))
+            || (!checkLimits(partialPath, edge, pceHardConstraints))
+            || (!checkInclude(partialPath, edge, zendNode, pceHardConstraints))) {
             return false;
+        } else {
+            return true;
         }
-        if (!checkLimits(partialPath, edge, pceHardConstraints)) {
-            return false;
-        }
-        if (!checkInclude(partialPath, edge, zendNode, pceHardConstraints)) {
-            return false;
-        }
-
-        return true;
     }
 
     private boolean checkTurn(OpenroadmLinkType prevType, OpenroadmLinkType nextType) {
@@ -149,7 +145,8 @@ public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> 
         listOfElementsCLLI.addAll(listOfElementsBuild(pathEdges, PceConstraints.ResourceType.CLLI));
 
         List<String> listOfElementsSRLG = new ArrayList<String>();
-        listOfElementsSRLG.add("NONE"); // first link is XPONDEROUTPUT, no SRLG for it
+        // first link is XPONDEROUTPUT, no SRLG for it
+        listOfElementsSRLG.add("NONE");
         listOfElementsSRLG.addAll(listOfElementsBuild(pathEdges, PceConstraints.ResourceType.SRLG));
 
         // validation: check each type for each element
@@ -220,7 +217,7 @@ public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> 
                             continue;
                         }
                     }
-                    if (found == false) {
+                    if (!found) {
                         // there is no specific srlg to include. thus add to list just the first one
                         listOfElements.add("NONE");
                     }

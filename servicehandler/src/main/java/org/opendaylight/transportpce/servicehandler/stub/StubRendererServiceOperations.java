@@ -97,7 +97,7 @@ public class StubRendererServiceOperations implements RendererServiceOperations 
                 ServiceImplementationRequestOutput output = null;
                 try {
                     LOG.info("Wait for 5s til beginning the Renderer serviceImplementation request");
-                    Thread.sleep(5000); // sleep for 1s
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     message = "renderer failed !";
                     rpcStatusEx = RpcStatusEx.Failed;
@@ -171,7 +171,7 @@ public class StubRendererServiceOperations implements RendererServiceOperations 
                 ServiceDeleteOutput output = null;
                 try {
                     LOG.info("Wait for 5s til beginning the Renderer serviceDelete request");
-                    Thread.sleep(5000); // sleep for 1s
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     message = "deleting service failed !";
                     LOG.error("deleting service failed !", e);

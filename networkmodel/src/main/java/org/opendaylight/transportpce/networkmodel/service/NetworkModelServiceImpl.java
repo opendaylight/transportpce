@@ -45,7 +45,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private static final boolean CREATE_MISSING_PARENTS = true;
 
     private NetworkTransactionService networkTransactionService;
-    //private final R2RLinkDiscoveryFactoryMethod linkDiscovery;
     private final R2RLinkDiscovery linkDiscovery;
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmFactory openRoadmFactory;
@@ -134,7 +133,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     openRoadmTopologyLink, CREATE_MISSING_PARENTS);
             }
             networkTransactionService.submit().get();
-            //linkDiscovery.readLLDP(nodeId);
             LOG.info("all nodes and links created");
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("ERROR: ", e);
