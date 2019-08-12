@@ -23,7 +23,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
 
   <properties>
-    <mdsal.model.version>0.13.2</mdsal.model.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 

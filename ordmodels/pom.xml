@@ -87,9 +87,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.opendaylight.mdsal.model</groupId>
-        <artifactId>mdsal-model-artifacts</artifactId>
-        <version>0.13.2</version>
+        <groupId>org.opendaylight.mdsal</groupId>
+        <artifactId>mdsal-artifacts</artifactId>
+        <version>4.0.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -112,7 +112,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>iana-afn-safi</artifactId>
-      <version>2013.07.04.15.6</version>
+      <version>2013.07.04.16.3</version>
       <type>pom</type>
     </dependency>
     <dependency>
