@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.List;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
@@ -91,7 +90,7 @@ public class PceLink {
         LOG.debug("PceLink: created PceLink  {}", toString());
     }
 
-    private OpenroadmLinkType calcType(Link link) {
+    /*private OpenroadmLinkType calcType(Link link) {
         org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.@Nullable Link1 link1 = null;
         OpenroadmLinkType tmplinkType = null;
 
@@ -111,7 +110,7 @@ public class PceLink {
             return null;
         }
         return tmplinkType;
-    }
+    }*/
 
     private LinkId calcOpposite(Link link) {
         // opposite link
@@ -142,7 +141,7 @@ public class PceLink {
         // sum of 1 over the span OSNRs (linear units)
         double sum = 0;
         // link OSNR, in dB
-        double linkOsnrDb;
+        //double linkOsnrDb;
         // link OSNR, in dB
         double linkOsnrLu;
         // span OSNR, in dB
@@ -150,7 +149,7 @@ public class PceLink {
         // span OSNR, in linear units
         double spanOsnrLu;
         // default amplifier noise value, in dB
-        double ampNoise = 5.5;
+        //double ampNoise = 5.5;
         // fiber span measured loss, in dB
         double loss;
         // launch power, in dB
@@ -213,7 +212,6 @@ public class PceLink {
         spanOsnrLu = Math.pow(10, (spanOsnrDb / 10.0));
         sum = PceConstraints.CONST_OSNR / spanOsnrLu;
         linkOsnrLu = sum;
-        //link_osnr_dB = 10 * Math.log10(1 / sum);
         LOG.debug("In retrieveosnr: link osnr is {} dB", linkOsnrLu);
         return linkOsnrLu;
     }

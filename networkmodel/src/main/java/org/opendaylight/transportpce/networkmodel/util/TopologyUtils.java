@@ -94,7 +94,6 @@ public  final class TopologyUtils {
             if (link.isPresent()) {
                 LinkBuilder linkBuilder = new LinkBuilder(link.get());
                 Link1Builder link1Builder = new Link1Builder(linkBuilder.augmentation(Link1.class));
-//                link1Builder.setAdministrativeState(State.OutOfService);
                 linkBuilder.removeAugmentation(Link1.class);
                 linkBuilder.addAugmentation(Link1.class,link1Builder.build());
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, linkIID.build(),

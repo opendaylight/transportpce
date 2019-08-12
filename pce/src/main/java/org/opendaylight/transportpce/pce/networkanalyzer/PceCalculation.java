@@ -52,7 +52,6 @@ public class PceCalculation {
     private String znodeId = "";
 
     private PceConstraints pceHardConstraints;
-//    private PceConstraints pceSoftConstraints;
 
     ///////////// Intermediate data/////////////////
     private List<PceLink> addLinks = new ArrayList<PceLink>();
@@ -84,7 +83,6 @@ public class PceCalculation {
         this.returnStructure = rc;
 
         this.pceHardConstraints = pceHardConstraints;
-//        this.pceSoftConstraints = pceSoftConstraints;
         parseInput();
     }
 
@@ -105,7 +103,6 @@ public class PceCalculation {
         }
 
         printNodesInfo(allPceNodes);
-        // printLinksInfo(allPceLinks);
 
         returnStructure.setRC(ResponseCodes.RESPONSE_OK);
         return;
@@ -312,7 +309,8 @@ public class PceCalculation {
                 LOG.debug("validateLink: DROP-LINK saved  {}", pcelink.toString());
                 break;
             case XPONDERINPUT :
-                azSrgs.add(sourceId); // store separately all SRG links directly
+                // store separately all SRG links directly
+                azSrgs.add(sourceId);
                 // connected to A/Z
                 if (!dest.checkTP(pcelink.getDestTP().toString())) {
                     LOG.debug("validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink.toString());
@@ -323,8 +321,10 @@ public class PceCalculation {
                 source.addOutgoingLink(pcelink);
                 LOG.debug("validateLink: XPONDER-INPUT link added to allPceLinks {}", pcelink.toString());
                 break;
-            case XPONDEROUTPUT : // does it mean XPONDER==>>SRG ?
-                azSrgs.add(destId); // store separately all SRG links directly
+            // does it mean XPONDER==>>SRG ?
+            case XPONDEROUTPUT :
+                // store separately all SRG links directly
+                azSrgs.add(destId);
                 // connected to A/Z
                 if (!source.checkTP(pcelink.getSourceTP().toString())) {
                     LOG.debug("validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink.toString());
@@ -370,15 +370,11 @@ public class PceCalculation {
                 break;
         }
 
-        if (pceNode.getSupNodeIdPceNode().equals(anodeId)) {
-            if (endPceNode(nodeType,pceNode.getNodeId(), pceNode)) {
-                this.aendPceNode = pceNode;
-            }
+        if ((pceNode.getSupNodeIdPceNode().equals(anodeId)) && (endPceNode(nodeType,pceNode.getNodeId(), pceNode))) {
+            this.aendPceNode = pceNode;
         }
-        if (pceNode.getSupNodeIdPceNode().equals(znodeId)) {
-            if (endPceNode(nodeType,pceNode.getNodeId(), pceNode)) {
-                this.zendPceNode = pceNode;
-            }
+        if ((pceNode.getSupNodeIdPceNode().equals(znodeId)) && (endPceNode(nodeType,pceNode.getNodeId(), pceNode))) {
+            this.zendPceNode = pceNode;
         }
 
         allPceNodes.put(pceNode.getNodeId(), pceNode);
@@ -482,11 +478,11 @@ public class PceCalculation {
         }
     }
 
-    private static void printLinksInfo(Map<LinkId, PceLink> allpcelinks) {
+    /*private static void printLinksInfo(Map<LinkId, PceLink> allpcelinks) {
         Iterator<Map.Entry<LinkId, PceLink>> links = allpcelinks.entrySet().iterator();
         while (links.hasNext()) {
             LOG.info("In printLinksInfo link {} : ", links.next().getValue().toString());
         }
-    }
+    }*/
 
 }

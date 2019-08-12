@@ -59,7 +59,8 @@ public class PceListenerImpl implements TransportpcePceListener {
             servicePathRpcResult = notification;
             PathDescription pathDescription = null;
             switch (servicePathRpcResult.getNotificationType().getIntValue()) {
-                case 1: /** path-computation-request. */
+                /* path-computation-request. */
+                case 1:
                     LOG.info("PCE '{}' Notification received : {}",servicePathRpcResult.getNotificationType().getName(),
                             notification);
                     if (servicePathRpcResult.getStatus() == RpcStatusEx.Successful) {
@@ -116,7 +117,8 @@ public class PceListenerImpl implements TransportpcePceListener {
                         return;
                     }
                     break;
-                case 2: /** cancel-resource-reserve. */
+                /* cancel-resource-reserve. */
+                case 2:
                     if (servicePathRpcResult.getStatus() == RpcStatusEx.Successful) {
                         LOG.info("PCE cancel resource done OK !");
                         OperationResult deleteServicePathOperationResult =
@@ -166,13 +168,13 @@ public class PceListenerImpl implements TransportpcePceListener {
             if (servicePathRpcResult.getNotificationType() != notification.getNotificationType()) {
                 result = false;
             }
-            if (servicePathRpcResult.getServiceName() != notification.getServiceName()) {
+            if (!servicePathRpcResult.getServiceName().equals(notification.getServiceName())) {
                 result = false;
             }
             if (servicePathRpcResult.getStatus() != notification.getStatus()) {
                 result = false;
             }
-            if (servicePathRpcResult.getStatusMessage() != notification.getStatusMessage()) {
+            if (!servicePathRpcResult.getStatusMessage().equals(notification.getStatusMessage())) {
                 result = false;
             }
         }

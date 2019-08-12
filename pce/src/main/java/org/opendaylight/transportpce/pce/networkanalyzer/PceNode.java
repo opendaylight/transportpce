@@ -126,26 +126,6 @@ public class PceNode {
         return;
     }
 
-
-
-/*    public PceNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId,
-            String supNodeId, String clli) {
-        this.node = node;
-        this.nodeId = nodeId;
-        this.nodeType = nodeType;
-        this.supNodeId = supNodeId;
-        this.clli = clli;
-
-        if ((node == null) || (nodeId == null) || (nodeType == null)
-                || (supNodeId == null) || (clli == null)) {
-            LOG.error(
-                    "PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
-            valid = false;
-        }
-
-        LOG.debug(" PceNode built :{}", this.toString());
-    }
-*/
     public void initWLlist() {
         this.availableWLindex.clear();
         if (!isValid()) {
@@ -270,7 +250,8 @@ public class PceNode {
         if (!this.availableSrgPp.isEmpty()) {
             Optional<String> client = null;
             final OpenroadmTpType openType = srgType;
-            client = this.availableSrgPp.entrySet().stream().filter(pp -> pp.getValue().getName() == openType.getName())
+            client = this.availableSrgPp.entrySet()
+                    .stream().filter(pp -> pp.getValue().getName().equals(openType.getName()))
                     .map(Map.Entry::getKey)
                     .sorted(new SortPortsByName())
                     .findFirst();

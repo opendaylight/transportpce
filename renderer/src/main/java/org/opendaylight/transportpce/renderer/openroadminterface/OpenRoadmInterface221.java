@@ -85,11 +85,8 @@ public class OpenRoadmInterface221 {
 
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder();
-        //ethIfBuilder.setAutoNegotiation(EthAttributes.AutoNegotiation.Enabled);
-        //ethIfBuilder.setDuplex(EthAttributes.Duplex.Full);
         ethIfBuilder.setFec(EthAttributes.Fec.Off);
         ethIfBuilder.setSpeed(100000L);
-        //ethIfBuilder.setMtu(9000L);
 
         InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.class,
             logicalConnPoint + "-ETHERNET");

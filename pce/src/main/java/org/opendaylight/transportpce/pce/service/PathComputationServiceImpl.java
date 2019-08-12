@@ -187,8 +187,8 @@ public class PathComputationServiceImpl implements PathComputationService {
                         .setResponseParameters(rpb.build());
 
               //add the GNPy result
-                GnpyResult gnpyAtoZ = sendingPCE.getGnpy_AtoZ();
-                GnpyResult gnpyZtoA = sendingPCE.getGnpy_ZtoA();
+                GnpyResult gnpyAtoZ = sendingPCE.getGnpyAtoZ();
+                GnpyResult gnpyZtoA = sendingPCE.getGnpyZtoA();
                 List<GnpyResponse> listResponse = new ArrayList<>();
                 if (gnpyAtoZ != null) {
                     GnpyResponse respAtoZ = generateGnpyResponse(gnpyAtoZ.getResponse(),"A-to-Z");

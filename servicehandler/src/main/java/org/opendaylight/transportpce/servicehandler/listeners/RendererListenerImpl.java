@@ -52,7 +52,8 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             LOG.info("Renderer '{}' Notification received : {}", serviceRpcResultSp.getNotificationType().getName(),
                     notification);
             switch (notifType) {
-                case 3 : /** service-implementation-request. */
+                /* service-implementation-request. */
+                case 3 :
                     if (serviceRpcResultSp.getStatus() == RpcStatusEx.Successful) {
                         LOG.info("Service implemented !");
                         OperationResult operationResult = null;
@@ -93,8 +94,8 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                         }
                     }
                     break;
-
-                case 4 : /** service-delete. */
+                /* service-delete. */
+                case 4 :
                     if (serviceRpcResultSp.getStatus() == RpcStatusEx.Successful) {
                         LOG.info("Service '{}' deleted !", serviceName);
                         if (this.input != null) {
@@ -125,13 +126,13 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             if (serviceRpcResultSp.getNotificationType() != notification.getNotificationType()) {
                 result = false;
             }
-            if (serviceRpcResultSp.getServiceName() != notification.getServiceName()) {
+            if (!serviceRpcResultSp.getServiceName().equals(notification.getServiceName())) {
                 result = false;
             }
             if (serviceRpcResultSp.getStatus() != notification.getStatus()) {
                 result = false;
             }
-            if (serviceRpcResultSp.getStatusMessage() != notification.getStatusMessage()) {
+            if (!serviceRpcResultSp.getStatusMessage().equals(notification.getStatusMessage())) {
                 result = false;
             }
         }

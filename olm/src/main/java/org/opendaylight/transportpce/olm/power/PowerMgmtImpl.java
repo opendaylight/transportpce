@@ -344,7 +344,7 @@ public class PowerMgmtImpl implements PowerMgmt {
         return true;
     }
 
-    /**
+    /*
      * This method does an edit-config on roadm connection subtree for a given
      * connection number in order to set power level for use by the optical
      * power control.
@@ -361,7 +361,7 @@ public class PowerMgmtImpl implements PowerMgmt {
      *            WaveLength number part of request
      * @return true/false based on status of operation.
      */
-    private boolean setTransponderPowerTx(Nodes inputNode, String destTpId, String srgId,
+    /*private boolean setTransponderPowerTx(Nodes inputNode, String destTpId, String srgId,
                                           String nextNodeId, Long waveLength) {
         Map<String, Double> txPowerRangeMap = null;
         Map<String, Double> rxSRGPowerRangeMap = null;
@@ -455,7 +455,7 @@ public class PowerMgmtImpl implements PowerMgmt {
             LOG.info("Mapping object not found for nodeId: {}", nodeId);
             return false;
         }
-    }
+    }*/
 
     /**
      * This method retrieves transponder OCH interface and
@@ -512,7 +512,7 @@ public class PowerMgmtImpl implements PowerMgmt {
         }
     }
 
-    /**
+    /*
      * This method retrieves transponder OCH interface and
      * sets power.
      *
@@ -526,7 +526,7 @@ public class PowerMgmtImpl implements PowerMgmt {
      *            Wavelength Number    *
      * @return true/false based on status of operation
      */
-    private boolean callSetRoadmPowerTx(String nodeId, String interfaceName,
+    /*private boolean callSetRoadmPowerTx(String nodeId, String interfaceName,
                                         OpenroadmVersion openroadmVersion,
                                         Long wavelength, String connectionNumber) {
         if (interfaceName == null) {
@@ -594,6 +594,6 @@ public class PowerMgmtImpl implements PowerMgmt {
             return false;
         }
         return false;
-    }
+    }*/
 
 }

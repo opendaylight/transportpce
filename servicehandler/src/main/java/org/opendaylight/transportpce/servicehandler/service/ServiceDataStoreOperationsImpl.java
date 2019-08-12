@@ -341,7 +341,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 result = "Failed to " + action + " service from Service List";
             }
         } else {
-            if (choice == 2) { /* Write Service */
+            /*
+             * Write Service.
+             */
+            if (choice == 2) {
                 LOG.debug("Writing '{}' Service", serviceName);
                 InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
                         .child(Services.class, new ServicesKey(serviceName));
