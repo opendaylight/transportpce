@@ -191,7 +191,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
 
             Node1Builder node1Builder = new Node1Builder(node);
 
-            switch (node.getNodeType()) {
+            switch (node1Builder.getNodeType()) {
                 case DEGREE:
                     DegreeAttributes degreeAttributes = node.getDegreeAttributes();
                     DegreeAttributesBuilder degreeAttributesBuilder;
@@ -250,8 +250,9 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
             if (nodeOpt.isPresent()) {
                 node = nodeOpt.get();
             } else {
-                LOG.error("Unable to get node {} from topology {}! Skipping addition of available wavelength for this"
-                        + "node.", nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
+                LOG.error(
+                    "Unable to get node {} from topology {}! Skipping addition of available wavelength for this node.",
+                         nodeId, NetworkUtils.OVERLAY_NETWORK_ID);
                 continue;
             }
 

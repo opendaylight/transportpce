@@ -39,7 +39,7 @@ import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeStreamWriter;
-import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactory;
+import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonWriterFactory;
 import org.opendaylight.yangtools.yang.model.api.SchemaContext;
@@ -112,8 +112,9 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
              * JsonWriterFactory.createJsonWriter(writer)
              */
             domWriter = JSONNormalizedNodeStreamWriter.createExclusiveWriter(
-                    JSONCodecFactory.createSimple(schemaContext), scPath.getParent(),
-                    scPath.getLastComponent().getNamespace(), JsonWriterFactory.createJsonWriter(writer, 2));
+                JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.createSimple(schemaContext),
+                scPath.getParent(), scPath.getLastComponent().getNamespace(),
+                JsonWriterFactory.createJsonWriter(writer, 2));
             // The write part
             final BindingStreamEventWriter bindingWriter = codecRegistry.newWriter(id, domWriter);
             codecRegistry.getSerializer(id.getTargetType()).serialize(object, bindingWriter);

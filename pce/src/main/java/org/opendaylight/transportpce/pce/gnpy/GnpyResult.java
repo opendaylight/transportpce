@@ -60,6 +60,7 @@ import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNodes;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeStreamWriter;
+import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
@@ -231,7 +232,9 @@ public class GnpyResult {
         NormalizedNodeResult result = new NormalizedNodeResult();
         SchemaContext schemaContext = getSchemaContext(objectClass);
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
-                JsonParserStream jsonParser = JsonParserStream.create(streamWriter, schemaContext, schemaContext);) {
+                JsonParserStream jsonParser = JsonParserStream.create(streamWriter,
+                    JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.getShared(schemaContext),
+                    schemaContext);) {
             LOG.debug("GNPy: the path to the reader {}", reader.getPath());
             LOG.debug("GNPy: the reader {}", reader.toString());
             LOG.debug("GNPy: the jsonParser class {} // jsonParser to string {}", jsonParser.getClass(),

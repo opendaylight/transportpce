@@ -32,7 +32,8 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.response.parameters.PathDescriptionBuilder;
 
-
+//writeOrModifyOrDeleteServiceList deprecated method should not raise warnings in tests
+@SuppressWarnings("deprecation")
 public class ServiceDataStoreOperationsImplTest extends AbstractTest {
 
     private ServiceDataStoreOperationsImpl serviceDataStoreOperations;

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.KShortestPaths;
+import org.jgrapht.alg.shortestpath.KShortestSimplePaths;
 import org.jgrapht.alg.shortestpath.PathValidator;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.opendaylight.transportpce.common.ResponseCodes;
@@ -136,10 +136,10 @@ public class PceGraph {
         }
 
         // KShortestPaths on weightedGraph
-        KShortestPaths<String, PceGraphEdge> swp =
-            new KShortestPaths<String, PceGraphEdge>(weightedGraph, kpathsToBring, mhopsPerPath, wpv);
+        KShortestSimplePaths<String, PceGraphEdge> swp =
+            new KShortestSimplePaths<String, PceGraphEdge>(weightedGraph, mhopsPerPath, wpv);
 
-        allWPaths = swp.getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue());
+        allWPaths = swp.getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue(), kpathsToBring);
 
         if (allWPaths.isEmpty()) {
             LOG.info(" In runKgraphs : algorithm didn't find any path");

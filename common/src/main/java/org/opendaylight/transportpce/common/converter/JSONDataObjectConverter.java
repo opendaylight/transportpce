@@ -27,6 +27,7 @@ import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeWriter;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactory;
+import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
@@ -103,7 +104,8 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
             ConvertType<T> convertType) {
         Writer writer = new StringWriter();
         JsonWriter jsonWriter = new JsonWriter(writer);
-        JSONCodecFactory jsonCodecFactory = JSONCodecFactory.createLazy(getSchemaContext());
+        JSONCodecFactory jsonCodecFactory =
+            JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.createLazy(getSchemaContext());
         NormalizedNodeStreamWriter create =
             JSONNormalizedNodeStreamWriter.createExclusiveWriter(jsonCodecFactory,
             (org.opendaylight.yangtools.yang.model.api.DataNodeContainer)null, null, jsonWriter);
@@ -133,7 +135,8 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
             JsonReader reader) {
         NormalizedNodeResult result = new NormalizedNodeResult();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
-            JsonParserStream jsonParser = JsonParserStream.create(streamWriter, getSchemaContext(),
+            JsonParserStream jsonParser = JsonParserStream.create(streamWriter,
+                JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.getShared(getSchemaContext()),
                 getSchemaContext())) {
             jsonParser.parse(reader);
         } catch (IOException e) {
