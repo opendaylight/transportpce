@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
-import com.google.common.util.concurrent.CheckedFuture;
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,13 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -160,14 +160,13 @@ public class PortMappingVersion121 {
                         .child(Nodes.class, new NodesKey(nodeId))
                         .child(Mapping.class, new MappingKey(oldMapping.getLogicalConnectionPoint()));
                     writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, mapIID, newMapping);
-                    CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
-                    submit.checkedGet();
+                    ListenableFuture<Void> submit = writeTransaction.submit();
+                    submit.get();
                     return true;
                 }
                 return false;
-            } catch (TransactionCommitFailedException e) {
-                LOG.error("Transaction Commit Error updating Mapping {} for node {}",
-                    oldMapping.getLogicalConnectionPoint(), nodeId, e);
+            } catch (InterruptedException | ExecutionException e) {
+                LOG.error("Error updating Mapping {} for node {}", oldMapping.getLogicalConnectionPoint(), nodeId, e);
                 return false;
             }
         } else {
@@ -591,12 +590,12 @@ public class PortMappingVersion121 {
         InstanceIdentifier<Network> nodesIID = InstanceIdentifier.builder(Network.class).build();
         Network network = nwBldr.build();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodesIID, network);
-        CheckedFuture<Void, TransactionCommitFailedException> submit = writeTransaction.submit();
+        ListenableFuture<Void> submit = writeTransaction.submit();
         try {
-            submit.checkedGet();
+            submit.get();
             return true;
 
-        } catch (TransactionCommitFailedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to post {}", network, e);
             return false;
         }

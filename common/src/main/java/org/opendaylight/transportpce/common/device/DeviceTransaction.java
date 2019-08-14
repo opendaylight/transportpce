@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.common.device;
 
 import com.google.common.base.Optional;
-import com.google.common.util.concurrent.CheckedFuture;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -23,7 +22,6 @@ import javax.annotation.Nullable;
 
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -55,7 +53,7 @@ public class DeviceTransaction {
         LOG.debug("Device transaction created. Lock: {}", deviceLock);
     }
 
-    public <T extends DataObject> CheckedFuture<Optional<T>, ReadFailedException> read(LogicalDatastoreType store,
+    public <T extends DataObject> ListenableFuture<Optional<T>> read(LogicalDatastoreType store,
             InstanceIdentifier<T> path) {
         return rwTx.read(store, path);
     }

@@ -8,10 +8,8 @@
 
 package org.opendaylight.transportpce.common.network;
 
-import com.google.common.util.concurrent.CheckedFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
@@ -26,8 +24,8 @@ public class NetworkTransactionImpl implements NetworkTransactionService {
 
     }
 
-    public <T extends DataObject> CheckedFuture<com.google.common.base.Optional<T>,
-        ReadFailedException> read(LogicalDatastoreType store, InstanceIdentifier<T> path) {
+    public <T extends DataObject> ListenableFuture<com.google.common.base.Optional<T>>
+        read(LogicalDatastoreType store, InstanceIdentifier<T> path) {
         return requestProcessor.read(store, path);
     }
 

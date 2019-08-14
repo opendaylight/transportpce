@@ -39,6 +39,7 @@ import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkBuilder;
+import org.opendaylight.yangtools.util.concurrent.FluentFutures;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
@@ -64,7 +65,7 @@ public class DeviceTransactionManagerTest {
         Mockito.when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
         Mockito.when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
         Mockito.when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
-        Mockito.when(rwTransactionMock.submit()).thenReturn(Futures.immediateCheckedFuture(null));
+        Mockito.doReturn(FluentFutures.immediateNullFluentFuture()).when(rwTransactionMock.submit());
 
         this.transactionManager = new DeviceTransactionManagerImpl(mountPointServiceMock, 3000);
     }
@@ -336,7 +337,7 @@ public class DeviceTransactionManagerTest {
         }
 
 
-        Mockito.when(rwTransactionMock.submit()).thenReturn(Futures.immediateCheckedFuture(null));
+        Mockito.doReturn(FluentFutures.immediateNullFluentFuture()).when(rwTransactionMock.submit());
 
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);

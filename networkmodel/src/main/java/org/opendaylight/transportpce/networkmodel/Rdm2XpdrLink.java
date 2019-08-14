@@ -9,11 +9,11 @@
 package org.opendaylight.transportpce.networkmodel;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.CheckedFuture;
+import com.google.common.util.concurrent.ListenableFuture;
+import java.util.concurrent.ExecutionException;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
@@ -55,14 +55,14 @@ final class Rdm2XpdrLink {
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
 
-        CheckedFuture<Void, TransactionCommitFailedException> submit = wrtx.submit();
+        ListenableFuture<Void> submit = wrtx.submit();
 
         try {
-            submit.checkedGet();
+            submit.get();
             LOG.info("Post successful");
             return true;
 
-        } catch (TransactionCommitFailedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to create Xponder to Roadm link in the Topo layer ");
             return false;
 
@@ -86,13 +86,13 @@ final class Rdm2XpdrLink {
             new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
-        CheckedFuture<Void, TransactionCommitFailedException> submit = wrtx.submit();
+        ListenableFuture<Void> submit = wrtx.submit();
         try {
-            submit.checkedGet();
+            submit.get();
             LOG.info("Post successful");
             return true;
 
-        } catch (TransactionCommitFailedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to create Xponder to Roadm link in the Topo layer ");
             return false;
         }
