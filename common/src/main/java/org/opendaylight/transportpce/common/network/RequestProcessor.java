@@ -9,15 +9,11 @@ package org.opendaylight.transportpce.common.network;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
-
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -95,6 +91,7 @@ public class RequestProcessor {
         rwTx.merge(store, path, data);
     }
 
+    @Deprecated
     public ListenableFuture<Void> submit() {
         acquireLock();
         ListenableFuture<Void> future = null;

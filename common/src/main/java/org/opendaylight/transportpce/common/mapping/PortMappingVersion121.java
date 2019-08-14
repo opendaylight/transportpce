@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,11 +18,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -68,7 +69,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.Opti
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfig;
-
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,8 +160,8 @@ public class PortMappingVersion121 {
                         .child(Nodes.class, new NodesKey(nodeId))
                         .child(Mapping.class, new MappingKey(oldMapping.getLogicalConnectionPoint()));
                     writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, mapIID, newMapping);
-                    ListenableFuture<Void> submit = writeTransaction.submit();
-                    submit.get();
+                    FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
+                    commit.get();
                     return true;
                 }
                 return false;
@@ -590,9 +590,9 @@ public class PortMappingVersion121 {
         InstanceIdentifier<Network> nodesIID = InstanceIdentifier.builder(Network.class).build();
         Network network = nwBldr.build();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodesIID, network);
-        ListenableFuture<Void> submit = writeTransaction.submit();
+        FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
         try {
-            submit.get();
+            commit.get();
             return true;
 
         } catch (InterruptedException | ExecutionException e) {

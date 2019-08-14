@@ -63,7 +63,7 @@ public final class OpenRoadmNetwork {
                 new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID)));
             WriteTransaction wrtx = controllerdb.newWriteOnlyTransaction();
             wrtx.put(LogicalDatastoreType.CONFIGURATION, nwIID.build(), openRoadmNetwork);
-            wrtx.submit().get(1, TimeUnit.SECONDS);
+            wrtx.commit().get(1, TimeUnit.SECONDS);
             LOG.info("OpenRoadm-Network created successfully.");
         } catch (ExecutionException | TimeoutException | InterruptedException e) {
             LOG.warn("Failed to create OpenRoadm-Network", e);

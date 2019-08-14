@@ -104,6 +104,7 @@ public class DeviceTransaction {
      * @param timeUnit a time unit
      * @return ListenableFuture which indicates when is submit completed.
      */
+    @Deprecated
     public ListenableFuture<Void> submit(long timeout, TimeUnit timeUnit) {
         if (wasSubmittedOrCancelled.get()) {
             String msg = "Transaction was already submitted or canceled!";
@@ -125,8 +126,8 @@ public class DeviceTransaction {
 
             @Override
             public void onFailure(Throwable throwable) {
-                LOG.error("Device transaction submit failed or submit took longer than {} {}!"
-                        + " Unlocking device.", timeout, timeUnit, throwable);
+                LOG.error("Device transaction submit failed or submit took longer than {} {}! Unlocking device.",
+                    timeout, timeUnit, throwable);
                 afterClose();
             }
         }, scheduledExecutorService);

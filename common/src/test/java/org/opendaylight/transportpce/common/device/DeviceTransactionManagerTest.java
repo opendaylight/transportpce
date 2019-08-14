@@ -65,7 +65,7 @@ public class DeviceTransactionManagerTest {
         Mockito.when(mountPointServiceMock.getMountPoint(any())).thenReturn(Optional.of(mountPointMock));
         Mockito.when(mountPointMock.getService(any())).thenReturn(Optional.of(dataBrokerMock));
         Mockito.when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock);
-        Mockito.doReturn(FluentFutures.immediateNullFluentFuture()).when(rwTransactionMock.submit());
+        Mockito.doReturn(FluentFutures.immediateNullFluentFuture()).when(rwTransactionMock.commit());
 
         this.transactionManager = new DeviceTransactionManagerImpl(mountPointServiceMock, 3000);
     }
@@ -85,7 +85,7 @@ public class DeviceTransactionManagerTest {
         }
 
         Mockito.verify(rwTransactionMock, Mockito.times(1)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).submit();
+        Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
     }
 
     @Test
@@ -133,7 +133,7 @@ public class DeviceTransactionManagerTest {
             thirdDeviceTx.submit(defaultTimeout, defaultTimeUnit);
 
             Mockito.verify(rwTransactionMock, Mockito.times(3)).put(defaultDatastore, defaultIid, defaultData);
-            Mockito.verify(rwTransactionMock, Mockito.times(4)).submit();
+            Mockito.verify(rwTransactionMock, Mockito.times(4)).commit();
         } catch (InterruptedException | ExecutionException e) {
             Assert.fail("Exception catched! " + e);
         }
@@ -227,7 +227,7 @@ public class DeviceTransactionManagerTest {
 
         Mockito.verify(rwTransactionMock, Mockito.times(1)).cancel();
         Mockito.verify(rwTransactionMock, Mockito.times(1)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).submit();
+        Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
     }
 
     @Test
@@ -243,7 +243,7 @@ public class DeviceTransactionManagerTest {
             Assert.fail("Exception catched! " + e);
         }
 
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).submit();
+        Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
 
         Mockito.when(dataBrokerMock.newReadWriteTransaction()).thenReturn(rwTransactionMock); // remove sleep
 
@@ -255,7 +255,7 @@ public class DeviceTransactionManagerTest {
         }
 
         Mockito.verify(rwTransactionMock, Mockito.times(2)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(2)).submit();
+        Mockito.verify(rwTransactionMock, Mockito.times(2)).commit();
     }
 
     @Test
@@ -292,13 +292,13 @@ public class DeviceTransactionManagerTest {
         }
 
         Mockito.verify(rwTransactionMock, Mockito.times(1)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(1)).submit();
+        Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
     }
 
     @Test
     public void submitTxTimeoutTransactionTest() {
         ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newSingleThreadExecutor());
-        Mockito.when(rwTransactionMock.submit()).then(invocation -> Futures.makeChecked(executor.submit(() -> {
+        Mockito.when(rwTransactionMock.commit()).then(invocation -> Futures.makeChecked(executor.submit(() -> {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -337,7 +337,7 @@ public class DeviceTransactionManagerTest {
         }
 
 
-        Mockito.doReturn(FluentFutures.immediateNullFluentFuture()).when(rwTransactionMock.submit());
+        Mockito.doReturn(FluentFutures.immediateNullFluentFuture()).when(rwTransactionMock.commit());
 
         try {
             putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
@@ -347,7 +347,7 @@ public class DeviceTransactionManagerTest {
         }
 
         Mockito.verify(rwTransactionMock, Mockito.times(2)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(2)).submit();
+        Mockito.verify(rwTransactionMock, Mockito.times(2)).commit();
 
         executor.shutdown();
     }

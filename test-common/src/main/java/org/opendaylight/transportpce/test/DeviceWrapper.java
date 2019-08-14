@@ -141,7 +141,7 @@ public final class DeviceWrapper {
         DOMDataWriteTransaction writeOnlyTransaction = domDataBroker.newWriteOnlyTransaction();
         writeOnlyTransaction.put(LogicalDatastoreType.OPERATIONAL, initialDataIi, dataNormalizedNodes.get());
         try {
-            writeOnlyTransaction.submit().get();
+            writeOnlyTransaction.commit().get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("This should be not reached {}", e.getMessage(), e);
             throw new IllegalStateException(e);

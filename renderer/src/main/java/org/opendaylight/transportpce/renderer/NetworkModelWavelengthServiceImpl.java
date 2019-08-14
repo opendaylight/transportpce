@@ -236,7 +236,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
             nodeWriteTx.put(LogicalDatastoreType.CONFIGURATION, createNode1IID(nodeId), node1Builder.build(), true);
         }
         try {
-            nodeWriteTx.submit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
+            nodeWriteTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Unable to add available WL {} for nodes {}!", wavelengthNumber, String.join(", ", nodeIds), e);
         }
@@ -285,7 +285,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
             nodeWriteTx.delete(LogicalDatastoreType.CONFIGURATION, availableWlIID);
         }
         try {
-            nodeWriteTx.submit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
+            nodeWriteTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Unable to delete available WL {} for nodes {}!", wavelengthNumber, String.join(", ", nodeIds),
                     e);
@@ -386,7 +386,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
             deleteUsedWlTx.delete(LogicalDatastoreType.CONFIGURATION, usedWlIID);
         }
         try {
-            deleteUsedWlTx.submit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
+            deleteUsedWlTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             List<String> tpIdsString = tpIds.stream().map(NodeIdPair::toString).collect(Collectors.toList());
             LOG.error("Unable to delete used WL {} from TPs {}!", wavelengthIndex, String.join(", ", tpIdsString), e);
@@ -404,8 +404,9 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
             if (tpOpt.isPresent()) {
                 tp = tpOpt.get();
             } else {
-                LOG.error("Unable to get termination point {} from topology {}! Skipping removal of used wavelength"
-                        + " for this node.", idPair.getTpID(), NetworkUtils.OVERLAY_NETWORK_ID);
+                LOG.error(
+                    "Unable to get termination point {} from topology {}! Skip removal of used wavelength for the node",
+                         idPair.getTpID(), NetworkUtils.OVERLAY_NETWORK_ID);
                 continue;
             }
 
@@ -550,7 +551,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                     idPair.getTpID()).build(), tp1Builder.build(), true);
         }
         try {
-            addUsedWlTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            addUsedWlTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             List<String> tpIdsString = tpIds.stream().map(NodeIdPair::toString).collect(Collectors.toList());
             LOG.error("Unable to add used WL {} for TPs {}!", wavelengthIndex, String.join(", ", tpIdsString), e);

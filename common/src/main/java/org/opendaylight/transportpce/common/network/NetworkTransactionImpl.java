@@ -48,6 +48,7 @@ public class NetworkTransactionImpl implements NetworkTransactionService {
         requestProcessor.put(store, path, data);
     }
 
+    @Deprecated
     public ListenableFuture<Void> submit() {
         return requestProcessor.submit();
     }

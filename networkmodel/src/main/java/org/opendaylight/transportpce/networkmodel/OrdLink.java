@@ -76,7 +76,7 @@ final class OrdLink {
         WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, linkIID.build(), linkBuilder.build());
         try {
-            writeTransaction.submit().get();
+            writeTransaction.commit().get();
             LOG.info("A new link with linkId: {} added into {} layer.",
                 linkId.getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
             return true;

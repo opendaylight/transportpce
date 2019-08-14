@@ -88,7 +88,7 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
         WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
         writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, linkIID.build());
         try {
-            writeTransaction.submit().get();
+            writeTransaction.commit().get();
             LOG.info("Link with linkId: {} deleted from {} layer.",
                 input.getLinkId(), NetworkUtils.OVERLAY_NETWORK_ID);
             return RpcResultBuilder

@@ -56,7 +56,7 @@ public final class ClliNetwork {
                 new NetworkKey(new NetworkId(NetworkUtils.CLLI_NETWORK_ID)));
             WriteTransaction wrtx = controllerdb.newWriteOnlyTransaction();
             wrtx.put(LogicalDatastoreType.CONFIGURATION, nwIID.build(), clliNetwork);
-            wrtx.submit().get(1, TimeUnit.SECONDS);
+            wrtx.commit().get(1, TimeUnit.SECONDS);
             LOG.info("CLLI-Network created successfully.");
         } catch (ExecutionException | TimeoutException | InterruptedException e) {
             LOG.warn("Failed to create CLLI-Network", e);

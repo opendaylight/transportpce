@@ -7,16 +7,18 @@
  */
 package org.opendaylight.transportpce.servicehandler.service;
 
+import com.google.common.util.concurrent.FluentFuture;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
@@ -61,7 +63,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             InstanceIdentifier<ServiceList> iid = InstanceIdentifier.create(ServiceList.class);
             ServiceList initialRegistry = new ServiceListBuilder().build();
             transaction.put(LogicalDatastoreType.OPERATIONAL, iid, initialRegistry);
-            Future<Void> future = transaction.submit();
+            FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("init failed: {}", e.getMessage());
@@ -75,7 +77,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             InstanceIdentifier<TempServiceList> iid = InstanceIdentifier.create(TempServiceList.class);
             TempServiceList initialRegistry = new TempServiceListBuilder().build();
             transaction.put(LogicalDatastoreType.OPERATIONAL, iid, initialRegistry);
-            Future<Void> future = transaction.submit();
+            FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("init failed: {}", e.getMessage());
@@ -124,7 +126,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             InstanceIdentifier<Services> iid =
                     InstanceIdentifier.create(ServiceList.class).child(Services.class, new ServicesKey(serviceName));
             writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
-            writeTx.submit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
+            writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to delete service " + serviceName + " from Service List";
@@ -144,7 +146,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
                             .ServicesKey(commonId));
             writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
-            writeTx.submit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
+            writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to delete service " + commonId + " from Service List";
@@ -166,7 +168,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                         .setAdministrativeState(administrativeState)
                         .build();
                 writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
-                writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+                writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
                 return OperationResult.ok(SUCCESSFUL_MESSAGE);
             } catch (TimeoutException | InterruptedException | ExecutionException e) {
                 String message = "Failed to modify service " + serviceName + " from Service List";
@@ -199,7 +201,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                             .setAdministrativeState(administrativeState)
                             .build();
                 writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
-                writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+                writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
                 return OperationResult.ok(SUCCESSFUL_MESSAGE);
             } catch (TimeoutException | InterruptedException | ExecutionException e) {
                 String message = "Failed to modify temp service " + serviceName + " from Temp Service List";
@@ -222,7 +224,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             Services service = ModelMappingUtils.mappingServices(serviceCreateInput, null);
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
-            writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to create service " + serviceCreateInput.getServiceName() + " to Service List";
@@ -244,7 +246,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 .Services service = ModelMappingUtils.mappingServices(tempServiceCreateInput);
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
-            writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to create Temp service " + tempServiceCreateInput.getCommonId()
@@ -263,7 +265,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             ServicePaths servicePath = ModelMappingUtils.mappingServicePaths(serviceInput, outputFromPce);
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(LogicalDatastoreType.OPERATIONAL, servicePathsIID, servicePath);
-            writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to create servicePath " + serviceInput.getCommonId() + " to ServicePath List";
@@ -280,7 +282,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         WriteTransaction servicePathsWriteTx = this.dataBroker.newWriteOnlyTransaction();
         servicePathsWriteTx.delete(LogicalDatastoreType.OPERATIONAL, servicePathsIID);
         try {
-            servicePathsWriteTx.submit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
+            servicePathsWriteTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             String message = "Unable to delete service path " + serviceName;

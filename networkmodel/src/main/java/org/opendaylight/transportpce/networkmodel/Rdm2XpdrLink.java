@@ -9,11 +9,13 @@
 package org.opendaylight.transportpce.networkmodel;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.FluentFuture;
 import java.util.concurrent.ExecutionException;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
@@ -55,10 +57,10 @@ final class Rdm2XpdrLink {
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
 
-        ListenableFuture<Void> submit = wrtx.submit();
+        FluentFuture<? extends @NonNull CommitInfo> commit = wrtx.commit();
 
         try {
-            submit.get();
+            commit.get();
             LOG.info("Post successful");
             return true;
 
@@ -86,9 +88,9 @@ final class Rdm2XpdrLink {
             new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
-        ListenableFuture<Void> submit = wrtx.submit();
+        FluentFuture<? extends @NonNull CommitInfo> commit = wrtx.commit();
         try {
-            submit.get();
+            commit.get();
             LOG.info("Post successful");
             return true;
 

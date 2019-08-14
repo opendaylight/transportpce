@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.FluentFuture;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,10 +24,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
@@ -401,9 +404,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                                 new NodelistKey(input.getServiceName()));
         final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodeListIID, nodeListBuilder.build());
-        Future<Void> submit = writeTransaction.submit();
+        FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
         try {
-            submit.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            commit.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             LOG.info("Nodes are register for alarm suppression for service: {}", input.getServiceName());
             return true;
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
@@ -421,9 +424,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                                 new NodelistKey(serviceName));
         final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
         writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, nodeListIID);
-        Future<Void> submit = writeTransaction.submit();
+        FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
         try {
-            submit.get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
+            commit.get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
             LOG.info("Nodes are unregister for alarm suppression for service: {}", serviceName);
             return true;
         } catch (InterruptedException | TimeoutException | ExecutionException e) {
@@ -453,7 +456,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             servicesBuilder.setTopology(topo);
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, servicesBuilder.build());
-            writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } else {
             LOG.warn("Service {} does not exist - topology can not be updated", name);
         }

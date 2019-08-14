@@ -98,7 +98,7 @@ public class PortMappingImpl implements PortMapping {
             .child(Nodes.class, new NodesKey(nodeId));
         rw.delete(LogicalDatastoreType.CONFIGURATION, nodesIID);
         try {
-            rw.submit().get(1, TimeUnit.SECONDS);
+            rw.commit().get(1, TimeUnit.SECONDS);
             LOG.info("Port mapping removal for node '{}'", nodeId);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Error for removing port mapping infos for node '{}'", nodeId);

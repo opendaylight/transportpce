@@ -61,7 +61,7 @@ public final class PceTestUtils {
             .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
         dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, (Network) dataObject.get());
-        dataWriteTransaction.submit().get();
+        dataWriteTransaction.commit().get();
     }
 
     public static void checkConfigurationResponse(PathComputationRequestOutput output,
