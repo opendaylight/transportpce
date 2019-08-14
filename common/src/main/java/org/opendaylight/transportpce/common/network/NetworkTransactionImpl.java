@@ -8,11 +8,13 @@
 
 package org.opendaylight.transportpce.common.network;
 
+import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 
 
 public class NetworkTransactionImpl implements NetworkTransactionService {
@@ -51,6 +53,10 @@ public class NetworkTransactionImpl implements NetworkTransactionService {
     @Deprecated
     public ListenableFuture<Void> submit() {
         return requestProcessor.submit();
+    }
+
+    public FluentFuture<? extends @NonNull CommitInfo> commit() {
+        return requestProcessor.commit();
     }
 
     @Override

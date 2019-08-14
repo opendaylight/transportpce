@@ -9,10 +9,11 @@
 package org.opendaylight.transportpce.common.network;
 
 import com.google.common.base.Optional;
-
+import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
-
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
@@ -38,6 +39,8 @@ public interface NetworkTransactionService {
 
     @Deprecated
     ListenableFuture<Void> submit();
+
+    FluentFuture<? extends @NonNull CommitInfo> commit();
 
     void close();
 }
