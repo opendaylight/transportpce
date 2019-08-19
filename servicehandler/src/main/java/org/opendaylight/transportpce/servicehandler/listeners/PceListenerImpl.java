@@ -168,13 +168,13 @@ public class PceListenerImpl implements TransportpcePceListener {
             if (servicePathRpcResult.getNotificationType() != notification.getNotificationType()) {
                 result = false;
             }
-            if (!servicePathRpcResult.getServiceName().equals(notification.getServiceName())) {
+            if (servicePathRpcResult.getServiceName() != notification.getServiceName()) {
                 result = false;
             }
             if (servicePathRpcResult.getStatus() != notification.getStatus()) {
                 result = false;
             }
-            if (!servicePathRpcResult.getStatusMessage().equals(notification.getStatusMessage())) {
+            if (servicePathRpcResult.getStatusMessage() != notification.getStatusMessage()) {
                 result = false;
             }
         }
