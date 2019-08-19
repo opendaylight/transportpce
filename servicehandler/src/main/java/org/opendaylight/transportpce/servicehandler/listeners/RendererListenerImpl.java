@@ -126,13 +126,13 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             if (serviceRpcResultSp.getNotificationType() != notification.getNotificationType()) {
                 result = false;
             }
-            if (!serviceRpcResultSp.getServiceName().equals(notification.getServiceName())) {
+            if (serviceRpcResultSp.getServiceName() != notification.getServiceName()) {
                 result = false;
             }
             if (serviceRpcResultSp.getStatus() != notification.getStatus()) {
                 result = false;
             }
-            if (!serviceRpcResultSp.getStatusMessage().equals(notification.getStatusMessage())) {
+            if (serviceRpcResultSp.getStatusMessage() != notification.getStatusMessage()) {
                 result = false;
             }
         }
