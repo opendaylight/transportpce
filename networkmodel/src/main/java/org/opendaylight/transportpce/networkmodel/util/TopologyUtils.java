@@ -98,7 +98,7 @@ public  final class TopologyUtils {
                 linkBuilder.addAugmentation(Link1.class,link1Builder.build());
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, linkIID.build(),
                     linkBuilder.build());
-                networkTransactionService.submit().get(1, TimeUnit.SECONDS);
+                networkTransactionService.commit().get(1, TimeUnit.SECONDS);
                 return true;
             } else {
                 LOG.error("No link found for given LinkId: {}",

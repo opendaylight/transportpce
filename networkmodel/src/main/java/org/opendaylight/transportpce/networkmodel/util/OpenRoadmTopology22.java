@@ -101,7 +101,7 @@ public class OpenRoadmTopology22 {
                 new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
 
             this.networkTransactionService.put(LogicalDatastoreType.CONFIGURATION, nwIID.build(), openRoadmTopology);
-            this.networkTransactionService.submit().get(1, TimeUnit.SECONDS);
+            this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
             LOG.info("OpenRoadm-Topology created successfully.");
         } catch (ExecutionException | TimeoutException | InterruptedException e) {
             LOG.warn("Failed to create OpenRoadm-Topology", e);
@@ -502,7 +502,7 @@ public class OpenRoadmTopology22 {
                 linkBuilder.addAugmentation(Link1.class,link1Builder.build());
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, linkIID.build(),
                         linkBuilder.build());
-                networkTransactionService.submit().get(1, TimeUnit.SECONDS);
+                networkTransactionService.commit().get(1, TimeUnit.SECONDS);
                 return true;
             } else {
                 LOG.error("No link found for given LinkId: {}",

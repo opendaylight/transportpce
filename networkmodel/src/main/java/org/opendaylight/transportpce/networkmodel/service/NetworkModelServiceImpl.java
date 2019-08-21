@@ -132,7 +132,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink,
                     openRoadmTopologyLink, CREATE_MISSING_PARENTS);
             }
-            networkTransactionService.submit().get();
+            networkTransactionService.commit().get();
             LOG.info("all nodes and links created");
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("ERROR: ", e);
@@ -199,7 +199,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             } else {
                 LOG.warn("TopologyShard for node '{}' is not present", nodeId);
             }
-            this.networkTransactionService.submit().get(1, TimeUnit.SECONDS);
+            this.networkTransactionService.commit().get(1, TimeUnit.SECONDS);
             LOG.info("all nodes and links deleted ! ");
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Error when trying to delete node : {}", nodeId, e);
