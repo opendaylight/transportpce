@@ -94,16 +94,6 @@ public class RequestProcessor {
         rwTx.merge(store, path, data);
     }
 
-    @Deprecated
-    public ListenableFuture<Void> submit() {
-        acquireLock();
-        ListenableFuture<Void> future = null;
-        future = rwTx.submit();
-        releaseLock();
-        resetRwTx();
-        return future;
-    }
-
     public FluentFuture<? extends @NonNull CommitInfo> commit() {
         acquireLock();
         FluentFuture<? extends @NonNull CommitInfo> future = null;

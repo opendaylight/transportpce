@@ -37,9 +37,6 @@ public interface NetworkTransactionService {
     <T extends DataObject> void merge(LogicalDatastoreType store, InstanceIdentifier<T> path, T data,
                                       boolean createMissingParents);
 
-    @Deprecated
-    ListenableFuture<Void> submit();
-
     FluentFuture<? extends @NonNull CommitInfo> commit();
 
     void close();

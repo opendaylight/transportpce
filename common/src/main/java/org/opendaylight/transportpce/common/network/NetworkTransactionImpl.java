@@ -50,11 +50,6 @@ public class NetworkTransactionImpl implements NetworkTransactionService {
         requestProcessor.put(store, path, data);
     }
 
-    @Deprecated
-    public ListenableFuture<Void> submit() {
-        return requestProcessor.submit();
-    }
-
     public FluentFuture<? extends @NonNull CommitInfo> commit() {
         return requestProcessor.commit();
     }
