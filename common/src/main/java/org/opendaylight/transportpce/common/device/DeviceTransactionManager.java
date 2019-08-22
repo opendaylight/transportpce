@@ -41,7 +41,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
  * </p>
  * <ul>
  *     <li>
- *     First is from creation of {@link DeviceTransaction} to calling method to close it (submit or cancel). When using
+ *     First is from creation of {@link DeviceTransaction} to calling method to close it (commit or cancel). When using
  *     {@link DeviceTransactionManager#getDeviceTransaction(String)} method then default timeout will be used. If there
  *     is need to specify this timeout manually use
  *     {@link DeviceTransactionManager#getDeviceTransaction(String, long, TimeUnit)} method. So if programmer will
@@ -50,8 +50,8 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
  *     </li>
  *
  *     <li>
- *     Second timeout is from calling {@link DeviceTransaction#submit(long, TimeUnit)} until submit is completed on
- *     device. Timeout can be specified directly using submit method. So in case submit will freeze somewhere on device
+ *     Second timeout is from calling {@link DeviceTransaction#commit(long, TimeUnit)} until commit is completed on
+ *     device. Timeout can be specified directly using commit method. So in case commit will freeze somewhere on device
  *     or it will take too much time device will be unlocked.
  *     </li>
  * </ul>
@@ -61,15 +61,15 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
  *  {@link DeviceTransactionManager#getDataFromDevice(String, LogicalDatastoreType, InstanceIdentifier, long, TimeUnit)}
  *     method can be used. It will automatically take care of {@link DeviceTransaction} and it will return data.
  *     This method <b>SHOULD NOT BE USED TOGETHER WITH DEVICE TRANSACTION ON THE SAME DEVICE IN THE SAME TIME</b>.
- *     In case that {@link DeviceTransaction} is created on device and before submitting it
+ *     In case that {@link DeviceTransaction} is created on device and before committing it
  *  {@link DeviceTransactionManager#getDataFromDevice(String, LogicalDatastoreType, InstanceIdentifier, long, TimeUnit)}
  *     method is called then get method will wait (will be blocking current thread) until device will be unlocked.
  *     However device is locked by transaction previously created. So this will result in blocking current thread until
- *     timeout for submit transaction will run out and cancel transaction. This can lead to incorrect execution of code.
+ *     timeout for commit transaction will run out and cancel transaction. This can lead to incorrect execution of code.
  * </p>
  *
  * <p>
- * Bellow is simple example how to get {@link DeviceTransaction}, put some data to it and then submit it.
+ * Bellow is simple example how to get {@link DeviceTransaction}, put some data to it and then commit it.
  * </p>
  * <pre>
  * {@code
@@ -94,11 +94,11 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
  *     deviceTx.put(LogicalDatastoreType.CONFIGURATION, someInstanceIdentifier, someData);
  *     deviceTx.delete(LogicalDatastoreType.CONFIGURATION, someOtherInstanceIdentifier, someOtherData);
  *
- *     // submit transaction with 5 seconds timeout
- *     ListenableFuture<Void> submit = deviceTx.submit(5, TimeUnit.SECONDS);
+ *     // commit transaction with 5 seconds timeout
+ *     FluentFuture<? extends @NonNull CommitInfo> commit = deviceTx.commit(5, TimeUnit.SECONDS);
  *     try {
- *         // wait until transaction is submitted
- *         submit.get();
+ *         // wait until transaction is committed
+ *         commit.get();
  *     } catch (InterruptedException | ExecutionException e) {
  *         throw new IllegalStateException("Failed to post data to device " + deviceId + "!", e);
  *     }
@@ -109,8 +109,8 @@ public interface DeviceTransactionManager {
 
     /**
      * Gets Future containing {@link DeviceTransaction}. Since only one transaction can be opened per device future will
-     * return transaction when all previously submitted transaction on device are closed. This method will use default
-     * timeout for submit transaction.
+     * return transaction when all previously committed transaction on device are closed. This method will use default
+     * timeout for commit transaction.
      *
      * @param deviceId device identifier on which will be transaction created.
      * @return Future returning Optional of DeviceTransaction. Optional will be empty if device with specified ID
@@ -123,7 +123,7 @@ public interface DeviceTransactionManager {
      *
      * @param deviceId device id on which will be transaction created.
      * @param timeoutToSubmit timeout will start running when transaction is created. If transaction will not be
-     *                        closed (submitted or cancelled) when times runs out it will be canceled (so device will
+     *                        closed (committed or cancelled) when times runs out it will be canceled (so device will
      *                        be unlocked).
      * @param timeUnit time units for timeout.
      * @return Future returning Optional of DeviceTransaction. Optional will be empty if device with specified ID
