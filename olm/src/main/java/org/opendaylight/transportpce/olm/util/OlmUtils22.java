@@ -75,6 +75,8 @@ final class OlmUtils22 {
      *
      * @return Result of the request list of PM readings
      */
+    //LOG.info message length is >120 char and can be difficultly shortened
+    @SuppressWarnings("checkstyle:linelength")
     public static GetPmOutputBuilder pmFetch(GetPmInput input, DeviceTransactionManager deviceTransactionManager) {
         LOG.info("Getting PM Data for 2.2.1 NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
             input.getResourceType(), input.getResourceIdentifier());
@@ -123,9 +125,8 @@ final class OlmUtils22 {
                     List<CurrentPm> filteredPMs = currentPMStream.collect(Collectors.toList());
                     List<Measurements> measurements = extractWantedMeasurements(filteredPMs,input.getGranularity());
                     if (measurements.isEmpty()) {
-                        LOG.error("No Matching PM data found for node: {}, " + "resource type: {},"
-                                + " resource name: {}, pm type: {}, extention: {}"
-                                + ", location: {} and direction: {}",
+                        LOG.error(
+                            "No Matching PM data found for node: {}, resource type: {}, resource name: {}, pm type: {}, extention: {}, location: {} and direction: {}",
                             input.getNodeId(), input.getResourceType(),
                             getResourceIdentifierAsString(input.getResourceIdentifier()),
                             input.getPmNameType(),input.getPmExtension(),input.getLocation(),
@@ -134,9 +135,8 @@ final class OlmUtils22 {
                         pmOutputBuilder.setNodeId(input.getNodeId()).setResourceType(input.getResourceType())
                             .setResourceIdentifier(input.getResourceIdentifier()).setGranularity(input.getGranularity())
                             .setMeasurements(measurements);
-                        LOG.info("PM data found successfully for node: {}, " + "resource type: {},"
-                                + " resource name: {}, pm type: {}, extention: {}"
-                                + ", location: {} and direction: {}",
+                        LOG.info(
+                            "PM data found successfully for node: {}, resource type: {}, resource name: {}, pm type: {}, extention: {}, location: {} and direction: {}",
                             input.getNodeId(), input.getResourceType(),
                             getResourceIdentifierAsString(input.getResourceIdentifier()),
                             input.getPmNameType(),input.getPmExtension(),input.getLocation(),

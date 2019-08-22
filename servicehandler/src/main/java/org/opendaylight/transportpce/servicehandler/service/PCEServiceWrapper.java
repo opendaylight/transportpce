@@ -118,7 +118,7 @@ public class PCEServiceWrapper {
         try {
             notificationPublishService.putNotification(notification);
         } catch (InterruptedException e) {
-            LOG.info("notification offer rejected : " + e);
+            LOG.info("notification offer rejected : ", e);
         }
         FutureCallback<PathComputationRequestOutput> pceCallback = new FutureCallback<PathComputationRequestOutput>() {
             String message = "";
@@ -139,7 +139,7 @@ public class PCEServiceWrapper {
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : ", e);
                     }
                 } else {
                     message = "PCE failed ";
@@ -148,7 +148,7 @@ public class PCEServiceWrapper {
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : ", e);
                     }
                 }
             }
@@ -163,7 +163,7 @@ public class PCEServiceWrapper {
                 try {
                     notificationPublishService.putNotification(notification);
                 } catch (InterruptedException e) {
-                    LOG.info("notification offer rejected : " + e);
+                    LOG.info("notification offer rejected : ", e);
                 }
             }
         };
@@ -235,7 +235,7 @@ public class PCEServiceWrapper {
         try {
             notificationPublishService.putNotification(notification);
         } catch (InterruptedException e) {
-            LOG.info("notification offer rejected : " + e);
+            LOG.info("notification offer rejected : ", e);
         }
         FutureCallback<CancelResourceReserveOutput> pceCallback = new FutureCallback<CancelResourceReserveOutput>() {
 
@@ -257,7 +257,7 @@ public class PCEServiceWrapper {
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : ", e);
                     }
                 } else {
                     message = "PCE failed ";
@@ -266,7 +266,7 @@ public class PCEServiceWrapper {
                     try {
                         notificationPublishService.putNotification(notification);
                     } catch (InterruptedException e) {
-                        LOG.info("notification offer rejected : " + e);
+                        LOG.info("notification offer rejected : ", e);
                     }
                 }
             }
@@ -280,7 +280,7 @@ public class PCEServiceWrapper {
                 try {
                     notificationPublishService.putNotification(notification);
                 } catch (InterruptedException e) {
-                    LOG.info("notification offer rejected : " + e);
+                    LOG.info("notification offer rejected : ", e);
                 }
             }
         };

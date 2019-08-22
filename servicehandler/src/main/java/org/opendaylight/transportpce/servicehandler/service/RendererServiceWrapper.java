@@ -59,7 +59,7 @@ public class RendererServiceWrapper {
         try {
             notificationPublishService.putNotification(notif);
         } catch (InterruptedException e) {
-            LOG.info("notification offer rejected : " + e);
+            LOG.info("notification offer rejected : ", e);
         }
     }
 

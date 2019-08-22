@@ -94,14 +94,14 @@ final class OlmUtils121 {
                 PmGranularity.forValue(input.getGranularity().getIntValue()),
                 pmName, pmExtension, location, direction);
             if (measurements.isEmpty()) {
-                LOG.error("No Matching PM data found for node: {}, " + "resource type: {}, resource name: {}",
+                LOG.error("No Matching PM data found for node: {}, resource type: {}, resource name: {}",
                         input.getNodeId(), input.getResourceType(),
                         getResourceIdentifierAsString(input.getResourceIdentifier()));
             } else {
                 pmOutputBuilder.setNodeId(input.getNodeId()).setResourceType(input.getResourceType())
                         .setResourceIdentifier(input.getResourceIdentifier()).setGranularity(input.getGranularity())
                         .setMeasurements(measurements);
-                LOG.info("PM Data found successfully for node: {}, resource type: {}, " + "resource name {}",
+                LOG.info("PM Data found successfully for node: {}, resource type: {}, resource name {}",
                         input.getNodeId(), input.getResourceType(),
                         getResourceIdentifierAsString(input.getResourceIdentifier()));
             }
