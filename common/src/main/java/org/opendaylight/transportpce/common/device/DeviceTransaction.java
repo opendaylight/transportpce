@@ -9,19 +9,21 @@
 package org.opendaylight.transportpce.common.device;
 
 import com.google.common.base.Optional;
+import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nullable;
-
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.CommitInfo;
+import org.opendaylight.yangtools.util.concurrent.FluentFutures;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -127,6 +129,35 @@ public class DeviceTransaction {
             @Override
             public void onFailure(Throwable throwable) {
                 LOG.error("Device transaction submit failed or submit took longer than {} {}! Unlocking device.",
+                    timeout, timeUnit, throwable);
+                afterClose();
+            }
+        }, scheduledExecutorService);
+        return future;
+    }
+
+    public FluentFuture<? extends @NonNull CommitInfo> commit(long timeout, TimeUnit timeUnit) {
+        if (wasSubmittedOrCancelled.get()) {
+            String msg = "Transaction was already submitted or canceled!";
+            LOG.error(msg);
+            return FluentFutures.immediateFailedFluentFuture(new IllegalStateException(msg));
+        }
+
+        LOG.debug("Transaction committed. Lock: {}", deviceLock);
+        wasSubmittedOrCancelled.set(true);
+        FluentFuture<? extends @NonNull CommitInfo> future =
+                rwTx.commit().withTimeout(timeout, timeUnit, scheduledExecutorService);
+
+        future.addCallback(new FutureCallback<CommitInfo>() {
+            @Override
+            public void onSuccess(@Nullable CommitInfo result) {
+                LOG.debug("Transaction with lock {} successfully committed:", deviceLock, result);
+                afterClose();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LOG.error("Device transaction commit failed or submit took longer than {} {}! Unlocking device.",
                     timeout, timeUnit, throwable);
                 afterClose();
             }
