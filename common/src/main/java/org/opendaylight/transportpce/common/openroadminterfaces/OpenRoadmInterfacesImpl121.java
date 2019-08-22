@@ -8,11 +8,13 @@
 
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.FluentFuture;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
@@ -67,8 +69,8 @@ public class OpenRoadmInterfacesImpl121 {
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
             Interface.class, new InterfaceKey(ifBuilder.getName()));
         deviceTx.put(LogicalDatastoreType.CONFIGURATION, interfacesIID, ifBuilder.build());
-        ListenableFuture<Void> txSubmitFuture = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
-            Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+        FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
+            deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
             txSubmitFuture.get();
             LOG.info("Successfully posted interface {} on node {}", ifBuilder.getName(), nodeId);
@@ -155,11 +157,11 @@ public class OpenRoadmInterfacesImpl121 {
             }
 
             deviceTx.delete(LogicalDatastoreType.CONFIGURATION, interfacesIID);
-            ListenableFuture<Void> submit = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
-                Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            FluentFuture<? extends @NonNull CommitInfo> commit =
+                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
 
             try {
-                submit.get();
+                commit.get();
                 LOG.info("Successfully deleted {} on node {}", interfaceName, nodeId);
             } catch (InterruptedException | ExecutionException e) {
                 throw new OpenRoadmInterfaceException(String.format("Failed to delete interface %s on " + "node %s",
@@ -220,8 +222,8 @@ public class OpenRoadmInterfacesImpl121 {
                     nodeId), e);
             }
             deviceTx.put(LogicalDatastoreType.CONFIGURATION, circuitPackIID, cpBldr.build());
-            ListenableFuture<Void> txSubmitFuture = deviceTx.submit(Timeouts.DEVICE_WRITE_TIMEOUT,
-                Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+            FluentFuture<? extends @NonNull CommitInfo> txSubmitFuture =
+                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
             try {
                 txSubmitFuture.get();
                 LOG.info("Successfully posted equipment state change on node {}", nodeId);

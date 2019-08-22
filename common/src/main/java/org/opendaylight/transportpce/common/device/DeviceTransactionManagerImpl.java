@@ -164,7 +164,7 @@ public class DeviceTransactionManagerImpl implements DeviceTransactionManager {
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
                 LOG.error("Exception thrown while reading data from device {}! IID: {}", deviceId, path, e);
             } finally {
-                deviceTx.submit(GET_DATA_SUBMIT_TIMEOUT, GET_DATA_SUBMIT_TIME_UNIT);
+                deviceTx.commit(GET_DATA_SUBMIT_TIMEOUT, GET_DATA_SUBMIT_TIME_UNIT);
             }
         } else {
             LOG.error("Could not obtain transaction for device {}!", deviceId);
