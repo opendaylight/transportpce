@@ -7,28 +7,28 @@
  */
 package org.opendaylight.transportpce.renderer;
 
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
-import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.TransportpceDeviceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.TransportpceRendererService;
+import org.opendaylight.yangtools.concepts.ObjectRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RendererProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(RendererProvider.class);
-    private final RpcProviderRegistry rpcProviderRegistry;
+    private final RpcProviderService rpcProviderService;
     private DeviceRendererRPCImpl deviceRendererRPCImpl;
-    private RpcRegistration<TransportpceDeviceRendererService> deviceRendererRegistration;
-    private RpcRegistration<TransportpceRendererService> tpceServiceRegistry;
+    private ObjectRegistration<DeviceRendererRPCImpl> deviceRendererRegistration;
+    private ObjectRegistration<TransportpceRendererService> tpceServiceRegistry;
     private RendererServiceOperations rendererServiceOperations;
 
-    public RendererProvider(RpcProviderRegistry rpcProviderRegistry, DeviceRendererRPCImpl deviceRendererRPCImpl,
+    public RendererProvider(RpcProviderService rpcProviderService, DeviceRendererRPCImpl deviceRendererRPCImpl,
             RendererServiceOperations rendererServiceOperations) {
-        this.rpcProviderRegistry = rpcProviderRegistry;
+        this.rpcProviderService = rpcProviderService;
         this.deviceRendererRPCImpl = deviceRendererRPCImpl;
         this.rendererServiceOperations = rendererServiceOperations;
     }
@@ -40,10 +40,10 @@ public class RendererProvider {
         LOG.info("RendererProvider Session Initiated");
         TransportPCEServicePathRPCImpl transportPCEServicePathRPCImpl =
             new TransportPCEServicePathRPCImpl(this.rendererServiceOperations);
-        this.deviceRendererRegistration = this.rpcProviderRegistry
-                .addRpcImplementation(TransportpceDeviceRendererService.class, deviceRendererRPCImpl);
-        this.tpceServiceRegistry = this.rpcProviderRegistry
-                .addRpcImplementation(TransportpceRendererService.class, transportPCEServicePathRPCImpl);
+        this.deviceRendererRegistration = this.rpcProviderService
+                .registerRpcImplementation(TransportpceDeviceRendererService.class, deviceRendererRPCImpl);
+        this.tpceServiceRegistry = this.rpcProviderService
+                .registerRpcImplementation(TransportpceRendererService.class, transportPCEServicePathRPCImpl);
     }
 
     /**

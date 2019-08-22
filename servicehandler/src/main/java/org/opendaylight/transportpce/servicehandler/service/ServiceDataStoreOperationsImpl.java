@@ -14,11 +14,11 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.eclipse.jdt.annotation.NonNull;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
@@ -87,12 +87,12 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     @Override
     public Optional<Services> getService(String serviceName) {
         try {
-            ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction();
+            ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();
             InstanceIdentifier<Services> iid =
                     InstanceIdentifier.create(ServiceList.class).child(Services.class, new ServicesKey(serviceName));
-            Future<com.google.common.base.Optional<Services>> future =
+            Future<java.util.Optional<Services>> future =
                     readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
-            return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS).toJavaUtil();
+            return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Reading service {} failed:", serviceName, e);
         }
@@ -103,15 +103,15 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
         .Services> getTempService(String serviceName) {
         try {
-            ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction();
+            ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();
             InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
                 .Services> iid = InstanceIdentifier.create(TempServiceList.class).child(org.opendaylight.yang.gen.v1
                         .http.org.openroadm.service.rev161014.temp.service.list.Services.class,
                         new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
                             .ServicesKey(serviceName));
-            Future<com.google.common.base.Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014
+            Future<java.util.Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014
                 .temp.service.list.Services>> future =  readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
-            return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS).toJavaUtil();
+            return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Reading service {} failed:", serviceName, e);
         }
@@ -337,7 +337,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     break;
             }
             try {
-                writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+                writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
                 LOG.error("Failed to {} service from Service List", action, e);
                 result = "Failed to " + action + " service from Service List";
@@ -353,7 +353,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 Services service = ModelMappingUtils.mappingServices(input, null);
                 writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
                 try {
-                    writeTx.submit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+                    writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
                     result = null;
                 } catch (InterruptedException | TimeoutException | ExecutionException e) {
                     LOG.error("Failed to createService service to Service List", e);

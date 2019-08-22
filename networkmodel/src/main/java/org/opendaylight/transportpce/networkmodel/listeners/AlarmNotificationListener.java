@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.ServiceNodelist;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.Nodelist;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service.nodelist.nodelist.Nodes;
@@ -58,8 +58,8 @@ public class AlarmNotificationListener implements OrgOpenroadmAlarmListener {
         List<Nodes> allNodeList = new ArrayList<>();
         InstanceIdentifier<ServiceNodelist> serviceNodeListIID = InstanceIdentifier.create(ServiceNodelist.class);
         try {
-            ReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction();
-            com.google.common.base.Optional<ServiceNodelist> serviceListObject =
+            ReadTransaction rtx = dataBroker.newReadOnlyTransaction();
+            Optional<ServiceNodelist> serviceListObject =
                     rtx.read(LogicalDatastoreType.OPERATIONAL, serviceNodeListIID).get();
             if (serviceListObject.isPresent()) {
                 for (Nodelist nodelist : serviceListObject.get().getNodelist()) {

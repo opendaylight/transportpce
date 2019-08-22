@@ -19,27 +19,27 @@ import java.util.ServiceLoader;
 import java.util.concurrent.Executors;
 import javassist.ClassPool;
 import org.eclipse.jdt.annotation.NonNull;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
-import org.opendaylight.controller.md.sal.binding.api.NotificationService;
-import org.opendaylight.controller.md.sal.binding.impl.BindingDOMDataBrokerAdapter;
-import org.opendaylight.controller.md.sal.binding.impl.BindingDOMNotificationPublishServiceAdapter;
-import org.opendaylight.controller.md.sal.binding.impl.BindingDOMNotificationServiceAdapter;
-import org.opendaylight.controller.md.sal.binding.impl.BindingToNormalizedNodeCodec;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-import org.opendaylight.controller.md.sal.dom.broker.impl.DOMNotificationRouter;
-import org.opendaylight.controller.md.sal.dom.broker.impl.SerializedDOMDataBroker;
-import org.opendaylight.controller.md.sal.dom.store.impl.InMemoryDOMDataStore;
-import org.opendaylight.controller.sal.core.spi.data.DOMStore;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.NotificationService;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMDataBrokerAdapter;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMNotificationPublishServiceAdapter;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMNotificationServiceAdapter;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingToNormalizedNodeCodec;
 import org.opendaylight.mdsal.binding.dom.codec.gen.impl.StreamWriterGenerator;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
 import org.opendaylight.mdsal.binding.generator.impl.GeneratedClassLoadingStrategy;
 import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
 import org.opendaylight.mdsal.binding.generator.util.BindingRuntimeContext;
 import org.opendaylight.mdsal.binding.generator.util.JavassistUtils;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 import org.opendaylight.mdsal.dom.api.DOMSchemaService;
 import org.opendaylight.mdsal.dom.api.DOMSchemaServiceExtension;
+import org.opendaylight.mdsal.dom.broker.DOMNotificationRouter;
+import org.opendaylight.mdsal.dom.broker.SerializedDOMDataBroker;
+import org.opendaylight.mdsal.dom.spi.store.DOMStore;
+import org.opendaylight.mdsal.dom.store.inmemory.InMemoryDOMDataStore;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.util.ListenerRegistry;
 import org.opendaylight.yangtools.yang.binding.YangModelBindingProvider;
@@ -91,14 +91,14 @@ public class DataStoreContextImpl implements DataStoreContext {
 
     @Override
     public NotificationService createNotificationService() {
-        return new BindingDOMNotificationServiceAdapter(this.mockedSchemaContext.bindingStreamCodecs,
-                this.domNotificationRouter);
+        return new BindingDOMNotificationServiceAdapter(this.domNotificationRouter,
+                this.mockedSchemaContext.bindingStreamCodecs);
     }
 
     @Override
     public NotificationPublishService createNotificationPublishService() {
-        return new BindingDOMNotificationPublishServiceAdapter(this.mockedSchemaContext.bindingToNormalized,
-                this.domNotificationRouter);
+        return new BindingDOMNotificationPublishServiceAdapter(this.domNotificationRouter,
+                this.mockedSchemaContext.bindingToNormalized);
     }
 
     @Override

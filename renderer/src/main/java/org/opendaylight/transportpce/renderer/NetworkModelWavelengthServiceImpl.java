@@ -7,19 +7,18 @@
  */
 package org.opendaylight.transportpce.renderer;
 
-import com.google.common.base.Optional;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.binding.api.WriteTransaction;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
@@ -165,12 +164,12 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
         InstanceIdentifier<Node1>
                 nodeIID = createNode1IID(nodeId);
         Optional<Node1> nodeOpt;
-        try (ReadOnlyTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
+        try (ReadTransaction nodeReadTx = this.dataBroker.newReadOnlyTransaction()) {
             nodeOpt = nodeReadTx.read(LogicalDatastoreType.CONFIGURATION, nodeIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting node from {} topology!", NetworkUtils.OVERLAY_NETWORK_ID, e);
-            nodeOpt = Optional.absent();
+            nodeOpt = Optional.empty();
         }
         return nodeOpt;
     }
@@ -306,13 +305,13 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
     private Optional<TerminationPoint1> getTerminationPoint1FromDatastore(String nodeId, String tpId) {
         InstanceIdentifier<TerminationPoint1> tpIID = createTerminationPoint1IIDBuilder(nodeId, tpId).build();
         Optional<TerminationPoint1> tpOpt;
-        try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             tpOpt = readTx.read(LogicalDatastoreType.CONFIGURATION, tpIID)
                     .get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting termination point from {} topology!", NetworkUtils.OVERLAY_NETWORK_ID,
                     e);
-            tpOpt = Optional.absent();
+            tpOpt = Optional.empty();
         }
         return tpOpt;
     }

@@ -7,25 +7,23 @@
  */
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
-import com.google.common.base.Optional;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -287,7 +285,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private Optional<PathDescription> getPathDescriptionFromDatastore(String serviceName) {
         InstanceIdentifier<PathDescription> pathDescriptionIID = InstanceIdentifier.create(ServicePathList.class)
                 .child(ServicePaths.class, new ServicePathsKey(serviceName)).child(PathDescription.class);
-        ReadOnlyTransaction pathDescReadTx = this.dataBroker.newReadOnlyTransaction();
+        ReadTransaction pathDescReadTx = this.dataBroker.newReadOnlyTransaction();
         try {
             LOG.debug("Getting path description for service {}", serviceName);
             return pathDescReadTx.read(LogicalDatastoreType.OPERATIONAL, pathDescriptionIID)
@@ -295,7 +293,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Exception while getting path description from datastore {} for service {}!", pathDescriptionIID,
                     serviceName, e);
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

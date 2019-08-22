@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
@@ -26,7 +26,7 @@ public class RendererProviderTest extends AbstractTest {
 
 
     @Mock
-    RpcProviderRegistry rpcProviderRegistry;
+    RpcProviderService rpcProviderService;
 
     @Mock
     private RendererServiceOperations rendererServiceOperations;
@@ -42,16 +42,16 @@ public class RendererProviderTest extends AbstractTest {
     }
 
     @Test
-    public void testInitMethodRegistersRendererToRpcRegistry() {
-        RendererProvider provider = new RendererProvider(rpcProviderRegistry,
-                deviceRendererRPC, rendererServiceOperations);
+    public void testInitMethodRegistersRendererToRpcService() {
+        RendererProvider provider =
+            new RendererProvider(rpcProviderService, deviceRendererRPC, rendererServiceOperations);
         provider.init();
 
-        verify(rpcProviderRegistry, times(1))
-                .addRpcImplementation(any(), any(TransportPCEServicePathRPCImpl.class));
+        verify(rpcProviderService, times(1))
+                .registerRpcImplementation(any(), any(TransportPCEServicePathRPCImpl.class));
 
-        verify(rpcProviderRegistry, times(1))
-                .addRpcImplementation(any(), any(DeviceRendererRPCImpl.class));
+        verify(rpcProviderService, times(1))
+                .registerRpcImplementation(any(), any(DeviceRendererRPCImpl.class));
     }
 
 

@@ -7,10 +7,10 @@
  */
 package org.opendaylight.transportpce.test;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
-import org.opendaylight.controller.md.sal.binding.api.NotificationService;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.NotificationService;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.DataStoreContextImpl;
 

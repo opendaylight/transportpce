@@ -12,9 +12,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.GetPmOutputBuilder;
@@ -45,9 +45,9 @@ public final class OlmUtils {
     public static Optional<Nodes> getNode(String nodeId, DataBroker db) {
         InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
             .child(Nodes.class, new NodesKey(nodeId));
-        try (ReadOnlyTransaction readTransaction = db.newReadOnlyTransaction()) {
+        try (ReadTransaction readTransaction = db.newReadOnlyTransaction()) {
             return readTransaction.read(LogicalDatastoreType.CONFIGURATION, nodesIID)
-                .get(DATABROKER_READ_TIMEOUT_SECONDS, TimeUnit.SECONDS).toJavaUtil();
+                .get(DATABROKER_READ_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             LOG.error("Unable to read Portmapping for nodeId {}", nodeId, ex);
             return Optional.empty();

@@ -15,8 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
-import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
@@ -35,7 +35,7 @@ public class ServicehandlerProviderTest  extends AbstractTest {
     private NotificationPublishService notificationPublishService;
 
     @Mock
-    RpcProviderRegistry rpcProviderRegistry;
+    RpcProviderService rpcProviderRegistry;
 
     @Mock
     NetworkModelWavelengthService networkModelWavelengthService;
@@ -57,7 +57,7 @@ public class ServicehandlerProviderTest  extends AbstractTest {
         provider.init();
 
         verify(rpcProviderRegistry, times(1))
-                .addRpcImplementation(any(), any(ServicehandlerImpl.class));
+                .registerRpcImplementation(any(), any(ServicehandlerImpl.class));
     }
 
 

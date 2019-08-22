@@ -23,9 +23,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.ResponseCodes;
@@ -301,10 +301,10 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 .augmentation(Network1.class)
                 .build();
         Optional<Network1> networkOptional;
-        try (ReadOnlyTransaction rtx = this.dataBroker.newReadOnlyTransaction()) {
+        try (ReadTransaction rtx = this.dataBroker.newReadOnlyTransaction()) {
             //TODO change to constant from Timeouts class when it will be merged.
             networkOptional = rtx.read(LogicalDatastoreType.CONFIGURATION, networkIID).get(Timeouts.DATASTORE_READ,
-                TimeUnit.MILLISECONDS).toJavaUtil();
+                TimeUnit.MILLISECONDS);
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Read of {} topology failed", NetworkUtils.OVERLAY_NETWORK_ID);
@@ -546,8 +546,8 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     private String getRealNodeId(String mappedNodeId) {
         KeyedInstanceIdentifier<Node, NodeKey> mappedNodeII =
             InstanceIdentifiers.OVERLAY_NETWORK_II.child(Node.class, new NodeKey(new NodeId(mappedNodeId)));
-        com.google.common.base.Optional<Node> realNode;
-        try (ReadOnlyTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction()) {
+        Optional<Node> realNode;
+        try (ReadTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction()) {
             realNode = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, mappedNodeII).get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error(e.getMessage(), e);
@@ -579,10 +579,10 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             .augmentation(Network1.class).child(Link.class, new LinkKey(linkId))
             .build();
         Optional<Link> linkOptional;
-        try (ReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction()) {
+        try (ReadTransaction rtx = dataBroker.newReadOnlyTransaction()) {
             //TODO change to constant from Timeouts class when it will be merged.
             linkOptional = rtx.read(LogicalDatastoreType.CONFIGURATION, linkIID).get(Timeouts.DATASTORE_READ,
-                TimeUnit.MILLISECONDS).toJavaUtil();
+                TimeUnit.MILLISECONDS);
             return linkOptional.get();
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.warn("Read of {} topology failed", NetworkUtils.OVERLAY_NETWORK_ID);

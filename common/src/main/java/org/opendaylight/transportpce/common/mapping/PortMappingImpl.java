@@ -15,10 +15,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.binding.api.WriteTransaction;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.NodesKey;
@@ -69,9 +69,8 @@ public class PortMappingImpl implements PortMapping {
          */
         InstanceIdentifier<Mapping> portMappingIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
             new NodesKey(nodeId)).child(Mapping.class, new MappingKey(logicalConnPoint)).build();
-        try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Mapping> mapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get()
-                .toJavaUtil();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<Mapping> mapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get();
             if (mapObject.isPresent()) {
                 Mapping mapping = mapObject.get();
                 LOG.info("Found mapping for {} - {}. Mapping: {}", nodeId, logicalConnPoint, mapping.toString());
@@ -149,9 +148,9 @@ public class PortMappingImpl implements PortMapping {
     public Nodes getNode(String nodeId) {
         InstanceIdentifier<Nodes> nodePortMappingIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
             new NodesKey(nodeId)).build();
-        try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodePortMapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID)
-                .get().toJavaUtil();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<Nodes> nodePortMapObject =
+                readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID).get();
             if (nodePortMapObject.isPresent()) {
                 Nodes node = nodePortMapObject.get();
                 LOG.info("Found node {} in portmapping.", nodeId);

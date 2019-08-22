@@ -8,10 +8,10 @@
 
 package org.opendaylight.transportpce.olm;
 
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
-import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService;
+import org.opendaylight.yangtools.concepts.ObjectRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,19 +20,19 @@ import org.slf4j.LoggerFactory;
  */
 public class OlmProvider {
     private static final Logger LOG = LoggerFactory.getLogger(OlmProvider.class);
-    private final RpcProviderRegistry rpcProviderRegistry;
+    private final RpcProviderService rpcProviderService;
     private final OlmPowerService olmPowerService;
-    private RpcRegistration<TransportpceOlmService> olmRPCRegistration;
+    private ObjectRegistration<TransportpceOlmService> olmRPCRegistration;
 
     /**
      * Instantiates a new olm provider.
      * @param olmPowerService
      *            implementation of OlmService
-     * @param rpcProviderRegistry
-     *            the rpc provider registry
+     * @param rpcProviderService
+     *            the rpc provider service
      */
-    public OlmProvider(final RpcProviderRegistry rpcProviderRegistry, final OlmPowerService olmPowerService) {
-        this.rpcProviderRegistry = rpcProviderRegistry;
+    public OlmProvider(final RpcProviderService rpcProviderService, final OlmPowerService olmPowerService) {
+        this.rpcProviderService = rpcProviderService;
         this.olmPowerService = olmPowerService;
     }
 
@@ -42,7 +42,7 @@ public class OlmProvider {
     public void init() {
         LOG.info("OlmProvider Session Initiated");
         // Initializing Notification module
-        olmRPCRegistration = rpcProviderRegistry.addRpcImplementation(TransportpceOlmService.class,
+        olmRPCRegistration = rpcProviderService.registerRpcImplementation(TransportpceOlmService.class,
                 new OlmPowerServiceRpcImpl(this.olmPowerService));
     }
 

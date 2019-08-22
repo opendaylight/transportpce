@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
@@ -89,7 +89,7 @@ public  final class TopologyUtils {
             InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
                 .augmentation(Network1.class).child(Link.class, new LinkKey(linkId));
-            com.google.common.base.Optional<Link> link =
+            java.util.Optional<Link> link =
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,linkIID.build()).get();
             if (link.isPresent()) {
                 LinkBuilder linkBuilder = new LinkBuilder(link.get());

@@ -8,9 +8,9 @@
 
 package org.opendaylight.transportpce.olm.stub;
 
-import com.google.common.base.Optional;
-import org.opendaylight.controller.md.sal.binding.api.MountPoint;
-import org.opendaylight.controller.md.sal.binding.api.MountPointService;
+import java.util.Optional;
+import org.opendaylight.mdsal.binding.api.MountPoint;
+import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
@@ -25,7 +25,7 @@ public class MountPointServiceStub implements MountPointService {
     @Override
     public Optional<MountPoint> getMountPoint(InstanceIdentifier<?> mountPoint) {
         if (returnedMountPoint == null) {
-            return Optional.absent();
+            return Optional.empty();
         }
         return Optional.of(returnedMountPoint);
     }

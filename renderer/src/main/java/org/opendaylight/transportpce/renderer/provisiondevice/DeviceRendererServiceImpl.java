@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,13 +22,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.eclipse.jdt.annotation.NonNull;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
@@ -443,10 +441,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         InstanceIdentifier<Services> iid =
                 InstanceIdentifier.create(ServiceList.class).child(Services.class, serviceKey);
         Optional<Services> services;
-        try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Future<com.google.common.base.Optional<Services>> future =
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Future<java.util.Optional<Services>> future =
                     readTx.read(LogicalDatastoreType.OPERATIONAL, iid);
-            services = future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS).toJavaUtil();
+            services = future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw e;
         }

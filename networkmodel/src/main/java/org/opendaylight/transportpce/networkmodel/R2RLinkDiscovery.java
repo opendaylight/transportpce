@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.MountPoint;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.MountPoint;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -150,9 +150,8 @@ public class R2RLinkDiscovery {
     public Direction getDegreeDirection(Integer degreeCounter, NodeId nodeId) {
         InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
             .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
-        try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID)
-                .get().toJavaUtil();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
             if (nodesObject.isPresent() && (nodesObject.get().getMapping() != null)) {
                 List<Mapping> mappingList = nodesObject.get().getMapping();
                 mappingList = mappingList.stream().filter(mp -> mp.getLogicalConnectionPoint().contains("DEG"
@@ -305,9 +304,8 @@ public class R2RLinkDiscovery {
     private Integer getDegFromInterface(NodeId nodeId, String interfaceName) {
         InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.builder(Network.class)
             .child(Nodes.class, new NodesKey(nodeId.getValue())).build();
-        try (ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
-            Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID)
-                .get().toJavaUtil();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
             if (nodesObject.isPresent() && (nodesObject.get().getCpToDegree() != null)) {
                 List<CpToDegree> cpToDeg = nodesObject.get().getCpToDegree();
                 Stream cpToDegStream = cpToDeg.stream().filter(cp -> cp.getInterfaceName() != null)

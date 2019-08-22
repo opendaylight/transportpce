@@ -6,9 +6,8 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
     odl:use-default-for-reference-types="true">
 
-    <reference id="dataBroker" interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"
-        odl:type="default" />
-    <reference id="rpcProviderRegistry" interface="org.opendaylight.controller.sal.binding.api.RpcProviderRegistry" />
+    <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker" odl:type="default" />
+    <reference id="rpcProviderService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService" />
     <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
     <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
     <reference id="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
@@ -37,7 +36,7 @@
         init-method="init" destroy-method="close">
         <argument ref="networkTransactionImpl" />
         <argument ref="dataBroker" />
-        <argument ref="rpcProviderRegistry" />
+        <argument ref="rpcProviderService" />
         <argument ref="networkutilsServiceImpl" />
         <argument ref="netconfTopologyListener" />
         <argument ref="openRoadmFactory" />

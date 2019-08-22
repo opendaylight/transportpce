@@ -7,11 +7,10 @@
  */
 package org.opendaylight.transportpce.networkmodel;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
-import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
+import org.opendaylight.mdsal.binding.api.RpcProviderService;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.util.ClliNetwork;
@@ -20,6 +19,7 @@ import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
+import org.opendaylight.yangtools.concepts.ObjectRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,20 +29,20 @@ public class NetworkModelProvider {
 
     private NetworkTransactionService networkTransactionService;
     private final DataBroker dataBroker;
-    private final RpcProviderRegistry rpcProviderRegistry;
+    private final RpcProviderService rpcProviderService;
     private final TransportpceNetworkutilsService networkutilsService;
     private final NetConfTopologyListener topologyListener;
     private final OpenRoadmFactory openRoadmFactory;
     private ListenerRegistration<NetConfTopologyListener> dataTreeChangeListenerRegistration;
-    private BindingAwareBroker.RpcRegistration<TransportpceNetworkutilsService> networkutilsServiceRpcRegistration;
+    private ObjectRegistration<TransportpceNetworkutilsService> networkutilsServiceRpcRegistration;
 
     public NetworkModelProvider(NetworkTransactionService networkTransactionService,
-                                final DataBroker dataBroker, final RpcProviderRegistry rpcProviderRegistry,
+                                final DataBroker dataBroker, final RpcProviderService rpcProviderService,
             final TransportpceNetworkutilsService networkutilsService, final NetConfTopologyListener topologyListener,
                                 OpenRoadmFactory openRoadmFactory) {
         this.networkTransactionService = networkTransactionService;
         this.dataBroker = dataBroker;
-        this.rpcProviderRegistry = rpcProviderRegistry;
+        this.rpcProviderService = rpcProviderService;
         this.networkutilsService = networkutilsService;
         this.topologyListener = topologyListener;
         this.openRoadmFactory = openRoadmFactory;
@@ -57,10 +57,10 @@ public class NetworkModelProvider {
         OpenRoadmNetwork.createOpenRoadmNetworkLayer(dataBroker);
         openRoadmFactory.createTopoLayerVersionControl(networkTransactionService);
         dataTreeChangeListenerRegistration =
-            dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(LogicalDatastoreType.OPERATIONAL,
+            dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
                 InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);
         networkutilsServiceRpcRegistration =
-            rpcProviderRegistry.addRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
+            rpcProviderService.registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
     }
 
 

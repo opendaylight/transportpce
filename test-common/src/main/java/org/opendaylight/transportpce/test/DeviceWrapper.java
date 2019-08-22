@@ -17,10 +17,10 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import javax.annotation.Nonnull;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataWriteTransaction;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.dom.api.DOMDataTreeWriteTransaction;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.DataStoreContextImpl;
 import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
@@ -138,7 +138,7 @@ public final class DeviceWrapper {
                 NormalizedNodes.findNode(initialDataNormalizedNodes.get(), initialDataIi);
         Preconditions.checkArgument(dataNormalizedNodes.isPresent());
         LOG.info("Initial data was successfully stored into ds");
-        DOMDataWriteTransaction writeOnlyTransaction = domDataBroker.newWriteOnlyTransaction();
+        DOMDataTreeWriteTransaction writeOnlyTransaction = domDataBroker.newWriteOnlyTransaction();
         writeOnlyTransaction.put(LogicalDatastoreType.OPERATIONAL, initialDataIi, dataNormalizedNodes.get());
         try {
             writeOnlyTransaction.commit().get();

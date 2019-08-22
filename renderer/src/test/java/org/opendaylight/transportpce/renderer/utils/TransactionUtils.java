@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.renderer.utils;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransaction;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -52,7 +52,7 @@ public final class TransactionUtils {
             return null;
         }
         DeviceTransaction deviceTx = deviceTxFuture.get().get();
-        com.google.common.base.Optional<? extends DataObject> readOpt
+        Optional<? extends DataObject> readOpt
                 = deviceTx.read(logicalDatastoreType, instanceIdentifier).get();
         if (!readOpt.isPresent()) {
             return null;

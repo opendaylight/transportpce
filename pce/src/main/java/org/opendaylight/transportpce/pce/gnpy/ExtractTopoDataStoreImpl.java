@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Coordinate;
@@ -179,9 +179,9 @@ public class ExtractTopoDataStoreImpl {
             // read the configuration part of the data broker that concerns
             // the openRoadm topology and get all the nodes
             java.util.Optional<Network> openRoadmTopo = this.networkTransactionService
-                    .read(LogicalDatastoreType.CONFIGURATION, insIdOpenRoadmTopo).get().toJavaUtil();
+                    .read(LogicalDatastoreType.CONFIGURATION, insIdOpenRoadmTopo).get();
             java.util.Optional<Network> openRoadmNet = this.networkTransactionService
-                    .read(LogicalDatastoreType.CONFIGURATION, insIdrOpenRoadmNet).get().toJavaUtil();
+                    .read(LogicalDatastoreType.CONFIGURATION, insIdrOpenRoadmNet).get();
             if (openRoadmNet.isPresent()) {
                 List<Node> openRoadmNetNodeList = openRoadmNet.get().getNode();
                 if (openRoadmTopo.isPresent()) {

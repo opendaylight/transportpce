@@ -9,9 +9,9 @@ package org.opendaylight.transportpce.common.mapping;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.Nodes;
@@ -39,9 +39,9 @@ public class MappingUtilsImpl implements MappingUtils {
          */
         InstanceIdentifier<NodeInfo> nodeInfoIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
                 new NodesKey(nodeId)).child(NodeInfo.class).build();
-        try (ReadOnlyTransaction readTx = dataBroker.newReadOnlyTransaction()) {
+        try (ReadTransaction readTx = dataBroker.newReadOnlyTransaction()) {
             Optional<NodeInfo> nodeInfoObj =
-                    readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get().toJavaUtil();
+                    readTx.read(LogicalDatastoreType.CONFIGURATION, nodeInfoIID).get();
             if (nodeInfoObj.isPresent()) {
                 NodeInfo nodInfo = nodeInfoObj.get();
                 switch (nodInfo.getOpenroadmVersion()) {

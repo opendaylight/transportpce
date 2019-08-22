@@ -7,14 +7,13 @@
  */
 package org.opendaylight.transportpce.networkmodel;
 
-import com.google.common.base.Optional;
 import com.google.common.util.concurrent.ListenableFuture;
-
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.binding.api.WriteTransaction;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.DeleteLinkInput;
@@ -67,7 +66,7 @@ public class NetworkUtilsImpl implements TransportpceNetworkutilsService {
 
         //Check if link exists
         try {
-            ReadOnlyTransaction readOnlyTransaction = dataBroker.newReadOnlyTransaction();
+            ReadTransaction readOnlyTransaction = dataBroker.newReadOnlyTransaction();
             Optional<Link> linkOptional = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, linkIID.build())
                 .get();
             if (!linkOptional.isPresent()) {

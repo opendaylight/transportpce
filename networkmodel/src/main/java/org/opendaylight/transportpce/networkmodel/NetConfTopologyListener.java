@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
-import org.opendaylight.controller.md.sal.binding.api.DataObjectModification.ModificationType;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
-import org.opendaylight.controller.md.sal.binding.api.MountPoint;
-import org.opendaylight.controller.md.sal.binding.api.NotificationService;
-import org.opendaylight.controller.sal.binding.api.RpcConsumerRegistry;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType;
+import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
+import org.opendaylight.mdsal.binding.api.DataTreeModification;
+import org.opendaylight.mdsal.binding.api.MountPoint;
+import org.opendaylight.mdsal.binding.api.NotificationService;
+import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.networkmodel.dto.NodeRegistration;
@@ -86,7 +86,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         }
 
         final Optional<NotificationService> notificationService =
-                mountPoint.getService(NotificationService.class).toJavaUtil();
+                mountPoint.getService(NotificationService.class);
         if (!notificationService.isPresent()) {
             LOG.error("Failed to get RpcService for node {}", nodeId);
             return;
@@ -121,8 +121,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 streamName = "OPENROADM";
             }
 
-            final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class)
-                .toJavaUtil();
+            final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
             if (service.isPresent()) {
                 final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
                 if (rpcService == null) {
@@ -177,7 +176,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
             if (streamName == null) {
                 streamName = "OPENROADM";
             }
-            final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class).toJavaUtil();
+            final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
             if (service.isPresent()) {
                 final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
                 if (rpcService == null) {

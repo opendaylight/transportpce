@@ -8,12 +8,12 @@
 
 package org.opendaylight.transportpce.olm.stub;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import javax.annotation.Nonnull;
-import org.opendaylight.controller.md.sal.binding.api.BindingService;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.MountPoint;
-import org.opendaylight.controller.sal.binding.api.RpcConsumerRegistry;
+import org.opendaylight.mdsal.binding.api.BindingService;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.MountPoint;
+import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public class MountPointStub  implements MountPoint {
@@ -34,12 +34,12 @@ public class MountPointStub  implements MountPoint {
     @Override
     public <T extends BindingService> Optional<T> getService(Class<T> service) {
         if (service.isInstance(dataBroker)) {
-            return Optional.fromNullable((T)dataBroker);
+            return Optional.ofNullable((T)dataBroker);
         }
         if (service.isInstance(rpcConsumerRegistry)) {
-            return Optional.fromNullable((T)rpcConsumerRegistry);
+            return Optional.ofNullable((T)rpcConsumerRegistry);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     @Nonnull

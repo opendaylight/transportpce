@@ -7,16 +7,14 @@
  */
 package org.opendaylight.transportpce.pce.constraints;
 
-import com.google.common.base.Optional;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
-
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.PathComputationRequestInput;
@@ -317,7 +315,7 @@ public class PceConstraintsCalc {
     }
 
     private Optional<PathDescription> getPathDescriptionFromDatastore(String serviceName) {
-        Optional<PathDescription> result = Optional.absent();
+        Optional<PathDescription> result = Optional.empty();
         InstanceIdentifier<ServicePaths> pathDescriptionIID = InstanceIdentifier.create(ServicePathList.class)
                 .child(ServicePaths.class, new ServicePathsKey(serviceName));
         try {
