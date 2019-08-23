@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Orange, Inc. and others.  All rights reserved.
+ * Copyright © 2019 Orange, Inc. and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -43,31 +43,6 @@ import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.El
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.ElementsBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.elements.Metadata;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.elements.MetadataBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.RouteIncludeEro;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TeHopType;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TeNodeId;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TePathDisjointness;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TeTpId;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.common.constraints_config.TeBandwidth;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.common.constraints_config.TeBandwidthBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.Type;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.type.NumUnnumHopBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.type.num.unnum.hop.NumUnnumHop;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.generic.path.constraints.PathConstraints;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.generic.path.constraints.PathConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.gnpy.specific.parameters.EffectiveFreqSlot;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.gnpy.specific.parameters.EffectiveFreqSlotBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.path.route.objects.ExplicitRouteObjects;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.path.route.objects.ExplicitRouteObjectsBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.path.route.objects.explicit.route.objects.RouteObjectIncludeExclude;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.path.route.objects.explicit.route.objects.RouteObjectIncludeExcludeBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.service.PathRequest;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.service.PathRequestBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.Synchronization;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.SynchronizationBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.synchronization.Svec;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.synchronization.SvecBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.ila.Ila;
@@ -75,10 +50,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attri
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -100,16 +71,19 @@ import org.slf4j.LoggerFactory;
  *
  */
 
-public class ExtractTopoDataStoreImpl {
-    private static final Logger LOG = LoggerFactory.getLogger(ExtractTopoDataStoreImpl.class);
+public class GnpyTopoImpl {
+    private static final Logger LOG = LoggerFactory.getLogger(GnpyTopoImpl.class);
     private final NetworkTransactionService networkTransactionService;
     private List<Elements> elements = new ArrayList<>();
     private List<Connections> connections = new ArrayList<>();
-    private List<PathRequest> pathRequest = new ArrayList<>();
-    private List<Synchronization> synchronization = new ArrayList<>();
+    //Mapping elements
+    //Mapping between the ord-topo and ord-ntw node
     private Map<String, String> mapDisgNodeRefNode = new HashMap<String, String>();
+    //Mapping between the ord-ntw and node ip
     private Map<String, IpAddress> mapNodeRefIp = new HashMap<String, IpAddress>();
+    //Mapping between link id and clfi
     private Map<String, String> mapLinkFiber = new HashMap<String, String>();
+    //Mapping between fiber clfi and ipAddress
     private Map<String, IpAddress> mapFiberIp = new HashMap<String, IpAddress>();
     private static int convertKmM = 1000;
 
@@ -117,8 +91,7 @@ public class ExtractTopoDataStoreImpl {
      * Construct the ExtractTopoDataStoreImpl.
      */
     @SuppressWarnings("unchecked")
-    public ExtractTopoDataStoreImpl(final NetworkTransactionService networkTransactionService,
-            PathComputationRequestInput input,AToZDirection atoz, Long requestId) {
+    public GnpyTopoImpl(final NetworkTransactionService networkTransactionService) {
         this.networkTransactionService = networkTransactionService;
         Map<String, List<?>> map = extractTopo();
         if (map.containsKey("Elements")) {
@@ -131,27 +104,6 @@ public class ExtractTopoDataStoreImpl {
         } else {
             connections = null;
         }
-
-        pathRequest = extractPathRequest(input, atoz, requestId);
-        synchronization = extractSynchronization(requestId);
-    }
-
-    public ExtractTopoDataStoreImpl(final NetworkTransactionService networkTransactionService,
-            PathComputationRequestInput input, ZToADirection ztoa, Long requestId) {
-        this.networkTransactionService = networkTransactionService;
-        Map<String, List<?>> map = extractTopo();
-        if (map.containsKey("Elements")) {
-            elements = (List<Elements>) map.get("Elements");
-        } else {
-            elements = null;
-        }
-        if (map.containsKey("Connections")) {
-            connections = (List<Connections>) map.get("Connections");
-        } else {
-            connections = null;
-        }
-        pathRequest = extractPathRequest(input, ztoa, requestId);
-        synchronization = extractSynchronization(requestId);
     }
 
     /*
@@ -173,7 +125,6 @@ public class ExtractTopoDataStoreImpl {
         InstanceIdentifier<Network> insIdrOpenRoadmNet = InstanceIdentifier
                 .builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))).build();
-        // Read the data broker
         try {
             // Initialize the reading of the networkTransactionService
             // read the configuration part of the data broker that concerns
@@ -295,7 +246,7 @@ public class ExtractTopoDataStoreImpl {
                                                     destId = element1.getUid();
                                                     destIp = null;
                                                     // Create a new link
-                                                    if (!destId.equals(srcId)) {
+                                                    if (srcId != destId) {
                                                         Connections connection = createNewConnection(srcId, srcIp,
                                                                 destId, destIp);
                                                         topoConnections.add(connection);
@@ -309,18 +260,15 @@ public class ExtractTopoDataStoreImpl {
                                         org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
                                             .networks.network.link.oms.attributes.@Nullable Span span
                                                 = omsAttributes.getSpan();
-
                                         String clfi = span.getClfi();
                                         IpAddress ipFiber = new IpAddress(new Ipv4Address("2.2.2." + idFiber));
                                         mapLinkFiber.put(link.getLinkId().getValue(), clfi);
                                         mapFiberIp.put(clfi, ipFiber);
                                         idFiber++;
-
                                         double attIn = 0;
                                         double connIn = 0;
                                         double connOut = 0;
                                         String typeVariety = "SSMF";
-
                                         double length = 0;
                                         // Compute the length of the link
                                         List<LinkConcatenation> linkConcatenationList = span.getLinkConcatenation();
@@ -330,16 +278,14 @@ public class ExtractTopoDataStoreImpl {
                                             length += srlgLength / convertKmM;
                                         }
                                         double lossCoef = span.getSpanlossCurrent().getValue().doubleValue() / length;
-
                                         Elements element1 = addElementsFiber(2, 0, "RLD", "Lannion_CAS",
                                                 ipFiber.getIpv4Address().getValue(), length, attIn, lossCoef, connIn,
                                                 connOut, typeVariety);
-
                                         topoElements.add(element1);
                                         // Create a new link
                                         destId = element1.getUid();
                                         destIp = null;
-                                        if (!destId.equals(srcId)) {
+                                        if (srcId != destId) {
                                             Connections connection = createNewConnection(srcId, srcIp, destId, destIp);
                                             topoConnections.add(connection);
                                             srcId = destId;
@@ -359,7 +305,7 @@ public class ExtractTopoDataStoreImpl {
                                         // Create a new link
                                         destId = element1.getUid();
                                         destIp = null;
-                                        if (!destId.equals(srcId)) {
+                                        if (srcId != destId) {
                                             Connections connection = createNewConnection(srcId, srcIp, destId, destIp);
                                             topoConnections.add(connection);
                                             srcId = destId;
@@ -367,7 +313,7 @@ public class ExtractTopoDataStoreImpl {
                                         }
                                     }
                                 } else {
-                                    LOG.warn("The oms attributes is null!");
+                                    LOG.warn("The oms attributes is null {} !",link1.getLinkType().getName());
                                 }
                                 // Create a new link
                                 destId = mapDisgNodeRefNode.get(link.getDestination().getDestNode().getValue());
@@ -391,200 +337,6 @@ public class ExtractTopoDataStoreImpl {
         map.put("Elements", topoElements);
         map.put("Connections", topoConnections);
         return map;
-    }
-
-    /*
-     * Create the pathRequest
-     */
-    public List<PathRequest> extractPathRequest(PathComputationRequestInput input, AToZDirection atoz, Long requestId) {
-        // List of A to Z
-        List<AToZ> listAtoZ = atoz.getAToZ();
-        int atozSize = listAtoZ.size();
-        // Create the path request
-        List<PathRequest> pathRequestList = new ArrayList<>();
-
-        // 1.1 Create explicitRouteObjects
-        // 1.1.1. create RouteObjectIncludeExclude list
-        List<RouteObjectIncludeExclude> routeObjectIncludeExcludes = new ArrayList<>();
-        IpAddress ipAddressCurrent = null;
-        Long index = (long) 0;
-        for (int i = 0; i < atozSize; i++) {
-            String nodeId = null;
-            if (listAtoZ.get(i).getResource()
-                    .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                    .pathdescription.rev171017.pce.resource.resource.resource.Node) {
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
-                    .resource.resource.resource.Node node = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c
-                            ._interface.pathdescription.rev171017.pce.resource.resource.resource.Node) listAtoZ
-                        .get(i).getResource().getResource();
-                nodeId = node.getNodeId();
-                if (nodeId != null) {
-                    String nodeRef = mapDisgNodeRefNode.get(nodeId);
-                    IpAddress ipAddress = mapNodeRefIp.get(nodeRef);
-                    for (Elements element : elements) {
-                        if (element.getUid().contains(ipAddress.getIpv4Address().getValue().toString())) {
-                            if ((ipAddressCurrent == null) || (!ipAddress.equals(ipAddressCurrent))) {
-                                ipAddressCurrent = ipAddress;
-                                // Fill in routeObjectIncludeExcludes
-                                RouteObjectIncludeExclude routeObjectIncludeExclude1 = addRouteObjectIncludeExclude(
-                                        ipAddress, 1, index);
-                                routeObjectIncludeExcludes.add(routeObjectIncludeExclude1);
-                                index++;
-                            }
-                            break;
-                        }
-                    }
-                } else {
-                    LOG.warn("node ID is null");
-                }
-            //TODO else if termination point not implemented in this version
-            } else if (listAtoZ.get(i).getResource()
-                    .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                    .pathdescription.rev171017.pce.resource.resource.resource.Link) {
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
-                    .resource.resource.resource.Link link = (org.opendaylight.yang.gen.v1.http.org.transportpce
-                            .b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.Link) listAtoZ
-                        .get(i).getResource().getResource();
-                String clfi = mapLinkFiber.get(link.getLinkId());
-                IpAddress fiberIp = mapFiberIp.get(clfi);
-                if (clfi != null) {
-                    RouteObjectIncludeExclude routeObjectIncludeExclude1 = addRouteObjectIncludeExclude(fiberIp, 1,
-                            index);
-                    routeObjectIncludeExcludes.add(routeObjectIncludeExclude1);
-                    index++;
-                }
-            }
-        }
-        // Create ExplicitRouteObjects
-        ExplicitRouteObjects explicitRouteObjects = new ExplicitRouteObjectsBuilder()
-                .setRouteObjectIncludeExclude(routeObjectIncludeExcludes).build();
-
-        // 1. Create the path request element 1
-        // Find parameters
-        String sourceNode = input.getServiceAEnd().getNodeId();
-        String destNode = input.getServiceZEnd().getNodeId();
-
-        // 1.2 Create a path constraints
-        Long rate = atoz.getRate();
-        // Create EffectiveFreqSlot
-        List<EffectiveFreqSlot> effectiveFreqSlot = new ArrayList<>();
-        EffectiveFreqSlot effectiveFreqSlot1 = new EffectiveFreqSlotBuilder().setM(5).setN(8).build();
-        effectiveFreqSlot.add(effectiveFreqSlot1);
-        // Create Te-Bandwidth
-        TeBandwidth teBandwidth = new TeBandwidthBuilder().setPathBandwidth(new BigDecimal(rate))
-                .setTechnology("flexi-grid").setTrxType("openroadm-beta1").setTrxMode("W100G")
-                .setEffectiveFreqSlot(effectiveFreqSlot).setSpacing(new BigDecimal(50000000000.0)).build();
-        PathConstraints pathConstraints = new PathConstraintsBuilder().setTeBandwidth(teBandwidth).build();
-        PathRequest pathRequest1 = new PathRequestBuilder().setRequestId(requestId)
-                .setSource(mapNodeRefIp.get(sourceNode)).setDestination(mapNodeRefIp.get(destNode))
-                .setSrcTpId("srcTpId".getBytes()).setDstTpId("dstTpId".getBytes()).setPathConstraints(pathConstraints)
-                .setExplicitRouteObjects(explicitRouteObjects).build();
-        pathRequestList.add(pathRequest1);
-        return pathRequestList;
-    }
-
-    public List<PathRequest> extractPathRequest(PathComputationRequestInput input, ZToADirection ztoa, Long requestId) {
-        // List of A to Z
-        List<ZToA> listZToA = ztoa.getZToA();
-        int ztoaSize = listZToA.size();
-        // Create the path request
-        List<PathRequest> servicePathRequest = new ArrayList<>();
-
-        // 1.1 Create explicitRouteObjects
-        // 1.1.1. create RouteObjectIncludeExclude list
-        List<RouteObjectIncludeExclude> routeObjectIncludeExcludes = new ArrayList<>();
-        IpAddress ipAddressCurrent = null;
-        Long index = (long) 0;
-        for (int i = 0; i < ztoaSize; i++) {
-            String nodeId = null;
-            if (listZToA.get(i).getResource()
-                    .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                    .pathdescription.rev171017.pce.resource.resource.resource.Node) {
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
-                    .resource.resource.resource.Node node = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c
-                    ._interface.pathdescription.rev171017.pce.resource.resource.resource.Node) listZToA.get(i)
-                    .getResource().getResource();
-                nodeId = node.getNodeId();
-                if (nodeId != null) {
-                    String nodeRef = mapDisgNodeRefNode.get(nodeId);
-                    IpAddress ipAddress = mapNodeRefIp.get(nodeRef);
-                    for (Elements element : elements) {
-                        if (element.getUid().contains(ipAddress.getIpv4Address().getValue().toString())) {
-                            if ((ipAddressCurrent == null) || (!ipAddress.equals(ipAddressCurrent))) {
-                                ipAddressCurrent = ipAddress;
-                                // Fill in routeObjectIncludeExcludes
-                                RouteObjectIncludeExclude routeObjectIncludeExclude1 = addRouteObjectIncludeExclude(
-                                        ipAddress, 1, index);
-                                routeObjectIncludeExcludes.add(routeObjectIncludeExclude1);
-                                index++;
-                            }
-                            break;
-                        }
-                    }
-                } else {
-                    LOG.warn("node ID is null");
-                }
-            //TODO else if termination point not implemented in this version
-            } else if (listZToA.get(i).getResource()
-                    .getResource() instanceof org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface
-                    .pathdescription.rev171017.pce.resource.resource.resource.Link) {
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
-                    .resource.resource.resource.Link link = (org.opendaylight.yang.gen.v1.http.org.transportpce
-                    .b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.Link) listZToA.get(i)
-                    .getResource().getResource();
-                String clfi = mapLinkFiber.get(link.getLinkId());
-                IpAddress fiberIp = mapFiberIp.get(clfi);
-                if (clfi != null) {
-                    RouteObjectIncludeExclude routeObjectIncludeExclude1 = addRouteObjectIncludeExclude(fiberIp, 1,
-                            index);
-                    routeObjectIncludeExcludes.add(routeObjectIncludeExclude1);
-                    index++;
-                }
-            }
-        }
-        // Create ExplicitRouteObjects
-        ExplicitRouteObjects explicitRouteObjects = new ExplicitRouteObjectsBuilder()
-                .setRouteObjectIncludeExclude(routeObjectIncludeExcludes).build();
-
-        // 1. Create the path request element 1
-        // Find parameters
-        String sourceNode = input.getServiceZEnd().getNodeId();
-        String destNode = input.getServiceAEnd().getNodeId();
-
-        // 1.2 Create a path constraints
-        Long rate = ztoa.getRate();
-        // Create EffectiveFreqSlot
-        List<EffectiveFreqSlot> effectiveFreqSlot = new ArrayList<>();
-        EffectiveFreqSlot effectiveFreqSlot1 = new EffectiveFreqSlotBuilder().setM(5).setN(8).build();
-        effectiveFreqSlot.add(effectiveFreqSlot1);
-        // Create Te-Bandwidth
-        TeBandwidth teBandwidth = new TeBandwidthBuilder().setPathBandwidth(new BigDecimal(rate))
-                .setTechnology("flexi-grid").setTrxType("openroadm-beta1").setTrxMode("W100G")
-                .setEffectiveFreqSlot(effectiveFreqSlot).setSpacing(new BigDecimal(50000000000.0)).build();
-        PathConstraints pathConstraints = new PathConstraintsBuilder().setTeBandwidth(teBandwidth).build();
-        PathRequest pathRequest1 = new PathRequestBuilder().setRequestId(requestId)
-                .setSource(mapNodeRefIp.get(sourceNode)).setDestination(mapNodeRefIp.get(destNode))
-                .setSrcTpId("srcTpId".getBytes()).setDstTpId("dstTpId".getBytes()).setPathConstraints(pathConstraints)
-                .setExplicitRouteObjects(explicitRouteObjects).build();
-        servicePathRequest.add(pathRequest1);
-        return servicePathRequest;
-    }
-
-    /*
-     * Create the synchronization
-     */
-    public List<Synchronization> extractSynchronization(Long requestId) {
-        // Create RequestIdNumber
-        List<Long> requestIdNumber = new ArrayList<>();
-        requestIdNumber.add(requestId);
-        // Create a synchronization
-        Svec svec = new SvecBuilder().setRelaxable(true).setDisjointness(new TePathDisjointness(true, true, false))
-                .setRequestIdNumber(requestIdNumber).build();
-        List<Synchronization> synchro = new ArrayList<>();
-        Synchronization synchronization1 = new SynchronizationBuilder().setSynchronizationId(new Long(0)).setSvec(svec)
-                .build();
-        synchro.add(synchronization1);
-        return (synchro);
     }
 
     /*
@@ -668,23 +420,6 @@ public class ExtractTopoDataStoreImpl {
         return element1;
     }
 
-    /*
-     * Add routeObjectIncludeExclude
-     */
-    private RouteObjectIncludeExclude addRouteObjectIncludeExclude(IpAddress ipAddress, long teTpValue, long index) {
-        TeNodeId teNodeId = new TeNodeId(ipAddress);
-        TeTpId teTpId = new TeTpId(teTpValue);
-        NumUnnumHop numUnnumHop = new org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.type.num
-            .unnum.hop.NumUnnumHopBuilder()
-            .setNodeId(teNodeId.getIpv4Address().getValue().toString()).setLinkTpId(teTpId.getUint32().toString())
-            .setHopType(TeHopType.STRICT).build();
-        Type type1 = new NumUnnumHopBuilder().setNumUnnumHop(numUnnumHop).build();
-        // Create routeObjectIncludeExclude element 1
-        RouteObjectIncludeExclude routeObjectIncludeExclude1 = new RouteObjectIncludeExcludeBuilder().setIndex(index)
-                .setExplicitRouteUsage(RouteIncludeEro.class).setType(type1).build();
-        return routeObjectIncludeExclude1;
-    }
-
     private Connections createNewConnection(String srcId, IpAddress srcIp, String destId, IpAddress destIp) {
         String fromNode = srcId;
         String toNode = destId;
@@ -714,50 +449,35 @@ public class ExtractTopoDataStoreImpl {
         this.connections = connections;
     }
 
-    public List<PathRequest> getPathRequest() {
-        return pathRequest;
+    public Map<String, String> getMapDisgNodeRefNode() {
+        return mapDisgNodeRefNode;
     }
 
-    public void setPathRequest(List<PathRequest> pathRequest) {
-        this.pathRequest = pathRequest;
+    public void setMapDisgNodeRefNode(Map<String, String> mapDisgNodeRefNode) {
+        this.mapDisgNodeRefNode = mapDisgNodeRefNode;
     }
 
-    public List<Synchronization> getSynchronization() {
-        return synchronization;
+    public Map<String, IpAddress> getMapNodeRefIp() {
+        return mapNodeRefIp;
     }
 
-    public void setSynchronization(List<Synchronization> synchronization) {
-        this.synchronization = synchronization;
+    public void setMapNodeRefIp(Map<String, IpAddress> mapNodeRefIp) {
+        this.mapNodeRefIp = mapNodeRefIp;
     }
 
-    public List<PathRequest> createEmptyPathRequest(PathComputationRequestInput input, AToZDirection atoz) {
-        // Create the path request
-        List<PathRequest> pathRequestList = new ArrayList<>();
-
-        // 1. Create the path request element 1
-        // Find parameters
-        String sourceNode = input.getServiceAEnd().getNodeId();
-        String destNode = input.getServiceZEnd().getNodeId();
-
-        // 1.2 Create a path constraints
-        Long rate = atoz.getRate();
-
-        // Create EffectiveFreqSlot
-        List<EffectiveFreqSlot> effectiveFreqSlot = new ArrayList<>();
-        EffectiveFreqSlot effectiveFreqSlot1 = new EffectiveFreqSlotBuilder().setM(5).setN(8).build();
-        effectiveFreqSlot.add(effectiveFreqSlot1);
-
-        // Create Te-Bandwidth
-        TeBandwidth teBandwidth = new TeBandwidthBuilder().setPathBandwidth(new BigDecimal(rate))
-                .setTechnology("flexi-grid").setTrxType("openroadm-beta1").setTrxMode("W100G")
-                .setEffectiveFreqSlot(effectiveFreqSlot).setSpacing(new BigDecimal(50000000000.0)).build();
-        PathConstraints pathConstraints = new PathConstraintsBuilder().setTeBandwidth(teBandwidth).build();
-        PathRequest pathRequest1 = new PathRequestBuilder().setRequestId(new Long(0))
-                .setSource(mapNodeRefIp.get(sourceNode)).setDestination(mapNodeRefIp.get(destNode))
-                .setSrcTpId("srcTpId".getBytes()).setDstTpId("dstTpId".getBytes()).setPathConstraints(pathConstraints)
-                .build();
-        pathRequestList.add(pathRequest1);
-        return pathRequestList;
+    public Map<String, String> getMapLinkFiber() {
+        return mapLinkFiber;
     }
 
+    public void setMapLinkFiber(Map<String, String> mapLinkFiber) {
+        this.mapLinkFiber = mapLinkFiber;
+    }
+
+    public Map<String, IpAddress> getMapFiberIp() {
+        return mapFiberIp;
+    }
+
+    public void setMapFiberIp(Map<String, IpAddress> mapFiberIp) {
+        this.mapFiberIp = mapFiberIp;
+    }
 }

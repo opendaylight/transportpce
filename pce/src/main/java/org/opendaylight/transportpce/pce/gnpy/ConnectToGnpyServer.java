@@ -50,11 +50,11 @@ public class ConnectToGnpyServer {
             os.write(jsonTxt.getBytes());
             os.flush();
             if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-                throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+                LOG.error("No valid response from GNPy : HTTP error code : {}", conn.getResponseCode());
+                return null;
             }
             InputStreamReader response = new InputStreamReader((conn.getInputStream()));
             if (response != null) {
-                jsonRespTxt = null;
                 try {
                     jsonRespTxt = CharStreams.toString(response);
                 } catch (IOException e1) {

@@ -19,13 +19,9 @@ import java.io.Writer;
 import java.util.Collections;
 import java.util.Optional;
 
-import javassist.ClassPool;
-
-import org.opendaylight.mdsal.binding.dom.codec.gen.impl.StreamWriterGenerator;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
 import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
 import org.opendaylight.mdsal.binding.generator.util.BindingRuntimeContext;
-import org.opendaylight.mdsal.binding.generator.util.JavassistUtils;
 import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
@@ -80,8 +76,6 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
 
     public String createJsonStringFromDataObject(final InstanceIdentifier<?> id, DataObject object) throws Exception {
 
-        // See this link for more info :
-        // https://github.com/opendaylight/fpc/blob/master/impl/src/main/java/org/opendaylight/fpc/utils/FpcCodecUtils.java
         final SchemaPath scPath = SchemaPath
                 .create(FluentIterable.from(id.getPathArguments()).transform(new Function<PathArgument, QName>() {
                     @Override
@@ -101,10 +95,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             SchemaContext schemaContext = moduleContext.tryToCreateSchemaContext().get();
             BindingRuntimeContext bindingContext;
             bindingContext = BindingRuntimeContext.create(moduleContext, schemaContext);
-            final BindingNormalizedNodeCodecRegistry bindingStreamCodecs = new BindingNormalizedNodeCodecRegistry(
-                    StreamWriterGenerator.create(JavassistUtils.forClassPool(ClassPool.getDefault())));
-            bindingStreamCodecs.onBindingRuntimeContextUpdated(bindingContext);
-            BindingNormalizedNodeCodecRegistry codecRegistry = bindingStreamCodecs;
+            final BindingNormalizedNodeCodecRegistry codecRegistry =
+                new BindingNormalizedNodeCodecRegistry(bindingContext);
 
             /*
              * This function needs : - context - scPath.getParent() -
@@ -118,6 +110,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             // The write part
             final BindingStreamEventWriter bindingWriter = codecRegistry.newWriter(id, domWriter);
             codecRegistry.getSerializer(id.getTargetType()).serialize(object, bindingWriter);
+            domWriter.close();
             writer.close();
         } catch (IOException e) {
             LOG.error("GNPy: writer error ");

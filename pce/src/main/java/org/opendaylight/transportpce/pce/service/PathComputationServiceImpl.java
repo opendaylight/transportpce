@@ -157,6 +157,21 @@ public class PathComputationServiceImpl implements PathComputationService {
                 PathDescriptionBuilder path = null;
                 path = sendingPCE.getPathDescription();
                 LOG.info("PCE response: {} {}", message, responseCode);
+
+                //add the GNPy result
+                GnpyResult gnpyAtoZ = sendingPCE.getGnpyAtoZ();
+                GnpyResult gnpyZtoA = sendingPCE.getGnpyZtoA();
+                List<GnpyResponse> listResponse = new ArrayList<>();
+                if (gnpyAtoZ != null) {
+                    GnpyResponse respAtoZ = generateGnpyResponse(gnpyAtoZ.getResponse(),"A-to-Z");
+                    listResponse.add(respAtoZ);
+                }
+                if (gnpyZtoA != null) {
+                    GnpyResponse respZtoA = generateGnpyResponse(gnpyZtoA.getResponse(),"Z-to-A");
+                    listResponse.add(respZtoA);
+                }
+                output.setGnpyResponse(listResponse);
+
                 if (!(sendingPCE.getSuccess()) || (path == null)) {
                     configurationResponseCommon.setAckFinalIndicator("Yes")
                             .setRequestId(input.getServiceHandlerHeader().getRequestId()).setResponseCode(responseCode)
@@ -186,20 +201,6 @@ public class PathComputationServiceImpl implements PathComputationService {
                 output.setConfigurationResponseCommon(configurationResponseCommon.build())
                         .setResponseParameters(rpb.build());
 
-              //add the GNPy result
-                GnpyResult gnpyAtoZ = sendingPCE.getGnpyAtoZ();
-                GnpyResult gnpyZtoA = sendingPCE.getGnpyZtoA();
-                List<GnpyResponse> listResponse = new ArrayList<>();
-                if (gnpyAtoZ != null) {
-                    GnpyResponse respAtoZ = generateGnpyResponse(gnpyAtoZ.getResponse(),"A-to-Z");
-                    listResponse.add(respAtoZ);
-                }
-                if (gnpyZtoA != null) {
-                    GnpyResponse respZtoA = generateGnpyResponse(gnpyZtoA.getResponse(),"Z-to-A");
-                    listResponse.add(respZtoA);
-                }
-                output.setGnpyResponse(listResponse);
-
                 //debug prints
                 AToZDirection atoz = pathDescription.getAToZDirection();
                 if ((atoz != null) && (atoz.getAToZ() != null)) {
@@ -226,6 +227,7 @@ public class PathComputationServiceImpl implements PathComputationService {
         if (responseGnpy != null) {
             if (responseGnpy.getResponseType() instanceof org.opendaylight.yang.gen.v1.gnpy.path.rev190502.result
                     .response.response.type.NoPathCase) {
+                LOG.info("GNPy : path is not feasible");
                 org.opendaylight.yang.gen.v1.gnpy.path.rev190502.result.response.response.type.NoPathCase
                     noPathGnpy = (org.opendaylight.yang.gen.v1.gnpy.path.rev190502.result.response.response.type
                     .NoPathCase) responseGnpy.getResponseType();

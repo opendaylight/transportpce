@@ -34,7 +34,7 @@ module gnpy-api {
           description
               "Describe the topology file to connect to gnpy";
       }
-  container service-file{
+      container service-file{
           uses gnpypc:service;
           description
               "Describe the service file to connect to gnpy";

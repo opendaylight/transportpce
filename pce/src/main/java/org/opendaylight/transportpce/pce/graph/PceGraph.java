@@ -138,7 +138,6 @@ public class PceGraph {
         // KShortestPaths on weightedGraph
         KShortestSimplePaths<String, PceGraphEdge> swp =
             new KShortestSimplePaths<String, PceGraphEdge>(weightedGraph, mhopsPerPath, wpv);
-
         allWPaths = swp.getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue(), kpathsToBring);
 
         if (allWPaths.isEmpty()) {
@@ -152,7 +151,6 @@ public class PceGraph {
         for (GraphPath<String, PceGraphEdge> path : allWPaths) {
             LOG.info("path Weight: {} : {}", path.getWeight(), path.getVertexList().toString());
         }
-        // debug print
 
         return true;
     }
@@ -170,10 +168,8 @@ public class PceGraph {
             LOG.error("In addLinkToGraph link dest node is null : {}", pcelink.toString());
             return false;
         }
-
         LOG.debug("In addLinkToGraph link to nodes : {}{} {}", pcelink.toString(), source.toString(), dest.toString());
         return true;
-
     }
 
     private void populateWithNodes(DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph) {

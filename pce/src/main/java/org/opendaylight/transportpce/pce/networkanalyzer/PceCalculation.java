@@ -66,7 +66,7 @@ public class PceCalculation {
 
     // this List serves graph calculation
     private Map<NodeId, PceNode> allPceNodes = new HashMap<NodeId, PceNode>();
-    // this List serves calculation of ZtoA path descritopn
+    // this List serves calculation of ZtoA path description
     // TODO maybe better solution is possible
     private Map<LinkId, PceLink> allPceLinks = new HashMap<LinkId, PceLink>();
     private Set<LinkId> linksToExclude = new HashSet<LinkId>();
@@ -395,7 +395,7 @@ public class PceCalculation {
 
     private ConstraintTypes validateNodeConstraints(PceNode pcenode) {
 
-        if (pceHardConstraints.getExcludeSupNodes().isEmpty()  && pceHardConstraints.getExcludeCLLI().isEmpty()) {
+        if (pceHardConstraints.getExcludeSupNodes().isEmpty() && pceHardConstraints.getExcludeCLLI().isEmpty()) {
             return ConstraintTypes.NONE;
         }
 
