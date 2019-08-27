@@ -38,6 +38,7 @@ import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
 import org.opendaylight.transportpce.olm.util.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 
 public class PowerMgmtTest extends AbstractTest {
@@ -119,6 +120,34 @@ public class PowerMgmtTest extends AbstractTest {
         boolean output = this.powerMgmt.setPower(input);
         Assert.assertEquals(true, output);
 
+    }
+
+    @Test
+    public void testPowerTurnDown() {
+        ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
+        boolean output = this.powerMgmt.powerTurnDown(input);
+        Assert.assertEquals(true, output);
+    }
+
+    @Test
+    public void testPowerTurnDown2() {
+        ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput2();
+        boolean output = this.powerMgmt.powerTurnDown(input);
+        Assert.assertEquals(false, output);
+    }
+
+    @Test
+    public void testPowerTurnDown3() {
+        ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput3();
+        boolean output = this.powerMgmt.powerTurnDown(input);
+        Assert.assertEquals(true, output);
+    }
+
+    @Test
+    public void testPowerTurnDown4() {
+        ServicePowerTurndownInput input = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput4();
+        boolean output = this.powerMgmt.powerTurnDown(input);
+        Assert.assertEquals(false, output);
     }
 
     @Test

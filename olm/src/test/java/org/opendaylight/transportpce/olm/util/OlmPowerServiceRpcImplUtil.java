@@ -98,9 +98,51 @@ public final class OlmPowerServiceRpcImplUtil {
         nodes.add(node1);
         nodes.add(node2);
         ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
-            .setNodes(nodes)
-            .setServiceName("service 1")
-            .setWaveNumber(Long.valueOf("1234")).build();
+                .setNodes(nodes)
+                .setServiceName("service 1")
+                .setWaveNumber(Long.valueOf("1234")).build();
+
+        return input;
+    }
+
+    public static ServicePowerTurndownInput getServicePowerTurndownInput2() {
+        Nodes node1 = new NodesBuilder().setDestTp("destdeg").setSrcTp("src").setNodeId("node 1").build();
+        Nodes node2 = new NodesBuilder().setDestTp("destdeg").setSrcTp("src").setNodeId("node 2").build();
+        List<Nodes> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+        ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
+                .setNodes(nodes)
+                .setServiceName("service 1")
+                .setWaveNumber(Long.valueOf("1234")).build();
+
+        return input;
+    }
+
+    public static ServicePowerTurndownInput getServicePowerTurndownInput3() {
+        Nodes node1 = new NodesBuilder().setDestTp("destsrg").setSrcTp("src").setNodeId("node 1").build();
+        Nodes node2 = new NodesBuilder().setDestTp("destsrg").setSrcTp("src").setNodeId("node 2").build();
+        List<Nodes> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+        ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
+                .setNodes(nodes)
+                .setServiceName("service 1")
+                .setWaveNumber(Long.valueOf("1234")).build();
+
+        return input;
+    }
+
+    public static ServicePowerTurndownInput getServicePowerTurndownInput4() {
+        Nodes node1 = new NodesBuilder().setDestTp("destdeg").setSrcTp("src").setNodeId("node 1").build();
+        Nodes node2 = new NodesBuilder().setDestTp("destdeg").setSrcTp("src").setNodeId("node 2").build();
+        List<Nodes> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+        ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
+                .setNodes(nodes)
+                .setServiceName("service 1")
+                .setWaveNumber(Long.valueOf("1234")).build();
 
         return input;
     }
