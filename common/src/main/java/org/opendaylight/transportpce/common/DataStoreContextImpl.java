@@ -74,7 +74,8 @@ public class DataStoreContextImpl implements DataStoreContext {
         this.dataBroker = createDataBroker();
         this.notificationService = createNotificationService();
         this.notificationPublishService = createNotificationPublishService();
-        for (ListenerRegistration<SchemaContextListener> listener : this.mockedSchemaContext.listeners) {
+        for (ListenerRegistration<? extends SchemaContextListener> listener :
+                                                        this.mockedSchemaContext.listeners.getRegistrations()) {
             listener.getInstance().onGlobalContextUpdated(this.mockedSchemaContext.schemaContext);
         }
     }

@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>3.0.10</version>
+    <version>4.0.4</version>
     <relativePath/>
   </parent>
 
@@ -24,9 +24,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.opendaylight.mdsal.model</groupId>
-        <artifactId>mdsal-model-artifacts</artifactId>
-        <version>0.13.2</version>
+        <groupId>org.opendaylight.mdsal</groupId>
+        <artifactId>mdsal-artifacts</artifactId>
+        <version>4.0.3</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>

@@ -192,7 +192,7 @@ public class PceConstraintsCalc {
         for (int i = 0; i < listHops.size(); i++) {
             HopType hoptype = listHops.get(i).getHopType().getHopType();
 
-            String hopt = hoptype.getImplementedInterface().getSimpleName();
+            String hopt = hoptype.implementedInterface().getSimpleName();
             LOG.info("in readIncludeNodes next hop to include {}", hopt);
             switch (hopt) {
                 case "Node":
