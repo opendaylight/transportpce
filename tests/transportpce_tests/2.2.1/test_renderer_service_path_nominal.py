@@ -205,7 +205,7 @@ class TransportPCERendererTesting(unittest.TestCase):
               'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
               'supporting-port': 'L1'}, res['interface'][0])
         self.assertDictEqual(
-             {u'frequency': 191.65, u'width': 40},
+             {u'frequency': 195.8, u'width': 40},
              res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
 
     def test_07_service_path_create_rdm_check(self):
@@ -223,7 +223,7 @@ class TransportPCERendererTesting(unittest.TestCase):
               'type': 'org-openroadm-interfaces:mediaChannelTrailTerminationPoint',
               'supporting-port': 'L1'}, res['interface'][0])
         self.assertDictEqual(
-             {u'min-freq': 191.625, u'max-freq': 191.67499999999998},
+             {u'min-freq': 195.775, u'max-freq': 195.825},
              res['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'])
 
 
@@ -242,7 +242,7 @@ class TransportPCERendererTesting(unittest.TestCase):
               'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
               'supporting-port': 'C3'}, res['interface'][0])
         self.assertDictEqual(
-             {u'frequency': 191.65, u'width': 40},
+             {u'frequency': 195.8, u'width': 40},
              res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
 
     # -mc supporting interfaces must not be created for SRG, only degrees
@@ -301,7 +301,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertDictEqual(
              {u'rate': u'org-openroadm-common-types:R100G',
               u'transmit-power':-5,
-              u'frequency': 191.65},
+              u'frequency': 195.8},
              res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_12_service_path_create_xpdr_check(self):
