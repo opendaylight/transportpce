@@ -14,9 +14,11 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
@@ -84,6 +86,7 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
     private PortMappingVersion221 portMappingVersion22;
     private PortMappingVersion121 portMappingVersion121;
     private OlmPowerService olmPowerService;
+    private DataBroker dataBroker;
     private PowerMgmt powerMgmtMock;
     @InjectMocks
     private OlmPowerService olmPowerServiceMock;
@@ -117,6 +120,7 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
             this.deviceTransactionManager);
         this.olmPowerService = new OlmPowerServiceImpl(this.getDataBroker(), this.powerMgmt,
             this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
+        this.dataBroker =  Mockito.mock(DataBroker.class);
         this.powerMgmtMock = Mockito.mock(PowerMgmt.class);
         this.olmPowerServiceMock = new OlmPowerServiceImpl(this.getDataBroker(), this.powerMgmtMock,
             this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
@@ -387,5 +391,42 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
         ServicePowerResetInput input = OlmPowerServiceRpcImplUtil.getServicePowerResetInput();
         ServicePowerResetOutput output = this.olmPowerService.servicePowerReset(input);
         Assert.assertEquals(null, output);
+    }
+
+    @Test
+    public void testServicePowerTurndownSuccessResult() {
+        ServicePowerTurndownInput servicePowerTurndownInput = OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput();
+        ServicePowerTurndownOutput servicePowerTurndownOutput =
+                this.olmPowerService.servicePowerTurndown(servicePowerTurndownInput);
+        Assert.assertEquals(ResponseCodes.SUCCESS_RESULT, servicePowerTurndownOutput.getResult());
+    }
+
+    @Test
+    public void testServicePowerTurndownFailResult() {
+        ServicePowerTurndownInput servicePowerTurndownInput =
+                OlmPowerServiceRpcImplUtil.getServicePowerTurndownInput2();
+        ServicePowerTurndownOutput servicePowerTurndownOutput =
+                this.olmPowerService.servicePowerTurndown(servicePowerTurndownInput);
+        Assert.assertEquals(ResponseCodes.FAILED_RESULT, servicePowerTurndownOutput.getResult());
+    }
+
+    @Test
+    public void testServicePowerSetupSuccessResult() {
+        ServicePowerSetupInput servicePowerSetupInput =
+                OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
+        ServicePowerSetupOutput servicePowerSetupOutput =
+                this.olmPowerService.servicePowerSetup(servicePowerSetupInput);
+        Assert.assertEquals(ResponseCodes.SUCCESS_RESULT, servicePowerSetupOutput.getResult());
+    }
+
+    @Test
+    public void testServicePowerSetupFailResult() {
+        ServicePowerSetupInput servicePowerSetupInput = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
+        Mockito.when(powerMgmtMock.setPower(servicePowerSetupInput)).thenReturn(Boolean.FALSE);
+        OlmPowerService olmPowerServiceWithMock = new OlmPowerServiceImpl(dataBroker, powerMgmtMock,
+                this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
+        ServicePowerSetupOutput servicePowerSetupOutput =
+                olmPowerServiceWithMock.servicePowerSetup(servicePowerSetupInput);
+        Assert.assertEquals(ResponseCodes.FAILED_RESULT, servicePowerSetupOutput.getResult());
     }
 }
