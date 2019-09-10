@@ -37,7 +37,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode1.log', 'w') as outfile:
                 cls.honeynode_process1 = subprocess.Popen(
-                    [executable, "17830", "sample_configs/openroadm/2.1/oper-ROADMA.xml"],
+                    [executable, "17831", "sample_configs/openroadm/2.1/oper-ROADMA.xml"],
                     stdout=outfile)
 
     @classmethod
@@ -47,7 +47,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode2.log', 'w') as outfile:
                 cls.honeynode_process2 = subprocess.Popen(
-                    [executable, "17831", "sample_configs/openroadm/2.1/oper-XPDRA.xml"],
+                    [executable, "17830", "sample_configs/openroadm/2.1/oper-XPDRA.xml"],
                     stdout=outfile)
 
     @classmethod
@@ -100,7 +100,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17830",
+             "netconf-node-topology:port": "17831",
              "netconf-node-topology:tcp-only": "false",
              "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -119,7 +119,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17831",
+            "netconf-node-topology:port": "17830",
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}

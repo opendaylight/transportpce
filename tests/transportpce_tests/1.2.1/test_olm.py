@@ -49,7 +49,7 @@ class TransportOlmTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode2.log', 'w') as outfile:
                 cls.honeynode_process2 = subprocess.Popen(
-                    [executable, "17831", "sample_configs/openroadm/2.1/oper-ROADMA-full.xml"],
+                    [executable, "17821", "sample_configs/openroadm/2.1/oper-ROADMA-full.xml"],
                     stdout=outfile)
 
     @classmethod
@@ -59,7 +59,7 @@ class TransportOlmTesting(unittest.TestCase):
         if os.path.isfile(executable):
             with open('honeynode3.log', 'w') as outfile:
                 cls.honeynode_process3 = subprocess.Popen(
-                    [executable, "17833", "sample_configs/openroadm/2.1/oper-ROADMC-full.xml"],
+                    [executable, "17823", "sample_configs/openroadm/2.1/oper-ROADMC-full.xml"],
                     stdout=outfile)
     @classmethod
     def __start_honeynode4(cls):
@@ -173,7 +173,7 @@ class TransportOlmTesting(unittest.TestCase):
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17831",
+             "netconf-node-topology:port": "17821",
              "netconf-node-topology:tcp-only": "false",
              "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -192,7 +192,7 @@ class TransportOlmTesting(unittest.TestCase):
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17833",
+             "netconf-node-topology:port": "17823",
              "netconf-node-topology:tcp-only": "false",
              "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
