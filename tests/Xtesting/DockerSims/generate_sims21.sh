@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cp Dockerfile.orig Dockerfile
+cp Dockerfile.orig.21 Dockerfile
 sudo docker build --tag=alpine_honeynode:2.1 .
 for conf_file in `(cd ../.. && ls sample_configs/openroadm/2.1/)`
 do  DOCKNAME=honeynode_`echo $conf_file |cut -d\. -f1 |tr '[:upper:]' '[:lower:]'`
