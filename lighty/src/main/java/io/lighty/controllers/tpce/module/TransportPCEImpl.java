@@ -105,53 +105,53 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
     public TransportPCEImpl(LightyServices lightyServices) {
         LOG.info("Creating common beans ...");
-        deviceTransactionManager = new DeviceTransactionManagerImpl(lightyServices.getControllerBindingMountPointService(), MaxDurationToSubmitTransaction);
-        mappingUtils = new MappingUtilsImpl(lightyServices.getControllerBindingPingPongDataBroker());
+        deviceTransactionManager = new DeviceTransactionManagerImpl(lightyServices.getBindingMountPointService(), MaxDurationToSubmitTransaction);
+        mappingUtils = new MappingUtilsImpl(lightyServices.getBindingDataBroker());
         openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(deviceTransactionManager);
         openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(deviceTransactionManager);
         openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils, openRoadmInterfacesImpl121, openRoadmInterfacesImpl221);
-        portMappingVersion221 = new PortMappingVersion221(lightyServices.getControllerBindingPingPongDataBroker(), deviceTransactionManager, openRoadmInterfaces);
-        requestProcessor = new RequestProcessor(lightyServices.getControllerBindingPingPongDataBroker());
+        portMappingVersion221 = new PortMappingVersion221(lightyServices.getBindingDataBroker(), deviceTransactionManager, openRoadmInterfaces);
+        requestProcessor = new RequestProcessor(lightyServices.getBindingDataBroker());
         networkTransaction = new NetworkTransactionImpl(requestProcessor);
-        portMappingVersion121 = new PortMappingVersion121(lightyServices.getControllerBindingPingPongDataBroker(), deviceTransactionManager, openRoadmInterfaces);
-        portMapping = new PortMappingImpl(lightyServices.getControllerBindingPingPongDataBroker(), portMappingVersion221, portMappingVersion121);
+        portMappingVersion121 = new PortMappingVersion121(lightyServices.getBindingDataBroker(), deviceTransactionManager, openRoadmInterfaces);
+        portMapping = new PortMappingImpl(lightyServices.getBindingDataBroker(), portMappingVersion221, portMappingVersion121);
         crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
         crossConnect = new CrossConnectImpl(deviceTransactionManager, mappingUtils, crossConnectImpl121, crossConnectImpl221);
         fixedFlex = new FixedFlexImpl();
 
         LOG.info("Creating PCE beans ...");
-        pathComputationService = new PathComputationServiceImpl(networkTransaction, lightyServices.getControllerBindingNotificationPublishService());
-        pceProvider = new PceProvider(lightyServices.getControllerRpcProviderRegistry(), pathComputationService);
+        pathComputationService = new PathComputationServiceImpl(networkTransaction, lightyServices.getBindingNotificationPublishService());
+        pceProvider = new PceProvider(lightyServices.getRpcProviderService(), pathComputationService);
 
         LOG.info("Creating network-model beans ...");
         openRoadmTopology22 = new OpenRoadmTopology22(networkTransaction, deviceTransactionManager);
         openRoadmFactory = new OpenRoadmFactory(mappingUtils, openRoadmTopology22);
-        linkDiscoveryImpl = new R2RLinkDiscovery(lightyServices.getControllerBindingPingPongDataBroker(), deviceTransactionManager, openRoadmFactory, networkTransaction);
-        networkutilsServiceImpl = new NetworkUtilsImpl(lightyServices.getControllerBindingPingPongDataBroker(), openRoadmFactory);
+        linkDiscoveryImpl = new R2RLinkDiscovery(lightyServices.getBindingDataBroker(), deviceTransactionManager, openRoadmFactory, networkTransaction);
+        networkutilsServiceImpl = new NetworkUtilsImpl(lightyServices.getBindingDataBroker(), openRoadmFactory);
         networkModelService = new NetworkModelServiceImpl(networkTransaction, linkDiscoveryImpl, deviceTransactionManager, openRoadmFactory, portMapping);
-        netConfTopologyListener = new NetConfTopologyListener(networkModelService, lightyServices.getControllerBindingPingPongDataBroker(), deviceTransactionManager);
-        networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getControllerBindingPingPongDataBroker(), lightyServices.getControllerRpcProviderRegistry(), networkutilsServiceImpl, netConfTopologyListener, openRoadmFactory);
+        netConfTopologyListener = new NetConfTopologyListener(networkModelService, lightyServices.getBindingDataBroker(), deviceTransactionManager);
+        networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener, openRoadmFactory);
 
         LOG.info("Creating OLM beans ...");
-        powerMgmt = new PowerMgmtImpl(lightyServices.getControllerBindingPingPongDataBroker(), openRoadmInterfaces, crossConnect, deviceTransactionManager);
-        olmPowerService = new OlmPowerServiceImpl(lightyServices.getControllerBindingPingPongDataBroker(), powerMgmt, deviceTransactionManager, portMapping, mappingUtils, openRoadmInterfaces);
-        olmProvider = new OlmProvider(lightyServices.getControllerRpcProviderRegistry(), olmPowerService);
+        powerMgmt = new PowerMgmtImpl(lightyServices.getBindingDataBroker(), openRoadmInterfaces, crossConnect, deviceTransactionManager);
+        olmPowerService = new OlmPowerServiceImpl(lightyServices.getBindingDataBroker(), powerMgmt, deviceTransactionManager, portMapping, mappingUtils, openRoadmInterfaces);
+        olmProvider = new OlmProvider(lightyServices.getRpcProviderService(), olmPowerService);
         olmPowerServiceRpc = new OlmPowerServiceRpcImpl(olmPowerService);
 
         LOG.info("Creating renderer beans ...");
         openRoadmInterface121 = new OpenRoadmInterface121(portMapping, openRoadmInterfaces);
         openRoadmInterface22 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces, fixedFlex);
         openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(mappingUtils, openRoadmInterface121, openRoadmInterface22);
-        deviceRendererService = new DeviceRendererServiceImpl(lightyServices.getControllerBindingPingPongDataBroker(), deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect, portMapping);
+        deviceRendererService = new DeviceRendererServiceImpl(lightyServices.getBindingDataBroker(), deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect, portMapping);
         deviceRendererRPC = new DeviceRendererRPCImpl(deviceRendererService);
-        networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(lightyServices.getControllerBindingPingPongDataBroker());
-        rendererServiceOperations = new RendererServiceOperationsImpl(deviceRendererService, olmPowerServiceRpc, lightyServices.getControllerBindingPingPongDataBroker(), networkModelWavelengthService, lightyServices.getControllerBindingNotificationPublishService());
-        rendererProvider = new RendererProvider(lightyServices.getControllerRpcProviderRegistry(), deviceRendererRPC, rendererServiceOperations);
+        networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(lightyServices.getBindingDataBroker());
+        rendererServiceOperations = new RendererServiceOperationsImpl(deviceRendererService, olmPowerServiceRpc, lightyServices.getBindingDataBroker(), networkModelWavelengthService, lightyServices.getBindingNotificationPublishService());
+        rendererProvider = new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererRPC, rendererServiceOperations);
 
         LOG.info("Creating service-handler beans ...");
-        servicehandlerProvider = new ServicehandlerProvider(lightyServices.getControllerBindingPingPongDataBroker(), lightyServices.getControllerRpcProviderRegistry(), lightyServices.getControllerBindingNotificationService(),
-                pathComputationService, rendererServiceOperations, networkModelWavelengthService, lightyServices.getControllerBindingNotificationPublishService());
+        servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
+                pathComputationService, rendererServiceOperations, networkModelWavelengthService, lightyServices.getBindingNotificationPublishService());
 
     }
 
