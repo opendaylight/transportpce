@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import time
 import unittest
+import test_utils
 
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
@@ -28,41 +29,20 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
-    def __start_honeynode1(cls):
-        executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                      "/honeynode-distribution-1.18.01/honeycomb-tpce")
-        if os.path.isfile(executable):
-            with open('honeynode1.log', 'w') as outfile:
-                cls.honeynode_process1 = subprocess.Popen(
-                    [executable, "17840", "sample_configs/openroadm/2.2.1/oper-XPDRA.xml"],
-                    stdout=outfile)
-
-    @classmethod
-    def __start_honeynode2(cls):
-        executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                      "/honeynode-distribution-1.18.01/honeycomb-tpce")
-        if os.path.isfile(executable):
-            with open('honeynode2.log', 'w') as outfile:
-                cls.honeynode_process2 = subprocess.Popen(
-                    [executable, "17841", "sample_configs/openroadm/2.2.1/oper-ROADMA.xml"],
-                    stdout=outfile)
-
-    @classmethod
-    def __start_odl(cls):
-        executable = "../karaf/target/assembly/bin/karaf"
-        with open('odl.log', 'w') as outfile:
-            cls.odl_process = subprocess.Popen(
-                ["bash", executable, "server"], stdout=outfile,
-                stdin=open(os.devnull))
-
-    @classmethod
     def setUpClass(cls):
-        cls.__start_honeynode1()
+        print ("starting honeynode1...")
+        cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
         time.sleep(20)
-        cls.__start_honeynode2()
+
+        print ("starting honeynode2...")
+        cls.honeynode_process2 = test_utils.start_roadma_honeynode()
         time.sleep(20)
-        cls.__start_odl()
+        print ("all honeynodes started")
+
+        print ("starting opendaylight...")
+        cls.odl_process = test_utils.start_tpce()
         time.sleep(60)
+        print ("opendaylight started")
 
     @classmethod
     def tearDownClass(cls):

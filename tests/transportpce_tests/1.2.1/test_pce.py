@@ -17,6 +17,7 @@ import shutil
 import subprocess
 import time
 import unittest
+import test_utils
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -43,18 +44,12 @@ class TransportPCEtesting(unittest.TestCase):
                 cls.complex_topo_uni_dir_data = topo_uni_dir_complex.read();
 
     @classmethod
-    def __start_odl(cls):
-        executable = "../karaf/target/assembly/bin/karaf"
-        with open('odl.log', 'w') as outfile:
-            cls.odl_process = subprocess.Popen(
-                ["bash", executable, "server"], stdout=outfile,
-                stdin=open(os.devnull))
-
-    @classmethod
     def setUpClass(cls):  # a class method called before tests in an individual class run.
         cls._get_file()
-        cls.__start_odl()
+        print ("starting opendaylight...")
+        cls.odl_process = test_utils.start_tpce()
         time.sleep(90)
+        print ("opendaylight started")
 
     @classmethod
     def tearDownClass(cls):
