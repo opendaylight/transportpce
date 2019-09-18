@@ -19,6 +19,7 @@ import subprocess
 import time
 import unittest
 import logging
+import test_utils
 
 class TransportGNPYtesting(unittest.TestCase):
 
@@ -32,17 +33,11 @@ class TransportGNPYtesting(unittest.TestCase):
             os.remove("transportpce_tests/gnpy.log")
 
     @classmethod
-    def __start_odl(cls):
-        executable = "../karaf/target/assembly/bin/karaf"
-        with open('transportpce_tests/odl.log', 'w') as outfile:
-            cls.odl_process = subprocess.Popen(
-                ["bash", executable, "server"], stdout=outfile,
-                stdin=open(os.devnull))
-
-    @classmethod
     def setUpClass(cls):
-        cls.__start_odl()
+        print ("starting opendaylight...")
+        cls.odl_process = test_utils.start_tpce()
         time.sleep(30)
+        print ("opendaylight started")
 
     @classmethod
     def tearDownClass(cls):
