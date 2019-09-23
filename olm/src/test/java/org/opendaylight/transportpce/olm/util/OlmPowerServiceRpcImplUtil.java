@@ -147,11 +147,19 @@ public final class OlmPowerServiceRpcImplUtil {
         return input;
     }
 
-    public static CalculateSpanlossBaseInput getCalculateSpanlossBaseInput() {
+    public static CalculateSpanlossBaseInput getCalculateSpanlossBaseInputLink() {
         CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
-            .setLinkId(new LinkId("link 1"))
-            .setSrcType(CalculateSpanlossBaseInput.SrcType.Link)
-            .addAugmentation(null, null).build();
+                .setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
+                .setSrcType(CalculateSpanlossBaseInput.SrcType.Link)
+                .addAugmentation(null, null).build();
+        return input;
+    }
+
+    public static CalculateSpanlossBaseInput getCalculateSpanlossBaseInputAll() {
+        CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
+                .setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
+                .setSrcType(CalculateSpanlossBaseInput.SrcType.All)
+                .addAugmentation(null, null).build();
         return input;
     }
 
@@ -174,5 +182,4 @@ public final class OlmPowerServiceRpcImplUtil {
             .setServiceName("service 1").build();
         return input;
     }
-
 }
