@@ -23,10 +23,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
 
   <properties>
-    <mdsal.version>1.10.0-SNAPSHOT</mdsal.version>
+    <mdsal.version>1.10.1-SNAPSHOT</mdsal.version>
     <yangtools.version>3.0.4</yangtools.version>
-    <netconf.version>1.7.0-SNAPSHOT</netconf.version>
-    <restconf.version>1.10.0-SNAPSHOT</restconf.version>
+    <netconf.version>1.7.1-SNAPSHOT</netconf.version>
+    <restconf.version>1.10.1-SNAPSHOT</restconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
