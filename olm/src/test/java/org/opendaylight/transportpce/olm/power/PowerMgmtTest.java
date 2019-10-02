@@ -63,7 +63,7 @@ public class PowerMgmtTest extends AbstractTest {
         this.mountPoint = new MountPointStub(this.getDataBroker());
         this.mountPointService = new MountPointServiceStub(mountPoint);
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
-        this.mappingUtils = Mockito.spy(MappingUtils.class);
+        this.mappingUtils = Mockito.spy(new MappingUtilsImpl(getDataBroker()));
         Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1).when(mappingUtils)
                 .getOpenRoadmVersion(Mockito.anyString());
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
@@ -83,43 +83,35 @@ public class PowerMgmtTest extends AbstractTest {
         this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.portMappingVersion121);
         this.portMapping = Mockito.spy(this.portMapping);
         this.powerMgmt = new PowerMgmtImpl(this.getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
-            this.deviceTransactionManager);
+                this.deviceTransactionManager);
     }
 
     @Test
     public void testSetPower() {
-
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
         boolean output = this.powerMgmt.setPower(input);
         Assert.assertEquals(true, output);
-
     }
 
     @Test
     public void testSetPower2() {
-
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput2();
         boolean output = this.powerMgmt.setPower(input);
         Assert.assertEquals(true, output);
-
     }
 
     @Test
     public void testSetPower3() {
-
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput3();
         boolean output = this.powerMgmt.setPower(input);
         Assert.assertEquals(true, output);
-
     }
 
     @Test
     public void testSetPower4() {
-
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput4();
         boolean output = this.powerMgmt.setPower(input);
         Assert.assertEquals(true, output);
-
     }
 
     @Test
@@ -155,7 +147,7 @@ public class PowerMgmtTest extends AbstractTest {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
             TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.getDataBroker(), null);
-            Thread.sleep(500);
+            Thread.sleep(1000);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
         boolean output = this.powerMgmt.setPower(input);

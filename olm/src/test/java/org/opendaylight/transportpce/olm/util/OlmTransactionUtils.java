@@ -136,10 +136,10 @@ public final class OlmTransactionUtils {
                         .setSectionEltNumber(Integer.valueOf(1)).build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al2 =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
-                        .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
-                        .setSectionElement(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
-                                .attributes.amplified.link.section.element.section.element.SpanBuilder()
-                                .setSpan(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
+                    .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
+                    .setSectionElement(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
+                            .attributes.amplified.link.section.element.section.element.SpanBuilder()
+                            .setSpan(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
                                         .attributes.amplified.link.section.element.section.element.span.SpanBuilder()
                                         .setAdministrativeState(AdminStates.InService)
                                         .setAutoSpanloss(true)
@@ -183,12 +183,12 @@ public final class OlmTransactionUtils {
         // create the roadm-to-roadm link to be measured
         List<Link> ietfLinkList = new ArrayList<>();
         Link roadm2roadmLink = new LinkBuilder().setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
-                .setSource(new SourceBuilder().setSourceNode(ietfNodeA.getNodeId()).setSourceTp("DEG2-TTP-TXRX").build())
-                .setDestination(new DestinationBuilder().setDestNode(ietfNodeC.getNodeId()).setDestTp("DEG1-TTP-TXRX")
-                        .build())
-                .addAugmentation(Link1.class, aug1)
-                .addAugmentation(Link1.class, aug2)
-                .build();
+            .setSource(new SourceBuilder().setSourceNode(ietfNodeA.getNodeId()).setSourceTp("DEG2-TTP-TXRX").build())
+            .setDestination(new DestinationBuilder().setDestNode(ietfNodeC.getNodeId()).setDestTp("DEG1-TTP-TXRX")
+                    .build())
+            .addAugmentation(Link1.class, aug1)
+            .addAugmentation(Link1.class, aug2)
+            .build();
         ietfLinkList.add(roadm2roadmLink);
         // create the ietf network
         Network1 openroadmAugmToIetfNetwork = new Network1Builder().setLink(ietfLinkList).build();
@@ -219,9 +219,9 @@ public final class OlmTransactionUtils {
         List<Measurement> measurementListA = new ArrayList<>();
         measurementListA.add(measurementA);
         CurrentPm cpA = new CurrentPmBuilder()
-                .setType(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum.OpticalPowerOutput)
-                .setMeasurement(measurementListA)
-                .build();
+            .setType(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum.OpticalPowerOutput)
+            .setMeasurement(measurementListA)
+            .build();
         List<CurrentPm> currentPmListA = new ArrayList<>();
         currentPmListA.add(cpA);
         InstanceIdentifier<Interface> interfaceIIDA = InstanceIdentifier.create(OrgOpenroadmDevice.class)
@@ -230,7 +230,7 @@ public final class OlmTransactionUtils {
                 .setCurrentPm(currentPmListA)
                 .setPmResourceInstance(interfaceIIDA)
                 .setPmResourceType(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
                 .setPmResourceTypeExtension("")
                 .setRetrievalTime(new DateAndTime("2018-06-07T13:22:58+00:00"))
                 .build();
@@ -248,9 +248,9 @@ public final class OlmTransactionUtils {
         List<Measurement> measurementListC = new ArrayList<>();
         measurementListC.add(measurementC);
         CurrentPm cpC = new CurrentPmBuilder()
-                .setType(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum.OpticalPowerInput)
-                .setMeasurement(measurementListC)
-                .build();
+            .setType(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum.OpticalPowerInput)
+            .setMeasurement(measurementListC)
+            .build();
         List<CurrentPm> currentPmListC = new ArrayList<>();
         currentPmListC.add(cpC);
         InstanceIdentifier<Interface> interfaceIIDC = InstanceIdentifier.create(OrgOpenroadmDevice.class)
@@ -259,7 +259,7 @@ public final class OlmTransactionUtils {
                 .setCurrentPm(currentPmListC)
                 .setPmResourceInstance(interfaceIIDC)
                 .setPmResourceType(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
                 .setPmResourceTypeExtension("")
                 .setRetrievalTime(new DateAndTime("2018-06-07T13:22:58+00:00"))
                 .build();
