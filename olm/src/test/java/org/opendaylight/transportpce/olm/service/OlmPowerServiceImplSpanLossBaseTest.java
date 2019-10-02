@@ -22,7 +22,9 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
+import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
@@ -73,9 +75,9 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     public void setUp() throws OpenRoadmInterfaceException {
         this.openRoadmInterfacesImpl121 = Mockito.mock(OpenRoadmInterfacesImpl121.class);
         this.openRoadmInterfacesImpl221 = Mockito.mock(OpenRoadmInterfacesImpl221.class);
-        this.mappingUtils = Mockito.mock(MappingUtils.class);
+        this.mappingUtils = Mockito.mock(MappingUtilsImpl.class);
         this.portMapping = Mockito.mock(PortMappingImpl.class);
-        this.deviceTransactionManager = Mockito.mock(DeviceTransactionManager.class);
+        this.deviceTransactionManager = Mockito.mock(DeviceTransactionManagerImpl.class);
         this.powerMgmt = Mockito.mock(PowerMgmtImpl.class);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(this.deviceTransactionManager, this.mappingUtils,
                 this.openRoadmInterfacesImpl121, this.openRoadmInterfacesImpl221);

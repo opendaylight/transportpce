@@ -28,6 +28,7 @@ import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl221;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
+import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion121;
@@ -96,7 +97,7 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         this.mountPoint = new MountPointStub(this.getDataBroker());
         this.mountPointService = new MountPointServiceStub(mountPoint);
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
-        this.mappingUtils = Mockito.spy(MappingUtils.class);
+        this.mappingUtils = Mockito.spy(new MappingUtilsImpl(getDataBroker()));
         Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1).when(mappingUtils)
                 .getOpenRoadmVersion(Mockito.anyString());
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
