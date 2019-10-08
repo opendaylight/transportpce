@@ -29,37 +29,42 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev171017.ServiceRpcResultSh;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev171017.ServiceRpcResultShBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceNotificationTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeader;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeaderBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.endpoint.RxDirection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.endpoint.TxDirection;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.lgx.LgxBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.port.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInput.Option;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfo;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeader;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.lgx.LgxBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceReconfigureInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceReconfigureInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRestorationInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRestorationInput.Option;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRestorationInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfo;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.feasibility.check.inputs.ServiceAEnd;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.feasibility.check.inputs.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.feasibility.check.inputs.ServiceZEnd;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.feasibility.check.inputs.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
@@ -74,80 +79,83 @@ public final class ServiceDataUtils {
 
     public static ServiceCreateInput buildServiceCreateInput() {
 
-        ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
             .ServiceAEnd serviceAEnd = getServiceAEndBuild()
             .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-            .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
+            .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service
             .create.input.ServiceZEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-3-2")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
+            .setNodeId(new NodeIdType("XPONDER-3-2"))
             .setTxDirection(getTxDirection())
             .setRxDirection(getRxDirection())
             .build();
 
-        builtInput.setCommonId("commonId");
-        builtInput.setConnectionType(ConnectionType.Service);
-        builtInput.setCustomer("Customer");
-        builtInput.setServiceName("service 1");
-        builtInput.setServiceAEnd(serviceAEnd);
-        builtInput.setServiceZEnd(serviceZEnd);
-        builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
-            .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build());
+        ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder()
+            .setCommonId("commonId")
+            .setConnectionType(ConnectionType.Service)
+            .setCustomer("Customer")
+            .setServiceName("service 1")
+            .setServiceAEnd(serviceAEnd)
+            .setServiceZEnd(serviceZEnd)
+            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
+                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build());
 
         return builtInput.build();
     }
 
     public static ServiceCreateInput buildServiceCreateInputWithHardConstraints() {
 
-        ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
                 .ServiceAEnd serviceAEnd = getServiceAEndBuild()
                 .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-                .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
+                .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service
                 .create.input.ServiceZEndBuilder()
-                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-3-2")
+                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
+                .setNodeId(new NodeIdType("XPONDER-3-2"))
                 .setTxDirection(getTxDirection())
                 .setRxDirection(getRxDirection())
                 .build();
 
-        builtInput.setCommonId("commonId");
-        builtInput.setConnectionType(ConnectionType.Service);
-        builtInput.setCustomer("Customer");
-        builtInput.setServiceName("service 1");
-        builtInput.setServiceAEnd(serviceAEnd);
-        builtInput.setServiceZEnd(serviceZEnd);
-        builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
-                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build());
-        builtInput.setHardConstraints(new HardConstraintsBuilder().build());
+        ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder()
+            .setCommonId("commonId")
+            .setConnectionType(ConnectionType.Service)
+            .setCustomer("Customer")
+            .setServiceName("service 1")
+            .setServiceAEnd(serviceAEnd)
+            .setServiceZEnd(serviceZEnd)
+            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
+                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build())
+            .setHardConstraints(new HardConstraintsBuilder().build());
 
         return builtInput.build();
     }
 
     public static ServiceCreateInput buildServiceCreateInputWithSoftConstraints() {
 
-        ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
                 .ServiceAEnd serviceAEnd = getServiceAEndBuild()
                 .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
-                .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
+                .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service
                 .create.input.ServiceZEndBuilder()
-                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-3-2")
+                .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
+                .setNodeId(new NodeIdType("XPONDER-3-2"))
                 .setTxDirection(getTxDirection())
                 .setRxDirection(getRxDirection())
                 .build();
 
-        builtInput.setCommonId("commonId");
-        builtInput.setConnectionType(ConnectionType.Service);
-        builtInput.setCustomer("Customer");
-        builtInput.setServiceName("service 1");
-        builtInput.setServiceAEnd(serviceAEnd);
-        builtInput.setServiceZEnd(serviceZEnd);
-        builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
-                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build());
-        builtInput.setSoftConstraints(new SoftConstraintsBuilder().build());
+        ServiceCreateInputBuilder builtInput = new ServiceCreateInputBuilder()
+            .setCommonId("commonId")
+            .setConnectionType(ConnectionType.Service)
+            .setCustomer("Customer")
+            .setServiceName("service 1")
+            .setServiceAEnd(serviceAEnd)
+            .setServiceZEnd(serviceZEnd)
+            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
+                .setRpcAction(RpcActions.ServiceCreate).setNotificationUrl("notification url").build())
+            .setSoftConstraints(new SoftConstraintsBuilder().build());
 
         return builtInput.build();
     }
@@ -175,77 +183,80 @@ public final class ServiceDataUtils {
 
     public static TempServiceCreateInput buildTempServiceCreateInput() {
 
-        TempServiceCreateInputBuilder builtInput = new TempServiceCreateInputBuilder();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.create.input
-            .ServiceAEnd serviceAEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.create.input
+            .ServiceAEnd serviceAEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
             .temp.service.create.input.ServiceAEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
+            .setNodeId(new NodeIdType("XPONDER-1-2"))
             .setTxDirection(getTxDirection())
             .setRxDirection(getRxDirection())
             .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.create.input
-            .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.create.input
+            .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp
             .service.create.input.ServiceZEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-3-2")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
+            .setNodeId(new NodeIdType("XPONDER-3-2"))
             .setTxDirection(getTxDirection())
             .setRxDirection(getRxDirection())
             .build();
 
-        builtInput.setCommonId("commonId");
-        builtInput.setConnectionType(ConnectionType.Service);
-        builtInput.setCustomer("Customer");
-        builtInput.setServiceAEnd(serviceAEnd);
-        builtInput.setServiceZEnd(serviceZEnd);
-        builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
+        TempServiceCreateInputBuilder builtInput = new TempServiceCreateInputBuilder()
+            .setCommonId("commonId")
+            .setConnectionType(ConnectionType.Service)
+            .setCustomer("Customer")
+            .setServiceAEnd(serviceAEnd)
+            .setServiceZEnd(serviceZEnd)
+            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
                 .setRpcAction(RpcActions.TempServiceCreate).setNotificationUrl("notification url").build());
 
         return builtInput.build();
     }
 
     public static ServiceFeasibilityCheckInput buildServiceFeasibilityCheckInput() {
-        ServiceFeasibilityCheckInputBuilder builtInput = new ServiceFeasibilityCheckInputBuilder();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.feasibility.check.input
-            .ServiceAEnd serviceAEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
-                .feasibility.check.input.ServiceAEndBuilder()
+
+        ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
                     .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
-                    .setNodeId("XPONDER-1-2").setTxDirection(getTxDirection()).setRxDirection(getRxDirection())
-                    .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.feasibility.check.input
-            .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
-                .feasibility.check.input.ServiceZEndBuilder()
+                    .setNodeId(new NodeIdType("XPONDER-1-2"))
+                    .setTxDirection(getTxDirection()).setRxDirection(getRxDirection()).build();
+        ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
                     .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
-                    .setNodeId("XPONDER-3-2").setTxDirection(getTxDirection()).setRxDirection(getRxDirection())
-                    .build();
-        builtInput.setCommonId("commonId");
-        builtInput.setConnectionType(ConnectionType.Service);
-        builtInput.setCustomer("Customer");
-        builtInput.setServiceAEnd(serviceAEnd);
-        builtInput.setServiceZEnd(serviceZEnd);
-        builtInput.setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
+                    .setNodeId(new NodeIdType("XPONDER-3-2"))
+                    .setTxDirection(getTxDirection()).setRxDirection(getRxDirection()).build();
+        ServiceAEnd serviceAEndvalue = new ServiceAEndBuilder().build();
+
+        ServiceFeasibilityCheckInputBuilder builtInput = new ServiceFeasibilityCheckInputBuilder()
+            .setCommonId("commonId")
+            .setConnectionType(ConnectionType.Service)
+            .setCustomer("Customer")
+            .setServiceAEnd(serviceAEnd)
+            .setServiceZEnd(serviceZEnd)
+            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("request 1")
                 .setRpcAction(RpcActions.ServiceFeasibilityCheck).setNotificationUrl("notification url").build());
         return builtInput.build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
         .ServiceAEndBuilder getServiceAEndBuild() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
             .ServiceAEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
+            .setNodeId(new NodeIdType("XPONDER-1-2"))
             .setTxDirection(getTxDirection())
             .setRxDirection(getRxDirection());
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
         .ServiceZEndBuilder getServiceZEndBuild() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.create.input
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input
             .ServiceZEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
+            .setNodeId(new NodeIdType("XPONDER-1-2"))
             .setTxDirection(getTxDirection())
             .setRxDirection(getRxDirection());
     }
 
     private static TxDirection getTxDirection() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
                 .endpoint.TxDirectionBuilder().setPort(new PortBuilder().setPortDeviceName("device name")
                         .setPortName("port name").setPortRack("port rack").setPortShelf("port shelf")
                         .setPortSlot("port slot").setPortSubSlot("port subslot").setPortType("port type").build())
@@ -255,7 +266,7 @@ public final class ServiceDataUtils {
     }
 
     private static RxDirection getRxDirection() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
                 .endpoint.RxDirectionBuilder()
                 .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
                     .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
@@ -267,66 +278,71 @@ public final class ServiceDataUtils {
     }
 
     public static ServiceDeleteInput buildServiceDeleteInput() {
+
         ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
         OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
         DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
         deleteInputBldr.setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder().setServiceName("service 1")
             .setDueDate(datetime).setTailRetention(ServiceDeleteReqInfo.TailRetention.No).build());
-        SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder();
-        sdncBuilder.setNotificationUrl("notification url");
-        sdncBuilder.setRequestId("request 1");
-        sdncBuilder.setRequestSystemId("request system 1");
-        sdncBuilder.setRpcAction(RpcActions.ServiceDelete);
+        SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder()
+            .setNotificationUrl("notification url")
+            .setRequestId("request 1")
+            .setRequestSystemId("request system 1")
+            .setRpcAction(RpcActions.ServiceDelete);
         deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
         return deleteInputBldr.build();
     }
 
     public static TempServiceDeleteInput buildTempServiceDeleteInput() {
-        TempServiceDeleteInputBuilder deleteInputBldr = new TempServiceDeleteInputBuilder();
-        deleteInputBldr.setCommonId("service 1");
+        TempServiceDeleteInputBuilder deleteInputBldr = new TempServiceDeleteInputBuilder()
+            .setCommonId("service 1");
         return deleteInputBldr.build();
     }
 
     public static TempServiceDeleteInput buildTempServiceDeleteInput(String commonId) {
-        TempServiceDeleteInputBuilder deleteInputBldr = new TempServiceDeleteInputBuilder();
-        deleteInputBldr.setCommonId(commonId);
+        TempServiceDeleteInputBuilder deleteInputBldr = new TempServiceDeleteInputBuilder()
+            .setCommonId(commonId);
         return deleteInputBldr.build();
     }
 
     public static ServiceRerouteInput buildServiceRerouteInput() {
-        ServiceRerouteInputBuilder builder = new ServiceRerouteInputBuilder();
-        builder.setServiceName("service 1");
+        ServiceRerouteInputBuilder builder = new ServiceRerouteInputBuilder()
+            .setServiceName("service 1");
         return builder.build();
     }
 
     public static ServiceRestorationInput buildServiceRestorationInput() {
-        ServiceRestorationInputBuilder builder = new ServiceRestorationInputBuilder();
-        builder.setServiceName("service 1");
-        builder.setOption(Option.Permanent);
+        ServiceRestorationInputBuilder builder = new ServiceRestorationInputBuilder()
+            .setServiceName("service 1")
+            .setOption(Option.Permanent);
         return builder.build();
     }
 
     public static ServiceReconfigureInput buildServiceReconfigureInput() {
-        ServiceReconfigureInputBuilder builtInput = new ServiceReconfigureInputBuilder();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
-            .ServiceAEnd serviceAEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
+
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.reconfigure.input
+            .ServiceAEnd serviceAEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service
                 .reconfigure.input.ServiceAEndBuilder()
                 .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
-                .setNodeId("XPONDER-1-2").setTxDirection(getTxDirection()).setRxDirection(getRxDirection())
+                .setNodeId(new NodeIdType("XPONDER-1-2")).setTxDirection(getTxDirection())
+                .setRxDirection(getRxDirection())
                 .build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
-            .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.reconfigure.input
+            .ServiceZEnd serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service
                 .reconfigure.input.ServiceZEndBuilder()
                 .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
-                .setNodeId("XPONDER-3-2").setTxDirection(getTxDirection()).setRxDirection(getRxDirection())
+                .setNodeId(new NodeIdType("XPONDER-3-2")).setTxDirection(getTxDirection())
+                .setRxDirection(getRxDirection())
                 .build();
-        builtInput.setCommonId("commonId");
-        builtInput.setConnectionType(ConnectionType.Service);
-        builtInput.setCustomer("Customer");
-        builtInput.setServiceName("service 1");
-        builtInput.setServiceAEnd(serviceAEnd);
-        builtInput.setServiceZEnd(serviceZEnd);
+
+        ServiceReconfigureInputBuilder builtInput = new ServiceReconfigureInputBuilder()
+            .setCommonId("commonId")
+            .setConnectionType(ConnectionType.Service)
+            .setCustomer("Customer")
+            .setServiceName("service 1")
+            .setServiceAEnd(serviceAEnd)
+            .setServiceZEnd(serviceZEnd);
         return builtInput.build();
     }
 
@@ -443,20 +459,22 @@ public final class ServiceDataUtils {
         return pathDescription;
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.reconfigure.input
         .ServiceAEndBuilder getServiceAEndBuildReconfigure() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.reconfigure.input
             .ServiceAEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
+            .setNodeId(new NodeIdType("XPONDER-1-2"))
             .setTxDirection(getTxDirection())
             .setRxDirection(getRxDirection());
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.reconfigure.input
         .ServiceZEndBuilder getServiceZEndBuildReconfigure() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.reconfigure.input
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.reconfigure.input
             .ServiceZEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1)
+            .setNodeId(new NodeIdType("XPONDER-1-2"))
             .setTxDirection(getTxDirection())
             .setRxDirection(getRxDirection());
     }
