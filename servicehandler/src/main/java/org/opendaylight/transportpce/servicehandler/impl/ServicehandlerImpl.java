@@ -34,45 +34,55 @@ import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateVali
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceNotificationTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommon;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.sdnc.request.header.SdncRequestHeaderBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RpcStatus;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.routing.constraints.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.EquipmentNotificationInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.EquipmentNotificationOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.NetworkReOptimizationInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.NetworkReOptimizationOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.OrgOpenroadmServiceService;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceFeasibilityCheckOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReconfigureOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteConfirmInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteConfirmOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRerouteOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRestorationOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReversionInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceReversionOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRollInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceRollOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfo.TailRetention;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.delete.input.ServiceDeleteReqInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev190531.RpcStatus;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.EquipmentNotificationInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.EquipmentNotificationOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.NetworkReOptimizationInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.NetworkReOptimizationOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateComplexResultNotificationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateComplexResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateResultNotificationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteComplexResultNotificationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteComplexResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteResultNotificationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteResultNotificationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckBulkInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckBulkOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceFeasibilityCheckOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceReconfigureInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceReconfigureOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteConfirmInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteConfirmOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRestorationInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRestorationOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceReversionInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceReversionOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRollInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRollOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfo.TailRetention;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
@@ -148,7 +158,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
          * header compliancy are verified.
          */
         LOG.info("checking Service Compliancy ...");
-        ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerCompliancyCheck.check(
+        ComplianceCheckResult serviceHandlerCheckResult =
+            ServicehandlerCompliancyCheck.check(
                 input.getServiceDeleteReqInfo().getServiceName(),
                 input.getSdncRequestHeader(), null, RpcActions.ServiceDelete, false, true);
         if (serviceHandlerCheckResult.hasPassed()) {
@@ -293,11 +304,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                 deleteInputBldr.setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
                     .setServiceName(serviceName).setDueDate(datetime)
                     .setTailRetention(TailRetention.No).build());
-                SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder();
-                sdncBuilder.setNotificationUrl(service.getSdncRequestHeader().getNotificationUrl());
-                sdncBuilder.setRequestId(service.getSdncRequestHeader().getRequestId());
-                sdncBuilder.setRequestSystemId(service.getSdncRequestHeader().getRequestSystemId());
-                sdncBuilder.setRpcAction(RpcActions.ServiceDelete);
+                SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder()
+                    .setNotificationUrl(service.getSdncRequestHeader().getNotificationUrl())
+                    .setRequestId(service.getSdncRequestHeader().getRequestId())
+                    .setRequestSystemId(service.getSdncRequestHeader().getRequestSystemId())
+                    .setRpcAction(RpcActions.ServiceDelete);
                 deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
                 ServiceInput serviceInput = new ServiceInput(deleteInputBldr.build());
                 serviceInput.setServiceAEnd(service.getServiceAEnd());
@@ -379,11 +390,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             deleteInputBldr.setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
                 .setServiceName(input.getServiceName()).setDueDate(datetime)
                 .setTailRetention(TailRetention.No).build());
-            SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder();
-            sdncBuilder.setNotificationUrl(service.getSdncRequestHeader().getNotificationUrl());
-            sdncBuilder.setRequestId(service.getSdncRequestHeader().getRequestId());
-            sdncBuilder.setRequestSystemId(service.getSdncRequestHeader().getRequestSystemId());
-            sdncBuilder.setRpcAction(RpcActions.ServiceDelete);
+            SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder()
+                .setNotificationUrl(service.getSdncRequestHeader().getNotificationUrl())
+                .setRequestId(service.getSdncRequestHeader().getRequestId())
+                .setRequestSystemId(service.getSdncRequestHeader().getRequestSystemId())
+                .setRpcAction(RpcActions.ServiceDelete);
             deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
             ServiceInput serviceInput = new ServiceInput(deleteInputBldr.build());
             serviceInput.setServiceAEnd(service.getServiceAEnd());
@@ -460,7 +471,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         String commonId = input.getCommonId();
         LOG.info("service common-id : {}", commonId);
         try {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
+            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
                 .Services> service = this.serviceDataStoreOperations.getTempService(commonId);
             if (!service.isPresent()) {
                 message = "Service '" + commonId + "' does not exist in datastore";
@@ -524,6 +535,45 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                     "PCE calculation failed", ResponseCodes.RESPONSE_FAILED);
         }
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<
+        ServiceDeleteComplexResultNotificationRequestOutput>> serviceDeleteComplexResultNotificationRequest(
+            ServiceDeleteComplexResultNotificationRequestInput input) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<
+        ServiceCreateResultNotificationRequestOutput>> serviceCreateResultNotificationRequest(
+            ServiceCreateResultNotificationRequestInput input) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<
+        ServiceDeleteResultNotificationRequestOutput>> serviceDeleteResultNotificationRequest(
+            ServiceDeleteResultNotificationRequestInput input) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<
+        ServiceCreateComplexResultNotificationRequestOutput>> serviceCreateComplexResultNotificationRequest(
+            ServiceCreateComplexResultNotificationRequestInput input) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ListenableFuture<RpcResult<ServiceFeasibilityCheckBulkOutput>> serviceFeasibilityCheckBulk(
+        ServiceFeasibilityCheckBulkInput input) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

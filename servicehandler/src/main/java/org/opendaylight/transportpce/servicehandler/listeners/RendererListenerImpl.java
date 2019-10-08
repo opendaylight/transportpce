@@ -15,8 +15,9 @@ import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.TransportpceRendererListener;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceNotificationTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev191009.RpcStatusEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,14 +61,14 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                         if (tempService) {
                             operationResult = this.serviceDataStoreOperations.modifyTempService(
                                     serviceRpcResultSp.getServiceName(),
-                                    State.InService, State.InService);
+                                    State.InService, AdminStates.InService);
                             if (!operationResult.isSuccess()) {
                                 LOG.warn("Temp Service status not updated in datastore !");
                             }
                         } else {
                             operationResult = this.serviceDataStoreOperations.modifyService(
                                     serviceRpcResultSp.getServiceName(),
-                                    State.InService, State.InService);
+                                    State.InService, AdminStates.InService);
                             if (!operationResult.isSuccess()) {
                                 LOG.warn("Service status not updated in datastore !");
                             }

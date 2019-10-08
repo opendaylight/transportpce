@@ -54,13 +54,13 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.renderer.rollback.output.FailedToRollback;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.renderer.rollback.output.FailedToRollbackBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev170228.renderer.rollback.output.FailedToRollbackKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.service.Topology;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.Topology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.R100G;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.ServicesKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterface;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev170907.node.interfaces.NodeInterfaceKey;
@@ -187,14 +187,14 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 processErrorMessage("Setup service path failed! Exception:" + ex.toString(), forkJoinPool, results);
                 success.set(false);
             }
-            NodeInterfaceBuilder nodeInterfaceBuilder = new NodeInterfaceBuilder();
-            nodeInterfaceBuilder.withKey(new NodeInterfaceKey(nodeId));
-            nodeInterfaceBuilder.setNodeId(nodeId);
-            nodeInterfaceBuilder.setConnectionId(createdConnections);
-            nodeInterfaceBuilder.setEthInterfaceId(createdEthInterfaces);
-            nodeInterfaceBuilder.setOtuInterfaceId(createdOtuInterfaces);
-            nodeInterfaceBuilder.setOduInterfaceId(createdOduInterfaces);
-            nodeInterfaceBuilder.setOchInterfaceId(createdOchInterfaces);
+            NodeInterfaceBuilder nodeInterfaceBuilder = new NodeInterfaceBuilder()
+                .withKey(new NodeInterfaceKey(nodeId))
+                .setNodeId(nodeId)
+                .setConnectionId(createdConnections)
+                .setEthInterfaceId(createdEthInterfaces)
+                .setOtuInterfaceId(createdOtuInterfaces)
+                .setOduInterfaceId(createdOduInterfaces)
+                .setOchInterfaceId(createdOchInterfaces);
             nodeInterfaces.add(nodeInterfaceBuilder.build());
         }));
         try {
@@ -207,10 +207,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         if (success.get()) {
             results.add("Roadm-connection successfully created for nodes: " + String.join(", ", nodesProvisioned));
         }
-        ServicePathOutputBuilder setServBldr = new ServicePathOutputBuilder();
-        setServBldr.setNodeInterface(new ArrayList<>(nodeInterfaces));
-        setServBldr.setSuccess(success.get());
-        setServBldr.setResult(String.join("\n", results));
+        ServicePathOutputBuilder setServBldr = new ServicePathOutputBuilder()
+            .setNodeInterface(new ArrayList<>(nodeInterfaces))
+            .setSuccess(success.get())
+            .setResult(String.join("\n", results));
         // setting topology in the service list data store
         try {
             setTopologyForService(input.getServiceName(), topology.getTopology());
@@ -381,9 +381,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     }
 
     private boolean alarmSuppressionNodeRegistration(ServicePathInput input) {
-        NodelistBuilder nodeListBuilder = new NodelistBuilder();
-        nodeListBuilder.withKey(new NodelistKey(input.getServiceName()));
-        nodeListBuilder.setServiceName(input.getServiceName());
+        NodelistBuilder nodeListBuilder = new NodelistBuilder()
+            .withKey(new NodelistKey(input.getServiceName()))
+            .setServiceName(input.getServiceName());
         List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service
             .nodelist.nodelist.Nodes> nodeList =
                 new ArrayList<>();
@@ -450,8 +450,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         }
         if (services.isPresent()) {
             LOG.info("service {} already exists", name);
-            servicesBuilder = new ServicesBuilder(services.get());
-            servicesBuilder.setTopology(topo);
+            servicesBuilder = new ServicesBuilder(services.get()).setTopology(topo);
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, servicesBuilder.build());
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);

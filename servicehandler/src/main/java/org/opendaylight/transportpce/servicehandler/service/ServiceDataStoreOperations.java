@@ -12,10 +12,11 @@ import java.util.Optional;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.PathComputationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.TempServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 
 /**
  * OpenROADM Service operations API providing basic operations on services.
@@ -43,7 +44,7 @@ public interface ServiceDataStoreOperations {
      *   unique common-id of the service
      * @return Optional of Services
      */
-    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.temp.service.list
+    Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
         .Services> getTempService(String commonId);
 
     /**
@@ -75,7 +76,7 @@ public interface ServiceDataStoreOperations {
      *   administrative state of service
      * @return result of modifyService operation
      */
-    OperationResult modifyService(String serviceName, State operationalState, State administrativeState);
+    OperationResult modifyService(String serviceName, State operationalState, AdminStates administrativeState);
 
     /**
      * modify Temp Service.
@@ -85,7 +86,7 @@ public interface ServiceDataStoreOperations {
      * @param administrativeState administrative state of service
      * @return result of modifyTempService operation
      */
-    OperationResult modifyTempService(String commonId, State operationalState, State administrativeState);
+    OperationResult modifyTempService(String commonId, State operationalState, AdminStates administrativeState);
 
     /**
      * create new service entry.
