@@ -1,21 +1,16 @@
-module org-openroadm-topology {
-  namespace "http://org/openroadm/topology";
-  prefix org-openroadm-topology;
-
-  import org-openroadm-resource {
-    prefix org-openroadm-resource;
-    revision-date 2016-10-14;
-  }
+module org-openroadm-service-format {
+  namespace "http://org/openroadm/service-format";
+  prefix org-openroadm-service-format;
 
   organization
     "Open ROADM MSA";
   contact
     "OpenROADM.org";
   description
-    "YANG definitions of topology.
+    "YANG definitions of service format.
 
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-      AT&T Intellectual Property.  All other rights reserved.
+      All other rights reserved.
 
       Redistribution and use in source and binary forms, with or without modification,
       are permitted provided that the following conditions are met:
@@ -40,53 +35,40 @@ module org-openroadm-topology {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-  revision 2016-10-14 {
+  revision 2019-05-31 {
     description
-      "Version 1.2";
+      "Version 5.1.0";
   }
 
-  grouping topology {
-    description
-      "Topology reports the individual hops along the service in the A to Z direction and Z to A directions.  This includes both ports internal to a device and those
-       at its edge that are available for externally connections. It includes both physical and logical ports.
-       Physical ports are ordered with the logical ports that run over them as follows:
-       a.\tOn ingress to a node/card, physical then logical
-       b.\tOn egress to a node/card, logical then physical";
-    list aToZ {
-      key "id";
-      leaf id {
+  typedef service-format {
+    type enumeration {
+      enum "Ethernet" {
+        value 1;
+      }
+      enum "OTU" {
+        value 2;
+      }
+      enum "OC" {
+        value 3;
+      }
+      enum "STM" {
+        value 4;
+      }
+      enum "OMS" {
+        value 5;
+      }
+      enum "ODU" {
+        value 6;
+      }
+      enum "OTM" {
+        value 7;
+      }
+      enum "other" {
+        value 8;
         description
-          "Unigue identifier for this topology component within this service";
-        type string;
-      }
-      uses hop;
-    }
-    list zToA {
-      key "id";
-      leaf id {
-        description
-          "Unigue identifier for this topology component within this service";
-        type string;
-      }
-      uses hop;
-    }
-  }
-
-  grouping hop {
-    leaf hop-type {
-      type enumeration {
-        enum "node-external" {
-          description
-            "The given resource is on the edge of the node, and used in relationships to resources outside of the node.";
-          value 1;
-        }
-        enum "node-internal" {
-          description
-            "The given resource is internally to the node";
-          value 2;
-        }
+          "Used in bookending use case when service-format is not standardized by the Open ROADM MSA.
+           When set to other, the specific service format/rate is specified by other-service-format-and-rate";
       }
     }
-    uses org-openroadm-resource:resource;
   }
 }

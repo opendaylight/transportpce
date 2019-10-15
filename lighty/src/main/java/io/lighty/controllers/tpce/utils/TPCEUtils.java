@@ -129,10 +129,10 @@ public final class TPCEUtils {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.$YangModuleInfoImpl.getInstance(),
 
             // service models
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev161014.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev161014.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev161014.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.$YangModuleInfoImpl.getInstance(),
 
             // API models / opendaylight
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.$YangModuleInfoImpl.getInstance(),
@@ -153,8 +153,7 @@ public final class TPCEUtils {
 
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev170426.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev191009.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.transportpce.topology.rev190625.$YangModuleInfoImpl.getInstance(),
 

@@ -22,9 +22,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev19
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.RpcStatusEx;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.ResponseParameters;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev191009.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev191009.response.parameters.sp.ResponseParameters;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev191009.response.parameters.sp.ResponseParametersBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,7 +91,7 @@ public class PceListenerImpl implements TransportpcePceListener {
                                 }
                                 ResponseParameters responseParameters = new ResponseParametersBuilder()
                                         .setPathDescription(new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c
-                                                ._interface.service.types.rev171016.response.parameters.sp.response
+                                                ._interface.service.types.rev191009.response.parameters.sp.response
                                                 .parameters.PathDescriptionBuilder(pathDescription).build())
                                         .build();
                                 PathComputationRequestOutput pceResponse = new PathComputationRequestOutputBuilder()

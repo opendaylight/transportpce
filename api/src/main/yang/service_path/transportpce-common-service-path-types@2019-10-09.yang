@@ -18,12 +18,19 @@ module transportpce-common-service-path-types {
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
+    revision-date 2019-05-31;
   }
   import org-openroadm-resource-types {
     prefix org-openroadm-resource-types;
+    revision-date 2018-11-30;
   }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
+    revision-date 2019-05-31;
+  }
+  import org-openroadm-service-format {
+    prefix org-openroadm-service-format;
+    revision-date 2019-05-31;
   }
 
   organization
@@ -61,15 +68,19 @@ module transportpce-common-service-path-types {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-
-  revision 2017-04-26 {
-      description
-        "Version 1.5";
+  revision 2019-10-09 {
+    description
+      "Version 1.6.1";
   }
 
   revision 2017-10-16 {
     description
       "Version 1.6";
+  }
+
+  revision 2017-04-26 {
+      description
+        "Version 1.5";
   }
 
   typedef service-path-notification-types {
@@ -133,7 +144,7 @@ module transportpce-common-service-path-types {
 
   grouping service-endpoint-sp {
     leaf service-format {
-      type org-openroadm-common-service-types:service-format;
+      type org-openroadm-service-format:service-format;
       mandatory true;
       description
         "Format of the requested service: Ethernet, OTU, etc.";

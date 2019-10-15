@@ -47,9 +47,9 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev19
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.RpcStatusEx;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.ServicePathNotificationTypes;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev191009.RpcStatusEx;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev191009.ServicePathNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev191009.response.parameters.sp.ResponseParametersBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,9 +176,9 @@ public class PathComputationServiceImpl implements PathComputationService {
                                 .build();
                 sendNotifications(ServicePathNotificationTypes.PathComputationRequest, input.getServiceName(),
                         RpcStatusEx.Successful, message, pathDescription);
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev171016.response
+                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev191009.response
                     .parameters.sp.response.parameters.PathDescription pathDescription1 = new org.opendaylight.yang.gen
-                        .v1.http.org.transportpce.b.c._interface.service.types.rev171016.response.parameters.sp
+                        .v1.http.org.transportpce.b.c._interface.service.types.rev191009.response.parameters.sp
                         .response.parameters.PathDescriptionBuilder()
                                 .setAToZDirection(path.getAToZDirection()).setZToADirection(path.getZToADirection())
                                 .build();
