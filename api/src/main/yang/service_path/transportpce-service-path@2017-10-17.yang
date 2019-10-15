@@ -7,7 +7,6 @@ module transportpce-servicepath {
   }
   import transportpce-common-service-path-types {
     prefix transportpce-common-service-path-types;
-    revision-date 2017-10-16;
   }
 
   organization
@@ -45,13 +44,14 @@ module transportpce-servicepath {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2017-10-17 {
+      description
+        "Version 1.6";
+  }
+
   revision 2017-04-26 {
       description
         "Version 1.5";
-  }
-  revision 2017-10-17 {
-    description
-      "Version 1.6";
   }
 
   container service-path-list {

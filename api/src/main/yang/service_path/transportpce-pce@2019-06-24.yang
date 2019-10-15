@@ -14,7 +14,6 @@ module transportpce-pce {
   }
   import transportpce-common-service-path-types {
     prefix transportpce-common-service-path-types;
-    revision-date 2017-10-16;
   }
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;

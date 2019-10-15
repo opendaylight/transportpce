@@ -2,6 +2,15 @@ module org-openroadm-routing-constraints {
   namespace "http://org/openroadm/routing/constrains";
   prefix org-openroadm-routing-constraints;
 
+  import org-openroadm-common-node-types {
+    prefix org-openroadm-common-node-types;
+    revision-date 2018-11-30;
+  }
+  import org-openroadm-network-resource {
+    prefix org-openroadm-network-resource;
+    revision-date 2018-11-30;
+  }
+
   organization
     "Open ROADM MSA";
   contact
@@ -10,7 +19,7 @@ module org-openroadm-routing-constraints {
     "YANG definitions of routing constraints.
 
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-      AT&T Intellectual Property.  All other rights reserved.
+      All other rights reserved.
 
       Redistribution and use in source and binary forms, with or without modification,
       are permitted provided that the following conditions are met:
@@ -35,6 +44,34 @@ module org-openroadm-routing-constraints {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2019-03-29 {
+    description
+      "Version 5.0.0";
+  }
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
+  revision 2017-09-29 {
+    description
+      "Version 2.1";
+  }
+  revision 2017-06-26 {
+    description
+      "Version 2.0";
+  }
   revision 2016-10-14 {
     description
       "Version 1.2";
@@ -56,22 +93,22 @@ module org-openroadm-routing-constraints {
     choice co-routing-or-general {
       case general {
         container diversity {
-          uses diversity-existing-service-contraints;
+          uses diversity-existing-service-constraints;
         }
         container exclude {
           uses common-constraints;
           leaf-list supporting-service-name {
+            type string;
             description
               "Supporting service(s) to exclude from this route.";
-            type string;
           }
         }
         container include {
           uses common-constraints;
           leaf-list supporting-service-name {
+            type string;
             description
               "Supporting service(s) to include in this route.";
-            type string;
           }
         }
         container latency {
@@ -80,6 +117,36 @@ module org-openroadm-routing-constraints {
           leaf max-latency {
             type uint32;
             units "ms";
+          }
+        }
+    container hop-count {
+          description
+            "Maximum hops allowed";
+          leaf max-wdm-hop-count {
+            type uint8;
+          }
+      leaf max-otn-hop-count {
+            type uint8;
+          }
+        }
+    container TE-metric {
+          description
+            "Maximum cost allowed";
+          leaf max-wdm-TE-metric {
+            type uint32;
+          }
+          leaf max-otn-TE-metric {
+            type uint32;
+          }
+         }
+    container distance {
+          description
+            "Maximum distance allowed";
+          leaf max-distance {
+               type decimal64 {
+               fraction-digits 2;
+               }
+         units "km";
           }
         }
       }
@@ -99,15 +166,32 @@ module org-openroadm-routing-constraints {
     leaf-list fiber-bundle {
       type string;
     }
+    leaf-list srlg-id {
+      type uint32;
+      description
+        "unique identifier for SRLG";
+    }
     leaf-list site {
       type string;
+      description
+        "site identifies the clli.
+         clli from the device model; clli-network-ref + clli from the network model.";
     }
     leaf-list node-id {
-      type string;
+      type org-openroadm-common-node-types:node-id-type;
+      description
+        "node-id from the device model; openroadm-network-ref + node-id from the network model.";
+    }
+    list link-identifier {
+      key "link-network-id link-id";
+      description
+        "Refers to link-id(s) from the network model.
+         The openroadm-topology-ref + link-id identifies the link in the network model.";
+      uses org-openroadm-network-resource:network-link-name;
     }
   }
 
-  grouping diversity-existing-service-contraints {
+  grouping diversity-existing-service-constraints {
     leaf-list existing-service {
       type string;
       description
@@ -121,6 +205,9 @@ module org-openroadm-routing-constraints {
         type boolean;
       }
       leaf srlg {
+        type boolean;
+      }
+      leaf link {
         type boolean;
       }
     }

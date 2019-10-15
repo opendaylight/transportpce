@@ -4,23 +4,23 @@ module org-openroadm-service {
 
   import ietf-yang-types {
     prefix yang;
+    revision-date 2013-07-15;
   }
   import org-openroadm-routing-constraints {
     prefix org-openroadm-routing-constraints;
-    revision-date 2016-10-14;
+    revision-date 2019-03-29;
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
-    revision-date 2016-10-14;
-
+    revision-date 2019-05-31;
   }
   import org-openroadm-resource-types {
     prefix org-openroadm-resource-types;
-    revision-date 2016-10-14;
+    revision-date 2018-11-30;
   }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
-    revision-date 2016-10-14;
+    revision-date 2019-05-31;
   }
 
   organization
@@ -31,7 +31,7 @@ module org-openroadm-service {
     "YANG definitions of services.
 
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-      AT&T Intellectual Property.  All other rights reserved.
+      All other rights reserved.
 
       Redistribution and use in source and binary forms, with or without modification,
       are permitted provided that the following conditions are met:
@@ -56,19 +56,132 @@ module org-openroadm-service {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2019-05-31 {
+    description
+      "Version 5.1.0";
+  }
+  revision 2019-03-29 {
+    description
+      "Version 5.0.0";
+  }
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-05-30 {
+    description
+      "Version 3.1.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
+  revision 2017-09-29 {
+    description
+      "Version 2.1";
+  }
+  revision 2017-07-28 {
+    description
+      "Version 2.0.1 - added revision-date to imports";
+  }
+  revision 2017-06-26 {
+    description
+      "Version 2.0";
+  }
   revision 2016-10-14 {
     description
       "Version 1.2";
   }
 
+  grouping service-feasibility-check-inputs {
+    leaf connection-type {
+      type org-openroadm-common-service-types:connection-type;
+    }
+    container service-a-end {
+      uses org-openroadm-common-service-types:service-endpoint;
+    }
+    container service-z-end {
+      uses org-openroadm-common-service-types:service-endpoint;
+    }
+    uses org-openroadm-routing-constraints:routing-constraints;
+    uses org-openroadm-common-service-types:routing-metric;
+    uses org-openroadm-common-service-types:service-resiliency;
+    leaf propose-equipment {
+      type enumeration {
+        enum "never" {
+          value 1;
+        }
+        enum "ifNeeded" {
+          value 2;
+        }
+        enum "always" {
+          value 3;
+        }
+      }
+      default "ifNeeded";
+      description
+        "Whether or not this request can propose new equipment that could
+         be used to fulfill this request. If never, the request will just
+         use existing deployed and planned equipment. If ifNeeded, routes using existing equipment
+         will be preferred. If always, a route with proposed equipment shall be returned, if possible";
+    }
+    uses org-openroadm-common-service-types:service-information;
+  }
+
+  grouping service-feasibility-check-outputs {
+    uses org-openroadm-common-service-types:response-parameters;
+    container service-a-end {
+      uses org-openroadm-common-service-types:service-endpoint;
+      list equipment-required {
+        key "equipment-identifier";
+        description
+          "List of required equipment, including equipment type, state and
+           quantity";
+        uses org-openroadm-common-service-types:equipment-info;
+      }
+    }
+    container service-z-end {
+      uses org-openroadm-common-service-types:service-endpoint;
+      list equipment-required {
+        key "equipment-identifier";
+        description
+          "List of required equipment, including equipment type, state and
+           quantity";
+        uses org-openroadm-common-service-types:equipment-info;
+      }
+    }
+    list intermediate-sites {
+      key "clli";
+      uses org-openroadm-common-service-types:service-endpoint;
+      list equipment-required {
+        key "equipment-identifier";
+        description
+          "List of required equipment, including equipment type, state and
+           quantity over entire route of service";
+        uses org-openroadm-common-service-types:equipment-info;
+      }
+    }
+  }
+
   rpc service-create {
+    description
+      "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
+       service-rpc-result Notification shall be sent.";
     input {
       leaf service-name {
         type string;
+        mandatory true;
         description
           "Identifier for the service to be created in
            the ROADM network, e.g., CLFI, CLCI, etc. This is reported against the service, but may not get reflected in the service in the network.";
-        mandatory true;
       }
       leaf common-id {
         type string;
@@ -76,6 +189,8 @@ module org-openroadm-service {
           "To be used by the ROADM controller to identify the routing constraints received from planning application (PED).";
       }
       uses org-openroadm-common-service-types:sdnc-request-header;
+      uses org-openroadm-common-service-types:routing-metric;
+      uses org-openroadm-common-service-types:service-resiliency;
       leaf connection-type {
         type org-openroadm-common-service-types:connection-type;
         mandatory true;
@@ -93,103 +208,118 @@ module org-openroadm-service {
       uses org-openroadm-common-service-types:configuration-response-common;
       uses org-openroadm-common-service-types:response-parameters;
     }
+  }
+  rpc service-create-result-notification-request {
     description
-      "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
-       service-rpc-result Notification shall be sent.";
+      "This is the callback notification that the controller invokes on the carrier system.";
+    input {
+      uses org-openroadm-common-service-types:configuration-response-common;
+      uses org-openroadm-common-service-types:service-identifiers-container;
+    }
+    output {
+      uses org-openroadm-common-service-types:configuration-response-common;
+    }
+  }
+  rpc service-create-complex-result-notification-request {
+    description
+      "This is the callback notification that the controller invokes on the carrier system.";
+    input {
+      uses org-openroadm-common-service-types:configuration-response-common;
+      uses org-openroadm-common-service-types:service-and-supporting-services;
+    }
+    output {
+      uses org-openroadm-common-service-types:configuration-response-common;
+    }
+  }
+  rpc service-delete-result-notification-request {
+    description
+      "This is the callback notification that the controller invokes on the carrier system.";
+    input {
+      uses org-openroadm-common-service-types:configuration-response-common;
+      uses org-openroadm-common-service-types:service-identifiers-container;
+    }
+    output {
+      uses org-openroadm-common-service-types:configuration-response-common;
+    }
+  }
+  rpc service-delete-complex-result-notification-request {
+    description
+      "This is the callback notification that the controller invokes on the carrier system.";
+    input {
+      uses org-openroadm-common-service-types:configuration-response-common;
+      uses org-openroadm-common-service-types:service-and-supporting-services;
+    }
+    output {
+      uses org-openroadm-common-service-types:configuration-response-common;
+    }
   }
   rpc service-feasibility-check {
+    description
+      "Whether a service was possible to be created, and if so
+       the routing constraints match and the a and z end connection that have
+       to match
+       Takes a potential service and determines if it is possible in the network
+       using equipment that is installed on the network, formally planned or proposed for planning.
+       No resources are reserved, provisioned or planned as a result of this operation";
     input {
       leaf common-id {
         type string;
         mandatory true;
         description
-          "To be used by the ROADM controller to identify the routing
-           constraints received from planning application (PED).";
+          "To be used by the ROADM controller to identify the routing constraints
+           received from planning application (PED).";
       }
       uses org-openroadm-common-service-types:sdnc-request-header;
-      leaf connection-type {
-        type org-openroadm-common-service-types:connection-type;
-      }
-      container service-a-end {
-        uses org-openroadm-common-service-types:service-endpoint;
-      }
-      container service-z-end {
-        uses org-openroadm-common-service-types:service-endpoint;
-      }
-      uses org-openroadm-routing-constraints:routing-constraints;
-      uses org-openroadm-common-service-types:service-information;
+      uses service-feasibility-check-inputs;
     }
     output {
       uses org-openroadm-common-service-types:configuration-response-common;
-      uses org-openroadm-common-service-types:response-parameters;
-      container service-a-end {
-        uses org-openroadm-common-service-types:service-endpoint;
-        list equipment-required {
-          description
-            "List of required equipment, including equipment type and quantity";
-          key "eqipment-identifier";
-          leaf eqipment-identifier {
-            type string;
-          }
-          leaf equipment-type {
-            type string;
-          }
-          leaf equipment-quantity {
-            type uint32;
-          }
-        }
-      }
-      container service-z-end {
-        uses org-openroadm-common-service-types:service-endpoint;
-        list equipment-required {
-          description
-            "List of required equipment, including equipment type and quantity";
-          key "eqipment-identifier";
-          leaf eqipment-identifier {
-            type string;
-          }
-          leaf equipment-type {
-            type string;
-          }
-          leaf equipment-quantity {
-            type uint32;
-          }
-        }
-      }
-      list intermediate-sites {
-        key "clli";
-        uses org-openroadm-common-service-types:service-endpoint;
-        list equipment-required {
-          description
-            "List of required equipment, including equipment type and quantity";
-          key "eqipment-identifier";
-          leaf eqipment-identifier {
-            type string;
-          }
-          leaf equipment-type {
-            type string;
-          }
-          leaf equipment-quantity {
-            type uint32;
-          }
-        }
-      }
+      uses service-feasibility-check-outputs;
     }
+  }
+  rpc service-feasibility-check-bulk {
     description
       "Whether a service was possible to be created, and if so
        the routing constraints match and the a and z end connection that have
-       to match";
+       to match
+
+       Takes a list of potential services and determines if they are possible in the network
+       using equipment that is installed on the network, formally planned or proposed for planning.
+       All services are treated collectively to ensure that a given resource is not used more than once.
+       No resources are reserved, provisioned or planned as a result of this operation";
+    input {
+      uses org-openroadm-common-service-types:sdnc-request-header;
+      list service-request-list {
+        leaf common-id {
+          type string;
+          mandatory true;
+          description
+            "To be used by the ROADM controller to identify the routing constraints
+             received from planning application (PED).";
+        }
+        uses service-feasibility-check-inputs;
+      }
+    }
+    output {
+      uses org-openroadm-common-service-types:configuration-response-common;
+      list service-response-list {
+        uses service-feasibility-check-outputs;
+      }
+    }
   }
   rpc service-delete {
+    description
+      "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
+       service-rpc-result Notification shall be sent. Once the service has been deleted, it no longer will appear in the service list";
     input {
       uses org-openroadm-common-service-types:sdnc-request-header;
       container service-delete-req-info {
         leaf service-name {
           type string;
+          mandatory true;
           description
             "Identifier for the service to be deleted in
              the ROADM network, e.g., CLFI, CLCI, etc.";
-          mandatory true;
         }
         leaf due-date {
           type yang:date-and-time;
@@ -216,23 +346,22 @@ module org-openroadm-service {
     output {
       uses org-openroadm-common-service-types:configuration-response-common;
     }
-    description
-      "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
-       service-rpc-result Notification shall be sent. Once the service has been deleted, it no longer will appear in the service list";
   }
   rpc equipment-notification {
     input {
       uses org-openroadm-common-service-types:sdnc-request-header;
-      leaf equiptment-id {
+      leaf equipment-id {
         type string;
         mandatory true;
       }
       leaf equipment-name {
         type string;
       }
-      leaf equipemt-type {
+      leaf equipment-type {
         type string;
         mandatory true;
+        description
+          "The set of valid value is derived from the equipment-type grouping used in the device model.";
       }
       leaf equipment-vendor {
         type string;
@@ -261,9 +390,9 @@ module org-openroadm-service {
     input {
       leaf common-id {
         type string;
+        mandatory true;
         description
           "To be used by the ROADM controller to identify the routing constraints received from planning application (PED).";
-        mandatory true;
       }
       uses org-openroadm-common-service-types:sdnc-request-header;
       leaf connection-type {
@@ -278,6 +407,8 @@ module org-openroadm-service {
       }
       uses org-openroadm-routing-constraints:routing-constraints;
       uses org-openroadm-common-service-types:service-information;
+      uses org-openroadm-common-service-types:routing-metric;
+      uses org-openroadm-common-service-types:service-resiliency;
     }
     output {
       uses org-openroadm-common-service-types:configuration-response-common;
@@ -296,6 +427,11 @@ module org-openroadm-service {
     }
   }
   rpc service-roll {
+    description
+      "This rpc can be use to roll a service according to 2 possible options :
+         A new path may (no path pre-calculation) or may not be calculated according
+         to the parameters provided (which includes metrics). If path computation has been triggered
+         and is successful, a new path is provided, and the service can be rolled according to that path.";
     input {
       leaf service-name {
         type string;
@@ -309,12 +445,16 @@ module org-openroadm-service {
         description
           "date and time service to be rolled";
       }
+      uses org-openroadm-common-service-types:routing-metric;
     }
     output {
       uses org-openroadm-common-types:rpc-response-status;
     }
   }
   rpc service-reconfigure {
+    description
+      "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
+       service-rpc-result Notification shall be sent.";
     input {
       leaf service-name {
         type string;
@@ -346,15 +486,24 @@ module org-openroadm-service {
       }
       uses org-openroadm-routing-constraints:routing-constraints;
       uses org-openroadm-common-service-types:service-information;
+      uses org-openroadm-common-service-types:routing-metric;
+      uses org-openroadm-common-service-types:service-resiliency;
     }
     output {
       uses org-openroadm-common-types:rpc-response-status;
     }
-    description
-      "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
-       service-rpc-result Notification shall be sent.";
   }
   rpc service-restoration {
+    description
+      "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
+       service-rpc-result Notification shall be sent.
+       This rpc can be use to reroute a service according to 2 possible options :
+        \t_Option1 : neither the backup-path-id nor the failure-case-id are provided, a new path shall be
+           calculated according to the parameters provided (which includes metrics). If path computation
+           is successful, a new path is provided, and the service is rerouted according to that path.
+        \t_Option2 : if a backup-path-id or a failure-case-id are provided, the service shall
+           be rerouted according to the corresponding path. If path computation is triggered and successful,
+           a new path is provided, and the service is rerouted according to that path.";
     input {
       leaf service-name {
         type string;
@@ -382,15 +531,29 @@ module org-openroadm-service {
         }
         mandatory true;
       }
+      leaf backup-path-id {
+        type uint8 {
+          range "1..255";
+        }
+        description
+          "When present, states that the service shall be rerouted according to a specific backup path";
+      }
+      leaf failure-case-id {
+        type string;
+        description
+          "When present, states that the service shall be rerouted according to a specific backup path.
+           This last corresponds to the provided failure case id";
+      }
+      uses org-openroadm-common-service-types:routing-metric;
     }
     output {
       uses org-openroadm-common-types:rpc-response-status;
     }
+  }
+  rpc service-reversion {
     description
       "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
        service-rpc-result Notification shall be sent.";
-  }
-  rpc service-reversion {
     input {
       leaf service-name {
         type string;
@@ -408,11 +571,11 @@ module org-openroadm-service {
     output {
       uses org-openroadm-common-types:rpc-response-status;
     }
-    description
-      "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
-       service-rpc-result Notification shall be sent.";
   }
   rpc service-reroute {
+    description
+      "Whether this request was validated and processed correctly. If successful, it returns the proposed new route.
+       If acceptable, this request should be followed by a service-reroute-confirm to complete the reroute operation.";
     input {
       leaf service-name {
         type string;
@@ -421,32 +584,31 @@ module org-openroadm-service {
           "Identifier for the service to be re-routed in
            the ROADM network, e.g., CLFI, CLCI, etc.";
       }
+      uses org-openroadm-common-service-types:routing-metric;
+      uses org-openroadm-common-service-types:service-resiliency;
     }
     output {
       uses org-openroadm-common-types:rpc-response-status;
       uses org-openroadm-routing-constraints:routing-constraints;
     }
-    description
-      "Whether this request was validated and processed correct. If sucessful, it return the proposed new route.
-       If acceptable, this request should be followed by a service-reroute-confirm to complete the reroute operation.";
   }
   rpc service-reroute-confirm {
-    input {
-      leaf service-name {
-        type string;
-        mandatory true;
-        description
-          "Identifier for the service to be re-routed in
-           the ROADM network, e.g., CLFI, CLCI, etc.";
-      }
-      uses org-openroadm-routing-constraints:routing-constraints;
-    }
-    output {
-      uses org-openroadm-common-types:rpc-response-status;
-    }
     description
       "Whether this request passed initial validation and was accepted for processing. Once the request completes processing, a
        service-rpc-result Notification shall be sent.";
+    input {
+      leaf service-name {
+        type string;
+        mandatory true;
+        description
+          "Identifier for the service to be re-routed in
+           the ROADM network, e.g., CLFI, CLCI, etc.";
+      }
+      uses org-openroadm-routing-constraints:routing-constraints;
+    }
+    output {
+      uses org-openroadm-common-types:rpc-response-status;
+    }
   }
   rpc network-re-optimization {
     input {
@@ -484,6 +646,7 @@ module org-openroadm-service {
           "Services that belong to the specified customer
            are to be checked by the RNC for re-optimization ";
       }
+      uses org-openroadm-common-service-types:routing-metric;
     }
     output {
       uses org-openroadm-common-types:rpc-response-status;
@@ -492,11 +655,75 @@ module org-openroadm-service {
       }
     }
   }
+  notification service-rpc-result {
+    description
+      "This Notification indicates result of service RPC";
+    leaf notification-type {
+      type org-openroadm-common-service-types:service-notification-types;
+    }
+    uses org-openroadm-common-types:rpc-response-status;
+    uses org-openroadm-common-service-types:service-notification-result;
+  }
+  notification service-traffic-flow {
+    description
+      "This Notification indicates that traffic is flowing again on the service after an administrative action has completed";
+    leaf service-name {
+      type string;
+      mandatory true;
+      description
+        "Identifier for the service being reported on";
+    }
+    leaf version-number {
+      type uint64;
+      description
+        "Identifier for the versioned service";
+    }
+    leaf actual-date {
+      type yang:date-and-time;
+      description
+        "Actual date and time traffic started flowing";
+    }
+  }
+  notification service-notification {
+    description
+      "This Notification that a service has been added, modified or removed.
+       A resourceCreation notification shall contain the created service in its entirety.
+       A resourceModified notification shall contain just the modified field, plus the service identifier
+       A resourceDeleted notification shall just contain the service identifier";
+    leaf notificationType {
+      type org-openroadm-resource-types:resource-notification-type;
+      description
+        "Whether this notification indicates a service creation, service modification or service deletion.";
+    }
+    leaf version-number {
+      type uint64;
+      description
+        "Identifier for the versioned service";
+    }
+    uses org-openroadm-common-service-types:service;
+  }
   container service-list {
     description
-      "List of service. Can only be created, deleted, modified, etc. using special RPCs.";
+      "List of service. Can only be created, deleted, modified, etc. using special RPCs. Will only contain one service with a given name.
+       Does not contain historical (deleted or rather those passed their end time) or draft services. If two services exist with the same
+       name (with non-lapping start-end times for example), this table will contain the current one. If only planned services exist for
+       the name, the one with the earliest start time will be present
+      ";
     list services {
       key "service-name";
+      uses org-openroadm-common-service-types:service;
+    }
+  }
+  container versioned-service-list {
+    description
+      "List of service, regardless of lifecycle state. Can only be created, deleted, modified, etc. using special RPCs. Can report more than one
+       version of a service, if supported by the implementation. May contain deleted services, multiple versions of the same service, as identified
+       by its name, etc.";
+    list services {
+      key "service-name version-number";
+      leaf version-number {
+        type uint64;
+      }
       uses org-openroadm-common-service-types:service;
     }
   }
@@ -511,42 +738,5 @@ module org-openroadm-service {
         }
       }
     }
-  }
-  notification service-rpc-result {
-    description
-      "This Notification indicates result of  service RPC";
-    leaf notification-type {
-      type org-openroadm-common-service-types:service-notification-types;
-    }
-    uses org-openroadm-common-types:rpc-response-status;
-    uses org-openroadm-common-service-types:service-notification-result;
-  }
-  notification service-traffic-flow {
-    description
-      "This Notification indicates that traffic is flowing again on the service after an administrative action has completed";
-    leaf service-name {
-      type string;
-      description
-        "Identifier for the service being reported on";
-      mandatory true;
-    }
-    leaf actual-date {
-      type yang:date-and-time;
-      description
-        "Actual date and time traffic started flowing";
-    }
-  }
-  notification service-notification {
-    description
-      "This Notification that a service has been added, modified or removed.
-       A resourceCreation notification shall contain the created service in its entirety.
-       A resourceMofified notification shall contain just the modified field, plus the service identifier
-       A resourceDeleted notification shall just contain the service identifier";
-    leaf notificationType {
-      type org-openroadm-resource-types:resource-notification-type;
-      description
-        "Whether this notification indicates a service creation, service modification or service deletion.";
-    }
-    uses org-openroadm-common-service-types:service;
   }
 }
