@@ -27,8 +27,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev19
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceRpcResultSpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServiceRpcResultSh;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev170930.ServiceRpcResultShBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev171017.ServiceRpcResultSh;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev171017.ServiceRpcResultShBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev161014.ServiceFormat;
@@ -404,7 +404,7 @@ public final class ServiceDataUtils {
 
     public static ServiceRpcResultSh buildServiceRpcResultSh(ServiceNotificationTypes serviceNotificationTypes,
             String serviceName, org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types
-            .rev170426.RpcStatusEx rpcStatusEx, String message) {
+            .rev171016.RpcStatusEx rpcStatusEx, String message) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
         OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
         DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
