@@ -9,7 +9,7 @@
                         "source-node": "XPONDER-1",
                         "source-tp": "XPDR-NW1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-OUTPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
                     "destination": {
                         "dest-node": "OpenROADM-1-SRG1",
                         "dest-tp": "SRG1-PP1-RX"
@@ -22,7 +22,7 @@
                         "source-node": "XPONDER-2",
                         "source-tp": "XPDR-NW1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-OUTPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
                     "destination": {
                         "dest-node": "OpenROADM-2-SRG1",
                         "dest-tp": "SRG1-PP1-RX"
@@ -35,7 +35,7 @@
                         "source-node": "XPONDER-3",
                         "source-tp": "XPDR-NW1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-OUTPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
                     "destination": {
                         "dest-node": "OpenROADM-3-SRG1",
                         "dest-tp": "SRG1-PP1-RX"
@@ -48,7 +48,7 @@
                         "source-node": "XPONDER-4",
                         "source-tp": "XPDR-NW1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-OUTPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
                     "destination": {
                         "dest-node": "OpenROADM-4-SRG1",
                         "dest-tp": "SRG1-PP1-RX"
@@ -61,7 +61,7 @@
                         "source-node": "XPONDER-5",
                         "source-tp": "XPDR-NW1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-OUTPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-OUTPUT",
                     "destination": {
                         "dest-node": "OpenROADM-5-SRG1",
                         "dest-tp": "SRG1-PP1-RX"
@@ -74,7 +74,7 @@
                         "source-node": "OpenROADM-1-SRG1",
                         "source-tp": "SRG1-PP1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-INPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
                     "destination": {
                         "dest-node": "XPONDER-1",
                         "dest-tp": "XPDR-NW1-RX"
@@ -87,7 +87,7 @@
                         "source-node": "OpenROADM-2-SRG1",
                         "source-tp": "SRG1-PP1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-INPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
                     "destination": {
                         "dest-node": "XPONDER-2",
                         "dest-tp": "XPDR-NW1-RX"
@@ -100,7 +100,7 @@
                         "source-node": "OpenROADM-3-SRG1",
                         "source-tp": "SRG1-PP1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-INPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
                     "destination": {
                         "dest-node": "XPONDER-3",
                         "dest-tp": "XPDR-NW1-RX"
@@ -113,7 +113,7 @@
                         "source-node": "OpenROADM-4-SRG1",
                         "source-tp": "SRG1-PP1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-INPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
                     "destination": {
                         "dest-node": "XPONDER-4",
                         "dest-tp": "XPDR-NW1-RX"
@@ -126,7 +126,7 @@
                         "source-node": "OpenROADM-5-SRG1",
                         "source-tp": "SRG1-PP1-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "XPONDER-INPUT",
+                    "org-openroadm-common-network:link-type": "XPONDER-INPUT",
                     "destination": {
                         "dest-node": "XPONDER-5",
                         "dest-tp": "XPDR-NW1-RX"
@@ -139,7 +139,7 @@
                         "source-node": "OpenROADM-1-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -152,7 +152,7 @@
                         "source-node": "OpenROADM-1-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -165,7 +165,7 @@
                         "source-node": "OpenROADM-2-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -178,7 +178,7 @@
                         "source-node": "OpenROADM-2-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -191,7 +191,7 @@
                         "source-node": "OpenROADM-2-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -204,7 +204,7 @@
                         "source-node": "OpenROADM-3-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -217,7 +217,7 @@
                         "source-node": "OpenROADM-3-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -230,7 +230,7 @@
                         "source-node": "OpenROADM-3-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -243,7 +243,7 @@
                         "source-node": "OpenROADM-3-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG4",
                         "dest-tp": "DEG4-CTP-RX"
@@ -256,7 +256,7 @@
                         "source-node": "OpenROADM-4-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -269,7 +269,7 @@
                         "source-node": "OpenROADM-4-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -282,7 +282,7 @@
                         "source-node": "OpenROADM-5-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -295,7 +295,7 @@
                         "source-node": "OpenROADM-5-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -308,7 +308,7 @@
                         "source-node": "OpenROADM-5-SRG1",
                         "source-tp": "SRG1-CP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "ADD-LINK",
+                    "org-openroadm-common-network:link-type": "ADD-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -321,7 +321,7 @@
                         "source-node": "OpenROADM-1-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-1-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -334,7 +334,7 @@
                         "source-node": "OpenROADM-1-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-1-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -347,7 +347,7 @@
                         "source-node": "OpenROADM-2-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -360,7 +360,7 @@
                         "source-node": "OpenROADM-2-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -373,7 +373,7 @@
                         "source-node": "OpenROADM-2-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -386,7 +386,7 @@
                         "source-node": "OpenROADM-3-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -399,7 +399,7 @@
                         "source-node": "OpenROADM-3-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -412,7 +412,7 @@
                         "source-node": "OpenROADM-3-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -425,7 +425,7 @@
                         "source-node": "OpenROADM-3-DEG4",
                         "source-tp": "DEG4-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -438,7 +438,7 @@
                         "source-node": "OpenROADM-4-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-4-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -451,7 +451,7 @@
                         "source-node": "OpenROADM-4-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-4-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -464,7 +464,7 @@
                         "source-node": "OpenROADM-5-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -477,7 +477,7 @@
                         "source-node": "OpenROADM-5-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -490,7 +490,7 @@
                         "source-node": "OpenROADM-5-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "DROP-LINK",
+                    "org-openroadm-common-network:link-type": "DROP-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-SRG1",
                         "dest-tp": "SRG1-CP-RX"
@@ -522,7 +522,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG1",
@@ -555,7 +555,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG1",
@@ -588,7 +588,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG1",
@@ -621,7 +621,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG2",
@@ -654,7 +654,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG3",
@@ -687,7 +687,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG2",
@@ -720,7 +720,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG2",
@@ -753,7 +753,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG2",
@@ -786,7 +786,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG2",
@@ -819,7 +819,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG1",
@@ -852,7 +852,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG4",
@@ -885,7 +885,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG1",
@@ -918,7 +918,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG3",
@@ -951,7 +951,7 @@
                         },
                         "TE-metric": 10
                     },
-                    "org-openroadm-network-topology:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG3",
@@ -965,7 +965,7 @@
                         "source-node": "OpenROADM-1-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -978,7 +978,7 @@
                         "source-node": "OpenROADM-1-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -991,7 +991,7 @@
                         "source-node": "OpenROADM-2-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -1004,7 +1004,7 @@
                         "source-node": "OpenROADM-2-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -1017,7 +1017,7 @@
                         "source-node": "OpenROADM-2-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -1030,7 +1030,7 @@
                         "source-node": "OpenROADM-2-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -1043,7 +1043,7 @@
                         "source-node": "OpenROADM-2-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -1056,7 +1056,7 @@
                         "source-node": "OpenROADM-2-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -1069,7 +1069,7 @@
                         "source-node": "OpenROADM-3-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -1082,7 +1082,7 @@
                         "source-node": "OpenROADM-3-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -1095,7 +1095,7 @@
                         "source-node": "OpenROADM-3-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG4",
                         "dest-tp": "DEG4-CTP-RX"
@@ -1108,7 +1108,7 @@
                         "source-node": "OpenROADM-3-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -1121,7 +1121,7 @@
                         "source-node": "OpenROADM-3-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -1134,7 +1134,7 @@
                         "source-node": "OpenROADM-3-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG4",
                         "dest-tp": "DEG4-CTP-RX"
@@ -1147,7 +1147,7 @@
                         "source-node": "OpenROADM-3-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -1160,7 +1160,7 @@
                         "source-node": "OpenROADM-3-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -1173,7 +1173,7 @@
                         "source-node": "OpenROADM-3-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG4",
                         "dest-tp": "DEG4-CTP-RX"
@@ -1186,7 +1186,7 @@
                         "source-node": "OpenROADM-3-DEG4",
                         "source-tp": "DEG4-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -1199,7 +1199,7 @@
                         "source-node": "OpenROADM-3-DEG4",
                         "source-tp": "DEG4-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -1212,7 +1212,7 @@
                         "source-node": "OpenROADM-3-DEG4",
                         "source-tp": "DEG4-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -1225,7 +1225,7 @@
                         "source-node": "OpenROADM-4-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -1238,7 +1238,7 @@
                         "source-node": "OpenROADM-4-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -1251,7 +1251,7 @@
                         "source-node": "OpenROADM-5-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -1264,7 +1264,7 @@
                         "source-node": "OpenROADM-5-DEG1",
                         "source-tp": "DEG1-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -1277,7 +1277,7 @@
                         "source-node": "OpenROADM-5-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -1290,7 +1290,7 @@
                         "source-node": "OpenROADM-5-DEG2",
                         "source-tp": "DEG2-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG3",
                         "dest-tp": "DEG3-CTP-RX"
@@ -1303,7 +1303,7 @@
                         "source-node": "OpenROADM-5-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG1",
                         "dest-tp": "DEG1-CTP-RX"
@@ -1316,7 +1316,7 @@
                         "source-node": "OpenROADM-5-DEG3",
                         "source-tp": "DEG3-CTP-TX"
                     },
-                    "org-openroadm-network-topology:link-type": "EXPRESS-LINK",
+                    "org-openroadm-common-network:link-type": "EXPRESS-LINK",
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG2",
                         "dest-tp": "DEG2-CTP-RX"
@@ -1330,51 +1330,51 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "SRG1-CP-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP4-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP1-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP4-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-CP-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP1-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
@@ -1411,7 +1411,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "SRG",
+                    "org-openroadm-common-network:node-type": "SRG",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -1424,19 +1424,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG1-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG1-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -1474,7 +1474,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -1487,19 +1487,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG2-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG2-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -1537,7 +1537,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -1550,51 +1550,51 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "SRG1-CP-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP4-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP1-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP4-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-CP-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP1-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
@@ -1631,7 +1631,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "SRG",
+                    "org-openroadm-common-network:node-type": "SRG",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -1644,19 +1644,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG1-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG1-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -1694,7 +1694,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -1707,19 +1707,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG2-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG2-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -1757,7 +1757,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -1770,19 +1770,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG3-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG3-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG3-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG3-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -1820,7 +1820,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -1833,51 +1833,51 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "SRG1-CP-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP4-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP1-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP4-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-CP-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP1-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
@@ -1914,7 +1914,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "SRG",
+                    "org-openroadm-common-network:node-type": "SRG",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -1927,19 +1927,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG1-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG1-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -1977,7 +1977,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -1990,19 +1990,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG2-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG2-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -2040,7 +2040,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2053,19 +2053,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG3-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG3-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG3-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG3-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -2103,7 +2103,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2116,19 +2116,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG4-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         },
                         {
                             "tp-id": "DEG4-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG4-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG4-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -2166,7 +2166,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2179,51 +2179,51 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "SRG1-CP-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP4-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP1-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP4-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-CP-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP1-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
@@ -2260,7 +2260,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "SRG",
+                    "org-openroadm-common-network:node-type": "SRG",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2273,19 +2273,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG1-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG1-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -2323,7 +2323,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2336,19 +2336,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG2-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG2-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -2386,7 +2386,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2399,51 +2399,51 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "SRG1-CP-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP4-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP1-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP4-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP5-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-CP-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-CP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-CP"
                         },
                         {
                             "tp-id": "SRG1-PP1-TX",
-                            "org-openroadm-network-topology:tp-type": "SRG-TX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-TX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP3-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         },
                         {
                             "tp-id": "SRG1-PP2-RX",
-                            "org-openroadm-network-topology:tp-type": "SRG-RX-PP"
+                            "org-openroadm-common-network:tp-type": "SRG-RX-PP"
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
@@ -2480,7 +2480,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "SRG",
+                    "org-openroadm-common-network:node-type": "SRG",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2493,19 +2493,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG1-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG1-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG1-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -2543,7 +2543,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2556,19 +2556,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG2-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG2-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG2-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -2606,7 +2606,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2619,19 +2619,19 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "DEG3-TTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-TTP"
                         },
                         {
                             "tp-id": "DEG3-CTP-TX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-TX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-TX-CTP"
                         },
                         {
                             "tp-id": "DEG3-CTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-CTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-CTP"
                         },
                         {
                             "tp-id": "DEG3-TTP-RX",
-                            "org-openroadm-network-topology:tp-type": "DEGREE-RX-TTP"
+                            "org-openroadm-common-network:tp-type": "DEGREE-RX-TTP"
                         }
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
@@ -2669,7 +2669,7 @@
                             }
                         ]
                     },
-                    "org-openroadm-network-topology:node-type": "DEGREE",
+                    "org-openroadm-common-network:node-type": "DEGREE",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2685,7 +2685,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -2695,7 +2695,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -2705,7 +2705,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -2715,7 +2715,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -2725,7 +2725,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -2735,7 +2735,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -2745,7 +2745,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -2755,7 +2755,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -2765,7 +2765,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -2775,7 +2775,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -2785,38 +2785,38 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],
-                    "org-openroadm-network-topology:node-type": "XPONDER",
+                    "org-openroadm-common-network:node-type": "XPONDER",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2832,7 +2832,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -2842,7 +2842,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -2852,7 +2852,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -2862,7 +2862,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -2872,7 +2872,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -2882,7 +2882,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -2892,7 +2892,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -2902,7 +2902,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -2912,7 +2912,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -2922,7 +2922,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -2932,38 +2932,38 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],
-                    "org-openroadm-network-topology:node-type": "XPONDER",
+                    "org-openroadm-common-network:node-type": "XPONDER",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -2979,7 +2979,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -2989,7 +2989,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -2999,7 +2999,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -3009,7 +3009,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -3019,7 +3019,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -3029,7 +3029,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -3039,7 +3039,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -3049,7 +3049,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -3059,7 +3059,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -3069,7 +3069,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -3079,38 +3079,38 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],
-                    "org-openroadm-network-topology:node-type": "XPONDER",
+                    "org-openroadm-common-network:node-type": "XPONDER",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -3126,7 +3126,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -3136,7 +3136,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -3146,7 +3146,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -3156,7 +3156,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -3166,7 +3166,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -3176,7 +3176,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -3186,7 +3186,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -3196,7 +3196,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -3206,7 +3206,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -3216,7 +3216,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -3226,38 +3226,38 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],
-                    "org-openroadm-network-topology:node-type": "XPONDER",
+                    "org-openroadm-common-network:node-type": "XPONDER",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",
@@ -3273,7 +3273,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -3283,7 +3283,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -3293,7 +3293,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -3303,7 +3303,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -3313,7 +3313,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-1"
                             }
@@ -3323,7 +3323,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-RX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -3333,7 +3333,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-2"
                             }
@@ -3343,7 +3343,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-5"
                             }
@@ -3353,7 +3353,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-3"
                             }
@@ -3363,7 +3363,7 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4-TX"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-NETWORK",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
                             "org-openroadm-network-topology:xpdr-network-attributes": {
                                 "tail-equipment-id": "Client-4"
                             }
@@ -3373,38 +3373,38 @@
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW4"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW5"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW1"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW2"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
                             "org-openroadm-network-topology:xpdr-client-attributes": {
                                 "tail-equipment-id": "XPDR-NW3"
                             },
-                            "org-openroadm-network-topology:tp-type": "XPONDER-CLIENT"
+                            "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],
-                    "org-openroadm-network-topology:node-type": "XPONDER",
+                    "org-openroadm-common-network:node-type": "XPONDER",
                     "supporting-node": [
                         {
                             "network-ref":"openroadm-network",

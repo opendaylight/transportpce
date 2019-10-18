@@ -21,7 +21,6 @@
 
     <bean id="openRoadmTopology22" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology22">
         <argument ref="networkTransactionImpl" />
-        <argument ref="deviceTransactionManager" />
     </bean>
 
     <bean id="openRoadmOtnTopology22" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmOtnTopology22">

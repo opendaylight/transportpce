@@ -45,16 +45,14 @@ final class OrdLink {
         LinkId oppositeLinkId = LinkIdUtil.getRdm2RdmOppositeLinkId(input);
 
         //For setting up attributes for openRoadm augment
-        Link1Builder link1Builder = new Link1Builder();
-        OMSAttributesBuilder omsAttributesBuilder = new OMSAttributesBuilder();
-        omsAttributesBuilder.setOppositeLink(oppositeLinkId);
-        link1Builder.setOMSAttributes(omsAttributesBuilder.build());
+        OMSAttributesBuilder omsAttributesBuilder = new OMSAttributesBuilder().setOppositeLink(oppositeLinkId);
+        Link1Builder link1Builder = new Link1Builder().setOMSAttributes(omsAttributesBuilder.build());
 
         //For opposite link augment
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder oppsiteLinkBuilder =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder();
-        oppsiteLinkBuilder.setOppositeLink(oppositeLinkId);
-        link1Builder.setLinkType(OpenroadmLinkType.ROADMTOROADM);
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
+                .setOppositeLink(oppositeLinkId)
+                .setLinkType(OpenroadmLinkType.ROADMTOROADM);
         String srcNode = new StringBuilder(input.getRdmANode()).append("-DEG").append(input.getDegANum()).toString();
         String srcTp = input.getTerminationPointA();
         String destNode = new StringBuilder(input.getRdmZNode()).append("-DEG").append(input.getDegZNum()).toString();

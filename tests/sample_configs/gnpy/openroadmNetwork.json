@@ -8,7 +8,7 @@
           "org-openroadm-network:model": "1",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.11",
-          "org-openroadm-network:node-type": "XPONDER",
+          "org-openroadm-common-network:node-type": "XPONDER",
           "supporting-node": [
             {
               "network-ref": "clli-network",
@@ -21,7 +21,7 @@
           "org-openroadm-network:model": "1",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.21",
-          "org-openroadm-network:node-type": "XPONDER",
+          "org-openroadm-common-network:node-type": "XPONDER",
           "supporting-node": [
             {
               "network-ref": "clli-network",
@@ -34,7 +34,7 @@
           "org-openroadm-network:model": "1",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.31",
-          "org-openroadm-network:node-type": "XPONDER",
+          "org-openroadm-common-network:node-type": "XPONDER",
           "supporting-node": [
             {
               "network-ref": "clli-network",
@@ -47,7 +47,7 @@
           "org-openroadm-network:model": "1",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.41",
-          "org-openroadm-network:node-type": "XPONDER",
+          "org-openroadm-common-network:node-type": "XPONDER",
           "supporting-node": [
             {
               "network-ref": "clli-network",
@@ -60,7 +60,7 @@
           "org-openroadm-network:model": "1",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.51",
-          "org-openroadm-network:node-type": "XPONDER",
+          "org-openroadm-common-network:node-type": "XPONDER",
           "supporting-node": [
             {
               "network-ref": "clli-network",
@@ -73,7 +73,7 @@
           "org-openroadm-network:model": "2",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.10",
-          "org-openroadm-network:node-type": "ROADM",
+          "org-openroadm-common-network:node-type": "ROADM",
           "supporting-node": [
             {
               "network-ref": "clli-network",
@@ -86,7 +86,7 @@
           "org-openroadm-network:model": "2",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.20",
-          "org-openroadm-network:node-type": "ROADM",
+          "org-openroadm-common-network:node-type": "ROADM",
           "supporting-node": [
             {
               "network-ref": "clli-network",
@@ -99,7 +99,7 @@
           "org-openroadm-network:model": "2",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.30",
-          "org-openroadm-network:node-type": "ROADM",
+          "org-openroadm-common-network:node-type": "ROADM",
           "supporting-node": [
             {
               "network-ref": "clli-network",
@@ -112,7 +112,7 @@
           "org-openroadm-network:model": "2",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.40",
-          "org-openroadm-network:node-type": "ROADM",
+          "org-openroadm-common-network:node-type": "ROADM",
           "supporting-node": [
             {
               "network-ref": "clli-network",
@@ -125,7 +125,7 @@
           "org-openroadm-network:model": "2",
           "org-openroadm-network:vendor": "vendorA",
           "org-openroadm-network:ip": "127.0.0.50",
-          "org-openroadm-network:node-type": "ROADM",
+          "org-openroadm-common-network:node-type": "ROADM",
           "supporting-node": [
             {
               "network-ref": "clli-network",

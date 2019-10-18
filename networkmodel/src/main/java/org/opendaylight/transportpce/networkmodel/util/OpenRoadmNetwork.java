@@ -85,16 +85,18 @@ public final class OpenRoadmNetwork {
         nodeBldr.setNodeId(nwNodeId);
         nodeBldr.withKey(new NodeKey(nwNodeId));
         Node1Builder node1bldr = new Node1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node2bldr =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
 
         /*
          * Recognize the node type: 1:ROADM, 2:XPONDER
          */
         switch (nodeInfo.getNodeType().getIntValue()) {
             case 1:
-                node1bldr.setNodeType(OpenroadmNodeType.ROADM);
+                node2bldr.setNodeType(OpenroadmNodeType.ROADM);
                 break;
             case 2:
-                node1bldr.setNodeType(OpenroadmNodeType.XPONDER);
+                node2bldr.setNodeType(OpenroadmNodeType.XPONDER);
                 break;
             default:
                 LOG.error("No correponsding type for the value: {}", nodeInfo.getNodeType().getName());
@@ -123,6 +125,8 @@ public final class OpenRoadmNetwork {
 
         // Augment to the main node builder
         nodeBldr.addAugmentation(Node1.class, node1bldr.build());
+        nodeBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class,
+            node2bldr.build());
         return nodeBldr.build();
     }
 

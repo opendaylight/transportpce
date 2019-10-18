@@ -102,21 +102,25 @@ final class Rdm2XpdrLink {
 
     private static NetworkBuilder createNetworkBuilder(String srcNode, String srcTp, String destNode, String destTp,
                                                        boolean isXponderInput, OpenRoadmFactory openRoadmFactory) {
-        NetworkId nwId = new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID);
-        NetworkBuilder nwBuilder = new NetworkBuilder();
-        nwBuilder.setNetworkId(nwId);
-        nwBuilder.withKey(new NetworkKey(nwId));
         Link1Builder lnk1bldr = new Link1Builder();
-        LinkBuilder linkBuilder = openRoadmFactory.createLink(srcNode, destNode, srcTp, destTp);
-        lnk1bldr.setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT);
-        lnk1bldr.setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
-        linkBuilder.addAugmentation(Link1.class, lnk1bldr.build());
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder lnk2bldr
+            = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
+                .setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT)
+                .setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
+        LinkBuilder linkBuilder = openRoadmFactory.createLink(srcNode, destNode, srcTp, destTp)
+            .addAugmentation(Link1.class, lnk1bldr.build())
+            .addAugmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
+                lnk2bldr.build());
 
         LOG.info("Link id in the linkbldr {}", linkBuilder.getLinkId());
         LOG.info("Link with oppo link {}", linkBuilder.augmentation(Link1.class));
-        Network1Builder nwBldr1 = new Network1Builder();
-        nwBldr1.setLink(ImmutableList.of(linkBuilder.build()));
-        nwBuilder.addAugmentation(Network1.class, nwBldr1.build());
+        Network1Builder nwBldr1 = new Network1Builder().setLink(ImmutableList.of(linkBuilder.build()));
+        NetworkId nwId = new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID);
+        NetworkBuilder nwBuilder = new NetworkBuilder()
+            .setNetworkId(nwId)
+            .withKey(new NetworkKey(nwId))
+            .addAugmentation(Network1.class, nwBldr1.build());
         return nwBuilder;
     }
 

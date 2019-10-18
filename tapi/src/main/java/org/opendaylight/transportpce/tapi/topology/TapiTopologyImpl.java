@@ -31,8 +31,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
@@ -138,7 +138,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 .equals(OpenroadmLinkType.XPONDERINPUT)).collect(Collectors.toList());
 
             List<Node> xpdrNodeList = nodeList.stream().filter(nt -> nt.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1.class).getNodeType()
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class).getNodeType()
                 .equals(OpenroadmNodeType.XPONDER)).collect(Collectors.toList());
             Map<String, List<String>> clientPortMap = new HashMap<>();
             for (Node node : xpdrNodeList) {
@@ -194,9 +194,9 @@ public class TapiTopologyImpl implements TapiTopologyService {
             }
             List<Node> nodeList = otnTopo.getNode();
             List<Node> otnNodeList = nodeList.stream().filter(nt -> nt.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1.class)
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
                 .getNodeType().equals(OpenroadmNodeType.SWITCH) || nt.augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1.class)
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
                     .getNodeType().equals(OpenroadmNodeType.MUXPDR)).collect(Collectors.toList());
             List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> tapiNodeList =
                 new ArrayList<>();

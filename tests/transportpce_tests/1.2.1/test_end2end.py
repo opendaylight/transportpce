@@ -1040,10 +1040,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
-            if ((ele[u'org-openroadm-network-topology:tp-type'] == 'XPONDER-CLIENT') 
+            if ((ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-CLIENT')
                 and (ele['tp-id'] == 'XPDR1-CLIENT1' or ele['tp-id'] == 'XPDR1-CLIENT3')):
                 self.assertNotIn('wavelength', dict.keys(ele['org-openroadm-network-topology:xpdr-client-attributes']))
-            elif ((ele[u'org-openroadm-network-topology:tp-type'] == 'XPONDER-NETWORK')
+            elif ((ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK')
                 and (ele['tp-id'] == 'XPDR1-CLIENT1' or ele['tp-id'] == 'XPDR1-CLIENT3')):
                 self.assertNotIn('wavelength', dict.keys(ele['org-openroadm-network-topology:xpdr-network-attributes']))
         time.sleep(10)

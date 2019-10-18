@@ -16,8 +16,8 @@ import java.util.Optional;
 import java.util.TreeMap;
 
 import org.opendaylight.transportpce.pce.SortPortsByName;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.pp.attributes.UsedWavelength;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
@@ -82,14 +82,19 @@ public class PceNode {
         }
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
             .node.TerminationPoint tp : allTps) {
-            TerminationPoint1 tp1 = tp.augmentation(TerminationPoint1.class);
-            OpenroadmTpType type = tp1.getTpType();
+            TerminationPoint1 cntp1 = tp.augmentation(TerminationPoint1.class);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1 nttp1 = tp
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
+                .TerminationPoint1.class);
+            OpenroadmTpType type = cntp1.getTpType();
+            LOG.info("type = {} for tp {}", type.getName(), tp.toString());
+
             switch (type) {
                 case SRGTXRXCP:
                 case SRGRXCP:
                 case SRGTXCP:
                     LOG.info("initSrgTpList: adding SRG-CP tp = {} ", tp.getTpId().getValue());
-                    this.availableSrgCp.put(tp.getTpId().getValue(), tp1.getTpType());
+                    this.availableSrgCp.put(tp.getTpId().getValue(), cntp1.getTpType());
                     break;
                 case SRGRXPP:
                 case SRGTXPP:
@@ -97,7 +102,7 @@ public class PceNode {
                     boolean used = true;
                     LOG.info("initSrgTpList: SRG-PP tp = {} found", tp.getTpId().getValue());
                     try {
-                        List<UsedWavelength> usedWavelengths = tp1.getPpAttributes().getUsedWavelength();
+                        List<UsedWavelength> usedWavelengths = nttp1.getPpAttributes().getUsedWavelength();
                         if (usedWavelengths.isEmpty()) {
                             used = false;
                         }
@@ -107,7 +112,7 @@ public class PceNode {
                     }
                     if (!used) {
                         LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
-                        this.availableSrgPp.put(tp.getTpId().getValue(), tp1.getTpType());
+                        this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
                     } else {
                         LOG.warn("initSrgTpList: SRG-PP tp = {} found is busy !!");
                     }
@@ -198,16 +203,19 @@ public class PceNode {
         this.valid = false;
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
             .node.TerminationPoint tp : allTps) {
-            TerminationPoint1 tp1 = tp.augmentation(TerminationPoint1.class);
-            if (tp1.getTpType() == OpenroadmTpType.XPONDERNETWORK) {
-                if (tp1.getXpdrNetworkAttributes().getWavelength() != null) {
+            TerminationPoint1 cntp1 = tp.augmentation(TerminationPoint1.class);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1 nttp1 = tp
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
+                .TerminationPoint1.class);
+            if (cntp1.getTpType() == OpenroadmTpType.XPONDERNETWORK) {
+                if (nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
                     this.usedXpndrNWTps.add(tp.getTpId().getValue());
                     LOG.debug("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
                 } else {
                     this.valid = true;
                 }
                 // find Client of this network TP
-                String client = tp1.getXpdrNetworkAttributes().getTailEquipmentId();
+                String client = nttp1.getXpdrNetworkAttributes().getTailEquipmentId();
                 if ((client.equals("")) || (client == null)) {
                     LOG.error("initXndrTps: XPONDER {} NW TP doesn't have defined Client {}", this.toString(), tp
                             .getTpId().getValue());

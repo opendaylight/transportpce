@@ -155,49 +155,58 @@ public final class OlmTransactionUtils {
         amplifiedLinkValues.add(al);
         amplifiedLinkValues.add(al2);
         Map<Class<? extends Augmentation<Link>>, Augmentation<Link>> map = Collections.emptyMap();
-        Augmentation<Link> aug1 = new Link1Builder().setAdministrativeGroup(Long.valueOf(123))
+        Augmentation<Link> aug11 = new Link1Builder().setAdministrativeGroup(Long.valueOf(123))
                 .setAdministrativeState(State.InService)
                 .setAmplified(true)
                 .setLinkLatency(Long.valueOf(123))
                 .setLinkLength(BigDecimal.valueOf(123))
-                .setLinkType(OpenroadmLinkType.ROADMTOROADM)
                 .setOMSAttributes(new OMSAttributesBuilder()
                         .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
                         .setOppositeLink(new LinkId("link 1"))
                         .setSpan(new SpanBuilder().build())
                         .setTEMetric(Long.valueOf(123)).build())
                 .setOperationalState(State.InService).build();
-        Augmentation<Link> aug2 = new Link1Builder().setAdministrativeGroup(Long.valueOf(123))
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 aug12 =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
+                .setLinkType(OpenroadmLinkType.ROADMTOROADM).build();
+        Augmentation<Link> aug21 = new Link1Builder()
+                .setAdministrativeGroup(Long.valueOf(123))
                 .setAdministrativeState(State.InService)
                 .setAmplified(true)
                 .setLinkLatency(Long.valueOf(123))
                 .setLinkLength(BigDecimal.valueOf(123))
-                .setLinkType(OpenroadmLinkType.ROADMTOROADM)
                 .setOMSAttributes(new OMSAttributesBuilder()
                         .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
                         .setOppositeLink(new LinkId("link 1"))
                         .setSpan(new SpanBuilder().build())
                         .setTEMetric(Long.valueOf(123)).build())
                 .setOperationalState(State.InService).build();
-
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 aug22 =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
+                .setLinkType(OpenroadmLinkType.ROADMTOROADM).build();
         // create the roadm-to-roadm link to be measured
         List<Link> ietfLinkList = new ArrayList<>();
         Link roadm2roadmLink = new LinkBuilder().setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
             .setSource(new SourceBuilder().setSourceNode(ietfNodeA.getNodeId()).setSourceTp("DEG2-TTP-TXRX").build())
-            .setDestination(new DestinationBuilder().setDestNode(ietfNodeC.getNodeId()).setDestTp("DEG1-TTP-TXRX")
-                    .build())
-            .addAugmentation(Link1.class, aug1)
-            .addAugmentation(Link1.class, aug2)
+            .setDestination(
+                new DestinationBuilder().setDestNode(ietfNodeC.getNodeId()).setDestTp("DEG1-TTP-TXRX").build())
+            .addAugmentation(Link1.class, aug11)
+            .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
+                aug12)
+            .addAugmentation(Link1.class, aug21)
+            .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
+                aug22)
             .build();
         ietfLinkList.add(roadm2roadmLink);
         // create the ietf network
         Network1 openroadmAugmToIetfNetwork = new Network1Builder().setLink(ietfLinkList).build();
-        NetworkBuilder ietfNetworkBldr = new NetworkBuilder().setNetworkId(new NetworkId("openroadm-topology"))
-                .setNode(ietfNodeList).addAugmentation(Network1.class, openroadmAugmToIetfNetwork);
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
-                openroadmTopology;
-        openroadmTopology = ietfNetworkBldr.build();
-        return openroadmTopology;
+        // openroadm Topology builder
+        NetworkBuilder ietfNetworkBldr = new NetworkBuilder()
+                .setNetworkId(new NetworkId("openroadm-topology"))
+                .setNode(ietfNodeList)
+                .addAugmentation(Network1.class, openroadmAugmToIetfNetwork);
+
+        return ietfNetworkBldr.build();
     }
 
     public static Mapping getMapping1() {

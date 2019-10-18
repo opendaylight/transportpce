@@ -107,7 +107,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['node-id'], 'SPDR-SA1')
         self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['network-ref'], 'clli-network')
         self.assertEqual(res['network'][0]['node'][0]['supporting-node'][0]['node-ref'], 'NodeSA')
-        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:node-type'], 'XPONDER')
+        self.assertEqual(res['network'][0]['node'][0]['org-openroadm-common-network:node-type'], 'XPONDER')
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:model'], 'universal-switchponder')
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:vendor'], 'vendorA')
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:ip'], '1.2.3.4')
