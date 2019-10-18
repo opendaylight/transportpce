@@ -43,6 +43,7 @@ import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.El
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.ElementsBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.elements.Metadata;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.elements.MetadataBuilder;
+// HEAD:pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ExtractTopoDataStoreImpl.java
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.RouteIncludeEro;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TeHopType;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TeNodeId;
@@ -68,12 +69,13 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.Syn
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.synchronization.Svec;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.synchronization.SvecBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+// import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.ila.Ila;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev181130.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
@@ -201,22 +203,30 @@ public class ExtractTopoDataStoreImpl {
                                 // topology and openRoadm network
                                 mapDisgNodeRefNode.put(openRoadmTopoNode.getNodeId().getValue(), nodeRef);
                                 Node1 openRoadmNetNode1 = null;
+                                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                                    .Node1 commonNetworkNode1 = null;
                                 for (Node openRoadmNetNode : openRoadmNetNodeList) {
                                     if (openRoadmNetNode.getNodeId().getValue().equals(nodeRef)) {
                                         openRoadmNetNode1 = openRoadmNetNode.augmentation(Node1.class);
+                                        commonNetworkNode1 = openRoadmNetNode.augmentation(org.opendaylight.yang.gen.v1
+                                            .http.org.openroadm.common.network.rev181130.Node1.class);
                                         ipAddress = openRoadmNetNode1.getIp();
                                         mapNodeRefIp.put(nodeRef, ipAddress);
                                         break;
                                     }
                                 }
-                                if (openRoadmNetNode1.getNodeType().getName().equals("ROADM")) {
+                                if (commonNetworkNode1.getNodeType().getName().equals("ROADM")) {
+                                //if (((org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1)
+                                //            openRoadmNetNode1).getNodeType().getName().equals("ROADM")) {
                                     if (!nodesList.contains(nodeRef)) {
                                         Elements element = addElementsRoadm(2, 0, nodeRef, openRoadmNetNode1.getShelf(),
                                                 -20, ipAddress.getIpv4Address().getValue().toString());
                                         topoElements.add(element);
                                         nodesList.add(nodeRef);
                                     }
-                                } else if (openRoadmNetNode1.getNodeType().getName().equals("XPONDER")) {
+                                } else if (commonNetworkNode1.getNodeType().getName().equals("XPONDER")) {
+                                //} else if (((org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                                //            .Node1) openRoadmNetNode1).getNodeType().getName().equals("XPONDER")) {
                                     if (!nodesList.contains(nodeRef)) {
                                         Elements element = addElementsTransceiver(2, 0, nodeRef,
                                                 openRoadmNetNode1.getShelf(),
@@ -245,15 +255,25 @@ public class ExtractTopoDataStoreImpl {
                         LOG.debug("The link list is not empty");
                         for (Link link : linksList) {
                             Link1 link1 = link.augmentation(Link1.class);
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
+                                .Link1 openroadmNetworkLink1 = link.augmentation(org.opendaylight.yang.gen.v1.http.org
+                                .openroadm.network.topology.rev181130.Link1.class);
                             int linkType = link1.getLinkType().getIntValue();
+                            // the previous line generates a warning
+                            //  but the following cast in comment makes the gnpy tox test fail
+                            // ((org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1) link1)
                             if (IntStream.of(externalLink).anyMatch(x -> x == linkType)) {
                                 // Verify if the node is a ROADM
                                 String srcId = mapDisgNodeRefNode.get(link.getSource().getSourceNode().getValue());
                                 IpAddress srcIp = mapNodeRefIp.get(srcId);
+                                String clfi = link1.getClfi();
                                 String destId = null;
                                 IpAddress destIp = null;
                                 // Add the links between amplifiers
-                                OMSAttributes omsAttributes = link1.getOMSAttributes();
+                                OMSAttributes omsAttributes = null;
+                                if (linkType == 4) {
+                                    omsAttributes = openroadmNetworkLink1.getOMSAttributes();
+                                }
                                 if (omsAttributes != null) {
                                     if (omsAttributes.getAmplifiedLink() != null) {
                                         List<AmplifiedLink> amplifiedLinkList = omsAttributes.getAmplifiedLink()
@@ -278,9 +298,6 @@ public class ExtractTopoDataStoreImpl {
                                                 } else if (amplifiedLink.getSectionElement()
                                                         .getSectionElement() instanceof Span) {
                                                     // Create the location
-                                                    Span span = (Span) amplifiedLink.getSectionElement()
-                                                            .getSectionElement();
-                                                    String clfi = span.getSpan().getClfi();
                                                     IpAddress ipFiber = new IpAddress(
                                                             new Ipv4Address("2.2.2." + idFiber));
                                                     mapLinkFiber.put(link.getLinkId().getValue(), clfi);
@@ -310,10 +327,10 @@ public class ExtractTopoDataStoreImpl {
                                             .networks.network.link.oms.attributes.@Nullable Span span
                                                 = omsAttributes.getSpan();
 
-                                        String clfi = span.getClfi();
+                                        String clfi1 = span.getClfi();
                                         IpAddress ipFiber = new IpAddress(new Ipv4Address("2.2.2." + idFiber));
-                                        mapLinkFiber.put(link.getLinkId().getValue(), clfi);
-                                        mapFiberIp.put(clfi, ipFiber);
+                                        mapLinkFiber.put(link.getLinkId().getValue(), clfi1);
+                                        mapFiberIp.put(clfi1, ipFiber);
                                         idFiber++;
 
                                         double attIn = 0;
@@ -323,13 +340,16 @@ public class ExtractTopoDataStoreImpl {
 
                                         double length = 0;
                                         // Compute the length of the link
-                                        List<LinkConcatenation> linkConcatenationList = span.getLinkConcatenation();
+                                        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
+                                            .networks.network.link.oms.attributes.@Nullable Span span1 =
+                                            omsAttributes.getSpan();
+                                        List<LinkConcatenation> linkConcatenationList = span1.getLinkConcatenation();
                                         for (LinkConcatenation linkConcatenation : linkConcatenationList) {
                                             double srlgLength = linkConcatenation.getSRLGLength();
                                             //convert to kilometer
                                             length += srlgLength / convertKmM;
                                         }
-                                        double lossCoef = span.getSpanlossCurrent().getValue().doubleValue() / length;
+                                        double lossCoef = span1.getSpanlossCurrent().getValue().doubleValue() / length;
 
                                         Elements element1 = addElementsFiber(2, 0, "RLD", "Lannion_CAS",
                                                 ipFiber.getIpv4Address().getValue(), length, attIn, lossCoef, connIn,
@@ -347,7 +367,7 @@ public class ExtractTopoDataStoreImpl {
                                         }
                                     } else {
                                         // Add a fiber
-                                        String clfi = "Fiber" + idFiber;
+                                        clfi = "Fiber" + idFiber;
                                         IpAddress ipFiber = new IpAddress(new Ipv4Address("2.2.2." + idFiber));
                                         mapLinkFiber.put(link.getLinkId().getValue(), clfi);
                                         mapFiberIp.put(clfi, ipFiber);
@@ -759,5 +779,4 @@ public class ExtractTopoDataStoreImpl {
         pathRequestList.add(pathRequest1);
         return pathRequestList;
     }
-
 }

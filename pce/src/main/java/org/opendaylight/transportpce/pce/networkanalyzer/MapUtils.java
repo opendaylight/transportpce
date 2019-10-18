@@ -12,8 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1;
 
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
@@ -107,6 +107,7 @@ public final class MapUtils {
         }
 
         tmplType = link1.getLinkType();
+
         if (tmplType == null) {
             LOG.error("MapUtils: No Link type available. {}", link.getLinkId().getValue());
             return null;
@@ -115,9 +116,11 @@ public final class MapUtils {
     }
 
     public static Span getOmsAttributesSpan(Link link) {
-        Link1 link1 = null;
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1 link1 = null;
         Span tempSpan = null;
-        link1 = link.augmentation(Link1.class);
+        link1 =
+            link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1.class);
+
         if (link1 == null) {
             LOG.error("MapUtils: No Link augmentation available. {}", link.getLinkId().getValue());
         }

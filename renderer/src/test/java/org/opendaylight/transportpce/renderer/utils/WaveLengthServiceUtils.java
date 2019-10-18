@@ -31,8 +31,8 @@ public final class WaveLengthServiceUtils {
 
     }
 
-    private static InstanceIdentifierBuilder<TerminationPoint1> createTerminationPoint1IIDBuilder(String nodeId,
-        String tpId) {
+    private static InstanceIdentifierBuilder<TerminationPoint1> createTerminationPoint1IIDBuilder(
+            String nodeId, String tpId) {
         return InstanceIdentifier
             .builder(Networks.class).child(Network.class,
                 new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
@@ -47,20 +47,58 @@ public final class WaveLengthServiceUtils {
             .augmentation(TerminationPoint1.class);
     }
 
+    private static InstanceIdentifierBuilder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            .TerminationPoint1> createTerminationPoint2IIDBuilder(
+                String nodeId, String tpId) {
+        return InstanceIdentifier
+            .builder(Networks.class).child(Network.class,
+                new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+                .Node.class, new NodeKey(new NodeId(nodeId)))
+            .augmentation(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
+            .child(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
+                .network.node.TerminationPoint.class, new TerminationPointKey(new TpId(tpId)))
+            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                .TerminationPoint1.class);
+    }
+
     public static void putTerminationPoint1ToDatastore(String nodeId, String tpId, TerminationPoint1 terminationPoint1,
-        DeviceTransactionManager deviceTransactionManager)
-        throws ExecutionException, InterruptedException {
+            DeviceTransactionManager deviceTransactionManager)
+            throws ExecutionException, InterruptedException {
         TransactionUtils
             .writeTransaction(deviceTransactionManager, nodeId, LogicalDatastoreType.CONFIGURATION,
                 createTerminationPoint1IIDBuilder(nodeId, tpId).build(), terminationPoint1);
     }
 
+    public static void putTerminationPoint2ToDatastore(String nodeId, String tpId,
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1
+                terminationPoint1, DeviceTransactionManager deviceTransactionManager)
+            throws ExecutionException, InterruptedException {
+        TransactionUtils
+            .writeTransaction(deviceTransactionManager, nodeId, LogicalDatastoreType.CONFIGURATION,
+                createTerminationPoint2IIDBuilder(nodeId, tpId).build(), terminationPoint1);
+    }
+
     public static TerminationPoint1 getTerminationPoint1FromDatastore(String nodeId, String tpId,
-        DeviceTransactionManager deviceTransactionManager)
-        throws ExecutionException, InterruptedException {
+            DeviceTransactionManager deviceTransactionManager)
+            throws ExecutionException, InterruptedException {
         InstanceIdentifier<TerminationPoint1> tpIID = createTerminationPoint1IIDBuilder(nodeId, tpId).build();
         return (TerminationPoint1) TransactionUtils
             .readTransaction(deviceTransactionManager, nodeId, LogicalDatastoreType.CONFIGURATION, tpIID);
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            .TerminationPoint1 getTerminationPoint2FromDatastore(String nodeId, String tpId,
+            DeviceTransactionManager deviceTransactionManager)
+            throws ExecutionException, InterruptedException {
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1>
+            tpIID = createTerminationPoint2IIDBuilder(nodeId, tpId).build();
+        return (org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1)
+             TransactionUtils
+                .readTransaction(deviceTransactionManager, nodeId, LogicalDatastoreType.CONFIGURATION, tpIID);
     }
 
     private static InstanceIdentifier<Node1> createNode1IID(String nodeId) {
@@ -74,6 +112,18 @@ public final class WaveLengthServiceUtils {
             .build();
     }
 
+    private static InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+        .Node1> createNode2IID(String nodeId) {
+        return InstanceIdentifier
+            .builder(Networks.class)
+            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+            .child(
+                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+                .Node.class, new NodeKey(new NodeId(nodeId)))
+            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+            .build();
+    }
+
     public static void putNode1ToDatastore(String nodeId, Node1 node1,
         DeviceTransactionManager deviceTransactionManager)
         throws ExecutionException, InterruptedException {
@@ -83,10 +133,30 @@ public final class WaveLengthServiceUtils {
                 LogicalDatastoreType.CONFIGURATION, nodeIID, node1);
     }
 
+    public static void putNode2ToDatastore(String nodeId,
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 node1,
+            DeviceTransactionManager deviceTransactionManager)
+           throws ExecutionException, InterruptedException {
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1> nodeIID =
+            createNode2IID(nodeId);
+        TransactionUtils
+            .writeTransaction(deviceTransactionManager, nodeId,
+                LogicalDatastoreType.CONFIGURATION, nodeIID, node1);
+    }
+
     public static Node1 getNode1FromDatastore(String nodeId, DeviceTransactionManager deviceTransactionManager)
-        throws ExecutionException, InterruptedException {
+            throws ExecutionException, InterruptedException {
         InstanceIdentifier<Node1> nodeIID = createNode1IID(nodeId);
         return (Node1) TransactionUtils
+            .readTransaction(deviceTransactionManager, nodeId, LogicalDatastoreType.CONFIGURATION, nodeIID);
+    }
+
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            .Node1 getNode2FromDatastore(String nodeId, DeviceTransactionManager deviceTransactionManager)
+            throws ExecutionException, InterruptedException {
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            .Node1> nodeIID = createNode2IID(nodeId);
+        return (org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1) TransactionUtils
             .readTransaction(deviceTransactionManager, nodeId, LogicalDatastoreType.CONFIGURATION, nodeIID);
     }
 }
