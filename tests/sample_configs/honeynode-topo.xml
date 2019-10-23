@@ -347,6 +347,10 @@
             <network-ref>openroadm-network</network-ref>
             <node-ref>ROADMC01</node-ref>
         </supporting-node>
+        <supporting-node>
+            <network-ref>clli-network</network-ref>
+            <node-ref>NodeC</node-ref>
+        </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
             <available-wavelengths>
                 <index>93</index>
@@ -649,11 +653,15 @@
             <tp-id>DEG1-TTP-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-TTP</tp-type>
         </termination-point>
+        <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
             <node-ref>ROADMC01</node-ref>
         </supporting-node>
-        <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
+        <supporting-node>
+            <network-ref>clli-network</network-ref>
+            <node-ref>NodeC</node-ref>
+        </supporting-node>
         <degree-attributes xmlns="http://org/openroadm/network/topology">
             <degree-number>1</degree-number>
             <available-wavelengths>
@@ -956,11 +964,15 @@
             <tp-id>DEG2-CTP-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-CTP</tp-type>
         </termination-point>
+        <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
             <node-ref>ROADMC01</node-ref>
         </supporting-node>
-        <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
+        <supporting-node>
+            <network-ref>clli-network</network-ref>
+            <node-ref>NodeC</node-ref>
+        </supporting-node>
         <degree-attributes xmlns="http://org/openroadm/network/topology">
             <degree-number>2</degree-number>
             <available-wavelengths>
@@ -1327,6 +1339,10 @@
             <network-ref>openroadm-network</network-ref>
             <node-ref>ROADMA01</node-ref>
         </supporting-node>
+        <supporting-node>
+            <network-ref>clli-network</network-ref>
+            <node-ref>NodeA</node-ref>
+        </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
             <available-wavelengths>
                 <index>93</index>
@@ -1641,11 +1657,15 @@
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
             <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT1</associated-connection-map-port>
         </termination-point>
+        <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
             <node-ref>XPDRA01</node-ref>
         </supporting-node>
-        <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
+        <supporting-node>
+            <network-ref>clli-network</network-ref>
+            <node-ref>NodeA</node-ref>
+        </supporting-node>
     </node>
     <node>
         <node-id>ROADMA01-DEG2</node-id>
@@ -1657,11 +1677,15 @@
             <tp-id>DEG2-CTP-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-CTP</tp-type>
         </termination-point>
+        <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
             <node-ref>ROADMA01</node-ref>
         </supporting-node>
-        <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
+        <supporting-node>
+            <network-ref>clli-network</network-ref>
+            <node-ref>NodeA</node-ref>
+        </supporting-node>
         <degree-attributes xmlns="http://org/openroadm/network/topology">
             <degree-number>2</degree-number>
             <available-wavelengths>
@@ -1976,11 +2000,15 @@
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
             <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT1</associated-connection-map-port>
         </termination-point>
+        <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
             <node-ref>XPDRC01</node-ref>
         </supporting-node>
-        <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
+        <supporting-node>
+            <network-ref>clli-network</network-ref>
+            <node-ref>NodeC</node-ref>
+        </supporting-node>
     </node>
     <node>
         <node-id>ROADMA01-DEG1</node-id>
@@ -1992,11 +2020,15 @@
             <tp-id>DEG1-TTP-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-TTP</tp-type>
         </termination-point>
+        <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
             <node-ref>ROADMA01</node-ref>
         </supporting-node>
-        <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
+        <supporting-node>
+            <network-ref>clli-network</network-ref>
+            <node-ref>NodeA</node-ref>
+        </supporting-node>
         <degree-attributes xmlns="http://org/openroadm/network/topology">
             <degree-number>1</degree-number>
             <available-wavelengths>

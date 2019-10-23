@@ -93,14 +93,15 @@ public class PceSendingPceRPCs {
             new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc);
         nwAnalizer.retrievePceNetwork();
         rc = nwAnalizer.getReturnStructure();
+        String serviceType = nwAnalizer.getServiceType();
         if (!rc.getStatus()) {
             LOG.error("In pathComputationWithConstraints, nwAnalizer: result = {}", rc.toString());
             return;
         }
         LOG.info("PceGraph ...");
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(),
-            nwAnalizer.getzendPceNode(), nwAnalizer.getAllPceNodes(),
-            hardConstraints, softConstraints, rc);
+                nwAnalizer.getzendPceNode(), nwAnalizer.getAllPceNodes(),
+                pceHardConstraints, pceSoftConstraints, rc, serviceType);
         graph.calcPath();
         rc = graph.getReturnStructure();
         if (!rc.getStatus()) {

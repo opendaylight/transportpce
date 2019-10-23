@@ -117,12 +117,14 @@ class TransportPCEtesting(unittest.TestCase):
                 },
                 "service-a-end": {
                     "node-id": "XPDRA01",
-                    "service-rate": "0",
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
                     "clli": "nodeA"
                 },
                 "service-z-end": {
                     "node-id": "XPDRC01",
-                    "service-rate": "0",
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
                     "clli": "nodeC"
                 }
             }
@@ -151,13 +153,15 @@ class TransportPCEtesting(unittest.TestCase):
                 },
                 "service-a-end": {
                     "node-id": "ROADMA01",
-                    "service-rate": "0",
-                    "clli": "nodeA"
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "clli": "NodeA"
                 },
                 "service-z-end": {
                     "node-id": "ROADMC01",
-                    "service-rate": "0",
-                    "clli": "nodeC"
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "clli": "NodeC"
                 }
             }
         }
@@ -250,13 +254,15 @@ class TransportPCEtesting(unittest.TestCase):
                 },
                 "service-a-end": {
                     "node-id": "XPONDER-1-2",
-                    "service-rate": "0",
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
                     "clli": "ORANGE1"
                 },
                 "service-z-end": {
                     "node-id": "XPONDER-3-2",
-                    "service-rate": "0",
-                    "clli": "ORANGE1"
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "clli": "ORANGE3"
                 }
             }
         }
@@ -282,12 +288,14 @@ class TransportPCEtesting(unittest.TestCase):
                   "request-id": "request1"
                 },
                 "service-a-end": {
-                  "service-rate": "0",
+                  "service-rate": "100",
+                  "service-format": "Ethernet",
                   "clli": "cll21",
                   "node-id": "OpenROADM-2-1"
                 },
                 "service-z-end": {
-                  "service-rate": "0",
+                  "service-rate": "100",
+                  "service-format": "Ethernet",
                   "clli": "ncli22",
                   "node-id": "OpenROADM-2-2"
                   },
@@ -400,8 +408,8 @@ class TransportPCEtesting(unittest.TestCase):
                 },
                 "service-a-end": {
                   "service-format": "Ethernet",
-                  "service-rate": "0",
-                  "clli": "clli11",
+                  "service-rate": "100",
+                  "clli": "ORANGE2",
                   "node-id": "XPONDER-2-2",
                   "tx-direction": {
                     "port": {
@@ -428,8 +436,8 @@ class TransportPCEtesting(unittest.TestCase):
                 },
                 "service-z-end": {
                   "service-format": "Ethernet",
-                  "service-rate": "0",
-                  "clli": "clli11",
+                  "service-rate": "100",
+                  "clli": "ORANGE1",
                   "node-id": "XPONDER-1-2",
                   "tx-direction": {
                     "port": {
@@ -500,12 +508,16 @@ class TransportPCEtesting(unittest.TestCase):
                     "request-id": "request 1"
                 },
                 "service-a-end": {
-                    "service-rate": "0",
-                    "node-id": "XPONDER-1-2"
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "node-id": "XPONDER-1-2",
+                    "clli": "ORANGE1"
                 },
                 "service-z-end": {
-                    "service-rate": "0",
-                    "node-id": "XPONDER-3-2"
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "node-id": "XPONDER-3-2",
+                    "clli": "ORANGE3"
              },
              "pce-metric": "hop-count"
            }
@@ -536,12 +548,16 @@ class TransportPCEtesting(unittest.TestCase):
                     "request-id": "request 1"
                 },
                 "service-a-end": {
-                    "service-rate": "0",
-                    "node-id": "XPONDER-1-2"
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "node-id": "XPONDER-1-2",
+                    "clli": "ORANGE1"
                 },
                 "service-z-end": {
-                    "service-rate": "0",
-                    "node-id": "XPONDER-3-2"
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "node-id": "XPONDER-3-2",
+                    "clli": "ORANGE3"
                 },
                 "hard-constraints": {
                     "exclude_": {

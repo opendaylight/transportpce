@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
 
@@ -22,6 +23,7 @@ public class PceResult {
     private String responseCode = ResponseCodes.RESPONSE_FAILED;
     private long resultWavelength = -1;
     private long rate = -1;
+    private  ServiceFormat serviceFormat = ServiceFormat.OC;
 
     public enum LocalCause {
         NONE, TOO_HIGH_LATENCY, OUT_OF_SPEC_OSNR, NO_PATH_EXISTS, INT_PROBLEM, HD_NODE_INCLUDE;
@@ -100,6 +102,14 @@ public class PceResult {
 
     public void setRate(long rate) {
         this.rate = rate;
+    }
+
+    public ServiceFormat getServiceFormat() {
+        return serviceFormat;
+    }
+
+    public void setServiceFormat(ServiceFormat serviceFormat) {
+        this.serviceFormat = serviceFormat;
     }
 
     public LocalCause getLocalCause() {

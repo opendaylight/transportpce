@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.pce.SortPortsByName;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
@@ -35,10 +36,11 @@ public class PceNode {
 
     private boolean valid = true;
 
-    private final Node node;
-    private final NodeId nodeId;
-    private final OpenroadmNodeType nodeType;
+    protected final Node node;
+    protected final NodeId nodeId;
+    protected final OpenroadmNodeType nodeType;
     private final String supNodeId;
+    private final String supNetworkNodeId;
     private final String clli;
 
     // wavelength calculation per node type
@@ -48,13 +50,19 @@ public class PceNode {
     private List<String> usedXpndrNWTps = new ArrayList<String>();
     private List<PceLink> outgoingLinks = new ArrayList<PceLink>();
     private Map<String, String> clientPerNwTp = new HashMap<String, String>();
+    private Map<String,List<Integer>> tpAvailableTribPort = new TreeMap<String,List<Integer>>();
+    private Map<String,List<Integer>> tpAvailableTribSlot = new TreeMap<String,List<Integer>>();
 
     public PceNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId) {
         this.node = node;
         this.nodeId = nodeId;
         this.nodeType = nodeType;
         this.supNodeId = getSupNodeId(node);
-        this.clli = MapUtils.getCLLI(node);
+        this.supNetworkNodeId = getNetworkSupNodeId(node);
+        //this.clli = MapUtils.getCLLI(node);
+        this.clli = getClliSupNodeId(node);
+        this.tpAvailableTribPort.clear();
+        this.tpAvailableTribSlot.clear();
 
         if ((node == null) || (nodeId == null) || (nodeType == null)) {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type");
@@ -289,23 +297,49 @@ public class PceNode {
         }
     }
 
+    private String getClliSupNodeId(Node inputNode) {
+        TreeMap<String, String> allSupNodes = new TreeMap<String, String>();
+        String tempNetworkSupNodeId = "";
+        allSupNodes = MapUtils.getAllSupNode(inputNode);
+        if (allSupNodes.get(NetworkUtils.CLLI_NETWORK_ID) == null) {
+            LOG.error("getClliSupNodeId: No Supporting node at CLLI layer for node: [{}].", inputNode.getNodeId());
+        } else {
+            tempNetworkSupNodeId = allSupNodes.get(NetworkUtils.CLLI_NETWORK_ID);
+        }
+        return tempNetworkSupNodeId;
+    }
+
+    public String getClliSupNodeId() {
+        return clli;
+    }
+
+    private String getNetworkSupNodeId(Node inputNode) {
+        TreeMap<String, String> allSupNodes = new TreeMap<String, String>();
+        String tempNetworkSupNodeId = "";
+        allSupNodes = MapUtils.getAllSupNode(inputNode);
+        if (allSupNodes.get(NetworkUtils.UNDERLAY_NETWORK_ID) == null) {
+            LOG.error(
+                "getNetworkSupNodeId: No Supporting node at NETWORK layer for node: [{}].", inputNode.getNodeId());
+        } else {
+            tempNetworkSupNodeId = allSupNodes.get(NetworkUtils.UNDERLAY_NETWORK_ID);
+        }
+        return tempNetworkSupNodeId;
+    }
+
+
     public void validateAZxponder(String anodeId, String znodeId) {
         if (!isValid()) {
             return;
         }
-
         if (this.nodeType != OpenroadmNodeType.XPONDER) {
             return;
         }
-
         // Detect A and Z
-        if (this.supNodeId.equals(anodeId) || (this.supNodeId.equals(znodeId))) {
-
+        if (this.supNetworkNodeId.equals(anodeId) || (this.supNetworkNodeId.equals(znodeId))) {
             LOG.info("validateAZxponder: A or Z node detected == {}", nodeId.getValue());
             initXndrTps();
             return;
         }
-
         LOG.debug("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
         valid = false;
     }
@@ -323,7 +357,7 @@ public class PceNode {
     }
 
     public boolean isValid() {
-        if ((node == null) || (nodeId == null) || (nodeType == null) || (supNodeId == null) || (clli == null)) {
+        if ((node == null) || (nodeId == null) || (nodeType == null) || (supNetworkNodeId == null) || (clli == null)) {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
             valid = false;
         }
@@ -354,6 +388,10 @@ public class PceNode {
         return supNodeId;
     }
 
+    public String getSupNetworkNodeIdPceNode() {
+        return supNetworkNodeId;
+    }
+
     public String getCLLI() {
         return clli;
     }
@@ -364,6 +402,14 @@ public class PceNode {
 
     public void printLinksOfNode() {
         LOG.info(" outgoing links of node {} : {} ", nodeId.getValue(), this.getOutgoingLinks().toString());
+    }
+
+    public Map<String,List<Integer>> getAvailableTribPorts() {
+        return tpAvailableTribPort;
+    }
+
+    public Map<String,List<Integer>> getAvailableTribSlots() {
+        return tpAvailableTribSlot;
     }
 
 }

@@ -44,6 +44,7 @@ public class PceGraph {
     private Map<NodeId, PceNode> allPceNodes = new HashMap<NodeId, PceNode>();
     private PceNode apceNode = null;
     private PceNode zpceNode = null;
+    private String serviceType = "";
 
     PceConstraints pceHardConstraints;
     PceConstraints pceSoftConstraints;
@@ -58,7 +59,8 @@ public class PceGraph {
     private List<PceLink> pathAtoZ = new ArrayList<PceLink>();
 
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
-            PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult pceResult) {
+            PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult pceResult,
+            String serviceType) {
         super();
         this.apceNode = aendNode;
         this.zpceNode = zendNode;
@@ -66,6 +68,7 @@ public class PceGraph {
         this.pceResult = pceResult;
         this.pceHardConstraints = pceHardConstraints;
         this.pceSoftConstraints = pceSoftConstraints;
+        this.serviceType = serviceType;
 
         LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode.toString(), zendNode.toString());
         LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes.toString());
@@ -89,7 +92,7 @@ public class PceGraph {
         pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
         for (GraphPath<String, PceGraphEdge> path : allWPaths) {
             PostAlgoPathValidator papv = new PostAlgoPathValidator();
-            pceResult = papv.checkPath(path, allPceNodes, pceResult, pceHardConstraints);
+            pceResult = papv.checkPath(path, allPceNodes, pceResult, pceHardConstraints, serviceType);
             LOG.info("In calcPath after PostAlgoPathValidator {} {}",
                     pceResult.getResponseCode(), ResponseCodes.RESPONSE_OK);
 
@@ -105,9 +108,17 @@ public class PceGraph {
             }
 
             shortestPathAtoZ = new ArrayList<>(pathAtoZ);
-            LOG.info("In calcPath Path FOUND path for wl [{}], hops {}, distance per metrics {}, path AtoZ {}",
-                    pceResult.getResultWavelength(), pathAtoZ.size(), path.getWeight(), pathAtoZ.toString());
-            break;
+            if (("100GE".equals(serviceType)) || ("OTU4".equals(serviceType))) {
+                LOG.info("In calcPath Path FOUND path for wl [{}], hops {}, distance per metrics {}, path AtoZ {}",
+                        pceResult.getResultWavelength(), pathAtoZ.size(), path.getWeight(), pathAtoZ.toString());
+                break;
+            } else {
+                // Service is at OTN layer and is relying on a supporting wavelength service
+                LOG.info("In calcPath Path FOUND path for hops {}, distance per metrics {}, path AtoZ {}",
+                        pathAtoZ.size(), path.getWeight(), pathAtoZ.toString());
+                break;
+            }
+
         }
 
         if (shortestPathAtoZ != null) {
@@ -222,6 +233,11 @@ public class PceGraph {
             case PropagationDelay :
                 weight = link.getLatency();
                 LOG.debug("In PceGraph PropagationDelay is used as a metrics. {}", link.toString());
+                if ((("1GE".equals(serviceType)) || ("10GE".equals(serviceType)) || ("ODU4".equals(serviceType)))
+                        && (weight == 0)) {
+                    LOG.warn("PropagationDelay set as metric, but latency is null: is latency set for OTN link {}?",
+                        link.toString());
+                }
                 break;
 
             default:
