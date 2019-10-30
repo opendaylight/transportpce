@@ -93,8 +93,8 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
-    #Test the gnpy
-    def test_04_path_computation_xpdr_bi(self):
+    #Path computed by PCE is not feasible and Gnpy computes a new one feasible
+    def test_04_path_computation_NotFeasibleWithPCE_FeasibleWithGnpy(self):
         url = ("{}/operations/transportpce-pce:path-computation-request"
               .format(self.restconf_baseurl))
         body = {"input": {
@@ -105,14 +105,14 @@ class TransportGNPYtesting(unittest.TestCase):
                     "request-id": "request-1"
                 },
                 "service-a-end": {
-                    "node-id": "XPDRA01",
+                    "node-id": "XPONDER-1",
                     "service-rate": "100",
-                    "clli": "nodeA"
+                    "clli": "Node1"
                 },
                 "service-z-end": {
-                    "node-id": "XPDRB",
+                    "node-id": "XPONDER-5",
                     "service-rate": "100",
-                    "clli": "nodeB"
+                    "clli": "Node5"
                 }
             }
         }
@@ -123,14 +123,131 @@ class TransportGNPYtesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
+        self.assertEqual(res['output']['configuration-response-common']['response-code'], '200')
         self.assertEqual(res['output']['gnpy-response'][0]['path-dir'], 'A-to-Z')
         self.assertEqual(res['output']['gnpy-response'][0]['feasibility'],True)
         self.assertEqual(res['output']['gnpy-response'][1]['path-dir'], 'Z-to-A')
         self.assertEqual(res['output']['gnpy-response'][1]['feasibility'],True)
         time.sleep(5)
 
-    #Disconnect the different topology
-    def test_05_disconnect_openroadmTopology(self):
+    #Path computed by PCE is not feasible and Gnpy cannot find a new one because the constraints
+    def test_05_path_computation_NotFeasibleWithPCE_NotFeasibleWithGnpy_withConstraints(self):
+        url = ("{}/operations/transportpce-pce:path-computation-request"
+              .format(self.restconf_baseurl))
+        body = {"input": {
+                "service-name": "service-2",
+                "resource-reserve": "true",
+                "pce-metric": "hop-count",
+                "service-handler-header": {
+                    "request-id": "request-2"
+                },
+                "service-a-end": {
+                    "node-id": "XPONDER-1",
+                    "service-rate": "100",
+                    "clli": "Node1"
+                },
+                "service-z-end": {
+                    "node-id": "XPONDER-5",
+                    "service-rate": "100",
+                    "clli": "Node5"
+                },
+                "hard-constraints": {
+                    "include_": {
+                        "ordered-hops": [
+                            {
+                                "hop-number": "0",
+                                "hop-type": {
+                                    "node-id": "XPONDER-1"
+                                }
+                            },
+                            {
+                                "hop-number": "2",
+                                "hop-type": {
+                                    "node-id": "OpenROADM-2"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+        headers = {'content-type': 'application/json',
+        "Accept": "application/json"}
+        response = requests.request(
+            "POST", url, data=json.dumps(body), headers=headers,
+            auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertEqual(res['output']['configuration-response-common']['response-code'], '500')
+        self.assertEqual(res['output']['gnpy-response'][0]['path-dir'], 'A-to-Z')
+        self.assertEqual(res['output']['gnpy-response'][0]['feasibility'],False)
+        self.assertEqual(res['output']['gnpy-response'][1]['path-dir'], 'Z-to-A')
+        self.assertEqual(res['output']['gnpy-response'][1]['feasibility'],False)
+        time.sleep(5)
+
+    #Path computed by PCE is feasible and Gnpy confirms the feasibility
+    def test_06_path_computation_FeasibleWithPCE_withConstraints(self):
+        url = ("{}/operations/transportpce-pce:path-computation-request"
+              .format(self.restconf_baseurl))
+        body = {"input": {
+                "service-name": "service-3",
+                "resource-reserve": "true",
+                "pce-metric": "hop-count",
+                "service-handler-header": {
+                    "request-id": "request-3"
+                },
+                "service-a-end": {
+                    "node-id": "XPONDER-1",
+                    "service-rate": "100",
+                    "clli": "Node1"
+                },
+                "service-z-end": {
+                    "node-id": "XPONDER-5",
+                    "service-rate": "100",
+                    "clli": "Node5"
+                },
+                "hard-constraints": {
+                    "include_": {
+                        "ordered-hops": [
+                            {
+                                "hop-number": "0",
+                                "hop-type": {
+                                    "node-id": "XPONDER-1"
+                                }
+                            },
+                            {
+                                "hop-number": "2",
+                                "hop-type": {
+                                    "node-id": "OpenROADM-3"
+                                }
+                            },
+                            {
+                                "hop-number": "4",
+                                "hop-type": {
+                                    "node-id": "OpenROADM-4"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+        headers = {'content-type': 'application/json',
+        "Accept": "application/json"}
+        response = requests.request(
+            "POST", url, data=json.dumps(body), headers=headers,
+            auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertEqual(res['output']['configuration-response-common']['response-code'], '200')
+        self.assertEqual(res['output']['gnpy-response'][0]['path-dir'], 'A-to-Z')
+        self.assertEqual(res['output']['gnpy-response'][0]['feasibility'],True)
+        self.assertEqual(res['output']['gnpy-response'][1]['path-dir'], 'Z-to-A')
+        self.assertEqual(res['output']['gnpy-response'][1]['feasibility'],True)
+        time.sleep(5)
+
+    #Disconnect the different topologies
+    def test_07_disconnect_openroadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
                .format(self.restconf_baseurl))
         data = {}
@@ -141,8 +258,7 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
-    def test_06_disconnect_openroadmNetwork(self):
-        #Config ROADMA
+    def test_08_disconnect_openroadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
                .format(self.restconf_baseurl))
         data = {}
@@ -153,7 +269,7 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
-    def test_07_disconnect_clliNetwork(self):
+    def test_09_disconnect_clliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
                .format(self.restconf_baseurl))
         data = {}
