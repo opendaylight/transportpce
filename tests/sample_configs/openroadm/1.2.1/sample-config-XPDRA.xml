@@ -2,7 +2,7 @@
 <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
   <org-openroadm-device xmlns="http://org/openroadm/device">
     <info>
-      <node-id>XPDRA</node-id>
+      <node-id>XPDRA01</node-id>
       <node-number>1</node-number>
       <node-type>xpdr</node-type>
       <clli>NodeA</clli>

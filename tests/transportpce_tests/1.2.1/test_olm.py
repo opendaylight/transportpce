@@ -93,10 +93,10 @@ class TransportOlmTesting(unittest.TestCase):
 
     def test_01_xpdrA_device_connected(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDRA"
+               "network-topology/topology/topology-netconf/node/XPDRA01"
               .format(self.restconf_baseurl))
         data = {"node": [{
-            "node-id": "XPDRA",
+            "node-id": "XPDRA01",
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
@@ -112,10 +112,10 @@ class TransportOlmTesting(unittest.TestCase):
 
     def test_02_xpdrC_device_connected(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDRC"
+               "network-topology/topology/topology-netconf/node/XPDRC01"
               .format(self.restconf_baseurl))
         data = {"node": [{
-            "node-id": "XPDRC",
+            "node-id": "XPDRC01",
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
@@ -131,10 +131,10 @@ class TransportOlmTesting(unittest.TestCase):
 
     def test_03_rdmA_device_connected(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADMA"
+               "network-topology/topology/topology-netconf/node/ROADMA01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADMA",
+             "node-id": "ROADMA01",
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
@@ -150,10 +150,10 @@ class TransportOlmTesting(unittest.TestCase):
 
     def test_04_rdmC_device_connected(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADMC"
+               "network-topology/topology/topology-netconf/node/ROADMC01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADMC",
+             "node-id": "ROADMC01",
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
@@ -172,10 +172,10 @@ class TransportOlmTesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRA",
+                    "networkutils:xpdr-node": "XPDRA01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADMA",
+                    "networkutils:rdm-node": "ROADMA01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP1-TXRX"
                 }
@@ -194,10 +194,10 @@ class TransportOlmTesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRA",
+                    "networkutils:xpdr-node": "XPDRA01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADMA",
+                    "networkutils:rdm-node": "ROADMA01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP1-TXRX"
                 }
@@ -216,10 +216,10 @@ class TransportOlmTesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRC",
+                    "networkutils:xpdr-node": "XPDRC01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADMC",
+                    "networkutils:rdm-node": "ROADMC01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP1-TXRX"
                 }
@@ -238,10 +238,10 @@ class TransportOlmTesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRC",
+                    "networkutils:xpdr-node": "XPDRC01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADMC",
+                    "networkutils:rdm-node": "ROADMC01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP1-TXRX"
                 }
@@ -259,7 +259,7 @@ class TransportOlmTesting(unittest.TestCase):
         url = "{}/operations/transportpce-device-renderer:create-ots-oms".format(self.restconf_baseurl)
         data = {
             "input" : {
-                "node-id" : "ROADMA",
+                "node-id" : "ROADMA01",
                 "logical-connection-point" : "DEG1-TTP-TXRX"
             }
         }
@@ -269,14 +269,14 @@ class TransportOlmTesting(unittest.TestCase):
              headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Interfaces OTS-DEG1-TTP-TXRX - OMS-DEG1-TTP-TXRX successfully created on node ROADMA',
+        self.assertIn('Interfaces OTS-DEG1-TTP-TXRX - OMS-DEG1-TTP-TXRX successfully created on node ROADMA01',
                       res["output"]["result"])
 
     def test_10_create_OTS_ROADMC(self):
         url = "{}/operations/transportpce-device-renderer:create-ots-oms".format(self.restconf_baseurl)
         data = {
             "input" : {
-                "node-id" : "ROADMC",
+                "node-id" : "ROADMC01",
                 "logical-connection-point" : "DEG2-TTP-TXRX"
             }
         }
@@ -286,14 +286,14 @@ class TransportOlmTesting(unittest.TestCase):
              headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Interfaces OTS-DEG2-TTP-TXRX - OMS-DEG2-TTP-TXRX successfully created on node ROADMC',
+        self.assertIn('Interfaces OTS-DEG2-TTP-TXRX - OMS-DEG2-TTP-TXRX successfully created on node ROADMC01',
                       res["output"]["result"])
 
     def test_11_get_PM_ROADMA(self):
         url = "{}/operations/transportpce-olm:get-pm".format(self.restconf_baseurl)
         data = {
             "input": {
-                "node-id": "ROADMA",
+                "node-id": "ROADMA01",
                 "resource-type": "interface",
                 "granularity": "15min",
                 "resource-identifier": {
@@ -324,7 +324,7 @@ class TransportOlmTesting(unittest.TestCase):
         url = "{}/operations/transportpce-olm:get-pm".format(self.restconf_baseurl)
         data = {
             "input": {
-                "node-id": "ROADMC",
+                "node-id": "ROADMC01",
                 "resource-type": "interface",
                 "granularity": "15min",
                 "resource-identifier": {
@@ -356,7 +356,7 @@ class TransportOlmTesting(unittest.TestCase):
         data = {
             "input": {
                 "src-type": "link",
-                "link-id": "ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX"
+                "link-id": "ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX"
             }
         }
         headers = {'content-type': 'application/json'}
@@ -369,7 +369,7 @@ class TransportOlmTesting(unittest.TestCase):
                       res["output"]["result"])
         self.assertIn({
             "spanloss": "6",
-                "link-id": "ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX"
+                "link-id": "ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX"
             }, res["output"]["spans"])
         time.sleep(5)
 
@@ -390,17 +390,17 @@ class TransportOlmTesting(unittest.TestCase):
                       res["output"]["result"])
         self.assertIn({
                 "spanloss": "15",
-                "link-id": "ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX"
+                "link-id": "ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX"
             }, res["output"]["spans"])
         self.assertIn({
                 "spanloss": "6",
-                "link-id": "ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX"
+                "link-id": "ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX"
             }, res["output"]["spans"])
         time.sleep(5)
 
     def test_15_get_OTS_DEG1_TTP_TXRX_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/OTS-DEG1-TTP-TXRX/"
+               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/OTS-DEG1-TTP-TXRX/"
                "org-openroadm-optical-transport-interfaces:ots".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -412,7 +412,7 @@ class TransportOlmTesting(unittest.TestCase):
 
     def test_16_get_OTS_DEG2_TTP_TXRX_ROADMC(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMC/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/OTS-DEG2-TTP-TXRX/"
+               "node/ROADMC01/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/OTS-DEG2-TTP-TXRX/"
                "org-openroadm-optical-transport-interfaces:ots".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -434,22 +434,22 @@ class TransportOlmTesting(unittest.TestCase):
                     {
                         "dest-tp": "XPDR1-NETWORK1",
                         "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRA"
+                        "node-id": "XPDRA01"
                     },
                     {
                         "dest-tp": "DEG1-TTP-TXRX",
                         "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMA"
+                        "node-id": "ROADMA01"
                     },
                     {
                         "dest-tp": "SRG1-PP1-TXRX",
                         "src-tp": "DEG2-TTP-TXRX",
-                        "node-id": "ROADMC"
+                        "node-id": "ROADMC01"
                     },
                     {
                         "dest-tp": "XPDR1-CLIENT1",
                         "src-tp": "XPDR1-NETWORK1",
-                        "node-id": "XPDRC"
+                        "node-id": "XPDRC01"
                     }
                 ]
             }
@@ -476,22 +476,22 @@ class TransportOlmTesting(unittest.TestCase):
                     {
                         "dest-tp": "XPDR1-NETWORK1",
                         "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRC"
+                        "node-id": "XPDRC01"
                     },
                     {
                         "dest-tp": "DEG2-TTP-TXRX",
                         "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMC"
+                        "node-id": "ROADMC01"
                     },
                     {
                         "src-tp": "DEG1-TTP-TXRX",
                         "dest-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMA"
+                        "node-id": "ROADMA01"
                     },
                     {
                         "src-tp": "XPDR1-NETWORK1",
                         "dest-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRA"
+                        "node-id": "XPDRA01"
                     }
                 ]
             }
@@ -516,22 +516,22 @@ class TransportOlmTesting(unittest.TestCase):
                     {
                         "dest-tp": "XPDR1-NETWORK1",
                         "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRA"
+                        "node-id": "XPDRA01"
                     },
                     {
                         "dest-tp": "DEG1-TTP-TXRX",
                         "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMA"
+                        "node-id": "ROADMA01"
                     },
                     {
                         "dest-tp": "SRG1-PP1-TXRX",
                         "src-tp": "DEG2-TTP-TXRX",
-                        "node-id": "ROADMC"
+                        "node-id": "ROADMC01"
                     },
                     {
                         "dest-tp": "XPDR1-CLIENT1",
                         "src-tp": "XPDR1-NETWORK1",
-                        "node-id": "XPDRC"
+                        "node-id": "XPDRC01"
                     }
                 ]
             }
@@ -545,7 +545,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_20_get_interface_XPDRA_XPDR1_NETWORK1(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA/yang-ext:mount/"
+        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA01/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/interface/XPDR1-NETWORK1-1/"
                "org-openroadm-optical-channel-interfaces:och".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -557,7 +557,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(1, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
 
     def test_21_get_roadmconnection_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA/yang-ext:mount/"
+        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA01/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
                "SRG1-PP1-TXRX-DEG1-TTP-TXRX-1".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -569,7 +569,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(-3, res['roadm-connections'][0]['target-output-power'])
 
     def test_22_get_roadmconnection_ROADMC(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC/yang-ext:mount/"
+        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC01/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
                "DEG2-TTP-TXRX-SRG1-PP1-TXRX-1".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -589,22 +589,22 @@ class TransportOlmTesting(unittest.TestCase):
                     {
                         "dest-tp": "XPDR1-NETWORK1",
                         "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRC"
+                        "node-id": "XPDRC01"
                     },
                     {
                         "dest-tp": "DEG2-TTP-TXRX",
                         "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMC"
+                        "node-id": "ROADMC01"
                     },
                     {
                         "src-tp": "DEG1-TTP-TXRX",
                         "dest-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMA"
+                        "node-id": "ROADMA01"
                     },
                     {
                         "src-tp": "XPDR1-NETWORK1",
                         "dest-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRA"
+                        "node-id": "XPDRA01"
                     }
                 ]
             }
@@ -618,7 +618,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_24_get_interface_XPDRC_XPDR1_NETWORK1(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRC/yang-ext:mount/"
+        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRC01/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/interface/XPDR1-NETWORK1-1/"
                "org-openroadm-optical-channel-interfaces:och".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -630,7 +630,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(1, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
 
     def test_25_get_roadmconnection_ROADMC(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC/yang-ext:mount/"
+        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC01/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
                "SRG1-PP1-TXRX-DEG2-TTP-TXRX-1".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -651,22 +651,22 @@ class TransportOlmTesting(unittest.TestCase):
                     {
                         "dest-tp": "XPDR1-NETWORK1",
                         "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRA"
+                        "node-id": "XPDRA01"
                     },
                     {
                         "dest-tp": "DEG1-TTP-TXRX",
                         "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMA"
+                        "node-id": "ROADMA01"
                     },
                     {
                         "dest-tp": "SRG1-PP1-TXRX",
                         "src-tp": "DEG2-TTP-TXRX",
-                        "node-id": "ROADMC"
+                        "node-id": "ROADMC01"
                     },
                     {
                         "dest-tp": "XPDR1-CLIENT1",
                         "src-tp": "XPDR1-NETWORK1",
-                        "node-id": "XPDRC"
+                        "node-id": "XPDRC01"
                     }
                 ]
             }
@@ -680,7 +680,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_27_get_roadmconnection_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA/yang-ext:mount/"
+        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA01/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
                "SRG1-PP1-TXRX-DEG1-TTP-TXRX-1".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -692,7 +692,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(-60, res['roadm-connections'][0]['target-output-power'])
 
     def test_28_get_roadmconnection_ROADMC(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC/yang-ext:mount/"
+        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC01/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
                "DEG2-TTP-TXRX-SRG1-PP1-TXRX-1".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -714,22 +714,22 @@ class TransportOlmTesting(unittest.TestCase):
                     {
                         "dest-tp": "XPDR1-NETWORK1",
                         "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRA"
+                        "node-id": "XPDRA01"
                     },
                     {
                         "dest-tp": "DEG1-TTP-TXRX",
                         "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMA"
+                        "node-id": "ROADMA01"
                     },
                     {
                         "dest-tp": "SRG1-PP1-TXRX",
                         "src-tp": "DEG2-TTP-TXRX",
-                        "node-id": "ROADMC"
+                        "node-id": "ROADMC01"
                     },
                     {
                         "dest-tp": "XPDR1-CLIENT1",
                         "src-tp": "XPDR1-NETWORK1",
-                        "node-id": "XPDRC"
+                        "node-id": "XPDRC01"
                     }
                 ]
             }
@@ -755,22 +755,22 @@ class TransportOlmTesting(unittest.TestCase):
                     {
                         "dest-tp": "XPDR1-NETWORK1",
                         "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRC"
+                        "node-id": "XPDRC01"
                     },
                     {
                         "dest-tp": "DEG2-TTP-TXRX",
                         "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMC"
+                        "node-id": "ROADMC01"
                     },
                     {
                         "src-tp": "DEG1-TTP-TXRX",
                         "dest-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMA"
+                        "node-id": "ROADMA01"
                     },
                     {
                         "src-tp": "XPDR1-NETWORK1",
                         "dest-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRA"
+                        "node-id": "XPDRA01"
                     }
                 ]
             }
@@ -791,10 +791,10 @@ class TransportOlmTesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRA",
+                    "networkutils:xpdr-node": "XPDRA01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "2",
-                    "networkutils:rdm-node": "ROADMA",
+                    "networkutils:rdm-node": "ROADMA01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP2-TXRX"
                 }
@@ -813,10 +813,10 @@ class TransportOlmTesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRA",
+                    "networkutils:xpdr-node": "XPDRA01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "2",
-                    "networkutils:rdm-node": "ROADMA",
+                    "networkutils:rdm-node": "ROADMA01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP2-TXRX"
                 }
@@ -842,12 +842,12 @@ class TransportOlmTesting(unittest.TestCase):
                     {
                         "dest-tp": "XPDR1-NETWORK2",
                         "src-tp": "XPDR1-CLIENT2",
-                        "node-id": "XPDRA"
+                        "node-id": "XPDRA01"
                     },
                     {
                         "dest-tp": "DEG1-TTP-TXRX",
                         "src-tp": "SRG1-PP2-TXRX",
-                        "node-id": "ROADMA"
+                        "node-id": "ROADMA01"
                     }
                 ]
             }
@@ -863,7 +863,7 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_34_get_interface_XPDRA_XPDR1_NETWORK2(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA/yang-ext:mount/"
+        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA01/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/interface/XPDR1-NETWORK2-2/"
                "org-openroadm-optical-channel-interfaces:och".format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -886,12 +886,12 @@ class TransportOlmTesting(unittest.TestCase):
                     {
                         "dest-tp": "XPDR1-NETWORK2",
                         "src-tp": "XPDR1-CLIENT2",
-                        "node-id": "XPDRA"
+                        "node-id": "XPDRA01"
                     },
                     {
                         "dest-tp": "DEG1-TTP-TXRX",
                         "src-tp": "SRG1-PP2-TXRX",
-                        "node-id": "ROADMA"
+                        "node-id": "ROADMA01"
                     }
                 ]
             }
@@ -907,7 +907,7 @@ class TransportOlmTesting(unittest.TestCase):
 
     def test_36_xpdrA_device_disconnected(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/XPDRA"
+                "network-topology/topology/topology-netconf/node/XPDRA01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -918,7 +918,7 @@ class TransportOlmTesting(unittest.TestCase):
 
     def test_37_xpdrC_device_disconnected(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/XPDRC"
+                "network-topology/topology/topology-netconf/node/XPDRC01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -940,7 +940,7 @@ class TransportOlmTesting(unittest.TestCase):
 
     def test_39_rdmA_device_disconnected(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMA"
+                "network-topology/topology/topology-netconf/node/ROADMA01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -951,7 +951,7 @@ class TransportOlmTesting(unittest.TestCase):
 
     def test_40_rdmC_device_disconnected(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMC"
+                "network-topology/topology/topology-netconf/node/ROADMC01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(

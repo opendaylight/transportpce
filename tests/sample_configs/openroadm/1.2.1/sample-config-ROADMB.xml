@@ -2661,7 +2661,7 @@
         <nbr-list>
           <if-name>
             <ifName>eth-2/0/ETH-PLUG</ifName>
-            <remoteSysName>ROADMA</remoteSysName>
+            <remoteSysName>ROADMA01</remoteSysName>
             <remoteMgmtAddressSubType>ipV4</remoteMgmtAddressSubType>
             <remoteMgmtAddress>1.1.1.1</remoteMgmtAddress>
             <remotePortIdSubType>ifalias</remotePortIdSubType>
@@ -2671,7 +2671,7 @@
           </if-name>
           <if-name>
             <ifName>eth-3/0/ETH-PLUG</ifName>
-            <remoteSysName>ROADMC</remoteSysName>
+            <remoteSysName>ROADMC01</remoteSysName>
             <remoteMgmtAddressSubType>ipV4</remoteMgmtAddressSubType>
             <remoteMgmtAddress>1.1.1.1</remoteMgmtAddress>
             <remotePortIdSubType>ifalias</remotePortIdSubType>

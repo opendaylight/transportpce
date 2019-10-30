@@ -94,10 +94,10 @@ class TransportPCEFulltesting(unittest.TestCase):
 #  connect netconf devices
     def test_01_connect_xpdrA(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDRA"
+               "network-topology/topology/topology-netconf/node/XPDRA01"
               .format(self.restconf_baseurl))
         data = {"node": [{
-            "node-id": "XPDRA",
+            "node-id": "XPDRA01",
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
@@ -113,10 +113,10 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_02_connect_xpdrC(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDRC"
+               "network-topology/topology/topology-netconf/node/XPDRC01"
               .format(self.restconf_baseurl))
         data = {"node": [{
-            "node-id": "XPDRC",
+            "node-id": "XPDRC01",
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
@@ -132,10 +132,10 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_03_connect_rdmA(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADMA"
+               "network-topology/topology/topology-netconf/node/ROADMA01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADMA",
+             "node-id": "ROADMA01",
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
@@ -151,10 +151,10 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_04_connect_rdmC(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADMC"
+               "network-topology/topology/topology-netconf/node/ROADMC01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADMC",
+             "node-id": "ROADMC01",
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
@@ -173,10 +173,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRA",
+                    "networkutils:xpdr-node": "XPDRA01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADMA",
+                    "networkutils:rdm-node": "ROADMA01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP1-TXRX"
                 }
@@ -196,10 +196,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRA",
+                    "networkutils:xpdr-node": "XPDRA01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADMA",
+                    "networkutils:rdm-node": "ROADMA01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP1-TXRX"
                 }
@@ -219,10 +219,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRC",
+                    "networkutils:xpdr-node": "XPDRC01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADMC",
+                    "networkutils:rdm-node": "ROADMC01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP1-TXRX"
                 }
@@ -242,10 +242,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRC",
+                    "networkutils:xpdr-node": "XPDRC01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADMC",
+                    "networkutils:rdm-node": "ROADMC01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP1-TXRX"
                 }
@@ -263,7 +263,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_09_add_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA-ROADMC oms-attributes
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
+               "link/ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
@@ -286,7 +286,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_10_add_omsAttributes_ROADMC_ROADMA(self):
         # Config ROADMC-ROADMA oms-attributes
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
+               "link/ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
@@ -322,7 +322,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "connection-type": "service",
                 "service-a-end": {
                     "service-rate": "100",
-                    "node-id": "XPDRA",
+                    "node-id": "XPDRA01",
                     "service-format": "Ethernet",
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
@@ -359,7 +359,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "service-z-end": {
                     "service-rate": "100",
-                    "node-id": "XPDRC",
+                    "node-id": "XPDRC01",
                     "service-format": "Ethernet",
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
@@ -431,7 +431,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_13_check_xc1_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -455,7 +455,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_14_check_xc1_ROADMC(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMC/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMC01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -478,7 +478,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(5)
 
     def test_15_check_topo_XPDRA(self):
-        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA-XPDR1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA01-XPDR1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -496,7 +496,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(3)
 
     def test_16_check_topo_ROADMA_SRG1(self):
-        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -514,7 +514,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(3)
 
     def test_17_check_topo_ROADMA_DEG1(self):
-        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-DEG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-DEG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -537,10 +537,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRA",
+                    "networkutils:xpdr-node": "XPDRA01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "2",
-                    "networkutils:rdm-node": "ROADMA",
+                    "networkutils:rdm-node": "ROADMA01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP2-TXRX"
                 }
@@ -561,10 +561,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRA",
+                    "networkutils:xpdr-node": "XPDRA01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "2",
-                    "networkutils:rdm-node": "ROADMA",
+                    "networkutils:rdm-node": "ROADMA01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP2-TXRX"
                 }
@@ -585,10 +585,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRC",
+                    "networkutils:xpdr-node": "XPDRC01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "2",
-                    "networkutils:rdm-node": "ROADMC",
+                    "networkutils:rdm-node": "ROADMC01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP2-TXRX"
                 }
@@ -609,10 +609,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         data = {
             "networkutils:input": {
                 "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRC",
+                    "networkutils:xpdr-node": "XPDRC01",
                     "networkutils:xpdr-num": "1",
                     "networkutils:network-num": "2",
-                    "networkutils:rdm-node": "ROADMC",
+                    "networkutils:rdm-node": "ROADMC01",
                     "networkutils:srg-num": "1",
                     "networkutils:termination-point-num": "SRG1-PP2-TXRX"
                 }
@@ -642,7 +642,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "connection-type": "service",
                 "service-a-end": {
                     "service-rate": "100",
-                    "node-id": "XPDRA",
+                    "node-id": "XPDRA01",
                     "service-format": "Ethernet",
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
@@ -679,7 +679,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "service-z-end": {
                     "service-rate": "100",
-                    "node-id": "XPDRC",
+                    "node-id": "XPDRC01",
                     "service-format": "Ethernet",
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
@@ -751,7 +751,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_24_check_xc2_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/DEG1-TTP-TXRX-SRG1-PP2-TXRX-2"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -772,7 +772,7 @@ class TransportPCEFulltesting(unittest.TestCase):
              res['roadm-connections'][0]['destination'])
 
     def test_25_check_topo_XPDRA(self):
-        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA-XPDR1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA01-XPDR1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -791,7 +791,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_26_check_topo_ROADMA_SRG1(self):
-        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -817,7 +817,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
 
     def test_27_check_topo_ROADMA_DEG1(self):
-        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-DEG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-DEG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -855,7 +855,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "connection-type": "service",
                 "service-a-end": {
                     "service-rate": "100",
-                    "node-id": "XPDRA",
+                    "node-id": "XPDRA01",
                     "service-format": "Ethernet",
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
@@ -892,7 +892,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "service-z-end": {
                     "service-rate": "100",
-                    "node-id": "XPDRC",
+                    "node-id": "XPDRC01",
                     "service-format": "Ethernet",
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
@@ -1026,7 +1026,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_32_check_no_xc_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url, auth=('admin', 'admin'))
@@ -1036,7 +1036,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_33_check_topo_XPDRA(self):
-        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA-XPDR1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA01-XPDR1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -1053,7 +1053,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_34_check_topo_ROADMA_SRG1(self):
-        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -1070,7 +1070,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_35_check_topo_ROADMA_DEG1(self):
-        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-DEG1"
+        url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-DEG1"
                .format(self.restconf_baseurl))
         response = requests.request(
              "GET", url1, auth=('admin', 'admin'))
@@ -1103,7 +1103,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "connection-type": "roadm-line",
                 "service-a-end": {
                     "service-rate": "100",
-                    "node-id": "ROADMA",
+                    "node-id": "ROADMA01",
                     "service-format": "OC",
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
@@ -1140,7 +1140,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "service-z-end": {
                     "service-rate": "100",
-                    "node-id": "ROADMC",
+                    "node-id": "ROADMC01",
                     "service-format": "OC",
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
@@ -1212,7 +1212,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_38_check_xc1_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -1236,7 +1236,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_39_check_xc1_ROADMC(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMC/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMC01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -1273,7 +1273,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "connection-type": "roadm-line",
                 "service-a-end": {
                     "service-rate": "100",
-                    "node-id": "ROADMA",
+                    "node-id": "ROADMA01",
                     "service-format": "OC",
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
@@ -1310,7 +1310,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "service-z-end": {
                     "service-rate": "100",
-                    "node-id": "ROADMC",
+                    "node-id": "ROADMC01",
                     "service-format": "OC",
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
@@ -1382,7 +1382,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_42_check_xc2_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/SRG1-PP2-TXRX-DEG1-TTP-TXRX-2"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -1480,7 +1480,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_47_get_no_xc_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf"
-               "/node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "/node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -1500,9 +1500,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             print ("trial number {}".format(i))
             print("eth service creation")
             self.test_11_create_eth_service1()
-            print ("check xc in ROADMA")
+            print ("check xc in ROADMA01")
             self.test_13_check_xc1_ROADMA()
-            print ("check xc in ROADMC")
+            print ("check xc in ROADMC01")
             self.test_14_check_xc1_ROADMC()
             print ("eth service deletion\n")
             self.test_30_delete_eth_service1()
@@ -1535,9 +1535,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             print ("trial number {}".format(i))
             print("oc service creation")
             self.test_36_create_oc_service1()
-            print ("check xc in ROADMA")
+            print ("check xc in ROADMA01")
             self.test_38_check_xc1_ROADMA()
-            print ("check xc in ROADMC")
+            print ("check xc in ROADMC01")
             self.test_39_check_xc1_ROADMC()
             print ("oc service deletion\n")
             self.test_44_delete_oc_service1()
@@ -1545,7 +1545,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_51_disconnect_XPDRA(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/XPDRA"
+                "network-topology/topology/topology-netconf/node/XPDRA01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -1556,7 +1556,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_52_disconnect_XPDRC(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/XPDRC"
+                "network-topology/topology/topology-netconf/node/XPDRC01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -1567,7 +1567,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_53_disconnect_ROADMA(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMA"
+                "network-topology/topology/topology-netconf/node/ROADMA01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -1578,7 +1578,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_54_disconnect_ROADMC(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMC"
+                "network-topology/topology/topology-netconf/node/ROADMC01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(

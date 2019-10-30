@@ -4,7 +4,7 @@
       "network-id":"openroadm-topology",
       "node":[
         {
-          "node-id":"XPDRA-XPDR1",
+          "node-id":"XPDRA01-XPDR1",
           "org-openroadm-network-topology:node-type":"XPONDER",
           "ietf-network-topology:termination-point":[
             {
@@ -45,12 +45,12 @@
           "supporting-node":[
             {
               "network-ref":"openroadm-network",
-              "node-ref":"XPDRA"
+              "node-ref":"XPDRA01"
             }
           ]
         },
         {
-          "node-id":"ROADMC-DEG2",
+          "node-id":"ROADMC01-DEG2",
           "org-openroadm-network-topology:degree-attributes":{
             "degree-number":2,
             "available-wavelengths":[
@@ -363,7 +363,7 @@
           ]
         },
         {
-          "node-id":"ROADMC-SRG1",
+          "node-id":"ROADMC01-SRG1",
           "org-openroadm-network-topology:srg-attributes":{
             "available-wavelengths":[
               {
@@ -735,7 +735,7 @@
           ]
         },
         {
-          "node-id":"ROADMA-DEG1",
+          "node-id":"ROADMA01-DEG1",
           "org-openroadm-network-topology:degree-attributes":{
             "degree-number":1,
             "available-wavelengths":[
@@ -1043,12 +1043,12 @@
           "supporting-node":[
             {
               "network-ref":"openroadm-network",
-              "node-ref":"ROADMA"
+              "node-ref":"ROADMA01"
             }
           ]
         },
         {
-          "node-id":"ROADMA-DEG2",
+          "node-id":"ROADMA01-DEG2",
           "org-openroadm-network-topology:degree-attributes":{
             "degree-number":2,
             "available-wavelengths":[
@@ -1356,7 +1356,7 @@
           "supporting-node":[
             {
               "network-ref":"openroadm-network",
-              "node-ref":"ROADMA"
+              "node-ref":"ROADMA01"
             }
           ]
         },
@@ -1733,7 +1733,7 @@
           ]
         },
         {
-          "node-id":"ROADMC-DEG1",
+          "node-id":"ROADMC01-DEG1",
           "org-openroadm-network-topology:degree-attributes":{
             "degree-number":1,
             "available-wavelengths":[
@@ -2041,7 +2041,7 @@
           "supporting-node":[
             {
               "network-ref":"openroadm-network",
-              "node-ref":"ROADMC"
+              "node-ref":"ROADMC01"
             }
           ]
         },
@@ -2405,7 +2405,7 @@
           ]
         },
         {
-          "node-id":"ROADMA-SRG1",
+          "node-id":"ROADMA01-SRG1",
           "org-openroadm-network-topology:srg-attributes":{
             "available-wavelengths":[
               {
@@ -2772,7 +2772,7 @@
           "supporting-node":[
             {
               "network-ref":"openroadm-network",
-              "node-ref":"ROADMA"
+              "node-ref":"ROADMA01"
             }
           ]
         },
@@ -3097,56 +3097,56 @@
       },
       "ietf-network-topology:link":[
         {
-          "link-id":"ROADMA-DEG1-DEG1-CTP-TXRXtoROADMA-SRG1-SRG1-CP-TXRX",
+          "link-id":"ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-SRG1-SRG1-CP-TXRX",
           "source":{
-            "source-node":"ROADMA-DEG1",
+            "source-node":"ROADMA01-DEG1",
             "source-tp":"DEG1-CTP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"DROP-LINK",
           "destination":{
-            "dest-node":"ROADMA-SRG1",
+            "dest-node":"ROADMA01-SRG1",
             "dest-tp":"SRG1-CP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMA-SRG1-SRG1-CP-TXRXtoROADMA-DEG1-DEG1-CTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX"
         },
         {
-          "link-id":"ROADMA-DEG2-DEG2-CTP-TXRXtoROADMA-SRG1-SRG1-CP-TXRX",
+          "link-id":"ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-SRG1-SRG1-CP-TXRX",
           "source":{
-            "source-node":"ROADMA-DEG2",
+            "source-node":"ROADMA01-DEG2",
             "source-tp":"DEG2-CTP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"DROP-LINK",
           "destination":{
-            "dest-node":"ROADMA-SRG1",
+            "dest-node":"ROADMA01-SRG1",
             "dest-tp":"SRG1-CP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMA-SRG1-SRG1-CP-TXRXtoROADMA-DEG2-DEG2-CTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX"
         },
         {
-          "link-id":"ROADMA-DEG1-DEG1-CTP-TXRXtoROADMA-DEG2-DEG2-CTP-TXRX",
+          "link-id":"ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX",
           "source":{
-            "source-node":"ROADMA-DEG1",
+            "source-node":"ROADMA01-DEG1",
             "source-tp":"DEG1-CTP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"EXPRESS-LINK",
           "destination":{
-            "dest-node":"ROADMA-DEG2",
+            "dest-node":"ROADMA01-DEG2",
             "dest-tp":"DEG2-CTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMA-DEG2-DEG2-CTP-TXRXtoROADMA-DEG1-DEG1-CTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX"
         },
         {
-          "link-id":"ROADMC-DEG1-DEG1-CTP-TXRXtoROADMC-SRG1-SRG1-CP-TXRX",
+          "link-id":"ROADMC01-DEG1-DEG1-CTP-TXRXtoROADMC01-SRG1-SRG1-CP-TXRX",
           "source":{
-            "source-node":"ROADMC-DEG1",
+            "source-node":"ROADMC01-DEG1",
             "source-tp":"DEG1-CTP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"DROP-LINK",
           "destination":{
-            "dest-node":"ROADMC-SRG1",
+            "dest-node":"ROADMC01-SRG1",
             "dest-tp":"SRG1-CP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMC-SRG1-SRG1-CP-TXRXtoROADMC-DEG1-DEG1-CTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMC01-SRG1-SRG1-CP-TXRXtoROADMC01-DEG1-DEG1-CTP-TXRX"
         },
         {
           "link-id":"ROADMB-DEG1-DEG1-CTP-TXRXtoROADMB-SRG1-SRG1-CP-TXRX",
@@ -3175,30 +3175,30 @@
           "org-openroadm-common-network:opposite-link":"ROADMB-SRG1-SRG1-CP-TXRXtoROADMB-DEG2-DEG2-CTP-TXRX"
         },
         {
-          "link-id":"ROADMC-DEG2-DEG2-CTP-TXRXtoROADMC-SRG1-SRG1-CP-TXRX",
+          "link-id":"ROADMC01-DEG2-DEG2-CTP-TXRXtoROADMC01-SRG1-SRG1-CP-TXRX",
           "source":{
-            "source-node":"ROADMC-DEG2",
+            "source-node":"ROADMC01-DEG2",
             "source-tp":"DEG2-CTP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"DROP-LINK",
           "destination":{
-            "dest-node":"ROADMC-SRG1",
+            "dest-node":"ROADMC01-SRG1",
             "dest-tp":"SRG1-CP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMC-SRG1-SRG1-CP-TXRXtoROADMC-DEG2-DEG2-CTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMC01-SRG1-SRG1-CP-TXRXtoROADMC01-DEG2-DEG2-CTP-TXRX"
         },
         {
-          "link-id":"ROADMC-DEG1-DEG1-CTP-TXRXtoROADMC-DEG2-DEG2-CTP-TXRX",
+          "link-id":"ROADMC01-DEG1-DEG1-CTP-TXRXtoROADMC01-DEG2-DEG2-CTP-TXRX",
           "source":{
-            "source-node":"ROADMC-DEG1",
+            "source-node":"ROADMC01-DEG1",
             "source-tp":"DEG1-CTP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"EXPRESS-LINK",
           "destination":{
-            "dest-node":"ROADMC-DEG2",
+            "dest-node":"ROADMC01-DEG2",
             "dest-tp":"DEG2-CTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMC-DEG2-DEG2-CTP-TXRXtoROADMC-DEG1-DEG1-CTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMC01-DEG2-DEG2-CTP-TXRXtoROADMC01-DEG1-DEG1-CTP-TXRX"
         },
         {
           "link-id":"ROADMB-DEG1-DEG1-CTP-TXRXtoROADMB-DEG2-DEG2-CTP-TXRX",
@@ -3214,13 +3214,13 @@
           "org-openroadm-common-network:opposite-link":"ROADMB-DEG2-DEG2-CTP-TXRXtoROADMB-DEG1-DEG1-CTP-TXRX"
         },
         {
-          "link-id":"ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX",
+          "link-id":"ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX",
           "source":{
-            "source-node":"ROADMA-DEG1",
+            "source-node":"ROADMA01-DEG1",
             "source-tp":"DEG1-TTP-TXRX"
           },
           "org-openroadm-network-topology:OMS-attributes":{
-            "opposite-link":"ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX",
+            "opposite-link":"ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX",
             "span":{
               "spanloss-base":11.4,
               "link-concatenation":[
@@ -3239,33 +3239,33 @@
           },
           "org-openroadm-network-topology:link-type":"ROADM-TO-ROADM",
           "destination":{
-            "dest-node":"ROADMC-DEG2",
+            "dest-node":"ROADMC01-DEG2",
             "dest-tp":"DEG2-TTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX"
         },
         {
-          "link-id":"XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX",
+          "link-id":"XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX",
           "source":{
-            "source-node":"XPDRA-XPDR1",
+            "source-node":"XPDRA01-XPDR1",
             "source-tp":"XPDR1-NETWORK1"
           },
-          "org-openroadm-network-topology:opposite-link":"ROADMA-SRG1-SRG1-PP1-TXRXtoXPDRA-XPDR1-XPDR1-NETWORK1",
+          "org-openroadm-network-topology:opposite-link":"ROADMA01-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1",
           "org-openroadm-network-topology:link-type":"XPONDER-OUTPUT",
           "destination":{
-            "dest-node":"ROADMA-SRG1",
+            "dest-node":"ROADMA01-SRG1",
             "dest-tp":"SRG1-PP1-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMA-SRG1-SRG1-PP1-TXRXtoXPDRA-XPDR1-XPDR1-NETWORK1"
+          "org-openroadm-common-network:opposite-link":"ROADMA01-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1"
         },
         {
-          "link-id":"ROADMC-DEG1-DEG1-TTP-TXRXtoROADMB-DEG2-DEG2-TTP-TXRX",
+          "link-id":"ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB-DEG2-DEG2-TTP-TXRX",
           "source":{
-            "source-node":"ROADMC-DEG1",
+            "source-node":"ROADMC01-DEG1",
             "source-tp":"DEG1-TTP-TXRX"
           },
           "org-openroadm-network-topology:OMS-attributes":{
-            "opposite-link":"ROADMB-DEG2-DEG2-TTP-TXRXtoROADMC-DEG1-DEG1-TTP-TXRX",
+            "opposite-link":"ROADMB-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX",
             "span":{
               "spanloss-base":11.4,
               "link-concatenation":[
@@ -3287,16 +3287,16 @@
             "dest-node":"ROADMB-DEG2",
             "dest-tp":"DEG2-TTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMB-DEG2-DEG2-TTP-TXRXtoROADMC-DEG1-DEG1-TTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMB-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX"
         },
         {
-          "link-id":"ROADMB-DEG1-DEG1-TTP-TXRXtoROADMA-DEG2-DEG2-TTP-TXRX",
+          "link-id":"ROADMB-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX",
           "source":{
             "source-node":"ROADMB-DEG1",
             "source-tp":"DEG1-TTP-TXRX"
           },
           "org-openroadm-network-topology:OMS-attributes":{
-            "opposite-link":"ROADMA-DEG2-DEG2-TTP-TXRXtoROADMB-DEG1-DEG1-TTP-TXRX",
+            "opposite-link":"ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB-DEG1-DEG1-TTP-TXRX",
             "span":{
               "spanloss-base":11.4,
               "link-concatenation":[
@@ -3315,36 +3315,36 @@
           },
           "org-openroadm-network-topology:link-type":"ROADM-TO-ROADM",
           "destination":{
-            "dest-node":"ROADMA-DEG2",
+            "dest-node":"ROADMA01-DEG2",
             "dest-tp":"DEG2-TTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMA-DEG2-DEG2-TTP-TXRXtoROADMB-DEG1-DEG1-TTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB-DEG1-DEG1-TTP-TXRX"
         },
         {
-          "link-id":"ROADMA-SRG1-SRG1-CP-TXRXtoROADMA-DEG2-DEG2-CTP-TXRX",
+          "link-id":"ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX",
           "source":{
-            "source-node":"ROADMA-SRG1",
+            "source-node":"ROADMA01-SRG1",
             "source-tp":"SRG1-CP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"ADD-LINK",
           "destination":{
-            "dest-node":"ROADMA-DEG2",
+            "dest-node":"ROADMA01-DEG2",
             "dest-tp":"DEG2-CTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMA-DEG2-DEG2-CTP-TXRXtoROADMA-SRG1-SRG1-CP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-SRG1-SRG1-CP-TXRX"
         },
         {
-          "link-id":"ROADMA-DEG2-DEG2-CTP-TXRXtoROADMA-DEG1-DEG1-CTP-TXRX",
+          "link-id":"ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX",
           "source":{
-            "source-node":"ROADMA-DEG2",
+            "source-node":"ROADMA01-DEG2",
             "source-tp":"DEG2-CTP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"EXPRESS-LINK",
           "destination":{
-            "dest-node":"ROADMA-DEG1",
+            "dest-node":"ROADMA01-DEG1",
             "dest-tp":"DEG1-CTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMA-DEG1-DEG1-CTP-TXRXtoROADMA-DEG2-DEG2-CTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX"
         },
         {
           "link-id":"XPDRB-XPDR1-XPDR1-NETWORK1toROADMB-SRG1-SRG1-PP1-TXRX",
@@ -3361,53 +3361,53 @@
           "org-openroadm-common-network:opposite-link":"ROADMB-SRG1-SRG1-PP1-TXRXtoXPDRB-XPDR1-XPDR1-NETWORK1"
         },
         {
-          "link-id":"ROADMA-SRG1-SRG1-CP-TXRXtoROADMA-DEG1-DEG1-CTP-TXRX",
+          "link-id":"ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX",
           "source":{
-            "source-node":"ROADMA-SRG1",
+            "source-node":"ROADMA01-SRG1",
             "source-tp":"SRG1-CP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"ADD-LINK",
           "destination":{
-            "dest-node":"ROADMA-DEG1",
+            "dest-node":"ROADMA01-DEG1",
             "dest-tp":"DEG1-CTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMA-DEG1-DEG1-CTP-TXRXtoROADMA-SRG1-SRG1-CP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-SRG1-SRG1-CP-TXRX"
         },
         {
-          "link-id":"ROADMA-SRG1-SRG1-PP1-TXRXtoXPDRA-XPDR1-XPDR1-NETWORK1",
+          "link-id":"ROADMA01-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1",
           "source":{
-            "source-node":"ROADMA-SRG1",
+            "source-node":"ROADMA01-SRG1",
             "source-tp":"SRG1-PP1-TXRX"
           },
-          "org-openroadm-network-topology:opposite-link":"XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX",
+          "org-openroadm-network-topology:opposite-link":"XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX",
           "org-openroadm-network-topology:link-type":"XPONDER-INPUT",
           "destination":{
-            "dest-node":"XPDRA-XPDR1",
+            "dest-node":"XPDRA01-XPDR1",
             "dest-tp":"XPDR1-NETWORK1"
           },
-          "org-openroadm-common-network:opposite-link":"XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX"
+          "org-openroadm-common-network:opposite-link":"XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX"
         },
         {
-          "link-id":"ROADMC-DEG2-DEG2-CTP-TXRXtoROADMC-DEG1-DEG1-CTP-TXRX",
+          "link-id":"ROADMC01-DEG2-DEG2-CTP-TXRXtoROADMC01-DEG1-DEG1-CTP-TXRX",
           "source":{
-            "source-node":"ROADMC-DEG2",
+            "source-node":"ROADMC01-DEG2",
             "source-tp":"DEG2-CTP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"EXPRESS-LINK",
           "destination":{
-            "dest-node":"ROADMC-DEG1",
+            "dest-node":"ROADMC01-DEG1",
             "dest-tp":"DEG1-CTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMC-DEG1-DEG1-CTP-TXRXtoROADMC-DEG2-DEG2-CTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMC01-DEG1-DEG1-CTP-TXRXtoROADMC01-DEG2-DEG2-CTP-TXRX"
         },
         {
-          "link-id":"ROADMB-DEG2-DEG2-TTP-TXRXtoROADMC-DEG1-DEG1-TTP-TXRX",
+          "link-id":"ROADMB-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX",
           "source":{
             "source-node":"ROADMB-DEG2",
             "source-tp":"DEG2-TTP-TXRX"
           },
           "org-openroadm-network-topology:OMS-attributes":{
-            "opposite-link":"ROADMC-DEG1-DEG1-TTP-TXRXtoROADMB-DEG2-DEG2-TTP-TXRX",
+            "opposite-link":"ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB-DEG2-DEG2-TTP-TXRX",
             "span":{
               "spanloss-base":11.4,
               "link-concatenation":[
@@ -3426,10 +3426,10 @@
           },
           "org-openroadm-network-topology:link-type":"ROADM-TO-ROADM",
           "destination":{
-            "dest-node":"ROADMC-DEG1",
+            "dest-node":"ROADMC01-DEG1",
             "dest-tp":"DEG1-TTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMC-DEG1-DEG1-TTP-TXRXtoROADMB-DEG2-DEG2-TTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB-DEG2-DEG2-TTP-TXRX"
         },
         {
           "link-id":"ROADMB-DEG2-DEG2-CTP-TXRXtoROADMB-DEG1-DEG1-CTP-TXRX",
@@ -3445,13 +3445,13 @@
           "org-openroadm-common-network:opposite-link":"ROADMB-DEG1-DEG1-CTP-TXRXtoROADMB-DEG2-DEG2-CTP-TXRX"
         },
         {
-          "link-id":"ROADMA-DEG2-DEG2-TTP-TXRXtoROADMB-DEG1-DEG1-TTP-TXRX",
+          "link-id":"ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB-DEG1-DEG1-TTP-TXRX",
           "source":{
-            "source-node":"ROADMA-DEG2",
+            "source-node":"ROADMA01-DEG2",
             "source-tp":"DEG2-TTP-TXRX"
           },
           "org-openroadm-network-topology:OMS-attributes":{
-            "opposite-link":"ROADMB-DEG1-DEG1-TTP-TXRXtoROADMA-DEG2-DEG2-TTP-TXRX",
+            "opposite-link":"ROADMB-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX",
             "span":{
               "spanloss-base":11.4,
               "link-concatenation":[
@@ -3473,29 +3473,29 @@
             "dest-node":"ROADMB-DEG1",
             "dest-tp":"DEG1-TTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMB-DEG1-DEG1-TTP-TXRXtoROADMA-DEG2-DEG2-TTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMB-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX"
         },
         {
-          "link-id":"ROADMC-SRG1-SRG1-CP-TXRXtoROADMC-DEG2-DEG2-CTP-TXRX",
+          "link-id":"ROADMC01-SRG1-SRG1-CP-TXRXtoROADMC01-DEG2-DEG2-CTP-TXRX",
           "source":{
-            "source-node":"ROADMC-SRG1",
+            "source-node":"ROADMC01-SRG1",
             "source-tp":"SRG1-CP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"ADD-LINK",
           "destination":{
-            "dest-node":"ROADMC-DEG2",
+            "dest-node":"ROADMC01-DEG2",
             "dest-tp":"DEG2-CTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMC-DEG2-DEG2-CTP-TXRXtoROADMC-SRG1-SRG1-CP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMC01-DEG2-DEG2-CTP-TXRXtoROADMC01-SRG1-SRG1-CP-TXRX"
         },
         {
-          "link-id":"ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX",
+          "link-id":"ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX",
           "source":{
-            "source-node":"ROADMC-DEG2",
+            "source-node":"ROADMC01-DEG2",
             "source-tp":"DEG2-TTP-TXRX"
           },
           "org-openroadm-network-topology:OMS-attributes":{
-            "opposite-link":"ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX",
+            "opposite-link":"ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX",
             "span":{
               "spanloss-base":11.4,
               "link-concatenation":[
@@ -3514,23 +3514,23 @@
           },
           "org-openroadm-network-topology:link-type":"ROADM-TO-ROADM",
           "destination":{
-            "dest-node":"ROADMA-DEG1",
+            "dest-node":"ROADMA01-DEG1",
             "dest-tp":"DEG1-TTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX"
         },
         {
-          "link-id":"ROADMC-SRG1-SRG1-CP-TXRXtoROADMC-DEG1-DEG1-CTP-TXRX",
+          "link-id":"ROADMC01-SRG1-SRG1-CP-TXRXtoROADMC01-DEG1-DEG1-CTP-TXRX",
           "source":{
-            "source-node":"ROADMC-SRG1",
+            "source-node":"ROADMC01-SRG1",
             "source-tp":"SRG1-CP-TXRX"
           },
           "org-openroadm-network-topology:link-type":"ADD-LINK",
           "destination":{
-            "dest-node":"ROADMC-DEG1",
+            "dest-node":"ROADMC01-DEG1",
             "dest-tp":"DEG1-CTP-TXRX"
           },
-          "org-openroadm-common-network:opposite-link":"ROADMC-DEG1-DEG1-CTP-TXRXtoROADMC-SRG1-SRG1-CP-TXRX"
+          "org-openroadm-common-network:opposite-link":"ROADMC01-DEG1-DEG1-CTP-TXRXtoROADMC01-SRG1-SRG1-CP-TXRX"
         },
         {
           "link-id":"ROADMB-SRG1-SRG1-CP-TXRXtoROADMB-DEG1-DEG1-CTP-TXRX",

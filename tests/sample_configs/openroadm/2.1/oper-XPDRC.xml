@@ -9,7 +9,7 @@
   </netconf>
   <org-openroadm-device xmlns="http://org/openroadm/device">
     <info>
-      <node-id>XPDRC</node-id>
+      <node-id>XPDRC01</node-id>
       <node-number>1</node-number>
       <node-type>xpdr</node-type>
       <clli>NodeC</clli>
