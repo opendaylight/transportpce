@@ -72,10 +72,10 @@ class TransportPCEtesting(unittest.TestCase):
     def test_01_connect_rdm(self):
         #Config ROADMA
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMA"
+                "network-topology/topology/topology-netconf/node/ROADMA01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADMA",
+             "node-id": "ROADMA01",
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
@@ -129,7 +129,7 @@ class TransportPCEtesting(unittest.TestCase):
     #Disconnect the ROADMA
     def test_03_disconnect_rdm(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMA"
+                "network-topology/topology/topology-netconf/node/ROADMA01"
                .format(self.restconf_baseurl))
         data = {}
         headers = {'content-type': 'application/json'}
@@ -142,10 +142,10 @@ class TransportPCEtesting(unittest.TestCase):
     def test_04_connect_xpdr(self):
          #Config XPDRA
          url = ("{}/config/network-topology:"
-                 "network-topology/topology/topology-netconf/node/XPDRA"
+                 "network-topology/topology/topology-netconf/node/XPDRA01"
                 .format(self.restconf_baseurl))
          data = {"node": [{
-              "node-id": "XPDRA",
+              "node-id": "XPDRA01",
               "netconf-node-topology:username": "admin",
               "netconf-node-topology:password": "admin",
               "netconf-node-topology:host": "127.0.0.1",
@@ -166,7 +166,7 @@ class TransportPCEtesting(unittest.TestCase):
     #Disconnect the XPDRA
     def test_06_disconnect_device(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDRA"
+               "network-topology/topology/topology-netconf/node/XPDRA01"
               .format(self.restconf_baseurl))
         data = {}
         headers = {'content-type': 'application/json'}

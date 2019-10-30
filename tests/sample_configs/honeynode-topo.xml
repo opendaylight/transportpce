@@ -1,135 +1,135 @@
 <network xmlns="urn:ietf:params:xml:ns:yang:ietf-network">
     <network-id>openroadm-topology</network-id>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMA-DEG2-DEG2-CTP-TXRXtoROADMA-DEG1-DEG1-CTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA-DEG1-DEG1-CTP-TXRXtoROADMA-DEG2-DEG2-CTP-TXRX</opposite-link>
+        <link-id>ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG1-CTP-TXRX</dest-tp>
-            <dest-node>ROADMA-DEG1</dest-node>
+            <dest-node>ROADMA01-DEG1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMA-DEG2</source-node>
+            <source-node>ROADMA01-DEG2</source-node>
             <source-tp>DEG2-CTP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">EXPRESS-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMC-SRG1-SRG1-CP-TXRXtoROADMC-DEG2-DEG2-CTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC-DEG2-DEG2-CTP-TXRXtoROADMC-SRG1-SRG1-CP-TXRX</opposite-link>
+        <link-id>ROADMC01-SRG1-SRG1-CP-TXRXtoROADMC01-DEG2-DEG2-CTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC01-DEG2-DEG2-CTP-TXRXtoROADMC01-SRG1-SRG1-CP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG2-CTP-TXRX</dest-tp>
-            <dest-node>ROADMC-DEG2</dest-node>
+            <dest-node>ROADMC01-DEG2</dest-node>
         </destination>
         <source>
-            <source-node>ROADMC-SRG1</source-node>
+            <source-node>ROADMC01-SRG1</source-node>
             <source-tp>SRG1-CP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">ADD-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMA-SRG1-SRG1-CP-TXRXtoROADMA-DEG1-DEG1-CTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA-DEG1-DEG1-CTP-TXRXtoROADMA-SRG1-SRG1-CP-TXRX</opposite-link>
+        <link-id>ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-SRG1-SRG1-CP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG1-CTP-TXRX</dest-tp>
-            <dest-node>ROADMA-DEG1</dest-node>
+            <dest-node>ROADMA01-DEG1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMA-SRG1</source-node>
+            <source-node>ROADMA01-SRG1</source-node>
             <source-tp>SRG1-CP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">ADD-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA-SRG1-SRG1-PP1-TXRXtoXPDRA-XPDR1-XPDR1-NETWORK1</opposite-link>
+        <link-id>XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1</opposite-link>
         <destination>
             <dest-tp>SRG1-PP1-TXRX</dest-tp>
-            <dest-node>ROADMA-SRG1</dest-node>
+            <dest-node>ROADMA01-SRG1</dest-node>
         </destination>
         <source>
-            <source-node>XPDRA-XPDR1</source-node>
+            <source-node>XPDRA01-XPDR1</source-node>
             <source-tp>XPDR1-NETWORK1</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">XPONDER-OUTPUT</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMA-DEG1-DEG1-CTP-TXRXtoROADMA-DEG2-DEG2-CTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA-DEG2-DEG2-CTP-TXRXtoROADMA-DEG1-DEG1-CTP-TXRX</opposite-link>
+        <link-id>ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG2-CTP-TXRX</dest-tp>
-            <dest-node>ROADMA-DEG2</dest-node>
+            <dest-node>ROADMA01-DEG2</dest-node>
         </destination>
         <source>
-            <source-node>ROADMA-DEG1</source-node>
+            <source-node>ROADMA01-DEG1</source-node>
             <source-tp>DEG1-CTP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">EXPRESS-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMC-DEG2-DEG2-CTP-TXRXtoROADMC-DEG1-DEG1-CTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC-DEG1-DEG1-CTP-TXRXtoROADMC-DEG2-DEG2-CTP-TXRX</opposite-link>
+        <link-id>ROADMC01-DEG2-DEG2-CTP-TXRXtoROADMC01-DEG1-DEG1-CTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC01-DEG1-DEG1-CTP-TXRXtoROADMC01-DEG2-DEG2-CTP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG1-CTP-TXRX</dest-tp>
-            <dest-node>ROADMC-DEG1</dest-node>
+            <dest-node>ROADMC01-DEG1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMC-DEG2</source-node>
+            <source-node>ROADMC01-DEG2</source-node>
             <source-tp>DEG2-CTP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">EXPRESS-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMC-DEG1-DEG1-CTP-TXRXtoROADMC-DEG2-DEG2-CTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC-DEG2-DEG2-CTP-TXRXtoROADMC-DEG1-DEG1-CTP-TXRX</opposite-link>
+        <link-id>ROADMC01-DEG1-DEG1-CTP-TXRXtoROADMC01-DEG2-DEG2-CTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC01-DEG2-DEG2-CTP-TXRXtoROADMC01-DEG1-DEG1-CTP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG2-CTP-TXRX</dest-tp>
-            <dest-node>ROADMC-DEG2</dest-node>
+            <dest-node>ROADMC01-DEG2</dest-node>
         </destination>
         <source>
-            <source-node>ROADMC-DEG1</source-node>
+            <source-node>ROADMC01-DEG1</source-node>
             <source-tp>DEG1-CTP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">EXPRESS-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMA-DEG1-DEG1-CTP-TXRXtoROADMA-SRG1-SRG1-CP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA-SRG1-SRG1-CP-TXRXtoROADMA-DEG1-DEG1-CTP-TXRX</opposite-link>
+        <link-id>ROADMA01-DEG1-DEG1-CTP-TXRXtoROADMA01-SRG1-SRG1-CP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG1-DEG1-CTP-TXRX</opposite-link>
         <destination>
             <dest-tp>SRG1-CP-TXRX</dest-tp>
-            <dest-node>ROADMA-SRG1</dest-node>
+            <dest-node>ROADMA01-SRG1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMA-DEG1</source-node>
+            <source-node>ROADMA01-DEG1</source-node>
             <source-tp>DEG1-CTP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">DROP-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMA-DEG2-DEG2-CTP-TXRXtoROADMA-SRG1-SRG1-CP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA-SRG1-SRG1-CP-TXRXtoROADMA-DEG2-DEG2-CTP-TXRX</opposite-link>
+        <link-id>ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-SRG1-SRG1-CP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX</opposite-link>
         <destination>
             <dest-tp>SRG1-CP-TXRX</dest-tp>
-            <dest-node>ROADMA-SRG1</dest-node>
+            <dest-node>ROADMA01-SRG1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMA-DEG2</source-node>
+            <source-node>ROADMA01-DEG2</source-node>
             <source-tp>DEG2-CTP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">DROP-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX</opposite-link>
+        <link-id>ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG2-TTP-TXRX</dest-tp>
-            <dest-node>ROADMC-DEG2</dest-node>
+            <dest-node>ROADMC01-DEG2</dest-node>
         </destination>
         <source>
-            <source-node>ROADMA-DEG1</source-node>
+            <source-node>ROADMA01-DEG1</source-node>
             <source-tp>DEG1-TTP-TXRX</source-tp>
         </source>
         <OMS-attributes xmlns="http://org/openroadm/network/topology">
-            <opposite-link>ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX</opposite-link>
+            <opposite-link>ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX</opposite-link>
             <TE-metric>10</TE-metric>
             <span>
                 <clfi>fiber1</clfi>
@@ -149,31 +149,31 @@
         <link-latency xmlns="http://org/openroadm/common/network">0</link-latency>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMA-SRG1-SRG1-PP1-TXRXtoXPDRA-XPDR1-XPDR1-NETWORK1</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX</opposite-link>
+        <link-id>ROADMA01-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX</opposite-link>
         <destination>
             <dest-tp>XPDR1-NETWORK1</dest-tp>
-            <dest-node>XPDRA-XPDR1</dest-node>
+            <dest-node>XPDRA01-XPDR1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMA-SRG1</source-node>
+            <source-node>ROADMA01-SRG1</source-node>
             <source-tp>SRG1-PP1-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">XPONDER-INPUT</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMC-DEG2-DEG2-TTP-TXRXtoROADMA-DEG1-DEG1-TTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX</opposite-link>
+        <link-id>ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG1-TTP-TXRX</dest-tp>
-            <dest-node>ROADMA-DEG1</dest-node>
+            <dest-node>ROADMA01-DEG1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMC-DEG2</source-node>
+            <source-node>ROADMC01-DEG2</source-node>
             <source-tp>DEG2-TTP-TXRX</source-tp>
         </source>
         <OMS-attributes xmlns="http://org/openroadm/network/topology">
-            <opposite-link>ROADMA-DEG1-DEG1-TTP-TXRXtoROADMC-DEG2-DEG2-TTP-TXRX</opposite-link>
+            <opposite-link>ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX</opposite-link>
             <TE-metric>10</TE-metric>
             <span>
                 <clfi>fiber2</clfi>
@@ -193,79 +193,79 @@
         <link-latency xmlns="http://org/openroadm/common/network">0</link-latency>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMC-DEG1-DEG1-CTP-TXRXtoROADMC-SRG1-SRG1-CP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC-SRG1-SRG1-CP-TXRXtoROADMC-DEG1-DEG1-CTP-TXRX</opposite-link>
+        <link-id>ROADMC01-DEG1-DEG1-CTP-TXRXtoROADMC01-SRG1-SRG1-CP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC01-SRG1-SRG1-CP-TXRXtoROADMC01-DEG1-DEG1-CTP-TXRX</opposite-link>
         <destination>
             <dest-tp>SRG1-CP-TXRX</dest-tp>
-            <dest-node>ROADMC-SRG1</dest-node>
+            <dest-node>ROADMC01-SRG1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMC-DEG1</source-node>
+            <source-node>ROADMC01-DEG1</source-node>
             <source-tp>DEG1-CTP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">DROP-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMC-SRG1-SRG1-CP-TXRXtoROADMC-DEG1-DEG1-CTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC-DEG1-DEG1-CTP-TXRXtoROADMC-SRG1-SRG1-CP-TXRX</opposite-link>
+        <link-id>ROADMC01-SRG1-SRG1-CP-TXRXtoROADMC01-DEG1-DEG1-CTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC01-DEG1-DEG1-CTP-TXRXtoROADMC01-SRG1-SRG1-CP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG1-CTP-TXRX</dest-tp>
-            <dest-node>ROADMC-DEG1</dest-node>
+            <dest-node>ROADMC01-DEG1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMC-SRG1</source-node>
+            <source-node>ROADMC01-SRG1</source-node>
             <source-tp>SRG1-CP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">ADD-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMC-DEG2-DEG2-CTP-TXRXtoROADMC-SRG1-SRG1-CP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC-SRG1-SRG1-CP-TXRXtoROADMC-DEG2-DEG2-CTP-TXRX</opposite-link>
+        <link-id>ROADMC01-DEG2-DEG2-CTP-TXRXtoROADMC01-SRG1-SRG1-CP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC01-SRG1-SRG1-CP-TXRXtoROADMC01-DEG2-DEG2-CTP-TXRX</opposite-link>
         <destination>
             <dest-tp>SRG1-CP-TXRX</dest-tp>
-            <dest-node>ROADMC-SRG1</dest-node>
+            <dest-node>ROADMC01-SRG1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMC-DEG2</source-node>
+            <source-node>ROADMC01-DEG2</source-node>
             <source-tp>DEG2-CTP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">DROP-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMC-SRG1-SRG1-PP1-TXRXtoXPDRC-XPDR1-XPDR1-NETWORK1</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">XPDRC-XPDR1-XPDR1-NETWORK1toROADMC-SRG1-SRG1-PP1-TXRX</opposite-link>
+        <link-id>ROADMC01-SRG1-SRG1-PP1-TXRXtoXPDRC01-XPDR1-XPDR1-NETWORK1</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">XPDRC01-XPDR1-XPDR1-NETWORK1toROADMC01-SRG1-SRG1-PP1-TXRX</opposite-link>
         <destination>
             <dest-tp>XPDR1-NETWORK1</dest-tp>
-            <dest-node>XPDRC-XPDR1</dest-node>
+            <dest-node>XPDRC01-XPDR1</dest-node>
         </destination>
         <source>
-            <source-node>ROADMC-SRG1</source-node>
+            <source-node>ROADMC01-SRG1</source-node>
             <source-tp>SRG1-PP1-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">XPONDER-INPUT</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>ROADMA-SRG1-SRG1-CP-TXRXtoROADMA-DEG2-DEG2-CTP-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA-DEG2-DEG2-CTP-TXRXtoROADMA-SRG1-SRG1-CP-TXRX</opposite-link>
+        <link-id>ROADMA01-SRG1-SRG1-CP-TXRXtoROADMA01-DEG2-DEG2-CTP-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-DEG2-DEG2-CTP-TXRXtoROADMA01-SRG1-SRG1-CP-TXRX</opposite-link>
         <destination>
             <dest-tp>DEG2-CTP-TXRX</dest-tp>
-            <dest-node>ROADMA-DEG2</dest-node>
+            <dest-node>ROADMA01-DEG2</dest-node>
         </destination>
         <source>
-            <source-node>ROADMA-SRG1</source-node>
+            <source-node>ROADMA01-SRG1</source-node>
             <source-tp>SRG1-CP-TXRX</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">ADD-LINK</link-type>
     </link>
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-        <link-id>XPDRC-XPDR1-XPDR1-NETWORK1toROADMC-SRG1-SRG1-PP1-TXRX</link-id>
-        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC-SRG1-SRG1-PP1-TXRXtoXPDRC-XPDR1-XPDR1-NETWORK1</opposite-link>
+        <link-id>XPDRC01-XPDR1-XPDR1-NETWORK1toROADMC01-SRG1-SRG1-PP1-TXRX</link-id>
+        <opposite-link xmlns="http://org/openroadm/common/network">ROADMC01-SRG1-SRG1-PP1-TXRXtoXPDRC01-XPDR1-XPDR1-NETWORK1</opposite-link>
         <destination>
             <dest-tp>SRG1-PP1-TXRX</dest-tp>
-            <dest-node>ROADMC-SRG1</dest-node>
+            <dest-node>ROADMC01-SRG1</dest-node>
         </destination>
         <source>
-            <source-node>XPDRC-XPDR1</source-node>
+            <source-node>XPDRC01-XPDR1</source-node>
             <source-tp>XPDR1-NETWORK1</source-tp>
         </source>
         <link-type xmlns="http://org/openroadm/network/topology">XPONDER-OUTPUT</link-type>
@@ -274,7 +274,7 @@
         <openroadm-common-network xmlns="http://org/openroadm/common/network"></openroadm-common-network>
     </network-types>
     <node>
-        <node-id>ROADMC-SRG1</node-id>
+        <node-id>ROADMC01-SRG1</node-id>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>SRG1-PP12-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/network/topology">SRG-TXRX-PP</tp-type>
@@ -345,7 +345,7 @@
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
-            <node-ref>ROADMC</node-ref>
+            <node-ref>ROADMC01</node-ref>
         </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
             <available-wavelengths>
@@ -640,7 +640,7 @@
         <node-type xmlns="http://org/openroadm/network/topology">SRG</node-type>
     </node>
     <node>
-        <node-id>ROADMC-DEG1</node-id>
+        <node-id>ROADMC01-DEG1</node-id>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>DEG1-CTP-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/network/topology">DEGREE-TXRX-CTP</tp-type>
@@ -651,7 +651,7 @@
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
-            <node-ref>ROADMC</node-ref>
+            <node-ref>ROADMC01</node-ref>
         </supporting-node>
         <node-type xmlns="http://org/openroadm/network/topology">DEGREE</node-type>
         <degree-attributes xmlns="http://org/openroadm/network/topology">
@@ -947,7 +947,7 @@
         </degree-attributes>
     </node>
     <node>
-        <node-id>ROADMC-DEG2</node-id>
+        <node-id>ROADMC01-DEG2</node-id>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>DEG2-TTP-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/network/topology">DEGREE-TXRX-TTP</tp-type>
@@ -958,7 +958,7 @@
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
-            <node-ref>ROADMC</node-ref>
+            <node-ref>ROADMC01</node-ref>
         </supporting-node>
         <node-type xmlns="http://org/openroadm/network/topology">DEGREE</node-type>
         <degree-attributes xmlns="http://org/openroadm/network/topology">
@@ -1254,7 +1254,7 @@
         </degree-attributes>
     </node>
     <node>
-        <node-id>ROADMA-SRG1</node-id>
+        <node-id>ROADMA01-SRG1</node-id>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>SRG1-PP12-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/network/topology">SRG-TXRX-PP</tp-type>
@@ -1325,7 +1325,7 @@
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
-            <node-ref>ROADMA</node-ref>
+            <node-ref>ROADMA01</node-ref>
         </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
             <available-wavelengths>
@@ -1620,7 +1620,7 @@
         <node-type xmlns="http://org/openroadm/network/topology">SRG</node-type>
     </node>
     <node>
-        <node-id>XPDRA-XPDR1</node-id>
+        <node-id>XPDRA01-XPDR1</node-id>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-NETWORK2</tp-id>
             <tp-type xmlns="http://org/openroadm/network/topology">XPONDER-NETWORK</tp-type>
@@ -1657,12 +1657,12 @@
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
-            <node-ref>XPDRA</node-ref>
+            <node-ref>XPDRA01</node-ref>
         </supporting-node>
         <node-type xmlns="http://org/openroadm/network/topology">XPONDER</node-type>
     </node>
     <node>
-        <node-id>ROADMA-DEG2</node-id>
+        <node-id>ROADMA01-DEG2</node-id>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>DEG2-TTP-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/network/topology">DEGREE-TXRX-TTP</tp-type>
@@ -1673,7 +1673,7 @@
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
-            <node-ref>ROADMA</node-ref>
+            <node-ref>ROADMA01</node-ref>
         </supporting-node>
         <node-type xmlns="http://org/openroadm/network/topology">DEGREE</node-type>
         <degree-attributes xmlns="http://org/openroadm/network/topology">
@@ -1969,7 +1969,7 @@
         </degree-attributes>
     </node>
     <node>
-        <node-id>XPDRC-XPDR1</node-id>
+        <node-id>XPDRC01-XPDR1</node-id>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-NETWORK2</tp-id>
             <tp-type xmlns="http://org/openroadm/network/topology">XPONDER-NETWORK</tp-type>
@@ -2006,12 +2006,12 @@
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
-            <node-ref>XPDRC</node-ref>
+            <node-ref>XPDRC01</node-ref>
         </supporting-node>
         <node-type xmlns="http://org/openroadm/network/topology">XPONDER</node-type>
     </node>
     <node>
-        <node-id>ROADMA-DEG1</node-id>
+        <node-id>ROADMA01-DEG1</node-id>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>DEG1-CTP-TXRX</tp-id>
             <tp-type xmlns="http://org/openroadm/network/topology">DEGREE-TXRX-CTP</tp-type>
@@ -2022,7 +2022,7 @@
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
-            <node-ref>ROADMA</node-ref>
+            <node-ref>ROADMA01</node-ref>
         </supporting-node>
         <node-type xmlns="http://org/openroadm/network/topology">DEGREE</node-type>
         <degree-attributes xmlns="http://org/openroadm/network/topology">

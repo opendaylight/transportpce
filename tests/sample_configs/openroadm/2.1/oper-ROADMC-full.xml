@@ -9,7 +9,7 @@
   </netconf>
   <org-openroadm-device xmlns="http://org/openroadm/device">
     <info>
-      <node-id>ROADMC</node-id>
+      <node-id>ROADMC01</node-id>
       <node-number>2</node-number>
       <node-type>rdm</node-type>
       <clli>NodeC</clli>
@@ -1237,7 +1237,7 @@
         <nbr-list>
           <if-name>
             <ifName>eth-3/0/ETH-PLUG</ifName>
-            <remoteSysName>ROADMA</remoteSysName>
+            <remoteSysName>ROADMA01</remoteSysName>
             <remoteMgmtAddressSubType>ipV4</remoteMgmtAddressSubType>
             <remoteMgmtAddress>1.1.1.1</remoteMgmtAddress>
             <remotePortIdSubType>ifalias</remotePortIdSubType>
@@ -4205,7 +4205,7 @@
     </measurements>
     <resource>
       <device>
-        <node-id>ROADMC</node-id>
+        <node-id>ROADMC01</node-id>
       </device>
       <resourceType>
         <type>interface</type>
@@ -4254,7 +4254,7 @@
     </measurements>
     <resource>
       <device>
-        <node-id>ROADMC</node-id>
+        <node-id>ROADMC01</node-id>
       </device>
       <resourceType>
         <type>interface</type>
@@ -4303,7 +4303,7 @@
     </measurements>
     <resource>
       <device>
-        <node-id>ROADMC</node-id>
+        <node-id>ROADMC01</node-id>
       </device>
       <resourceType>
         <type>interface</type>
@@ -4352,7 +4352,7 @@
     </measurements>
     <resource>
       <device>
-        <node-id>ROADMC</node-id>
+        <node-id>ROADMC01</node-id>
       </device>
       <resourceType>
         <type>interface</type>

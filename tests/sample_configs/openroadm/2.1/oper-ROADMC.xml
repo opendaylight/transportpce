@@ -2,7 +2,7 @@
 <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
   <org-openroadm-device xmlns="http://org/openroadm/device">
     <info>
-      <node-id>ROADMC</node-id>
+      <node-id>ROADMC01</node-id>
       <node-number>2</node-number>
       <node-type>rdm</node-type>
       <clli>NodeC</clli>
@@ -933,7 +933,7 @@
         <nbr-list>
           <if-name>
             <ifName>eth-3/0/ETH-PLUG</ifName>
-            <remoteSysName>ROADMA</remoteSysName>
+            <remoteSysName>ROADMA01</remoteSysName>
             <remoteMgmtAddressSubType>ipV4</remoteMgmtAddressSubType>
             <remoteMgmtAddress>1.1.1.1</remoteMgmtAddress>
             <remotePortIdSubType>ifalias</remotePortIdSubType>

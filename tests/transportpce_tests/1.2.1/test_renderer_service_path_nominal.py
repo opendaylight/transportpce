@@ -72,10 +72,10 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_01_rdm_device_connected(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADMA"
+               "network-topology/topology/topology-netconf/node/ROADMA01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADMA",
+             "node-id": "ROADMA01",
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
@@ -91,10 +91,10 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_02_xpdr_device_connected(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDRA"
+               "network-topology/topology/topology-netconf/node/XPDRA01"
               .format(self.restconf_baseurl))
         data = {"node": [{
-            "node-id": "XPDRA",
+            "node-id": "XPDRA01",
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
@@ -110,7 +110,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_03_rdm_portmapping(self):
         url = ("{}/config/transportpce-portmapping:network/"
-               "nodes/ROADMA"
+               "nodes/ROADMA01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -128,7 +128,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_04_xpdr_portmapping(self):
         url = ("{}/config/transportpce-portmapping:network/"
-               "nodes/XPDRA"
+               "nodes/XPDRA01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -155,10 +155,10 @@ class TransportPCERendererTesting(unittest.TestCase):
              "renderer:modulation-format": "qpsk",
              "renderer:operation": "create",
              "renderer:nodes": [
-                 {"renderer:node-id": "ROADMA",
+                 {"renderer:node-id": "ROADMA01",
                   "renderer:src-tp": "SRG1-PP7-TXRX",
                   "renderer:dest-tp": "DEG1-TTP-TXRX"},
-                 {"renderer:node-id": "XPDRA",
+                 {"renderer:node-id": "XPDRA01",
                   "renderer:src-tp": "XPDR1-CLIENT1",
                   "renderer:dest-tp": "XPDR1-NETWORK1"}]}}
         headers = {'content-type': 'application/json'}
@@ -167,11 +167,11 @@ class TransportPCERendererTesting(unittest.TestCase):
              headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn('Roadm-connection successfully created for nodes: ROADMA', res["output"]["result"])
+        self.assertIn('Roadm-connection successfully created for nodes: ROADMA01', res["output"]["result"])
 
     def test_06_service_path_create_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-                "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+                "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                 "interface/DEG1-TTP-TXRX-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -189,7 +189,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_07_service_path_create_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-                "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+                "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                 "interface/SRG1-PP7-TXRX-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -209,7 +209,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_08_service_path_create_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/SRG1-PP7-TXRX-DEG1-TTP-TXRX-7"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -231,7 +231,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_09_service_path_create_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-                "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+                "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                 "interface/XPDR1-NETWORK1-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -254,7 +254,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_10_service_path_create_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-                "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+                "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                 "interface/XPDR1-NETWORK1-OTU"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -276,7 +276,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_11_service_path_create_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-                "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+                "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                 "interface/XPDR1-NETWORK1-ODU"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -300,7 +300,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_12_service_path_create_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-CLIENT1-ETHERNET"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -324,7 +324,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_13_service_path_create_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-                "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+                "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                 "circuit-packs/1%2F0%2F1-PLUG-NET"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -341,10 +341,10 @@ class TransportPCERendererTesting(unittest.TestCase):
              "renderer:wave-number": "7",
              "renderer:operation": "delete",
              "renderer:nodes": [
-                 {"renderer:node-id": "ROADMA",
+                 {"renderer:node-id": "ROADMA01",
                   "renderer:src-tp": "SRG1-PP7-TXRX",
                   "renderer:dest-tp": "DEG1-TTP-TXRX"},
-                 {"renderer:node-id": "XPDRA",
+                 {"renderer:node-id": "XPDRA01",
                   "renderer:src-tp": "XPDR1-CLIENT1",
                   "renderer:dest-tp": "XPDR1-NETWORK1"}]}}
         headers = {'content-type': 'application/json'}
@@ -357,7 +357,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_15_service_path_delete_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-                "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+                "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                 "interface/DEG1-TTP-TXRX-7"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -372,7 +372,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_16_service_path_delete_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/SRG1-PP7-TXRX-7"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -386,7 +386,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_17_service_path_delete_rdm_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/SRG1-PP7-TXRX-DEG1-TTP-TXRX-7"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -400,7 +400,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_18_service_path_delete_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-7"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -414,7 +414,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_19_service_path_delete_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-OTU"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -428,7 +428,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_20_service_path_delete_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-ODU"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -442,7 +442,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_21_service_path_delete_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-CLIENT1-ETHERNET"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -456,7 +456,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_22_service_path_delete_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDRA/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
+               "node/XPDRA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "circuit-packs/1%2F0%2F1-PLUG-NET"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
@@ -468,7 +468,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_23_rdm_device_disconnected(self):
         url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADMA"
+               "network-topology/topology/topology-netconf/node/ROADMA01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -479,7 +479,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_24_xpdr_device_disconnected(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/XPDRA"
+                "network-topology/topology/topology-netconf/node/XPDRA01"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(

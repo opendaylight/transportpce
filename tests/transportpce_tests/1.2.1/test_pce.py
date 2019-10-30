@@ -77,7 +77,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing nodeId
     def test_02_get_nodeId(self):
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -86,12 +86,12 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
-            res['node'][0]['node-id'], 'ROADMA-SRG1')
+            res['node'][0]['node-id'], 'ROADMA01-SRG1')
         time.sleep(1)
 
     # Get existing linkId
     def test_03_get_linkId(self):
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/link/XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/link/XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX"
               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}
@@ -101,7 +101,7 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         self.assertEqual(
             res['ietf-network-topology:link'][0]['link-id'],
-            'XPDRA-XPDR1-XPDR1-NETWORK1toROADMA-SRG1-SRG1-PP1-TXRX')
+            'XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX')
         time.sleep(1)
 
     # Path Computation success
@@ -116,12 +116,12 @@ class TransportPCEtesting(unittest.TestCase):
                     "request-id": "request-1"
                 },
                 "service-a-end": {
-                    "node-id": "XPDRA",
+                    "node-id": "XPDRA01",
                     "service-rate": "0",
                     "clli": "nodeA"
                 },
                 "service-z-end": {
-                    "node-id": "XPDRC",
+                    "node-id": "XPDRC01",
                     "service-rate": "0",
                     "clli": "nodeC"
                 }
@@ -150,12 +150,12 @@ class TransportPCEtesting(unittest.TestCase):
                     "request-id": "request-1"
                 },
                 "service-a-end": {
-                    "node-id": "ROADMA",
+                    "node-id": "ROADMA01",
                     "service-rate": "0",
                     "clli": "nodeA"
                 },
                 "service-z-end": {
-                    "node-id": "ROADMC",
+                    "node-id": "ROADMC01",
                     "service-rate": "0",
                     "clli": "nodeC"
                 }
@@ -185,7 +185,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Test deleted topology
     def test_07_test_topology_simple_bi_deleted(self):
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA-SRG1"
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
                 .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
         "Accept": "application/json"}

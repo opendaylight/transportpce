@@ -22,7 +22,7 @@
           "org-openroadm-network:model":"2"
         },
         {
-          "node-id":"ROADMC",
+          "node-id":"ROADMC01",
           "supporting-node":[
             {
               "network-ref":"clli-network",
@@ -48,7 +48,7 @@
           "org-openroadm-network:model":"1"
         },
         {
-          "node-id":"ROADMA",
+          "node-id":"ROADMA01",
           "supporting-node":[
             {
               "network-ref":"clli-network",
@@ -61,7 +61,7 @@
           "org-openroadm-network:model":"2"
         },
         {
-          "node-id":"XPDRA",
+          "node-id":"XPDRA01",
           "supporting-node":[
             {
               "network-ref":"clli-network",

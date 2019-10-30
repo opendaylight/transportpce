@@ -105,7 +105,7 @@ class TransportGNPYtesting(unittest.TestCase):
                     "request-id": "request-1"
                 },
                 "service-a-end": {
-                    "node-id": "XPDRA",
+                    "node-id": "XPDRA01",
                     "service-rate": "100",
                     "clli": "nodeA"
                 },
