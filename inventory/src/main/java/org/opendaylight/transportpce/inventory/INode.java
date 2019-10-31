@@ -23,15 +23,17 @@ public class INode {
 
     private final DataSource dataSource;
     private final DeviceTransactionManager deviceTransactionManager;
-    private final INode221 inode221;
+    //private final INode221 inode221;
     private final INode121 inode121;
 
-    public INode(DataSource dataSource, DeviceTransactionManager deviceTransactionManager, INode121 inode121,
-        INode221 inode221) {
+    public INode(DataSource dataSource, DeviceTransactionManager deviceTransactionManager,
+        INode121 inode121
+        //, INode221 inode221
+    ) {
         this.dataSource = dataSource;
         this.deviceTransactionManager = deviceTransactionManager;
         this.inode121 = inode121;
-        this.inode221 = inode221;
+        //this.inode221 = inode221;
     }
 
     public boolean addNode(String deviceId, String openROADMversion) {

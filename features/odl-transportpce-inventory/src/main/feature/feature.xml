@@ -2,7 +2,7 @@
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.4.0" name="odl-transportpce-inventory">
     <feature name="odl-transportpce-inventory">
         <feature>scheduler</feature>
-        <feature>pax-jdbc-mysql</feature>
+        <feature>pax-jdbc-mariadb</feature>
         <feature>pax-jdbc-pool-dbcp2</feature>
         <configfile finalname="etc/org.ops4j.datasource-transportpce.cfg" override="false">
             mvn:${project.groupId}/${project.artifactId}/${project.version}/cfg/datasource
