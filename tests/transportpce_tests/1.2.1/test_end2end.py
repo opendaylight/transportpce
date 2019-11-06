@@ -555,7 +555,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
         time.sleep(2)
 
-
     def test_19_connect_roadmA_PP2_to_xpdrA_N2(self):
         url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(self.restconf_baseurl)
         data = {
@@ -579,7 +578,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
         time.sleep(2)
 
-
     def test_20_connect_xprdC_N2_to_roadmC_PP2(self):
         url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(self.restconf_baseurl)
         data = {
@@ -602,7 +600,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
         time.sleep(2)
-
 
     def test_21_connect_roadmC_PP2_to_xpdrC_N2(self):
         url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(self.restconf_baseurl)
@@ -814,7 +811,6 @@ class TransportPCEFulltesting(unittest.TestCase):
             if ele['tp-id'] == 'SRG1-PP3-TXRX':
                 self.assertNotIn('org-openroadm-network-topology:pp-attributes', dict.keys(ele))
         time.sleep(10)
-
 
     def test_27_check_topo_ROADMA_DEG1(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-DEG1"
@@ -1409,7 +1405,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_27_check_topo_ROADMA_DEG1()
         time.sleep(3)
 
-
     def test_44_delete_oc_service1(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
               .format(self.restconf_baseurl))
@@ -1541,7 +1536,6 @@ class TransportPCEFulltesting(unittest.TestCase):
             self.test_39_check_xc1_ROADMC()
             print ("oc service deletion\n")
             self.test_44_delete_oc_service1()
-
 
     def test_51_disconnect_XPDRA(self):
         url = ("{}/config/network-topology:"

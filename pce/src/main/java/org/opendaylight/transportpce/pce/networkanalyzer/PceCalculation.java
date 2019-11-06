@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.ResponseCodes;
@@ -99,7 +101,6 @@ public class PceCalculation {
             returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
             return;
         }
-
         printNodesInfo(allPceNodes);
 
         returnStructure.setRC(ResponseCodes.RESPONSE_OK);
@@ -139,10 +140,12 @@ public class PceCalculation {
             LOG.error("readMdSal: network is null: {}", nwInstanceIdentifier);
             return false;
         }
-        allNodes = nw.getNode();
+        allNodes = nw.getNode().stream().sorted((n1, n2) -> n1.getNodeId().getValue().compareTo(n2.getNodeId()
+            .getValue())).collect(Collectors.toList());
         Network1 nw1 = nw.augmentation(Network1.class);
 
-        allLinks = nw1.getLink();
+        allLinks = nw1.getLink().stream().sorted((l1, l2) -> l1.getSource().getSourceTp().toString().compareTo(l2
+            .getSource().getSourceTp().toString())).collect(Collectors.toList());
         if (allNodes == null || allNodes.isEmpty()) {
             LOG.error("readMdSal: no nodes ");
             return false;
@@ -368,11 +371,21 @@ public class PceCalculation {
                 break;
         }
 
-        if ((pceNode.getSupNodeIdPceNode().equals(anodeId)) && (endPceNode(nodeType,pceNode.getNodeId(), pceNode))) {
-            this.aendPceNode = pceNode;
+        if (pceNode.getSupNodeIdPceNode().equals(this.anodeId)) {
+            if (this.aendPceNode != null) {
+                LOG.debug("aendPceNode already gets: {}", this.aendPceNode);
+            } else if (endPceNode(nodeType,pceNode.getNodeId(), pceNode)) {
+                this.aendPceNode = pceNode;
+            }
+            // returning false otherwise would break E2E test
         }
-        if ((pceNode.getSupNodeIdPceNode().equals(znodeId)) && (endPceNode(nodeType,pceNode.getNodeId(), pceNode))) {
-            this.zendPceNode = pceNode;
+        if (pceNode.getSupNodeIdPceNode().equals(this.znodeId)) {
+            if (this.zendPceNode != null) {
+                LOG.debug("zendPceNode already gets: {}", this.zendPceNode);
+            } else if (endPceNode(nodeType,pceNode.getNodeId(), pceNode)) {
+                this.zendPceNode = pceNode;
+            }
+            // returning false otherwise would break E2E test
         }
 
         allPceNodes.put(pceNode.getNodeId(), pceNode);
@@ -430,7 +443,6 @@ public class PceCalculation {
     }
 
     private Boolean endPceNode(OpenroadmNodeType openroadmNodeType, NodeId nodeId, PceNode pceNode) {
-        Boolean add = true;
         switch (openroadmNodeType) {
             case SRG :
                 pceNode.initSrgTps();
@@ -440,11 +452,15 @@ public class PceCalculation {
                 pceNode.initXndrTps();
                 break;
             default:
-                add = false;
                 LOG.warn("endPceNode: Node {} is not SRG or XPONDER !", nodeId);
-                break;
+                return false;
         }
-        return add;
+
+        if (!pceNode.isValid()) {
+            LOG.error("validateNode : there are no availaible wavelengths in node {}", pceNode.getNodeId().getValue());
+            return false;
+        }
+        return true;
     }
 
     public PceNode getaendPceNode() {
