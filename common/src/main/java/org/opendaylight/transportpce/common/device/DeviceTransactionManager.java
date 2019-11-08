@@ -138,7 +138,6 @@ public interface DeviceTransactionManager {
     /**
      * Returns data from device from specified path. Creates new device transaction, gets data via it and closes
      * transaction.
-     *
      * This method is blocking - it's waiting until it receives {@link DeviceTransaction} and then the data from device.
      *
      * @param deviceId Device identifier from which will be data read.
