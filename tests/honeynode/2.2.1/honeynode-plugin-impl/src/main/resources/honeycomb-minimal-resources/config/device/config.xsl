@@ -5,8 +5,8 @@
         </xsl:copy>
     </xsl:template>
     <xsl:template match="/">
-        <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+        <!-- config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"-->
             <xsl:apply-templates/>
-        </config>
+        <!-- /config-->
     </xsl:template>
 </xsl:stylesheet>

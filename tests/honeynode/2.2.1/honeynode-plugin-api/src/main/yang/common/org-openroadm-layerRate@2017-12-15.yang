@@ -1,18 +1,20 @@
-module org-openroadm-switching-pool-types {
-  namespace "http://org/openroadm/switching-pool-types";
-  prefix org-openroadm-switching-pool-types;
+module org-openroadm-layerRate {
+  namespace "http://org/openroadm/layerRate";
+  prefix org-openroadm-layerRate;
 
   organization
     "Open ROADM MSA";
   contact
     "OpenROADM.org";
   description
-    "YANG definitions of common types.
+    "YANG definitions of layer rates.
 
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
       AT&T Intellectual Property.  All other rights reserved.
 
       Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
       * Redistributions of source code must retain the above copyright notice, this
         list of conditions and the following disclaimer.
       * Redistributions in binary form must reproduce the above copyright notice,
@@ -37,19 +39,56 @@ module org-openroadm-switching-pool-types {
     description
       "Version 2.2";
   }
+  revision 2016-10-14 {
+    description
+      "Version 1.2";
+  }
 
-  typedef switching-pool-types {
+  typedef layer-rate-enum {
     type enumeration {
-      enum "non-blocking" {
+      enum "vendorExtension" {
         value 1;
         description
-          "Single non-blocking element";
+          "vendor extension";
       }
-      enum "blocking" {
+      enum "layer2" {
         value 2;
         description
-          "Multiple connected non-blocking lists";
+          "2";
       }
+      enum "layer3" {
+        value 3;
+        description
+          "3";
+      }
+      enum "layer4" {
+        value 4;
+        description
+          "4";
+      }
+      enum "layer5" {
+        value 5;
+        description
+          "5";
+      }
+      enum "layer6" {
+        value 6;
+        description
+          "6";
+      }
+    }
+  }
+
+  grouping layer-rate {
+    description
+      "Set list of layer rates, plus the ability to report layer rates not yet in set list.";
+    leaf type {
+      type layer-rate-enum;
+      mandatory true;
+    }
+    leaf extension {
+      type string;
+      mandatory false;
     }
   }
 }

@@ -150,15 +150,15 @@ public final class DeviceConfiguration {
             transformer = factory.newTransformer(xslt);
             text = new StreamSource(new File(classLoader.getResource(DEVICE_DATA_SAMPLE_OPER_XML).getFile()));
             transformer.transform(text, new StreamResult(tmpwriter));
-            LOG.info("removing namespace ...");
-            xslt = new StreamSource(new File(classLoader.getResource(NAMESPACE_TRIMER_XSL).getFile()));
-            transformer = factory.newTransformer(xslt);
+//            LOG.info("removing namespace ...");
+//            xslt = new StreamSource(new File(classLoader.getResource(NAMESPACE_TRIMER_XSL).getFile()));
+//            transformer = factory.newTransformer(xslt);
             reader = new StringReader(tmpwriter.toString());
             StringWriter device_config = new StringWriter();
             text = new StreamSource(reader);
             transformer.transform(text, new StreamResult(device_config));
-            result = device_config.toString();
-//            LOG.info("DeviceConfiguration - operToCconfig - result = {}", result);
+            result = tmpwriter.toString();
+            LOG.info("DeviceConfiguration - operToCconfig - result = {}", result);
         } catch (TransformerException e) {
             LOG.error("Transformer failed ");
         }

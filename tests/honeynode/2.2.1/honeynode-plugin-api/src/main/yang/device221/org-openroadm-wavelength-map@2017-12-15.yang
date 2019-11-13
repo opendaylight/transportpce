@@ -1,13 +1,13 @@
-module org-openroadm-maintenance-loopback {
-  namespace "http://org/openroadm/maintenance-loopback";
-  prefix org-openroadm-maint-loopback;
+module org-openroadm-wavelength-map {
+  namespace "http://org/openroadm/wavelength-map";
+  prefix org-openroadm-wavelength-map;
 
   organization
     "Open ROADM MSA";
   contact
     "OpenROADM.org";
   description
-    "YANG definitions for maintenance loopback.
+    "YANG definitions for mapping wavelength-number to center frequency and wavelength value.
 
      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
      AT&T Intellectual Property.  All other rights reserved.
@@ -44,36 +44,32 @@ module org-openroadm-maintenance-loopback {
       "Version 1.2";
   }
 
-  grouping maint-loopback {
-    container maint-loopback {
-      leaf enabled {
-        type boolean;
-        default "false";
-        description
-          "loopback operation enable flag";
+  grouping wavelength-map-g {
+    list wavelengths {
+      key "wavelength-number";
+      config false;
+      leaf wavelength-number {
+        type uint32;
       }
-      leaf type {
-        when "../enabled = 'true'";
-        type enumeration {
-          enum "fac" {
-            value 0;
-            description
-              "pre-FEC Loopback in the facility direction";
-          }
-          enum "term" {
-            value 1;
-            description
-              "Loopback in the terminal direction";
-          }
-          enum "fac2" {
-            value 2;
-            description
-              "post-FEC Loopback in the facility direction";
-          }
+      leaf center-frequency {
+        type decimal64 {
+          fraction-digits 3;
+          range "191.350..196.100";
         }
-        default "fac";
+        units "THz";
         description
-          "Set Loopback type (or direction).";
+          "Frequency of the transmit optical channel
+           Domain range:  191.350THz .. 196.100THz ";
+      }
+      leaf wavelength {
+        type decimal64 {
+          fraction-digits 2;
+          range "1528.77..1566.72";
+        }
+        units "nm";
+        description
+          "Lambda corresponding to transmit frequency
+           Domain range:  1528.72nm .. 1566.72nm ";
       }
     }
   }
