@@ -66,7 +66,7 @@ public interface DataObjectConverter {
      * @param <T> T extends DataContainer
      *
      * @return {@link ConvertType} converter for {@link DataContainer}
-     * representing rpc data
+     *      representing rpc data
      */
     <T extends DataContainer> ConvertType<T> rpcData();
 

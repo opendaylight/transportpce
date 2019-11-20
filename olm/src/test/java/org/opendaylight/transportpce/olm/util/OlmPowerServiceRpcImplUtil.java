@@ -34,7 +34,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 
 public final class OlmPowerServiceRpcImplUtil {
 
-    private OlmPowerServiceRpcImplUtil() {}
+    private OlmPowerServiceRpcImplUtil() {
+    }
 
     public static GetPmInput  getGetPmInput() {
         GetPmInput input = new GetPmInputBuilder().setGranularity(PmGranularity._15min).setNodeId("node1")

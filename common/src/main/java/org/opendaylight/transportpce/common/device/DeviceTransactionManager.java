@@ -139,7 +139,9 @@ public interface DeviceTransactionManager {
      * Returns data from device from specified path. Creates new device transaction, gets data via it and closes
      * transaction.
      *
+     * <p>
      * This method is blocking - it's waiting until it receives {@link DeviceTransaction} and then the data from device.
+     * </p>
      *
      * @param deviceId Device identifier from which will be data read.
      * @param logicalDatastoreType Datastore type.
