@@ -56,6 +56,7 @@ public class NetworkModelProvider {
         ClliNetwork.createClliLayer(dataBroker);
         OpenRoadmNetwork.createOpenRoadmNetworkLayer(dataBroker);
         openRoadmFactory.createTopoLayerVersionControl(networkTransactionService);
+        openRoadmFactory.createOtnTopoLayerVersionControl(networkTransactionService);
         dataTreeChangeListenerRegistration =
             dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
                 InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);

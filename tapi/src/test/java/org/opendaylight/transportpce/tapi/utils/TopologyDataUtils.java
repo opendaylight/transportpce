@@ -19,6 +19,7 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInputBuilder;
@@ -86,7 +87,7 @@ public final class TopologyDataUtils {
     }
 
     public static void writePortmappingFromFileToDatastore(DataStoreContext dataStoreContextUtil) {
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.Network result = null;
+        Network result = null;
         File portmappingFile = new File(PORTMAPPING_FILE);
         if (portmappingFile.exists()) {
             String fileName = portmappingFile.getName();
@@ -101,13 +102,11 @@ public final class TopologyDataUtils {
                         "Could not transform the input %s into normalized nodes", fileName));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
-                    .getDataObject(transformIntoNormalizedNode.get(), org.opendaylight.yang.gen.v1.http.org.opendaylight
-                    .transportpce.portmapping.rev190702.Network.QNAME);
+                    .getDataObject(transformIntoNormalizedNode.get(), Network.QNAME);
                 if (!dataObject.isPresent()) {
                     throw new IllegalStateException("Could not transform normalized nodes into data object");
                 } else {
-                    result = (org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702
-                        .Network) dataObject.get();
+                    result = (Network) dataObject.get();
                 }
             } catch (FileNotFoundException e) {
                 LOG.error("File not found : {} at {}", e.getMessage(), e.getLocalizedMessage());
@@ -115,9 +114,7 @@ public final class TopologyDataUtils {
         } else {
             LOG.error("xml file {} not found at {}", portmappingFile.getName(), portmappingFile.getAbsolutePath());
         }
-        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702
-            .Network> portmappingIID = InstanceIdentifier.builder(org.opendaylight.yang.gen.v1.http.org.opendaylight
-            .transportpce.portmapping.rev190702.Network.class).build();
+        InstanceIdentifier<Network> portmappingIID = InstanceIdentifier.builder(Network.class).build();
         writeTransaction(dataStoreContextUtil.getDataBroker(), portmappingIID, result);
         LOG.info("portmapping-example stored with success in datastore");
     }

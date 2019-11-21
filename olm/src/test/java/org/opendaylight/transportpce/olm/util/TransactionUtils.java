@@ -19,19 +19,20 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegree;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.CpToDegreeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev170228.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.CpToDegreeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev181130.FiberPmd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev181130.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.SectionElementBuilder;
@@ -369,10 +370,12 @@ public final class TransactionUtils {
         mappingList.add(map1);
         Nodes nodes = new NodesBuilder()
             .setNodeId(nodeId)
-            .setNodeType(NodeTypes.Xpdr)
+            .setNodeInfo(new NodeInfoBuilder()
+                .setNodeType(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes.Xpdr)
+                .setOpenroadmVersion(OpenroadmVersion._121)
+                .build())
             .setCpToDegree(cpList)
             .setMapping(mappingList)
-            .setOpenroadmVersion(Nodes.OpenroadmVersion._121)
             .build();
         return nodes;
     }
@@ -401,10 +404,12 @@ public final class TransactionUtils {
         mappingList.add(map1);
         Nodes nodes = new NodesBuilder()
             .setNodeId(nodeId)
-            .setNodeType(null)
+            .setNodeInfo(new NodeInfoBuilder()
+                .setNodeType(null)
+                .setOpenroadmVersion(OpenroadmVersion._121)
+                .build())
             .setCpToDegree(cpList)
             .setMapping(mappingList)
-            .setOpenroadmVersion(Nodes.OpenroadmVersion._121)
             .build();
         return nodes;
     }
@@ -433,10 +438,12 @@ public final class TransactionUtils {
         mappingList.add(map1);
         Nodes nodes = new NodesBuilder()
             .setNodeId(nodeId)
-            .setNodeType(NodeTypes.Rdm)
+            .setNodeInfo(new NodeInfoBuilder()
+                .setNodeType(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes.Rdm)
+                .setOpenroadmVersion(OpenroadmVersion._121)
+                .build())
             .setCpToDegree(cpList)
             .setMapping(mappingList)
-            .setOpenroadmVersion(Nodes.OpenroadmVersion._121)
             .build();
         return nodes;
     }

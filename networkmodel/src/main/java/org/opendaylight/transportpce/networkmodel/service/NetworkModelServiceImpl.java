@@ -23,8 +23,10 @@ import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.ClliNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev190702.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.transportpce.networkmodel.util.OpenRoadmOtnTopology22;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -50,6 +52,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private final OpenRoadmFactory openRoadmFactory;
     private final PortMapping portMapping;
     private HashMap<String,TopologyShard> topologyShardMountedDevice;
+    private HashMap<String,TopologyShard> otnTopologyShardMountedDevice;
 
     public NetworkModelServiceImpl(final NetworkTransactionService networkTransactionService,
         final R2RLinkDiscovery linkDiscovery, DeviceTransactionManager deviceTransactionManager,
@@ -61,6 +64,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         this.openRoadmFactory = openRoadmFactory;
         this.portMapping = portMapping;
         this.topologyShardMountedDevice = new HashMap<String,TopologyShard>();
+        this.otnTopologyShardMountedDevice = new HashMap<String,TopologyShard>();
     }
 
     public void init() {
@@ -131,6 +135,28 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     .build();
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink,
                     openRoadmTopologyLink, CREATE_MISSING_PARENTS);
+            }
+            if (nodeInfo.getNodeType().equals(NodeTypes.Xpdr) && (nodeInfo.getOpenroadmVersion().getIntValue() != 1)) {
+                TopologyShard otnTopologyShard = new OpenRoadmOtnTopology22(this.networkTransactionService,
+                    this.deviceTransactionManager).createTopologyShard(portMapping.getNode(nodeId));
+                if (otnTopologyShard == null) {
+                    LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
+                    return;
+                }
+                this.otnTopologyShardMountedDevice.put(nodeId, otnTopologyShard);
+
+                for (Node openRoadmOtnTopologyNode: otnTopologyShard.getNodes()) {
+                    LOG.info("creating node {} in {}", openRoadmOtnTopologyNode.getNodeId().getValue(),
+                            // NetworkUtils.OVERLAY_NETWORK_ID);
+                            NetworkUtils.OTN_NETWORK_ID);
+                    InstanceIdentifier<Node> iiOpenRoadmOtnTopologyNode = InstanceIdentifier.builder(Networks.class)
+                            // .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                            .child(Node.class, openRoadmOtnTopologyNode.key())
+                            .build();
+                    networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmOtnTopologyNode,
+                            openRoadmOtnTopologyNode);
+                }
             }
             networkTransactionService.commit().get();
             LOG.info("all nodes and links created");

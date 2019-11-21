@@ -16,6 +16,7 @@
     <bean id="openRoadmFactory" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory">
         <argument ref="mappingUtils" />
         <argument ref="openRoadmTopology22" />
+        <argument ref="openRoadmOtnTopology22" />
     </bean>
 
     <bean id="openRoadmTopology22" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology22">
@@ -23,6 +24,10 @@
         <argument ref="deviceTransactionManager" />
     </bean>
 
+    <bean id="openRoadmOtnTopology22" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmOtnTopology22">
+        <argument ref="networkTransactionImpl" />
+        <argument ref="deviceTransactionManager" />
+    </bean>
 
     <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
         <argument ref="networkTransactionImpl" />

@@ -15,6 +15,10 @@ module transportpce-portmapping {
     AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
     ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
 
+  revision "2019-11-15" {
+    description "OTN support";
+  }
+
   revision 2019-07-02 {
     description
         "Version 2. To manage device 2.2.1";
@@ -113,6 +117,21 @@ module transportpce-portmapping {
           description
              "Useful to identify from portmapping client from network ports
              of XPDR";
+        }
+        leaf supporting-ethernet{
+          type string;
+          description
+            "Ethernet interface provisioned on the port";
+         }
+         leaf supporting-odu4{
+           type string;
+           description
+             "ODU4 interface provisioned on the port";
+         }
+         leaf rate{
+            type string;
+            description
+              "Rate supported by the port";
         }
         leaf associated-lcp {
           type string;
