@@ -46,6 +46,15 @@ def start_xpdrc_honeynode():
                 [executable, "17844", "sample_configs/openroadm/2.2.1/oper-XPDRC.xml"],
                 stdout=outfile)
 
+def start_spdra_honeynode():
+    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
+                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    if os.path.isfile(executable):
+        with open('honeynode6.log', 'w') as outfile:
+            return subprocess.Popen(
+                [executable, "17845", "sample_configs/openroadm/2.2.1/oper-SPDRAv2.xml"],
+                stdout=outfile)
+
 def start_tpce():
     if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
         print ("starting LIGHTY.IO TransportPCE build...")
