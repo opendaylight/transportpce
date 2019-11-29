@@ -37,7 +37,7 @@ public class NetworkTransactionImpl implements NetworkTransactionService {
         requestProcessor.delete(store, path);
     }
 
-
+    @Deprecated
     public <T extends DataObject> void put(LogicalDatastoreType store,
         InstanceIdentifier<T> path, T data, boolean createMissingParents) {
 
@@ -65,6 +65,7 @@ public class NetworkTransactionImpl implements NetworkTransactionService {
         requestProcessor.merge(store, path, data);
     }
 
+    @Deprecated
     public <T extends DataObject> void merge(LogicalDatastoreType store,
         InstanceIdentifier<T> path, T data, boolean createMissingParents) {
 
