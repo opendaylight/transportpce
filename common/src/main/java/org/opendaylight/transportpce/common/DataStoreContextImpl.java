@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.concurrent.Executors;
-import javassist.ClassPool;
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -26,12 +25,10 @@ import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMDataBrokerAdapter;
 import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMNotificationPublishServiceAdapter;
 import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMNotificationServiceAdapter;
 import org.opendaylight.mdsal.binding.dom.adapter.BindingToNormalizedNodeCodec;
-import org.opendaylight.mdsal.binding.dom.codec.gen.impl.StreamWriterGenerator;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
 import org.opendaylight.mdsal.binding.generator.impl.GeneratedClassLoadingStrategy;
 import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
 import org.opendaylight.mdsal.binding.generator.util.BindingRuntimeContext;
-import org.opendaylight.mdsal.binding.generator.util.JavassistUtils;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 import org.opendaylight.mdsal.dom.api.DOMSchemaService;
@@ -235,9 +232,7 @@ public class DataStoreContextImpl implements DataStoreContext {
             BindingRuntimeContext bindingContext =
                 BindingRuntimeContext.create(this.moduleInfoBackedCntxt, this.schemaContext);
             BindingNormalizedNodeCodecRegistry bindingNormalizedNodeCodecRegistry =
-                    new BindingNormalizedNodeCodecRegistry(
-                            StreamWriterGenerator.create(JavassistUtils.forClassPool(ClassPool.getDefault())));
-            bindingNormalizedNodeCodecRegistry.onBindingRuntimeContextUpdated(bindingContext);
+                    new BindingNormalizedNodeCodecRegistry(bindingContext);
             return bindingNormalizedNodeCodecRegistry;
         }
 
