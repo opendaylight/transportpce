@@ -61,6 +61,7 @@ public class RequestProcessor {
         rwTx.delete(store, path);
     }
 
+    @Deprecated
     public <T extends DataObject> void put(LogicalDatastoreType store,
         InstanceIdentifier<T> path, T data, boolean createMissingParents) {
 
@@ -77,7 +78,7 @@ public class RequestProcessor {
         rwTx.put(store, path, data);
     }
 
-
+    @Deprecated
     public <T extends DataObject> void merge(LogicalDatastoreType store,
         InstanceIdentifier<T> path, T data, boolean createMissingParents) {
 
