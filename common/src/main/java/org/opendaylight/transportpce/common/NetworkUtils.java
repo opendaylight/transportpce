@@ -18,6 +18,8 @@ public final class NetworkUtils {
 
     public static final String OVERLAY_NETWORK_ID = "openroadm-topology";
 
+    public static final String OTN_NETWORK_ID = "otn-topology";
+
     public enum Operation {
         CREATE,
         DELETE

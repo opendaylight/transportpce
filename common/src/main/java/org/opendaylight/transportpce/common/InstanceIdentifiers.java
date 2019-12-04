@@ -30,8 +30,12 @@ public final class InstanceIdentifiers {
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))).build();
 
     public static final InstanceIdentifier<Network> OVERLAY_NETWORK_II = InstanceIdentifier
-            .builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
+        .builder(Networks.class)
+        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
+
+    public static final InstanceIdentifier<Network> OTN_NETWORK_II = InstanceIdentifier
+        .builder(Networks.class)
+        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID))).build();
 
     public static final InstanceIdentifier<Network> CLLI_NETWORK_II = InstanceIdentifier
             .builder(Networks.class)
