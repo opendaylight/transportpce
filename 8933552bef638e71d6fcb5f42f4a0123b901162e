@@ -56,6 +56,52 @@
       "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22debe64_6c16363a",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-06T10:31:44Z",
+      "side": 1,
+      "message": "this has changed since Neon",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 33
+      },
+      "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd5d9cdf_eb310985",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-06T10:31:44Z",
+      "side": 1,
+      "message": "not sure it is still valid too.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 17
+      },
+      "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
