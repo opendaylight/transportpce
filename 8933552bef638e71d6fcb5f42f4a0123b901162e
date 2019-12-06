@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c2df279f_769be0f6",
+        "filename": "api/src/main/java/org/opendaylight/yang/gen/v1/gnpy/path/rev190502/AccumulatedMetricTypeBuilder.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-06T11:51:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c423f09_7a14ee8a",
+      "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8b73c3a_2a28a2ae",
         "filename": "api/src/main/java/org/opendaylight/yang/gen/v1/gnpy/path/rev190502/TeTpIdBuilder.java",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b925473_a9847768",
+        "filename": "api/src/main/java/org/opendaylight/yang/gen/v1/gnpy/path/rev190502/TeTpIdBuilder.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-06T11:51:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8b73c3a_2a28a2ae",
+      "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "4cc81603_205e2566",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-06T11:51:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9a9a404_442c309a",
+      "range": {
+        "startLine": 3,
+        "startChar": 10,
+        "endLine": 3,
+        "endChar": 23
+      },
+      "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22debe64_6c16363a",
         "filename": "ocmodels/pom.xml",
         "patchSetId": 6
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "100f2e87_b2e4070d",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-06T11:51:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22debe64_6c16363a",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 33
+      },
+      "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd5d9cdf_eb310985",
         "filename": "ocmodels/pom.xml",
         "patchSetId": 6
@@ -102,6 +186,30 @@
       "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4ffa85d_a59ca211",
+        "filename": "ocmodels/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-06T11:51:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd5d9cdf_eb310985",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 17
+      },
+      "revId": "8933552bef638e71d6fcb5f42f4a0123b901162e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
