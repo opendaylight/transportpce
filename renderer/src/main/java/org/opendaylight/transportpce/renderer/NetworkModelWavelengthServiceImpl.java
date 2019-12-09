@@ -232,7 +232,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                     // TODO skip for now
                     continue;
             }
-            nodeWriteTx.put(LogicalDatastoreType.CONFIGURATION, createNode1IID(nodeId), node1Builder.build(), true);
+            nodeWriteTx.put(LogicalDatastoreType.CONFIGURATION, createNode1IID(nodeId), node1Builder.build());
         }
         try {
             nodeWriteTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
@@ -547,7 +547,7 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                     continue;
             }
             addUsedWlTx.put(LogicalDatastoreType.CONFIGURATION, createTerminationPoint1IIDBuilder(idPair.getNodeID(),
-                    idPair.getTpID()).build(), tp1Builder.build(), true);
+                    idPair.getTpID()).build(), tp1Builder.build());
         }
         try {
             addUsedWlTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
