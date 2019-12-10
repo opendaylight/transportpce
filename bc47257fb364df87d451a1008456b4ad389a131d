@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "76cfb25b_c38cb80b",
+        "filename": "api/src/main/java/org/opendaylight/yang/gen/v1/gnpy/path/rev190502/AccumulatedMetricTypeBuilder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-10T15:38:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "013ee490_05db3907",
+      "revId": "bc47257fb364df87d451a1008456b4ad389a131d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "972fecaf_112d2b2c",
         "filename": "api/src/main/java/org/opendaylight/yang/gen/v1/gnpy/path/rev190502/TeTpIdBuilder.java",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "bc47257fb364df87d451a1008456b4ad389a131d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "152699cd_e1edce3f",
+        "filename": "api/src/main/java/org/opendaylight/yang/gen/v1/gnpy/path/rev190502/TeTpIdBuilder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-10T15:38:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "972fecaf_112d2b2c",
+      "revId": "bc47257fb364df87d451a1008456b4ad389a131d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
