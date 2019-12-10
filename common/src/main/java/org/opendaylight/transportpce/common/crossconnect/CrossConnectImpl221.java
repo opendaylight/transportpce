@@ -29,14 +29,18 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Op
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PowerDBm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.GetConnectionPortTrailInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.GetConnectionPortTrailOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OduConnection.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.connection.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.connection.SourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.get.connection.port.trail.output.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.Nodes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
@@ -60,19 +64,17 @@ public class CrossConnectImpl221 {
 
 
     public Optional<String> postCrossConnect(String deviceId, Long waveNumber, String srcTp, String destTp) {
-        RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder();
         String connectionNumber = generateConnectionName(srcTp, destTp, waveNumber);
-        rdmConnBldr.setConnectionName(connectionNumber);
+        RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder()
+                .setConnectionName(connectionNumber)
+                .setOpticalControlMode(OpticalControlMode.Off)
+                .setSource(new SourceBuilder().setSrcIf(srcTp + "-nmc-" + waveNumber).build())
+                .setDestination(new DestinationBuilder().setDstIf(destTp + "-nmc-" + waveNumber)
+                .build());
 
-        rdmConnBldr.setOpticalControlMode(OpticalControlMode.Off);
-
-        rdmConnBldr.setSource(new SourceBuilder().setSrcIf(srcTp + "-nmc-" + waveNumber).build());
-
-        rdmConnBldr.setDestination(new DestinationBuilder().setDstIf(destTp + "-nmc-" + waveNumber).build());
-
-
-        InstanceIdentifier<RoadmConnections> rdmConnectionIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(RoadmConnections.class, new RoadmConnectionsKey(rdmConnBldr.getConnectionName()));
+        InstanceIdentifier<RoadmConnections> rdmConnectionIID =
+                InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                    .child(RoadmConnections.class, new RoadmConnectionsKey(rdmConnBldr.getConnectionName()));
 
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
         DeviceTransaction deviceTx;
@@ -245,5 +247,54 @@ public class CrossConnectImpl221 {
 
     private String generateConnectionName(String srcTp, String destTp, Long waveNumber) {
         return srcTp + "-" + destTp + "-" + waveNumber;
+    }
+
+    public Optional<String> postOtnCrossConnect(List<String> createdOduInterfaces, Nodes node) {
+        String deviceId = node.getNodeId();
+        String srcTp = createdOduInterfaces.get(0);
+        String dstTp = createdOduInterfaces.get(1);
+        OduConnectionBuilder oduConnectionBuilder = new OduConnectionBuilder()
+            .setConnectionName(srcTp + "-x-" + dstTp)
+            .setDestination(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.odu.connection
+                .DestinationBuilder().setDstIf(dstTp).build())
+            .setSource(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.odu.connection
+                .SourceBuilder().setSrcIf(srcTp).build())
+            .setDirection(Direction.Bidirectional);
+
+        InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
+                .container.org.openroadm.device.OduConnection> oduConnectionIID =
+            InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
+                        .container.org.openroadm.device.OduConnection.class,
+                    new OduConnectionKey(oduConnectionBuilder.getConnectionName())
+                );
+
+        Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
+        DeviceTransaction deviceTx;
+        try {
+            Optional<DeviceTransaction> deviceTxOpt = deviceTxFuture.get();
+            if (deviceTxOpt.isPresent()) {
+                deviceTx = deviceTxOpt.get();
+            } else {
+                LOG.error("Device transaction for device {} was not found!", deviceId);
+                return Optional.empty();
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Unable to obtain device transaction for device {}!", deviceId, e);
+            return Optional.empty();
+        }
+
+        // post the cross connect on the device
+        deviceTx.merge(LogicalDatastoreType.CONFIGURATION, oduConnectionIID, oduConnectionBuilder.build());
+        FluentFuture<? extends @NonNull CommitInfo> commit =
+                deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
+        try {
+            commit.get();
+            LOG.info("Otn-connection successfully created: {}-{}", srcTp, dstTp);
+            return Optional.of(srcTp + "-x-" + dstTp);
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.warn("Failed to post {}. Exception: {}", oduConnectionBuilder.build(), e);
+        }
+        return Optional.empty();
     }
 }

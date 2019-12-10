@@ -23,13 +23,14 @@ public class OpenRoadmInterfaceFactory {
     private final MappingUtils mappingUtils;
     private final OpenRoadmInterface121 openRoadmInterface121;
     private final OpenRoadmInterface221 openRoadmInterface221;
-
+    private final OpenRoadmOTNInterface openRoadmOTNInterface;
 
     public OpenRoadmInterfaceFactory(MappingUtils mappingUtils, OpenRoadmInterface121 openRoadmInterface121,
-        OpenRoadmInterface221 openRoadmInterface221) {
+        OpenRoadmInterface221 openRoadmInterface221, OpenRoadmOTNInterface openRoadmOTNInterface) {
         this.mappingUtils = mappingUtils;
         this.openRoadmInterface121 = openRoadmInterface121;
         this.openRoadmInterface221 = openRoadmInterface221;
+        this.openRoadmOTNInterface = openRoadmOTNInterface;
     }
 
     public String createOpenRoadmEthInterface(String nodeId, String logicalConnPoint)
@@ -175,5 +176,35 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
+    public String createOpenRoadmEth1GInterface(String nodeId,
+                                                String logicalConnPoint) throws OpenRoadmInterfaceException {
+        return openRoadmOTNInterface.createOpenRoadmEth1GInterface(nodeId,logicalConnPoint);
+    }
+
+    public String createOpenRoadmEth10GInterface(String nodeId,
+                                                 String logicalConnPoint) throws OpenRoadmInterfaceException {
+        return openRoadmOTNInterface.createOpenRoadmEth10GInterface(nodeId,logicalConnPoint);
+    }
+
+    public String createOpenRoadmOdu0Interface(String nodeId, String logicalConnPoint, String servicename,
+            String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlot)
+            throws OpenRoadmInterfaceException {
+        return openRoadmOTNInterface.createOpenRoadmOdu0Interface(nodeId, logicalConnPoint, servicename, payLoad,
+            isNetworkPort, tribPortNumber, tribSlot);
+    }
+
+    public String createOpenRoadmOdu2Interface(String nodeId, String logicalConnPoint, String servicename,
+        String payLoad, boolean isNetworkPort)
+            throws OpenRoadmInterfaceException {
+        return openRoadmOTNInterface.createOpenRoadmOdu2Interface(nodeId, logicalConnPoint, servicename, payLoad,
+            isNetworkPort);
+    }
+
+    public String createOpenRoadmOdu2eInterface(String nodeId, String logicalConnPoint, String servicename,
+        String payLoad, boolean isNetworkPort)
+            throws OpenRoadmInterfaceException {
+        return openRoadmOTNInterface.createOpenRoadmOdu2eInterface(nodeId, logicalConnPoint, servicename, payLoad,
+            isNetworkPort);
+    }
 
 }

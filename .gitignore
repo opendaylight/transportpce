@@ -22,8 +22,8 @@ classes
 ordmodels/src/main/java
 tests/config.xml
 tests/models
-
+api/src/main/java/org/opendaylight/yang/gen/v1/gnpy/path/rev190502/TeTpIdBuilder.java
+api/src/main/java/org/opendaylight/yang/gen/v1/gnpy/path/rev190502/AccumulatedMetricTypeBuilder.java
 # Sphinx documentation
 .tox/
 docs/_build/
-

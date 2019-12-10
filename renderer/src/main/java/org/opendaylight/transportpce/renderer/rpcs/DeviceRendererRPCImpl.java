@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.renderer.rpcs;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
+import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.CreateOtsOmsInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.CreateOtsOmsOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInput;
@@ -31,9 +32,12 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceRendererRPCImpl.class);
     private DeviceRendererService deviceRenderer;
+    private OtnDeviceRendererService otnDeviceRendererService;
 
-    public DeviceRendererRPCImpl(DeviceRendererService deviceRenderer) {
+    public DeviceRendererRPCImpl(DeviceRendererService deviceRenderer,
+                                 OtnDeviceRendererService otnDeviceRendererService) {
         this.deviceRenderer = deviceRenderer;
+        this.otnDeviceRendererService = otnDeviceRendererService;
     }
 
     /**
@@ -74,9 +78,14 @@ public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService 
 
     @Override
     public ListenableFuture<RpcResult<OtnServicePathOutput>> otnServicePath(OtnServicePathInput input) {
-        return RpcResultBuilder
-                    .success(new OtnServicePathOutputBuilder().setResult("Unsupported operation"))
-                    .buildFuture();
+        if (input.getOperation().getIntValue() == 1) {
+            LOG.info("Create operation request received");
+            return RpcResultBuilder.success(this.otnDeviceRendererService.setupOtnServicePath(input)).buildFuture();
+        } else if (input.getOperation().getIntValue() == 2) {
+            LOG.info("Delete operation request received");
+            return RpcResultBuilder.success(this.otnDeviceRendererService.deleteOtnServicePath(input)).buildFuture();
+        }
+        return RpcResultBuilder.success(new OtnServicePathOutputBuilder().setResult("Invalid operation")).buildFuture();
     }
 
     /**

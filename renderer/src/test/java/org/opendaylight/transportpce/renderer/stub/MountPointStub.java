@@ -23,7 +23,6 @@ public class MountPointStub  implements MountPoint {
     private RpcConsumerRegistry rpcConsumerRegistry;
 
     public MountPointStub(DataBroker dataBroker) {
-
         this.dataBroker = dataBroker;
     }
 
