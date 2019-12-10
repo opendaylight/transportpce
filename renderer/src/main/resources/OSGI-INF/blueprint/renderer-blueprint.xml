@@ -40,11 +40,18 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="FixedFlexImpl"/>
   </bean>
 
+  <bean id="openRoadmOtnInterface"
+        class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOTNInterface">
+    <argument ref="portMapping"/>
+    <argument ref="openRoadmInterfaces"/>
+  </bean>
+
   <bean id="openRoadmInterfaceFactory"
         class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory">
     <argument ref="mappingUtils"/>
     <argument ref="openRoadmInterface121"/>
     <argument ref="openRoadmInterface221"/>
+    <argument ref="openRoadmOtnInterface"/>
   </bean>
 
   <bean id="deviceRenderer" class="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererServiceImpl" >
@@ -56,8 +63,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="portMapping" />
   </bean>
 
+  <bean id="otnDeviceRenderer" class="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererServiceImpl" >
+    <argument ref="openRoadmInterfaceFactory" />
+    <argument ref="crossConnect" />
+  </bean>
+
     <bean id="deviceRendererRPCImpl" class="org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl" >
     <argument ref="deviceRenderer" />
+    <argument ref="otnDeviceRenderer" />
   </bean>
 
   <bean id="networkModelWavelengthService"

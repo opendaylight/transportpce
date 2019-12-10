@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
+import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.CreateOtsOmsInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.RendererRollbackInput;
@@ -21,6 +22,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 
 public class DeviceRendererRPCImplTest extends AbstractTest {
     private final DeviceRendererService deviceRenderer = Mockito.mock(DeviceRendererService.class);
+    private final OtnDeviceRendererService otnDeviceRenderer = Mockito.mock(OtnDeviceRendererService.class);
     private final ServicePathInput servicePathInput = Mockito.spy(ServicePathInput.class);
     private final CreateOtsOmsInput createOtsOmsInput = Mockito.mock(CreateOtsOmsInput.class);
     private final RendererRollbackInput rendererRollbackInput = Mockito.mock(RendererRollbackInput.class);
@@ -29,7 +31,7 @@ public class DeviceRendererRPCImplTest extends AbstractTest {
     @Before
     public void setup() {
 
-        deviceRendererRPC = new DeviceRendererRPCImpl(deviceRenderer);
+        deviceRendererRPC = new DeviceRendererRPCImpl(deviceRenderer, otnDeviceRenderer);
     }
 
 
