@@ -101,6 +101,20 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
     }
 
+    @Override
+    public <T> void postOTNInterface(String nodeId, T ifBuilder) throws OpenRoadmInterfaceException {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder
+                ifBuilder22 = (org.opendaylight.yang.gen.v1.http.org.openroadm
+                .device.rev181019.interfaces.grp.InterfaceBuilder) ifBuilder;
+        openRoadmInterfacesImpl221.postInterface(nodeId,ifBuilder22);
+    }
+
+    @Override
+    public void postOTNEquipmentState(String nodeId, String circuitPackName, boolean activate)
+        throws OpenRoadmInterfaceException {
+        openRoadmInterfacesImpl221.postEquipmentState(nodeId, circuitPackName, activate);
+    }
+
     private <T> T convertInstanceOfInterface(Object object, Class<T> classToCast) {
         try {
             return classToCast.cast(object);

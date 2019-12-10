@@ -81,4 +81,28 @@ public interface OpenRoadmInterfaces {
      */
     void deleteInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException;
 
+    /**
+     * This methods does an edit-config operation on the openROADM device in
+     * order to create the OTN given interface.
+     *
+     * @param nodeId node ID
+     * @param ifBuilder Builder object containing the data to post
+     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
+     */
+    <T> void postOTNInterface(String nodeId, T ifBuilder) throws OpenRoadmInterfaceException;
+
+    /**
+     * This methods does an edit-config operation on the openROADM device in
+     * order to manages the equipment-state status of the circuit pack on which
+     * OTN interfaces are created.
+     *
+     * @param nodeId node ID
+     * @param circuitPackName Circtuit-Pack name
+     * @param activate activate or not
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm Interface Exception
+     */
+    void postOTNEquipmentState(String nodeId, String circuitPackName, boolean activate)
+        throws OpenRoadmInterfaceException;
+
 }

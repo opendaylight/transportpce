@@ -38,6 +38,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface221;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
+import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOTNInterface;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.utils.CreateOtsOmsDataUtils;
 import org.opendaylight.transportpce.renderer.utils.MountPointUtils;
@@ -83,8 +84,9 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
         OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping,openRoadmInterfaces,
             fixedFlexInterface);
+        OpenRoadmOTNInterface openRoadmOTNInterface = new OpenRoadmOTNInterface(portMapping, openRoadmInterfaces);
         this.openRoadmInterfaceFactory = new OpenRoadmInterfaceFactory(this.mappingUtils,openRoadmInterface121,
-            openRoadmInterface221);
+            openRoadmInterface221, openRoadmOTNInterface);
 
         this.crossConnectImpl121 = new CrossConnectImpl121(this.deviceTransactionManager);
         this.crossConnectImpl221 = new CrossConnectImpl221(this.deviceTransactionManager);

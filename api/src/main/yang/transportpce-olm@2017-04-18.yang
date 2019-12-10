@@ -112,7 +112,7 @@ module transportpce-olm {
           }
         }
         description
-          "Soruce type defines whether RPC runs for all links or given link Id";
+          "Source type defines whether RPC runs for all links or given link Id";
       }
       leaf link-id {
         when "../src-type = 'link'";

@@ -18,6 +18,7 @@ import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.Nodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,5 +103,11 @@ public class CrossConnectImpl implements CrossConnect {
             return crossConnectImpl221.setPowerLevel(nodeId,mode,powerValue,connectionNumber);
         }
         return false;
+    }
+
+    @Override
+    public Optional<String> postOtnCrossConnect(List<String> createdOduInterfaces, Nodes node)
+            throws OpenRoadmInterfaceException {
+        return crossConnectImpl221.postOtnCrossConnect(createdOduInterfaces, node);
     }
 }
