@@ -504,7 +504,6 @@
                         "source-tp": "DEG1-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-2-DEG1-to-OpenROADM-1-DEG1",
                         "span": {
                             "spanloss-base": 28.4,
                             "link-concatenation": [
@@ -517,12 +516,12 @@
                             ],
                             "spanloss-current": 29,
                             "engineered-spanloss": 30.2,
-                            "clfi": "fiber12",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber12",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG1",
@@ -537,7 +536,6 @@
                         "source-tp": "DEG2-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-3-DEG1-to-OpenROADM-1-DEG2",
                         "span": {
                             "spanloss-base": 11.4,
                             "link-concatenation": [
@@ -550,12 +548,12 @@
                             ],
                             "spanloss-current": 12,
                             "engineered-spanloss": 12.2,
-                            "clfi": "fiber13",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber13",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG1",
@@ -570,7 +568,6 @@
                         "source-tp": "DEG1-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-1-DEG1-to-OpenROADM-2-DEG1",
                         "span": {
                             "spanloss-base": 28.4,
                             "link-concatenation": [
@@ -583,12 +580,12 @@
                             ],
                             "spanloss-current": 29,
                             "engineered-spanloss": 30.2,
-                            "clfi": "fiber21",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber21",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG1",
@@ -603,7 +600,6 @@
                         "source-tp": "DEG2-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-3-DEG2-to-OpenROADM-2-DEG2",
                         "span": {
                             "spanloss-base": 28.4,
                             "link-concatenation": [
@@ -616,12 +612,12 @@
                             ],
                             "spanloss-current": 29,
                             "engineered-spanloss": 30.2,
-                            "clfi": "fiber23",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber23",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG2",
@@ -636,7 +632,6 @@
                         "source-tp": "DEG3-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-5-DEG3-to-OpenROADM-2-DEG3",
                         "span": {
                             "spanloss-base": 7.1,
                             "link-concatenation": [
@@ -649,12 +644,12 @@
                             ],
                             "spanloss-current": 7.2,
                             "engineered-spanloss": 7.5,
-                            "clfi": "fiber25",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber25",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG3",
@@ -669,7 +664,6 @@
                         "source-tp": "DEG1-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-1-DEG2-to-OpenROADM-3-DEG1",
                         "span": {
                             "spanloss-base": 11.4,
                             "link-concatenation": [
@@ -682,12 +676,12 @@
                             ],
                             "spanloss-current": 12,
                             "engineered-spanloss": 12.2,
-                            "clfi": "fiber31",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber31",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG2",
@@ -702,7 +696,6 @@
                         "source-tp": "DEG2-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-2-DEG2-to-OpenROADM-3-DEG2",
                         "span": {
                             "spanloss-base": 28.4,
                             "link-concatenation": [
@@ -715,12 +708,12 @@
                             ],
                             "spanloss-current": 29,
                             "engineered-spanloss": 30.2,
-                            "clfi": "fiber32",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber32",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG2",
@@ -735,7 +728,6 @@
                         "source-tp": "DEG3-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-5-DEG2-to-OpenROADM-3-DEG3",
                         "span": {
                             "spanloss-base": 7.1,
                             "link-concatenation": [
@@ -748,12 +740,12 @@
                             ],
                             "spanloss-current": 7.2,
                             "engineered-spanloss": 7.5,
-                            "clfi": "fiber35",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber35",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG2",
@@ -768,7 +760,6 @@
                         "source-tp": "DEG2-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-4-DEG2-to-OpenROADM-3-DEG4",
                         "span": {
                             "spanloss-base": 28.4,
                             "link-concatenation": [
@@ -781,12 +772,12 @@
                             ],
                             "spanloss-current": 29,
                             "engineered-spanloss": 30.2,
-                            "clfi": "fiber34",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber34",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG2",
@@ -801,7 +792,6 @@
                         "source-tp": "DEG1-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-4-DEG1-to-OpenROADM-5-DEG1",
                         "span": {
                             "spanloss-base": 28.4,
                             "link-concatenation": [
@@ -814,12 +804,12 @@
                             ],
                             "spanloss-current": 29,
                             "engineered-spanloss": 30.2,
-                            "clfi": "fiber45",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber45",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG1",
@@ -834,7 +824,6 @@
                         "source-tp": "DEG2-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-3-DEG4-to-OpenROADM-4-DEG2",
                         "span": {
                             "spanloss-base": 28.4,
                             "link-concatenation": [
@@ -847,12 +836,12 @@
                             ],
                             "spanloss-current": 29,
                             "engineered-spanloss": 30.2,
-                            "clfi": "fiber43",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber43",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG4",
@@ -867,7 +856,6 @@
                         "source-tp": "DEG1-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-4-DEG1-to-OpenROADM-5-DEG1",
                         "span": {
                             "spanloss-base": 28.4,
                             "link-concatenation": [
@@ -880,12 +868,12 @@
                             ],
                             "spanloss-current": 29,
                             "engineered-spanloss": 30.2,
-                            "clfi": "fiber54",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber54",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG1",
@@ -900,7 +888,6 @@
                         "source-tp": "DEG2-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-3-DEG3-to-OpenROADM-5-DEG2",
                         "span": {
                             "spanloss-base": 7.1,
                             "link-concatenation": [
@@ -913,12 +900,12 @@
                             ],
                             "spanloss-current": 7.2,
                             "engineered-spanloss": 7.5,
-                            "clfi": "fiber53",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber53",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG3",
@@ -933,7 +920,6 @@
                         "source-tp": "DEG3-TTP-TX"
                     },
                     "org-openroadm-network-topology:OMS-attributes": {
-                        "opposite-link": "OpenROADM-2-DEG3-to-OpenROADM-5-DEG3",
                         "span": {
                             "spanloss-base": 7.1,
                             "link-concatenation": [
@@ -946,12 +932,12 @@
                             ],
                             "spanloss-current": 7.2,
                             "engineered-spanloss": 7.5,
-                            "clfi": "fiber52",
                             "auto-spanloss": true
-                        },
-                        "TE-metric": 10
+                        }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
+                    "org-openroadm-common-network:clfi": "fiber52",
+                    "org-openroadm-common-network:TE-metric": 10,
                     "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG3",
