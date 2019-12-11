@@ -267,7 +267,6 @@ class TransportPCEFulltesting(unittest.TestCase):
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
-            "clfi": "fiber1",
             "auto-spanloss": "true",
             "spanloss-base": 11.4,
             "spanloss-current": 12,
@@ -290,7 +289,6 @@ class TransportPCEFulltesting(unittest.TestCase):
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
-            "clfi": "fiber1",
             "auto-spanloss": "true",
             "spanloss-base": 11.4,
             "spanloss-current": 12,
@@ -947,7 +945,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
 # add a test that check the openroadm-service-list still only contains 2 elements
-
     def test_29_delete_eth_service3(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
               .format(self.restconf_baseurl))

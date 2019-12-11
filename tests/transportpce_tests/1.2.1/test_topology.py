@@ -494,13 +494,12 @@ class TransportPCETopologyTesting(unittest.TestCase):
         time.sleep(20)
 
     def test_14_omsAttributes_ROADMA_ROADMC(self):
-        # Config ROADMA-ROADMC oms-attributes
+        # Config ROADMA01-ROADMC01 oms-attributes
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
                "link/ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
-            "clfi": "fiber1",
             "auto-spanloss": "true",
             "engineered-spanloss": 12.2,
             "link-concatenation": [{
@@ -521,7 +520,6 @@ class TransportPCETopologyTesting(unittest.TestCase):
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
-            "clfi": "fiber1",
             "auto-spanloss": "true",
             "engineered-spanloss": 12.2,
             "link-concatenation": [{
@@ -790,10 +788,10 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_21_connect_ROADMB(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMB"
+                "network-topology/topology/topology-netconf/node/ROADMB01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADMB",
+             "node-id": "ROADMB01",
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
@@ -808,13 +806,12 @@ class TransportPCETopologyTesting(unittest.TestCase):
         time.sleep(20)
 
     def test_22_omsAttributes_ROADMA_ROADMB(self):
-        # Config ROADMA-ROADMB oms-attributes
+        # Config ROADMA01-ROADMB01 oms-attributes
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
+               "link/ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB01-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
-                "clfi": "fiber1",
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
                 "link-concatenation": [{
@@ -829,13 +826,12 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_23_omsAttributes_ROADMB_ROADMA(self):
-        # Config ROADMB-ROADMA oms-attributes
+        # Config ROADMB01-ROADMA01 oms-attributes
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMB-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
+               "link/ROADMB01-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
-                "clfi": "fiber1",
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
                 "link-concatenation": [{
@@ -850,13 +846,12 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_24_omsAttributes_ROADMB_ROADMC(self):
-        # Config ROADMB-ROADMC oms-attributes
+        # Config ROADMB01-ROADMC01 oms-attributes
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMB-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
+               "link/ROADMB01-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
-                "clfi": "fiber1",
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
                 "link-concatenation": [{
@@ -871,13 +866,12 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_25_omsAttributes_ROADMC_ROADMB(self):
-        # Config ROADMC01-ROADMB oms-attributes
+        # Config ROADMC01-ROADMB01 oms-attributes
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
+               "link/ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB01-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
-                "clfi": "fiber1",
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
                 "link-concatenation": [{
@@ -925,8 +919,8 @@ class TransportPCETopologyTesting(unittest.TestCase):
         #Tests related to links
         nbLink=len(res['network'][0]['ietf-network-topology:link'])
         listR2RLink=['ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX','ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX',
-           'ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB-DEG1-DEG1-TTP-TXRX','ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB-DEG2-DEG2-TTP-TXRX',
-           'ROADMB-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX','ROADMB-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX']
+           'ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB01-DEG1-DEG1-TTP-TXRX','ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB01-DEG2-DEG2-TTP-TXRX',
+           'ROADMB01-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX','ROADMB01-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX']
         for i in range(0,nbLink):
             if res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type'] == 'ROADM-TO-ROADM':
                 link_id = res['network'][0]['ietf-network-topology:link'][i]['link-id']
@@ -987,10 +981,10 @@ class TransportPCETopologyTesting(unittest.TestCase):
         nbLink=len(res['network'][0]['ietf-network-topology:link'])
         R2RLink = ['ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX',
                        'ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX',
-                       'ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB-DEG1-DEG1-TTP-TXRX',
-                       'ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB-DEG2-DEG2-TTP-TXRX',
-                       'ROADMB-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX',
-                       'ROADMB-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX']
+                       'ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB01-DEG1-DEG1-TTP-TXRX',
+                       'ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB01-DEG2-DEG2-TTP-TXRX',
+                       'ROADMB01-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX',
+                       'ROADMB01-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX']
         for i in range(0,nbLink):
             nodeType = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type']
             link_id=res['network'][0]['ietf-network-topology:link'][i]['link-id']
@@ -1009,7 +1003,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
     def test_30_disconnect_ROADMB(self):
         #Delete in the topology-netconf
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADMB"
+                "network-topology/topology/topology-netconf/node/ROADMB01"
                .format(self.restconf_baseurl))
         data = {}
         headers = {'content-type': 'application/json'}
@@ -1143,7 +1137,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(nbNode,2)
         for i in range(0,nbNode-1):
             self.assertNotEqual(res['network'][0]['node'][i]['node-id'],'ROADMC01')
-            self.assertNotEqual(res['network'][0]['node'][i]['node-id'],'ROADMB')
+            self.assertNotEqual(res['network'][0]['node'][i]['node-id'],'ROADMB01')
 
     def test_34_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
