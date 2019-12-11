@@ -15,15 +15,15 @@
       <clli>NodeC</clli>
       <vendor>vendorA</vendor>
       <model>model2</model>
-      <serial-id>nodeid-1234</serial-id>
-      <ipAddress>1.2.3.4</ipAddress>
+      <serial-id>nodeid-1235</serial-id>
+      <ipAddress>1.2.3.5</ipAddress>
       <prefix-length>24</prefix-length>
-      <defaultGateway>1.2.3.4</defaultGateway>
+      <defaultGateway>1.2.3.5</defaultGateway>
       <source>static</source>
-      <current-ipAddress>1.2.3.4</current-ipAddress>
+      <current-ipAddress>1.2.3.5</current-ipAddress>
       <current-prefix-length>10</current-prefix-length>
       <current-defaultGateway>1.2.3.1</current-defaultGateway>
-      <macAddress>00:01:02:03:04:05</macAddress>
+      <macAddress>00:01:02:03:04:06</macAddress>
       <softwareVersion>swversion1234</softwareVersion>
       <openroadm-version>2.2</openroadm-version>
       <template>template_TRANSPONDER</template>

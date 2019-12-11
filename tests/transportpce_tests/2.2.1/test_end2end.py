@@ -290,7 +290,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                "OMS-attributes/span"
                .format(self.restconf_baseurl))
         data = {"span": {
-            "clfi": "fiber1",
+            "clfi": "fiber2",
             "auto-spanloss": "true",
             "spanloss-base": 11.4,
             "spanloss-current": 12,

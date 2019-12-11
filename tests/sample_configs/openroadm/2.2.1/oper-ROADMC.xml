@@ -16,11 +16,11 @@
       <vendor>vendorA</vendor>
       <model>model2</model>
       <serial-id>0002</serial-id>
-      <ipAddress>127.0.0.11</ipAddress>
+      <ipAddress>127.0.0.13</ipAddress>
       <prefix-length>28</prefix-length>
       <defaultGateway>127.0.0.20</defaultGateway>
       <source>static</source>
-      <current-ipAddress>127.0.0.11</current-ipAddress>
+      <current-ipAddress>127.0.0.13</current-ipAddress>
       <current-prefix-length>28</current-prefix-length>
       <current-defaultGateway>127.0.0.20</current-defaultGateway>
       <macAddress>00:01:02:03:04:05</macAddress>

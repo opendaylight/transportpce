@@ -16,7 +16,7 @@
       <vendor>vendorA</vendor>
       <model>1</model>
       <serial-id>00001</serial-id>
-      <ipAddress>127.0.0.12</ipAddress>
+      <ipAddress>127.0.0.11</ipAddress>
       <prefix-length>28</prefix-length>
       <defaultGateway>127.0.0.20</defaultGateway>
       <source>static</source>
