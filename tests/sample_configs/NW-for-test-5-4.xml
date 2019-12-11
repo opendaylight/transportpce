@@ -2703,15 +2703,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-1-DEG1-to-OpenROADM-1-2-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-2-DEG1-to-OpenROADM-1-1-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1112</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-2-DEG1-to-OpenROADM-1-1-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber1</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -2728,15 +2727,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-2-DEG1-to-OpenROADM-1-1-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-1-DEG1-to-OpenROADM-1-2-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1211</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-1-DEG1-to-OpenROADM-1-2-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber2</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -2753,15 +2751,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-2-DEG2-to-OpenROADM-1-3-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1213</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber56</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -2779,14 +2776,13 @@
     <link-id>OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-2-DEG2-to-OpenROADM-1-3-DEG2</opposite-link>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1312</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-3-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-2-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-2-DEG2-to-OpenROADM-1-3-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber3</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -2803,15 +2799,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-3-DEG1-to-OpenROADM-1-4-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-4-DEG1-to-OpenROADM-1-3-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1314</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-4-DEG1-to-OpenROADM-1-3-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -2828,15 +2823,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-4-DEG1-to-OpenROADM-1-3-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-3-DEG1-to-OpenROADM-1-4-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1413</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-3-DEG1-to-OpenROADM-1-4-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber4</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -2853,15 +2847,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-4-DEG2-to-OpenROADM-1-1-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-1-DEG2-to-OpenROADM-1-4-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1411</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-1-DEG2-to-OpenROADM-1-4-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber57</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -2878,15 +2871,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-1-DEG2-to-OpenROADM-1-4-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-4-DEG2-to-OpenROADM-1-1-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1114</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-4-DEG2-to-OpenROADM-1-1-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber5</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3223,15 +3215,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-1-DEG1-to-OpenROADM-2-2-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-2-DEG1-to-OpenROADM-2-1-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2122</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-2-DEG1-to-OpenROADM-2-1-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber6</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3248,15 +3239,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-2-DEG1-to-OpenROADM-2-1-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-1-DEG1-to-OpenROADM-2-2-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2221</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-1-DEG1-to-OpenROADM-2-2-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber7</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3273,15 +3263,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-2-DEG2-to-OpenROADM-2-3-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-3-DEG2-to-OpenROADM-2-2-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2223</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-3-DEG2-to-OpenROADM-2-2-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber8</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3298,15 +3287,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-3-DEG2-to-OpenROADM-2-2-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-2-DEG2-to-OpenROADM-2-3-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2322</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-3-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-2-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-2-DEG2-to-OpenROADM-2-3-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber9</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3323,15 +3311,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-3-DEG1-to-OpenROADM-2-4-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-4-DEG1-to-OpenROADM-2-3-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2324</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-4-DEG1-to-OpenROADM-2-3-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber10</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3348,15 +3335,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-4-DEG1-to-OpenROADM-2-3-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-3-DEG1-to-OpenROADM-2-4-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2423</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-3-DEG1-to-OpenROADM-2-4-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber11</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3373,15 +3359,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-4-DEG2-to-OpenROADM-2-1-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-1-DEG2-to-OpenROADM-2-4-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2421</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-1-DEG2-to-OpenROADM-2-4-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber58</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3398,15 +3383,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-1-DEG2-to-OpenROADM-2-4-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-4-DEG2-to-OpenROADM-2-1-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2124</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-4-DEG2-to-OpenROADM-2-1-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber12</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3747,15 +3731,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-1-DEG1-to-OpenROADM-3-2-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-2-DEG1-to-OpenROADM-3-1-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3132</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-2-DEG1-to-OpenROADM-3-1-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber13</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3772,15 +3755,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-2-DEG1-to-OpenROADM-3-1-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-1-DEG1-to-OpenROADM-3-2-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3231</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-1-DEG1-to-OpenROADM-3-2-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber14</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3797,15 +3779,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-2-DEG2-to-OpenROADM-3-3-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-3-DEG2-to-OpenROADM-3-2-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3233</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-3-DEG2-to-OpenROADM-3-2-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber15</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3822,15 +3803,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-3-DEG2-to-OpenROADM-3-2-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-2-DEG2-to-OpenROADM-3-3-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3332</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-3-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-2-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-2-DEG2-to-OpenROADM-3-3-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber16</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3847,15 +3827,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-3-DEG1-to-OpenROADM-3-4-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-4-DEG1-to-OpenROADM-3-3-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3334</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-4-DEG1-to-OpenROADM-3-3-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber17</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3872,15 +3851,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-4-DEG1-to-OpenROADM-3-3-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-3-DEG1-to-OpenROADM-3-4-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3433</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-3-DEG1-to-OpenROADM-3-4-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber18</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3897,15 +3875,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-4-DEG2-to-OpenROADM-3-1-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-1-DEG2-to-OpenROADM-3-4-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3431</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-1-DEG2-to-OpenROADM-3-4-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber19</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -3922,15 +3899,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-1-DEG2-to-OpenROADM-3-4-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-4-DEG2-to-OpenROADM-3-1-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3431</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-4-DEG2-to-OpenROADM-3-1-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber20</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4267,15 +4243,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-1-DEG1-to-OpenROADM-4-2-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-2-DEG1-to-OpenROADM-4-1-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4142</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-2-DEG1-to-OpenROADM-4-1-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber21</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4292,15 +4267,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-2-DEG1-to-OpenROADM-4-1-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-1-DEG1-to-OpenROADM-4-2-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4241</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-1-DEG1-to-OpenROADM-4-2-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber22</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4317,15 +4291,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-2-DEG2-to-OpenROADM-4-3-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-3-DEG2-to-OpenROADM-4-2-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4243</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-3-DEG2-to-OpenROADM-4-2-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber23</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4342,15 +4315,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-3-DEG2-to-OpenROADM-4-2-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-2-DEG2-to-OpenROADM-4-3-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4342</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-3-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-2-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-2-DEG2-to-OpenROADM-4-3-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber24</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4367,15 +4339,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-3-DEG1-to-OpenROADM-4-4-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-4-DEG1-to-OpenROADM-4-3-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4344</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-4-DEG1-to-OpenROADM-4-3-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber25</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4392,15 +4363,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-4-DEG1-to-OpenROADM-4-3-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-3-DEG1-to-OpenROADM-4-4-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4443</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-3-DEG1-to-OpenROADM-4-4-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber26</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4417,15 +4387,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-4-DEG2-to-OpenROADM-4-1-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-1-DEG2-to-OpenROADM-4-4-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4441</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-1-DEG2-to-OpenROADM-4-4-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber27</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4442,15 +4411,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-1-DEG2-to-OpenROADM-4-4-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-4-DEG2-to-OpenROADM-4-1-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4144</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-4-DEG2-to-OpenROADM-4-1-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber28</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4787,15 +4755,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-1-DEG1-to-OpenROADM-5-2-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-2-DEG1-to-OpenROADM-5-1-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5152</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-2-DEG1-to-OpenROADM-5-1-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber29</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4812,15 +4779,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-2-DEG1-to-OpenROADM-5-1-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-1-DEG1-to-OpenROADM-5-2-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5251</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-1-DEG1-to-OpenROADM-5-2-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber30</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4837,15 +4803,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-2-DEG2-to-OpenROADM-5-3-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-3-DEG2-to-OpenROADM-5-2-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5253</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-3-DEG2-to-OpenROADM-5-2-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber31</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4862,15 +4827,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-3-DEG2-to-OpenROADM-5-2-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-2-DEG2-to-OpenROADM-5-3-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5352</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-3-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-2-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-2-DEG2-to-OpenROADM-5-3-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber32</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4887,15 +4851,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-3-DEG1-to-OpenROADM-5-4-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-4-DEG1-to-OpenROADM-5-3-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5354</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-4-DEG1-to-OpenROADM-5-3-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber33</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4912,15 +4875,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-4-DEG1-to-OpenROADM-5-3-DEG1</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-3-DEG1-to-OpenROADM-5-4-DEG1</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5453</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-3-DEG1-to-OpenROADM-5-4-DEG1</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber34</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4937,15 +4899,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-4-DEG2-to-OpenROADM-5-1-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-1-DEG2-to-OpenROADM-5-4-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5451</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-1-DEG2-to-OpenROADM-5-4-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber35</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4962,15 +4923,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-1-DEG2-to-OpenROADM-5-4-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-4-DEG2-to-OpenROADM-5-1-DEG2</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5154</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-4-DEG2-to-OpenROADM-5-1-DEG2</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber36</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -4987,15 +4947,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-4-DEG3-to-OpenROADM-2-1-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-1-DEG3-to-OpenROADM-1-4-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1421</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-1-DEG3-to-OpenROADM-1-4-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber37</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5012,15 +4971,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-1-DEG3-to-OpenROADM-1-4-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-4-DEG3-to-OpenROADM-2-1-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2114</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-4-DEG3-to-OpenROADM-2-1-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber38</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5037,15 +4995,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-3-DEG3-to-OpenROADM-2-2-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-2-DEG3-to-OpenROADM-1-3-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1322</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-2-DEG3-to-OpenROADM-1-3-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber39</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5062,15 +5019,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-2-DEG3-to-OpenROADM-1-3-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-3-DEG3-to-OpenROADM-2-2-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2213</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-3-DEG3-to-OpenROADM-2-2-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber40</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5087,15 +5043,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-4-DEG3-to-OpenROADM-3-1-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-1-DEG3-to-OpenROADM-2-4-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2431</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-1-DEG3-to-OpenROADM-2-4-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber41</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5112,15 +5067,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-1-DEG3-to-OpenROADM-2-4-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-4-DEG3-to-OpenROADM-3-1-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3124</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-4-DEG3-to-OpenROADM-3-1-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber42</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5137,15 +5091,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-2-3-DEG3-to-OpenROADM-3-2-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-2-DEG3-to-OpenROADM-2-3-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber2332</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-2-DEG3-to-OpenROADM-2-3-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber43</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5162,15 +5115,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> 
    <link-id>OpenROADM-3-2-DEG3-to-OpenROADM-2-3-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-3-DEG3-to-OpenROADM-3-2-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3223</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-2-3-DEG3-to-OpenROADM-3-2-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber44</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5187,15 +5139,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-4-DEG3-to-OpenROADM-4-1-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-1-DEG3-to-OpenROADM-3-4-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3441</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-1-DEG3-to-OpenROADM-3-4-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber45</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5212,15 +5163,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-1-DEG3-to-OpenROADM-3-4-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-4-DEG3-to-OpenROADM-4-1-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4134</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-4-DEG3-to-OpenROADM-4-1-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber46</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5237,15 +5187,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-3-3-DEG3-to-OpenROADM-4-2-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-2-DEG3-to-OpenROADM-3-3-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber3342</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-2-DEG3-to-OpenROADM-3-3-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber47</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5262,15 +5211,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-2-DEG3-to-OpenROADM-3-3-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-3-DEG3-to-OpenROADM-4-2-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4233</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-3-3-DEG3-to-OpenROADM-4-2-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber48</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5287,15 +5235,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-4-DEG3-to-OpenROADM-5-1-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-1-DEG3-to-OpenROADM-4-4-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4451</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-1-DEG3-to-OpenROADM-4-4-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber49</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5312,15 +5259,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-1-DEG3-to-OpenROADM-4-4-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-4-DEG3-to-OpenROADM-5-1-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5144</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-4-DEG3-to-OpenROADM-5-1-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber50</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5337,15 +5283,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-4-3-DEG3-to-OpenROADM-5-2-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-2-DEG3-to-OpenROADM-4-3-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber4352</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">10</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-2-DEG3-to-OpenROADM-4-3-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber51</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5362,15 +5307,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-2-DEG3-to-OpenROADM-4-3-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-3-DEG3-to-OpenROADM-5-2-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5243</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">10</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-4-3-DEG3-to-OpenROADM-5-2-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber52</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5387,15 +5331,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-4-DEG3-to-OpenROADM-1-1-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-1-DEG3-to-OpenROADM-5-4-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5411</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-1-DEG3-to-OpenROADM-5-4-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber53</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5412,15 +5355,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-1-DEG3-to-OpenROADM-5-4-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-4-DEG3-to-OpenROADM-1-1-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1154</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-4-DEG3-to-OpenROADM-1-1-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber54</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5437,15 +5379,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-5-3-DEG3-to-OpenROADM-1-2-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-2-DEG3-to-OpenROADM-5-3-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber5312</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">10</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-1-2-DEG3-to-OpenROADM-5-3-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber55</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>
@@ -5462,15 +5403,14 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-2-DEG3-to-OpenROADM-5-3-DEG3</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-3-DEG3-to-OpenROADM-1-2-DEG3</opposite-link>
+    <clfi xmlns="http://org/openroadm/common/network">fiber1253</clfi>
+    <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-latency xmlns="http://org/openroadm/network/topology">10</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-        <opposite-link>OpenROADM-5-3-DEG3-to-OpenROADM-1-2-DEG3</opposite-link>
-        <TE-metric>10</TE-metric>
         <span>
-            <clfi>fiber56</clfi>
             <auto-spanloss>true</auto-spanloss>
             <spanloss-base>11.4</spanloss-base>
             <spanloss-current>12</spanloss-current>

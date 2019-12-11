@@ -120,6 +120,8 @@
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <link-id>ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX</link-id>
         <opposite-link xmlns="http://org/openroadm/common/network">ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX</opposite-link>
+        <clfi xmlns="http://org/openroadm/common/network">fiberA01C01</clfi>
+        <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
         <destination>
             <dest-tp>DEG2-TTP-TXRX</dest-tp>
             <dest-node>ROADMC01-DEG2</dest-node>
@@ -129,10 +131,7 @@
             <source-tp>DEG1-TTP-TXRX</source-tp>
         </source>
         <OMS-attributes xmlns="http://org/openroadm/network/topology">
-            <opposite-link>ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX</opposite-link>
-            <TE-metric>10</TE-metric>
             <span>
-                <clfi>fiber1</clfi>
                 <auto-spanloss>true</auto-spanloss>
                 <spanloss-base>11.4</spanloss-base>
                 <spanloss-current>12</spanloss-current>
@@ -164,6 +163,8 @@
     <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
         <link-id>ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX</link-id>
         <opposite-link xmlns="http://org/openroadm/common/network">ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX</opposite-link>
+        <clfi xmlns="http://org/openroadm/common/network">fiberC01A01</clfi>
+        <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
         <destination>
             <dest-tp>DEG1-TTP-TXRX</dest-tp>
             <dest-node>ROADMA01-DEG1</dest-node>
@@ -173,10 +174,7 @@
             <source-tp>DEG2-TTP-TXRX</source-tp>
         </source>
         <OMS-attributes xmlns="http://org/openroadm/network/topology">
-            <opposite-link>ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX</opposite-link>
-            <TE-metric>10</TE-metric>
             <span>
-                <clfi>fiber2</clfi>
                 <auto-spanloss>true</auto-spanloss>
                 <spanloss-base>11.4</spanloss-base>
                 <spanloss-current>12</spanloss-current>
