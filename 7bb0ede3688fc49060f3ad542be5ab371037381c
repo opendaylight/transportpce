@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ddb54e6_e8f95078",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T11:41:22Z",
+      "side": 1,
+      "message": "readability",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 80
+      },
+      "revId": "7bb0ede3688fc49060f3ad542be5ab371037381c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f9a8729_d9cf7b00",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T11:41:22Z",
+      "side": 1,
+      "message": "can be improved",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 116
+      },
+      "revId": "7bb0ede3688fc49060f3ad542be5ab371037381c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12f8ecf2_04715493",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T11:41:22Z",
+      "side": 1,
+      "message": "can be improved",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 69
+      },
+      "revId": "7bb0ede3688fc49060f3ad542be5ab371037381c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5b55fdb_61b77e85",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T11:41:22Z",
+      "side": 1,
+      "message": "can be improved",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 84
+      },
+      "revId": "7bb0ede3688fc49060f3ad542be5ab371037381c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0414f81e_8d5685de",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T11:41:22Z",
+      "side": 1,
+      "message": "can be improved",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 84
+      },
+      "revId": "7bb0ede3688fc49060f3ad542be5ab371037381c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3cb548d_1524e94c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T11:41:22Z",
+      "side": 1,
+      "message": "can be improved",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 69
+      },
+      "revId": "7bb0ede3688fc49060f3ad542be5ab371037381c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1da339de_16d35083",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T11:41:22Z",
+      "side": 1,
+      "message": "can be improved",
+      "range": {
+        "startLine": 271,
+        "startChar": 1,
+        "endLine": 278,
+        "endChar": 84
+      },
+      "revId": "7bb0ede3688fc49060f3ad542be5ab371037381c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
