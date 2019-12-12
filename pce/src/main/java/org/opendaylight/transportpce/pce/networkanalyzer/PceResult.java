@@ -21,11 +21,10 @@ public class PceResult {
     private boolean calcStatus = false;
     private String responseCode = ResponseCodes.RESPONSE_FAILED;
     private long resultWavelength = -1;
-    // for now it is constant returned as received from A-end
     private long rate = -1;
 
     public enum LocalCause {
-        NONE, TOO_HIGH_LATENCY, NO_PATH_EXISTS, INT_PROBLEM;
+        NONE, TOO_HIGH_LATENCY, OUT_OF_SPEC_OSNR, NO_PATH_EXISTS, INT_PROBLEM, HD_NODE_INCLUDE;
     }
 
     private LocalCause localCause = LocalCause.NONE;
@@ -39,14 +38,14 @@ public class PceResult {
     public void setRC(String rc) {
         switch (rc) {
             case ResponseCodes.RESPONSE_OK :
-                calcMessage = "Path is calculated";
+                calcMessage = "Path is calculated by PCE";
                 calcStatus = true;
                 responseCode = ResponseCodes.RESPONSE_OK;
                 break;
             case ResponseCodes.RESPONSE_FAILED :
                 responseCode = ResponseCodes.RESPONSE_FAILED;
                 calcStatus = false;
-                calcMessage = "No path available";
+                calcMessage = "No path available by PCE";
                 break;
             default:
                 LOG.error("setRC: RespondeCodes unknown");

@@ -35,9 +35,10 @@ public class PceGraph {
 
     ////////////////////////// for Graph ///////////////////////////
     // how many paths to bring
-    int kpathsToBring = 10;
+    private int kpathsToBring = 10;
+
     // max #hops
-    int mhopsPerPath = 50;
+    private int mhopsPerPath = 50;
 
     // input
     private Map<NodeId, PceNode> allPceNodes = new HashMap<NodeId, PceNode>();
@@ -68,7 +69,6 @@ public class PceGraph {
 
         LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode.toString(), zendNode.toString());
         LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes.toString());
-
     }
 
     public boolean calcPath() {
@@ -88,9 +88,8 @@ public class PceGraph {
         // validate found paths
         pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
         for (GraphPath<String, PceGraphEdge> path : allWPaths) {
-
             PostAlgoPathValidator papv = new PostAlgoPathValidator();
-            pceResult = papv.checkPath(path, allPceNodes, pceResult);
+            pceResult = papv.checkPath(path, allPceNodes, pceResult, pceHardConstraints);
             LOG.info("In calcPath after PostAlgoPathValidator {} {}",
                     pceResult.getResponseCode(), ResponseCodes.RESPONSE_OK);
 
@@ -124,16 +123,7 @@ public class PceGraph {
         if (weightedGraph.edgeSet().isEmpty() || weightedGraph.vertexSet().isEmpty()) {
             return false;
         }
-
-        PathValidator<String, PceGraphEdge> wpv = new InAlgoPathValidator(pceHardConstraints, zpceNode);
-
-        // local optimization. if 'include' constraint exists then increase amount of paths to return.
-        // it's because this constraint is checked at the last step when part of good paths
-        // are dropped by other constraints
-        if (!pceHardConstraints.getListToInclude().isEmpty()) {
-            kpathsToBring = kpathsToBring * 10;
-            LOG.info("k = {}",kpathsToBring);
-        }
+        PathValidator<String, PceGraphEdge> wpv = new InAlgoPathValidator();
 
         // KShortestPaths on weightedGraph
         KShortestSimplePaths<String, PceGraphEdge> swp =
@@ -149,7 +139,7 @@ public class PceGraph {
 
         // debug print
         for (GraphPath<String, PceGraphEdge> path : allWPaths) {
-            LOG.info("path Weight: {} : {}", path.getWeight(), path.getVertexList().toString());
+            LOG.debug("path Weight: {} : {}", path.getWeight(), path.getVertexList().toString());
         }
 
         return true;
@@ -241,7 +231,18 @@ public class PceGraph {
         return weight;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public int getKpathsToBring() {
+        return kpathsToBring;
+    }
+
+    public void setKpathsToBring(int kpathsToBring) {
+        this.kpathsToBring = kpathsToBring;
+    }
+
+    public void setMhopsPerPath(int mhopsPerPath) {
+        this.mhopsPerPath = mhopsPerPath;
+    }
+
     public List<PceLink> getPathAtoZ() {
         return shortestPathAtoZ;
     }

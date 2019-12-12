@@ -86,9 +86,9 @@ public class PceCalculation {
         parseInput();
     }
 
-    public void calcPath() {
+    public void retrievePceNetwork() {
 
-        LOG.info("In PceCalculation calcPath: ");
+        LOG.info("In PceCalculation retrieveNetwork: ");
 
         if (!readMdSal()) {
             returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);

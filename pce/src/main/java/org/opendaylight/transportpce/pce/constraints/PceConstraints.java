@@ -24,7 +24,7 @@ public class PceConstraints {
     private RoutingConstraintsSp.PceMetric pceMetrics = RoutingConstraintsSp.PceMetric.HopCount;
     private Long maxLatency = (long) -1;
 
-    /////////////// EXCLUDE ///////////////////
+    // Structure related to  EXCLUDE constraints
     // Nodes/CLLI/SRLG lists might consist of two types of elements : (1)from diversity constraints (2)from exclude list
     // e.g.: nodesToExclude - topo-level nodes IDs - comes from diversity constraints
     //     : supNodesToExclude - supporting nodes IDs - comes from exclude list
@@ -37,16 +37,12 @@ public class PceConstraints {
 
     private List<String> clliToExclude = new ArrayList<String>();
     private List<String> clliNodesToExclude = new ArrayList<String>();
+
+    ///Structures related to INCLUDE constraints
     private List<String> nodesToInclude = new ArrayList<String>();
     private List<PceNode> pceNodesToInclude = new ArrayList<PceNode>();
-
-    public static final Long CONST_OSNR = 1L;
-    private double maxOSNR = (CONST_OSNR / (Math.pow(10, (24 / 10.0))));
-
-    /**.
-     * /////////////// INCLUDE CONSTRAINTS.///////////////////
-     */
     private List<ResourcePair> listToInclude = new ArrayList<ResourcePair>();
+
     private List<String> srlgNames = new ArrayList<String>();
 
     public enum ResourceType {
@@ -157,11 +153,6 @@ public class PceConstraints {
     public void setIncludePceNode(PceNode node) {
         LOG.info("in Pceconstraints setIncludePceNode new node = {}", node.toString());
         this.pceNodesToInclude.add(node);
-    }
-
-    public Double getMaxOSNR() {
-        LOG.debug("in Pceconstraints getMaxOSNR = {}", maxOSNR);
-        return maxOSNR;
     }
 
     public class ResourcePair {

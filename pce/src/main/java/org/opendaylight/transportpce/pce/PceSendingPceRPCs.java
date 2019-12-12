@@ -91,7 +91,7 @@ public class PceSendingPceRPCs {
 
         PceCalculation nwAnalizer =
             new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc);
-        nwAnalizer.calcPath();
+        nwAnalizer.retrievePceNetwork();
         rc = nwAnalizer.getReturnStructure();
         if (!rc.getStatus()) {
             LOG.error("In pathComputationWithConstraints, nwAnalizer: result = {}", rc.toString());
@@ -104,7 +104,7 @@ public class PceSendingPceRPCs {
         graph.calcPath();
         rc = graph.getReturnStructure();
         if (!rc.getStatus()) {
-            LOG.warn("In pathComputation : Graph return without Path ");
+            LOG.warn("In pathComputationWithConstraints : Graph return without Path ");
             // TODO fix. This is quick workaround for algorithm problem
             if ((rc.getLocalCause() == PceResult.LocalCause.TOO_HIGH_LATENCY)
                 && (hardConstraints.getPceMetrics() == PceMetric.HopCount)
@@ -112,6 +112,12 @@ public class PceSendingPceRPCs {
                 hardConstraints.setPceMetrics(PceMetric.PropagationDelay);
                 graph = patchRerunGraph(graph);
             }
+
+            if (rc.getLocalCause() == PceResult.LocalCause.HD_NODE_INCLUDE) {
+                graph.setKpathsToBring(graph.getKpathsToBring() * 10);
+                graph = patchRerunGraph(graph);
+            }
+
             if (!rc.getStatus()) {
                 LOG.error("In pathComputationWithConstraints, graph.calcPath: result = {}", rc.toString());
                 return;
@@ -144,6 +150,7 @@ public class PceSendingPceRPCs {
             ztoa = rc.getZtoADirection();
         }
 
+        //Connect to Gnpy to check path feasibility and recompute another path in case of path non-feasibility
         try {
             ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
             if (connectToGnpy.isGnpyURLExist()) {

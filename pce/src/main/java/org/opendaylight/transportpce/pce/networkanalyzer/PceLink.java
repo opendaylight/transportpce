@@ -10,8 +10,8 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.List;
 
-import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation.FiberType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -24,20 +24,15 @@ public class PceLink {
 
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceLink.class);
-
     ///////////////////////// LINKS ////////////////////
     /*
      * extension of Link to include constraints and Graph weight
      */
-
     double weight = 0;
-
     private boolean isValid = true;
-
     // this member is for XPONDER INPUT/OUTPUT links.
-    // it keeps name of client correcponding to NETWORK TP
+    // it keeps name of client corresponding to NETWORK TP
     private String client = "";
-
     private final LinkId linkId;
     private final OpenroadmLinkType linkType;
     private final NodeId sourceId;
@@ -53,6 +48,11 @@ public class PceLink {
     private final List<Long> srlgList;
     private final double osnr;
     private final Span omsAttributesSpan;
+    private static final double CELERITY = 2.99792458 * 1e5; //meter per ms
+    private static final double NOISE_MASK_A = 0.571429;
+    private static final double NOISE_MASK_B = 39.285714;
+    private static final double UPPER_BOUND_OSNR = 33;
+    private static final double LOWER_BOUND_OSNR = 0.1;
 
     public PceLink(Link link, PceNode source, PceNode dest) {
         LOG.debug("PceLink: : PceLink start ");
@@ -74,47 +74,24 @@ public class PceLink {
         this.linkType = MapUtils.calcType(link);
 
         this.oppositeLink = calcOpposite(link);
-        this.latency = calcLatency(link);
 
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
             this.omsAttributesSpan = MapUtils.getOmsAttributesSpan(link);
             this.srlgList = MapUtils.getSRLG(link);
-            this.osnr = retrieveOSNR();
+            this.latency = calcLatency(link);
+            this.osnr = calcSpanOSNR();
         } else {
             this.omsAttributesSpan = null;
             this.srlgList = null;
-            this.osnr = 0.0;
+            this.latency = 0L;
+            this.osnr = 100L; //infinite OSNR in DB
         }
-
 
         LOG.debug("PceLink: created PceLink  {}", toString());
     }
 
-    /*private OpenroadmLinkType calcType(Link link) {
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.@Nullable Link1 link1 = null;
-        OpenroadmLinkType tmplinkType = null;
-
-        // ID and type
-        link1 = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-            .Link1.class);
-        if (link1 == null) {
-            this.isValid = false;
-            LOG.error("PceLink: No Link augmentation available. Link is ignored {}", this.linkId);
-            return null;
-        }
-
-        tmplinkType = link1.getLinkType();
-        if (tmplinkType == null) {
-            this.isValid = false;
-            LOG.error("PceLink: No Link type available. Link is ignored {}", this.linkId);
-            return null;
-        }
-        return tmplinkType;
-    }*/
-
+    //Retrieve the opposite link
     private LinkId calcOpposite(Link link) {
-        // opposite link
-
         LinkId tmpoppositeLink = MapUtils.extractOppositeLink(link);
         if (tmpoppositeLink == null) {
             LOG.error("PceLink: Error calcOpposite. Link is ignored {}", link.getLinkId().getValue());
@@ -123,97 +100,73 @@ public class PceLink {
         return tmpoppositeLink;
     }
 
+    //Compute the link latency : if the latency is not defined, the latency it is computed from the omsAttributesSpan
     private Long calcLatency(Link link) {
-        Long tmplatency = 1L;
         Link1 link1 = null;
-        // latency
         link1 = link.augmentation(Link1.class);
+        Long tmplatency = link1.getLinkLatency();
+        if (tmplatency != null) {
+            return tmplatency;
+        }
+
         try {
-            tmplatency = link1.getLinkLatency();
+            double tmp = 0;
+            for (int i = 0; i < this.omsAttributesSpan.getLinkConcatenation().size(); i++) {
+                //Length is expressed in meter and latency is expressed in ms according to OpenROADM MSA
+                tmp += this.omsAttributesSpan.getLinkConcatenation().get(i).getSRLGLength() / CELERITY;
+                LOG.info("In PceLink: The latency of link {} == {}",link.getLinkId(),tmplatency);
+            }
+            tmplatency = (long) Math.ceil(tmp);
         } catch (NullPointerException e) {
-            LOG.debug("the latency does not exist for this link");
+            LOG.debug("In PceLink: cannot compute the latency for the link {}",link.getLinkId().getValue());
+            tmplatency = 1L;
         }
         return tmplatency;
     }
 
-    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
-    public double retrieveOSNR() {
-        // sum of 1 over the span OSNRs (linear units)
-        double sum = 0;
-        // link OSNR, in dB
-        //double linkOsnrDb;
-        // link OSNR, in dB
-        double linkOsnrLu;
-        // span OSNR, in dB
-        double spanOsnrDb;
-        // span OSNR, in linear units
-        double spanOsnrLu;
-        // default amplifier noise value, in dB
-        //double ampNoise = 5.5;
-        // fiber span measured loss, in dB
-        double loss;
-        // launch power, in dB
-        double power;
-        double constantA = 38.97293;
-        double constantB = 0.72782;
-        double constantC = -0.532331;
-        double constactD = -0.019549;
-        double upperBoundosnr = 33;
-        double lowerBoundosnr = 0.1;
-
-        if (omsAttributesSpan ==  null) {
-            // indicates no data or N/A
+    //Compute the OSNR of a span
+    public double calcSpanOSNR() {
+        try {
+            double pout; //power on the output of the previous ROADM (dBm)
+            pout = retrievePower(this.omsAttributesSpan.getLinkConcatenation().get(0).getFiberType());
+            double spanLoss = this.omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue(); // span loss (dB)
+            double pin = pout - spanLoss; //power on the input of the current ROADM (dBm)
+            double spanOsnrDb;
+            spanOsnrDb = NOISE_MASK_A * pin + NOISE_MASK_B;
+            if (spanOsnrDb > UPPER_BOUND_OSNR) {
+                spanOsnrDb =  UPPER_BOUND_OSNR;
+            } else if (spanOsnrDb < LOWER_BOUND_OSNR) {
+                spanOsnrDb = LOWER_BOUND_OSNR;
+            }
+            return spanOsnrDb;
+        } catch (NullPointerException e) {
+            LOG.error("in PceLink : Null field in the OmsAttrubtesSpan");
             return 0L;
         }
-        loss = omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue();
-        switch (omsAttributesSpan.getLinkConcatenation().get(0).getFiberType()) {
+    }
+
+    private double retrievePower(FiberType fiberType) {
+        double power;
+        switch (fiberType) {
             case Smf:
                 power = 2;
                 break;
-
             case Eleaf:
                 power = 1;
                 break;
-
-            case Oleaf:
-                power = 0;
-                break;
-
-            case Dsf:
-                power = 0;
-                break;
-
-            case Truewave:
-                power = 0;
-                break;
-
             case Truewavec:
                 power = -1;
                 break;
-
+            case Oleaf:
+            case Dsf:
+            case Truewave:
             case NzDsf:
-                power = 0;
-                break;
-
             case Ull:
-                power = 0;
-                break;
-
             default:
                 power = 0;
                 break;
         }
-        spanOsnrDb = constantA + constantB * power + constantC * loss + constactD * power * loss;
-        if (spanOsnrDb > upperBoundosnr) {
-            spanOsnrDb =  upperBoundosnr;
-        } else if (spanOsnrDb < lowerBoundosnr) {
-            spanOsnrDb = lowerBoundosnr;
-        }
-        spanOsnrLu = Math.pow(10, (spanOsnrDb / 10.0));
-        sum = PceConstraints.CONST_OSNR / spanOsnrLu;
-        linkOsnrLu = sum;
-        LOG.debug("In retrieveosnr: link osnr is {} dB", linkOsnrLu);
-        return linkOsnrLu;
+        return power;
     }
 
     public LinkId getOppositeLink() {
@@ -313,7 +266,7 @@ public class PceLink {
     }
 
     public String toString() {
-        return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latecy=" + latency;
+        return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latency=" + latency;
     }
 
 }

@@ -27,7 +27,6 @@ import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yangtools.yang.binding.BindingStreamEventWriter;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
@@ -113,8 +112,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 scPath.getParent(), scPath.getLastComponent().getNamespace(),
                 JsonWriterFactory.createJsonWriter(writer, 2));
             // The write part
-            final BindingStreamEventWriter bindingWriter = codecRegistry.newWriter(id, domWriter);
-            codecRegistry.getSerializer(id.getTargetType()).serialize(object, bindingWriter);
+            codecRegistry.getSerializer(id.getTargetType()).serialize(object, codecRegistry.newWriter(id, domWriter));
             domWriter.close();
             writer.close();
         } catch (IOException | YangSyntaxErrorException | ReactorException e) {
