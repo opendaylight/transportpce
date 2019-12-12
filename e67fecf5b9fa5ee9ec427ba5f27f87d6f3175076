@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d67b750_7ca0b31b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T09:23:57Z",
+      "side": 1,
+      "message": "readability",
+      "range": {
+        "startLine": 129,
+        "startChar": 50,
+        "endLine": 130,
+        "endChar": 51
+      },
+      "revId": "e67fecf5b9fa5ee9ec427ba5f27f87d6f3175076",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0c8254f_ba532822",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T09:23:57Z",
+      "side": 1,
+      "message": "readability",
+      "range": {
+        "startLine": 197,
+        "startChar": 64,
+        "endLine": 198,
+        "endChar": 51
+      },
+      "revId": "e67fecf5b9fa5ee9ec427ba5f27f87d6f3175076",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31549bd9_19cf47d7",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2019-12-12T09:23:57Z",
+      "side": 1,
+      "message": "readability",
+      "range": {
+        "startLine": 256,
+        "startChar": 64,
+        "endLine": 257,
+        "endChar": 50
+      },
+      "revId": "e67fecf5b9fa5ee9ec427ba5f27f87d6f3175076",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
