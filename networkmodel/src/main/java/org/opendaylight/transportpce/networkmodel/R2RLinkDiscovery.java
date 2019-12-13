@@ -311,7 +311,7 @@ public class R2RLinkDiscovery {
                 Stream cpToDegStream = cpToDeg.stream().filter(cp -> cp.getInterfaceName() != null)
                     .filter(cp -> cp.getInterfaceName().equals(interfaceName));
                 if (cpToDegStream != null) {
-                    Optional<CpToDegree> firstCpToDegree = cpToDegStream.findFirst();
+                    @SuppressWarnings("unchecked") Optional<CpToDegree> firstCpToDegree = cpToDegStream.findFirst();
                     if (firstCpToDegree.isPresent() && (firstCpToDegree != null)) {
                         LOG.debug("Found and returning {}",firstCpToDegree.get().getDegreeNumber().intValue());
                         return firstCpToDegree.get().getDegreeNumber().intValue();
