@@ -54,6 +54,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> Optional<T>  getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
 
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
