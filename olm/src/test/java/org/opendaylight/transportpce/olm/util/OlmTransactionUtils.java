@@ -72,6 +72,7 @@ public final class OlmTransactionUtils {
     private OlmTransactionUtils() {
     }
 
+    @SuppressWarnings("unchecked")
     public static void writeTransaction(DataBroker dataBroker, InstanceIdentifier instanceIdentifier,
                                         DataObject object) {
         @NonNull

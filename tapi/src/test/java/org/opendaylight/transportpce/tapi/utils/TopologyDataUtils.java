@@ -77,6 +77,7 @@ public final class TopologyDataUtils {
         LOG.info("openroadm-topology stored with success in datastore");
     }
 
+    @SuppressWarnings("unchecked")
     private static boolean writeTransaction(DataBroker dataBroker, InstanceIdentifier instanceIdentifier,
         DataObject object) {
         @NonNull
