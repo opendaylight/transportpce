@@ -24,7 +24,7 @@ public final class TransactionUtils {
 
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({ "unchecked", "deprecation" })
     // deviceTx.put needs the "true" boolean parameter at the end in order to not compromise the Junit test suite
     public static boolean writeTransaction(DeviceTransactionManager deviceTransactionManager,
                                     String nodeId,

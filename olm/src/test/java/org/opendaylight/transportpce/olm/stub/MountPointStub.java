@@ -32,6 +32,7 @@ public class MountPointStub  implements MountPoint {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends BindingService> Optional<T> getService(Class<T> service) {
         if (service.isInstance(dataBroker)) {
             return Optional.ofNullable((T)dataBroker);

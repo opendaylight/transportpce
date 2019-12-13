@@ -69,6 +69,7 @@ public final class TransactionUtils {
 
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean writeTransaction(DataBroker dataBroker, InstanceIdentifier instanceIdentifier,
         DataObject object) {
         ReadWriteTransaction transaction = dataBroker.newReadWriteTransaction();
