@@ -23,12 +23,10 @@ public interface CrossConnect {
      *            Device id.
      * @param connectionNumber
      *            Name of the cross connect.
-     * @param <T>
-     *            generic.
      *
-     * @return Roadm connection subtree from the device.
+     * @return optional of Roadm connection subtree from the device.
      */
-    <T> Optional<T> getCrossConnect(String deviceId, String connectionNumber);
+    Optional<?> getCrossConnect(String deviceId, String connectionNumber);
 
     /**
      * This method does a post(edit-config) on roadm connection subtree for a
@@ -73,14 +71,13 @@ public interface CrossConnect {
      *            Source logical connection point.
      * @param destTp
      *            Destination logical connection point.
-     * @param <T>
-     *            generic.
-     * @throws OpenRoadmInterfaceException
-     *            an exception at OpenRoadm interface.
      *
      * @return list of Ports object type.
+     *
+     * @throws OpenRoadmInterfaceException
+     *            an exception at OpenRoadm interface.
      */
-    <T> List<T> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp)
+    List<?> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp)
             throws OpenRoadmInterfaceException;
 
     /**
