@@ -217,7 +217,8 @@ public final class PowerMgmtVersion221 {
     public static boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue,
             String connectionNumber, CrossConnect crossConnect,
             DeviceTransactionManager deviceTransactionManager) {
-        Optional<RoadmConnections> rdmConnOpt =  crossConnect.getCrossConnect(deviceId, connectionNumber);
+        @SuppressWarnings("unchecked") Optional<RoadmConnections> rdmConnOpt =
+            (Optional<RoadmConnections>) crossConnect.getCrossConnect(deviceId, connectionNumber);
         if (rdmConnOpt.isPresent()) {
             RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
             rdmConnBldr.setOpticalControlMode(mode);
