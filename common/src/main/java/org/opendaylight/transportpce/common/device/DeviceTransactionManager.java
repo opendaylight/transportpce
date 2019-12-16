@@ -132,7 +132,6 @@ public interface DeviceTransactionManager {
     Future<Optional<DeviceTransaction>> getDeviceTransaction(String deviceId, long timeoutToSubmit, TimeUnit timeUnit);
 
     // TODO make private in impl
-    @Deprecated
     Optional<MountPoint> getDeviceMountPoint(String deviceId);
 
     /**
