@@ -33,27 +33,27 @@
         <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>transportpce-api</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.transportpce.ordmodels</groupId>
             <artifactId>transportpce-ordmodels-common</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.transportpce.ordmodels</groupId>
             <artifactId>transportpce-ordmodels-device</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.transportpce.ordmodels</groupId>
             <artifactId>transportpce-ordmodels-network</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.transportpce.ordmodels</groupId>
             <artifactId>transportpce-ordmodels-service</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.3-SNAPSHOT</version>
         </dependency>
         <!-- TPCE Models -   END -->
 
@@ -61,17 +61,17 @@
         <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>transportpce-pce</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>transportpce-olm</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>transportpce-servicehandler</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.3-SNAPSHOT</version>
         </dependency>
         <!-- TPCE bundles -   END -->
 
