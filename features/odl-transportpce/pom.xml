@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>5.0.3</version>
+    <version>5.0.4</version>
     <relativePath/>
   </parent>
 
@@ -24,7 +24,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <properties>
     <mdsal.version>1.10.2-SNAPSHOT</mdsal.version>
-    <yangtools.version>3.0.6</yangtools.version>
+    <yangtools.version>3.0.7</yangtools.version>
     <netconf.version>1.7.2-SNAPSHOT</netconf.version>
     <restconf.version>1.10.2-SNAPSHOT</restconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
