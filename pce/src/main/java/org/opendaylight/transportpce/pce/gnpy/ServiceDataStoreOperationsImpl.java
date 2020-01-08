@@ -52,14 +52,17 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public ServiceDataStoreOperationsImpl(NetworkTransactionService networkTransactionService) {
     }
 
-    public void createXMLFromDevice(DataStoreContext dataStoreContextUtil, OrgOpenroadmDevice device, String output) {
+    public void createXMLFromDevice(DataStoreContext dataStoreContextUtil, OrgOpenroadmDevice device, String output)
+        throws GnpyException {
+
         if (device != null) {
             Optional<NormalizedNode<?, ?>> transformIntoNormalizedNode = null;
             XMLDataObjectConverter cwDsU = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil);
             transformIntoNormalizedNode = cwDsU.toNormalizedNodes(device, OrgOpenroadmDevice.class);
             if (!transformIntoNormalizedNode.isPresent()) {
-                throw new IllegalStateException(
-                        String.format("Could not transform the input %s into normalized nodes", device));
+                throw new GnpyException(String.format(
+                    "In ServiceDataStoreOperationsImpl: Cannot transform the device %s into normalized nodes",
+                    device.toString()));
             }
             Writer writerFromDataObject =
                 cwDsU.writerFromDataObject(device, OrgOpenroadmDevice.class,cwDsU.dataContainer());
@@ -68,13 +71,15 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 writer.write(writerFromDataObject.toString());
                 writer.close();
             } catch (IOException e) {
-                LOG.error("Bufferwriter error ");
+                throw new GnpyException(
+                    String.format("In ServiceDataStoreOperationsImpl : Bufferwriter error"),e);
             }
             LOG.debug("GNPy: device xml : {}", writerFromDataObject.toString());
         }
     }
 
-    public String createJsonStringFromDataObject(final InstanceIdentifier<?> id, DataObject object) throws Exception {
+    public String createJsonStringFromDataObject(final InstanceIdentifier<?> id, DataObject object)
+        throws GnpyException, Exception {
 
         final SchemaPath scPath = SchemaPath
                 .create(FluentIterable.from(id.getPathArguments()).transform(new Function<PathArgument, QName>() {
@@ -112,24 +117,20 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             codecRegistry.getSerializer(id.getTargetType()).serialize(object, bindingWriter);
             domWriter.close();
             writer.close();
-        } catch (IOException e) {
-            LOG.error("GNPy: writer error ");
-        } catch (YangSyntaxErrorException e) {
-            LOG.warn("GNPy: exception {} occured during json file creation", e.getMessage(), e);
-        } catch (ReactorException e) {
-            LOG.warn("GNPy: exception {} occured during json file creation", e.getMessage(), e);
+        } catch (IOException | YangSyntaxErrorException | ReactorException e) {
+            throw new GnpyException("In ServiceDataStoreOperationsImpl: exception during json file creation",e);
         }
         return writer.toString();
     }
 
     // Write the json as a string in a file
-    public void writeStringFile(String jsonString, String fileName) {
+    public void writeStringFile(String jsonString, String fileName) throws GnpyException {
         try {
             FileWriter file = new FileWriter(fileName);
             file.write(jsonString);
             file.close();
         } catch (IOException e) {
-            LOG.error("GNPy: writer error ");
+            throw new GnpyException("In ServiceDataStoreOperationsImpl : exception during file writing",e);
         }
     }
 }
