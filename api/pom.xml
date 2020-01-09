@@ -38,10 +38,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.mdsal.binding.model.ietf</groupId>
-      <artifactId>rfc6991-ietf-inet-types</artifactId>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>transportpce-tapimodels</artifactId>
       <version>${project.version}</version>
@@ -87,5 +83,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       </plugin>
     </plugins>
   </reporting>
-
 </project>

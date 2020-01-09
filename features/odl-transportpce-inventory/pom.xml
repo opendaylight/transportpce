@@ -18,6 +18,8 @@
     <version>0.5.0-SNAPSHOT</version>
     <packaging>feature</packaging>
 
+    <name>OpenDaylight :: transportpce :: Inventory</name>
+
     <properties>
         <transportpce.db.host>localhost:3306</transportpce.db.host>
         <transportpce.db.database>transportpce</transportpce.db.database>
@@ -30,13 +32,7 @@
         <skip.karaf.featureTest>true</skip.karaf.featureTest>
     </properties>
 
-    <name>OpenDaylight :: transportpce :: Inventory</name>
     <dependencies>
-        <dependency>
-            <groupId>org.opendaylight.transportpce</groupId>
-            <artifactId>transportpce-inventory</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>odl-transportpce</artifactId>
@@ -44,60 +40,63 @@
             <classifier>features</classifier>
             <type>xml</type>
         </dependency>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>transportpce-inventory</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/resources</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>
-                                        src/main/resources
-                                    </directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-db-artifact</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>target/resources/org.ops4j.datasource-transporpce.cfg</file>
-                                    <type>cfg</type>
-                                    <classifier>datasource</classifier>
-                                </artifact>
-                                <artifact>
-                                    <file>target/resources/org.opendaylight.transportpce.job.cfg</file>
-                                    <type>cfg</type>
-                                    <classifier>config</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+      <plugins>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>copy-resources</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${basedir}/target/resources</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>src/main/resources</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>attach-db-artifact</id>
+              <phase>package</phase>
+              <goals>
+                <goal>attach-artifact</goal>
+              </goals>
+              <configuration>
+                <artifacts>
+                  <artifact>
+                    <file>target/resources/org.ops4j.datasource-transporpce.cfg</file>
+                    <type>cfg</type>
+                    <classifier>datasource</classifier>
+                  </artifact>
+                  <artifact>
+                    <file>target/resources/org.opendaylight.transportpce.job.cfg</file>
+                    <type>cfg</type>
+                    <classifier>config</classifier>
+                  </artifact>
+                </artifacts>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
     </build>
 </project>

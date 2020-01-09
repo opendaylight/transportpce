@@ -22,56 +22,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <version>0.5.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.opendaylight.controller</groupId>
-        <artifactId>mdsal-artifacts</artifactId>
-        <version>1.10.2-SNAPSHOT</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-      <dependency>
-        <groupId>org.opendaylight.netconf</groupId>
-        <artifactId>netconf-artifacts</artifactId>
-        <version>1.7.2-SNAPSHOT</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-renderer</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>transportpce-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.controller.model</groupId>
-      <artifactId>model-topology</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>sal-netconf-connector</artifactId>
-    </dependency>
-
     <!-- Testing Dependencies -->
     <dependency>
-      <groupId>org.powermock</groupId>
-      <artifactId>powermock-core</artifactId>
-      <scope>test</scope>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>test-common</artifactId>
+      <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-api-mockito2</artifactId>
@@ -83,12 +41,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-    <groupId>${project.groupId}</groupId>
-    <artifactId>test-common</artifactId>
-    <version>${project.version}</version>
-    </dependency>
-
     <!-- Sodium bump: javax.annotation.Nullable and friends -->
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
@@ -96,5 +48,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <optional>true</optional>
     </dependency>
   </dependencies>
-
 </project>

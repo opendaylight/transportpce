@@ -19,68 +19,47 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <groupId>org.opendaylight.transportpce</groupId>
   <artifactId>transportpce-karaf</artifactId>
   <version>0.5.0-SNAPSHOT</version>
-  <name>${project.artifactId}</name>
   <packaging>pom</packaging>
+  <name>${project.artifactId}</name>
 
-    <properties>
-        <karaf.localFeature>odl-transportpce</karaf.localFeature>
-        <device.yang.jar.extract.directory>
-            ${project.build.outputDirectory}/../yang-models/schema
-        </device.yang.jar.extract.directory>
-        <device.yang.final.directory>
-            ${project.build.outputDirectory}/../assembly/cache/schema
-        </device.yang.final.directory>
-    </properties>
+  <properties>
+    <karaf.localFeature>odl-transportpce</karaf.localFeature>
+    <device.yang.jar.extract.directory>
+        ${project.build.outputDirectory}/../yang-models/schema
+    </device.yang.jar.extract.directory>
+    <device.yang.final.directory>
+        ${project.build.outputDirectory}/../assembly/cache/schema
+    </device.yang.final.directory>
+  </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>transportpce-artifacts</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}.ordmodels</groupId>
-                <artifactId>transportpce-ordmodels-device</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <!-- scope is compile so all features (there is only one) are installed into startup.properties
+  <dependencies>
+    <dependency>
+    <!-- scope is compile so all features (there is only one) are installed into startup.properties
                 and the feature repo itself is not installed -->
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>framework</artifactId>
-            <type>kar</type>
-        </dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>framework</artifactId>
+      <type>kar</type>
+    </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>features-transportpce</artifactId>
-            <version>${project.version}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
-    </dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-transportpce</artifactId>
+      <version>${project.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
 
-     <build>
-         <plugins>
-             <plugin>
-                 <groupId>org.apache.maven.plugins</groupId>
-                 <artifactId>maven-deploy-plugin</artifactId>
-                 <configuration>
-                     <skip>true</skip>
-                 </configuration>
-             </plugin>
-         </plugins>
-     </build>
-
-
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

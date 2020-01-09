@@ -29,36 +29,22 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </scm>
 
   <modules>
-    <module>artifacts</module>
     <module>ordmodels</module>
     <module>tapimodels</module>
     <module>api</module>
     <module>common</module>
+    <module>test-common</module>
     <module>renderer</module>
     <module>networkmodel</module>
     <module>inventory</module>
     <module>olm</module>
-    <!--module>tests</module-->
     <module>pce</module>
     <module>servicehandler</module>
     <module>tapi</module>
     <module>features</module>
     <module>karaf</module>
-    <module>test-common</module>
   </modules>
 
-  <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
-  <!--
-      Jenkins-releng tests reports more than 600 lines of javadoc warnings on ordmodels
-      and api folders generated-sources for unclear reasons.
-      This behavior was impossible to reproduce locally.
-      The javadoc plugin build section below removes most of those useless warnings.
-      ordmodels/pom.xml and api/pom.xml have been modified similarly with a build and
-      a reporting sections to remove the rest of the warnings.
-      Note that javadoc plugins maven implementation still suffers from several bugs.
-      Tests shows that many configurations options are not correctly supported.
-      (proxy, sourceFilesExclude, etc...).
-  -->
   <build>
     <plugins>
       <plugin>
