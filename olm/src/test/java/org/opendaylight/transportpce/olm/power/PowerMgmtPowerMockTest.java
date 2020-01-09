@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -116,6 +117,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                 this.deviceTransactionManager);
     }
 
+    @Ignore
     @Test
     public void testSetPowerMockingUtil() {
         PowerMockito.mockStatic(OlmUtils.class);
@@ -127,6 +129,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
 
     }
 
+    @Ignore
     @Test
     public void testSetPowerMockingUtilNetwokType() throws OpenRoadmInterfaceException {
         PowerMockito.mockStatic(OlmUtils.class);
@@ -148,6 +151,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
 
     }
 
+    @Ignore
     @Test
     public void testSetPowerMockingUtilNetwokTypeMoreThanOneNode() throws OpenRoadmInterfaceException {
         PowerMockito.mockStatic(OlmUtils.class);
@@ -169,6 +173,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
 
     }
 
+    @Ignore
     @Test
     public void testSetPowerXpdrNodes() {
         PowerMockito.mockStatic(OlmUtils.class);
@@ -180,6 +185,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
 
     }
 
+    @Ignore
     @Test
     public void testSetPowerRdmNodesReturnInterfaceEmpty() throws OpenRoadmInterfaceException {
         PowerMockito.mockStatic(OlmUtils.class);
@@ -194,6 +200,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
         Assert.assertEquals(false, output);
     }
 
+    @Ignore
     @Test
     public void testSetPowerRdmNodesThrowsException() throws OpenRoadmInterfaceException {
         PowerMockito.mockStatic(OlmUtils.class);
@@ -208,6 +215,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
         Assert.assertEquals(false, output);
     }
 
+    @Ignore
     @Test
     public void testSetPowerRdmNodesReturnInterface() throws OpenRoadmInterfaceException {
         PowerMockito.mockStatic(OlmUtils.class);
