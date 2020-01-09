@@ -58,6 +58,9 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
     private XMLDataObjectConverter(SchemaContext schemaContext, BindingNormalizedNodeSerializer codecRegistry) {
         super(schemaContext, codecRegistry);
         this.xmlInputFactory = XMLInputFactory.newInstance();
+        // set external DTD and schema to null to avoid vulnerability (sonar report)
+        this.xmlInputFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        this.xmlInputFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
     }
 
     /**
