@@ -21,29 +21,65 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <version>0.4.2-SNAPSHOT</version>
   <packaging>feature</packaging>
 
+  <name>OpenDaylight :: transportpce</name>
 
   <properties>
     <mdsal.version>1.10.2-SNAPSHOT</mdsal.version>
-    <yangtools.version>3.0.6</yangtools.version>
     <netconf.version>1.7.2-SNAPSHOT</netconf.version>
     <restconf.version>1.10.2-SNAPSHOT</restconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
-  <name>OpenDaylight :: transportpce</name>
-
   <dependencies>
     <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>odl-restconf-all</artifactId>
-      <version>${restconf.version}</version>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>odl-transportpce-api</artifactId>
+      <version>${project.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
     <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-renderer</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-networkmodel</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-olm</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-pce</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>transportpce-servicehandler</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>odl-mdsal-broker</artifactId>
       <version>${mdsal.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.netconf</groupId>
+      <artifactId>odl-restconf-all</artifactId>
+      <version>${restconf.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
@@ -61,79 +97,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
-    <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>netconf-console</artifactId>
-      <version>${netconf.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>odl-netconf-topology</artifactId>
-      <version>${netconf.version}</version>
-      <classifier>features</classifier>
-      <type>xml</type>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>odl-transportpce-api</artifactId>
-      <version>${project.version}</version>
-      <classifier>features</classifier>
-      <type>xml</type>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>odl-transportpce-ordmodels</artifactId>
-      <version>${project.version}</version>
-      <classifier>features</classifier>
-      <type>xml</type>
-    </dependency>
-    <!--dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>odl-transportpce-stubmodels</artifactId>
-      <version>${project.version}</version>
-      <classifier>features</classifier>
-      <type>xml</type>
-    </dependency-->
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>transportpce-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>transportpce-networkmodel</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>transportpce-pce</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>transportpce-renderer</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>transportpce-olm</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>transportpce-servicehandler</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <!--dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>transportpce-stubpce</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.transportpce</groupId>
-      <artifactId>transportpce-stubrenderer</artifactId>
-      <version>${project.version}</version>
-    </dependency-->
   </dependencies>
 
 <!-- skipping test since this is an umbrella project / folder -->
@@ -149,6 +112,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       </plugin>
     </plugins>
   </build>
-
-
 </project>
