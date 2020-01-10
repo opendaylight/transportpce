@@ -65,6 +65,9 @@ public final class StringUtils {
     /**
      * Checks if the given object is null and returns its representation given by replacement.
      *
+     * @param objectString an object
+     * @param replacement a replacement string
+     * @return a string representing the object
      */
     public static String prepareString(Object objectString, String replacement) {
         return objectString == null ? replacement : objectString.toString();
@@ -73,6 +76,8 @@ public final class StringUtils {
     /**
      * Checks if the given object is null and returns -1 .
      *
+     * @param object an object
+     * @return a string representing the object or -1 if null
      */
     public static String prepareEmptyInt(Object object) {
         return (object == null ? "-1" : object.toString());

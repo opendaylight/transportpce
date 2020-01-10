@@ -262,6 +262,12 @@ public class GnpyResult {
 
     /**
      * Transforms the given input {@link NormalizedNode} into the given {@link DataObject}.
+     *
+     * @param <T> a generic
+     * @param normalizedNode a non null representation of the normalizedNode
+     * @param rootNode root node
+     * @param codecRegistry codec registry
+     * @return value of the binding Node Entry
      */
     @SuppressWarnings("unchecked")
     public <T extends DataObject> Optional<T> getDataObject(@Nonnull NormalizedNode<?, ?> normalizedNode,
