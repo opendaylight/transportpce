@@ -258,17 +258,13 @@ public class GnpyResult {
     }
 
     /**
-     * Transforms the given input {@link NormalizedNode} into the given
-     * {@link DataObject}.
+     * Transforms the given input {@link NormalizedNode} into the given {@link DataObject}.
      *
-     * @param normalizedNode
-     *            normalized node you want to convert
-     * @param rootNode
-     *            {@link QName} of converted normalized node root
-     *
-     *            <p>
-     *            The input object should be {@link ContainerNode}
-     *            </p>
+     * @param <T> a generic
+     * @param normalizedNode a non null representation of the normalizedNode
+     * @param rootNode root node
+     * @param codecRegistry codec registry
+     * @return value of the binding Node Entry
      */
     public <T extends DataObject> Optional<T> getDataObject(@Nonnull NormalizedNode<?, ?> normalizedNode,
             @Nonnull QName rootNode, BindingNormalizedNodeSerializer codecRegistry) {
