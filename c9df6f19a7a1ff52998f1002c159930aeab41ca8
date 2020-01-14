@@ -16,6 +16,259 @@
       "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae762a00_2cf52d33",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2019-12-12.yang",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "Shall add a description, stating that trib-lot is a reference which points the first trib-slot of a list made of 1 (ODU0), 8 (ODU2/ODU2e) trib-slots to be provisionned at the end on the device interface",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 11
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a2da279_b5c096c5",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "General comment for following methods handling 1GE/10GE/ODU0/ODU2/ODU2e :\nAs we check the version for previous method, when trying to create OTN interfaces (or interfaces that implies to handle OTN in muxponders : 1GE/10GE), suggest to harden the code introducing the same kind of test. If version 2.2.1 --\u003e proceed, if version 1.2.1 : throw exception : this equipment does not support OTN interfaces/connections.",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 5
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20f30e6c_21d0cdd2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "As for ODU0 interfaces, tribslots and tribport shall be provided as input parameters of the method",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 200,
+        "endChar": 27
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5077cabf_7e26bfba",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "Same comment : tribslots and tribport shall be provided as input parameters of the method for ODU2e",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 208,
+        "endChar": 5
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e401a2b_33244452",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "Sorry do not remember why we don\u0027t set current speed and duplex type. Could you keep this as it is but add comment on the reason why we de-activate this setting",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 37
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41b207c4_deb85403",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "Same as previous comment : please commment on the reason for de-activating this setting",
+      "range": {
+        "startLine": 111,
+        "startChar": 1,
+        "endLine": 112,
+        "endChar": 37
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a83554e_dcd9fda3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "tribslots and tribports need to be added as input parameters",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 50
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "283b58f1_5cd6f100",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "I guess this was made for demonstration purpose. As Tribport and tribslots are added as input parameters, please modify accordingly to make it generic. Tribslot shall then be a list with first member referenced on tribslot passed as an integer input  parameter.",
+      "range": {
+        "startLine": 159,
+        "startChar": 1,
+        "endLine": 161,
+        "endChar": 47
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "376f9354_461298c2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "Same comment as for ODU2e : tribport and tribslot shall be input parameters of the method",
+      "range": {
+        "startLine": 247,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 50
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08eeae61_57b63e37",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "Same comment as before. As Tribport and tribslots are added as input parameters, please modify accordingly to make it generic.",
+      "range": {
+        "startLine": 274,
+        "startChar": 1,
+        "endLine": 276,
+        "endChar": 33
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "312cdfca_aed9d6c2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:21:29Z",
+      "side": 1,
+      "message": "Will need to add tribport and tribslot to be consistent with ODU0 interface creation process",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 112
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
