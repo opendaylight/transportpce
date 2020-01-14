@@ -249,6 +249,29 @@
     },
     {
       "key": {
+        "uuid": "5a4ea662_5d09fd6a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-01-14T18:44:07Z",
+      "side": 1,
+      "message": "Will need to make something more generic : right now we support the creation of GE, 10GE, ODU0, ODU2e. But we should also support at least ODU4 in a first step (already supported in OpenRoadmInterface) , and ODU2 later on. ODU4 shall be  created in a first step to support the ODU2 or ODU2e. Service creation process will be : ODU4 OTN link, and then 10GE/ODU2e relying on it. For 1GE/ODU0 there might be an intermediate container to map ODU0 to ODU2. \n\nThis work could be done now or in a separate change during consolidation in TRNSPRTPCE-174 : Integrate OTN Renderer Code",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 56
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "312cdfca_aed9d6c2",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 11
