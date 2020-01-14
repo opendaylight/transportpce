@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75d8aae0_4032cb4b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-01-14T09:19:34Z",
+      "side": 1,
+      "message": "JIRA: TRNSPRTPCE-174",
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
