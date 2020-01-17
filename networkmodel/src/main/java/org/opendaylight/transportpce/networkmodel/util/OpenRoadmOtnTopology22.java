@@ -24,8 +24,8 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.networks.network.network.types.OpenroadmCommonNetworkBuilder;
@@ -227,7 +227,7 @@ public class OpenRoadmOtnTopology22 {
                     LOG.warn("no rate in portmapping for lcp {} of {}", ma.getLogicalConnectionPoint(),
                         mappingNode.getNodeId());
                 }
-                xpdrTpBuilder.setTailEquipmentId(ma.getAssociatedLcp());
+                xpdrTpBuilder.setTailEquipmentId(ma.getConnectionMapLcp());
                 ontTp1Bldr.setXpdrTpPortConnectionAttributes(xpdrTpBuilder.build());
                 ietfTpBldr.addAugmentation(TerminationPoint1.class, ontTp1Bldr.build());
                 tpList.add(ietfTpBldr.build());
@@ -248,7 +248,7 @@ public class OpenRoadmOtnTopology22 {
                     LOG.warn("no rate in portmapping for lcp {} of {}", ma.getLogicalConnectionPoint(),
                         mappingNode.getNodeId());
                 }
-                xpdrTpBuilder.setTailEquipmentId(ma.getAssociatedLcp());
+                xpdrTpBuilder.setTailEquipmentId(ma.getConnectionMapLcp());
                 ontTp1Bldr.setXpdrTpPortConnectionAttributes(xpdrTpBuilder.build());
                 ietfTpBldr.addAugmentation(TerminationPoint1.class, ontTp1Bldr.build());
                 tpList.add(ietfTpBldr.build());

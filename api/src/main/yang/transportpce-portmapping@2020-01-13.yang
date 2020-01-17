@@ -4,6 +4,9 @@ module transportpce-portmapping {
   prefix "org-opendaylight-transportpce-portmapping";
 
   import org-openroadm-common-types { prefix org-openroadm-common-types; revision-date 2018-10-19; }
+  import org-openroadm-switching-pool-types { prefix org-openroadm-switching-pool-types; revision-date 2017-12-15; }
+  import org-openroadm-port-types {prefix org-openroadm-port-types; revision-date 2018-10-19; }
+
   import ietf-inet-types { prefix ietf-inet-types; revision-date 2013-07-15; }
 
   organization
@@ -14,6 +17,11 @@ module transportpce-portmapping {
     "YANG definitions of RPCs supported by OLM. Copyright (c) 2017
     AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
     ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
+
+  revision "2020-01-13" {
+      description "Add OTN data from device and necessary
+          to build node inside otn topology";
+    }
 
   revision "2019-11-15" {
     description "OTN support";
@@ -115,41 +123,49 @@ module transportpce-portmapping {
         leaf port-qual {
           type string;
           description
-             "Useful to identify from portmapping client from network ports
-             of XPDR";
+            "Useful to identify from portmapping client from network ports
+            of XPDR";
         }
         leaf supporting-ethernet{
           type string;
           description
             "Ethernet interface provisioned on the port";
-         }
-         leaf supporting-odu4{
-           type string;
-           description
-             "ODU4 interface provisioned on the port";
-         }
-         leaf rate{
-            type string;
-            description
-              "Rate supported by the port";
         }
-        leaf associated-lcp {
+        leaf supporting-odu4{
           type string;
           description
-             "For XPDR, associate two logical-connection-points from device/connnection-map
-             data";
+            "ODU4 interface provisioned on the port";
+        }
+        leaf rate{
+          type string;
+          description
+            "Rate supported by the port";
+        }
+        leaf-list supported-interface-capability {
+          type identityref {
+            base org-openroadm-port-types:supported-if-capability;
+          }
+        }
+        leaf xponder-type {
+          type org-openroadm-common-types:xpdr-node-types;
+        }
+        leaf connection-map-lcp {
+          type string;
+          description
+            "For XPDR, associate two logical-connection-points from device/connnection-map
+            data";
         }
         leaf partner-lcp {
           type string;
           description
-             "For XPDR unidirectional NETWORK port, associate two logical-connection-points
-             from device/partner port data";
+            "For XPDR unidirectional NETWORK port, associate two logical-connection-points
+            from device/partner port data";
         }
       }
       list cp-to-degree {
         description
-             "This mapping helps locate degree number of the circuitpack that
-             does lldp protocol management";
+          "This mapping helps locate degree number of the circuitpack that
+          does lldp protocol management";
         key circuit-pack-name;
         leaf circuit-pack-name {
           type string;
@@ -159,6 +175,43 @@ module transportpce-portmapping {
         }
         leaf interface-name {
           type string;
+        }
+      }
+
+      list switching-pool-lcp {
+        description
+          "For MUXPDR and SWITCH, associates from device/odu-switching-pools data, the logical-connection-points";
+        key "switching-pool-number";
+        leaf switching-pool-number {
+          type uint16;
+          description
+            "Unique identifier for this odu-switching-pool";
+        }
+        leaf switching-pool-type {
+          type org-openroadm-switching-pool-types:switching-pool-types;
+        }
+        list non-blocking-list {
+          key "nbl-number";
+          leaf nbl-number {
+            type uint16;
+            description
+              "Identifier for this non-blocking-list. Unique within odu-switching-pool";
+          }
+          leaf interconnect-bandwidth-unit {
+            type uint32;
+            description
+              "Switch fabric interconnect bandwidth unit rate in bits per second.
+               Represents granularity of switch fabric";
+          }
+          leaf interconnect-bandwidth {
+            type uint32;
+            description
+              "Total interconnect bandwidth for a non-blocking element expressed as
+               number of inter-connect-bandwidth units";
+          }
+          leaf-list lcp-list {
+            type string;
+          }
         }
       }
     }

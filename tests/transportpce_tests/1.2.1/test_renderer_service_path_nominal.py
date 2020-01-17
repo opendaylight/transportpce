@@ -138,13 +138,13 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertIn(
              {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
               'logical-connection-point': 'XPDR1-NETWORK1', 'port-direction': 'bidirectional',
-              'associated-lcp': 'XPDR1-CLIENT1', 'port-qual': 'xpdr-network'},
+              'connection-map-lcp': 'XPDR1-CLIENT1', 'port-qual': 'xpdr-network'},
              res['nodes'][0]['mapping'])
         self.assertIn(
              {'supporting-port': 'C1',
               'supporting-circuit-pack-name': '1/0/C1-PLUG-CLIENT',
               'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
-              'associated-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
+              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
              res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):

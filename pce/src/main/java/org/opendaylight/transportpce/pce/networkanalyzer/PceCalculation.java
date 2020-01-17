@@ -94,7 +94,6 @@ public class PceCalculation {
             returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
             return;
         }
-
         MapUtils.mapDiversityConstraints(allNodes, allLinks, pceHardConstraints);
 
         if (!analyzeNw()) {

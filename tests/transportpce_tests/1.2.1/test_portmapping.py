@@ -247,7 +247,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-direction': 'bidirectional',
-             'associated-lcp': 'XPDR1-CLIENT1', 'port-qual': 'xpdr-network'},
+             'connection-map-lcp': 'XPDR1-CLIENT1', 'port-qual': 'xpdr-network'},
             res['mapping'])
 
     def test_11_xpdr_portmapping_NETWORK2(self):
@@ -262,7 +262,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertIn(
             {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
-             'associated-lcp': 'XPDR1-CLIENT3', 'port-qual': 'xpdr-network'},
+             'connection-map-lcp': 'XPDR1-CLIENT3', 'port-qual': 'xpdr-network'},
             res['mapping'])
 
     def test_12_xpdr_portmapping_CLIENT1(self):
@@ -278,7 +278,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             {'supporting-port': 'C1',
              'supporting-circuit-pack-name': '1/0/C1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
-             'associated-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
+             'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
             res['mapping'])
 
     def test_13_xpdr_portmapping_CLIENT2(self):
@@ -310,7 +310,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             {'supporting-port': 'C3',
              'supporting-circuit-pack-name': '1/0/C3-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT3',
-             'associated-lcp': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
+             'connection-map-lcp': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
              'port-qual': 'xpdr-client'},
             res['mapping'])
 

@@ -23,8 +23,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev191115.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.NetworkTypes1;
@@ -215,12 +215,12 @@ public class OpenRoadmTopology22 {
                 .network.rev181130.TerminationPoint1Builder();
             if (m.getPortQual().equals("xpdr-network")) {
                 XpdrNetworkAttributesBuilder xpdrNwAttrBldr = new XpdrNetworkAttributesBuilder()
-                        .setTailEquipmentId(m.getAssociatedLcp());
+                        .setTailEquipmentId(m.getConnectionMapLcp());
                 ontTp1Bldr.setXpdrNetworkAttributes(xpdrNwAttrBldr.build());
                 ocnTp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
                 org.opendaylight.yang.gen.v1.http.transportpce.topology.rev190625.TerminationPoint1Builder tpceTp1Bldr =
                     new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev190625.TerminationPoint1Builder()
-                        .setAssociatedConnectionMapPort(m.getAssociatedLcp());
+                        .setAssociatedConnectionMapPort(m.getConnectionMapLcp());
                 ietfTpBldr.addAugmentation(TerminationPoint1.class, ontTp1Bldr.build())
                     .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
                         .TerminationPoint1.class, ocnTp1Bldr.build())
@@ -229,12 +229,12 @@ public class OpenRoadmTopology22 {
                 tpList.add(ietfTpBldr.build());
             } else if (m.getPortQual().equals("xpdr-client")) {
                 XpdrClientAttributesBuilder xpdrNwAttrBldr = new XpdrClientAttributesBuilder()
-                        .setTailEquipmentId(m.getAssociatedLcp());
+                        .setTailEquipmentId(m.getConnectionMapLcp());
                 ontTp1Bldr.setXpdrClientAttributes(xpdrNwAttrBldr.build());
                 ocnTp1Bldr.setTpType(OpenroadmTpType.XPONDERCLIENT);
                 org.opendaylight.yang.gen.v1.http.transportpce.topology.rev190625.TerminationPoint1Builder tpceTp1Bldr =
                     new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev190625.TerminationPoint1Builder()
-                        .setAssociatedConnectionMapPort(m.getAssociatedLcp());
+                        .setAssociatedConnectionMapPort(m.getConnectionMapLcp());
                 ietfTpBldr.addAugmentation(TerminationPoint1.class, ontTp1Bldr.build())
                     .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
                         .TerminationPoint1.class, ocnTp1Bldr.build())

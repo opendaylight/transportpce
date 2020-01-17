@@ -32,7 +32,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public  final class TopologyUtils {
+public final class TopologyUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(TopologyUtils.class);
 
@@ -43,28 +43,26 @@ public  final class TopologyUtils {
     public static LinkBuilder createLink(String srcNode, String dstNode, String srcTp, String destTp) {
 
         // Create Destination for link
-        DestinationBuilder dstNodeBldr = new DestinationBuilder();
-        dstNodeBldr.setDestTp(destTp);
-        dstNodeBldr.setDestNode(new NodeId(dstNode));
+        DestinationBuilder dstNodeBldr = new DestinationBuilder()
+            .setDestTp(destTp)
+            .setDestNode(new NodeId(dstNode));
 
         // Create Source for the link
-        SourceBuilder srcNodeBldr = new SourceBuilder();
-        srcNodeBldr.setSourceNode(new NodeId(srcNode));
-        srcNodeBldr.setSourceTp(srcTp);
+        SourceBuilder srcNodeBldr = new SourceBuilder()
+            .setSourceNode(new NodeId(srcNode))
+            .setSourceTp(srcTp);
 
         // set link builder attribute
-        LinkBuilder lnkBldr = new LinkBuilder();
-
-        lnkBldr.setDestination(dstNodeBldr.build());
-        lnkBldr.setSource(srcNodeBldr.build());
-        lnkBldr.setLinkId(LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp));
+        LinkBuilder lnkBldr = new LinkBuilder()
+            .setDestination(dstNodeBldr.build())
+            .setSource(srcNodeBldr.build())
+            .setLinkId(LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp));
         lnkBldr.withKey(new LinkKey(lnkBldr.getLinkId()));
 
         //set opposite link
-        Link1Builder lnk1Bldr = new Link1Builder();
         LinkId oppositeLinkId = LinkIdUtil.getOppositeLinkId(srcNode, srcTp, dstNode, destTp);
-        lnk1Bldr.setOppositeLink(oppositeLinkId);
-        lnkBldr.addAugmentation(Link1.class,lnk1Bldr.build());
+        Link1 lnk1 = new Link1Builder().setOppositeLink(oppositeLinkId).build();
+        lnkBldr.addAugmentation(Link1.class,lnk1);
         return lnkBldr;
     }
 
