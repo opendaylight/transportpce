@@ -208,14 +208,17 @@ public class PceNode {
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
                 .TerminationPoint1.class);
             if (cntp1.getTpType() == OpenroadmTpType.XPONDERNETWORK) {
-                if (nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
+                if (nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
                     this.usedXpndrNWTps.add(tp.getTpId().getValue());
-                    LOG.debug("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
+                    LOG.info("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
                 } else {
                     this.valid = true;
                 }
                 // find Client of this network TP
-                String client = nttp1.getXpdrNetworkAttributes().getTailEquipmentId();
+                org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123.TerminationPoint1 tpceTp1 =
+                    tp.augmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123
+                        .TerminationPoint1.class);
+                String client = tpceTp1.getAssociatedConnectionMapPort();
                 if ((client.equals("")) || (client == null)) {
                     LOG.error("initXndrTps: XPONDER {} NW TP doesn't have defined Client {}", this.toString(), tp
                             .getTpId().getValue());
@@ -276,14 +279,14 @@ public class PceNode {
     }
 
     private String getSupNodeId(Node inputNode) {
-        String tempSupId = "";
         // TODO: supporting IDs exist as a List. this code takes just the
         // first element
-        tempSupId = MapUtils.getSupNode(inputNode);
-        if (tempSupId.equals("")) {
+        if (MapUtils.getSupNode(inputNode) != null) {
+            return MapUtils.getSupNode(inputNode);
+        } else {
             LOG.error("getSupNodeId: Empty Supporting node for node: [{}]. Node is ignored", inputNode.getNodeId());
+            return "";
         }
-        return tempSupId;
     }
 
     public void validateAZxponder(String anodeId, String znodeId) {

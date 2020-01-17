@@ -86,7 +86,7 @@ class TransportPCEtesting(unittest.TestCase):
 
 
     def setUp(self):
-        time.sleep(30)
+        time.sleep(5)
 
 #END_IGNORE_XTESTING
 
@@ -202,6 +202,10 @@ class TransportPCEtesting(unittest.TestCase):
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+                              res['network'][0]['node'][i]['supporting-node'])
                 listNode.remove(nodeId)
             elif(nodeId=='ROADM-A1-SRG3'):
                 #Test related to SRG1
@@ -211,6 +215,10 @@ class TransportPCEtesting(unittest.TestCase):
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+                              res['network'][0]['node'][i]['supporting-node'])
                 listNode.remove(nodeId)
             elif(nodeId=='ROADM-A1-DEG1'):
                 #Test related to DEG1
@@ -219,6 +227,10 @@ class TransportPCEtesting(unittest.TestCase):
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+                              res['network'][0]['node'][i]['supporting-node'])
                 listNode.remove(nodeId)
             elif(nodeId=='ROADM-A1-DEG2'):
                 #Test related to DEG2
@@ -227,6 +239,10 @@ class TransportPCEtesting(unittest.TestCase):
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
                               res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+                              res['network'][0]['node'][i]['supporting-node'])
                 listNode.remove(nodeId)
             else:
                 self.assertFalse(True)
@@ -303,6 +319,8 @@ class TransportPCEtesting(unittest.TestCase):
              #Tests related to XPDRA nodes
              if(nodeId=='XPDR-A1-XPDR1'):
                  self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDR-A1'},
+                               res['network'][0]['node'][i]['supporting-node'])
+                 self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
                                res['network'][0]['node'][i]['supporting-node'])
                  self.assertEqual(nodeType,'XPONDER')
                  nbTps=len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
@@ -392,7 +410,6 @@ class TransportPCEtesting(unittest.TestCase):
               "POST", url, data=json.dumps(data), headers=headers,
               auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
-        time.sleep(10)
 
     def test_11_connect_tail_rdm_xpdr(self):
          #Connect the tail: ROADMA to XPDRA
@@ -407,14 +424,13 @@ class TransportPCEtesting(unittest.TestCase):
                 "networkutils:srg-num": "1",
                 "networkutils:termination-point-num": "SRG1-PP1-TXRX"
              }
-            }
+           }
          }
          headers = {'content-type': 'application/json'}
          response = requests.request(
                "POST", url, data=json.dumps(data), headers=headers,
                auth=('admin', 'admin'))
          self.assertEqual(response.status_code, requests.codes.ok)
-         time.sleep(10)
 
     def test_12_getLinks_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
@@ -483,7 +499,7 @@ class TransportPCEtesting(unittest.TestCase):
              "PUT", url, data=json.dumps(data), headers=headers,
              auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.created)
-        time.sleep(30)
+        time.sleep(20)
 
     def test_14_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
@@ -504,7 +520,6 @@ class TransportPCEtesting(unittest.TestCase):
             else:
                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-clli-network:clli'],'NodeC')
             listNode.remove(nodeId)
-
         self.assertEqual(len(listNode),0)
 
     def test_15_getOpenRoadmNetwork(self):
@@ -727,7 +742,7 @@ class TransportPCEtesting(unittest.TestCase):
              "PUT", url, data=json.dumps(data), headers=headers,
              auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.created)
-        time.sleep(30)
+        time.sleep(20)
 
     def test_19_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
@@ -750,7 +765,6 @@ class TransportPCEtesting(unittest.TestCase):
             else:
                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-clli-network:clli'],'NodeC')
             listNode.remove(nodeId)
-
         self.assertEqual(len(listNode),0)
 
     def test_20_verifyDegree(self):
@@ -814,7 +828,6 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(oppLink_type, 'XPONDER-OUTPUT')
             elif link_type=='XPONDER-OUTPUT':
                 self.assertEqual(oppLink_type, 'XPONDER-INPUT')
-        time.sleep(5)
 
     def test_22_disconnect_ROADMB(self):
         #Delete in the topology-netconf
@@ -940,9 +953,12 @@ class TransportPCEtesting(unittest.TestCase):
                     if (tpid == 'XPDR1-CLIENT1'):
                         self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
                                          ['org-openroadm-common-network:tp-type'], 'XPONDER-CLIENT')
+                    if (tpid == 'XPDR1-NETWORK1'):
                         self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                         ['org-openroadm-network-topology:xpdr-client-attributes']['tail-equipment-id'],
-                                         'XPDR1-NETWORK1')
+                                         ['org-openroadm-common-network:tp-type'], 'XPONDER-NETWORK')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                         ['org-openroadm-network-topology:xpdr-network-attributes']['tail-equipment-id'],
+                                         'ROADM-A1-SRG1--SRG1-PP1-TXRX')
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDR-A1'},
                     res['network'][0]['node'][i]['supporting-node'])
                 listNode.remove(nodeId)

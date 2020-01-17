@@ -12,10 +12,9 @@ import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
+import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.networkmodel.util.ClliNetwork;
-import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
-import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
+import org.opendaylight.transportpce.networkmodel.util.TpceNetwork;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
@@ -27,25 +26,22 @@ public class NetworkModelProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelProvider.class);
 
-    private NetworkTransactionService networkTransactionService;
     private final DataBroker dataBroker;
     private final RpcProviderService rpcProviderService;
     private final TransportpceNetworkutilsService networkutilsService;
     private final NetConfTopologyListener topologyListener;
-    private final OpenRoadmFactory openRoadmFactory;
     private ListenerRegistration<NetConfTopologyListener> dataTreeChangeListenerRegistration;
     private ObjectRegistration<TransportpceNetworkutilsService> networkutilsServiceRpcRegistration;
+    private TpceNetwork tpceNetwork;
 
-    public NetworkModelProvider(NetworkTransactionService networkTransactionService,
-                                final DataBroker dataBroker, final RpcProviderService rpcProviderService,
-            final TransportpceNetworkutilsService networkutilsService, final NetConfTopologyListener topologyListener,
-                                OpenRoadmFactory openRoadmFactory) {
-        this.networkTransactionService = networkTransactionService;
+    public NetworkModelProvider(NetworkTransactionService networkTransactionService, final DataBroker dataBroker,
+        final RpcProviderService rpcProviderService, final TransportpceNetworkutilsService networkutilsService,
+        final NetConfTopologyListener topologyListener) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.networkutilsService = networkutilsService;
         this.topologyListener = topologyListener;
-        this.openRoadmFactory = openRoadmFactory;
+        this.tpceNetwork = new TpceNetwork(networkTransactionService);
     }
 
     /**
@@ -53,17 +49,16 @@ public class NetworkModelProvider {
      */
     public void init() {
         LOG.info("NetworkModelProvider Session Initiated");
-        ClliNetwork.createClliLayer(dataBroker);
-        OpenRoadmNetwork.createOpenRoadmNetworkLayer(dataBroker);
-        openRoadmFactory.createTopoLayerVersionControl(networkTransactionService);
-        openRoadmFactory.createOtnTopoLayerVersionControl(networkTransactionService);
+        tpceNetwork.createLayer(NetworkUtils.CLLI_NETWORK_ID);
+        tpceNetwork.createLayer(NetworkUtils.UNDERLAY_NETWORK_ID);
+        tpceNetwork.createLayer(NetworkUtils.OVERLAY_NETWORK_ID);
+        tpceNetwork.createLayer(NetworkUtils.OTN_NETWORK_ID);
         dataTreeChangeListenerRegistration =
             dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL,
                 InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);
         networkutilsServiceRpcRegistration =
             rpcProviderService.registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
     }
-
 
         /**
          * Method called when the blueprint container is destroyed.
@@ -77,5 +72,4 @@ public class NetworkModelProvider {
             networkutilsServiceRpcRegistration.close();
         }
     }
-
 }

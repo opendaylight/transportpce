@@ -138,40 +138,44 @@ class TransportPCEtesting(unittest.TestCase):
             self.assertEqual(nbNode, 2)
             listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2']
             for i in range(0, nbNode):
-                nodeType = res['network'][0]['node'][i]['org-openroadm-network-topology:node-type']
+                nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
                 nodeId = res['network'][0]['node'][i]['node-id']
-                if(nodeId == 'SPDR-SA1-XPDR1'):
+                if (nodeId == 'SPDR-SA1-XPDR1'):
                     self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
+                                  res['network'][0]['node'][i]['supporting-node'])
+                    self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
                                   res['network'][0]['node'][i]['supporting-node'])
                     self.assertEqual(nodeType, 'XPONDER')
                     nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                     client = 0
                     network = 0
                     for j in range(0, nbTps):
-                        tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-network-topology:tp-type']
+                        tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-common-network:tp-type']
                         tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                         if (tpType == 'XPONDER-CLIENT'):
                             client += 1
                         elif (tpType == 'XPONDER-NETWORK'):
                             network += 1
-                    self.assertTrue(client == 4)
+                    self.assertTrue(client == 0)
                     self.assertTrue(network == 1)
                     listNode.remove(nodeId)
-                if(nodeId == 'SPDR-SA1-XPDR2'):
+                elif (nodeId == 'SPDR-SA1-XPDR2'):
                     self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
+                                  res['network'][0]['node'][i]['supporting-node'])
+                    self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
                                   res['network'][0]['node'][i]['supporting-node'])
                     self.assertEqual(nodeType, 'XPONDER')
                     nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                     client = 0
                     network = 0
                     for j in range(0, nbTps):
-                        tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-network-topology:tp-type']
+                        tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-common-network:tp-type']
                         tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                         if (tpType == 'XPONDER-CLIENT'):
                             client += 1
                         elif (tpType == 'XPONDER-NETWORK'):
                             network += 1
-                    self.assertTrue(client == 4)
+                    self.assertTrue(client == 0)
                     self.assertTrue(network == 4)
                     listNode.remove(nodeId)
                 else:
@@ -202,18 +206,20 @@ class TransportPCEtesting(unittest.TestCase):
         for i in range(0, nbNode):
             nodeId = res['network'][0]['node'][i]['node-id']
             if(nodeId == 'SPDR-SA1-XPDR1'):
-                nodeType = res['network'][0]['node'][i]['org-openroadm-otn-network-topology:node-type']
+                nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
                 self.assertEqual(nodeType, 'MUXPDR')
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
                               res['network'][0]['node'][i]['supporting-node'])
                 self.assertIn({'network-ref': 'openroadm-topology', 'node-ref': 'SPDR-SA1-XPDR1'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
                               res['network'][0]['node'][i]['supporting-node'])
                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:xpdr-attributes']['xpdr-number'], 1)
                 nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 client = 0
                 network = 0
                 for j in range(0, nbTps):
-                    tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-type']
+                    tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-common-network:tp-type']
                     tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                     if (tpType == 'XPONDER-CLIENT'):
                         client += 1
@@ -240,18 +246,20 @@ class TransportPCEtesting(unittest.TestCase):
                         self.assertIn('XPDR1-CLIENT1', nbl['tp-list'])
                         self.assertNotIn('XPDR1-CLIENT2', nbl['tp-list'])
             elif(nodeId == 'SPDR-SA1-XPDR2'):
-                nodeType = res['network'][0]['node'][i]['org-openroadm-otn-network-topology:node-type']
+                nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
                 self.assertEqual(nodeType, 'SWITCH')
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
                               res['network'][0]['node'][i]['supporting-node'])
                 self.assertIn({'network-ref': 'openroadm-topology', 'node-ref': 'SPDR-SA1-XPDR2'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
                               res['network'][0]['node'][i]['supporting-node'])
                 self.assertEqual(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:xpdr-attributes']['xpdr-number'], 2)
                 nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 client = 0
                 network = 0
                 for j in range(0, nbTps):
-                    tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-type']
+                    tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-common-network:tp-type']
                     tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                     if (tpType == 'XPONDER-CLIENT'):
                         client += 1

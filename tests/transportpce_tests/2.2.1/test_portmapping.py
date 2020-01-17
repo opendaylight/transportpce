@@ -236,7 +236,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
+            {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
+             'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
              'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1'},
             res['mapping'])
@@ -251,7 +252,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
+            {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
+             'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-CLIENT2', 'port-qual': 'xpdr-network'},
             res['mapping'])
@@ -266,7 +268,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supporting-port': 'C1',
+            {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
+             'supporting-port': 'C1',
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
@@ -282,10 +285,11 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supporting-port': 'C1',
-                 'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
-                 'logical-connection-point': 'XPDR1-CLIENT2', 'port-direction': 'bidirectional',
-                 'connection-map-lcp': 'XPDR1-NETWORK2', 'port-qual': 'xpdr-client'},
+            {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
+             'supporting-port': 'C1',
+             'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
+             'logical-connection-point': 'XPDR1-CLIENT2', 'port-direction': 'bidirectional',
+             'connection-map-lcp': 'XPDR1-NETWORK2', 'port-qual': 'xpdr-client'},
             res['mapping'])
 
     def test_15_xpdr_device_disconnected(self):

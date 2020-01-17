@@ -24,7 +24,7 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
+import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.InitRoadmNodesInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.Nodes;
@@ -49,13 +49,11 @@ public class R2RLinkDiscovery {
     private final DataBroker dataBroker;
     private final NetworkTransactionService networkTransactionService;
     private final DeviceTransactionManager deviceTransactionManager;
-    private final OpenRoadmFactory openRoadmFactory;
 
     public R2RLinkDiscovery(final DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
-        OpenRoadmFactory openRoadmFactory, NetworkTransactionService networkTransactionService) {
+        NetworkTransactionService networkTransactionService) {
         this.dataBroker = dataBroker;
         this.deviceTransactionManager = deviceTransactionManager;
-        this.openRoadmFactory = openRoadmFactory;
         this.networkTransactionService = networkTransactionService;
     }
 
@@ -225,7 +223,7 @@ public class R2RLinkDiscovery {
         r2rlinkBuilderAToZ.setRdmANode(nodeId.getValue()).setDegANum(srcDegId.shortValue())
             .setTerminationPointA(srcTpTx).setRdmZNode(destNodeId.getValue()).setDegZNum(destDegId.shortValue())
             .setTerminationPointZ(destTpRx);
-        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderAToZ.build(), this.openRoadmFactory, this.dataBroker)) {
+        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderAToZ.build(), this.dataBroker)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in A->Z direction", nodeId.getValue(),
                 destNodeId.getValue());
             return false;
@@ -236,11 +234,14 @@ public class R2RLinkDiscovery {
                 + ", SrcTPId: {}, DestNodeId:{} , DestDegId: {}, DestTPId: {}",
             destNodeId, destDegId, destTpTx, nodeId.getValue(), srcDegId, srcTpRx);
 
-        InitRoadmNodesInputBuilder r2rlinkBuilderZToA = new InitRoadmNodesInputBuilder();
-        r2rlinkBuilderZToA.setRdmANode(destNodeId.getValue()).setDegANum(destDegId.shortValue())
-            .setTerminationPointA(destTpTx).setRdmZNode(nodeId.getValue()).setDegZNum(srcDegId.shortValue())
+        InitRoadmNodesInputBuilder r2rlinkBuilderZToA = new InitRoadmNodesInputBuilder()
+            .setRdmANode(destNodeId.getValue())
+            .setDegANum(destDegId.shortValue())
+            .setTerminationPointA(destTpTx)
+            .setRdmZNode(nodeId.getValue())
+            .setDegZNum(srcDegId.shortValue())
             .setTerminationPointZ(srcTpRx);
-        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderZToA.build(), this.openRoadmFactory, this.dataBroker)) {
+        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderZToA.build(), this.dataBroker)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in Z->A direction",
                 destNodeId.getValue(), nodeId.getValue());
             return false;
@@ -293,10 +294,10 @@ public class R2RLinkDiscovery {
             destTpTx = "DEG" + destDegId + "-TTP-TX";
             destTpRx = "DEG" + destDegId + "-TTP-RX";
         }
-        return this.openRoadmFactory.deleteLink(nodeId.getValue() + "-" + srcDegId.toString(),
+        return TopologyUtils.deleteLink(nodeId.getValue() + "-" + srcDegId.toString(),
                 destNodeId.getValue() + "-" + destDegId.toString(),
                 srcTpTx.toString(), destTpRx.toString(),networkTransactionService)
-            && this.openRoadmFactory.deleteLink(destNodeId.getValue() + "-" + destDegId.toString(),
+            && TopologyUtils.deleteLink(destNodeId.getValue() + "-" + destDegId.toString(),
                 nodeId.getValue() + "-" + srcDegId.toString(), destTpTx, srcTpRx,
                 networkTransactionService);
     }

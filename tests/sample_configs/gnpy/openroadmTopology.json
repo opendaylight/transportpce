@@ -2682,137 +2682,72 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "Client-4",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],
@@ -2829,137 +2764,72 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "Client-4",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],
@@ -2976,137 +2846,72 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "Client-4",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],
@@ -3123,137 +2928,72 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "Client-4",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],
@@ -3270,137 +3010,72 @@
                     "ietf-network-topology:termination-point": [
                         {
                             "tp-id": "XPDR-NW1-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW1-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-1"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-1",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-RX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-RX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW2-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-2"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-2",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW5-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-5"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-5",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW3-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-3"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-3",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "XPDR-NW4-TX",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4-TX"
-                            },
-                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK",
-                            "org-openroadm-network-topology:xpdr-network-attributes": {
-                                "tail-equipment-id": "Client-4"
-                            }
+                            "transportpce-topology:associated-connection-map-port": "Client-4",
+                            "org-openroadm-common-network:tp-type": "XPONDER-NETWORK"
                         },
                         {
                             "tp-id": "Client-4",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW4"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-5",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW5"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-1",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW1"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-2",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW2"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         },
                         {
                             "tp-id": "Client-3",
-                            "org-openroadm-network-topology:xpdr-client-attributes": {
-                                "tail-equipment-id": "XPDR-NW3"
-                            },
                             "org-openroadm-common-network:tp-type": "XPONDER-CLIENT"
                         }
                     ],

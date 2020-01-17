@@ -14,7 +14,7 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
-import org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory;
+import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.InitRoadmNodesInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder;
@@ -39,8 +39,7 @@ final class OrdLink {
 
     /**Method to create OMS links if not discovered by LLDP. This is helpful
      to create test topologies using simulators**/
-    public static boolean createRdm2RdmLinks(InitRoadmNodesInput input,
-                                             OpenRoadmFactory openRoadmFactory, DataBroker dataBroker) {
+    public static boolean createRdm2RdmLinks(InitRoadmNodesInput input, DataBroker dataBroker) {
 
         LinkId oppositeLinkId = LinkIdUtil.getRdm2RdmOppositeLinkId(input);
 
@@ -59,7 +58,7 @@ final class OrdLink {
         String destTp = input.getTerminationPointZ();
 
         //IETF link builder
-        LinkBuilder linkBuilder = openRoadmFactory.createLink(srcNode, destNode, srcTp, destTp);
+        LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp);
 
         linkBuilder.addAugmentation(Link1.class,link1Builder.build());
         linkBuilder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130

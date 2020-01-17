@@ -13,26 +13,9 @@
     <reference id="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
     <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
 
-    <bean id="openRoadmFactory" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmFactory">
-        <argument ref="mappingUtils" />
-        <argument ref="openRoadmTopology22" />
-        <argument ref="openRoadmOtnTopology22" />
-    </bean>
-
-    <bean id="openRoadmTopology22" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology22">
-        <argument ref="networkTransactionImpl" />
-    </bean>
-
-    <bean id="openRoadmOtnTopology22" class="org.opendaylight.transportpce.networkmodel.util.OpenRoadmOtnTopology22">
-        <argument ref="networkTransactionImpl" />
-        <argument ref="deviceTransactionManager" />
-    </bean>
-
     <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
         <argument ref="networkTransactionImpl" />
         <argument ref="linkDiscoveryImpl" />
-        <argument ref="deviceTransactionManager" />
-        <argument ref="openRoadmFactory" />
         <argument ref="portMapping" />
     </bean>
 
@@ -43,7 +26,6 @@
         <argument ref="rpcProviderService" />
         <argument ref="networkutilsServiceImpl" />
         <argument ref="netconfTopologyListener" />
-        <argument ref="openRoadmFactory" />
     </bean>
 
     <bean id="netconfTopologyListener" class="org.opendaylight.transportpce.networkmodel.NetConfTopologyListener">
@@ -54,13 +36,11 @@
 
     <bean id="networkutilsServiceImpl" class="org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl">
         <argument ref="dataBroker" />
-        <argument ref="openRoadmFactory" />
     </bean>
 
     <bean id="linkDiscoveryImpl" class="org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery">
         <argument ref="dataBroker" />
         <argument ref="deviceTransactionManager" />
-        <argument ref="openRoadmFactory" />
         <argument ref="networkTransactionImpl" />
    </bean>
 

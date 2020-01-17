@@ -42,8 +42,13 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.nodes.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.nodes.SwitchingPoolLcpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.nodes.switching.pool.lcp.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200113.network.nodes.switching.pool.lcp.NonBlockingListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CircuitPack;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.PortsKey;
@@ -57,10 +62,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.Degree;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.DegreeKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.Info;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.Protocols;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.Xponder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.xponder.XpdrPort;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType;
@@ -101,7 +108,7 @@ public class PortMappingVersion221 {
             if (nodeInfo == null) {
                 return false;
             } else {
-                postPortMapping(nodeId, nodeInfo, null, null);
+                postPortMapping(nodeId, nodeInfo, null, null, null);
             }
         } else {
             LOG.warn("Device info subtree is absent for {}", nodeId);
@@ -136,7 +143,7 @@ public class PortMappingVersion221 {
                 break;
 
         }
-        return postPortMapping(nodeId, nodeInfo, portMapList, null);
+        return postPortMapping(nodeId, nodeInfo, portMapList, null, null);
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
@@ -202,7 +209,6 @@ public class PortMappingVersion221 {
             circuitPackList = deviceObject.get().getCircuitPacks();
             circuitPackList.sort(Comparator.comparing(CircuitPack::getCircuitPackName));
         }
-        String xpdrPreFix = "XPDR";
         if (device.getXponder() == null) {
             LOG.warn("{} configuration does not contain a list of xponders", nodeId);
             for (CircuitPacks cp : circuitPackList) {
@@ -224,7 +230,7 @@ public class PortMappingVersion221 {
                         String lcp = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
                         lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
                         mappingMap.put(lcp, createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
-                            null));
+                            null, null));
                         line++;
                     } else if (PortQual.XpdrNetwork.getIntValue() == port.getPortQual().getIntValue()
                         && port.getPortDirection().getIntValue() != Direction.Bidirectional.getIntValue()
@@ -249,9 +255,9 @@ public class PortMappingVersion221 {
                                         lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
                                         lcpMap.put(cpOpt.get().getCircuitPackName() + '+' + port2.getPortName(), lcp2);
                                         mappingMap.put(lcp1, createXpdrMappingObject(nodeId, port, circuitPackName,
-                                            lcp1, lcp2, null, null));
+                                            lcp1, lcp2, null, null, null));
                                         mappingMap.put(lcp2, createXpdrMappingObject(nodeId, port2, cpOpt.get()
-                                            .getCircuitPackName(), lcp2, lcp1, null, null));
+                                            .getCircuitPackName(), lcp2, lcp1, null, null, null));
                                     } else {
                                         LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
                                     }
@@ -273,7 +279,7 @@ public class PortMappingVersion221 {
                         String lcp = "XPDR1-" + StringConstants.CLIENT_TOKEN + client;
                         lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
                         mappingMap.put(lcp, createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
-                            null));
+                            null, null));
                         client++;
                     } else {
                         LOG.warn("Error in the configuration of port {} of {} for {}", port.getPortName(),
@@ -285,97 +291,84 @@ public class PortMappingVersion221 {
         } else {
             LOG.info("{} configuration contains a list of xponders", nodeId);
             for (Xponder xponder:deviceObject.get().getXponder()) {
-                xpdrPreFix += xponder.getXpdrNumber();
+                line = 1;
+                client = 1;
+                Integer xponderNb = xponder.getXpdrNumber();
+                XpdrNodeTypes xponderType = xponder.getXpdrType();
                 for (XpdrPort xpdrPort : xponder.getXpdrPort()) {
-                    CircuitPacks cp = circuitPackList.stream().filter(x -> x.getCircuitPackName()
-                            .equals(xpdrPort.getCircuitPackName()))
-                            .collect(Collectors.toList()).get(0);
-                    String circuitPackName = cp.getCircuitPackName();
-                    Boolean isExisting = false;
-                    for (String keys : lcpMap.keySet()) {
-                        LOG.info("Keys are {}", keys);
-                        if (keys.contains(cp.getCircuitPackName() + "+" + xpdrPort.getPortName().toString())) {
-                            isExisting = true;
-                            break;
-                        }
-                    }
-                    if (isExisting) {
+                    String circuitPackName = xpdrPort.getCircuitPackName();
+                    String portName = xpdrPort.getPortName().toString();
+                    Ports port = device.getCircuitPacks().stream().filter(cp -> cp.getCircuitPackName()
+                        .equals(circuitPackName)).findFirst().get().getPorts().stream().filter(p -> p.getPortName()
+                        .equals(portName)).findFirst().get();
+                    if (port.getPortQual() == null) {
+                        LOG.warn("PortQual was not found for port {} on circuit pack: {}", port.getPortName(),
+                                circuitPackName);
                         continue;
                     }
-                    List<Ports> portList = cp.getPorts();
-                    portList.sort(Comparator.comparing(Ports::getPortName));
-                    for (Ports port : portList) {
-                        if (port.getPortQual() == null) {
-                            LOG.warn("PortQual was not found for port {} on circuit pack: {}", port.getPortName(),
-                                    circuitPackName);
+                    if ((PortQual.XpdrNetwork.getIntValue() == port.getPortQual().getIntValue()
+                        || PortQual.SwitchNetwork.getIntValue() == port.getPortQual().getIntValue())
+                        && port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
+                        String lcp = "XPDR" + xponderNb + "-" + StringConstants.NETWORK_TOKEN + line;
+                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
+                        mappingMap.put(lcp, createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
+                            null, xponderType));
+                        line++;
+                    } else if ((PortQual.XpdrNetwork.getIntValue() == port.getPortQual().getIntValue()
+                        || PortQual.SwitchNetwork.getIntValue() == port.getPortQual().getIntValue())
+                        && port.getPortDirection().getIntValue() != Direction.Bidirectional.getIntValue()
+                        && port.getPartnerPort() != null
+                        && port.getPartnerPort().getCircuitPackName() != null
+                        && port.getPartnerPort().getPortName() != null) {
+                        if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
                             continue;
                         }
-                        if ((PortQual.XpdrNetwork.getIntValue() == port.getPortQual().getIntValue()
-                            || PortQual.SwitchNetwork.getIntValue() == port.getPortQual().getIntValue())
-                                && port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
-                            String lcp = xpdrPreFix + "-" + StringConstants.NETWORK_TOKEN + line;
-                            lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
-                            mappingMap.put(lcp, createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
-                                null));
-                            line++;
-                        } else if (PortQual.XpdrNetwork.getIntValue() == port.getPortQual().getIntValue()
-                                && port.getPortDirection().getIntValue() != Direction.Bidirectional.getIntValue()
-                                && port.getPartnerPort() != null
-                                && port.getPartnerPort().getCircuitPackName() != null
-                                && port.getPartnerPort().getPortName() != null) {
-                            if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
-                                continue;
-                            }
-                            String lcp1 = xpdrPreFix + "-" + StringConstants.NETWORK_TOKEN + line;
-                            Optional<CircuitPacks> cpOpt = circuitPackList.stream().filter(cP -> cP.getCircuitPackName()
-                                    .equals(port.getPartnerPort().getCircuitPackName())).findFirst();
-                            if (cpOpt.isPresent()) {
-                                Optional<Ports> poOpt = cpOpt.get().getPorts().stream().filter(p -> p.getPortName()
-                                    .equals(port.getPartnerPort().getPortName().toString())).findFirst();
-                                if (poOpt.isPresent()) {
-                                    Ports port2 = poOpt.get();
-                                    if (checkPartnerPort(circuitPackName, port, port2)) {
-                                        String lcp2 = new StringBuilder(xpdrPreFix)
-                                            .append(StringConstants.NETWORK_TOKEN)
-                                            .append(line + 1)
-                                            .toString();
-                                        if (!lcpMap.containsKey(lcp1) && !lcpMap.containsKey(lcp2)) {
-                                            lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
-                                            lcpMap.put(cpOpt.get().getCircuitPackName() + '+' + port2.getPortName(),
-                                                lcp2);
-                                            mappingMap.put(lcp1, createXpdrMappingObject(nodeId, port, circuitPackName,
-                                                lcp1, lcp2, null, null));
-                                            mappingMap.put(lcp2, createXpdrMappingObject(nodeId, port2, cpOpt.get()
-                                                    .getCircuitPackName(), lcp2, lcp1, null, null));
-                                        } else {
-                                            LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
-                                        }
-                                        line += 2;
+                        String lcp1 = "XPDR" + xponderNb + "-" + StringConstants.NETWORK_TOKEN + line;
+
+                        Optional<CircuitPacks> cpOpt = circuitPackList.stream().filter(cP -> cP.getCircuitPackName()
+                            .equals(port.getPartnerPort().getCircuitPackName())).findFirst();
+                        if (cpOpt.isPresent()) {
+                            Optional<Ports> poOpt = cpOpt.get().getPorts().stream().filter(p -> p.getPortName().equals(
+                                port.getPartnerPort().getPortName().toString())).findFirst();
+                            if (poOpt.isPresent()) {
+                                Ports port2 = poOpt.get();
+                                if (checkPartnerPort(circuitPackName, port, port2)) {
+                                    String lcp2 = new StringBuilder("XPDR").append(xponderNb).append("-").append(
+                                        StringConstants.NETWORK_TOKEN).append(line + 1).toString();
+                                    if (!lcpMap.containsKey(lcp1) && !lcpMap.containsKey(lcp2)) {
+                                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
+                                        lcpMap.put(cpOpt.get().getCircuitPackName() + '+' + port2.getPortName(), lcp2);
+                                        mappingMap.put(lcp1, createXpdrMappingObject(nodeId, port, circuitPackName,
+                                            lcp1, lcp2, null, null, xponderType));
+                                        mappingMap.put(lcp2, createXpdrMappingObject(nodeId, port2, cpOpt.get()
+                                            .getCircuitPackName(), lcp2, lcp1, null, null, xponderType));
                                     } else {
-                                        LOG.error("port {} on {} is not a correct partner port of {} on  {}",
-                                            port2.getPortName(), cpOpt.get().getCircuitPackName(), port.getPortName(),
-                                            circuitPackName);
+                                        LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
                                     }
+                                    line += 2;
                                 } else {
-                                    LOG.error("Error fetching port {} on {} for {}",
-                                        port.getPartnerPort().getPortName(), port.getPartnerPort().getCircuitPackName(),
-                                        nodeId);
+                                    LOG.error("port {} on {} is not a correct partner port of {} on  {}", port2
+                                        .getPortName(), cpOpt.get().getCircuitPackName(), port.getPortName(),
+                                        circuitPackName);
                                 }
                             } else {
-                                LOG.error("Error fetching circuit-pack {} for {}",
+                                LOG.error("Error fetching port {} on {} for {}", port.getPartnerPort().getPortName(),
                                     port.getPartnerPort().getCircuitPackName(), nodeId);
                             }
-                        } else if (PortQual.XpdrClient.getIntValue() == port.getPortQual().getIntValue()
-                            || PortQual.SwitchClient.getIntValue() == port.getPortQual().getIntValue()) {
-                            String lcp = xpdrPreFix + "-" + StringConstants.CLIENT_TOKEN + client;
-                            lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
-                            mappingMap.put(lcp,
-                                createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null));
-                            client++;
                         } else {
-                            LOG.warn("Error in the configuration of port {} of {} for {}",
-                                port.getPortName(), circuitPackName, nodeId);
+                            LOG.error("Error fetching circuit-pack {} for {}", port.getPartnerPort()
+                                .getCircuitPackName(), nodeId);
                         }
+                    } else if (PortQual.XpdrClient.getIntValue() == port.getPortQual().getIntValue()
+                        || PortQual.SwitchClient.getIntValue() == port.getPortQual().getIntValue()) {
+                        String lcp = "XPDR" + xponderNb + "-" + StringConstants.CLIENT_TOKEN + client;
+                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
+                        mappingMap.put(lcp, createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
+                            null, null));
+                        client++;
+                    } else {
+                        LOG.warn("Error in the configuration of port {} of {} for {}", port.getPortName(),
+                            circuitPackName, nodeId);
                     }
                 }
             }
@@ -398,7 +391,7 @@ public class PortMappingVersion221 {
                 if (slcp != null) {
                     Mapping mapping = mappingMap.get(slcp);
                     mappingMap.remove(slcp);
-                    portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping, dlcp));
+                    portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping, dlcp, null));
                 } else {
                     LOG.error("Error in connection-map analysis");
                 }
@@ -406,10 +399,45 @@ public class PortMappingVersion221 {
         } else {
             LOG.warn("No connection-map inside device configuration");
         }
-        if (!mappingMap.isEmpty()) {
-            for (Mapping m : mappingMap.values()) {
-                portMapList.add(m);
+        if (device.getOduSwitchingPools() != null) {
+            List<OduSwitchingPools> oduSwithcingPools = device.getOduSwitchingPools();
+            List<SwitchingPoolLcp> switchingPoolList = new ArrayList<>();
+            for (OduSwitchingPools odp : oduSwithcingPools) {
+                List<NonBlockingList> nblList = new ArrayList<>();
+                for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org
+                    .openroadm.device.odu.switching.pools.NonBlockingList nbl : odp.getNonBlockingList()) {
+                    List<String> lcpList = new ArrayList<>();
+                    if (nbl.getPortList() != null) {
+                        for (PortList item : nbl.getPortList()) {
+                            String key = item.getCircuitPackName() + "+" + item.getPortName();
+                            if (lcpMap.containsKey(key)) {
+                                lcpList.add(lcpMap.get(key));
+                            } else {
+                                LOG.error("error : port {} of {} is not associated to a logical connection point",
+                                    item.getPortName(), item.getCircuitPackName());
+                            }
+                        }
+                        NonBlockingList nonBlockingList = new NonBlockingListBuilder()
+                            .setNblNumber(nbl.getNblNumber())
+                            .setInterconnectBandwidth(nbl.getInterconnectBandwidth())
+                            .setInterconnectBandwidthUnit(nbl.getInterconnectBandwidthUnit())
+                            .setLcpList(lcpList)
+                            .build();
+                        nblList.add(nonBlockingList);
+                    }
+                }
+                SwitchingPoolLcp splBldr = new SwitchingPoolLcpBuilder()
+                    .setSwitchingPoolNumber(odp.getSwitchingPoolNumber())
+                    .setSwitchingPoolType(odp.getSwitchingPoolType())
+                    .setNonBlockingList(nblList)
+                    .build();
+                switchingPoolList.add(splBldr);
             }
+            postPortMapping(nodeId, null, null, null, switchingPoolList);
+        }
+
+        if (!mappingMap.isEmpty()) {
+            mappingMap.forEach((k,v) -> portMapList.add(v));
         }
         return true;
     }
@@ -546,8 +574,7 @@ public class PortMappingVersion221 {
                             continue;
                         }
                     } else {
-                        LOG.info("{} : port {} on {} is not roadm-external or has already been handled."
-                            + " No logicalConnectionPoint assignment for this port.",
+                        LOG.info("{} : port {} on {} is not roadm-external or has already been handled. No logicalConnectionPoint assignment for this port.",
                             nodeId, port.getPortName(), circuitPackName);
                     }
                 }
@@ -681,9 +708,8 @@ public class PortMappingVersion221 {
     }
 
     private boolean postPortMapping(String nodeId, NodeInfo nodeInfo, List<Mapping> portMapList,
-        List<CpToDegree> cp2DegreeList) {
-        NodesBuilder nodesBldr = new NodesBuilder();
-        nodesBldr.withKey(new NodesKey(nodeId)).setNodeId(nodeId);
+        List<CpToDegree> cp2DegreeList, List<SwitchingPoolLcp> splList) {
+        NodesBuilder nodesBldr = new NodesBuilder().withKey(new NodesKey(nodeId)).setNodeId(nodeId);
         if (nodeInfo != null) {
             nodesBldr.setNodeInfo(nodeInfo);
         }
@@ -693,12 +719,13 @@ public class PortMappingVersion221 {
         if (cp2DegreeList != null) {
             nodesBldr.setCpToDegree(cp2DegreeList);
         }
-
+        if (splList != null) {
+            nodesBldr.setSwitchingPoolLcp(splList);
+        }
         List<Nodes> nodesList = new ArrayList<>();
         nodesList.add(nodesBldr.build());
 
-        NetworkBuilder nwBldr = new NetworkBuilder();
-        nwBldr.setNodes(nodesList);
+        NetworkBuilder nwBldr = new NetworkBuilder().setNodes(nodesList);
 
         final WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
         InstanceIdentifier<Network> nodesIID = InstanceIdentifier.builder(Network.class).build();
@@ -708,7 +735,6 @@ public class PortMappingVersion221 {
         try {
             commit.get();
             return true;
-
         } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to post {}", network, e);
             return false;
@@ -761,22 +787,28 @@ public class PortMappingVersion221 {
     }
 
     private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
-        String logicalConnectionPoint, String partnerLcp, Mapping mapping, String assoLcp) {
+            String logicalConnectionPoint, String partnerLcp, Mapping mapping, String connectionMapLcp,
+            XpdrNodeTypes xpdrNodeType) {
         MappingBuilder mpBldr;
-        if (mapping != null && assoLcp != null) {
+        if (mapping != null && connectionMapLcp != null) {
             // update existing mapping
-            mpBldr = new MappingBuilder(mapping);
-            mpBldr.setConnectionMapLcp(assoLcp);
+            mpBldr = new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp);
         } else {
             // create a new mapping
-            mpBldr = new MappingBuilder();
-            mpBldr.withKey(new MappingKey(logicalConnectionPoint))
+            mpBldr = new MappingBuilder()
+                .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName());
             if (port.getPortQual() != null) {
                 mpBldr.setPortQual(port.getPortQual().getName());
+            }
+            if (port.getSupportedInterfaceCapability() != null) {
+                mpBldr.setSupportedInterfaceCapability(port.getSupportedInterfaceCapability());
+            }
+            if (xpdrNodeType != null) {
+                mpBldr.setXponderType(xpdrNodeType);
             }
             if (partnerLcp != null) {
                 mpBldr.setPartnerLcp(partnerLcp);
@@ -793,7 +825,7 @@ public class PortMappingVersion221 {
         Map<String, String> interfaceList = getEthInterfaceList(nodeId);
         List<CpToDegree> cpToDegreeList = getCpToDegreeList(degrees, nodeId, interfaceList);
         LOG.info("Map looks like this {}", interfaceList);
-        postPortMapping(nodeId, null, null, cpToDegreeList);
+        postPortMapping(nodeId, null, null, cpToDegreeList, null);
 
         Map<Integer, List<ConnectionPorts>> connectionPortMap = getPerDegreePorts(nodeId, deviceInfo);
         for (Integer k : connectionPortMap.keySet()) {

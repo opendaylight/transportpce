@@ -1624,36 +1624,22 @@
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-NETWORK2</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-            <xpdr-client-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-NETWORK1</tail-equipment-id>
-            </xpdr-client-attributes>
-            <xpdr-network-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-CLIENT2</tail-equipment-id>
-            </xpdr-network-attributes>
+            <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT2</associated-connection-map-port>
         </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-CLIENT2</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
-            <xpdr-client-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-NETWORK2</tail-equipment-id>
-            </xpdr-client-attributes>
+            <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK2</associated-connection-map-port>
         </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-CLIENT1</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
-            <xpdr-client-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-NETWORK1</tail-equipment-id>
-            </xpdr-client-attributes>
+            <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK1</associated-connection-map-port>
         </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-NETWORK1</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-            <xpdr-client-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-NETWORK1</tail-equipment-id>
-            </xpdr-client-attributes>
-            <xpdr-network-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-CLIENT1</tail-equipment-id>
-            </xpdr-network-attributes>
+            <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT1</associated-connection-map-port>
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
@@ -1973,36 +1959,22 @@
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-NETWORK2</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-            <xpdr-client-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-NETWORK1</tail-equipment-id>
-            </xpdr-client-attributes>
-            <xpdr-network-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-CLIENT2</tail-equipment-id>
-            </xpdr-network-attributes>
+            <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT2</associated-connection-map-port>
         </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-CLIENT2</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
-            <xpdr-client-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-NETWORK2</tail-equipment-id>
-            </xpdr-client-attributes>
+            <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK2</associated-connection-map-port>
         </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-CLIENT1</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
-            <xpdr-client-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-NETWORK1</tail-equipment-id>
-            </xpdr-client-attributes>
+            <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK1</associated-connection-map-port>
         </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
             <tp-id>XPDR1-NETWORK1</tp-id>
             <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-            <xpdr-client-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-NETWORK1</tail-equipment-id>
-            </xpdr-client-attributes>
-            <xpdr-network-attributes xmlns="http://org/openroadm/network/topology">
-                <tail-equipment-id>XPDR1-CLIENT1</tail-equipment-id>
-            </xpdr-network-attributes>
+            <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT1</associated-connection-map-port>
         </termination-point>
         <supporting-node>
             <network-ref>openroadm-network</network-ref>
