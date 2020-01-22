@@ -87,7 +87,9 @@ class TransportPCERendererTesting(unittest.TestCase):
         response = requests.request(
             "PUT", url, data=json.dumps(data), headers=headers,
             auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.created)
+        self.assertIn(response.status_code, [requests.codes.created,
+                                             requests.codes.ok])
+        # self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(20)
 
     def test_02_xpdr_device_connected(self):
@@ -106,7 +108,9 @@ class TransportPCERendererTesting(unittest.TestCase):
         response = requests.request(
             "PUT", url, data=json.dumps(data), headers=headers,
             auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.created)
+        # self.assertEqual(response.status_code, requests.codes.created)
+        self.assertIn(response.status_code, [requests.codes.created,
+                                             requests.codes.ok])
         time.sleep(20)
 
     def test_03_rdm_portmapping(self):
@@ -140,14 +144,16 @@ class TransportPCERendererTesting(unittest.TestCase):
             {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
-             'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1'},
+             'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
+             'lcp-hash-val': '8e128ba57560403cfd4ffafae38cd941'},
             res['nodes'][0]['mapping'])
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
              'supporting-port': 'C1',
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
+             'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
+             'lcp-hash-val': '3ed8ed1336784ac7c2f66c22f2f03d8'},
             res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
