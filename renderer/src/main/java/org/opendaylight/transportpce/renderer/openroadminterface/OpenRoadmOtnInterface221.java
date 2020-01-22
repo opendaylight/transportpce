@@ -35,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.opu.OpuBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.parent.odu.allocation.ParentOduAllocationBuilder;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +63,7 @@ public class OpenRoadmOtnInterface221 {
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder();
         //ethIfBuilder.setAutoNegotiation(EthAttributes.AutoNegotiation.Disabled);
-        ethIfBuilder.setSpeed(1000L);
+        ethIfBuilder.setSpeed(Uint32.valueOf(1000L));
         InterfaceBuilder ethInterfaceBldr =
             createGenericInterfaceBuilder(portMap, EthernetCsmacd.class, logicalConnPoint + "-ETHERNET1G");
         // Create Interface1 type object required for adding as augmentation
@@ -109,7 +110,7 @@ public class OpenRoadmOtnInterface221 {
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder()
             //.setAutoNegotiation(EthAttributes.AutoNegotiation.Disabled)
-            .setSpeed(10000L);
+            .setSpeed(Uint32.valueOf(10000L));
         // Create Interface1 type object required for adding as augmentation
         Interface1Builder ethIf1Builder = new  Interface1Builder();
         InterfaceBuilder ethInterfaceBldr =
@@ -167,7 +168,7 @@ public class OpenRoadmOtnInterface221 {
                 nbr -> tribSlots.add(Uint16.valueOf(nbr))
             );
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
-                .setTribPortNumber(tribPortNumber)
+                .setTribPortNumber(Uint16.valueOf(tribPortNumber))
                 .setTribSlots(tribSlots);
             oduIfBuilder.setOduFunction(ODUCTP.class)
                     .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
@@ -225,7 +226,7 @@ public class OpenRoadmOtnInterface221 {
             tribSlots.add(Uint16.valueOf(tribSlot)); //add trib slots
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
                     //set trib port numbers
-                    .setTribPortNumber(tribPortNumber)
+                    .setTribPortNumber(Uint16.valueOf(tribPortNumber))
                     .setTribSlots(tribSlots);
             oduIfBuilder.setOduFunction(ODUCTP.class)
                     .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
@@ -289,7 +290,7 @@ public class OpenRoadmOtnInterface221 {
             );
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
                     //set trib port numbers
-                    .setTribPortNumber(tribPortNumber)
+                    .setTribPortNumber(Uint16.valueOf(tribPortNumber))
                     .setTribSlots(tribSlots);
             oduIfBuilder.setOduFunction(ODUCTP.class)
                     .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
