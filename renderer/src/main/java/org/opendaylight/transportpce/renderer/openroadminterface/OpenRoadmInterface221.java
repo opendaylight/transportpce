@@ -9,9 +9,10 @@
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -63,6 +64,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.OtuAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.otu.container.OtuBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +73,10 @@ public class OpenRoadmInterface221 {
     private final OpenRoadmInterfaces openRoadmInterfaces;
     private FixedFlexInterface fixedFlex;
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface221.class);
+    //FNV1 128 bit hash constants
+    private static final BigInteger FNV_PRIME = new BigInteger("309485009821345068724781371");
+    private static final BigInteger FNV_INIT = new BigInteger("6c62272e07bb014262b821756295c58d", 16);
+    private static final BigInteger FNV_MOD = new BigInteger("2").pow(128);
 
     public OpenRoadmInterface221(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces,
         FixedFlexInterface fixedFlex) {
@@ -83,14 +89,15 @@ public class OpenRoadmInterface221 {
         throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(
+                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
 
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder()
             .setFec(EthAttributes.Fec.Off)
-            .setSpeed(100000L);
+            .setSpeed(Uint32.valueOf(100000));
 
         InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.class,
             logicalConnPoint + "-ETHERNET");
@@ -299,7 +306,7 @@ public class OpenRoadmInterface221 {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
+                String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s",
                     nodeId, logicalConnPoint));
         }
         // Create generic interface
@@ -323,6 +330,52 @@ public class OpenRoadmInterface221 {
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, otuInterfaceBldr);
         return otuInterfaceBldr.getName();
+    }
+
+    public String createOpenRoadmOtu4Interface(String anodeId, String alogicalConnPoint, String asupportOchInterface,
+                                               String znodeId, String zlogicalConnPoint)
+        throws OpenRoadmInterfaceException {
+        Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
+        Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
+        if (portMapA == null) {
+            throw new OpenRoadmInterfaceException(
+                    String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s ",
+                            anodeId, alogicalConnPoint));
+        }
+        // On the Zside
+        if (portMapZ == null) {
+            throw new OpenRoadmInterfaceException(
+                    String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s ",
+                            znodeId, zlogicalConnPoint));
+
+        }
+        // Create generic interface builder
+        InterfaceBuilder otuInterfaceBldr = createGenericInterfaceBuilder(portMapA, OtnOtu.class,
+                alogicalConnPoint + "-OTU");
+
+        // Set the supporting interface data
+        otuInterfaceBldr.setSupportingInterface(asupportOchInterface);
+
+
+        // OTU interface specific data
+        OtuBuilder otuIfBuilder = new OtuBuilder()
+                .setFec(OtuAttributes.Fec.Scfec)
+                .setRate(OTU4.class)
+                .setTxSapi(portMapA.getLcpHashVal())
+                .setTxDapi(portMapZ.getLcpHashVal());
+
+
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder otuIf1Builder =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder();
+
+        otuInterfaceBldr.addAugmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
+                otuIf1Builder.setOtu(otuIfBuilder.build()).build());
+
+        // Post interface on the device
+        openRoadmInterfaces.postInterface(anodeId, otuInterfaceBldr);
+        return otuInterfaceBldr.getName();
+
     }
 
     public String createOpenRoadmOchInterfaceName(String logicalConnectionPoint, Long waveNumber) {
@@ -450,10 +503,7 @@ public class OpenRoadmInterface221 {
         OduBuilder oduIfBuilder = new OduBuilder()
                 .setRate(ODU4.class)
                 .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
-        if (!nodeId.toLowerCase(Locale.getDefault()).contains("eci")) {
-            oduIfBuilder.setTxDapi("");
-            oduIfBuilder.setTxSapi("");
-        }
+
         // Set Opu attributes
         OpuBuilder opuBldr = new OpuBuilder()
                 .setPayloadType(PayloadTypeDef.getDefaultInstance("21"))
@@ -478,6 +528,25 @@ public class OpenRoadmInterface221 {
         }
         this.portMapping.updateMapping(nodeId, portMap);
         return oduInterfaceBldr.getName();
+    }
+
+    /**
+     * Implements the FNV-1 128bit algorithm.
+     * https://www.wikiwand.com/en/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function#/FNV-1_hash
+     * https://github.com/pmdamora/fnv-cracker-app/blob/master/src/main/java/passwordcrack/cracking/HashChecker.java
+     * @param stringdata the String to be hashed
+     * @return the hash string
+     */
+    private String fnv(String stringdata) {
+        BigInteger hash = FNV_INIT;
+        byte[] data = stringdata.getBytes(StandardCharsets.UTF_8);
+
+        for (byte b : data) {
+            hash = hash.multiply(FNV_PRIME).mod(FNV_MOD);
+            hash = hash.xor(BigInteger.valueOf((int) b & 0xff));
+        }
+
+        return hash.toString(16);
     }
 
 }
