@@ -60,8 +60,8 @@ public class OpenRoadmOtnInterface221 {
         }
 
         // Ethernet interface specific data
-        EthernetBuilder ethIfBuilder = new EthernetBuilder();
-        ethIfBuilder.setSpeed(1000L);
+        EthernetBuilder ethIfBuilder = new EthernetBuilder()
+                .setSpeed(1000L);
         InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(
                 portMap, EthernetCsmacd.class,
                 logicalConnPoint + "-ETHERNET1G");
@@ -168,7 +168,8 @@ public class OpenRoadmOtnInterface221 {
             IntStream.range(tribSlotIndex, tribSlotIndex + 8)
                     .forEach(nbr -> tribSlots.add(Uint16.valueOf(nbr)));
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
-                    .setTribPortNumber(tribPortNumber).setTribSlots(tribSlots);
+                    .setTribPortNumber(tribPortNumber)
+                    .setTribSlots(tribSlots);
             oduIfBuilder.setOduFunction(ODUCTP.class)
                     .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
                     .setParentOduAllocation(parentOduAllocationBuilder.build());
@@ -225,7 +226,8 @@ public class OpenRoadmOtnInterface221 {
             tribSlots.add(Uint16.valueOf(tribSlot));
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
                     // set trib port numbers
-                    .setTribPortNumber(tribPortNumber).setTribSlots(tribSlots);
+                    .setTribPortNumber(tribPortNumber)
+                    .setTribSlots(tribSlots);
             oduIfBuilder.setOduFunction(ODUCTP.class)
                     .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
                     .setParentOduAllocation(parentOduAllocationBuilder.build());
@@ -285,7 +287,8 @@ public class OpenRoadmOtnInterface221 {
                     .forEach(nbr -> tribSlots.add(Uint16.valueOf(nbr)));
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
                     // set trib port numbers
-                    .setTribPortNumber(tribPortNumber).setTribSlots(tribSlots);
+                    .setTribPortNumber(tribPortNumber)
+                    .setTribSlots(tribSlots);
             oduIfBuilder.setOduFunction(ODUCTP.class)
                     .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
                     .setParentOduAllocation(parentOduAllocationBuilder.build());
