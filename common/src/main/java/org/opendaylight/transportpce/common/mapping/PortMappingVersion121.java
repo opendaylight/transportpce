@@ -657,6 +657,7 @@ public class PortMappingVersion121 {
     private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
         String logicalConnectionPoint, String partnerLcp, Mapping mapping, String assoLcp) {
         MappingBuilder mpBldr;
+
         if (mapping != null && assoLcp != null) {
             // update existing mapping
             mpBldr = new MappingBuilder(mapping);
@@ -664,11 +665,13 @@ public class PortMappingVersion121 {
         } else {
             // create a new mapping
             mpBldr = new MappingBuilder();
+            String nodeIdLcp = nodeId + logicalConnectionPoint;
             mpBldr.withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
-                .setPortDirection(port.getPortDirection().getName());
+                .setPortDirection(port.getPortDirection().getName())
+                .setLcpHashVal(String.valueOf(nodeIdLcp.hashCode()));
             if (port.getPortQual() != null) {
                 mpBldr.setPortQual(port.getPortQual().getName());
             }
