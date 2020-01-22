@@ -137,6 +137,21 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
+    public String createOpenRoadmOtu4Interface(String AnodeId, String AlogicalConnPoint, String AsupportOchInterface,
+    String ZnodeId, String ZlogicalConnPoint)
+            throws OpenRoadmInterfaceException {
+        switch (mappingUtils.getOpenRoadmVersion(AnodeId)) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
+                return openRoadmInterface121.createOpenRoadmOtu4Interface(AnodeId,
+                        AlogicalConnPoint, AsupportOchInterface);
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                return openRoadmInterface221.createOpenRoadmOtu4Interface(AnodeId, AlogicalConnPoint,
+                        AsupportOchInterface, ZnodeId, ZlogicalConnPoint);
+            default:
+                return null;
+        }
+    }
+
     public String createOpenRoadmOchInterfaceName(String logicalConnectionPoint, Long waveNumber) {
         return logicalConnectionPoint + "-" + waveNumber;
     }
