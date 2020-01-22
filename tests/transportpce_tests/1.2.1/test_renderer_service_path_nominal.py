@@ -136,6 +136,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
+<<<<<<< HEAD
             {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-CLIENT1', 'port-qual': 'xpdr-network'},
@@ -146,6 +147,18 @@ class TransportPCERendererTesting(unittest.TestCase):
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
             res['nodes'][0]['mapping'])
+=======
+             {'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
+              'logical-connection-point': 'XPDR1-NETWORK1', 'port-direction': 'bidirectional',
+              'connection-map-lcp': 'XPDR1-CLIENT1', 'port-qual': 'xpdr-network',  'lcp-hash-val': '-2126208575'},
+             res['nodes'][0]['mapping'])
+        self.assertIn(
+             {'supporting-port': 'C1',
+              'supporting-circuit-pack-name': '1/0/C1-PLUG-CLIENT',
+              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
+              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client', 'lcp-hash-val': '2135103528'},
+             res['nodes'][0]['mapping'])
+>>>>>>> e35287fd... Adding SAPI/DAPI to Renderer
 
     def test_05_service_path_create(self):
         url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)

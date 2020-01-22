@@ -804,12 +804,15 @@ public class PortMappingVersion221 {
             mpBldr = new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp);
         } else {
             // create a new mapping
+            String nodeIdLcp = nodeId + logicalConnectionPoint;
             mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
-                .setPortDirection(port.getPortDirection().getName());
+                .setPortDirection(port.getPortDirection().getName())
+                .setLcpHashVal(String.valueOf(nodeIdLcp.hashCode()));
+
             if (port.getPortQual() != null) {
                 mpBldr.setPortQual(port.getPortQual().getName());
             }

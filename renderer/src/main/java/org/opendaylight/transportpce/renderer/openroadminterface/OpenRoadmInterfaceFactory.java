@@ -136,6 +136,34 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
+    /**
+     * This methods creates an OTU interface on the given termination point.
+     *
+     * @param anodeId node ID for A side
+     * @param alogicalConnPoint logical connection point for A side
+     * @param asupportOchInterface supporting OCH interface
+     * @param znodeId node ID for the Z side
+     * @param zlogicalConnPoint logical connection point for Z side
+     * @return Name of the interface if successful, otherwise return null.
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm interface exception
+     */
+
+    public String createOpenRoadmOtu4Interface(String anodeId, String alogicalConnPoint, String asupportOchInterface,
+            String znodeId, String zlogicalConnPoint)
+            throws OpenRoadmInterfaceException {
+        switch (mappingUtils.getOpenRoadmVersion(anodeId)) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
+                return openRoadmInterface121.createOpenRoadmOtu4Interface(anodeId,
+                        alogicalConnPoint, asupportOchInterface);
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                return openRoadmInterface221.createOpenRoadmOtu4Interface(anodeId, alogicalConnPoint,
+                        asupportOchInterface, znodeId, zlogicalConnPoint);
+            default:
+                return null;
+        }
+    }
+
     public String createOpenRoadmOchInterfaceName(String logicalConnectionPoint, Long waveNumber) {
         return logicalConnectionPoint + "-" + waveNumber;
     }
