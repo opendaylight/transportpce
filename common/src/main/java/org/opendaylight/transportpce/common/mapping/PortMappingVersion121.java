@@ -10,6 +10,8 @@ package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -82,6 +84,11 @@ public class PortMappingVersion121 {
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmInterfaces openRoadmInterfaces;
+
+    //FNV1 128 bit hash constants
+    private static final BigInteger FNV_PRIME = new BigInteger("309485009821345068724781371");
+    private static final BigInteger FNV_INIT = new BigInteger("6c62272e07bb014262b821756295c58d", 16);
+    private static final BigInteger FNV_MOD = new BigInteger("2").pow(128);
 
     public PortMappingVersion121(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
         OpenRoadmInterfaces openRoadmInterfaces) {
@@ -657,6 +664,7 @@ public class PortMappingVersion121 {
     private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
         String logicalConnectionPoint, String partnerLcp, Mapping mapping, String assoLcp) {
         MappingBuilder mpBldr;
+
         if (mapping != null && assoLcp != null) {
             // update existing mapping
             mpBldr = new MappingBuilder(mapping);
@@ -664,11 +672,13 @@ public class PortMappingVersion121 {
         } else {
             // create a new mapping
             mpBldr = new MappingBuilder();
+            String nodeIdLcp = nodeId + logicalConnectionPoint;
             mpBldr.withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
-                .setPortDirection(port.getPortDirection().getName());
+                .setPortDirection(port.getPortDirection().getName())
+                .setLcpHashVal(fnv(nodeIdLcp));
             if (port.getPortQual() != null) {
                 mpBldr.setPortQual(port.getPortQual().getName());
             }
@@ -847,4 +857,22 @@ public class PortMappingVersion121 {
         return nodeInfoBldr.build();
     }
 
+    /**
+     * Implements the FNV-1 128bit algorithm.
+     * https://www.wikiwand.com/en/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function#/FNV-1_hash
+     * https://github.com/pmdamora/fnv-cracker-app/blob/master/src/main/java/passwordcrack/cracking/HashChecker.java
+     * @param stringdata the String to be hashed
+     * @return the hash string
+     */
+    private String fnv(String stringdata) {
+        BigInteger hash = FNV_INIT;
+        byte[] data = stringdata.getBytes(StandardCharsets.UTF_8);
+
+        for (byte b : data) {
+            hash = hash.multiply(FNV_PRIME).mod(FNV_MOD);
+            hash = hash.xor(BigInteger.valueOf((int) b & 0xff));
+        }
+
+        return hash.toString(16);
+    }
 }
