@@ -17,15 +17,19 @@ module transportpce-topology {
 
     organization
         "TransportPCE team";
-      contact
+    contact
         "TransportPCE team";
+
+    revision 2020-01-23 {
+        description "Add transportpce augmentation for otn-topology";
+    }
 
     revision 2019-06-25 {
         description "Initial revision";
     }
 
     augment "/nd:networks/nd:network/nd:node/nwt:termination-point" {
-        when "../../nd:network-types/cnet:openroadm-common-network/openroadm-topology";
+        when "../../nd:network-types/cnet:openroadm-common-network/openroadm-topology or ../../nd:network-types/cnet:openroadm-common-network/otn-topology";
         description
           "Defines associated logical-connection-point for XPDR port.";
         leaf associated-connection-map-port {
@@ -35,5 +39,5 @@ module transportpce-topology {
           description
             "The xpdr port connectable regarding the device connection-map";
         }
-      }
+    }
 }
