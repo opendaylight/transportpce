@@ -1038,7 +1038,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertNotIn('roadm-connections', dict.keys(res['org-openroadm-device']))
         time.sleep(2)
 
-    @unittest.skip("Skip this test until tail-equipment-id deletion is finished.")
     def test_33_check_topo_XPDRA(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDR-A1-XPDR1"
                .format(self.restconf_baseurl))
@@ -1050,8 +1049,9 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-CLIENT':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
-            elif ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK':
-                self.assertNotIn('org-openroadm-network-topology:xpdr-network-attributes', dict.keys(ele))
+            elif (ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK'):
+                self.assertIn(u'tail-equipment-id', dict.keys(ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
+                self.assertNotIn('wavelength', dict.keys(ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
         time.sleep(10)
 
     def test_34_check_topo_ROADMA_SRG1(self):
@@ -1492,7 +1492,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_34_check_topo_ROADMA_SRG1()
         self.test_35_check_topo_ROADMA_DEG2()
 
-#    @unittest.expectedFailure
     def test_49_loop_create_eth_service(self):
         for i in range(1,6):
             print ("trial number {}".format(i))
@@ -1505,7 +1504,6 @@ class TransportPCEFulltesting(unittest.TestCase):
             print ("eth service deletion\n")
             self.test_30_delete_eth_service1()
 
-#    @unittest.expectedFailure
     def test_50_loop_create_oc_service(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/service1"
                .format(self.restconf_baseurl))

@@ -1031,7 +1031,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertNotIn('roadm-connections', dict.keys(res['org-openroadm-device']))
         time.sleep(2)
 
-    @unittest.skip("Skip this test until tail-equipment-id deletion is finished.")
     def test_33_check_topo_XPDRA(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA01-XPDR1"
                .format(self.restconf_baseurl))
@@ -1044,9 +1043,9 @@ class TransportPCEFulltesting(unittest.TestCase):
             if ((ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-CLIENT')
                 and (ele['tp-id'] == 'XPDR1-CLIENT1' or ele['tp-id'] == 'XPDR1-CLIENT3')):
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
-            elif ((ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK')
-                and (ele['tp-id'] == 'XPDR1-CLIENT1' or ele['tp-id'] == 'XPDR1-CLIENT3')):
-                self.assertNotIn('org-openroadm-network-topology:xpdr-network-attributes', dict.keys(ele))
+            elif (ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK'):
+                self.assertIn(u'tail-equipment-id', dict.keys(ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
+                self.assertNotIn('wavelength', dict.keys(ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
         time.sleep(10)
 
     def test_34_check_topo_ROADMA_SRG1(self):
