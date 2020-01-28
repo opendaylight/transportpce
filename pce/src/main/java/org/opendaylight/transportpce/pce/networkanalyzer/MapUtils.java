@@ -84,7 +84,7 @@ public final class MapUtils {
         try {
             List<LinkConcatenation> linkList = getOmsAttributesSpan(link).getLinkConcatenation();
             for (LinkConcatenation lc : linkList) {
-                srlgList.add(lc.getSRLGId());
+                srlgList.add(lc.getSRLGId().toJava());
             }
         } catch (NullPointerException e) {
             LOG.debug("No concatenation for this link");
@@ -107,7 +107,7 @@ public final class MapUtils {
 
                 for (org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.networks.network.link
                         .LinkConcatenation lc : linkConcatenation) {
-                    srlgList.add(lc.getSRLGId());
+                    srlgList.add(lc.getSRLGId().toJava());
                 }
             } catch (NullPointerException e) {
                 LOG.debug("No concatenation for this link");
@@ -168,7 +168,7 @@ public final class MapUtils {
             && link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                 .Link1.class).getAvailableBandwidth() != null) {
             return link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
-                .Link1.class).getAvailableBandwidth();
+                .Link1.class).getAvailableBandwidth().toJava();
         } else {
             LOG.warn("MapUtils: no Available Bandwidth available for link {}", link.getLinkId());
             return 0L;
@@ -181,7 +181,7 @@ public final class MapUtils {
             && link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                 .Link1.class).getUsedBandwidth() != null) {
             return link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
-                .Link1.class).getUsedBandwidth();
+                .Link1.class).getUsedBandwidth().toJava();
         } else {
             LOG.warn("MapUtils: no Available Bandwidth available for link {}", link.getLinkId());
             return 0L;

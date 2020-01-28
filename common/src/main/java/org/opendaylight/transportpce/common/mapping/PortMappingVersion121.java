@@ -321,7 +321,7 @@ public class PortMappingVersion121 {
         // Get value for max Srg from info subtree, required for iteration
         // if not present assume to be 20 (temporary)
         if (ordmInfo.getMaxSrgs() != null) {
-            maxSrg = ordmInfo.getMaxSrgs();
+            maxSrg = ordmInfo.getMaxSrgs().toJava();
         } else {
             maxSrg = 20;
         }
@@ -336,7 +336,7 @@ public class PortMappingVersion121 {
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmSrgObject.isPresent()) {
                 srgCps.addAll(ordmSrgObject.get().getCircuitPacks());
-                cpPerSrg.put(ordmSrgObject.get().getSrgNumber(), srgCps);
+                cpPerSrg.put(ordmSrgObject.get().getSrgNumber().toJava(), srgCps);
             }
         }
         LOG.info("Device {} has {} Srg", deviceId, cpPerSrg.size());
@@ -468,7 +468,7 @@ public class PortMappingVersion121 {
         // Get value for max degree from info subtree, required for iteration
         // if not present assume to be 20 (temporary)
         if (ordmInfo.getMaxDegrees() != null) {
-            maxDegree = ordmInfo.getMaxDegrees();
+            maxDegree = ordmInfo.getMaxDegrees().toJava();
         } else {
             maxDegree = 20;
         }
@@ -493,7 +493,7 @@ public class PortMappingVersion121 {
         Integer maxDegree;
 
         if (ordmInfo.getMaxDegrees() != null) {
-            maxDegree = ordmInfo.getMaxDegrees();
+            maxDegree = ordmInfo.getMaxDegrees().toJava();
         } else {
             maxDegree = 20;
         }

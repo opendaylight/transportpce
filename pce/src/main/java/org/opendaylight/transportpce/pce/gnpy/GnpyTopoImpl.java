@@ -334,7 +334,7 @@ public class GnpyTopoImpl {
         // Compute the length of the link
         List<LinkConcatenation> linkConcatenationList = span.getLinkConcatenation();
         for (LinkConcatenation linkConcatenation : linkConcatenationList) {
-            double srlgLength = linkConcatenation.getSRLGLength();
+            double srlgLength = linkConcatenation.getSRLGLength().toJava();
             //convert to kilometer
             length += srlgLength / CONVERT_KM_M;
         }

@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.olm;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +71,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.rev161014.resour
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.opendaylight.yangtools.yang.common.Uint64;
 
 public class OlmPowerServiceRpcImplTest extends AbstractTest {
 
@@ -146,7 +146,7 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
                 .setPmParameterName(new PmParameterNameBuilder()
                 .setExtension("123")
                 .setType(PmNamesEnum.DefectSeconds).build())
-                .setPmParameterValue(new PmDataType(BigInteger.valueOf(1234))).build())
+                .setPmParameterValue(new PmDataType(Uint64.valueOf(1234))).build())
             .build();
         List<Measurements> measurementsList = new ArrayList<Measurements>();
         measurementsList.add(measurements);

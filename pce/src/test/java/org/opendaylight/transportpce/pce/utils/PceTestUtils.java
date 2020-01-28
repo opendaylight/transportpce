@@ -91,25 +91,25 @@ public final class PceTestUtils {
         Assert.assertEquals(atozSize, ztoaSize);
 
         Long actualAToZWavel = output.getResponseParameters().getPathDescription().getAToZDirection()
-            .getAToZWavelengthNumber();
+            .getAToZWavelengthNumber().toJava();
         Long expectedAToZWavel = expectedOutput.getResponseParameters().getPathDescription().getAToZDirection()
-            .getAToZWavelengthNumber();
+            .getAToZWavelengthNumber().toJava();
         Assert.assertEquals(actualAToZWavel, expectedAToZWavel);
 
         Long actualZtoAWavel = output.getResponseParameters().getPathDescription().getZToADirection()
-            .getZToAWavelengthNumber();
+            .getZToAWavelengthNumber().toJava();
         Long expectedZtoAWavel = expectedOutput.getResponseParameters().getPathDescription().getZToADirection()
-            .getZToAWavelengthNumber();
+            .getZToAWavelengthNumber().toJava();
         Assert.assertEquals(actualZtoAWavel, expectedZtoAWavel);
 
-        Long actualAToZRate = output.getResponseParameters().getPathDescription().getAToZDirection().getRate();
+        Long actualAToZRate = output.getResponseParameters().getPathDescription().getAToZDirection().getRate().toJava();
         Long expectedAToZRate = expectedOutput.getResponseParameters().getPathDescription().getAToZDirection()
-            .getRate();
+            .getRate().toJava();
         Assert.assertEquals(expectedAToZRate, actualAToZRate);
 
-        Long actualZToARate = output.getResponseParameters().getPathDescription().getZToADirection().getRate();
+        Long actualZToARate = output.getResponseParameters().getPathDescription().getZToADirection().getRate().toJava();
         Long expectedZToARate = expectedOutput.getResponseParameters().getPathDescription().getZToADirection()
-            .getRate();
+            .getRate().toJava();
         Assert.assertEquals(actualZToARate, expectedZToARate);
     }
 

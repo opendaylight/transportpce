@@ -50,6 +50,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.Resource;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,8 +85,8 @@ public class GnpyServiceImpl {
     /*
      * Construct the GnpyServiceImpl
      */
-    public GnpyServiceImpl(PathComputationRequestInput input, AToZDirection atoz, Long requestId, GnpyTopoImpl gnpyTopo,
-        PceConstraints pceHardConstraints) throws GnpyException {
+    public GnpyServiceImpl(PathComputationRequestInput input, AToZDirection atoz, Uint32 requestId,
+                GnpyTopoImpl gnpyTopo, PceConstraints pceHardConstraints) throws GnpyException {
         this.elements = gnpyTopo.getElements();
         this.mapDisgNodeRefNode = gnpyTopo.getMapDisgNodeRefNode();
         this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
@@ -93,15 +94,15 @@ public class GnpyServiceImpl {
         this.mapFiberIp = gnpyTopo.getMapFiberIp();
         this.trxList = gnpyTopo.getTrxList();
         try {
-            this.pathRequest = extractPathRequest(input, atoz, requestId, pceHardConstraints);
+            this.pathRequest = extractPathRequest(input, atoz, requestId.toJava(), pceHardConstraints);
             this.synchronization = extractSynchronization(requestId);
         } catch (NullPointerException e) {
             throw new GnpyException("In GnpyServiceImpl: one of the elements is null",e);
         }
     }
 
-    public GnpyServiceImpl(PathComputationRequestInput input, ZToADirection ztoa, Long requestId, GnpyTopoImpl gnpyTopo,
-        PceConstraints pceHardConstraints) throws GnpyException {
+    public GnpyServiceImpl(PathComputationRequestInput input, ZToADirection ztoa, Uint32 requestId,
+                GnpyTopoImpl gnpyTopo, PceConstraints pceHardConstraints) throws GnpyException {
         this.elements = gnpyTopo.getElements();
         this.mapDisgNodeRefNode = gnpyTopo.getMapDisgNodeRefNode();
         this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
@@ -109,7 +110,7 @@ public class GnpyServiceImpl {
         this.mapFiberIp = gnpyTopo.getMapFiberIp();
         this.trxList = gnpyTopo.getTrxList();
         try {
-            pathRequest = extractPathRequest(input, ztoa, requestId, pceHardConstraints);
+            pathRequest = extractPathRequest(input, ztoa, requestId.toJava(), pceHardConstraints);
             synchronization = extractSynchronization(requestId);
         } catch (NullPointerException e) {
             throw new GnpyException("In GnpyServiceImpl: one of the elements of service is null",e);
@@ -136,7 +137,8 @@ public class GnpyServiceImpl {
         ExplicitRouteObjects explicitRouteObjects = new ExplicitRouteObjectsBuilder()
             .setRouteObjectIncludeExclude(routeObjectIncludeExcludes).build();
         //Create Path Constraint
-        PathConstraints pathConstraints = createPathConstraints(atoz.getRate(),atoz.getAToZWavelengthNumber());
+        PathConstraints pathConstraints =
+            createPathConstraints(atoz.getRate().toJava(),atoz.getAToZWavelengthNumber().toJava());
 
         // Create the path request
         List<PathRequest> pathRequestList = new ArrayList<>();
@@ -265,7 +267,8 @@ public class GnpyServiceImpl {
             if (element.getUid().contains(ipAddress.getIpv4Address().getValue())) {
                 if ((this.currentNodeIpAddress == null) || (this.currentNodeIpAddress != ipAddress)) {
                     this.currentNodeIpAddress = ipAddress;
-                    RouteObjectIncludeExclude routeObjectIncludeExclude = addRouteObjectIncludeExclude(ipAddress, 1);
+                    RouteObjectIncludeExclude routeObjectIncludeExclude =
+                        addRouteObjectIncludeExclude(ipAddress, Uint32.valueOf(1));
                     routeObjectIncludeExcludes.add(routeObjectIncludeExclude);
                     index++;
                     found = true;
@@ -297,14 +300,15 @@ public class GnpyServiceImpl {
                 throw new GnpyException(String.format("In gnpyServiceImpl addNodeRouteObject : fiberIp of %s is null",
                     subLink));
             }
-            RouteObjectIncludeExclude routeObjectIncludeExclude = addRouteObjectIncludeExclude(fiberIp, 1);
+            RouteObjectIncludeExclude routeObjectIncludeExclude =
+                addRouteObjectIncludeExclude(fiberIp, Uint32.valueOf(1));
             routeObjectIncludeExcludes.add(routeObjectIncludeExclude);
             index++;
         }
     }
 
     // Add routeObjectIncludeExclude
-    private RouteObjectIncludeExclude addRouteObjectIncludeExclude(IpAddress ipAddress, long teTpValue) {
+    private RouteObjectIncludeExclude addRouteObjectIncludeExclude(IpAddress ipAddress, Uint32 teTpValue) {
         TeNodeId teNodeId = new TeNodeId(ipAddress);
         TeTpId teTpId = new TeTpId(teTpValue);
         NumUnnumHop numUnnumHop = new org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type.num
@@ -340,9 +344,9 @@ public class GnpyServiceImpl {
     }
 
     //Create the synchronization
-    private List<Synchronization> extractSynchronization(Long requestId) {
+    private List<Synchronization> extractSynchronization(Uint32 requestId) {
         // Create RequestIdNumber
-        List<Long> requestIdNumber = new ArrayList<>();
+        List<Uint32> requestIdNumber = new ArrayList<>();
         requestIdNumber.add(requestId);
         // Create a synchronization
         Svec svec = new SvecBuilder().setRelaxable(true)

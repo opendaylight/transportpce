@@ -34,6 +34,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.odu.container.OduBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.opu.OpuBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.parent.odu.allocation.ParentOduAllocationBuilder;
+import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,11 +160,11 @@ public class OpenRoadmOtnInterface221 {
             .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
         LOG.debug("Inside the ODU2e creation {} {} {}",isNetworkPort,tribPortNumber,tribSlotIndex);
         if (isNetworkPort) {
-            List<Integer> tribSlots = new ArrayList<>();
-            int newIdx = tribSlotIndex;
+            List<Uint16> tribSlots = new ArrayList<>();
+            Uint16 newIdx = Uint16.valueOf(tribSlotIndex);
             tribSlots.add(newIdx);
             IntStream.range(tribSlotIndex, tribSlotIndex + 8).forEach(
-                nbr -> tribSlots.add(nbr)
+                nbr -> tribSlots.add(Uint16.valueOf(nbr))
             );
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
                 .setTribPortNumber(tribPortNumber)
@@ -220,8 +221,8 @@ public class OpenRoadmOtnInterface221 {
             .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
         if (isNetworkPort) {
             LOG.debug("Network port is true");
-            List<Integer> tribSlots = new ArrayList<>();
-            tribSlots.add(tribSlot); //add trib slots
+            List<Uint16> tribSlots = new ArrayList<>();
+            tribSlots.add(Uint16.valueOf(tribSlot)); //add trib slots
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
                     //set trib port numbers
                     .setTribPortNumber(tribPortNumber)
@@ -282,9 +283,9 @@ public class OpenRoadmOtnInterface221 {
             .setOduFunction(ODUTTPCTP.class)
             .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
         if (isNetworkPort) {
-            List<Integer> tribSlots = new ArrayList<>();
+            List<Uint16> tribSlots = new ArrayList<>();
             IntStream.range(tribSlotIndex, tribSlotIndex + 8).forEach(
-                nbr -> tribSlots.add(nbr)
+                nbr -> tribSlots.add(Uint16.valueOf(nbr))
             );
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
                     //set trib port numbers

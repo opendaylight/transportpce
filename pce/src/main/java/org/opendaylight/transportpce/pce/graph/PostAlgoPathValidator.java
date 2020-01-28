@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,8 +100,8 @@ public class PostAlgoPathValidator {
             case "1GE":
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                 pceResult.setServiceType(serviceType);
-                Map<String, Integer> tribPort = chooseTribPort(path, allPceNodes);
-                Map<String, List<Integer>> tribSlot = chooseTribSlot(path, allPceNodes, tribSlotNb);
+                Map<String, Uint16> tribPort = chooseTribPort(path, allPceNodes);
+                Map<String, List<Uint16>> tribSlot = chooseTribSlot(path, allPceNodes, tribSlotNb);
 
                 if (tribPort != null && tribSlot != null) {
                     pceResult.setResultTribPort(tribPort);
@@ -276,10 +277,10 @@ public class PostAlgoPathValidator {
         return listOfElements;
     }
 
-    private Map<String, Integer> chooseTribPort(GraphPath<String,
+    private Map<String, Uint16> chooseTribPort(GraphPath<String,
         PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes) {
         LOG.info("In choosetribPort: edgeList = {} ", path.getEdgeList().toString());
-        Map<String, Integer> tribPortMap = new HashMap<>();
+        Map<String, Uint16> tribPortMap = new HashMap<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
             NodeId linkSrcNode = edge.link().getSourceId();
@@ -288,10 +289,10 @@ public class PostAlgoPathValidator {
             String linkDestTp = edge.link().getDestTP().toString();
             PceNode pceOtnNodeSrc = allPceNodes.get(linkSrcNode);
             PceNode pceOtnNodeDest = allPceNodes.get(linkDestNode);
-            List<Integer> srcTpnPool = pceOtnNodeSrc.getAvailableTribPorts().get(linkSrcTp);
-            List<Integer> destTpnPool = pceOtnNodeDest.getAvailableTribPorts().get(linkDestTp);
-            List<Integer> commonEdgeTpnPool = new ArrayList<>();
-            for (Integer integer : srcTpnPool) {
+            List<Uint16> srcTpnPool = pceOtnNodeSrc.getAvailableTribPorts().get(linkSrcTp);
+            List<Uint16> destTpnPool = pceOtnNodeDest.getAvailableTribPorts().get(linkDestTp);
+            List<Uint16> commonEdgeTpnPool = new ArrayList<>();
+            for (Uint16 integer : srcTpnPool) {
                 if (destTpnPool.contains(integer)) {
                     commonEdgeTpnPool.add(integer);
                 }
@@ -305,10 +306,10 @@ public class PostAlgoPathValidator {
         return tribPortMap;
     }
 
-    private Map<String, List<Integer>> chooseTribSlot(GraphPath<String,
+    private Map<String, List<Uint16>> chooseTribSlot(GraphPath<String,
         PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, int nbSlot) {
         LOG.info("In choosetribSlot2: edgeList = {} ", path.getEdgeList().toString());
-        Map<String, List<Integer>> tribSlotMap = new HashMap<>();
+        Map<String, List<Uint16>> tribSlotMap = new HashMap<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
             NodeId linkSrcNode = edge.link().getSourceId();
@@ -317,11 +318,11 @@ public class PostAlgoPathValidator {
             String linkDestTp = edge.link().getDestTP().toString();
             PceNode pceOtnNodeSrc = allPceNodes.get(linkSrcNode);
             PceNode pceOtnNodeDest = allPceNodes.get(linkDestNode);
-            List<Integer> srcTsPool = pceOtnNodeSrc.getAvailableTribSlots().get(linkSrcTp);
-            List<Integer> destTsPool = pceOtnNodeDest.getAvailableTribSlots().get(linkDestTp);
-            List<Integer> commonEdgeTsPool = new ArrayList<>();
-            List<Integer> tribSlotList = new ArrayList<>();
-            for (Integer integer : srcTsPool) {
+            List<Uint16> srcTsPool = pceOtnNodeSrc.getAvailableTribSlots().get(linkSrcTp);
+            List<Uint16> destTsPool = pceOtnNodeDest.getAvailableTribSlots().get(linkDestTp);
+            List<Uint16> commonEdgeTsPool = new ArrayList<>();
+            List<Uint16> tribSlotList = new ArrayList<>();
+            for (Uint16 integer : srcTsPool) {
                 if (destTsPool.contains(integer)) {
                     commonEdgeTsPool.add(integer);
                 }
@@ -331,7 +332,7 @@ public class PostAlgoPathValidator {
             int index = 0;
             while (discontinue && (commonEdgeTsPool.size() - index >= nbSlot)) {
                 discontinue = false;
-                Integer val = commonEdgeTsPool.get(index);
+                Integer val = commonEdgeTsPool.get(index).toJava();
                 for (int i = 0; i < nbSlot; i++) {
                     if (commonEdgeTsPool.get(index + i).equals(val + i)) {
                         tribSlotList.add(commonEdgeTsPool.get(index + i));
@@ -349,9 +350,9 @@ public class PostAlgoPathValidator {
         return tribSlotMap;
     }
 
-    private List<List<Integer>> chooseTribSlot3(GraphPath<String, PceGraphEdge> path,
+    private List<List<Uint16>> chooseTribSlot3(GraphPath<String, PceGraphEdge> path,
         Map<NodeId, PceNode> allPceNodes) {
-        List<List<Integer>> tribSlot = new ArrayList<>();
+        List<List<Uint16>> tribSlot = new ArrayList<>();
         boolean statusOK = true;
         boolean check = false;
         Object nodeClass = allPceNodes.getClass();
@@ -368,8 +369,8 @@ public class PostAlgoPathValidator {
             Object tpd = allPceNodes.get(edge.link().getDestTP());
             if ((pceNode.getAvailableTribSlots().containsKey(tps.toString()))
                 && (pceNode.getAvailableTribSlots().containsKey(tpd.toString()))) {
-                List<Integer> tribSlotEdgeSourceN = new ArrayList<>();
-                List<Integer> tribSlotEdgeDestN = new ArrayList<>();
+                List<Uint16> tribSlotEdgeSourceN = new ArrayList<>();
+                List<Uint16> tribSlotEdgeDestN = new ArrayList<>();
                 tribSlotEdgeSourceN = pceNode.getAvailableTribSlots().get(tps.toString());
                 tribSlotEdgeDestN = pceNode.getAvailableTribSlots().get(tps.toString());
                 check = false;

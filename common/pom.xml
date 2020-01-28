@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.opendaylight.mdsal</groupId>
         <artifactId>binding-parent</artifactId>
-        <version>4.0.11</version>
+        <version>5.0.9</version>
         <relativePath />
     </parent>
 
@@ -24,14 +24,14 @@
             <dependency>
                 <groupId>org.opendaylight.netconf</groupId>
                 <artifactId>netconf-artifacts</artifactId>
-                <version>1.7.2-SNAPSHOT</version>
+                <version>1.8.0-SNAPSHOT</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.opendaylight.mdsal</groupId>
                 <artifactId>mdsal-artifacts</artifactId>
-                <version>4.0.11</version>
+                <version>5.0.9</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -62,6 +62,7 @@
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
@@ -79,4 +80,11 @@
       </plugin>
     </plugins>
   </build>
+
+<!-- checkstyle and spotbugds enforced by odlparent since Magnesium -->
+  <properties>
+    <!-- odlparent.checkstyle.enforce>false</odlparent.checkstyle.enforce -->
+    <odlparent.spotbugs.enforce>false</odlparent.spotbugs.enforce>
+  </properties>
+
 </project>

@@ -51,7 +51,7 @@ public class OtnDeviceOperationsImpl implements OtnDeviceOperations {
             for (PortIfTypeConfig portIfTypeConfig : portIfTypeConfigList) {
                 if (portIfTypeConfig.getCircuitPackName().equals(circuitPackName)
                         && portIfTypeConfig.getPortName().equals(portName)) {
-                    return possiblePortConfig.getConfigId();
+                    return possiblePortConfig.getConfigId().toJava();
                 }
             }
         }

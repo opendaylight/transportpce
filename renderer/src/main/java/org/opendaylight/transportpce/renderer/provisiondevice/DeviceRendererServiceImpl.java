@@ -115,7 +115,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
                     String srcTp = node.getSrcTp();
                     String destTp = node.getDestTp();
-                    Long waveNumber = input.getWaveNumber();
+                    Long waveNumber = input.getWaveNumber().toJava();
                     if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
                         Mapping mapping = this.portMapping.getMapping(nodeId,destTp);
@@ -262,7 +262,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             LOG.info("Deleting service setup on node {}", nodeId);
             String srcTp;
             String destTp;
-            Long waveNumber = input.getWaveNumber();
+            Long waveNumber = input.getWaveNumber().toJava();
             if (node.getDestTp() == null) {
                 LOG.error("Destination termination point must not be null.");
                 return;
