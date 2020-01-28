@@ -320,7 +320,7 @@ public class PowerMgmtImpl implements PowerMgmt {
             String nodeId = input.getNodes().get(i).getNodeId();
             String srcTpId =  input.getNodes().get(i).getSrcTp();
             String destTpId = input.getNodes().get(i).getDestTp();
-            Long wlNumber = input.getWaveNumber();
+            Long wlNumber = input.getWaveNumber().toJava();
             String connectionNumber =  srcTpId + "-" + destTpId + "-" + wlNumber;
             if (destTpId.toLowerCase().contains("srg")) {
                 crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off, null, connectionNumber);

@@ -121,7 +121,7 @@ public class PceCalculation {
         }
         serviceFormatA = input.getServiceAEnd().getServiceFormat().getName();
         serviceFormatZ = input.getServiceZEnd().getServiceFormat().getName();
-        serviceRate = input.getServiceAEnd().getServiceRate();
+        serviceRate = input.getServiceAEnd().getServiceRate().toJava();
 
         LOG.info("parseInput: A and Z :[{}] and [{}]", anodeId, znodeId);
         if (!(serviceFormatA.equals(serviceFormatZ))) {
@@ -161,7 +161,7 @@ public class PceCalculation {
                 serviceFormatA, String.valueOf(serviceRate));
         }
 
-        returnStructure.setRate(input.getServiceAEnd().getServiceRate());
+        returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
         returnStructure.setServiceFormat(input.getServiceAEnd().getServiceFormat());
         return true;
     }

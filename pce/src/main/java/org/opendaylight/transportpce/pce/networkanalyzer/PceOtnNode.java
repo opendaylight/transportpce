@@ -34,6 +34,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,8 +54,8 @@ public class PceOtnNode implements PceNode {
     private final String pceNodeType;
     private final String otnServiceType;
 
-    private Map<String, List<Integer>> tpAvailableTribPort = new TreeMap<String, List<Integer>>();
-    private Map<String, List<Integer>> tpAvailableTribSlot = new TreeMap<String, List<Integer>>();
+    private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<String, List<Uint16>>();
+    private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<String, List<Uint16>>();
     private Map<String, OpenroadmTpType> availableXponderTp = new TreeMap<String, OpenroadmTpType>();
     private List<String> usedXpdrNWTps = new ArrayList<String>();
     private List<TpId> availableXpdrNWTps;
@@ -366,7 +367,7 @@ public class PceOtnNode implements PceNode {
             for (OduSwitchingPools ospx : osp) {
                 List<NonBlockingList> nbl = ospx.getNonBlockingList();
                 for (NonBlockingList nbll : nbl) {
-                    if (nbll.getAvailableInterconnectBandwidth() >= neededBW) {
+                    if (nbll.getAvailableInterconnectBandwidth().toJava() >= neededBW) {
                         List<TpId> tplist = new ArrayList<TpId>(nbll.getTpList());
                         if ((tplist.contains(tp1.getTpId())) & (tplist.contains(tp2.getTpId()))) {
                             LOG.debug("validateSwitchingPoolBandwidth: couple  of tp {} x {} valid for crossconnection",
@@ -414,7 +415,7 @@ public class PceOtnNode implements PceNode {
                 && tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0)
                     .getOdtuType().equals(ODTU4TsAllocated.class)) {
                 @Nullable
-                List<Integer> tpnPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
+                List<Uint16> tpnPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
                     .getOdtuTpnPool().get(0).getTpnPool();
                 if (tpnPool != null) {
                     tpAvailableTribPort.put(tp.getTpId().getValue(), tpnPool);
@@ -436,7 +437,7 @@ public class PceOtnNode implements PceNode {
         for (TerminationPoint tp : networkTpList) {
             if (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getTsPool() != null) {
                 @Nullable
-                List<Integer> tsPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
+                List<Uint16> tsPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
                     .getTsPool();
                 tpAvailableTribSlot.put(tp.getTpId().getValue(), tsPool);
             }
@@ -474,12 +475,12 @@ public class PceOtnNode implements PceNode {
     }
 
     @Override
-    public Map<String, List<Integer>> getAvailableTribPorts() {
+    public Map<String, List<Uint16>> getAvailableTribPorts() {
         return tpAvailableTribPort;
     }
 
     @Override
-    public Map<String, List<Integer>> getAvailableTribSlots() {
+    public Map<String, List<Uint16>> getAvailableTribSlots() {
         return tpAvailableTribSlot;
     }
 

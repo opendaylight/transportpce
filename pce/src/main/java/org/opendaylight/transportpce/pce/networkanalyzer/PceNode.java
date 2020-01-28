@@ -10,8 +10,8 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.List;
 import java.util.Map;
-
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yangtools.yang.common.Uint16;
 
 public interface PceNode {
     String getPceNodeType();
@@ -34,7 +34,7 @@ public interface PceNode {
 
     boolean checkWL(long index);
 
-    Map<String, List<Integer>> getAvailableTribPorts();
+    Map<String, List<Uint16>> getAvailableTribPorts();
 
-    Map<String, List<Integer>> getAvailableTribSlots();
+    Map<String, List<Uint16>> getAvailableTribSlots();
 }

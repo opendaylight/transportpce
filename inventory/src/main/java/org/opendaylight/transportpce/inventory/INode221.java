@@ -342,7 +342,7 @@ public class INode221 {
         //String serialId = "";
 
         String nodeId = prepareDashString(deviceInfo.getNodeId());
-        Long nodeNumber = deviceInfo.getNodeNumber();
+        Long nodeNumber = deviceInfo.getNodeNumber().toJava();
         Integer nodeTypeEnu = deviceInfo.getNodeType().getIntValue();
         String clli = prepareDashString(deviceInfo.getClli());
         String vendor = prepareDashString(deviceInfo.getVendor());
