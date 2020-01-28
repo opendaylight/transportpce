@@ -22,6 +22,30 @@
       "revId": "33486ff2651dacb288772692f3479dc935e433fe",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95fe0bc6_505337bd",
+        "filename": "ordmodels/device/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-01-28T15:14:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9d500ef_9881b70d",
+      "range": {
+        "startLine": 52,
+        "startChar": 15,
+        "endLine": 52,
+        "endChar": 30
+      },
+      "revId": "33486ff2651dacb288772692f3479dc935e433fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
