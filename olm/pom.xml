@@ -13,7 +13,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>4.0.11</version>
+    <version>5.0.9</version>
     <relativePath/>
   </parent>
 
@@ -59,7 +59,15 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
+      <version>3.0.2</version>
       <optional>true</optional>
     </dependency>
   </dependencies>
+
+<!-- checkstyle and spotbugds enforced by odlparent since Magnesium -->
+  <properties>
+    <!-- odlparent.checkstyle.enforce>false</odlparent.checkstyle.enforce -->
+    <odlparent.spotbugs.enforce>false</odlparent.spotbugs.enforce>
+  </properties>
+
 </project>

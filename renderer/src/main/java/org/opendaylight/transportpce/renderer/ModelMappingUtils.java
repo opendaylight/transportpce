@@ -90,7 +90,7 @@ public final class ModelMappingUtils {
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setServiceName(serviceName)
             .setOperation(ServicePathInput.Operation.Create)
-            .setWaveNumber(Long.valueOf(pathDescription.getAToZDirection().getAToZWavelengthNumber()))
+            .setWaveNumber(Long.valueOf(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava()))
             .setNodes(nodeLists.getList());
         return new ServicePathInputData(servicePathInputBuilder.build(), nodeLists);
     }
@@ -101,7 +101,7 @@ public final class ModelMappingUtils {
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setOperation(ServicePathInput.Operation.Create)
             .setServiceName(serviceName)
-            .setWaveNumber(Long.valueOf(pathDescription.getZToADirection().getZToAWavelengthNumber()))
+            .setWaveNumber(Long.valueOf(pathDescription.getZToADirection().getZToAWavelengthNumber().toJava()))
             .setNodes(nodeLists.getList());
         return new ServicePathInputData(servicePathInputBuilder.build(), nodeLists);
     }

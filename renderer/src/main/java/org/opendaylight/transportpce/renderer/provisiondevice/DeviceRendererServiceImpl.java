@@ -116,7 +116,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
                     String srcTp = node.getSrcTp();
                     String destTp = node.getDestTp();
-                    Long waveNumber = input.getWaveNumber();
+                    Long waveNumber = input.getWaveNumber().toJava();
                     if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Line Interfaces
@@ -246,7 +246,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             LOG.info("Deleting service setup on node {}", nodeId);
             String srcTp = node.getSrcTp();
             String destTp = node.getDestTp();
-            Long waveNumber = input.getWaveNumber();
+            Long waveNumber = input.getWaveNumber().toJava();
             if ((srcTp == null) || (destTp == null)) {
                 LOG.error("Source ({}) or destination ({}) termination point is null.", srcTp, destTp);
                 return;
