@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe1c1f52_11723066",
+        "filename": "api/src/main/yang/service_path/transportpce-common-types@2019-12-12.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-01-28T11:07:49Z",
+      "side": 1,
+      "message": "it seems these new models only add OTN parameters and do not change anything else.\nIn that case, I recommend splitting the YANG and the code import revisions upgrade in another change to clearly identify potential problems brought by the feature upgrade itself.",
+      "revId": "132863f3137ad62b2d9237c487caba6ef9b751b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0fc51f72_cf4b671f",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2019-12-12.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-01-28T11:07:49Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "132863f3137ad62b2d9237c487caba6ef9b751b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a61e9e89_d8fee774",
+        "filename": "api/src/main/yang/transportpce-olm@2017-04-18.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-01-28T11:07:49Z",
+      "side": 1,
+      "message": "does it make sense to force the revision here ?\nCan this revision eventually removed ?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 31
+      },
+      "revId": "132863f3137ad62b2d9237c487caba6ef9b751b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a8feb37_587591a0",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-01-28T11:07:49Z",
+      "side": 1,
+      "message": "A Line Feed would allow to get rid of the String concatenation.\n\n            throw new OpenRoadmInterfaceException(\n\t\t\t\tString.format(\"Unable to get mapping from PortMapping for node % and logical connection port %s\",\n\t\t\t\t\t nodeId, logicalConnPoint));",
+      "range": {
+        "startLine": 102,
+        "startChar": 50,
+        "endLine": 103,
+        "endChar": 51
+      },
+      "revId": "132863f3137ad62b2d9237c487caba6ef9b751b2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
