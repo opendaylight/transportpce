@@ -27,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ public class GnpyUtilitiesImpl {
     private GnpyTopoImpl gnpyTopo = null;
     private GnpyResult gnpyAtoZ;
     private GnpyResult gnpyZtoA;
-    private Long requestId;
+    private Uint32 requestId;
     //private boolean status;
 
     public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input)
@@ -56,7 +57,7 @@ public class GnpyUtilitiesImpl {
         this.input = input;
         this.gnpyAtoZ = null;
         this.gnpyZtoA = null;
-        this.requestId = (long) 0;
+        this.requestId = Uint32.valueOf(0);
     }
 
     public boolean verifyComputationByGnpy(AToZDirection atoz, ZToADirection ztoa, PceConstraints pceHardConstraints)
@@ -77,7 +78,7 @@ public class GnpyUtilitiesImpl {
     }
 
     public GnpyResult gnpyResponseOneDirection(GnpyServiceImpl gnpySvc) throws GnpyException, Exception {
-        requestId++;
+        requestId = Uint32.valueOf((requestId.toJava()) + 1);
         List<PathRequest> pathRequestList = gnpySvc.getPathRequest();
         List<Synchronization> synchronizationList = gnpySvc.getSynchronization();
         // Send the computed path to GNPY tool

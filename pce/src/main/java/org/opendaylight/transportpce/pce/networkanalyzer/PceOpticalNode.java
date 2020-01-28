@@ -24,6 +24,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,7 +147,7 @@ public class PceOpticalNode implements PceNode {
                 }
                 for (org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
                         .AvailableWavelengths awl : srgAvailableWL) {
-                    this.availableWLindex.add(awl.getIndex());
+                    this.availableWLindex.add(awl.getIndex().toJava());
                     LOG.debug("initWLlist: SRG next = {} in {}", awl.getIndex(), this.toString());
                 }
                 break;
@@ -160,7 +161,7 @@ public class PceOpticalNode implements PceNode {
                 }
                 for (org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes
                             .AvailableWavelengths awl : degAvailableWL) {
-                    this.availableWLindex.add(awl.getIndex());
+                    this.availableWLindex.add(awl.getIndex().toJava());
                     LOG.debug("initWLlist: DEGREE next = {} in {}", awl.getIndex(), this.toString());
                 }
                 break;
@@ -362,13 +363,13 @@ public class PceOpticalNode implements PceNode {
     }
 
     @Override
-    public Map<String, List<Integer>> getAvailableTribPorts() {
+    public Map<String, List<Uint16>> getAvailableTribPorts() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Map<String, List<Integer>> getAvailableTribSlots() {
+    public Map<String, List<Uint16>> getAvailableTribSlots() {
         // TODO Auto-generated method stub
         return null;
     }

@@ -119,7 +119,7 @@ public class PceLink {
     private Long calcLatency(Link link) {
         Link1 link1 = null;
         link1 = link.augmentation(Link1.class);
-        Long tmplatency = link1.getLinkLatency();
+        Long tmplatency = link1.getLinkLatency().toJava();
         if (tmplatency != null) {
             return tmplatency;
         }
@@ -128,7 +128,7 @@ public class PceLink {
             double tmp = 0;
             for (int i = 0; i < this.omsAttributesSpan.getLinkConcatenation().size(); i++) {
                 //Length is expressed in meter and latency is expressed in ms according to OpenROADM MSA
-                tmp += this.omsAttributesSpan.getLinkConcatenation().get(i).getSRLGLength() / CELERITY;
+                tmp += this.omsAttributesSpan.getLinkConcatenation().get(i).getSRLGLength().toJava() / CELERITY;
                 LOG.info("In PceLink: The latency of link {} == {}",link.getLinkId(),tmp);
             }
             tmplatency = (long) Math.ceil(tmp);

@@ -15,6 +15,7 @@ import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
+import org.opendaylight.yangtools.yang.common.Uint16;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +26,8 @@ public class PceResult {
     private boolean calcStatus = false;
     private String responseCode = ResponseCodes.RESPONSE_FAILED;
     private long resultWavelength = -1;
-    private Map<String, Integer> resultTribPort;
-    private Map<String, List<Integer>> resultTribSlot;
+    private Map<String, Uint16> resultTribPort;
+    private Map<String, List<Uint16>> resultTribSlot;
     private Integer resultTribSlotNb = -1;
     private String serviceType = "";
 
@@ -137,19 +138,19 @@ public class PceResult {
         this.calcMessage = calcMessage;
     }
 
-    public Map<String, Integer> getResultTribPort() {
+    public Map<String, Uint16> getResultTribPort() {
         return resultTribPort;
     }
 
-    public void setResultTribPort(Map<String, Integer> resultTribPort) {
+    public void setResultTribPort(Map<String, Uint16> resultTribPort) {
         this.resultTribPort = resultTribPort;
     }
 
-    public Map<String, List<Integer>> getResultTribSlot() {
+    public Map<String, List<Uint16>> getResultTribSlot() {
         return resultTribSlot;
     }
 
-    public void setResultTribSlot(Map<String, List<Integer>> resultTribSlot) {
+    public void setResultTribSlot(Map<String, List<Uint16>> resultTribSlot) {
         this.resultTribSlot = resultTribSlot;
     }
 

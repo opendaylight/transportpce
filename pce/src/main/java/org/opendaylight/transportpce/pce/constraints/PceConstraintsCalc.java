@@ -130,7 +130,7 @@ public class PceConstraintsCalc {
 
         Latency latency = tmpGeneral.getLatency();
         if (latency != null) {
-            constraints.setMaxLatency(latency.getMaxLatency());
+            constraints.setMaxLatency(latency.getMaxLatency().toJava());
             LOG.info("In readGeneralContrains: read latency {}", latency.toString());
         }
 
