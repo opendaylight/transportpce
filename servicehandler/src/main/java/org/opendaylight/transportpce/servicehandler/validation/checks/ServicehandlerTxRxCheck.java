@@ -134,7 +134,7 @@ public final class ServicehandlerTxRxCheck {
         String message = "";
         if (serviceEnd != null) {
             try {
-                Long serviceRate = serviceEnd.getServiceRate();
+                Long serviceRate = serviceEnd.getServiceRate().toJava();
                 ServiceFormat serviceformat = serviceEnd.getServiceFormat();
                 String clli = serviceEnd.getClli();
                 if ((serviceRate == null) || (serviceRate <= 0)) {

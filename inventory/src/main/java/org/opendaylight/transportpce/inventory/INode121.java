@@ -341,7 +341,7 @@ public class INode121 {
         String startTimetampStr = getCurrentTimestamp();
 
         String nodeId = prepareDashString(deviceInfo.getNodeId());
-        Long nodeNumber = deviceInfo.getNodeNumber();
+        Long nodeNumber = deviceInfo.getNodeNumber().toJava();
         String nodeTypeEnu = deviceInfo.getNodeType().getName();
         String clli = prepareDashString(deviceInfo.getClli());
         String vendor = prepareDashString(deviceInfo.getVendor());

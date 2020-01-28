@@ -92,12 +92,12 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
         List<NodeIdPair> ztoaTpIds = getZToATpList(pathDescription);
 
         deleteAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                pathDescription.getAToZDirection().getAToZWavelengthNumber());
+                pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava());
         deleteAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                pathDescription.getZToADirection().getZToAWavelengthNumber());
+                pathDescription.getZToADirection().getZToAWavelengthNumber().toJava());
 
-        addUsedWL(pathDescription.getAToZDirection().getAToZWavelengthNumber(), atozTpIds);
-        addUsedWL(pathDescription.getZToADirection().getZToAWavelengthNumber(), ztoaTpIds);
+        addUsedWL(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava(), atozTpIds);
+        addUsedWL(pathDescription.getZToADirection().getZToAWavelengthNumber().toJava(), ztoaTpIds);
     }
 
     @Override
@@ -105,13 +105,13 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
         List<NodeIdPair> atozTpIds = getAToZTpList(pathDescription);
         List<NodeIdPair> ztoaTpIds = getZToATpList(pathDescription);
 
-        deleteUsedWL(pathDescription.getAToZDirection().getAToZWavelengthNumber(), atozTpIds);
-        deleteUsedWL(pathDescription.getZToADirection().getZToAWavelengthNumber(), ztoaTpIds);
+        deleteUsedWL(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava(), atozTpIds);
+        deleteUsedWL(pathDescription.getZToADirection().getZToAWavelengthNumber().toJava(), ztoaTpIds);
 
         addAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                pathDescription.getAToZDirection().getAToZWavelengthNumber());
+                pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava());
         addAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                pathDescription.getZToADirection().getZToAWavelengthNumber());
+                pathDescription.getZToADirection().getZToAWavelengthNumber().toJava());
     }
 
     private List<NodeIdPair> getAToZTpList(PathDescription pathDescription) {
