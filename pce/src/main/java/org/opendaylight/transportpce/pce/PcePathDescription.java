@@ -55,7 +55,7 @@ public class PcePathDescription {
     }
 
     public PceResult buildDescriptions() {
-        LOG.info("In buildDescriptions: AtoZ {}", pathAtoZ.toString());
+        LOG.info("In buildDescriptions: AtoZ =  {}", pathAtoZ.toString());
         List<AToZ> atozList = new ArrayList<AToZ>();
         if (pathAtoZ == null) {
             rc.setRC(ResponseCodes.RESPONSE_FAILED);
@@ -64,12 +64,16 @@ public class PcePathDescription {
         }
 
         buildAtoZ(atozList, pathAtoZ);
-
-        rc.setAtoZDirection(new AToZDirectionBuilder()
+        AToZDirectionBuilder atoZDirectionBldr = new AToZDirectionBuilder()
             .setRate(rc.getRate())
-            .setAToZWavelengthNumber(rc.getResultWavelength())
-            .setAToZ(atozList).build());
-
+            .setAToZ(atozList);
+        if ("100GE".equals(rc.getServiceType()) || "OTU4".equals(rc.getServiceType())) {
+            atoZDirectionBldr.setAToZWavelengthNumber(rc.getResultWavelength());
+        } else if ("10GE".equals(rc.getServiceType()) || "1GE".equals(rc.getServiceType())
+            || "ODU4".equals(rc.getServiceType())) {
+            atoZDirectionBldr.setAToZWavelengthNumber(Long.valueOf(0));
+        }
+        rc.setAtoZDirection(atoZDirectionBldr.build());
         pathZtoA = ImmutableList.copyOf(pathAtoZ).reverse();
         LOG.info("In buildDescriptions: ZtoA {}", pathZtoA.toString());
 
@@ -80,17 +84,21 @@ public class PcePathDescription {
             return rc;
         }
         buildZtoA(ztoaList, pathZtoA);
-
-        rc.setZtoADirection(new ZToADirectionBuilder()
+        ZToADirectionBuilder ztoADirectionBldr = new ZToADirectionBuilder()
             .setRate(rc.getRate())
-            .setZToAWavelengthNumber(rc.getResultWavelength())
-            .setZToA(ztoaList).build());
+            .setZToA(ztoaList);
+        if ("100GE".equals(rc.getServiceType()) || "OTU4".equals(rc.getServiceType())) {
+            ztoADirectionBldr.setZToAWavelengthNumber(rc.getResultWavelength());
+        } else if ("10GE".equals(rc.getServiceType()) || "1GE".equals(rc.getServiceType())
+            || "ODU4".equals(rc.getServiceType())) {
+            ztoADirectionBldr.setZToAWavelengthNumber(Long.valueOf(0));
+        }
+        rc.setZtoADirection(ztoADirectionBldr.build());
 
         return rc;
     }
 
     private void buildAtoZ(List<AToZ> etoeList, List<PceLink> path) {
-
         Integer index = 0;
         PceLink lastLink = null;
         AToZ lastResource = null;

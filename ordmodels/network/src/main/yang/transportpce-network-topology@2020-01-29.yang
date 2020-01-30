@@ -20,12 +20,34 @@ module transportpce-topology {
     contact
         "TransportPCE team";
 
+    revision 2020-01-29 {
+        description "Add transportpce augmentation to manage otn-link-type in otn-topology";
+    }
     revision 2020-01-23 {
         description "Add transportpce augmentation for otn-topology";
     }
-
     revision 2019-06-25 {
         description "Initial revision";
+    }
+
+    typedef otn-link-type {
+      type enumeration {
+        enum "OTU4" {
+          value 0;
+        }
+        enum "ODU4" {
+          value 1;
+        }
+        enum "ODTU4" {
+          value 2;
+        }
+        enum "ODU2e" {
+          value 3;
+        }
+        enum "ODU0" {
+          value 4;
+        }
+      }
     }
 
     augment "/nd:networks/nd:network/nd:node/nwt:termination-point" {
@@ -38,6 +60,20 @@ module transportpce-topology {
           type string;
           description
             "The xpdr port connectable regarding the device connection-map";
+        }
+    }
+
+    augment "/nd:networks/nd:network/nwt:link" {
+        when "../nd:network-types/cnet:openroadm-common-network/otn-topology";
+        description
+          "Defines more accurate otn link types to differentiate otn links in otn-topology";
+        leaf otn-link-type {
+          when
+            "../cnet:link-type = 'OTN-LINK'";
+          type otn-link-type;
+          description
+              "type of otn link, to help link management inside transportpce";
+          }
         }
     }
 }

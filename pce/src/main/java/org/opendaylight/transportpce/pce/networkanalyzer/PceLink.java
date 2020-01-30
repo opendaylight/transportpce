@@ -14,6 +14,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation.FiberType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
@@ -41,8 +42,6 @@ public class PceLink {
     private final NodeId destId;
     private final Object sourceTP;
     private final Object destTP;
-    private final String sourceSupNodeId;
-    private final String destSupNodeId;
     private final String sourceNetworkSupNodeId;
     private final String destNetworkSupNodeId;
     private final String sourceCLLI;
@@ -50,6 +49,7 @@ public class PceLink {
     private final LinkId oppositeLink;
     private final Long latency;
     private final Long availableBandwidth;
+    private final Long usedBandwidth;
     private final List<Long> srlgList;
     private final double osnr;
     private final Span omsAttributesSpan;
@@ -60,7 +60,7 @@ public class PceLink {
     private static final double LOWER_BOUND_OSNR = 0.1;
 
     public PceLink(Link link, PceNode source, PceNode dest) {
-        LOG.debug("PceLink: : PceLink start ");
+        LOG.info("PceLink: : PceLink start ");
 
         this.linkId = link.getLinkId();
 
@@ -70,13 +70,11 @@ public class PceLink {
         this.sourceTP = link.getSource().getSourceTp();
         this.destTP = link.getDestination().getDestTp();
 
-        this.sourceSupNodeId = source.getSupNodeIdPceNode();
-        this.destSupNodeId = dest.getSupNodeIdPceNode();
-        this.sourceNetworkSupNodeId = source.getSupNetworkNodeIdPceNode();
-        this.destNetworkSupNodeId = dest.getSupNetworkNodeIdPceNode();
+        this.sourceNetworkSupNodeId = source.getSupNetworkNodeId();
+        this.destNetworkSupNodeId = dest.getSupNetworkNodeId();
 
-        this.sourceCLLI = source.getClliSupNodeId();
-        this.destCLLI = dest.getClliSupNodeId();
+        this.sourceCLLI = source.getSupClliNodeId();
+        this.destCLLI = dest.getSupClliNodeId();
 
         this.linkType = MapUtils.calcType(link);
 
@@ -88,8 +86,10 @@ public class PceLink {
             this.latency = calcLatency(link);
             this.osnr = calcSpanOSNR();
             this.availableBandwidth = 0L;
+            this.usedBandwidth = 0L;
         } else if (this.linkType == OpenroadmLinkType.OTNLINK) {
             this.availableBandwidth = MapUtils.getAvailableBandwidth(link);
+            this.usedBandwidth = MapUtils.getUsedBandwidth(link);
             this.srlgList = MapUtils.getSRLGfromLink(link);
             this.osnr = 0.0;
             this.latency = 0L;
@@ -100,6 +100,7 @@ public class PceLink {
             this.latency = 0L;
             this.osnr = 100L; //infinite OSNR in DB
             this.availableBandwidth = 0L;
+            this.usedBandwidth = 0L;
         }
         LOG.debug("PceLink: created PceLink  {}", toString());
     }
@@ -228,17 +229,12 @@ public class PceLink {
         return availableBandwidth;
     }
 
-
-    public String getsourceSupNodeId() {
-        return sourceSupNodeId;
+    public Long getUsedBandwidth() {
+        return availableBandwidth;
     }
 
     public String getsourceNetworkSupNodeId() {
         return sourceNetworkSupNodeId;
-    }
-
-    public String getdestSupNodeId() {
-        return destSupNodeId;
     }
 
     public String getdestNetworkSupNodeId() {
@@ -262,17 +258,15 @@ public class PceLink {
     }
 
     public boolean isValid() {
-        if ((this.linkId == null) || (this.linkType == null)
-                || (this.oppositeLink == null)) {
+        if ((this.linkId == null) || (this.linkType == null) || (this.oppositeLink == null)) {
             isValid = false;
             LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
         }
-        if ((this.sourceId == null) || (this.destId == null)
-                || (this.sourceTP == null) || (this.destTP == null)) {
+        if ((this.sourceId == null) || (this.destId == null) || (this.sourceTP == null) || (this.destTP == null)) {
             isValid = false;
             LOG.error("PceLink: No Link source or destination is available. Link is ignored {}", linkId);
         }
-        if ((this.sourceSupNodeId.equals("")) || (this.destSupNodeId.equals(""))) {
+        if ((this.sourceNetworkSupNodeId.equals("")) || (this.destNetworkSupNodeId.equals(""))) {
             isValid = false;
             LOG.error("PceLink: No Link source SuppNodeID or destination SuppNodeID is available. Link is ignored {}",
                 linkId);
@@ -292,60 +286,80 @@ public class PceLink {
         return isValid;
     }
 
-    public boolean isOtnValid(Link link, String oduType) {
-        if (this.linkType == OpenroadmLinkType.OTNLINK) {
-            isOtnValid = false;
-            Long availableBW = MapUtils.getAvailableBandwidth(link);
-            if ((availableBW == 0L) || (availableBW == null)) {
-                LOG.error("PceLink: No bandwidth available or not valid OTN Link, Link {}  is ignored ", linkId);
-            } else if (("ODU4".equals(oduType)) && (availableBW == 100000L)) {
-                isOtnValid = true;
-                LOG.debug("PceLink: Selected OTU4 Link {} is eligible for ODU creation OTN Link", linkId);
-            } else if (("ODU2".equals(oduType)) || ("ODU2e".equals(oduType)) && (availableBW >= 12500L)) {
-                isOtnValid = true;
-                LOG.debug("PceLink: Selected ODU4 Link {} has available bandwidth and is eligible for {} creation ",
-                    linkId, oduType);
-            } else if (("ODU0".equals(oduType)) && (availableBW >= 1250L)) {
-                isOtnValid = true;
-                LOG.debug("PceLink: Selected ODU4 Link {} has available bandwidth and is eligible for {} creation ",
-                    linkId, oduType);
-            } else if (("ODU1".equals(oduType)) && (availableBW >= 2500L)) {
-                isOtnValid = true;
-                LOG.debug("PceLink: Selected ODU4 Link {} has available bandwidth and is eligible for {} creation ",
-                    linkId, oduType);
-            } else {
-                isOtnValid = false;
-                LOG.error(
-                    "PceLink: Selected OTN Link {} is not eligible for ODU creation: not enough available bandwidth",
-                    linkId);
-            }
+    public boolean isOtnValid(Link link, String serviceType) {
 
-        } else {
-            isOtnValid = false;
+        if (this.linkType != OpenroadmLinkType.OTNLINK) {
             LOG.error("PceLink: Not an OTN link. Link is ignored {}", linkId);
+            return false;
         }
 
-        if ((this.linkId == null) || (this.linkType == null)
-                || (this.oppositeLink == null)) {
-            isOtnValid = false;
-            LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
+        OtnLinkType otnLinkType = link
+            .augmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1.class)
+            .getOtnLinkType();
+        if (this.availableBandwidth == 0L) {
+            LOG.error("PceLink: No bandwidth available for OTN Link, link {}  is ignored ", linkId);
+            return false;
         }
-        if ((this.sourceId == null) || (this.destId == null)
-                || (this.sourceTP == null) || (this.destTP == null)) {
-            isOtnValid = false;
+
+        long neededBW = 0L;
+        OtnLinkType neededType = null;
+        switch (serviceType) {
+
+            case "ODU4":
+                if (this.usedBandwidth != 0L) {
+                    return false;
+                }
+                neededBW = 100000L;
+                neededType = OtnLinkType.OTU4;
+                break;
+            case "ODU2":
+            case "ODU2e":
+                neededBW = 12500L;
+                break;
+            case "ODU0":
+                neededBW = 1250L;
+                break;
+            case "ODU1":
+                neededBW = 2500L;
+                break;
+            case "10GE":
+                neededBW = 10000L;
+                neededType = OtnLinkType.ODTU4;
+                break;
+            case "1GE":
+                neededBW = 1000L;
+                neededType = OtnLinkType.ODTU4;
+                break;
+            default:
+                LOG.error("PceLink: isOtnValid Link {} unsupported serviceType {} ", linkId, serviceType);
+                return false;
+        }
+
+        if ((this.availableBandwidth >= neededBW)
+            && ((neededType == null) || (neededType.equals(otnLinkType)))) {
+            LOG.info("PceLink: Selected Link {} has available bandwidth and is eligible for {} creation ",
+                linkId, serviceType);
+        }
+
+        if ((this.linkId == null) || (this.linkType == null) || (this.oppositeLink == null)) {
+            LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
+            return false;
+        }
+        if ((this.sourceId == null) || (this.destId == null) || (this.sourceTP == null) || (this.destTP == null)) {
             LOG.error("PceLink: No Link source or destination is available. Link is ignored {}", linkId);
+            return false;
         }
         if ((this.sourceNetworkSupNodeId.equals("")) || (this.destNetworkSupNodeId.equals(""))) {
-            isOtnValid = false;
             LOG.error("PceLink: No Link source SuppNodeID or destination SuppNodeID is available. Link is ignored {}",
                 linkId);
+            return false;
         }
         if ((this.sourceCLLI.equals("")) || (this.destCLLI.equals(""))) {
-            isOtnValid = false;
             LOG.error("PceLink: No Link source CLLI or destination CLLI is available. Link is ignored {}", linkId);
+            return false;
         }
 
-        return isOtnValid;
+        return true;
     }
 
     public String toString() {

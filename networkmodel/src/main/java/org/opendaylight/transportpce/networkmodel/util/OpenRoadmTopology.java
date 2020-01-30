@@ -196,24 +196,24 @@ public final class OpenRoadmTopology {
                     .common.network.rev181130.TerminationPoint1Builder();
                 if (m.getPortQual().equals("xpdr-network")) {
                     ocnTp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123.TerminationPoint1 tpceTp1 =
-                        new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123
+                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1 tpceTp1 =
+                        new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129
                         .TerminationPoint1Builder().setAssociatedConnectionMapPort(m.getConnectionMapLcp()).build();
                     ietfTpBldr
                         .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
                             .rev181130.TerminationPoint1.class, ocnTp1Bldr.build())
-                        .addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123
+                        .addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129
                             .TerminationPoint1.class, tpceTp1);
                     tpList.add(ietfTpBldr.build());
                 } else if (m.getPortQual().equals("xpdr-client")) {
                     ocnTp1Bldr.setTpType(OpenroadmTpType.XPONDERCLIENT);
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123.TerminationPoint1 tpceTp1 =
-                        new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123
+                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1 tpceTp1 =
+                        new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129
                         .TerminationPoint1Builder().setAssociatedConnectionMapPort(m.getConnectionMapLcp()).build();
                     ietfTpBldr
                         .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
                             .TerminationPoint1.class, ocnTp1Bldr.build())
-                        .addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123
+                        .addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129
                             .TerminationPoint1.class, tpceTp1);
                     tpList.add(ietfTpBldr.build());
                 }

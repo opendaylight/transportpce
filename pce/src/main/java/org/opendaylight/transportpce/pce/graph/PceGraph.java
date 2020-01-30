@@ -211,25 +211,13 @@ public class PceGraph {
     }
 
     private double chooseWeight(PceLink link) {
-
         // HopCount is default
         double weight = 1;
         switch (pceHardConstraints.getPceMetrics()) {
-            case IGPMetric :
-                // TODO implement IGPMetric - low priority.
-                LOG.warn("In PceGraph not implemented IGPMetric. HopCount works as a default");
-                break;
-
-            case TEMetric :
-                // TODO implement TEMetric - low priority
-                LOG.warn("In PceGraph not implemented TEMetric. HopCount works as a default");
-                break;
-
             case HopCount :
                 weight = 1;
                 LOG.debug("In PceGraph HopCount is used as a metrics. {}", link.toString());
                 break;
-
             case PropagationDelay :
                 weight = link.getLatency();
                 LOG.debug("In PceGraph PropagationDelay is used as a metrics. {}", link.toString());
@@ -239,11 +227,14 @@ public class PceGraph {
                         link.toString());
                 }
                 break;
-
+            // TODO implement IGPMetric and TEMetric - low priority.
+            case IGPMetric :
+            case TEMetric :
             default:
+                LOG.warn("In PceGraph {} not implemented. HopCount works as a default",
+                    pceHardConstraints.getPceMetrics());
                 break;
         }
-
         return weight;
     }
 
@@ -271,5 +262,4 @@ public class PceGraph {
         this.pceHardConstraints = pceHardConstraintsInput;
         this.pceSoftConstraints = pceSoftConstraintsInput;
     }
-
 }

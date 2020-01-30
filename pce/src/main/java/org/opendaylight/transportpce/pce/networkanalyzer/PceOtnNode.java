@@ -9,38 +9,35 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-//import java.util.Optional;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
-//import org.eclipse.jdt.annotation.Nullable;
-import org.opendaylight.transportpce.common.NetworkUtils;
-//import org.opendaylight.transportpce.pce.SortPortsByName;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks
-//.network.node.termination.point.pp.attributes.UsedWavelength;
+import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.ODTU4TsAllocated;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.networks.network.node.SwitchingPools;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.If100GEODU4;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.If10GEODU2e;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.If1GEODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev181130.xpdr.otn.tp.attributes.OdtuTpnPool;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.If100GEODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.If10GEODU2e;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.If1GEODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PceOtnNode extends PceNode {
+public class PceOtnNode implements PceNode {
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
     ////////////////////////// OTN NODES ///////////////////////////
@@ -50,160 +47,235 @@ public class PceOtnNode extends PceNode {
 
     private boolean valid = true;
 
-    private final String supNetworkNodeId;
-    private final String supTopoNodeId;
-    private final String clli;
+    private final Node node;
+    private final NodeId nodeId;
+    private final OpenroadmNodeType nodeType;
+    private final String pceNodeType;
     private final String otnServiceType;
 
     private Map<String, List<Integer>> tpAvailableTribPort = new TreeMap<String, List<Integer>>();
     private Map<String, List<Integer>> tpAvailableTribSlot = new TreeMap<String, List<Integer>>();
     private Map<String, OpenroadmTpType> availableXponderTp = new TreeMap<String, OpenroadmTpType>();
     private List<String> usedXpdrNWTps = new ArrayList<String>();
-    private List<String> unusableXpdrNWTps = new ArrayList<String>();
+    private List<TpId> availableXpdrNWTps;
+    private List<TpId> usableXpdrNWTps;
     private List<String> usedXpdrClientTps = new ArrayList<String>();
-    private List<String> unusableXpdrClientTps = new ArrayList<String>();
+    private List<TpId> availableXpdrClientTps;
+    private List<TpId> usableXpdrClientTps;
+
     private List<PceLink> outgoingLinks = new ArrayList<PceLink>();
     private Map<String, String> clientPerNwTp = new HashMap<String, String>();
 
-    public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String serviceType) {
-        super(node, nodeType, nodeId);
-        this.supNetworkNodeId = getNetworkSupNodeId(node);
-        this.supTopoNodeId = getTopoSupNodeId(node);
-        this.clli = getClliSupNodeId(node);
+    public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String pceNodeType, String serviceType) {
+        this.node = node;
+        this.nodeId = nodeId;
+        this.nodeType = nodeType;
+        this.pceNodeType = pceNodeType;
         this.otnServiceType = serviceType;
-        this.tpAvailableTribPort.clear();
         this.tpAvailableTribSlot.clear();
         this.usedXpdrNWTps.clear();
-        this.unusableXpdrNWTps.clear();
+        this.availableXpdrNWTps = new ArrayList<TpId>();
+        this.usableXpdrNWTps = new ArrayList<TpId>();
         this.usedXpdrClientTps.clear();
-        this.unusableXpdrClientTps.clear();
-
-        if ((node == null) || (nodeId == null) || (nodeType == null)) {
+        this.availableXpdrClientTps = new ArrayList<TpId>();
+        this.usableXpdrClientTps = new ArrayList<TpId>();
+        this.tpAvailableTribPort.clear();
+        checkAvailableTribPort();
+        this.tpAvailableTribSlot.clear();
+        checkAvailableTribSlot();
+        if ((node == null) || (nodeId == null) || (nodeType != OpenroadmNodeType.MUXPDR)
+            && (nodeType != OpenroadmNodeType.SWITCH) && (nodeType != OpenroadmNodeType.TPDR)) {
             LOG.error("PceOtnNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
     }
 
     public void initXndrTps(String mode) {
-        LOG.info("initXndrTps for node : {}", this.nodeId);
-        int availableNetworkTpNumber = 0;
-        int availableClientTpNumber = 0;
-
+        LOG.info("PceOtnNode: initXndrTps for node {}", this.nodeId.getValue());
         this.availableXponderTp.clear();
 
-        if (!isValid()) {
-            return;
-        }
-        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 nodeTp =
-            this.node.augmentation(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class);
-        List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-            .network.node.TerminationPoint> allTps = nodeTp.getTerminationPoint();
+        org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 nodeTp
+            = this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                .ietf.network.topology.rev180226.Node1.class);
+        List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .node.TerminationPoint> allTps = nodeTp.getTerminationPoint();
         this.valid = false;
         if (allTps == null) {
-            LOG.error("initXndrTps: XPONDER TerminationPoint list is empty for node {}", this.toString());
+            LOG.error("PceOtnNode: initXndrTps: XPONDER TerminationPoint list is empty for node {}", this.toString());
             return;
         }
 
-        for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-                .network.node.TerminationPoint tp : allTps) {
-            TerminationPoint1 otnTp1 = tp.augmentation(TerminationPoint1.class);
+        for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
+            .node.TerminationPoint tp : allTps) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.@Nullable TerminationPoint1 ocnTp1
+                = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                .TerminationPoint1.class);
             //TODO many nested if-structures below, this needs to be reworked
-            if (otnTp1.getTpType() == OpenroadmTpType.XPONDERNETWORK) {
-                if (otnTp1.getXpdrTpPortConnectionAttributes().getWavelength() != null) {
-                    this.usedXpdrNWTps.add(tp.getTpId().getValue());
+            if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType()) && this.otnServiceType.equals("ODU4")) {
+                TerminationPoint1 ontTp1;
+                if (tp.augmentation(TerminationPoint1.class) != null) {
+                    ontTp1 = tp.augmentation(TerminationPoint1.class);
                 } else {
-                    // find server of this network TP
-                    String server = otnTp1.getXpdrTpPortConnectionAttributes().getTailEquipmentId();
-                    if ((server.equals("")) || (server == null)) {
-                        this.unusableXpdrNWTps.add(tp.getTpId().getValue());
+                    continue;
+                }
+                if (checkTpForOdtuTermination(ontTp1)) {
+                    LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
+                    this.availableXpdrNWTps.add(tp.getTpId());
+                } else {
+                    LOG.error("TP {} of {} does not allow ODU4 termination creation", tp.getTpId().getValue(),
+                        node.getNodeId().getValue());
+                }
+            } else if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType())
+                && (this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))) {
+                TerminationPoint1 ontTp1;
+                if (tp.augmentation(TerminationPoint1.class) != null) {
+                    ontTp1 = tp.augmentation(TerminationPoint1.class);
+                } else {
+                    continue;
+                }
+                if ("10GE".equals(otnServiceType) && checkOdtuTTPforLoOduCreation(ontTp1, 10)
+                    || "1GE".equals(otnServiceType) && checkOdtuTTPforLoOduCreation(ontTp1, 1)) {
+                    LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
+                    this.availableXpdrNWTps.add(tp.getTpId());
+                } else {
+                    if ("10GE".equals(otnServiceType)) {
+                        LOG.error("TP {} of {} does not allow OD2e termination creation", tp.getTpId().getValue(),
+                            node.getNodeId().getValue());
+                    } else if ("1GE".equals(otnServiceType)) {
+                        LOG.error("TP {} of {} does not allow ODU0 termination creation", tp.getTpId().getValue(),
+                            node.getNodeId().getValue());
                     } else {
-                        // tp is not used and as a tail to server WDM layer
-                        if (("10GE".equals(this.otnServiceType)) || ("1GE".equals(this.otnServiceType))) {
-                            // LO-ODU needs to be created on a parent HO-ODU
-                            // interface
-                            List<OdtuTpnPool> presenceOdtu =
-                                otnTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool();
-                            if (presenceOdtu == null) {
-                                this.unusableXpdrNWTps.add(tp.getTpId().getValue());
-                            } else {
-                                List<SupportedInterfaceCapability> sic =
-                                    otnTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability();
-                                if ((findNetworkCompliantInterface(sic)) & (checkAvailableTribPort(tp))
-                                    & (checkAvailableTribSlot(tp))) {
-                                    this.availableXponderTp.put(tp.getTpId().getValue(),
-                                        OpenroadmTpType.XPONDERNETWORK);
-                                    availableNetworkTpNumber++;
-                                }
-                                /*
-                                 * Add the retrieval of outgoing ingoing links
-                                 * through an external function
-                                 */
-                            }
-                        } else {
-                            // service is HO service
-                            List<SupportedInterfaceCapability> sic =
-                                otnTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability();
-                            if (findNetworkCompliantInterface(sic)) {
-                                this.availableXponderTp.put(tp.getTpId().getValue(), OpenroadmTpType.XPONDERNETWORK);
-                                availableNetworkTpNumber++;
-                                /*
-                                 * Add the retrieval of outgoing ingoing links
-                                 * through an external function
-                                 */
-                            } else {
-                                this.unusableXpdrNWTps.add(tp.getTpId().getValue());
-
-                            }
-
-                        }
-
+                        LOG.error("TP {} of {} does not allow any termination creation", tp.getTpId().getValue(),
+                            node.getNodeId().getValue());
                     }
-
                 }
-
-                // The port is not a network port
-            } else if (otnTp1.getTpType() == OpenroadmTpType.XPONDERCLIENT) {
-                // For Client port we verify that it supports needed interfaces
-                // TBD : How shall we check a client port is available and not
-                // in use?
-                List<SupportedInterfaceCapability> sic =
-                    otnTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability();
-                if (findClientCompliantInterface(sic)) {
-                    this.availableXponderTp.put(tp.getTpId().getValue(), OpenroadmTpType.XPONDERCLIENT);
-                    availableClientTpNumber++;
+            } else if (OpenroadmTpType.XPONDERCLIENT.equals(ocnTp1.getTpType())
+                && (this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))) {
+                TerminationPoint1 ontTp1;
+                if (tp.augmentation(TerminationPoint1.class) != null) {
+                    ontTp1 = tp.augmentation(TerminationPoint1.class);
+                } else {
+                    continue;
                 }
-            }
-            LOG.debug("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
-            LOG.error("initXndrTps: XPONDER {} NW TP doesn't have defined server ROADM SRG {}", this.toString(), tp
-                .getTpId().getValue());
-        }
-        if ("AZ".equals(mode)) {
-            if ((availableClientTpNumber >= 1) || (availableNetworkTpNumber >= 1)) {
-                // for A and Z node we need to have one valid client port & one
-                // valid network port
-                this.valid = true;
-            }
-        } else if ("intermediate".equals(mode)) {
-            if ((availableNetworkTpNumber >= 2)) {
-                // for OTN switching node used in transit we need to have two
-                // valid network ports
-                this.valid = true;
+                if (checkClientTp(ontTp1)) {
+                    LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
+                    this.availableXpdrClientTps.add(tp.getTpId());
+                } else {
+                    LOG.error("TP {} of {} does not allow lo-ODU (ODU2e or ODU0) termination creation",
+                        tp.getTpId().getValue(), node.getNodeId().getValue());
+                }
             }
         }
 
-        if (!isValid()) {
-            LOG.debug("initXndrTps: XPONDER doesn't have the required ports available  {}", this.toString());
-            return;
+        if ((this.otnServiceType.equals("ODU4") && mode.equals("AZ"))
+            || ((this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))
+                && mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1))
+            || ((this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))
+                && mode.equals("intermediate") && checkSwPool(null, availableXpdrNWTps, 0, 2))) {
+            this.valid = true;
         } else {
-            LOG.debug("initXndrTps: XPONDER {} is elligible", this.toString());
+            this.valid = false;
         }
+    }
+
+    private boolean checkSwPool(List<TpId> clientTps, List<TpId> netwTps, int nbClient, int nbNetw) {
+        if (clientTps != null && netwTps != null && nbClient == 1 && nbNetw == 1) {
+            clientTps.sort(Comparator.comparing(TpId::getValue));
+            netwTps.sort(Comparator.comparing(TpId::getValue));
+            for (TpId nwTp : netwTps) {
+                for (TpId clTp : clientTps) {
+                    @Nullable
+                    List<NonBlockingList> nblList = node.augmentation(Node1.class).getSwitchingPools()
+                        .getOduSwitchingPools().get(0).getNonBlockingList();
+                    for (NonBlockingList nbl : nblList) {
+                        if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
+                            usableXpdrClientTps.add(clTp);
+                            usableXpdrNWTps.add(nwTp);
+                        }
+                        if (usableXpdrClientTps.size() >= nbClient && usableXpdrNWTps.size() >= nbNetw) {
+                            clientPerNwTp.put(nwTp.getValue(), clTp.getValue());
+                            return true;
+                        }
+                    }
+                }
+            }
+
+        }
+        if (clientTps == null && netwTps != null && nbClient == 0 && nbNetw == 2) {
+            netwTps.sort(Comparator.comparing(TpId::getValue));
+            @Nullable
+            List<NonBlockingList> nblList = node.augmentation(Node1.class).getSwitchingPools().getOduSwitchingPools()
+                .get(0).getNonBlockingList();
+            for (NonBlockingList nbl : nblList) {
+                for (TpId nwTp : netwTps) {
+                    if (nbl.getTpList().contains(nwTp)) {
+                        usableXpdrNWTps.add(nwTp);
+                    }
+                    if (usableXpdrNWTps.size() >= nbNetw) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkTpForOdtuTermination(TerminationPoint1 ontTp1) {
+        for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()) {
+            LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
+            if (sic.getIfCapType().equals(IfOCHOTU4ODU4.class)
+                && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() == null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkOdtuTTPforLoOduCreation(TerminationPoint1 ontTp1, int tsNb) {
+        if (ontTp1.getXpdrTpPortConnectionAttributes() != null
+            && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() != null
+            && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
+            && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getOdtuType()
+                .equals(ODTU4TsAllocated.class)
+            && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getTpnPool().size() >= 1
+            && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean checkClientTp(TerminationPoint1 ontTp1) {
+        for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()) {
+            LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
+            switch (otnServiceType) {
+                case "1GE":
+                // we could also check the administrative status of the tp
+                    if (sic.getIfCapType().equals(If1GEODU0.class)) {
+                        return true;
+                    }
+                    break;
+                case "10GE":
+                    if (sic.getIfCapType().equals(If10GEODU2e.class)) {
+                        return true;
+                    }
+                    break;
+                case "100GE":
+                    if (sic.getIfCapType().equals(If100GEODU4.class)) {
+                        return true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return false;
     }
 
     private Boolean findClientCompliantInterface(List<SupportedInterfaceCapability> sic) {
         boolean compliant = false;
         for (SupportedInterfaceCapability sit : sic) {
-            String interfacetype = sit.getIfCapType().toString();
+            String interfacetype = sit.getIfCapType().getName();
             switch (interfacetype) {
                 case "If1GEODU0":
                 case "If1GE":
@@ -225,7 +297,7 @@ public class PceOtnNode extends PceNode {
                     break;
                 case "IfOTU4ODU4":
                 case "IfOCHOTU4ODU4":
-                    if (("OTU4".equals(this.otnServiceType)) || ("ODU4".equals(this.otnServiceType))) {
+                    if ("OTU4".equals(this.otnServiceType) || "ODU4".equals(this.otnServiceType)) {
                         compliant = true;
                     }
                     break;
@@ -233,7 +305,6 @@ public class PceOtnNode extends PceNode {
                     compliant = false;
                     break;
             }
-
         }
         return compliant;
     }
@@ -258,82 +329,31 @@ public class PceOtnNode extends PceNode {
                     compliant = false;
                     break;
             }
-
         }
         return compliant;
     }
 
-    private String getClliSupNodeId(Node inputNode) {
-        TreeMap<String, String> allSupNodes = new TreeMap<String, String>();
-        String tempNetworkSupNodeId = "";
-        allSupNodes = MapUtils.getAllSupNode(inputNode);
-        if (allSupNodes.get(NetworkUtils.CLLI_NETWORK_ID) == null) {
-            LOG.error("getClliSupNodeId: No Supporting node at CLLI layer for node: [{}].", inputNode.getNodeId());
-        } else {
-            tempNetworkSupNodeId = allSupNodes.get(NetworkUtils.CLLI_NETWORK_ID);
-        }
-        return tempNetworkSupNodeId;
-    }
-
-    private String getNetworkSupNodeId(Node inputNode) {
-        TreeMap<String, String> allSupNodes = new TreeMap<String, String>();
-        String tempNetworkSupNodeId = "";
-        allSupNodes = MapUtils.getAllSupNode(inputNode);
-        if (allSupNodes.get(NetworkUtils.UNDERLAY_NETWORK_ID) == null) {
-            LOG.error(
-                "getNetworkSupNodeId: No Supporting node at NETWORK layer for node: [{}].", inputNode.getNodeId());
-        } else {
-            tempNetworkSupNodeId = allSupNodes.get(NetworkUtils.UNDERLAY_NETWORK_ID);
-        }
-        return tempNetworkSupNodeId;
-    }
-
-    private String getTopoSupNodeId(Node inputNode) {
-        TreeMap<String, String> allSupNodes = new TreeMap<String, String>();
-        String tempTopoSupNodeId = "";
-        allSupNodes = MapUtils.getAllSupNode(inputNode);
-        if (allSupNodes.get(NetworkUtils.OVERLAY_NETWORK_ID) == null) {
-            LOG.error(
-                "getTopologySupNodeId: No Supporting node at TOPOLOGY layer for node: [{}].", inputNode.getNodeId());
-        } else {
-            tempTopoSupNodeId = allSupNodes.get(NetworkUtils.OVERLAY_NETWORK_ID);
-        }
-        return tempTopoSupNodeId;
-    }
-
-    public void validateAZxponder(String anodeId, String znodeId) {
+    public void validateXponder(String anodeId, String znodeId) {
         if (!isValid()) {
             return;
         }
-        if ((this.nodeType != OpenroadmNodeType.MUXPDR) & (this.nodeType != OpenroadmNodeType.SWITCH)
-            & (this.nodeType != OpenroadmNodeType.TPDR)) {
-            return;
+        if (OpenroadmNodeType.SWITCH.equals(this.nodeType)) {
+            initXndrTps("intermediate");
         }
-        // Detect A and Z, a/znodeId correspond to otn layer, supporting node
-        // might be of Network or Topology layer
-        if (this.nodeId.equals(anodeId) || (this.nodeId.equals(znodeId))) {
+        if (this.nodeId.getValue().equals(anodeId) || (this.nodeId.getValue().equals(znodeId))) {
             initXndrTps("AZ");
-            if (!this.valid) {
-                LOG.debug("validateAZxponder: XPONDER unusable for A or Z == {}", nodeId.getValue());
-            } else {
-                LOG.info("validateAZxponder: A or Z node detected and validated == {}", nodeId.getValue());
-            }
-            return;
         } else {
-            LOG.debug("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
+            LOG.info("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
             valid = false;
         }
-
     }
 
     public boolean validateSwitchingPoolBandwidth(
-            Node node,
-            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-                .network.node.TerminationPoint tp1,
-            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-                .network.node.TerminationPoint tp2,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                .ietf.network.topology.rev180226.networks.network.node.TerminationPoint tp1,
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
+                .ietf.network.topology.rev180226.networks.network.node.TerminationPoint tp2,
             Long neededBW) {
-        Long availableBW = 0L;
         if (this.nodeType != OpenroadmNodeType.TPDR) {
             return true;
         } else {
@@ -355,13 +375,11 @@ public class PceOtnNode extends PceNode {
                         }
                     }
                 }
-
             }
             LOG.debug("validateSwitchingPoolBandwidth: No valid Switching pool for crossconnecting tp {} and {}",
                 tp1.getTpId().toString(), tp2.getTpId().toString());
             return false;
         }
-
     }
 
     public void validateIntermediateSwitch() {
@@ -379,88 +397,59 @@ public class PceOtnNode extends PceNode {
             LOG.info("validateIntermediateSwitch: Switch usable for transit == {}", nodeId.getValue());
         }
         return;
-
     }
 
-    public boolean checkAvailableTribPort(
-                org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-                    .network.node.TerminationPoint tp) {
-        boolean compatibleSupInt = false;
-        TerminationPoint1 otnTp1 = tp.augmentation(TerminationPoint1.class);
-        if (otnTp1.getTpType() == OpenroadmTpType.XPONDERNETWORK) {
-            try {
-                List<OdtuTpnPool> otpp = otnTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool();
+    public void checkAvailableTribPort() {
+        List<TerminationPoint> networkTpList = node.augmentation(
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
+            .getTerminationPoint().stream()
+            .filter(type -> type
+                .augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class)
+                .getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
+            .collect(Collectors.toList());
 
-                for (OdtuTpnPool otppi : otpp) {
-                    if (otppi.getOdtuType().getClass().equals(ODTU4TsAllocated.class)) {
-                        this.tpAvailableTribPort.put(tp.getTpId().getValue(), otppi.getTpnPool());
-                        LOG.debug("checkAvailableTribPort: tp {} and his trib Ports have been added to "
-                            + "tpAvailableTribPortMap", tp.getTpId().getValue());
-                        compatibleSupInt = true;
-
-                    }
+        for (TerminationPoint tp : networkTpList) {
+            if (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
+                && tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0)
+                    .getOdtuType().equals(ODTU4TsAllocated.class)) {
+                @Nullable
+                List<Integer> tpnPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
+                    .getOdtuTpnPool().get(0).getTpnPool();
+                if (tpnPool != null) {
+                    tpAvailableTribPort.put(tp.getTpId().getValue(), tpnPool);
                 }
-            } catch (NullPointerException e) {
-                LOG.debug("checkAvailableTribPort: OdtuTpnPool not present for tp {} ", tp.getTpId().toString());
             }
-
-        } else {
-            LOG.debug("checkAvailableTribPort: tp {} has no odtu tpn Pool", tp.getTpId().getValue());
         }
-        return compatibleSupInt;
     }
 
-    public boolean checkAvailableTribSlot(
-            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks
-                .network.node.TerminationPoint tp) {
-        boolean compatibleSupInt = false;
-        TerminationPoint1 otnTp1 = tp.augmentation(TerminationPoint1.class);
-        if (otnTp1.getTpType() == OpenroadmTpType.XPONDERNETWORK) {
-            List<OdtuTpnPool> otpp;
-            try {
-                otpp = otnTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool();
+    public void checkAvailableTribSlot() {
+        List<TerminationPoint> networkTpList = node.augmentation(
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
+            .getTerminationPoint().stream()
+            .filter(type -> type
+                .augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class)
+                .getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
+            .collect(Collectors.toList());
 
-                for (OdtuTpnPool otppi : otpp) {
-                    if (otppi.getOdtuType().getClass().equals(ODTU4TsAllocated.class)) {
-                        this.tpAvailableTribSlot.put(
-                            tp.getTpId().getValue(),
-                            otnTp1.getXpdrTpPortConnectionAttributes().getTsPool());
-                        LOG.debug(
-                            "checkAvailableTribPort: tp {} and its trib Slots were added to tpAvailableTribSlotMap",
-                            tp.getTpId().getValue());
-                        compatibleSupInt = true;
-
-                    }
-                }
-
-            } catch (NullPointerException e) {
-                LOG.debug("checkAvailableTribSlot: OdtuTpnPool not present for tp {} ", tp.getTpId().toString());
+        for (TerminationPoint tp : networkTpList) {
+            if (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getTsPool() != null) {
+                @Nullable
+                List<Integer> tsPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
+                    .getTsPool();
+                tpAvailableTribSlot.put(tp.getTpId().getValue(), tsPool);
             }
-        } else {
-            LOG.debug("checkAvailableTribPort: tp {} is not a network Port", tp.getTpId().getValue());
         }
-        return compatibleSupInt;
-    }
-
-    public String getXpdrClient(String tp) {
-        return this.clientPerNwTp.get(tp);
-    }
-
-    public boolean checkTP(String tp) {
-        return !((this.usedXpdrNWTps.contains(tp)) || (this.usedXpdrClientTps.contains(tp))
-            || (this.unusableXpdrNWTps.contains(tp)) || (this.unusableXpdrClientTps.contains(tp)));
     }
 
     public boolean isValid() {
-        if ((node == null) || (nodeId == null) || (nodeType == null) || (supNetworkNodeId == null) || (clli == null)) {
+        if ((node == null) || (nodeId == null) || (nodeType == null) || (this.getSupNetworkNodeId() == null)
+            || (this.getSupClliNodeId() == null)) {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
             valid = false;
         }
         return valid;
-    }
-
-    public Map<String, OpenroadmTpType> getAvailableTps() {
-        return availableXponderTp;
     }
 
     public void addOutgoingLink(PceLink outLink) {
@@ -471,36 +460,72 @@ public class PceOtnNode extends PceNode {
         return outgoingLinks;
     }
 
-    public String getClient(String tp) {
-        return clientPerNwTp.get(tp);
-    }
-
-    public String getTopoSupNodeIdPceNode() {
-        return supTopoNodeId;
-    }
-
-    public String getNetworkSupNodeIdPceNode() {
-        return supNetworkNodeId;
-    }
-
-    public String getCLLI() {
-        return clli;
+    @Override
+    public String getXpdrClient(String tp) {
+        return this.clientPerNwTp.get(tp);
     }
 
     public String toString() {
-        return "PceNode type=" + nodeType + " ID=" + nodeId.getValue() + " CLLI=" + clli;
+        return "PceNode type=" + nodeType + " ID=" + nodeId.getValue() + " CLLI=" + this.getSupClliNodeId();
     }
 
     public void printLinksOfNode() {
         LOG.info(" outgoing links of node {} : {} ", nodeId.getValue(), this.getOutgoingLinks().toString());
     }
 
+    @Override
     public Map<String, List<Integer>> getAvailableTribPorts() {
         return tpAvailableTribPort;
     }
 
+    @Override
     public Map<String, List<Integer>> getAvailableTribSlots() {
         return tpAvailableTribSlot;
     }
 
+    public List<TpId> getUsableXpdrNWTps() {
+        return usableXpdrNWTps;
+    }
+
+    public List<TpId> getUsableXpdrClientTps() {
+        return usableXpdrClientTps;
+    }
+
+    @Override
+    public String getPceNodeType() {
+        return this.pceNodeType;
+    }
+
+    @Override
+    public String getSupNetworkNodeId() {
+        return MapUtils.getSupNetworkNode(this.node);
+    }
+
+    @Override
+    public String getSupClliNodeId() {
+        return MapUtils.getSupClliNode(this.node);
+    }
+
+    @Override
+    public String getRdmSrgClient(String tp) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public NodeId getNodeId() {
+        return nodeId;
+    }
+
+    @Override
+    public boolean checkTP(String tp) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean checkWL(long index) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

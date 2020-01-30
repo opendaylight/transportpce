@@ -48,7 +48,7 @@ public final class MapUtils {
 
             if (excNodes.contains(node.getNodeId().getValue())) {
                 LOG.debug("mapDiversityConstraints setExcludeSupNodes for node {}", node.getNodeId().getValue());
-                pceHardConstraints.setExcludeSupNodes(Arrays.asList(getSupNode(node)));
+                pceHardConstraints.setExcludeSupNodes(Arrays.asList(getSupNetworkNode(node)));
             }
         }
 
@@ -116,10 +116,20 @@ public final class MapUtils {
         return srlgList;
     }
 
-    public static String getSupNode(Node node) {
+    public static String getSupNetworkNode(Node node) {
         List<SupportingNode> supNodes = node.getSupportingNode();
         for (SupportingNode snode : supNodes) {
             if (NetworkUtils.UNDERLAY_NETWORK_ID.equals(snode.getNetworkRef().getValue())) {
+                return snode.getNodeRef().getValue();
+            }
+        }
+        return null;
+    }
+
+    public static String getSupClliNode(Node node) {
+        List<SupportingNode> supNodes = node.getSupportingNode();
+        for (SupportingNode snode : supNodes) {
+            if (NetworkUtils.CLLI_NETWORK_ID.equals(snode.getNetworkRef().getValue())) {
                 return snode.getNodeRef().getValue();
             }
         }
@@ -153,38 +163,29 @@ public final class MapUtils {
 
 
     public static Long getAvailableBandwidth(Link link) {
-        Link1 link1 = null;
-        Long availableBW  = 0L;
-        // ID and type
-        link1 = link.augmentation(Link1.class);
-        if (link1 == null) {
-            LOG.error("MapUtils: No Link augmentation available. {}", link.getLinkId().getValue());
-            return availableBW;
+        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
+            .Link1.class) != null
+            && link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
+                .Link1.class).getAvailableBandwidth() != null) {
+            return link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
+                .Link1.class).getAvailableBandwidth();
         } else {
-            OpenroadmLinkType tmplType = null;
-            tmplType = link1.getLinkType();
-            if (tmplType == null) {
-                LOG.error("MapUtils: No Link type available. {}", link.getLinkId().getValue());
-                return null;
-            } else if (tmplType == OpenroadmLinkType.OTNLINK) {
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1 link11 =
-                    link.augmentation(
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1.class);
-                if (link11 == null) {
-                    LOG.error("MapUtils: No Link augmentation available for {}", link.getLinkId().getValue());
-                    return availableBW;
-                } else {
-                    availableBW = link11.getAvailableBandwidth();
-                    return availableBW;
-                }
-
-            } else {
-                LOG.error("MapUtils: Evaluated Link is not of OTN Type");
-            }
+            LOG.warn("MapUtils: no Available Bandwidth available for link {}", link.getLinkId());
+            return 0L;
         }
+    }
 
-
-        return 0L;
+    public static Long getUsedBandwidth(Link link) {
+        if (link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
+            .Link1.class) != null
+            && link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
+                .Link1.class).getUsedBandwidth() != null) {
+            return link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
+                .Link1.class).getUsedBandwidth();
+        } else {
+            LOG.warn("MapUtils: no Available Bandwidth available for link {}", link.getLinkId());
+            return 0L;
+        }
     }
 
     public static OpenroadmLinkType calcType(Link link) {

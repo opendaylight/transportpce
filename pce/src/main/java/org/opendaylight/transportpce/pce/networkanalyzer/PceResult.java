@@ -8,6 +8,9 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import java.util.List;
+import java.util.Map;
+
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
@@ -22,6 +25,12 @@ public class PceResult {
     private boolean calcStatus = false;
     private String responseCode = ResponseCodes.RESPONSE_FAILED;
     private long resultWavelength = -1;
+    private Map<String, Integer> resultTribPort;
+    private Map<String, List<Integer>> resultTribSlot;
+    private Integer resultTribSlotNb = -1;
+    private String serviceType = "";
+
+    // for now it is constant returned as received from A-end
     private long rate = -1;
     private  ServiceFormat serviceFormat = ServiceFormat.OC;
 
@@ -55,9 +64,8 @@ public class PceResult {
     }
 
     public String toString() {
-        return ("[" + calcMessage + "] code:[" + responseCode + "] wavelength="
-                + resultWavelength + " localCause=" + localCause + " rate="
-                + rate);
+        return ("[" + calcMessage + "] code:[" + responseCode + "] wavelength=" + resultWavelength + " localCause="
+                + localCause + " rate=" + rate + " serviceType = " + serviceType);
     }
 
     public boolean getStatus() {
@@ -127,6 +135,38 @@ public class PceResult {
 
     public void setCalcMessage(String calcMessage) {
         this.calcMessage = calcMessage;
+    }
+
+    public Map<String, Integer> getResultTribPort() {
+        return resultTribPort;
+    }
+
+    public void setResultTribPort(Map<String, Integer> resultTribPort) {
+        this.resultTribPort = resultTribPort;
+    }
+
+    public Map<String, List<Integer>> getResultTribSlot() {
+        return resultTribSlot;
+    }
+
+    public void setResultTribSlot(Map<String, List<Integer>> resultTribSlot) {
+        this.resultTribSlot = resultTribSlot;
+    }
+
+    public int getResultTribSlotNb() {
+        return resultTribSlotNb;
+    }
+
+    public void setResultTribSlotNb(int resultTribSlotNb) {
+        this.resultTribSlotNb = resultTribSlotNb;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 
 }

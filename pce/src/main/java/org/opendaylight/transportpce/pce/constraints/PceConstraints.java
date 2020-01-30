@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.pce.constraints;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
+import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class PceConstraints {
 
     ///Structures related to INCLUDE constraints
     private List<String> nodesToInclude = new ArrayList<String>();
-    private List<PceNode> pceNodesToInclude = new ArrayList<PceNode>();
+    private List<PceOpticalNode> pceNodesToInclude = new ArrayList<PceOpticalNode>();
     private List<ResourcePair> listToInclude = new ArrayList<ResourcePair>();
 
     private List<String> srlgNames = new ArrayList<String>();
@@ -145,12 +145,12 @@ public class PceConstraints {
         nodesToInclude.addAll(nodes);
     }
 
-    public List<PceNode> getIncludePceNodes() {
+    public List<PceOpticalNode> getIncludePceNodes() {
         LOG.debug("in Pceconstraints getIncludePceNodes size = {}", pceNodesToInclude.size());
         return pceNodesToInclude;
     }
 
-    public void setIncludePceNode(PceNode node) {
+    public void setIncludePceNode(PceOpticalNode node) {
         LOG.info("in Pceconstraints setIncludePceNode new node = {}", node.toString());
         this.pceNodesToInclude.add(node);
     }

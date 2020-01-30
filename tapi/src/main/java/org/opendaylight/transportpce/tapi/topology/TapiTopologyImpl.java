@@ -282,7 +282,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
         Link> xpdIn) {
         @Nullable
         String networkLcp = tp.augmentation(
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123.TerminationPoint1.class)
+            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1.class)
             .getAssociatedConnectionMapPort();
         @NonNull
         KeyedInstanceIdentifier<Mapping, MappingKey> pmIID = InstanceIdentifier.create(

@@ -336,8 +336,8 @@ public final class OpenRoadmOtnTopology {
                 .setTpSupportedInterfaces(tpSupIf)
                 .setXpdrTpPortConnectionAttributes(xtpcaBldr.build())
                 .build();
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123.TerminationPoint1Builder tpceTp1Bldr =
-                new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123.TerminationPoint1Builder();
+            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1Builder tpceTp1Bldr =
+                new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1Builder();
             if (OpenroadmTpType.XPONDERNETWORK.equals(tpType)) {
                 TpId tpId = new TpId("XPDR" + node.getXpdrNb() + "-NETWORK" + i);
                 if (node.getXpdrNetConnectionMap().get(tpId.getValue()) != null) {
@@ -401,13 +401,13 @@ public final class OpenRoadmOtnTopology {
         return suppNodeList;
     }
 
-    private static TerminationPoint buildIetfTp(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123
+    private static TerminationPoint buildIetfTp(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129
         .TerminationPoint1Builder tpceTp1Bldr, TerminationPoint1 otnTp1, OpenroadmTpType tpType, TpId tpId,
         List<SupportingTerminationPoint> supportTpList) {
 
         TerminationPointBuilder ietfTpBldr = new TerminationPointBuilder();
         if (tpceTp1Bldr.getAssociatedConnectionMapPort() != null) {
-            ietfTpBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200123
+            ietfTpBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129
                 .TerminationPoint1.class, tpceTp1Bldr.build());
         }
         if (supportTpList != null) {
