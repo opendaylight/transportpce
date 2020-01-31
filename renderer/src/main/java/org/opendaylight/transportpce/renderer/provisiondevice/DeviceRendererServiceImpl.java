@@ -55,6 +55,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.renderer.rollback.output.FailedToRollbackBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.renderer.rollback.output.FailedToRollbackKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.Topology;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.R100G;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
@@ -119,15 +120,22 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     Long waveNumber = input.getWaveNumber();
                     if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
-                        // create OpenRoadm Xponder Line Interfaces
+                        Mapping mapping = this.portMapping.getMapping(nodeId,destTp);
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, destTp, waveNumber, R100G.class, ModulationFormat.DpQpsk);
                         createdOchInterfaces.add(supportingOchInterface);
                         String supportingOtuInterface = this.openRoadmInterfaceFactory
                                 .createOpenRoadmOtu4Interface(nodeId, destTp, supportingOchInterface);
                         createdOtuInterfaces.add(supportingOtuInterface);
-                        createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
-                                destTp, supportingOtuInterface));
+                        if (mapping != null && mapping.getXponderType() != null
+                            && (mapping.getXponderType().getIntValue() == 3
+                            || mapping.getXponderType().getIntValue() == 2)) {
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory
+                                .createOpenRoadmOtnOdu4Interface(nodeId,destTp, supportingOtuInterface));
+                        } else {
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
+                                    destTp, supportingOtuInterface));
+                        }
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.CLIENT_TOKEN)) {
                         crossConnectFlag++;
@@ -137,6 +145,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
+                        Mapping mapping = this.portMapping.getMapping(nodeId,srcTp);
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, srcTp, waveNumber, R100G.class, ModulationFormat.DpQpsk);
@@ -146,6 +155,15 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         createdOtuInterfaces.add(supportingOtuInterface);
                         createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
                                 srcTp, supportingOtuInterface));
+                        if (mapping != null && mapping.getXponderType() != null
+                            && (mapping.getXponderType().getIntValue() == 3
+                            || mapping.getXponderType().getIntValue() == 2)) {
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory
+                                .createOpenRoadmOtnOdu4Interface(nodeId, destTp, supportingOtuInterface));
+                        } else {
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
+                                    destTp, supportingOtuInterface));
+                        }
                     }
                     if ((destTp != null) && destTp.contains(StringConstants.CLIENT_TOKEN)) {
                         crossConnectFlag++;
