@@ -41,7 +41,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </bean>
 
   <bean id="openRoadmOtnInterface"
-        class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOTNInterface">
+        class="org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface221">
     <argument ref="portMapping"/>
     <argument ref="openRoadmInterfaces"/>
   </bean>
@@ -66,6 +66,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <bean id="otnDeviceRenderer" class="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererServiceImpl" >
     <argument ref="openRoadmInterfaceFactory" />
     <argument ref="crossConnect" />
+    <argument ref="openRoadmInterfaces" />
+    <argument ref="deviceTransactionManager" />
   </bean>
 
     <bean id="deviceRendererRPCImpl" class="org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl" >
