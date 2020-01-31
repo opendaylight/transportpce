@@ -811,6 +811,9 @@ public class PortMappingVersion221 {
             if (xpdrNodeType != null) {
                 mpBldr.setXponderType(xpdrNodeType);
             }
+            if (xpdrNodeType == null && port.getPortQual().getName().toLowerCase().contains("xpdr-")) {
+                mpBldr.setXponderType(XpdrNodeTypes.Tpdr);
+            }
             if (partnerLcp != null) {
                 mpBldr.setPartnerLcp(partnerLcp);
             }
