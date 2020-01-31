@@ -239,7 +239,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
-             'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1'},
+             'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1', 'xponder-type': 'tpdr'},
             res['mapping'])
 
     def test_12_xpdr_portmapping_NETWORK2(self):
@@ -255,7 +255,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-CLIENT2', 'port-qual': 'xpdr-network'},
+             'connection-map-lcp': 'XPDR1-CLIENT2', 'port-qual': 'xpdr-network', 'xponder-type': 'tpdr'},
             res['mapping'])
 
     def test_13_xpdr_portmapping_CLIENT1(self):
@@ -272,7 +272,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-port': 'C1',
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
+             'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client', 'xponder-type': 'tpdr'},
             res['mapping'])
 
     def test_14_xpdr_portmapping_CLIENT2(self):
@@ -289,7 +289,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'supporting-port': 'C1',
              'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT2', 'port-direction': 'bidirectional',
-             'connection-map-lcp': 'XPDR1-NETWORK2', 'port-qual': 'xpdr-client'},
+             'connection-map-lcp': 'XPDR1-NETWORK2', 'port-qual': 'xpdr-client', 'xponder-type': 'tpdr'},
             res['mapping'])
 
     def test_15_xpdr_device_disconnected(self):

@@ -147,7 +147,7 @@ class TransportPCERendererTesting(unittest.TestCase):
               'supporting-port': 'C1',
               'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
               'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
-              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client'},
+              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client', 'xponder-type': 'tpdr'},
              res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
