@@ -46,8 +46,11 @@ public class GnpyUtilitiesImpl {
     private GnpyResult gnpyAtoZ;
     private GnpyResult gnpyZtoA;
     private Long requestId;
+    //private boolean status;
 
-    public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input) {
+    public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input)
+        throws GnpyException {
+
         this.networkTransaction = networkTransaction;
         this.gnpyTopo = new GnpyTopoImpl(networkTransaction);
         this.input = input;
@@ -57,106 +60,82 @@ public class GnpyUtilitiesImpl {
     }
 
     public boolean verifyComputationByGnpy(AToZDirection atoz, ZToADirection ztoa, PceConstraints pceHardConstraints)
-        throws Exception {
+        throws GnpyException, Exception {
+
+        if (atoz == null || atoz.getAToZ() == null || ztoa == null || ztoa.getZToA() == null) {
+            throw new GnpyException("In GnpyUtilities: the path transmitted to Gnpy is null");
+        }
+
+        GnpyServiceImpl gnpySvc1 = new GnpyServiceImpl(input, atoz, requestId, gnpyTopo, pceHardConstraints);
+        this.gnpyAtoZ = gnpyResponseOneDirection(gnpySvc1);
         boolean isPcePathFeasible = false;
-        List<Elements> elementsList = gnpyTopo.getElements();
-        List<Connections> connectionsList = gnpyTopo.getConnections();
-
-        if (atoz == null || atoz.getAToZ() == null) {
-            LOG.error("In pceSendingPceRPC: empty atoz path");
-        } else {
-            GnpyServiceImpl gnpySvc = new GnpyServiceImpl(input, atoz, requestId, gnpyTopo, pceHardConstraints);
-            requestId++;
-            List<PathRequest> pathRequestList1 = gnpySvc.getPathRequest();
-            List<Synchronization> synchronizationList1 = gnpySvc.getSynchronization();
-            // Send the computed path A-to-Z to GNPY tool
-            String gnpyResponse1 = getGnpyResponse(elementsList, connectionsList, pathRequestList1,
-                synchronizationList1);
-            // Analyze the response
-            if (gnpyResponse1 != null) {
-                GnpyResult result = new GnpyResult(gnpyResponse1, gnpyTopo);
-                result.analyzeResult();
-                this.gnpyAtoZ = result;
-                isPcePathFeasible = this.gnpyAtoZ.getPathFeasibility();
-            } else {
-                LOG.error("No response from the GNPy server");
-            }
-        }
-
-        if (ztoa == null || ztoa.getZToA() == null) {
-            LOG.error("In pceSendingPceRPC: empty ztoa path");
-            isPcePathFeasible = false;
-        } else {
-            GnpyServiceImpl gnpySvc = new GnpyServiceImpl(input, ztoa, requestId, gnpyTopo, pceHardConstraints);
-            requestId++;
-            List<PathRequest> pathRequestList2 = gnpySvc.getPathRequest();
-            List<Synchronization> synchronizationList2 = gnpySvc.getSynchronization();
-            // Send the computed path Z-to-A to GNPY tool
-            String gnpyResponse2 = getGnpyResponse(elementsList, connectionsList, pathRequestList2,
-                synchronizationList2);
-            // Analyze the response
-            if (gnpyResponse2 != null) {
-                GnpyResult result = new GnpyResult(gnpyResponse2, gnpyTopo);
-                result.analyzeResult();
-                this.gnpyZtoA = result;
-                isPcePathFeasible &= this.gnpyZtoA.getPathFeasibility();
-            } else {
-                LOG.error("No response from the GNPy server");
-            }
-        }
+        isPcePathFeasible = this.gnpyAtoZ.getPathFeasibility();
+        GnpyServiceImpl gnpySvc2 = new GnpyServiceImpl(input, ztoa, requestId, gnpyTopo, pceHardConstraints);
+        this.gnpyZtoA = gnpyResponseOneDirection(gnpySvc2);
+        isPcePathFeasible &= this.gnpyZtoA.getPathFeasibility();
         return isPcePathFeasible;
     }
 
-    public HardConstraints askNewPathFromGnpy(AToZDirection atoz, ZToADirection ztoa,
-        HardConstraints gnpyPathAsHC, PceConstraints pceHardConstraints) throws Exception {
-        boolean isPcePathFeasible = false;
+    public GnpyResult gnpyResponseOneDirection(GnpyServiceImpl gnpySvc) throws GnpyException, Exception {
+        requestId++;
+        List<PathRequest> pathRequestList = gnpySvc.getPathRequest();
+        List<Synchronization> synchronizationList = gnpySvc.getSynchronization();
+        // Send the computed path to GNPY tool
         List<Elements> elementsList = gnpyTopo.getElements();
         List<Connections> connectionsList = gnpyTopo.getConnections();
-
-        // Ask a new path A-to-Z
-        if (atoz.getAToZWavelengthNumber() == null) {
-            LOG.info("The wavelength is null!");
-        }
-
-        AToZDirection atoztmp = new AToZDirectionBuilder().setRate(atoz.getRate())
-            .setAToZ(null).build();
-        GnpyServiceImpl gnpySvc = new GnpyServiceImpl(input, atoztmp, requestId, gnpyTopo, pceHardConstraints);
-        requestId++;
-        List<PathRequest> pathRequestList1 = gnpySvc.getPathRequest();
-        List<Synchronization> synchronizationList1 = gnpySvc.getSynchronization();
-
-        // Send the computed path A-to-Z to GNPY tool
-        String gnpyResponse1 = getGnpyResponse(elementsList, connectionsList, pathRequestList1, synchronizationList1);
+        String gnpyResponse = getGnpyResponse(elementsList, connectionsList, pathRequestList,
+            synchronizationList);
         // Analyze the response
-        if (gnpyResponse1 != null) {
-            GnpyResult result = new GnpyResult(gnpyResponse1, gnpyTopo);
-            LOG.debug("GNPy result created");
-            isPcePathFeasible = result.getPathFeasibility();
-            this.gnpyAtoZ = result;
-            if (isPcePathFeasible) {
-                List<PathRouteObjects> pathRouteObjectList = result.analyzeResult();
-                gnpyPathAsHC = result.computeHardConstraintsFromGnpyPath(pathRouteObjectList);
-            }
-        } else {
-            LOG.error("No response from the GNPy server");
+        if (gnpyResponse == null) {
+            throw new GnpyException("In GnpyUtilities: no respnse from GNPy server");
         }
+        GnpyResult result = new GnpyResult(gnpyResponse, gnpyTopo);
+        result.analyzeResult();
+        return result;
+    }
+
+    public HardConstraints askNewPathFromGnpy(HardConstraints gnpyPathAsHC, PceConstraints pceHardConstraints)
+            throws GnpyException, Exception {
+
+        AToZDirection atoztmp = new AToZDirectionBuilder()
+            .setRate(input.getServiceAEnd().getServiceRate())
+            .setAToZ(null)
+            .build();
+        GnpyServiceImpl gnpySvc = new GnpyServiceImpl(input, atoztmp, requestId, gnpyTopo, pceHardConstraints);
+        GnpyResult result = gnpyResponseOneDirection(gnpySvc);
+
+        if (result == null) {
+            throw new GnpyException("In GnpyUtilities: no response from the GNPy server");
+        }
+
+        if (!result.getPathFeasibility()) {
+            return null;
+        }
+        List<PathRouteObjects> pathRouteObjectList = result.analyzeResult();
+        gnpyPathAsHC = result.computeHardConstraintsFromGnpyPath(pathRouteObjectList);
+
         return gnpyPathAsHC;
     }
 
     public String getGnpyResponse(List<Elements> elementsList, List<Connections> connectionsList,
-        List<PathRequest> pathRequestList, List<Synchronization> synchronizationList) throws Exception {
+        List<PathRequest> pathRequestList, List<Synchronization> synchronizationList) throws GnpyException, Exception {
         GnpyApi gnpyApi = new GnpyApiBuilder()
             .setTopologyFile(
                 new TopologyFileBuilder().setElements(elementsList).setConnections(connectionsList).build())
-            .setServiceFile(new ServiceFileBuilder().setPathRequest(pathRequestList).build()).build();
+            .setServiceFile(
+                new ServiceFileBuilder().setPathRequest(pathRequestList).build())
+            .build();
         InstanceIdentifier<GnpyApi> idGnpyApi = InstanceIdentifier.builder(GnpyApi.class).build();
         String gnpyJson;
         ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(networkTransaction);
         gnpyJson = sd.createJsonStringFromDataObject(idGnpyApi, gnpyApi);
         LOG.debug("GNPy Id: {} / json created : {}", idGnpyApi, gnpyJson);
         ConnectToGnpyServer connect = new ConnectToGnpyServer();
-        String gnpyJsonModified = gnpyJson.replace("gnpy-eqpt-config:", "")
-            .replace("gnpy-path-computation-simplified:", "").replace("gnpy-network-topology:", "");
+        String gnpyJsonModified = gnpyJson
+            .replace("gnpy-eqpt-config:", "")
+            .replace("gnpy-path-computation-simplified:", "")
+            .replace("gnpy-network-topology:", "");
+
         String gnpyResponse = connect.gnpyCnx(gnpyJsonModified);
         return gnpyResponse;
     }

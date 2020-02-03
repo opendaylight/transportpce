@@ -15,9 +15,10 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public interface ServiceDataStoreOperations {
 
-    void createXMLFromDevice(DataStoreContext dataStoreContextUtil, OrgOpenroadmDevice device, String output);
+    void createXMLFromDevice(DataStoreContext dataStoreContextUtil, OrgOpenroadmDevice device, String output)
+        throws GnpyException;
 
-    String createJsonStringFromDataObject(InstanceIdentifier<?> id, DataObject object) throws Exception;
+    String createJsonStringFromDataObject(InstanceIdentifier<?> id, DataObject object) throws GnpyException, Exception;
 
-    void writeStringFile(String jsonString, String fileName);
+    void writeStringFile(String jsonString, String fileName) throws GnpyException;
 }

@@ -13,6 +13,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.gnpy.ConnectToGnpyServer;
+import org.opendaylight.transportpce.pce.gnpy.GnpyException;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
 import org.opendaylight.transportpce.pce.gnpy.GnpyUtilitiesImpl;
 import org.opendaylight.transportpce.pce.graph.PceGraph;
@@ -86,8 +87,7 @@ public class PceSendingPceRPCs {
         LOG.info("cancelResourceReserve ...");
     }
 
-    public void pathComputationWithConstraints(PceConstraints hardConstraints, PceConstraints softConstraints)
-            throws Exception {
+    public void pathComputationWithConstraints(PceConstraints hardConstraints, PceConstraints softConstraints) {
 
         PceCalculation nwAnalizer =
             new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc);
@@ -137,71 +137,88 @@ public class PceSendingPceRPCs {
         this.message = rc.getMessage();
         this.responseCode = rc.getResponseCode();
 
-        if (!rc.getStatus()) {
-            LOG.error("In pathComputation, pathComputationWithConstraints: result = {}", rc.toString());
+        AToZDirection atoz = null;
+        ZToADirection ztoa = null;
+        if (rc.getStatus()) {
+            atoz = rc.getAtoZDirection();
+            ztoa = rc.getZtoADirection();
+        }
+
+        try {
+            ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
+            if (connectToGnpy.isGnpyURLExist()) {
+                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input);
+                if (rc.getStatus() && gnpyToCheckFeasiblity(atoz,ztoa,gnpy)) {
+                    setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
+                    return;
+                }
+                callGnpyToComputeNewPath(gnpy);
+            } else {
+                setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
+                return;
+            }
+        }
+        catch (GnpyException e) {
+            LOG.error("Exception raised by GNPy {}",e.getMessage());
+            setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
+            return;
+        }
+        return;
+    }
+
+    private boolean gnpyToCheckFeasiblity(AToZDirection atoz, ZToADirection ztoa, GnpyUtilitiesImpl gnpy)
+            throws GnpyException, Exception {
+
+        //Call GNPy for path verification
+        if (gnpy.verifyComputationByGnpy(atoz, ztoa, pceHardConstraints)) {
+            LOG.info("In pceSendingPceRPC: the path is feasible according to Gnpy");
+            gnpyAtoZ = gnpy.getGnpyAtoZ();
+            gnpyZtoA = gnpy.getGnpyZtoA();
+            return true;
+        }
+        return false;
+    }
+
+    private void callGnpyToComputeNewPath(GnpyUtilitiesImpl gnpy) throws GnpyException, Exception {
+
+        //Call GNPy in the case of non feasibility
+        LOG.info("In pceSendingPceRPC: the path is not feasible according to Gnpy");
+        HardConstraints gnpyPathAsHC = null;
+        gnpyPathAsHC = gnpy.askNewPathFromGnpy(gnpyPathAsHC, pceHardConstraints);
+        if (gnpyPathAsHC == null) {
+            LOG.info("In pceSendingPceRPC: GNPy failed to find another path");
+            this.success = false;
+            this.message = "No path available by PCE and GNPy ";
+            this.responseCode = ResponseCodes.RESPONSE_FAILED;
+            gnpyAtoZ = gnpy.getGnpyAtoZ();
+            gnpyZtoA = gnpy.getGnpyZtoA();
             return;
         }
 
-        // Verify the path with GNPy
+        LOG.info("In pceSendingPceRPC: GNPy succeed to find another path");
+        // Compute the path
+        PathComputationRequestInput inputFromGnpy = new PathComputationRequestInputBuilder()
+            .setServiceName(input.getServiceName()).setHardConstraints(gnpyPathAsHC)
+            .setSoftConstraints(input.getSoftConstraints()).setPceMetric(PceMetric.HopCount)
+            .setServiceAEnd(input.getServiceAEnd()).setServiceZEnd(input.getServiceZEnd()).build();
+        PceConstraintsCalc constraintsGnpy = new PceConstraintsCalc(inputFromGnpy, networkTransaction);
+        PceConstraints gnpyHardConstraints = constraintsGnpy.getPceHardConstraints();
+        PceConstraints gnpySoftConstraints = constraintsGnpy.getPceSoftConstraints();
+        pathComputationWithConstraints(gnpyHardConstraints, gnpySoftConstraints);
         AToZDirection atoz = rc.getAtoZDirection();
         ZToADirection ztoa = rc.getZtoADirection();
-        ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
-
-        // Verify that the GNPy server exists
-        if (connectToGnpy.isGnpyURLExist()) {
-            LOG.info("Gnpy instance is connected T-PCE");
-            GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input);
-            if (gnpy.verifyComputationByGnpy(atoz, ztoa, pceHardConstraints)) {
-                LOG.info("The path is feasible according to Gnpy");
-                setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
-            }
-            else {
-                LOG.info("The path is not feasible according to Gnpy");
-                HardConstraints gnpyPathAsHC = null;
-                gnpyPathAsHC = gnpy.askNewPathFromGnpy(atoz, ztoa, gnpyPathAsHC, pceHardConstraints);
-                if (gnpyPathAsHC != null) {
-                    LOG.info("GNPy succeed to find another path");
-                    // Compute the path
-                    PathComputationRequestInput inputFromGnpy = new PathComputationRequestInputBuilder()
-                        .setServiceName(input.getServiceName())
-                        .setHardConstraints(gnpyPathAsHC)
-                        .setSoftConstraints(input.getSoftConstraints())
-                        .setPceMetric(PceMetric.HopCount)
-                        .setServiceAEnd(input.getServiceAEnd())
-                        .setServiceZEnd(input.getServiceZEnd())
-                        .build();
-                    PceConstraintsCalc constraintsGnpy = new PceConstraintsCalc(inputFromGnpy, networkTransaction);
-                    PceConstraints gnpyHardConstraints = constraintsGnpy.getPceHardConstraints();
-                    PceConstraints gnpySoftConstraints = constraintsGnpy.getPceSoftConstraints();
-                    pathComputationWithConstraints(gnpyHardConstraints, gnpySoftConstraints);
-                    atoz = rc.getAtoZDirection();
-                    ztoa = rc.getZtoADirection();
-                    setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
-                    if (gnpy.verifyComputationByGnpy(atoz, ztoa, pceHardConstraints)) {
-                        LOG.info("In pathComputation: the new path computed by GNPy is valid");
-                        setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
-                        this.success = true;
-                        this.message = "Path is calculated by GNPy ";
-                        this.responseCode = ResponseCodes.RESPONSE_OK;
-                    } else {
-                        LOG.info("In pathComputation: the new path computed by GNPy is not valid");
-                        this.success = false;
-                        this.message = "No path available ";
-                        this.responseCode = ResponseCodes.RESPONSE_FAILED;
-                    }
-                } else {
-                    LOG.info("GNPy failed to find another path");
-                    this.success = false;
-                    this.message = "No path available by PCE and GNPy ";
-                    this.responseCode = ResponseCodes.RESPONSE_FAILED;
-                }
-            }
-            gnpyAtoZ = gnpy.getGnpyAtoZ();
-            gnpyZtoA = gnpy.getGnpyZtoA();
-        } else {
-            LOG.info("in PCESendingPceRPCs: Cannot connect to GNPy!!");
+        if (gnpyToCheckFeasiblity(atoz, ztoa,gnpy)) {
+            LOG.info("In pceSendingPceRPC: the new path computed by GNPy is valid");
+            this.success = true;
+            this.message = "Path is calculated by GNPy";
+            this.responseCode = ResponseCodes.RESPONSE_OK;
             setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
-            LOG.info("In pathComputation Graph is Found");
+        } else {
+            LOG.info("In pceSendingPceRPC: the new path computed by GNPy is not valid");
+            this.success = false;
+            this.message = "No path available";
+            this.responseCode = ResponseCodes.RESPONSE_FAILED;
+            setPathDescription(new PathDescriptionBuilder().setAToZDirection(null).setZToADirection(null));
         }
     }
 

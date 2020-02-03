@@ -85,14 +85,15 @@ public class GnpyResult {
     private Map<String, IpAddress> mapNodeRefIp = new HashMap<String, IpAddress>();
     //private Map<String, IpAddress> mapFiberIp = new HashMap<String, IpAddress>();
 
-    public GnpyResult(String gnpyResponseString, GnpyTopoImpl gnpyTopo) throws Exception {
-
+    public GnpyResult(String gnpyResponseString, GnpyTopoImpl gnpyTopo) throws GnpyException, Exception {
         this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
         // Create the schema context
         final ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
         Iterable<? extends YangModuleInfo> moduleInfos;
+
         moduleInfos = Collections.singleton(BindingReflections.getModuleInfo(Result.class));
         moduleContext.addModuleInfos(moduleInfos);
+
         SchemaContext schemaContext = moduleContext.tryToCreateSchemaContext().get();
 
         // Create the binding binding normalized node codec registry
@@ -106,8 +107,8 @@ public class GnpyResult {
             pathQname.getModule());
         YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
         DataObject dataObject = null;
+
         // Create the object response
-        // Create JsonReader from String
         InputStream streamGnpyRespnse = new ByteArrayInputStream(gnpyResponseString.getBytes(StandardCharsets.UTF_8));
         InputStreamReader gnpyResultReader = new InputStreamReader(streamGnpyRespnse);
         JsonReader jsonReader = new JsonReader(gnpyResultReader);
@@ -117,15 +118,14 @@ public class GnpyResult {
         if (codecRegistry.fromNormalizedNode(yangId, normalizedNode) != null) {
             dataObject = codecRegistry.fromNormalizedNode(yangId, normalizedNode).getValue();
         } else {
-            LOG.warn("The codec registry from the normalized node is null!");
+            throw new GnpyException("In GnpyResult: the codec registry from the normalized node is null!");
         }
         List<Response> responses = null;
         responses = ((Result) dataObject).getResponse();
-        if (responses != null) {
-            LOG.info("The response id is {}; ", responses.get(0).getResponseId());
-        } else {
-            LOG.warn("The response is null!");
+        if (responses == null) {
+            throw new GnpyException("In GnpyResult: the response from GNpy is null!");
         }
+        LOG.info("The response id is {}; ", responses.get(0).getResponseId());
         this.response = responses.get(0);
         analyzeResult();
     }
@@ -135,10 +135,10 @@ public class GnpyResult {
         if (response != null) {
             if (response.getResponseType() instanceof NoPathCase) {
                 isFeasible = false;
-                LOG.info("The path is not feasible ");
+                LOG.info("In GnpyResult: The path is not feasible ");
             } else if (response.getResponseType() instanceof PathCase) {
                 isFeasible = true;
-                LOG.info("The path is feasible ");
+                LOG.info("In GnpyResult: The path is feasible ");
             }
         }
         return isFeasible;
@@ -250,7 +250,8 @@ public class GnpyResult {
         return Optional.ofNullable(result.getResult());
     }
 
-    private SchemaContext getSchemaContext(Class<? extends DataObject> objectClass) throws Exception {
+    private SchemaContext getSchemaContext(Class<? extends DataObject> objectClass) throws GnpyException, Exception {
+
         final ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
         Iterable<? extends YangModuleInfo> moduleInfos;
         SchemaContext schemaContext = null;

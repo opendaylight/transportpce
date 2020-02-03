@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -44,12 +44,14 @@ import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.El
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.elements.Metadata;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.elements.MetadataBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.SpanAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.ila.Ila;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -74,6 +76,7 @@ import org.slf4j.LoggerFactory;
 public class GnpyTopoImpl {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyTopoImpl.class);
     private final NetworkTransactionService networkTransactionService;
+    //List of elements
     private List<Elements> elements = new ArrayList<>();
     private List<Connections> connections = new ArrayList<>();
     //Mapping elements
@@ -81,28 +84,37 @@ public class GnpyTopoImpl {
     private Map<String, String> mapDisgNodeRefNode = new HashMap<String, String>();
     //Mapping between the ord-ntw and node ip
     private Map<String, IpAddress> mapNodeRefIp = new HashMap<String, IpAddress>();
-    //Mapping between link id and clfi
-    private Map<String, String> mapLinkFiber = new HashMap<String, String>();
-    //Mapping between fiber clfi and ipAddress
+    //Mapping between the ROADM-ROADM linkId/secElement and the linkId
+    private Map<String, List<String>> mapLinkFiber = new HashMap<String, List<String>>();
+    //Mapping between the ROADM-ROADM linkId/secElement and ipAddress
     private Map<String, IpAddress> mapFiberIp = new HashMap<String, IpAddress>();
-    private static int convertKmM = 1000;
+    //List of Xponders
+    private List<String> trxList = new ArrayList<>();
+    //Initialize the 32 bit identifiers for the edfa and the fiber.
+    //These 32-bit identifiers are not ipv4 addresses (despite having ipv4Adresses format, dotted-decimal notation).
+    //They are imposed by the GNPy yang model to identify network elements and not used for any routing purposes.
+    private Ipv4Address edfaId;
+    private Ipv4Address fiberId;
+    private static final double LATITUDE = 0;
+    private static final double LONGITUTE = 0;
+    private static final String REGION = "N/A";
+    private static final String CITY = "N/A";
+    private static final int CONVERT_KM_M = 1000;
+    private static final double TARGET_PCH_OUT_DB = -20;
 
     /*
      * Construct the ExtractTopoDataStoreImpl.
      */
-    @SuppressWarnings("unchecked")
-    public GnpyTopoImpl(final NetworkTransactionService networkTransactionService) {
+    public GnpyTopoImpl(final NetworkTransactionService networkTransactionService) throws GnpyException {
         this.networkTransactionService = networkTransactionService;
-        Map<String, List<?>> map = extractTopo();
-        if (map.containsKey("Elements")) {
-            elements = (List<Elements>) map.get("Elements");
-        } else {
-            elements = null;
-        }
-        if (map.containsKey("Connections")) {
-            connections = (List<Connections>) map.get("Connections");
-        } else {
-            connections = null;
+        //32-bit identifier for the fiber. The dotted decimal notation has the format 243.x.x.x (0<=x<=255)
+        fiberId = new Ipv4Address("243.0.0.1");
+        //32-bit identifier for the edfa. The dotted decimal notation has the format 244.x.x.x (0<=x<=255)
+        edfaId = new Ipv4Address("244.0.0.1");
+        try {
+            extractTopo();
+        } catch (NullPointerException e) {
+            throw new GnpyException("In GnpyTopoImpl: one of the elements is null",e);
         }
     }
 
@@ -111,12 +123,7 @@ public class GnpyTopoImpl {
      * a mapping structure to map between the nodeId and the ipAddress (uid)
      *
      */
-    public Map<String, List<?>> extractTopo() {
-        Map<String, List<?>> map = new HashMap<String, List<?>>();
-        // Define the elements
-        List<Elements> topoElements = new ArrayList<>();
-        // Define the connections
-        List<Connections> topoConnections = new ArrayList<>();
+    private void extractTopo() throws GnpyException {
         // Define the instance identifier of the OpenRoadm topology
         InstanceIdentifier<Network> insIdOpenRoadmTopo = InstanceIdentifier
                 .builder(Networks.class)
@@ -127,238 +134,221 @@ public class GnpyTopoImpl {
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))).build();
         try {
             // Initialize the reading of the networkTransactionService
-            // read the configuration part of the data broker that concerns
-            // the openRoadm topology and get all the nodes
+            // read the configuration part of the data broker that concerns the openRoadm topology and get all the nodes
             java.util.Optional<Network> openRoadmTopo = this.networkTransactionService
                     .read(LogicalDatastoreType.CONFIGURATION, insIdOpenRoadmTopo).get();
             java.util.Optional<Network> openRoadmNet = this.networkTransactionService
                     .read(LogicalDatastoreType.CONFIGURATION, insIdrOpenRoadmNet).get();
-            if (openRoadmNet.isPresent()) {
-                List<Node> openRoadmNetNodeList = openRoadmNet.get().getNode();
-                if (openRoadmTopo.isPresent()) {
-                    List<Node> openRoadmTopoNodeList = openRoadmTopo.get().getNode();
-                    List<String> nodesList = new ArrayList<>();
-                    // Create the list of nodes
-                    if (!openRoadmTopoNodeList.isEmpty()) {
-                        // Create elements
-                        for (Node openRoadmTopoNode : openRoadmTopoNodeList) {
-                            // Retrieve the supporting node and the type of the
-                            // node in openRoadm network
-                            List<SupportingNode> supportingNodeList = openRoadmTopoNode.getSupportingNode();
-                            for (SupportingNode supportingNode : supportingNodeList) {
-                                String nodeRef = supportingNode.getNodeRef().getValue();
-                                IpAddress ipAddress = null;
-                                // Retrieve the mapping between the openRoadm
-                                // topology and openRoadm network
-                                mapDisgNodeRefNode.put(openRoadmTopoNode.getNodeId().getValue(), nodeRef);
-                                Node1 openRoadmNetNode1 = null;
-                                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
-                                    .Node1 commonNetworkNode1 = null;
-                                for (Node openRoadmNetNode : openRoadmNetNodeList) {
-                                    if (openRoadmNetNode.getNodeId().getValue().equals(nodeRef)) {
-                                        openRoadmNetNode1 = openRoadmNetNode.augmentation(Node1.class);
-                                        commonNetworkNode1 = openRoadmNetNode.augmentation(org.opendaylight.yang.gen.v1
-                                            .http.org.openroadm.common.network.rev181130.Node1.class);
-                                        ipAddress = openRoadmNetNode1.getIp();
-                                        mapNodeRefIp.put(nodeRef, ipAddress);
-                                        break;
-                                    }
-                                }
-                                if (commonNetworkNode1.getNodeType().getName().equals("ROADM")) {
-                                //if (((org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1)
-                                //            openRoadmNetNode1).getNodeType().getName().equals("ROADM")) {
-                                    if (!nodesList.contains(nodeRef)) {
-                                        Elements element = addElementsRoadm(2, 0, nodeRef, openRoadmNetNode1.getShelf(),
-                                                -20, ipAddress.getIpv4Address().getValue().toString());
-                                        topoElements.add(element);
-                                        nodesList.add(nodeRef);
-                                    }
-                                } else if (commonNetworkNode1.getNodeType().getName().equals("XPONDER")) {
-                                //} else if (((org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
-                                //            .Node1) openRoadmNetNode1).getNodeType().getName().equals("XPONDER")) {
-                                    if (!nodesList.contains(nodeRef)) {
-                                        Elements element = addElementsTransceiver(2, 0, nodeRef,
-                                                openRoadmNetNode1.getShelf(),
-                                                ipAddress.getIpv4Address().getValue().toString());
-                                        topoElements.add(element);
-                                        nodesList.add(nodeRef);
-                                    }
-                                } else {
-                                    LOG.warn("the type is not implemented");
-                                }
-                            }
-                        }
-                    } else {
-                        LOG.warn("no nodes in the network");
-                    }
-
-                    // Create the list of connections
-                    Network1 nw1 = openRoadmTopo.get().augmentation(Network1.class);
-                    List<Link> linksList = nw1.getLink();
-                    // 1:EXPRESS-LINK    2:ADD-LINK       3:DROP-LINK
-                    // 4:ROADM-To-ROADM  5:XPONDER-INPUT  6:XPONDER-OUTPUT
-                    int[] externalLink = {4,5,6};
-                    int idFiber = 0;
-                    int nbEDFA = 0;
-                    if (!linksList.isEmpty()) {
-                        LOG.debug("The link list is not empty");
-                        for (Link link : linksList) {
-                            Link1 link1 = link.augmentation(Link1.class);
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                                .Link1 openroadmNetworkLink1 = link.augmentation(org.opendaylight.yang.gen.v1.http.org
-                                .openroadm.network.topology.rev181130.Link1.class);
-                            int linkType = link1.getLinkType().getIntValue();
-                            // the previous line generates a warning
-                            //  but the following cast in comment makes the gnpy tox test fail
-                            // ((org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1) link1)
-                            if (IntStream.of(externalLink).anyMatch(x -> x == linkType)) {
-                                // Verify if the node is a ROADM
-                                String srcId = mapDisgNodeRefNode.get(link.getSource().getSourceNode().getValue());
-                                IpAddress srcIp = mapNodeRefIp.get(srcId);
-                                String clfi = link1.getClfi();
-                                String destId = null;
-                                IpAddress destIp = null;
-                                // Add the links between amplifiers
-                                OMSAttributes omsAttributes = null;
-                                if (linkType == 4) {
-                                    omsAttributes = openroadmNetworkLink1.getOMSAttributes();
-                                }
-                                if (omsAttributes != null) {
-                                    if (omsAttributes.getAmplifiedLink() != null) {
-                                        List<AmplifiedLink> amplifiedLinkList = omsAttributes.getAmplifiedLink()
-                                                .getAmplifiedLink();
-                                        if (!amplifiedLinkList.isEmpty()) {
-                                            for (AmplifiedLink amplifiedLink : amplifiedLinkList) {
-                                                Elements element1 = null;
-                                                if (amplifiedLink.getSectionElement()
-                                                        .getSectionElement() instanceof Ila) {
-                                                    Ila ila = (Ila) amplifiedLink.getSectionElement()
-                                                            .getSectionElement();
-                                                    String nodeId = ila.getNodeId().getValue();
-                                                    IpAddress ipEdfa = new IpAddress(
-                                                            new Ipv4Address("1.1.1." + nbEDFA));
-                                                    nbEDFA++;
-                                                    mapDisgNodeRefNode.put(nodeId, nodeId);
-                                                    mapNodeRefIp.put(nodeId, ipEdfa);
-                                                    element1 = addElementsEdfa(2, 0, "RLD", "Lannion_CAS",
-                                                            ila.getGain().getValue(), ila.getTilt().getValue(),
-                                                            ila.getOutVoaAtt().getValue(), "std_medium_gain",
-                                                            ipEdfa.getIpv4Address().getValue().toString());
-                                                } else if (amplifiedLink.getSectionElement()
-                                                        .getSectionElement() instanceof Span) {
-                                                    // Create the location
-                                                    IpAddress ipFiber = new IpAddress(
-                                                            new Ipv4Address("2.2.2." + idFiber));
-                                                    mapLinkFiber.put(link.getLinkId().getValue(), clfi);
-                                                    mapFiberIp.put(clfi, ipFiber);
-                                                    idFiber++;
-                                                    element1 = addElementsFiber(2, 0, "RLD", "Lannion_CAS",
-                                                            ipFiber.getIpv4Address().getValue(), 20, 0, 0.2, 0, 0,
-                                                            "SSMF");
-                                                }
-                                                if (element1 != null) {
-                                                    topoElements.add(element1);
-                                                    destId = element1.getUid();
-                                                    destIp = null;
-                                                    // Create a new link
-                                                    if (srcId != destId) {
-                                                        Connections connection = createNewConnection(srcId, srcIp,
-                                                                destId, destIp);
-                                                        topoConnections.add(connection);
-                                                        srcId = destId;
-                                                        srcIp = destIp;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else if (omsAttributes.getSpan() != null) {
-                                        IpAddress ipFiber = new IpAddress(new Ipv4Address("2.2.2." + idFiber));
-                                        mapLinkFiber.put(link.getLinkId().getValue(), clfi);
-                                        mapFiberIp.put(clfi, ipFiber);
-                                        idFiber++;
-                                        double attIn = 0;
-                                        double connIn = 0;
-                                        double connOut = 0;
-                                        String typeVariety = "SSMF";
-                                        double length = 0;
-                                        // Compute the length of the link
-                                        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                                            .networks.network.link.oms.attributes.@Nullable Span span =
-                                            omsAttributes.getSpan();
-                                        List<LinkConcatenation> linkConcatenationList = span.getLinkConcatenation();
-                                        for (LinkConcatenation linkConcatenation : linkConcatenationList) {
-                                            double srlgLength = linkConcatenation.getSRLGLength();
-                                            //convert to kilometer
-                                            length += srlgLength / convertKmM;
-                                        }
-                                        double lossCoef = span.getSpanlossCurrent().getValue().doubleValue() / length;
-                                        Elements element1 = addElementsFiber(2, 0, "RLD", "Lannion_CAS",
-                                                ipFiber.getIpv4Address().getValue(), length, attIn, lossCoef, connIn,
-                                                connOut, typeVariety);
-                                        topoElements.add(element1);
-                                        // Create a new link
-                                        destId = element1.getUid();
-                                        destIp = null;
-                                        if (srcId != destId) {
-                                            Connections connection = createNewConnection(srcId, srcIp, destId, destIp);
-                                            topoConnections.add(connection);
-                                            srcId = destId;
-                                            srcIp = destIp;
-                                        }
-                                    } else {
-                                        // Add a fiber
-                                        clfi = "Fiber" + idFiber;
-                                        IpAddress ipFiber = new IpAddress(new Ipv4Address("2.2.2." + idFiber));
-                                        mapLinkFiber.put(link.getLinkId().getValue(), clfi);
-                                        mapFiberIp.put(clfi, ipFiber);
-                                        idFiber++;
-                                        // Create a new element
-                                        Elements element1 = addElementsFiber(2, 0, "RLD", "Lannion_CAS",
-                                                ipFiber.getIpv4Address().getValue(), 20, 0, 0.2, 0, 0, "SSMF");
-                                        topoElements.add(element1);
-                                        // Create a new link
-                                        destId = element1.getUid();
-                                        destIp = null;
-                                        if (srcId != destId) {
-                                            Connections connection = createNewConnection(srcId, srcIp, destId, destIp);
-                                            topoConnections.add(connection);
-                                            srcId = destId;
-                                            srcIp = destIp;
-                                        }
-                                    }
-                                } else {
-                                    LOG.warn("The oms attributes is null {} !",link1.getLinkType().getName());
-                                }
-                                // Create a new link
-                                destId = mapDisgNodeRefNode.get(link.getDestination().getDestNode().getValue());
-                                destIp = mapNodeRefIp.get(destId);
-                                Connections connection = createNewConnection(srcId, srcIp, destId, destIp);
-                                topoConnections.add(connection);
-                            }
-                        }
-                    } else {
-                        LOG.warn("no links in the network");
-                    }
-                } else {
-                    LOG.warn("No nodes in the selected network ...");
-                }
+            if (openRoadmNet.isPresent() && openRoadmTopo.isPresent()) {
+                extractElements(openRoadmTopo,openRoadmNet);
+                extractConnections(openRoadmTopo,openRoadmNet);
+                LOG.debug("In GnpyTopoImpl : elements and connections are well extracted");
+            }
+            else {
+                throw new GnpyException(
+                    "In GnpyTopoImpl : openroadm topology network or openroadm network are not well mounted ...");
             }
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Error reading the topology", e);
             this.networkTransactionService.close();
+            throw new GnpyException("In gnpyTopoImpl: error in reading the topology", e);
         }
         this.networkTransactionService.close();
-        map.put("Elements", topoElements);
-        map.put("Connections", topoConnections);
-        return map;
+    }
+
+    private void extractElements(java.util.Optional<Network> openRoadmTopo,
+            java.util.Optional<Network> openRoadmNet) throws GnpyException {
+        // Create the list of nodes
+        List<Node> openRoadmNetNodeList = openRoadmNet.get().getNode();
+        List<Node> openRoadmTopoNodeList = openRoadmTopo.get().getNode();
+        List<String> nodesList = new ArrayList<>();
+
+        if (openRoadmTopoNodeList.isEmpty() || openRoadmNetNodeList.isEmpty()) {
+            throw new GnpyException("In gnpyTopoImpl: no nodes in the openradm topology or openroadm network");
+        }
+        // Create elements
+        for (Node openRoadmTopoNode : openRoadmTopoNodeList) {
+            // Retrieve the supporting node and the type of the node in openRoadm network
+            List<SupportingNode> supportingNodeList = openRoadmTopoNode.getSupportingNode();
+            for (SupportingNode supportingNode : supportingNodeList) {
+                IpAddress ipAddress = null;
+                String nodeRef = supportingNode.getNodeRef().getValue();
+                // Retrieve the mapping between the openRoadm topology and openRoadm network
+                mapDisgNodeRefNode.put(openRoadmTopoNode.getNodeId().getValue(), nodeRef);
+                Node1 openRoadmNetNode1 = null;
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                    .Node1 commonNetworkNode1 = null;
+                for (Node openRoadmNetNode : openRoadmNetNodeList) {
+                    if (openRoadmNetNode.getNodeId().getValue().equals(nodeRef)) {
+                        openRoadmNetNode1 = openRoadmNetNode.augmentation(Node1.class);
+                        commonNetworkNode1 = openRoadmNetNode.augmentation(org.opendaylight.yang.gen.v1
+                            .http.org.openroadm.common.network.rev181130.Node1.class);
+                        ipAddress = openRoadmNetNode1.getIp();
+                        mapNodeRefIp.put(nodeRef, ipAddress);
+                        break;
+                    }
+                }
+                if (commonNetworkNode1.getNodeType().getName().equals("ROADM")) {
+                    if (!nodesList.contains(nodeRef)) {
+                        Elements element = createElementsRoadm(LATITUDE, LONGITUTE, nodeRef,
+                                openRoadmNetNode1.getShelf(),TARGET_PCH_OUT_DB, ipAddress.getIpv4Address().getValue()
+                                .toString());
+                        this.elements.add(element);
+                        nodesList.add(nodeRef);
+                    }
+                } else if (commonNetworkNode1.getNodeType().getName().equals("XPONDER")) {
+                    if (!nodesList.contains(nodeRef)) {
+                        Elements element = createElementsTransceiver(LATITUDE, LONGITUTE, nodeRef,
+                                openRoadmNetNode1.getShelf(),ipAddress.getIpv4Address().getValue().toString());
+                        this.elements.add(element);
+                        nodesList.add(nodeRef);
+                        trxList.add(nodeRef);
+                    }
+                } else {
+                    throw new GnpyException("In gnpyTopoImpl: the type is not implemented");
+                }
+            }
+        }
+    }
+
+    private void extractConnections(java.util.Optional<Network> openRoadmTopo,
+            java.util.Optional<Network> openRoadmNet) throws GnpyException {
+        // Create the list of connections
+        Network1 nw1 = openRoadmTopo.get().augmentation(Network1.class);
+        List<Link> linksList = nw1.getLink();
+        // 1:EXPRESS-LINK    2:ADD-LINK       3:DROP-LINK
+        // 4:ROADM-To-ROADM  5:XPONDER-INPUT  6:XPONDER-OUTPUT
+        int[] externalLink = {OpenroadmLinkType.ROADMTOROADM.getIntValue(),OpenroadmLinkType.XPONDERINPUT.getIntValue(),
+            OpenroadmLinkType.XPONDEROUTPUT.getIntValue()};
+
+        if (linksList.isEmpty()) {
+            throw new GnpyException("In gnpyTopoImpl: no links in the network");
+        }
+
+        for (Link link : linksList) {
+            Link1 link1 = link.augmentation(Link1.class);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
+                .Link1 openroadmNetworkLink1 = link.augmentation(org.opendaylight.yang.gen.v1.http.org
+                .openroadm.network.topology.rev181130.Link1.class);
+            int linkType = link1.getLinkType().getIntValue();
+            if (! IntStream.of(externalLink).anyMatch(x -> x == linkType)) {
+                continue;
+            }
+
+            String srcId = mapDisgNodeRefNode.get(link.getSource().getSourceNode().getValue());
+            IpAddress srcIp = mapNodeRefIp.get(srcId);
+            String linkId = link.getLinkId().getValue();
+            String destId = null;
+            IpAddress destIp = null;
+            if (linkType == OpenroadmLinkType.ROADMTOROADM.getIntValue()) {
+                OMSAttributes omsAttributes = openroadmNetworkLink1.getOMSAttributes();
+                if (omsAttributes == null) {
+                    throw new GnpyException(String.format(
+                        "In gnpyTopoImpl: OMS attributes do not exit for ROADM to ROADM link: %s",linkId));
+                }
+                //Case of amplified link
+                if (omsAttributes.getAmplifiedLink() != null) {
+                    srcIp = extractAmplifiedLink(omsAttributes, linkId, srcIp);
+                }
+                //Case of one span link
+                if (omsAttributes.getSpan() != null) {
+                    srcIp = extractSpanLink(omsAttributes, linkId, srcIp);
+                }
+            }
+            // Create a new link
+            destId = mapDisgNodeRefNode.get(link.getDestination().getDestNode().getValue());
+            destIp = mapNodeRefIp.get(destId);
+            createNewConnection(srcIp,destIp);
+        }
+    }
+
+    private IpAddress extractAmplifiedLink(OMSAttributes omsAttributes, String linkId, IpAddress srcIp)
+        throws GnpyException {
+
+        List<AmplifiedLink> amplifiedLinkList = omsAttributes.getAmplifiedLink()
+            .getAmplifiedLink();
+        IpAddress destIp = null;
+        if (!amplifiedLinkList.isEmpty()) {
+            for (AmplifiedLink amplifiedLink : amplifiedLinkList) {
+                String secElt = amplifiedLink.getSectionEltNumber().toString();
+                //Case of ILA
+                if (amplifiedLink.getSectionElement().getSectionElement() instanceof Ila) {
+                    Ila ila = (Ila) amplifiedLink.getSectionElement().getSectionElement();
+                    destIp = extractILAFromAmpLink(ila);
+                }
+                //Case of Span
+                if (amplifiedLink.getSectionElement().getSectionElement() instanceof Span) {
+                    Span span = (Span) amplifiedLink.getSectionElement().getSectionElement();
+                    destIp = extractSpan((SpanAttributes) span.getSpan(), linkId, secElt);
+                }
+                // Create a new link
+                if (createNewConnection(srcIp,destIp)) {
+                    srcIp = destIp;
+                }
+            }
+        }
+        return srcIp;
+    }
+
+    private IpAddress extractSpanLink(OMSAttributes omsAttributes, String linkId, IpAddress srcIp)
+        throws GnpyException {
+
+        SpanAttributes span = omsAttributes.getSpan();
+        IpAddress destIp = extractSpan((SpanAttributes) span, linkId, linkId);
+        if (createNewConnection(srcIp, destIp)) {
+            return destIp;
+        }
+        return srcIp;
+    }
+
+    private IpAddress extractILAFromAmpLink(Ila ila) throws GnpyException {
+        String nodeId = ila.getNodeId().getValue();
+        IpAddress ipEdfa = new IpAddress(edfaId);
+        edfaId = incrementIdentifier(edfaId);
+        mapDisgNodeRefNode.put(nodeId, nodeId);
+        mapNodeRefIp.put(nodeId, ipEdfa);
+        Elements element = createElementsEdfa(LATITUDE, LONGITUTE, REGION, CITY,
+                ila.getGain().getValue(), ila.getTilt().getValue(),
+                ila.getOutVoaAtt().getValue(), "std_medium_gain",
+                ipEdfa.getIpv4Address().getValue().toString());
+        this.elements.add(element);
+        return ipEdfa;
+    }
+
+    private IpAddress extractSpan(SpanAttributes span, String linkId, String subLinkId) throws GnpyException {
+        IpAddress ipFiber = new IpAddress(fiberId);
+
+        if (!mapLinkFiber.containsKey(linkId)) {
+            mapLinkFiber.put(linkId, new ArrayList<String>());
+        }
+        mapLinkFiber.get(linkId).add(subLinkId);
+        mapFiberIp.put(subLinkId, ipFiber);
+        fiberId = incrementIdentifier(fiberId);
+        double attIn = 0;
+        double connIn = 0;
+        double connOut = 0;
+        String typeVariety = "SSMF";
+        double length = 0;
+        // Compute the length of the link
+        List<LinkConcatenation> linkConcatenationList = span.getLinkConcatenation();
+        for (LinkConcatenation linkConcatenation : linkConcatenationList) {
+            double srlgLength = linkConcatenation.getSRLGLength();
+            //convert to kilometer
+            length += srlgLength / CONVERT_KM_M;
+        }
+        double lossCoef = span.getSpanlossCurrent().getValue().doubleValue() / length;
+        Elements element = createElementsFiber(LATITUDE, LONGITUTE, REGION, CITY,
+            ipFiber.getIpv4Address().getValue(), length, attIn, lossCoef, connIn, connOut, typeVariety);
+        this.elements.add(element);
+        return ipFiber;
+
     }
 
     /*
-     * Method to add Fiber
+     * Method to create Fiber
      */
-    private Elements addElementsFiber(double latitude, double longitude, String region, String city, String clfi,
+    private Elements createElementsFiber(double latitude, double longitude, String region, String city, String uidFiber,
             double length, double attIn, double lossCoef, double connIn, double connOut, String typeVariety) {
-        // Create an amplifier after the roadm
+        // Create an amplifier after the ROADM
         Coordinate c1 = new Coordinate(new BigDecimal(latitude));
         Coordinate c2 = new Coordinate(new BigDecimal(longitude));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
@@ -368,7 +358,7 @@ public class GnpyTopoImpl {
                 .setAttIn(new BigDecimal(attIn)).setLossCoef(new BigDecimal(lossCoef)).setConIn(new BigDecimal(connIn))
                 .setConOut(new BigDecimal(connOut)).build();
         Params params1 = new ParamsBuilder().setFiberroadm(fiber).build();
-        Elements element1 = new ElementsBuilder().setUid(clfi)
+        Elements element1 = new ElementsBuilder().setUid(uidFiber)
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Fiber.class)
                 .setTypeVariety(typeVariety).setMetadata(metadata1)
                 .setElementType(new FiberRoadmBuilder().setParams(params1).build()).build();
@@ -376,11 +366,11 @@ public class GnpyTopoImpl {
     }
 
     /*
-     * Method to add Edfa
+     * Method to create EDFA
      */
-    private Elements addElementsEdfa(double latitude, double longitude, String region, String city,
+    private Elements createElementsEdfa(double latitude, double longitude, String region, String city,
             BigDecimal gainTarget, BigDecimal tiltTarget, BigDecimal outVoa, String typeVariety, String uidEdfa) {
-        // Create an amplifier after the roadm
+        // Create an amplifier after the ROADM
         Coordinate c1 = new Coordinate(new BigDecimal(latitude));
         Coordinate c2 = new Coordinate(new BigDecimal(longitude));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
@@ -391,16 +381,15 @@ public class GnpyTopoImpl {
         Edfa edfa = new EdfaBuilder()
                 .setOperational(operational).build();
         Elements element1 = new ElementsBuilder().setUid(uidEdfa)
-                // Choose an ip address
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Edfa.class)
                 .setMetadata(metadata1).setElementType(edfa).setTypeVariety(typeVariety).build();
         return element1;
     }
 
     /*
-     * Method to add ROADM
+     * Method to create ROADM
      */
-    private Elements addElementsRoadm(double latitude, double longitude, String region, String city,
+    private Elements createElementsRoadm(double latitude, double longitude, String region, String city,
             double targetPchOutDb, String uidRoadm) {
 
         Coordinate c1 = new Coordinate(new BigDecimal(latitude));
@@ -408,7 +397,6 @@ public class GnpyTopoImpl {
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
-        // Create the roadm
         Roadm roadm = new RoadmBuilder().setTargetPchOutDb(new BigDecimal(targetPchOutDb)).build();
         Params params1 = new ParamsBuilder().setFiberroadm(roadm).build();
         Elements element1 = new ElementsBuilder().setUid(uidRoadm)
@@ -418,9 +406,9 @@ public class GnpyTopoImpl {
     }
 
     /*
-     * Method to add Transceiver
+     * Method to create Transceiver
      */
-    private Elements addElementsTransceiver(double latitude, double longitude, String region, String city,
+    private Elements createElementsTransceiver(double latitude, double longitude, String region, String city,
             String uidTrans) {
         Coordinate c1 = new Coordinate(new BigDecimal(latitude));
         Coordinate c2 = new Coordinate(new BigDecimal(longitude));
@@ -434,17 +422,54 @@ public class GnpyTopoImpl {
         return element1;
     }
 
-    private Connections createNewConnection(String srcId, IpAddress srcIp, String destId, IpAddress destIp) {
-        String fromNode = srcId;
-        String toNode = destId;
-        if (srcIp != null) {
-            fromNode = srcIp.getIpv4Address().getValue().toString();
+    /*
+     * Method to create Connection
+     */
+    private boolean createNewConnection(IpAddress srcIp, IpAddress destIp) throws GnpyException {
+        if (srcIp == null || destIp == null) {
+            throw new GnpyException("create new connection : null node IpAddress");
         }
-        if (destIp != null) {
-            toNode = destIp.getIpv4Address().getValue().toString();
+        String fromNode = srcIp.getIpv4Address().getValue();
+        String toNode = destIp.getIpv4Address().getValue();
+        if (fromNode == toNode) {
+            return false;
         }
-        Connections connection1 = new ConnectionsBuilder().setFromNode(fromNode).setToNode(toNode).build();
-        return (connection1);
+        Connections connection = new ConnectionsBuilder().setFromNode(fromNode).setToNode(toNode).build();
+        this.connections.add(connection);
+        return true;
+    }
+
+    /*
+     * Increment 32-bit identifier
+     */
+    private Ipv4Address incrementIdentifier(Ipv4Address id)  throws GnpyException {
+        String ips = id.getValue();
+        String [] fields = ips.split(Pattern.quote("."));
+        int intF1 = Integer.parseInt(fields[1]);
+        int intF2 = Integer.parseInt(fields[2]);
+        int intF3 = Integer.parseInt(fields[3]);
+        if (intF3 < 255) {
+            intF3++;
+        } else {
+            if (intF2 < 255) {
+                intF2++;
+                intF3 = 0;
+            } else {
+                if (intF1 < 255) {
+                    intF1++;
+                    intF2 = 0;
+                    intF3 = 0;
+                } else {
+                    throw new GnpyException("GnpyTopoImpl : the topology is not supported by gnpy");
+                }
+                fields[1] = Integer.toString(intF1);
+            }
+            fields[2] = Integer.toString(intF2);
+        }
+        fields[3] = Integer.toString(intF3);
+        String nidString = fields[0] + "." + fields[1] + "." + fields[2] + "." + fields[3];
+        Ipv4Address nid = new Ipv4Address(nidString);
+        return nid;
     }
 
     public List<Elements> getElements() {
@@ -479,11 +504,11 @@ public class GnpyTopoImpl {
         this.mapNodeRefIp = mapNodeRefIp;
     }
 
-    public Map<String, String> getMapLinkFiber() {
+    public Map<String, List<String>> getMapLinkFiber() {
         return mapLinkFiber;
     }
 
-    public void setMapLinkFiber(Map<String, String> mapLinkFiber) {
+    public void setMapLinkFiber(Map<String, List<String>> mapLinkFiber) {
         this.mapLinkFiber = mapLinkFiber;
     }
 
@@ -493,5 +518,13 @@ public class GnpyTopoImpl {
 
     public void setMapFiberIp(Map<String, IpAddress> mapFiberIp) {
         this.mapFiberIp = mapFiberIp;
+    }
+
+    public List<String> getTrxList() {
+        return trxList;
+    }
+
+    public void setTrxList(List<String> trxList) {
+        this.trxList = trxList;
     }
 }
