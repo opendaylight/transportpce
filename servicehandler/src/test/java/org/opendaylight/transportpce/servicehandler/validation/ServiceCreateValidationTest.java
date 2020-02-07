@@ -13,12 +13,12 @@ import org.junit.Test;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.CoRoutingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.CoRoutingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.routing.constraints.SoftConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateInputBuilder;
 
 
 public class ServiceCreateValidationTest {
@@ -38,7 +38,7 @@ public class ServiceCreateValidationTest {
             .setHardConstraints(new HardConstraintsBuilder()
                 .setCoRoutingOrGeneral(new CoRoutingBuilder()
                     .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
+                        .constrains.rev191129.constraints.co.routing.or.general.co.routing
                         .CoRoutingBuilder().setExistingService(
                         Arrays.asList("Some existing-service")).build())
                     .build())
@@ -46,7 +46,7 @@ public class ServiceCreateValidationTest {
                 .build()).setSoftConstraints(new SoftConstraintsBuilder()
                 .setCoRoutingOrGeneral(new CoRoutingBuilder()
                     .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
+                        .constrains.rev191129.constraints.co.routing.or.general.co.routing
                         .CoRoutingBuilder().setExistingService(
                         Arrays.asList("Some existing-service")).build())
                     .build())
@@ -72,7 +72,7 @@ public class ServiceCreateValidationTest {
             .setSoftConstraints(new SoftConstraintsBuilder()
                 .setCoRoutingOrGeneral(new CoRoutingBuilder()
                     .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
+                        .constrains.rev191129.constraints.co.routing.or.general.co.routing
                         .CoRoutingBuilder().setExistingService(
                         Arrays.asList("Some existing-service")).build())
                     .build())
@@ -89,7 +89,7 @@ public class ServiceCreateValidationTest {
             .setSoftConstraints(null).setHardConstraints(new HardConstraintsBuilder()
                 .setCoRoutingOrGeneral(new CoRoutingBuilder()
                     .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
+                        .constrains.rev191129.constraints.co.routing.or.general.co.routing
                         .CoRoutingBuilder().setExistingService(
                         Arrays.asList("Some existing-service")).build())
                     .build())

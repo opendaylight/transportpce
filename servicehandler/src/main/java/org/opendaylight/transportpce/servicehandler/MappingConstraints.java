@@ -11,17 +11,17 @@ package org.opendaylight.transportpce.servicehandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.Constraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.CoRoutingOrGeneral;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.CoRouting;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.General;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Diversity;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Exclude;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Include;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.Latency;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev191129.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.Constraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.CoRoutingOrGeneral;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.CoRouting;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.General;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.general.Diversity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.general.Exclude;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.general.Include;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.general.Latency;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.routing.constraints.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ConstraintsSp;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.DiversityBuilder;
@@ -157,7 +157,7 @@ public class MappingConstraints {
                 } else if (coRoutingOrGeneral instanceof CoRouting) {
                     tmpCoRouting = (CoRouting)coRoutingOrGeneral;
                     if (tmpCoRouting  !=  null) {
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329
+                        org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129
                             .constraints.co.routing.or.general.co.routing.CoRouting tmpCoRoutingCoRouting =
                             tmpCoRouting.getCoRouting();
                         if (tmpCoRoutingCoRouting  !=  null) {
