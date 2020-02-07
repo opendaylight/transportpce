@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8749c281_ea7c68b2",
+        "filename": "tests/installJDK11CentOS.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-07T16:04:34Z",
+      "side": 1,
+      "message": "probably not needed too.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "d0ff94c667217a0341ca71660c550cd5a757ab84",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89c40fed_193c9b47",
+        "filename": "tox.ini",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-07T16:04:34Z",
+      "side": 1,
+      "message": "this probably don\u0027t behave well when run locally and needs to be improved if it can be removed because of Java 11 javadoc.\nMaybe an empty file ?",
+      "range": {
+        "startLine": 25,
+        "startChar": 150,
+        "endLine": 25,
+        "endChar": 166
+      },
+      "revId": "d0ff94c667217a0341ca71660c550cd5a757ab84",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
