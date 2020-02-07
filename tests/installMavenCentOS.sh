@@ -6,3 +6,4 @@ sudo mkdir -p /opt
 sudo tar xf /tmp/apache-maven-3.6.3-bin.tar.gz -C /opt
 sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
 sudo ln -s /opt/maven/bin/mvn /usr/bin/mvn
+touch FLAG_TPCE_RELENG
