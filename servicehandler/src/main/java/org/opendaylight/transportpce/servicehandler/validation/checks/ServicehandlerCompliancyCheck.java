@@ -7,9 +7,9 @@
  */
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeader;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.sdnc.request.header.SdncRequestHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
