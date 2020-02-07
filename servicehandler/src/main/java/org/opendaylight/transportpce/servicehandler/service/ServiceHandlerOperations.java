@@ -7,10 +7,10 @@
  */
 package org.opendaylight.transportpce.servicehandler.service;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceDeleteOutput;
 
 public interface ServiceHandlerOperations {
     ServiceCreateOutput serviceCreate(ServiceCreateInput input);

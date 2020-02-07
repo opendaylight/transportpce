@@ -322,6 +322,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "XPDR-A1",
                     "service-format": "Ethernet",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
                         "port": {
@@ -359,6 +365,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "XPDR-C1",
                     "service-format": "Ethernet",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
                         "port": {
@@ -640,6 +652,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "XPDR-A1",
                     "service-format": "Ethernet",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
                         "port": {
@@ -677,6 +695,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "XPDR-C1",
                     "service-format": "Ethernet",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
                         "port": {
@@ -862,6 +886,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "XPDR-A1",
                     "service-format": "Ethernet",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
                         "port": {
@@ -899,6 +929,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "XPDR-C1",
                     "service-format": "Ethernet",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
                         "port": {
@@ -1113,6 +1149,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "ROADM-A1",
                     "service-format": "OC",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
                         "port": {
@@ -1150,6 +1192,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "ROADM-C1",
                     "service-format": "OC",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
                         "port": {
@@ -1281,6 +1329,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "ROADM-A1",
                     "service-format": "OC",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJP8",
                     "tx-direction": {
                         "port": {
@@ -1318,6 +1372,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-rate": "100",
                     "node-id": "ROADM-C1",
                     "service-format": "OC",
+                    "subrate-eth-sla": {
+                        "subrate-eth-sla": {
+                            "committed-info-rate": "100000",
+                            "committed-burst-size": "64"
+                        }
+                    },
                     "clli": "SNJSCAMCJT4",
                     "tx-direction": {
                         "port": {
