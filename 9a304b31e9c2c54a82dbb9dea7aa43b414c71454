@@ -22,6 +22,30 @@
       "revId": "9a304b31e9c2c54a82dbb9dea7aa43b414c71454",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d5a4fc6_27e02bb5",
+        "filename": "tapi/pom.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-07T09:41:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ed49dd0_08035f43",
+      "range": {
+        "startLine": 32,
+        "startChar": 17,
+        "endLine": 32,
+        "endChar": 22
+      },
+      "revId": "9a304b31e9c2c54a82dbb9dea7aa43b414c71454",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
