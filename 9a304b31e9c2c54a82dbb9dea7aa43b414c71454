@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ed49dd0_08035f43",
+        "filename": "tapi/pom.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-07T09:26:38Z",
+      "side": 1,
+      "message": "should be 5.0.9",
+      "range": {
+        "startLine": 32,
+        "startChar": 17,
+        "endLine": 32,
+        "endChar": 22
+      },
+      "revId": "9a304b31e9c2c54a82dbb9dea7aa43b414c71454",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
