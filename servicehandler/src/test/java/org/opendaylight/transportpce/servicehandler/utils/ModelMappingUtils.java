@@ -20,32 +20,32 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommonBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.response.parameters.ResponseParametersBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.LifecycleState;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev190531.RpcStatus;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceReconfigureInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceRerouteOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev191129.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.configuration.response.common.ConfigurationResponseCommon;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.configuration.response.common.ConfigurationResponseCommonBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.response.parameters.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.LifecycleState;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev191129.RpcStatus;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceReconfigureInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceRerouteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceRerouteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceRerouteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.TempServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.TempServiceCreateOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.TempServiceCreateOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.TempServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.TempServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.TempServiceDeleteOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.endpoint.sp.RxDirection;
@@ -129,7 +129,7 @@ public final class ModelMappingUtils {
     }
 
     public static ServiceAEnd createServiceAEnd(org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
-            .rev190531.ServiceEndpoint serviceAEnd) {
+            .rev191129.ServiceEndpoint serviceAEnd) {
         ServiceAEndBuilder serviceAEndBuilder = new ServiceAEndBuilder();
         serviceAEndBuilder.setClli(serviceAEnd.getClli());
         serviceAEndBuilder.setNodeId(new NodeIdType(serviceAEnd.getNodeId().getValue()).getValue());
@@ -141,7 +141,7 @@ public final class ModelMappingUtils {
     }
 
     public static ServiceZEnd createServiceZEnd(org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
-            .rev190531.ServiceEndpoint serviceZEnd) {
+            .rev191129.ServiceEndpoint serviceZEnd) {
         ServiceZEndBuilder serviceZEndBuilder = new ServiceZEndBuilder();
         serviceZEndBuilder.setClli(serviceZEnd.getClli());
         serviceZEndBuilder.setNodeId(new NodeIdType(serviceZEnd.getNodeId().getValue()).getValue());
@@ -153,14 +153,14 @@ public final class ModelMappingUtils {
     }
 
     public static RxDirection createRxDirection(org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
-            .rev190531.service.endpoint.RxDirection rxDirection) {
+            .rev191129.service.endpoint.RxDirection rxDirection) {
         RxDirectionBuilder rxDirectionBuilder = new RxDirectionBuilder();
         rxDirectionBuilder.setPort(rxDirection.getPort());
         return rxDirectionBuilder.build();
     }
 
     public static TxDirection createTxDirection(org.opendaylight.yang.gen.v1.http.org.openroadm.common.service
-            .types.rev190531.service.endpoint.TxDirection txDirection) {
+            .types.rev191129.service.endpoint.TxDirection txDirection) {
         TxDirectionBuilder txDirectionBuilder = new TxDirectionBuilder();
         txDirectionBuilder.setPort(txDirection.getPort());
         return txDirectionBuilder.build();
@@ -236,14 +236,20 @@ public final class ModelMappingUtils {
 
     public static Services mappingServices(ServiceCreateInput serviceCreateInput,
             ServiceReconfigureInput serviceReconfigureInput) {
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEnd aend = null;
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceZEnd zend = null;
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service.ServiceAEnd aend = null;
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service.ServiceZEnd zend = null;
         ServicesBuilder service = new ServicesBuilder();
         if (serviceCreateInput != null) {
-            aend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                    .ServiceAEndBuilder(serviceCreateInput.getServiceAEnd()).build();
-            zend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                    .ServiceZEndBuilder(serviceCreateInput.getServiceZEnd()).build();
+            aend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service
+                .ServiceAEndBuilder((org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
+                .rev191129.ServiceEndpoint) serviceCreateInput.getServiceAEnd())
+                .setProjectId(serviceCreateInput.getServiceAEnd().getProjectId()).setProjectNote(serviceCreateInput
+                    .getServiceAEnd().getProjectNote()).build();
+            zend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service
+                .ServiceZEndBuilder((org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
+                .rev191129 .ServiceEndpoint) serviceCreateInput.getServiceZEnd())
+                .setProjectId(serviceCreateInput.getServiceZEnd().getProjectId()).setProjectNote(serviceCreateInput
+                    .getServiceZEnd().getProjectNote()).build();
             service.setServiceName(serviceCreateInput.getServiceName()).setAdministrativeState(AdminStates.OutOfService)
                     .setOperationalState(State.OutOfService).setCommonId(serviceCreateInput.getCommonId())
                     .setConnectionType(serviceCreateInput.getConnectionType())
@@ -254,10 +260,15 @@ public final class ModelMappingUtils {
                     .setSdncRequestHeader(serviceCreateInput.getSdncRequestHeader())
                     .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
         } else if (serviceReconfigureInput != null) {
-            aend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                    .ServiceAEndBuilder(serviceReconfigureInput.getServiceAEnd()).build();
-            zend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                    .ServiceZEndBuilder(serviceReconfigureInput.getServiceZEnd()).build();
+            aend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service
+                .ServiceAEndBuilder((org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
+                .rev191129 .ServiceEndpoint) serviceReconfigureInput.getServiceAEnd())
+                .setProjectId(serviceReconfigureInput.getServiceAEnd().getProjectId())
+                .setProjectNote(serviceReconfigureInput.getServiceAEnd().getProjectNote()).build();
+            zend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service
+                .ServiceZEndBuilder((org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
+                .rev191129.ServiceEndpoint) serviceReconfigureInput.getServiceZEnd())
+                .setProjectId(serviceReconfigureInput.getServiceZEnd().getProjectNote()).build();
             service.setServiceName(serviceReconfigureInput.getServiceName())
             .setAdministrativeState(AdminStates.OutOfService)
                     .setOperationalState(State.OutOfService).setCommonId(serviceReconfigureInput.getCommonId())
@@ -271,17 +282,21 @@ public final class ModelMappingUtils {
         return service.build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.temp.service.list
         .Services mappingServices(TempServiceCreateInput tempServiceCreateInput) {
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEnd aend = null;
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceZEnd zend = null;
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-            .ServicesBuilder service = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service.ServiceAEnd aend = null;
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service.ServiceZEnd zend = null;
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.temp.service.list
+            .ServicesBuilder service = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.temp
                 .service.list.ServicesBuilder();
-        aend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                .ServiceAEndBuilder(tempServiceCreateInput.getServiceAEnd()).build();
-        zend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                .ServiceZEndBuilder(tempServiceCreateInput.getServiceZEnd()).build();
+        aend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service
+            .ServiceAEndBuilder((org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
+            .rev191129 .ServiceEndpoint) tempServiceCreateInput.getServiceAEnd())
+            .setProjectId(tempServiceCreateInput.getServiceAEnd().getProjectNote()).build();
+        zend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service
+            .ServiceZEndBuilder((org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
+            .rev191129 .ServiceEndpoint) tempServiceCreateInput.getServiceZEnd())
+            .setProjectId(tempServiceCreateInput.getServiceZEnd().getProjectNote()).build();
         service.setServiceName(tempServiceCreateInput.getCommonId()).setAdministrativeState(AdminStates.OutOfService)
                 .setOperationalState(State.OutOfService).setCommonId(tempServiceCreateInput.getCommonId())
                 .setConnectionType(tempServiceCreateInput.getConnectionType())

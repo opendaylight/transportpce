@@ -1,14 +1,13 @@
-module org-openroadm-common-ber-test {
-  namespace "http://org/openroadm/common-ber-test";
-  prefix org-openroadm-common-ber-test;
+module org-openroadm-network-resource {
+  namespace "http://org/openroadm/network-resource";
+  prefix org-openroadm-network-resource;
 
   organization
     "Open ROADM MSA";
   contact
     "OpenROADM.org";
   description
-    "YANG definitions for ber test that are common to the ber-test rpc and its
-     associated callback rpc (service-rpc-async-callback)
+    "YANG definitions of resources.
 
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
       All other rights reserved.
@@ -36,6 +35,10 @@ module org-openroadm-common-ber-test {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
   revision 2018-11-30 {
     description
       "Version 4.1.0";
@@ -45,35 +48,79 @@ module org-openroadm-common-ber-test {
       "Version 3.0.0";
   }
 
-  grouping ber-test-options-container {
-    container ber-options {
-      leaf target-prefec-ber {
-        type decimal64 {
-          fraction-digits 4;
+  identity network-resource-types {
+    description
+      "base type for network resources";
+  }
+
+  identity network-resource-tp {
+    base network-resource-types;
+    description
+      "tp-id network resource";
+  }
+
+  identity network-resource-link {
+    base network-resource-types;
+    description
+      "link-id network resource";
+  }
+
+  grouping network-resource {
+    description
+      "This resource identifier is intended to provide a generic identifer
+       for any network resource that can be used without specific knowledge of
+       the resource.";
+    container network-resource {
+      choice network-resource {
+        case network-resource-tp {
+          uses network-tp-name;
+        }
+        case network-resource-link {
+          uses network-link-name;
         }
       }
-      leaf duration {
-        type uint16;
-        units "seconds";
+    }
+    leaf network-resource-type {
+      type identityref {
+        base network-resource-types;
       }
-      leaf pm-polling-timeout {
-        type uint16;
-        units "seconds";
-      }
-      leaf retry-attempts {
-        type uint16;
-      }
+      mandatory true;
     }
   }
-  grouping complex-ber-test-options-container {
-    container complex-ber-options {
-      uses ber-test-options-container;
-      leaf is-complex-result{
-        type boolean;
-        default "false";
-        description
-          "True: Indicates that the results should be provided via complex-service-rpc-ber-test-async-callback. False: Indicates that the results should be provided via  service-rpc-ber-test-async-callback";
-      }
+
+  grouping network-tp-name {
+    leaf tp-network-id {
+      type string;
+      mandatory true;
+      description
+        "network-id from the network model.";
+    }
+    leaf tp-node-id {
+      type string;
+      mandatory true;
+      description
+        "node-id from the network model.";
+    }
+    leaf tp-id {
+      type string;
+      mandatory true;
+      description
+        "tp-id from the network model.";
+    }
+  }
+
+  grouping network-link-name {
+    leaf link-network-id {
+      type string;
+      mandatory true;
+      description
+        "network-id from the network model.";
+    }
+    leaf link-id {
+      type string;
+      mandatory true;
+      description
+        "link-id from the network model.";
     }
   }
 }

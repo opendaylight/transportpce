@@ -9,18 +9,18 @@ package org.opendaylight.transportpce.servicehandler.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.CoRoutingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.GeneralBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.DiversityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.ExcludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.IncludeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.constraints.co.routing.or.general.general.LatencyBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.diversity.existing.service.constraints.ExistingServiceApplicabilityBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.HardConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraints;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329.routing.constraints.SoftConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev191129.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.CoRoutingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.GeneralBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.general.DiversityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.general.ExcludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.general.IncludeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.constraints.co.routing.or.general.general.LatencyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.diversity.existing.service.constraints.ExistingServiceApplicabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.routing.constraints.HardConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.routing.constraints.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.routing.constraints.SoftConstraints;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev191129.routing.constraints.SoftConstraintsBuilder;
 
 /**
  * Utility Class to Build Hard Constraints and Soft Constraints.
@@ -38,7 +38,7 @@ public final class ConstraintsUtils {
         return new SoftConstraintsBuilder()
                 .setCoRoutingOrGeneral(new CoRoutingBuilder()
                     .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
+                        .constrains.rev191129.constraints.co.routing.or.general.co.routing
                         .CoRoutingBuilder().setExistingService(
                             new ArrayList<>(Collections.singletonList("existing-service 1"))).build())
                     .build())
@@ -50,7 +50,7 @@ public final class ConstraintsUtils {
         return new HardConstraintsBuilder()
                 .setCoRoutingOrGeneral(new CoRoutingBuilder()
                     .setCoRouting(new org.opendaylight.yang.gen.v1.http.org.openroadm.routing
-                        .constrains.rev190329.constraints.co.routing.or.general.co.routing
+                        .constrains.rev191129.constraints.co.routing.or.general.co.routing
                         .CoRoutingBuilder().setExistingService(
                             new ArrayList<>(Collections.singletonList("existing-service 1"))).build())
                     .build())

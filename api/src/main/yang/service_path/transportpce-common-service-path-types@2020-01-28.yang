@@ -19,7 +19,7 @@ module transportpce-common-service-path-types {
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
-    revision-date 2019-05-31;
+    revision-date 2019-11-29;
   }
   import org-openroadm-otn-common-types {
     prefix org-openroadm-otn-common-types;
@@ -31,11 +31,11 @@ module transportpce-common-service-path-types {
   }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
-    revision-date 2019-05-31;
+    revision-date 2019-11-29;
   }
   import org-openroadm-service-format {
     prefix org-openroadm-service-format;
-    revision-date 2019-05-31;
+    revision-date 2019-11-29;
   }
 
   organization
