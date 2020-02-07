@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.opendaylight.transportpce.common.ResponseCodes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
 import org.opendaylight.yangtools.yang.common.Uint16;
