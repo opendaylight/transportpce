@@ -17,15 +17,15 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.path.computation.request.input.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.path.computation.request.input.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.path.computation.request.input.ServiceZEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommonBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeaderBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev191129.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.configuration.response.common.ConfigurationResponseCommon;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.configuration.response.common.ConfigurationResponseCommonBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.sdnc.request.header.SdncRequestHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
@@ -668,34 +668,34 @@ public final class PceTestData {
 
     public static ServiceCreateInput buildServiceCreateInput() {
 
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceAEnd serviceAEnd =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.service.create.input.ServiceAEnd serviceAEnd =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129
                         .service.create.input.ServiceAEndBuilder()
                         .setClli("clli")
                         .setServiceRate((long) 0)
                         .setNodeId(new NodeIdType("XPONDER-1-2"))
                         .setTxDirection(new org.opendaylight.yang.gen.v1.http.org
-                                .openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder()
+                                .openroadm.common.service.types.rev191129.service.endpoint.TxDirectionBuilder()
                                 .setPort(new PortBuilder().build())
                                 .build())
                         .setRxDirection(new org.opendaylight.yang.gen.v1.http.org
-                                .openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder()
+                                .openroadm.common.service.types.rev191129.service.endpoint.RxDirectionBuilder()
                                 .setPort(new PortBuilder().build())
                                 .build())
                         .build();
 
-        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceZEnd serviceZEnd =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
+        org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.service.create.input.ServiceZEnd serviceZEnd =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129
                         .service.create.input.ServiceZEndBuilder()
                         .setClli("clli")
                         .setServiceRate((long) 0)
                         .setNodeId(new NodeIdType("XPONDER-3-2"))
                         .setTxDirection(new org.opendaylight.yang.gen.v1.http.org
-                                .openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder()
+                                .openroadm.common.service.types.rev191129.service.endpoint.TxDirectionBuilder()
                                 .setPort(new PortBuilder().build())
                                 .build())
                         .setRxDirection(new org.opendaylight.yang.gen.v1.http.org
-                                .openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder()
+                                .openroadm.common.service.types.rev191129.service.endpoint.RxDirectionBuilder()
                                 .setPort(new PortBuilder().build())
                                 .build())
                         .build();
