@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "72ea0fe4_061b667b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-07T15:59:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a242b1d6_4ff0f1a7",
+      "revId": "59930a682636a811b6e576f87b8e8a95499ceb12",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0354d6a5_54717d32",
         "filename": "tests/installJDK11CentOS.sh",
         "patchSetId": 3
@@ -39,6 +57,30 @@
       "revId": "59930a682636a811b6e576f87b8e8a95499ceb12",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a85425d5_ba91db57",
+        "filename": "tests/installJDK11CentOS.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-07T15:59:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0354d6a5_54717d32",
+      "range": {
+        "startLine": 5,
+        "startChar": 57,
+        "endLine": 5,
+        "endChar": 58
+      },
+      "revId": "59930a682636a811b6e576f87b8e8a95499ceb12",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
