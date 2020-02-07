@@ -7,22 +7,22 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.equipment.types.rev181130.OpticTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeaderBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirectionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.lgx.LgxBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceAEnd;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceAEndBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceZEnd;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceZEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.equipment.types.rev191129.OpticTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev191129.NodeIdType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.ConnectionType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.RpcActions;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.sdnc.request.header.SdncRequestHeaderBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service.endpoint.RxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service.endpoint.TxDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service.lgx.LgxBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev191129.service.port.PortBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev191129.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.ServiceCreateInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.service.create.input.ServiceAEnd;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.service.create.input.ServiceAEndBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.service.create.input.ServiceZEnd;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev191129.service.create.input.ServiceZEndBuilder;
 
 public final class TapiUtils {
 
