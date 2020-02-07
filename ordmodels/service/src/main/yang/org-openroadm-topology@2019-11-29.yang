@@ -1,0 +1,167 @@
+module org-openroadm-topology {
+  namespace "http://org/openroadm/topology";
+  prefix org-openroadm-topology;
+
+  import org-openroadm-resource {
+    prefix org-openroadm-resource;
+    revision-date 2019-11-29;
+  }
+  import org-openroadm-network-resource {
+    prefix org-openroadm-network-resource;
+    revision-date 2019-11-29;
+  }
+
+  organization
+    "Open ROADM MSA";
+  contact
+    "OpenROADM.org";
+  description
+    "YANG definitions of topology.
+
+      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
+      All other rights reserved.
+
+      Redistribution and use in source and binary forms, with or without modification,
+      are permitted provided that the following conditions are met:
+
+      * Redistributions of source code must retain the above copyright notice, this
+        list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above copyright notice,
+        this list of conditions and the following disclaimer in the documentation and/or
+        other materials provided with the distribution.
+      * Neither the Members of the Open ROADM MSA Agreement nor the names of its
+        contributors may be used to endorse or promote products derived from this software
+        without specific prior written permission.
+
+      THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
+      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+      IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
+      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+      NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+      OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+      WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+      POSSIBILITY OF SUCH DAMAGE";
+
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
+  revision 2019-09-27 {
+    description
+      "Version 6.0.0";
+  }
+  revision 2019-05-31 {
+    description
+      "Version 5.1.0";
+  }
+  revision 2019-03-29 {
+    description
+      "Version 5.0.0";
+  }
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
+  revision 2017-09-29 {
+    description
+      "Version 2.1";
+  }
+  revision 2017-07-28 {
+    description
+      "Version 2.0.1 - added revision-date to imports";
+  }
+  revision 2017-06-26 {
+    description
+      "Version 2.0";
+  }
+  revision 2016-10-14 {
+    description
+      "Version 1.2";
+  }
+
+  grouping topology {
+    description
+      "Topology reports the individual hops along the service in the A to Z direction and Z to A directions.  This includes both ports internal to a device and those
+       at its edge that are available for externally connections. It includes both physical and logical ports.
+       Physical ports are ordered with the logical ports that run over them as follows:
+       a.\t On ingress to a node/card, physical then logical
+       b.\t On egress to a node/card, logical then physical";
+    list aToZ {
+      key "id";
+      leaf id {
+        type string;
+        description
+          "Unique identifier for this topology component within this service";
+      }
+      uses hop;
+    }
+    list zToA {
+      key "id";
+      leaf id {
+        type string;
+        description
+          "Unique identifier for this topology component within this service";
+      }
+      uses hop;
+    }
+  }
+
+  grouping hop {
+    leaf hop-type {
+      type enumeration {
+        enum node-external {
+          value 1;
+          description
+            "The given resource is on the edge of the node, and used in relationships to resources outside of the node.";
+        }
+        enum node-internal {
+          value 2;
+          description
+            "The given resource is internally to the node";
+        }
+      }
+    }
+    uses org-openroadm-resource:resource {
+      augment "resource/resource/interface" {
+        uses org-openroadm-resource:resource-reporting;
+      }
+    }
+  }
+
+  grouping network-topology {
+    description
+      "network-topology defines the ordered a-to-z and z-to-a topology in terms of network model entities: tp-id and link-id";
+    list a-to-z {
+      key "id";
+      leaf id {
+        type string;
+        description
+          "Unique identifier for this network-topology component within this service";
+      }
+      uses org-openroadm-network-resource:network-resource;
+    }
+    list z-to-a {
+      key "id";
+      leaf id {
+        type string;
+        description
+          "Unigue identifier for this network-topology component within this service";
+      }
+      uses org-openroadm-network-resource:network-resource;
+    }
+  }
+}

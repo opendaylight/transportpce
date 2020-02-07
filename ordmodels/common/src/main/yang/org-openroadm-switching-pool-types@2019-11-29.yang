@@ -1,48 +1,18 @@
-module transportpce-servicehandler {
-  namespace "http://org/opendaylight/transportpce/servicehandler";
-  prefix org-opendaylight-transportpce-servicehandler;
-
-  import ietf-yang-types {
-    prefix yang;
-  }
-  import transportpce-routing-constraints {
-    prefix transportpce-routing-constraints;
-  }
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-  }
-  import org-openroadm-resource-types {
-    prefix org-openroadm-resource-types;
-  }
-  import org-openroadm-common-service-types {
-    prefix org-openroadm-common-service-types;
-    revision-date 2019-05-31;
-  }
-  import transportpce-common-service-path-types {
-    prefix transportpce-common-service-path-types;
-  }
-  import transportpce-pathDescription {
-    prefix transportpce-pathDescription;
-  }
-  import org-openroadm-topology {
-    prefix org-openroadm-topology;
-  }
+module org-openroadm-switching-pool-types {
+  namespace "http://org/openroadm/switching-pool-types";
+  prefix org-openroadm-switching-pool-types;
 
   organization
-    "transportPCE";
+    "Open ROADM MSA";
   contact
-    "transportPCE committers - ODL";
+    "OpenROADM.org";
   description
-    "YANG definitions of A interface (transportPCE). Adapted from service definition (openroadm)
-     Copyright © 2017 Orange, Inc. and others.  All rights reserved.
+    "YANG definitions of common types.
 
-     openroadm copyright:
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-      AT&T Intellectual Property.  All other rights reserved.
+      All other rights reserved.
 
       Redistribution and use in source and binary forms, with or without modification,
-      are permitted provided that the following conditions are met:
-
       * Redistributions of source code must retain the above copyright notice, this
         list of conditions and the following disclaimer.
       * Redistributions in binary form must reproduce the above copyright notice,
@@ -63,22 +33,31 @@ module transportpce-servicehandler {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-  revision 2017-10-17 {
+  revision 2019-11-29 {
     description
-      "Version 1.6";
+      "Version 6.1.0";
   }
-  revision 2017-09-30 {
+  revision 2018-11-30 {
     description
-      "Version 1.2";
+      "Version 4.1.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
   }
 
-  notification service-rpc-result-sh {
-    description
-      "This Notification indicates result of service RPC";
-    leaf notification-type {
-      type org-openroadm-common-service-types:service-notification-types;
+  typedef switching-pool-types {
+    type enumeration {
+      enum non-blocking {
+        value 1;
+        description
+          "Single non-blocking element";
+      }
+      enum blocking {
+        value 2;
+        description
+          "Multiple connected non-blocking lists";
+      }
     }
-    uses transportpce-common-service-path-types:rpc-response-status-ex;
-    uses org-openroadm-common-service-types:service-notification-result;
   }
 }

@@ -1,44 +1,17 @@
-module transportpce-servicehandler {
-  namespace "http://org/opendaylight/transportpce/servicehandler";
-  prefix org-opendaylight-transportpce-servicehandler;
-
-  import ietf-yang-types {
-    prefix yang;
-  }
-  import transportpce-routing-constraints {
-    prefix transportpce-routing-constraints;
-  }
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-  }
-  import org-openroadm-resource-types {
-    prefix org-openroadm-resource-types;
-  }
-  import org-openroadm-common-service-types {
-    prefix org-openroadm-common-service-types;
-    revision-date 2019-05-31;
-  }
-  import transportpce-common-service-path-types {
-    prefix transportpce-common-service-path-types;
-  }
-  import transportpce-pathDescription {
-    prefix transportpce-pathDescription;
-  }
-  import org-openroadm-topology {
-    prefix org-openroadm-topology;
-  }
+module org-openroadm-common-ber-test {
+  namespace "http://org/openroadm/common-ber-test";
+  prefix org-openroadm-common-ber-test;
 
   organization
-    "transportPCE";
+    "Open ROADM MSA";
   contact
-    "transportPCE committers - ODL";
+    "OpenROADM.org";
   description
-    "YANG definitions of A interface (transportPCE). Adapted from service definition (openroadm)
-     Copyright © 2017 Orange, Inc. and others.  All rights reserved.
+    "YANG definitions for ber test that are common to the ber-test rpc and its
+     associated callback rpc (service-rpc-async-callback)
 
-     openroadm copyright:
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-      AT&T Intellectual Property.  All other rights reserved.
+      All other rights reserved.
 
       Redistribution and use in source and binary forms, with or without modification,
       are permitted provided that the following conditions are met:
@@ -63,22 +36,49 @@ module transportpce-servicehandler {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-  revision 2017-10-17 {
+  revision 2019-11-29 {
     description
-      "Version 1.6";
+      "Version 6.1.0";
   }
-  revision 2017-09-30 {
+  revision 2018-11-30 {
     description
-      "Version 1.2";
+      "Version 4.1.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
   }
 
-  notification service-rpc-result-sh {
-    description
-      "This Notification indicates result of service RPC";
-    leaf notification-type {
-      type org-openroadm-common-service-types:service-notification-types;
+  grouping ber-test-options-container {
+    container ber-options {
+      leaf target-prefec-ber {
+        type decimal64 {
+          fraction-digits 4;
+        }
+      }
+      leaf duration {
+        type uint16;
+        units "seconds";
+      }
+      leaf pm-polling-timeout {
+        type uint16;
+        units "seconds";
+      }
+      leaf retry-attempts {
+        type uint16;
+      }
     }
-    uses transportpce-common-service-path-types:rpc-response-status-ex;
-    uses org-openroadm-common-service-types:service-notification-result;
+  }
+
+  grouping complex-ber-test-options-container {
+    container complex-ber-options {
+      uses ber-test-options-container;
+      leaf is-complex-result {
+        type boolean;
+        default "false";
+        description
+          "True: Indicates that the results should be provided via complex-service-rpc-ber-test-async-callback. False: Indicates that the results should be provided via  service-rpc-ber-test-async-callback";
+      }
+    }
   }
 }

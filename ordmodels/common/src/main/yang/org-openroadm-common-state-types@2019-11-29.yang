@@ -1,44 +1,16 @@
-module transportpce-servicehandler {
-  namespace "http://org/opendaylight/transportpce/servicehandler";
-  prefix org-opendaylight-transportpce-servicehandler;
-
-  import ietf-yang-types {
-    prefix yang;
-  }
-  import transportpce-routing-constraints {
-    prefix transportpce-routing-constraints;
-  }
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-  }
-  import org-openroadm-resource-types {
-    prefix org-openroadm-resource-types;
-  }
-  import org-openroadm-common-service-types {
-    prefix org-openroadm-common-service-types;
-    revision-date 2019-05-31;
-  }
-  import transportpce-common-service-path-types {
-    prefix transportpce-common-service-path-types;
-  }
-  import transportpce-pathDescription {
-    prefix transportpce-pathDescription;
-  }
-  import org-openroadm-topology {
-    prefix org-openroadm-topology;
-  }
+module org-openroadm-common-state-types {
+  namespace "http://org/openroadm/common-state-types";
+  prefix org-openroadm-common-state-types;
 
   organization
-    "transportPCE";
+    "Open ROADM MSA";
   contact
-    "transportPCE committers - ODL";
+    "OpenROADM.org";
   description
-    "YANG definitions of A interface (transportPCE). Adapted from service definition (openroadm)
-     Copyright © 2017 Orange, Inc. and others.  All rights reserved.
+    "YANG definitions of common types.
 
-     openroadm copyright:
       Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
-      AT&T Intellectual Property.  All other rights reserved.
+      All other rights reserved.
 
       Redistribution and use in source and binary forms, with or without modification,
       are permitted provided that the following conditions are met:
@@ -63,22 +35,79 @@ module transportpce-servicehandler {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
-  revision 2017-10-17 {
+  revision 2019-11-29 {
     description
-      "Version 1.6";
+      "Version 6.1.0";
   }
-  revision 2017-09-30 {
+  revision 2018-11-30 {
     description
-      "Version 1.2";
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
   }
 
-  notification service-rpc-result-sh {
-    description
-      "This Notification indicates result of service RPC";
-    leaf notification-type {
-      type org-openroadm-common-service-types:service-notification-types;
+  typedef lifecycle-state {
+    type enumeration {
+      enum deployed {
+        value 1;
+      }
+      enum planned {
+        value 2;
+      }
+      enum maintenance {
+        value 3;
+      }
+      enum deploying {
+        value 4;
+      }
+      enum undeploying {
+        value 5;
+      }
+      enum undeployed {
+        value 6;
+      }
+      enum proposed {
+        value 7;
+      }
+      enum draft {
+        value 8;
+      }
+      enum deploy-failed {
+        value 9;
+      }
+      enum undeploy-failed {
+        value 10;
+      }
+      enum deployed-augmented {
+        value 11;
+      }
+      enum deployed-updating {
+        value 12;
+      }
     }
-    uses transportpce-common-service-path-types:rpc-response-status-ex;
-    uses org-openroadm-common-service-types:service-notification-result;
+    description
+      "Lifecycle state.";
+  }
+
+  typedef state {
+    type enumeration {
+      enum inService {
+        value 1;
+      }
+      enum outOfService {
+        value 2;
+      }
+      enum degraded {
+        value 3;
+      }
+    }
+    description
+      "State that indicates whether the resource is able to provide fulfill its role - carry traffic, etc.";
   }
 }
