@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30f7ec82_66aeb032",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-02-07T17:18:26Z",
+      "side": 1,
+      "message": "Current port is a client port",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 55
+      },
+      "revId": "3e2dd75c78a96a515e2b4e64ac6916afc3203458",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "81c44b5a_2030b9d8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-02-07T17:18:26Z",
+      "side": 1,
+      "message": "get(1) or could rather consider printing the list one shot",
+      "range": {
+        "startLine": 169,
+        "startChar": 1,
+        "endLine": 169,
+        "endChar": 90
+      },
+      "revId": "3e2dd75c78a96a515e2b4e64ac6916afc3203458",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
