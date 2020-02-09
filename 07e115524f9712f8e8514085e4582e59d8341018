@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8652b769_6aae0611",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-09T17:24:43Z",
+      "side": 1,
+      "message": "[WARNING] [...]renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java:[91,17] unchecked cast: java.lang.Class\u003c? extends org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType\u003e\n  found:    java.lang.Class\u003ccapture#1 of ? extends org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.InterfaceType\u003e",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 20
+      },
+      "revId": "07e115524f9712f8e8514085e4582e59d8341018",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9da477dc_f9b21b54",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/otn/OtnDeviceOperations.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-09T17:24:43Z",
+      "side": 1,
+      "message": "[WARN] [..]renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/otn/OtnDeviceOperations.java:26: Forbidden summary fragment. [SummaryJavadoc]",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 28,
+        "endChar": 9
+      },
+      "revId": "07e115524f9712f8e8514085e4582e59d8341018",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
