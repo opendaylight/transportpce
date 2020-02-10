@@ -16,7 +16,6 @@ module transportpce-renderer {
   }
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
-    revision-date 2017-10-17;
   }
 
   organization

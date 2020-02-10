@@ -18,6 +18,11 @@ module transportpce-portmapping {
     AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
     ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
 
+  revision "2020-01-28" {
+      description "Add necessary parameters to consolidate OTN
+          and address ONAP MDONS use case";
+    }
+
   revision "2020-01-13" {
       description "Add OTN data from device and necessary
           to build node inside otn topology";
@@ -207,6 +212,13 @@ module transportpce-portmapping {
             type uint32;
             description
               "Total interconnect bandwidth for a non-blocking element expressed as
+               number of inter-connect-bandwidth units : corresponds to capable-
+               inter-connect bandwidth";
+          }
+          leaf available-interconnect-bandwidth {
+            type uint32;
+            description
+              "Total interconnect bandwidth available for a non-blocking element can use as
                number of inter-connect-bandwidth units";
           }
           leaf-list lcp-list {

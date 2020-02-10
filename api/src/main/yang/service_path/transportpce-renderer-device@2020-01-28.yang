@@ -1,0 +1,162 @@
+module transportpce-device-renderer {
+  namespace "http://org/opendaylight/transportpce/renderer/device";
+  prefix "org-opendaylight-transportpce-renderer-device";
+
+  import transportpce-common-types {
+    prefix org-transportpce-common-types;
+    revision-date 2020-01-28;
+  }
+  import org-openroadm-otn-common-types {
+    prefix org-openroadm-otn-common-types;
+    revision-date 2018-11-30;
+  }
+
+  organization
+       "transportPCE";
+  contact
+       "transportPCE committers - ODL";
+  description
+       "YANG definitions of RPCs supported by renderer.
+        Copyright (c) 2017 AT&T and others.  All rights reserved.
+        authors: Dhruv Bhardwaj ( db929a@att.com )
+                 Shweta Vachhani ( sv111y@att.com )";
+
+  revision "2020-01-28" {
+    description "Complement rpc otn-service-path";
+  }
+
+  revision "2019-12-12" {
+    description "Add rpc otn-service-path";
+  }
+
+  revision "2017-02-28" {
+    description "Initial revision of renderer model version 1.5";
+  }
+
+  rpc service-path {
+    input {
+      leaf modulation-format {
+        type string;
+      }
+      leaf operation {
+        type enumeration {
+          enum "create" {
+            value 1;
+          }
+          enum "delete" {
+            value 2;
+          }
+        }
+      }
+      uses org-transportpce-common-types:olm-renderer-input;
+    }
+    output {
+      leaf success {
+        type boolean;
+      }
+      leaf result {
+        type string;
+      }
+      uses org-transportpce-common-types:node-interfaces;
+    }
+  }
+
+  rpc otn-service-path {
+      input {
+          leaf service-rate {
+              type string;
+          }
+          leaf service-type {
+              type string;
+          }
+          leaf ethernet-encoding {
+              type string;
+          }
+          leaf trib-slot {
+              type int16;
+          }
+          leaf-list complex-trib-slots {
+              type int16;
+                description "Used in case trib-slot allocation policy of an equipment would
+                    not correspond to contiguous trib-slots";
+          }
+          leaf-list opucn-trib-slots {
+              type org-openroadm-otn-common-types:opucn-trib-slot-def;
+          }
+          leaf trib-port-number {
+              type int16;
+          }
+          leaf operation {
+              type enumeration {
+                  enum "create" {
+                      value 1;
+                  }
+                  enum "delete" {
+                      value 2;
+                  }
+             }
+          }
+          container a-end-api-info {
+              leaf node-id {
+                  type string;
+              }
+          uses org-transportpce-common-types:api-info;
+          }
+          container z-end-api-info {
+              leaf node-id {
+                  type string;
+              }
+              uses org-transportpce-common-types:api-info;
+          }
+          uses org-transportpce-common-types:otn-renderer-input;
+      }
+      output {
+          leaf success {
+              type boolean;
+          }
+          leaf result {
+              type string;
+          }
+          uses org-transportpce-common-types:node-interfaces;
+      }
+  }
+
+  rpc renderer-rollback {
+    input {
+      uses org-transportpce-common-types:node-interfaces;
+    }
+    output {
+      leaf success {
+        type boolean;
+      }
+      list failed-to-rollback {
+        key node-id;
+        leaf node-id {
+          type string;
+        }
+        leaf-list interface {
+          type string;
+        }
+      }
+    }
+  }
+
+  rpc create-ots-oms {
+    input {
+      leaf node-id {
+        type string;
+      }
+      leaf logical-connection-point {
+        type string;
+      }
+    }
+    output {
+      leaf success {
+        type boolean;
+      }
+      leaf result {
+        type string;
+      }
+    }
+  }
+}

@@ -5,7 +5,6 @@ module transportpce-olm {
 
   import transportpce-common-types {
       prefix org-transportpce-common-types;
-      revision-date 2017-09-07;
   }
 
   import ietf-network-topology {

@@ -43,7 +43,7 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.Syn
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.SynchronizationBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.synchronization.Svec;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.synchronization.SvecBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev190624.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;

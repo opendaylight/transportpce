@@ -10,15 +10,20 @@ module transportpce-common-service-path-types {
   }
   import transportpce-routing-constraints {
     prefix transportpce-routing-constraints;
-    revision-date 2017-10-17;
   }
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
-    revision-date 2017-10-17;
+  }
+  import transportpce-common-types {
+    prefix transportpce-common-types;
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
     revision-date 2019-05-31;
+  }
+  import org-openroadm-otn-common-types {
+    prefix org-openroadm-otn-common-types;
+    revision-date 2018-11-30;
   }
   import org-openroadm-resource-types {
     prefix org-openroadm-resource-types;
@@ -67,6 +72,12 @@ module transportpce-common-service-path-types {
       WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
+
+  revision 2020-01-28 {
+    description
+        "Version 1.7";
+        // General consolidation to handle OTN and ONAP MDONS use case
+  }
 
   revision 2019-10-09 {
     description
@@ -151,13 +162,39 @@ module transportpce-common-service-path-types {
     }
     leaf service-rate {
       when "../service-format!='OMS'"{
-        description "service rate not applicable when service
-        format is roadmline";
+        description "service rate not applicable when service format is roadmline";
       }
       type uint32;
       mandatory true;
       description
-        "Rate of the requested service in GBps";
+            "Rate of the requested service in GBps";
+    }
+    leaf otu-service-rate {
+      when "../service-format='OTU'" {
+        description "service rate not applicable when service format is OTU";
+      }
+      type identityref {
+        base org-openroadm-otn-common-types:otu-rate-identity;
+      }
+      mandatory false;
+      description
+            "OTU Rate of the requested service";
+    }
+    leaf odu-service-rate {
+      when "../service-format='ODU'" {
+        description "service rate not applicable when service format is ODU";
+      }
+      type identityref {
+        base org-openroadm-otn-common-types:odu-rate-identity;
+      }
+      mandatory false;
+      description
+            "OTU Rate of the requested service";
+    }
+    leaf other-service-format-and-rate {
+      type string;
+      description "This value encodes both the service format and the rate supported.
+            This field should not be specified when service format != other.";
     }
     leaf clli {
       type string;
@@ -169,14 +206,26 @@ module transportpce-common-service-path-types {
          type string;
     }
     container tx-direction {
+      leaf logical-connection-point {
+        type string;
+        description "PCE works on topology --> change from port (device) to node-id+logical-connection-point
+                (topology) assuming Portmapping will be used by both the Renderer
+                and the SH to make the conversion from device to topology";
+      }
       uses org-openroadm-common-service-types:service-port;
- //     uses service-lgx;
- //     uses service-tail;
+      //     uses service-lgx;
+      //     uses service-tail;
     }
     container rx-direction {
+      leaf logical-connection-point {
+        type string;
+        description "PCE works on topology --> change from port (device) to node-id+logical-connection-point
+                (topology) assuming Portmapping will be used by both the Renderer
+                and the SH to make the conversion from device to topology";
+      }
       uses org-openroadm-common-service-types:service-port;
- //     uses service-lgx;
- //     uses service-tail;
+      //     uses service-lgx;
+      //     uses service-tail;
     }
   }
 
@@ -193,8 +242,7 @@ module transportpce-common-service-path-types {
     leaf service-path-name {
       type string;
       description
-        "Identifier for the service-path to be calculated by
-         the PCE";
+        "Identifier for the service-path to be calculated by the PCE";
       mandatory true;
     }
     uses service-handler-header;

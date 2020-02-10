@@ -7,7 +7,6 @@ module transportpce-servicehandler {
   }
   import transportpce-routing-constraints {
     prefix transportpce-routing-constraints;
-    revision-date 2017-10-17;
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
@@ -23,7 +22,6 @@ module transportpce-servicehandler {
   }
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
-    revision-date 2017-10-17;
   }
   import org-openroadm-topology {
     prefix org-openroadm-topology;
