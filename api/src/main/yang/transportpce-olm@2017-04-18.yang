@@ -1,18 +1,17 @@
 module transportpce-olm {
   yang-version 1;
   namespace "http://org/opendaylight/transportpce/olm";
-  prefix "org-opendaylight-transportpce-olm";
+  prefix org-opendaylight-transportpce-olm;
 
   import transportpce-common-types {
-      prefix org-transportpce-common-types;
+    prefix org-transportpce-common-types;
   }
-
   import ietf-network-topology {
-     prefix ietf-network-topology;
-     revision-date 2018-02-26;
+    prefix ietf-network-topology;
+    revision-date 2018-02-26;
   }
 
- organization
+  organization
     "transportPCE";
   contact
     "transportPCE committers - ODL";
@@ -22,127 +21,132 @@ module transportpce-olm {
      authors: Dhruv Bhardwaj ( db929a@att.com )
               Shweta Vachhani ( sv111y@att.com )";
 
-  revision "2017-04-18" {
-    description "Initial revision of olm model";
+  revision 2017-04-18 {
+    description
+      "Initial revision of olm model";
   }
 
-  rpc get-pm{
-   description
+  rpc get-pm {
+    description
       "This RPC fetches from the device a list of pm measurements
        on a given resource and granularity.";
-    input{
+    input {
       uses org-transportpce-common-types:olm-get-pm-input;
     }
-    output{
+    output {
       uses org-transportpce-common-types:olm-get-pm-input;
-      leaf resource-id{
+      leaf resource-id {
         type string;
       }
       list measurements {
-          description
-             "Set of parameters related to a PM Measurement";
-      leaf pmparameter-name{
-        type string;
-      }
-      leaf pmparameter-value {
-        type string;
+        description
+          "Set of parameters related to a PM Measurement";
+        leaf pmparameter-name {
+          type string;
+        }
+        leaf pmparameter-value {
+          type string;
         }
       }
     }
   }
-  rpc service-power-setup{
-   description
+
+  rpc service-power-setup {
+    description
       "This RPC sets up output power values on a list of ROADMs/Transponders
          based on the path the wavelength takes";
-    input{
-       uses org-transportpce-common-types:olm-renderer-input;
+    input {
+      uses org-transportpce-common-types:olm-renderer-input;
     }
-    output{
-      leaf result{
+    output {
+      leaf result {
         type string;
       }
     }
   }
-  rpc service-power-turndown{
-   description
+
+  rpc service-power-turndown {
+    description
       "This RPC turn down the output power values on a list of ROADMs/Transponders
          based on the path the wavelength takes";
-    input{
-       uses org-transportpce-common-types:olm-renderer-input;
+    input {
+      uses org-transportpce-common-types:olm-renderer-input;
     }
-    output{
-      leaf result{
+    output {
+      leaf result {
         type string;
       }
     }
   }
-  rpc service-power-reset{
-      description
-         "This RPC re-calculates and re-sets power for all nodes part of a
-              service given in input";
-       input{
-         leaf service-name{
-              type string;
-              description
-               "Name of the service. Unique identifier for serivice";
-         }
-       }
-       output{
-         leaf result{
-           type string;
-         }
-       }
+
+  rpc service-power-reset {
+    description
+      "This RPC re-calculates and re-sets power for all nodes part of a
+           service given in input";
+    input {
+      leaf service-name {
+        type string;
+        description
+          "Name of the service. Unique identifier for serivice";
+      }
+    }
+    output {
+      leaf result {
+        type string;
+      }
+    }
   }
-  rpc calculate-spanloss-base{
-      description
-         "This RPC calculates spanloss for the very first time on all links
-            in the network model or any newly discovered link";
-       input{
-         leaf src-type {
-           description
-             "Soruce type defines whether RPC runs for all links or given link Id";
-          type enumeration{
-             enum "link"{
-               value 1;
-             }
-             enum "all"{
-               value 2;
-             }
-           }
-         }
-         leaf link-id {
-            when "../src-type = 'link'";
-            type ietf-network-topology:link-id;
-            default "all";
-             description
-               "Link-Id for the link where spanloss-base needs to be calculated. Default option is
-               calculating spanloss for all Roadm to Roadm links";
-         }
-       }
-       output{
-         leaf result{
-           type string;
-         }
-         list spans {
-             leaf link-id {
-                 type ietf-network-topology:link-id;
-             }
-             leaf spanloss {
-                 type string;
-             }
-         }
-       }
+
+  rpc calculate-spanloss-base {
+    description
+      "This RPC calculates spanloss for the very first time on all links
+         in the network model or any newly discovered link";
+    input {
+      leaf src-type {
+        type enumeration {
+          enum link {
+            value 1;
+          }
+          enum all {
+            value 2;
+          }
+        }
+        description
+          "Soruce type defines whether RPC runs for all links or given link Id";
+      }
+      leaf link-id {
+        when "../src-type = 'link'";
+        type ietf-network-topology:link-id;
+        default "all";
+        description
+          "Link-Id for the link where spanloss-base needs to be calculated. Default option is
+           calculating spanloss for all Roadm to Roadm links";
+      }
+    }
+    output {
+      leaf result {
+        type string;
+      }
+      list spans {
+        leaf link-id {
+          type ietf-network-topology:link-id;
+        }
+        leaf spanloss {
+          type string;
+        }
+      }
+    }
   }
-  rpc calculate-spanloss-current{
-      description
-         "This RPC can be used by PM monitoring to calculate spanloss
-            periodically";
-       input{
-       }
-       output{
-         leaf result{
-           type string;
-         }
-       }
+
+  rpc calculate-spanloss-current {
+    description
+      "This RPC can be used by PM monitoring to calculate spanloss
+         periodically";
+    input;
+    output {
+      leaf result {
+        type string;
+      }
+    }
   }
 }

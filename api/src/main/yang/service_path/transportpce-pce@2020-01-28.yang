@@ -1,6 +1,6 @@
 module transportpce-pce {
-    namespace "http://org/opendaylight/transportpce/pce";
-    prefix "org-opendaylight-transportpce-pce";
+  namespace "http://org/opendaylight/transportpce/pce";
+  prefix org-opendaylight-transportpce-pce;
 
   import ietf-yang-types {
     prefix yang;
@@ -18,7 +18,7 @@ module transportpce-pce {
     prefix transportpce-pathDescription;
   }
   import gnpy-path-computation-simplified {
-    prefix "gnpypc";
+    prefix gnpypc;
   }
 
   organization
@@ -60,38 +60,103 @@ module transportpce-pce {
     description
       "Version 1.7";
   }
-
   revision 2019-06-24 {
     description
       "Version 1.6.1";
   }
-
   revision 2017-10-17 {
     description
       "Version 1.6";
   }
-
   revision 2017-04-26 {
     description
       "Version 1.5";
+  }
+
+  grouping stubpce-path-description {
+    leaf path-name {
+      type string;
+      mandatory true;
+      description
+        "Identifier for the pathDescription to be created in the ROADM
+         network, e.g., CLFI, CLCI, etc.";
+    }
+    uses transportpce-pathDescription:path-description;
+  }
+
+  grouping gnpy {
+    list gnpy-response {
+      key "path-dir";
+      config false;
+      description
+        "GNPy response";
+      leaf path-dir {
+        type string;
+        description
+          "A-to-Z or Z-to-A";
+      }
+      leaf feasibility {
+        type boolean;
+        description
+          "true : feasible path / False : non-feasible.";
+      }
+      choice response-type {
+        config false;
+        description
+          "response-type";
+        case no-path-case {
+          uses gnpypc:no-path-info;
+        }
+        case path-case {
+          description
+            "Path computation service.";
+          uses path-performance;
+        }
+      }
+    }
+  }
+
+  grouping path-performance {
+    description
+      "TE generic path properties grouping";
+    container path-properties {
+      config false;
+      description
+        "The TE path properties";
+      list path-metric {
+        key "metric-type";
+        description
+          "TE path metric type";
+        leaf metric-type {
+          type identityref {
+            base gnpypc:path-metric-type;
+          }
+        }
+        leaf accumulative-value {
+          type decimal64 {
+            fraction-digits 2;
+          }
+        }
+      }
+    }
   }
 
   rpc path-computation-request {
     input {
       leaf service-name {
         type string;
+        mandatory true;
         description
           "Identifier for the service to be created in the ROADM network,
            e.g., CLFI, CLCI, etc. This is reported against the service, but
            may not get reflected in the service in the network.";
-        mandatory true;
       }
       leaf resource-reserve {
         type boolean;
-        description
-                "indicates if resources (from local PCE topology) must be reserved
-                until further notice (cancel-resource-reserve or topology update)";
         mandatory true;
+        description
+          "indicates if resources (from local PCE topology) must be reserved
+           until further notice (cancel-resource-reserve or topology update)";
       }
       uses transportpce-common-service-path-types:service-handler-header;
       container service-a-end {
@@ -125,7 +190,7 @@ module transportpce-pce {
 
   notification service-path-rpc-result {
     description
-        "This Notification indicates result of  service RPC";
+      "This Notification indicates result of  service RPC";
     leaf notification-type {
       type transportpce-common-service-path-types:service-path-notification-types;
     }
@@ -137,74 +202,13 @@ module transportpce-pce {
     uses org-openroadm-common-service-types:routing-metric;
   }
 
-  grouping stubpce-path-description {
-    leaf path-name {
-      type string;
-      description
-            "Identifier for the pathDescription to be created in the ROADM
-            network, e.g., CLFI, CLCI, etc.";
-      mandatory true;
-    }
-    uses transportpce-pathDescription:path-description;
-  }
-
   container path-description-list {
     description
-        "List of pathDescription. Can only be created, deleted, modified,
-        etc. using special RPCs.";
+      "List of pathDescription. Can only be created, deleted, modified,
+       etc. using special RPCs.";
     list pathDescriptions {
       key "path-name";
       uses stubpce-path-description;
-    }
-  }
-
-  grouping gnpy {
-    list gnpy-response {
-      key path-dir;
-      config false;
-      description "GNPy response";
-      leaf path-dir {
-        type string;
-        description "A-to-Z or Z-to-A";
-      }
-      leaf feasibility {
-        type boolean;
-        description
-                "true : feasible path / False : non-feasible.";
-      }
-      choice response-type {
-        config false;
-        description "response-type";
-        case no-path-case {
-          uses gnpypc:no-path-info;
-        }
-        case path-case {
-          uses path-performance;
-          description "Path computation service.";
-        }
-      }
-    }
-  }
-
-  grouping path-performance {
-    description "TE generic path properties grouping";
-    container path-properties {
-      config false;
-      description "The TE path properties";
-      list path-metric {
-        key metric-type;
-        description "TE path metric type";
-        leaf metric-type {
-          type identityref {
-            base gnpypc:path-metric-type;
-          }
-        }
-        leaf accumulative-value {
-          type decimal64 {
-            fraction-digits 2;
-          }
-        }
-      }
     }
   }
 }

@@ -37,10 +37,9 @@ module transportpce-routing-constraints {
       POSSIBILITY OF SUCH DAMAGE";
 
   revision 2017-04-26 {
-      description
-        "Version 1.5";
+    description
+      "Version 1.5";
   }
-
   revision 2017-10-17 {
     description
       "Version 1.6";
@@ -58,32 +57,32 @@ module transportpce-routing-constraints {
     }
   }
 
-grouping ordered-constraints-sp {
+  grouping ordered-constraints-sp {
     description
       "";
     container hop-type {
       choice hop-type {
         case SRLG {
           leaf SRLG {
-               type string; //to be clarified with topology model
+            type string;
+            //to be clarified with topology model
           }
         }
-
         case clli {
           leaf clli {
-               type string; //to be clarified with topology model
+            type string;
+            //to be clarified with topology model
           }
         }
-
         case node {
           leaf node-id {
-               type string; // to be clarified with topology model
+            type string;
+            // to be clarified with topology model
           }
         }
       }
     }
   }
-
 
   grouping diversity-existing-service-contraints-sp {
     leaf-list existing-service {
@@ -103,6 +102,7 @@ grouping ordered-constraints-sp {
       }
     }
   }
+
   grouping routing-constraints-sp {
     container hard-constraints {
       uses constraints-sp;
@@ -111,16 +111,17 @@ grouping ordered-constraints-sp {
       uses constraints-sp;
     }
     leaf pce-metric {
-         type enumeration {
-              enum hop-count;
-              enum propagation-delay;
-              enum TE-metric;
-              enum IGP-metric;
-         }
+      type enumeration {
+        enum hop-count;
+        enum propagation-delay;
+        enum TE-metric;
+        enum IGP-metric;
+      }
     }
     leaf locally-protected-links {
-         type boolean;
-         description "indicates whether it must use locally protected links or not";
+      type boolean;
+      description
+        "indicates whether it must use locally protected links or not";
     }
   }
 
@@ -136,25 +137,24 @@ grouping ordered-constraints-sp {
         container exclude_ {
           uses common-constraints-sp;
           leaf-list supporting-service-name {
+            type string;
             description
               "Supporting service(s) to exclude from this route.";
-            type string;
           }
           leaf affinity {
-               type uint32;
+            type uint32;
           }
         }
         container include_ {
           list ordered-hops {
-               key hop-number;
-               leaf hop-number {
-                    description
-                      "designates the id of the hop: node-id, SRLG-id, site-id";
-                    type uint16;
-               }
-               uses ordered-constraints-sp;
+            key "hop-number";
+            leaf hop-number {
+              type uint16;
+              description
+                "designates the id of the hop: node-id, SRLG-id, site-id";
+            }
+            uses ordered-constraints-sp;
           }
-
         }
         container latency {
           description
@@ -176,6 +176,4 @@ grouping ordered-constraints-sp {
       }
     }
   }
-
-
 }

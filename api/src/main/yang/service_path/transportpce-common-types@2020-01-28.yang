@@ -1,619 +1,633 @@
 module transportpce-common-types {
-    namespace "http://org/transportpce/common-types";
-    prefix org-transportpce-common-types;
+  namespace "http://org/transportpce/common-types";
+  prefix org-transportpce-common-types;
 
-    import org-openroadm-resource-types {
-        prefix org-openroadm-resource-types;
-        revision-date 2016-10-14;
-    }
-    import org-openroadm-pm-types {
-        prefix org-openroadm-pm-types;
-        revision-date 2016-10-14;
-    }
-    import org-openroadm-otn-common-types {
-        prefix org-openroadm-otn-common-types;
-        revision-date 2018-11-30;
-    }
+  import org-openroadm-resource-types {
+    prefix org-openroadm-resource-types;
+    revision-date 2016-10-14;
+  }
+  import org-openroadm-pm-types {
+    prefix org-openroadm-pm-types;
+    revision-date 2016-10-14;
+  }
+  import org-openroadm-otn-common-types {
+    prefix org-openroadm-otn-common-types;
+    revision-date 2018-11-30;
+  }
 
-    revision "2020-01-28" {
-        description "Add necessary parameters to consolidate OTN and address ONAP
-            MDONS use case, including grouping otn-renderer-input";
-    }
-    revision "2019-12-12" {
-        description "Add grouping otn-renderer-input";
-    }
+  revision 2020-01-28 {
+    description
+      "Add necessary parameters to consolidate OTN and address ONAP
+       MDONS use case, including grouping otn-renderer-input";
+  }
+  revision 2019-12-12 {
+    description
+      "Add grouping otn-renderer-input";
+  }
+  revision 2017-09-07 {
+    description
+      "Initial revision of TransportPCE common-types";
+  }
 
-    revision "2017-09-07" {
-        description "Initial revision of TransportPCE common-types";
-    }
-
-    grouping olm-renderer-input {
-      leaf service-name {
-          type string;
+  typedef pm-names-enum {
+    type enumeration {
+      enum vendorExtension {
+        value 1;
+        description
+          "vendor extension";
       }
-      leaf wave-number {
-          type uint32;
+      enum bitErrorRate {
+        value 2;
+        description
+          "Bit error rate (BER)";
       }
-      list nodes {
-          ordered-by user;
-          key "node-id";
-          leaf node-id {
-              type string;
-              description "Gloabally unique identifier for the node";
-          }
-          leaf src-tp {
-              type string;
-              description "Source termination point ";
-              mandatory true;
-          }
-          leaf dest-tp {
-              type string;
-              description "Destination termination point ";
-              mandatory true;
-          }
+      enum opticalPowerOutput {
+        value 3;
+        description
+          "Optical Power Output (OPOUT-OTS, OPOUT-OMS, OPT-OCH). Total optical power includes Variable Optical Attenuator (VOA) attenuation";
       }
-      description
-          "Type to be used by OLM and Renderer RPCs";
-      list node-interface {
-        key node-id;
-        leaf node-id {
-          type string;
-        }
-        leaf-list och-interface-id {
-          type string;
-        }
-        leaf-list otu-interface-id {
-          type string;
-        }
-        leaf-list odu-interface-id {
-          type string;
-        }
-        leaf-list eth-interface-id {
-          type string;
-        }
-        leaf-list connection-id {
-          type string;
-        }
+      enum opticalReturnLoss {
+        value 4;
+        description
+          "Optical Return Loss (ORL-OTS) - at MW port(s) B";
       }
-
+      enum opticalPowerInput {
+        value 5;
+        description
+          "Optical Power Input (OPIN-OTS, OPIN-OMS, OPR-OCH). Total optical power";
+      }
+      enum codeViolations {
+        value 8;
+        description
+          "Code Violations (CV)";
+      }
+      enum erroredSeconds {
+        value 9;
+        description
+          "Errored Seconds (ES)";
+      }
+      enum severelyErroredSeconds {
+        value 10;
+        description
+          "Severely Errored Seconds (SES)";
+      }
+      enum unavailableSeconds {
+        value 11;
+        description
+          "Unavailable Seconds (UAS)";
+      }
+      enum inFrames {
+        value 12;
+        description
+          "In frames (INFRAMES-E)";
+      }
+      enum inFramesErrored {
+        value 13;
+        description
+          "In frames errored (INFRAMESERR-E)";
+      }
+      enum outFrames {
+        value 14;
+        description
+          "Out frames (OUTFRAMES-E)";
+      }
+      enum erroredSecondsEthernet {
+        value 15;
+        description
+          "Errored Seconds Ethernet (ES-E)";
+      }
+      enum severelyErroredSecondsEthernet {
+        value 16;
+        description
+          "Severly Errored Seconds, Ethernet (SES-E)";
+      }
+      enum unavailableSecondsEthernet {
+        value 17;
+        description
+          "Unavailable Seconds, Ethernet (UAS-E)";
+      }
+      enum erroredBlockCount {
+        value 18;
+        description
+          "Errored block count";
+      }
+      enum delay {
+        value 19;
+        description
+          "Number of frames between a DMValue toggle event and the received DMp signal value toggle event";
+      }
+      enum defectSeconds {
+        value 20;
+        description
+          "Defect Seconds (DS)";
+      }
+      enum backwardIncomingAlignmentError {
+        value 21;
+        description
+          "Backward Incoming Alignment Error (BIAE)";
+      }
+      enum incomingAlignmentError {
+        value 22;
+        description
+          "Incoming Alignment Error (IAE)";
+      }
+      enum opticalPowerOutputMin {
+        value 23;
+        description
+          "Minimum Optical Power Output (OPOUT-OTS). Total optical power includes Variable Optical Attenuator (VOA) attenuation";
+      }
+      enum opticalPowerOutputMax {
+        value 24;
+        description
+          "Maximum Optical Power Output (OPOUT-OTS). Total optical power includes Variable Optical Attenuator (VOA) attenuation";
+      }
+      enum opticalPowerOutputAvg {
+        value 25;
+        description
+          "Average Optical Power Output (OPOUT-OTS). Total optical power includes Variable Optical Attenuator (VOA) attenuation";
+      }
+      enum opticalPowerInputMin {
+        value 26;
+        description
+          "Minimum Optical Power Input (OPIN-OTS). Total optical power";
+      }
+      enum opticalPowerInputMax {
+        value 27;
+        description
+          "Maximum Optical Power Input (OPIN-OTS). Total optical power";
+      }
+      enum opticalPowerInputAvg {
+        value 28;
+        description
+          "Average Optical Power Input (OPIN-OTS). Total optical power";
+      }
+      enum opticalPowerOutputOSC {
+        value 29;
+        description
+          "OSC Optical Power Output (OPT-OSC). OSC Transmit power on MW port";
+      }
+      enum opticalPowerOutputOSCMin {
+        value 30;
+        description
+          "Minimum OSC Optical Power Output (OPT-OSC). OSC Transmit power on MW port";
+      }
+      enum opticalPowerOutputOSCMax {
+        value 31;
+        description
+          "Maximum OSC Optical Power Output (OPT-OSC). OSC Transmit power on MW port";
+      }
+      enum opticalPowerOutputOSCAvg {
+        value 32;
+        description
+          "Average OSC Optical Power Output (OPT-OSC). OSC Transmit power on MW port";
+      }
+      enum opticalPowerInputOSC {
+        value 33;
+        description
+          "OSC Optical Power Input (OPR-OSC). OSC Receive power on MW port";
+      }
+      enum opticalPowerInputOSCMin {
+        value 34;
+        description
+          "Minimum OSC Optical Power Input (OPR-OSC). OSC Receive power on MW port";
+      }
+      enum opticalPowerInputOSCMax {
+        value 35;
+        description
+          "Maximum OSC Optical Power Input (OPR-OSC). OSC Receive power on MW port";
+      }
+      enum opticalPowerInputOSCAvg {
+        value 36;
+        description
+          "Average OSC Optical Power Input (OPR-OSC). OSC Receive power on MW port";
+      }
+      enum preFECCorrectedErrors {
+        value 37;
+        description
+          "pFEC corrected Errors";
+      }
+      enum totalOpticalPowerInput {
+        value 38;
+        description
+          "Total Optical Power Input.";
+      }
+      enum totalOpticalPowerInputMin {
+        value 39;
+        description
+          "Minumun Total Optical Power Input.";
+      }
+      enum totalOpticalPowerInputMax {
+        value 40;
+        description
+          "Maximum Total Optical Power Input.";
+      }
+      enum totalOpticalPowerInputAvg {
+        value 41;
+        description
+          "Average Total Optical Power Input.";
+      }
+      enum FECCorrectableBlocks {
+        value 42;
+        description
+          "FEC Correctable Blocks.";
+      }
+      enum FECUncorrectableBlocks {
+        value 43;
+        description
+          "FEC Uncorrectable Blocks.";
+      }
+      enum BIPErrorCounter {
+        value 56;
+        description
+          "BIP Error Counter";
+      }
+      enum protectionSwitchingCount {
+        value 57;
+        description
+          "Protection Switching Count (PSC)";
+      }
+      enum protectionSwitchingDuration {
+        value 58;
+        description
+          "Protection Switching Duration in seconds (PSD)";
+      }
+      enum erroredBlockCountTCM1-up {
+        value 59;
+        description
+          "errored Blocks Count on TCM1 up direction.";
+      }
+      enum erroredBlockCountTCM2-up {
+        value 60;
+        description
+          "errored Blocks Count on TCM2 up direction.";
+      }
+      enum erroredBlockCountTCM3-up {
+        value 61;
+        description
+          "errored Blocks Count on TCM3 up direction.";
+      }
+      enum erroredBlockCountTCM4-up {
+        value 62;
+        description
+          "errored Blocks Count on TCM4 up direction.";
+      }
+      enum erroredBlockCountTCM5-up {
+        value 63;
+        description
+          "errored Blocks Count on TCM5 up direction.";
+      }
+      enum erroredBlockCountTCM6-up {
+        value 64;
+        description
+          "errored Blocks Count on TCM6 up direction.";
+      }
+      enum delayTCM1-up {
+        value 65;
+        description
+          "Delay on TCM1 up direction.";
+      }
+      enum delayTCM2-up {
+        value 66;
+        description
+          "Delay on TCM2 up direction.";
+      }
+      enum delayTCM3-up {
+        value 67;
+        description
+          "Delay on TCM3 up direction.";
+      }
+      enum delayTCM4-up {
+        value 68;
+        description
+          "Delay on TCM4 up direction.";
+      }
+      enum delayTCM5-up {
+        value 69;
+        description
+          "Delay on TCM5 up direction.";
+      }
+      enum delayTCM6-up {
+        value 70;
+        description
+          "Delay on TCM6 up direction.";
+      }
+      enum erroredBlockCountTCM1-down {
+        value 71;
+        description
+          "errored Blocks Count on TCM1 down direction.";
+      }
+      enum erroredBlockCountTCM2-down {
+        value 72;
+        description
+          "errored Blocks Count on TCM2 down direction.";
+      }
+      enum erroredBlockCountTCM3-down {
+        value 73;
+        description
+          "errored Blocks Count on TCM3 down direction.";
+      }
+      enum erroredBlockCountTCM4-down {
+        value 74;
+        description
+          "errored Blocks Count on TCM4 down direction.";
+      }
+      enum erroredBlockCountTCM5-down {
+        value 75;
+        description
+          "errored Blocks Count on TCM5 down direction.";
+      }
+      enum erroredBlockCountTCM6-down {
+        value 76;
+        description
+          "errored Blocks Count on TCM6 down direction.";
+      }
+      enum delayTCM1-down {
+        value 77;
+        description
+          "Delay on TCM1 down direction.";
+      }
+      enum delayTCM2-down {
+        value 78;
+        description
+          "Delay on TCM2 down direction.";
+      }
+      enum delayTCM3-down {
+        value 79;
+        description
+          "Delay on TCM3 down direction.";
+      }
+      enum delayTCM4-down {
+        value 80;
+        description
+          "Delay on TCM4 down direction.";
+      }
+      enum delayTCM5-down {
+        value 81;
+        description
+          "Delay on TCM5 down direction.";
+      }
+      enum delayTCM6-down {
+        value 82;
+        description
+          "Delay on TCM6 down direction.";
+      }
     }
+  }
 
-    grouping otn-renderer-input {
-      leaf service-name {
-          type string;
+  typedef location {
+    type enumeration {
+      enum notApplicable {
+        value 1;
       }
-      list nodes {
-        ordered-by user;
-        key "node-id";
-        leaf node-id {
-            type string;
-            description "Globally unique identifier for the node";
-        }
-        leaf network-tp {
-            type string;
-            description "Source termination point ";
-        }
-        leaf client-tp {
-          type string;
-          description "Destination termination point for end nodes";
-          //mandatory true;
-        }
-        leaf network2-tp {
-          type string;
-          description "Destination termination point for intermediate switch";
-        }
+      enum nearEnd {
+        value 2;
       }
-      description "Type to be used by OLM and Renderer RPCs for OTN";
-     }
+      enum farEnd {
+        value 3;
+      }
+    }
+  }
 
-    grouping olm-get-pm-input {
+  typedef direction {
+    type enumeration {
+      enum tx {
+        value 1;
+      }
+      enum rx {
+        value 2;
+      }
+      enum bidirectional {
+        value 3;
+      }
+      enum notApplicable {
+        value 4;
+      }
+    }
+  }
+
+  grouping olm-renderer-input {
+    description
+      "Type to be used by OLM and Renderer RPCs";
+    leaf service-name {
+      type string;
+    }
+    leaf wave-number {
+      type uint32;
+    }
+    list nodes {
+      key "node-id";
+      ordered-by user;
       leaf node-id {
-          type string;
-          description "Gloabally unique identifier
-              for the node";
-          mandatory true;
-      }
-      leaf resource-type {
-          type org-openroadm-resource-types:resource-type-enum;
-          description "Type of the PM resource";
-          mandatory true;
-      }
-      container resource-identifier {
-          leaf resource-name {
-              type string;
-              description "Identifier of particular resource of given type";
-              mandatory true;
-          }
-          leaf circuit-pack-name {
-              when "../../resource-type = 'port'";
-              type string;
-              description "In case resource type is port, then particular resource is identified by port-name
-                  (resource-name) and circuit-pack-name (this leaf).";
-              mandatory true;
-
-          }
-      }
-      leaf granularity {
-          type org-openroadm-pm-types:pm-granularity;
-          description "Granularity of PM bin can be
-              notApplicable,15min,24Hour";
-          mandatory true;
-      }
-      leaf pm-name-type {
-          type pm-names-enum;
-      }
-      leaf pm-extension {
-          type string;
-      }
-      leaf location {
-          type location;
-      }
-      leaf direction {
-          type direction;
-      }
-    }
-
-    grouping node-interfaces {
-      list node-interface {
-        key node-id;
-        leaf node-id {
-            type string;
-        }
-        leaf-list och-interface-id {
-            type string;
-        }
-        leaf-list otu-interface-id {
-            type string;
-        }
-        leaf-list odu-interface-id {
-            type string;
-        }
-        leaf-list eth-interface-id {
-            type string;
-        }
-        leaf-list connection-id {
-          type string;
-        }
-      }
-    }
-
-    grouping otn-constraint {
-      container otn-constraints {
-        leaf trib-port-number {
-          type uint16;
-          description
-                  "defines a trib-port that must be used at A or Z end";
-        }
-        leaf-list opu-trib-slots {
-          type uint16;
-          description
-                  "defines a list of trib-slots that must be used at A or Z end";
-        }
-        leaf-list opucn-trib-slots {
-          type string;
-          description
-                  "defines a list of opucn-trib-slots that must be used at A or
-                  Z end";
-        }
-        container imposed-api {
-          description "defines constraints on access point identifier to be used by
-                  local device when one end point of the path (service) is located
-                  in a remote domain not handled by the controller. These parameters
-                  are passed to the local controller (transportpce) for interoperability
-                  purposes.
-                  SAPI : The source api (local domain) to be used by A
-                  or Z end as expected by remote controller.
-                  DAPI: defines the destination api (remote domain) to be used by A
-                  or Z end as exposed in the remote domain. Used when the end of the path
-                  is in an external domain, handled by a remote controller.
-                  EXPECTED-SAPI : The api of the remote end of the path (in an external
-                  domain) as expected to be received by A or Z end.
-                  EXPECTED-DAPI : defines the destination api to be used by remote end
-                  as exposed in the local domain. Used when the end of the path is in an
-                  external domain, handled by a remote controller";
-          uses api-info;
-        }
-      }
-    }
-
-    grouping api-info {
-      leaf sapi {
         type string;
         description
-          "The source api used by the node";
+          "Gloabally unique identifier for the node";
       }
-      leaf dapi {
+      leaf src-tp {
         type string;
+        mandatory true;
         description
-          "the destination api of the other end of the path";
+          "Source termination point ";
       }
-      leaf expected-sapi {
+      leaf dest-tp {
         type string;
+        mandatory true;
         description
-              "The api of the remote end of the path as expected to be received
-              by the node";
-      }
-      leaf expected-dapi {
-        type string;
-        description
-              "api of the node itself, supposed to be used by remote end as
-              the destination";
+          "Destination termination point ";
       }
     }
-
-       typedef pm-names-enum {
-           type enumeration {
-             enum "vendorExtension" {
-               value 1;
-               description
-                 "vendor extension";
-             }
-             enum "bitErrorRate" {
-               value 2;
-               description
-                 "Bit error rate (BER)";
-             }
-             enum "opticalPowerOutput" {
-               value 3;
-               description
-                 "Optical Power Output (OPOUT-OTS, OPOUT-OMS, OPT-OCH). Total optical power includes Variable Optical Attenuator (VOA) attenuation";
-             }
-             enum "opticalReturnLoss" {
-               value 4;
-               description
-                 "Optical Return Loss (ORL-OTS) - at MW port(s) B";
-             }
-             enum "opticalPowerInput" {
-               value 5;
-               description
-                 "Optical Power Input (OPIN-OTS, OPIN-OMS, OPR-OCH). Total optical power";
-             }
-             enum "codeViolations" {
-               value 8;
-               description
-                 "Code Violations (CV)";
-             }
-             enum "erroredSeconds" {
-               value 9;
-               description
-                 "Errored Seconds (ES)";
-             }
-             enum "severelyErroredSeconds" {
-               value 10;
-               description
-                 "Severely Errored Seconds (SES)";
-             }
-             enum "unavailableSeconds" {
-               value 11;
-               description
-                 "Unavailable Seconds (UAS)";
-             }
-             enum "inFrames" {
-               value 12;
-               description
-                 "In frames (INFRAMES-E)";
-             }
-             enum "inFramesErrored" {
-               value 13;
-               description
-                 "In frames errored (INFRAMESERR-E)";
-             }
-             enum "outFrames" {
-               value 14;
-               description
-                 "Out frames (OUTFRAMES-E)";
-             }
-             enum "erroredSecondsEthernet" {
-               value 15;
-               description
-                 "Errored Seconds Ethernet (ES-E)";
-             }
-             enum "severelyErroredSecondsEthernet" {
-               value 16;
-               description
-                 "Severly Errored Seconds, Ethernet (SES-E)";
-             }
-             enum "unavailableSecondsEthernet" {
-               value 17;
-               description
-                 "Unavailable Seconds, Ethernet (UAS-E)";
-             }
-             enum "erroredBlockCount" {
-               value 18;
-               description
-                 "Errored block count";
-             }
-             enum "delay" {
-               value 19;
-               description
-                 "Number of frames between a DMValue toggle event and the received DMp signal value toggle event";
-             }
-             enum "defectSeconds" {
-               value 20;
-               description
-                 "Defect Seconds (DS)";
-             }
-             enum "backwardIncomingAlignmentError" {
-               value 21;
-               description
-                 "Backward Incoming Alignment Error (BIAE)";
-             }
-             enum "incomingAlignmentError" {
-               value 22;
-               description
-                 "Incoming Alignment Error (IAE)";
-             }
-             enum "opticalPowerOutputMin" {
-               value 23;
-               description
-                 "Minimum Optical Power Output (OPOUT-OTS). Total optical power includes Variable Optical Attenuator (VOA) attenuation";
-             }
-             enum "opticalPowerOutputMax" {
-               value 24;
-               description
-                 "Maximum Optical Power Output (OPOUT-OTS). Total optical power includes Variable Optical Attenuator (VOA) attenuation";
-             }
-             enum "opticalPowerOutputAvg" {
-               value 25;
-               description
-                 "Average Optical Power Output (OPOUT-OTS). Total optical power includes Variable Optical Attenuator (VOA) attenuation";
-             }
-             enum "opticalPowerInputMin" {
-               value 26;
-               description
-                 "Minimum Optical Power Input (OPIN-OTS). Total optical power";
-             }
-             enum "opticalPowerInputMax" {
-               value 27;
-               description
-                 "Maximum Optical Power Input (OPIN-OTS). Total optical power";
-             }
-             enum "opticalPowerInputAvg" {
-               value 28;
-               description
-                 "Average Optical Power Input (OPIN-OTS). Total optical power";
-             }
-             enum "opticalPowerOutputOSC" {
-               value 29;
-               description
-                 "OSC Optical Power Output (OPT-OSC). OSC Transmit power on MW port";
-             }
-             enum "opticalPowerOutputOSCMin" {
-               value 30;
-               description
-                 "Minimum OSC Optical Power Output (OPT-OSC). OSC Transmit power on MW port";
-             }
-             enum "opticalPowerOutputOSCMax" {
-               value 31;
-               description
-                 "Maximum OSC Optical Power Output (OPT-OSC). OSC Transmit power on MW port";
-             }
-             enum "opticalPowerOutputOSCAvg" {
-               value 32;
-               description
-                 "Average OSC Optical Power Output (OPT-OSC). OSC Transmit power on MW port";
-             }
-             enum "opticalPowerInputOSC" {
-               value 33;
-               description
-                 "OSC Optical Power Input (OPR-OSC). OSC Receive power on MW port";
-             }
-             enum "opticalPowerInputOSCMin" {
-               value 34;
-               description
-                 "Minimum OSC Optical Power Input (OPR-OSC). OSC Receive power on MW port";
-             }
-             enum "opticalPowerInputOSCMax" {
-               value 35;
-               description
-                 "Maximum OSC Optical Power Input (OPR-OSC). OSC Receive power on MW port";
-             }
-             enum "opticalPowerInputOSCAvg" {
-               value 36;
-               description
-                 "Average OSC Optical Power Input (OPR-OSC). OSC Receive power on MW port";
-             }
-             enum "preFECCorrectedErrors" {
-               value 37;
-               description
-                 "pFEC corrected Errors";
-             }
-             enum "totalOpticalPowerInput" {
-               value 38;
-               description
-                 "Total Optical Power Input.";
-             }
-             enum "totalOpticalPowerInputMin" {
-               value 39;
-               description
-                 "Minumun Total Optical Power Input.";
-             }
-             enum "totalOpticalPowerInputMax" {
-               value 40;
-               description
-                 "Maximum Total Optical Power Input.";
-             }
-             enum "totalOpticalPowerInputAvg" {
-               value 41;
-               description
-                 "Average Total Optical Power Input.";
-             }
-             enum "FECCorrectableBlocks" {
-               value 42;
-               description
-                 "FEC Correctable Blocks.";
-             }
-             enum "FECUncorrectableBlocks" {
-               value 43;
-               description
-                 "FEC Uncorrectable Blocks.";
-             }
-             enum "BIPErrorCounter" {
-               value 56;
-               description
-                 "BIP Error Counter";
-             }
-             enum "protectionSwitchingCount" {
-               value 57;
-               description
-                 "Protection Switching Count (PSC)";
-             }
-             enum "protectionSwitchingDuration" {
-               value 58;
-               description
-                 "Protection Switching Duration in seconds (PSD)";
-             }
-             enum "erroredBlockCountTCM1-up" {
-               value 59;
-               description
-                 "errored Blocks Count on TCM1 up direction.";
-             }
-             enum "erroredBlockCountTCM2-up" {
-               value 60;
-               description
-                 "errored Blocks Count on TCM2 up direction.";
-             }
-             enum "erroredBlockCountTCM3-up" {
-               value 61;
-               description
-                 "errored Blocks Count on TCM3 up direction.";
-             }
-             enum "erroredBlockCountTCM4-up" {
-               value 62;
-               description
-                 "errored Blocks Count on TCM4 up direction.";
-             }
-             enum "erroredBlockCountTCM5-up" {
-               value 63;
-               description
-                 "errored Blocks Count on TCM5 up direction.";
-             }
-             enum "erroredBlockCountTCM6-up" {
-               value 64;
-               description
-                 "errored Blocks Count on TCM6 up direction.";
-             }
-             enum "delayTCM1-up" {
-               value 65;
-               description
-                 "Delay on TCM1 up direction.";
-             }
-             enum "delayTCM2-up" {
-               value 66;
-               description
-                 "Delay on TCM2 up direction.";
-             }
-             enum "delayTCM3-up" {
-               value 67;
-               description
-                 "Delay on TCM3 up direction.";
-             }
-             enum "delayTCM4-up" {
-               value 68;
-               description
-                 "Delay on TCM4 up direction.";
-             }
-             enum "delayTCM5-up" {
-               value 69;
-               description
-                 "Delay on TCM5 up direction.";
-             }
-             enum "delayTCM6-up" {
-               value 70;
-               description
-                 "Delay on TCM6 up direction.";
-             }
-             enum "erroredBlockCountTCM1-down" {
-               value 71;
-               description
-                 "errored Blocks Count on TCM1 down direction.";
-             }
-             enum "erroredBlockCountTCM2-down" {
-               value 72;
-               description
-                 "errored Blocks Count on TCM2 down direction.";
-             }
-             enum "erroredBlockCountTCM3-down" {
-               value 73;
-               description
-                 "errored Blocks Count on TCM3 down direction.";
-             }
-             enum "erroredBlockCountTCM4-down" {
-               value 74;
-               description
-                 "errored Blocks Count on TCM4 down direction.";
-             }
-             enum "erroredBlockCountTCM5-down" {
-               value 75;
-               description
-                 "errored Blocks Count on TCM5 down direction.";
-             }
-             enum "erroredBlockCountTCM6-down" {
-               value 76;
-               description
-                 "errored Blocks Count on TCM6 down direction.";
-             }
-             enum "delayTCM1-down" {
-               value 77;
-               description
-                 "Delay on TCM1 down direction.";
-             }
-             enum "delayTCM2-down" {
-               value 78;
-               description
-                 "Delay on TCM2 down direction.";
-             }
-             enum "delayTCM3-down" {
-               value 79;
-               description
-                 "Delay on TCM3 down direction.";
-             }
-             enum "delayTCM4-down" {
-               value 80;
-               description
-                 "Delay on TCM4 down direction.";
-             }
-             enum "delayTCM5-down" {
-               value 81;
-               description
-                 "Delay on TCM5 down direction.";
-             }
-             enum "delayTCM6-down" {
-               value 82;
-               description
-                 "Delay on TCM6 down direction.";
-             }
-           }
-         }
-
-      typedef location {
-        type enumeration {
-          enum "notApplicable" {
-            value 1;
-          }
-          enum "nearEnd" {
-            value 2;
-          }
-          enum "farEnd" {
-            value 3;
-          }
-        }
+    list node-interface {
+      key "node-id";
+      leaf node-id {
+        type string;
       }
-      typedef direction {
-        type enumeration {
-          enum "tx" {
-            value 1;
-          }
-          enum "rx" {
-            value 2;
-          }
-          enum "bidirectional" {
-            value 3;
-          }
-          enum "notApplicable" {
-            value 4;
-          }
-        }
+      leaf-list och-interface-id {
+        type string;
       }
+      leaf-list otu-interface-id {
+        type string;
+      }
+      leaf-list odu-interface-id {
+        type string;
+      }
+      leaf-list eth-interface-id {
+        type string;
+      }
+      leaf-list connection-id {
+        type string;
+      }
+    }
+  }
 
+  grouping otn-renderer-input {
+    description
+      "Type to be used by OLM and Renderer RPCs for OTN";
+    leaf service-name {
+      type string;
+    }
+    list nodes {
+      key "node-id";
+      ordered-by user;
+      leaf node-id {
+        type string;
+        description
+          "Globally unique identifier for the node";
+      }
+      leaf network-tp {
+        type string;
+        description
+          "Source termination point ";
+      }
+      leaf client-tp {
+        type string;
+        description
+          "Destination termination point for end nodes";
+        //mandatory true;
+      }
+      leaf network2-tp {
+        type string;
+        description
+          "Destination termination point for intermediate switch";
+      }
+    }
+  }
+
+  grouping olm-get-pm-input {
+    leaf node-id {
+      type string;
+      mandatory true;
+      description
+        "Gloabally unique identifier
+         for the node";
+    }
+    leaf resource-type {
+      type org-openroadm-resource-types:resource-type-enum;
+      mandatory true;
+      description
+        "Type of the PM resource";
+    }
+    container resource-identifier {
+      leaf resource-name {
+        type string;
+        mandatory true;
+        description
+          "Identifier of particular resource of given type";
+      }
+      leaf circuit-pack-name {
+        when "../../resource-type = 'port'";
+        type string;
+        mandatory true;
+        description
+          "In case resource type is port, then particular resource is identified by port-name
+           (resource-name) and circuit-pack-name (this leaf).";
+      }
+    }
+    leaf granularity {
+      type org-openroadm-pm-types:pm-granularity;
+      mandatory true;
+      description
+        "Granularity of PM bin can be
+         notApplicable,15min,24Hour";
+    }
+    leaf pm-name-type {
+      type pm-names-enum;
+    }
+    leaf pm-extension {
+      type string;
+    }
+    leaf location {
+      type location;
+    }
+    leaf direction {
+      type direction;
+    }
+  }
+
+  grouping node-interfaces {
+    list node-interface {
+      key "node-id";
+      leaf node-id {
+        type string;
+      }
+      leaf-list och-interface-id {
+        type string;
+      }
+      leaf-list otu-interface-id {
+        type string;
+      }
+      leaf-list odu-interface-id {
+        type string;
+      }
+      leaf-list eth-interface-id {
+        type string;
+      }
+      leaf-list connection-id {
+        type string;
+      }
+    }
+  }
+
+  grouping otn-constraint {
+    container otn-constraints {
+      leaf trib-port-number {
+        type uint16;
+        description
+          "defines a trib-port that must be used at A or Z end";
+      }
+      leaf-list opu-trib-slots {
+        type uint16;
+        description
+          "defines a list of trib-slots that must be used at A or Z end";
+      }
+      leaf-list opucn-trib-slots {
+        type string;
+        description
+          "defines a list of opucn-trib-slots that must be used at A or
+           Z end";
+      }
+      container imposed-api {
+        description
+          "defines constraints on access point identifier to be used by
+           local device when one end point of the path (service) is located
+           in a remote domain not handled by the controller. These parameters
+           are passed to the local controller (transportpce) for interoperability
+           purposes.
+           SAPI : The source api (local domain) to be used by A
+           or Z end as expected by remote controller.
+           DAPI: defines the destination api (remote domain) to be used by A
+           or Z end as exposed in the remote domain. Used when the end of the path
+           is in an external domain, handled by a remote controller.
+           EXPECTED-SAPI : The api of the remote end of the path (in an external
+           domain) as expected to be received by A or Z end.
+           EXPECTED-DAPI : defines the destination api to be used by remote end
+           as exposed in the local domain. Used when the end of the path is in an
+           external domain, handled by a remote controller";
+        uses api-info;
+      }
+    }
+  }
+
+  grouping api-info {
+    leaf sapi {
+      type string;
+      description
+        "The source api used by the node";
+    }
+    leaf dapi {
+      type string;
+      description
+        "the destination api of the other end of the path";
+    }
+    leaf expected-sapi {
+      type string;
+      description
+        "The api of the remote end of the path as expected to be received
+         by the node";
+    }
+    leaf expected-dapi {
+      type string;
+      description
+        "api of the node itself, supposed to be used by remote end as
+         the destination";
+    }
+  }
 }

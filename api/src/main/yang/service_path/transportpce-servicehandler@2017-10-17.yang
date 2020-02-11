@@ -1,6 +1,6 @@
 module transportpce-servicehandler {
-    namespace "http://org/opendaylight/transportpce/servicehandler";
-    prefix "org-opendaylight-transportpce-servicehandler";
+  namespace "http://org/opendaylight/transportpce/servicehandler";
+  prefix org-opendaylight-transportpce-servicehandler;
 
   import ietf-yang-types {
     prefix yang;
@@ -66,14 +66,12 @@ module transportpce-servicehandler {
     description
       "Version 1.6";
   }
-
   revision 2017-09-30 {
-      description
-        "Version 1.2";
+    description
+      "Version 1.2";
   }
 
-
-  notification service-rpc-result-sh{
+  notification service-rpc-result-sh {
     description
       "This Notification indicates result of service RPC";
     leaf notification-type {
@@ -82,6 +80,4 @@ module transportpce-servicehandler {
     uses transportpce-common-service-path-types:rpc-response-status-ex;
     uses org-openroadm-common-service-types:service-notification-result;
   }
-
-
 }

@@ -1,13 +1,24 @@
 module transportpce-portmapping {
   yang-version 1;
   namespace "http://org/opendaylight/transportpce/portmapping";
-  prefix "org-opendaylight-transportpce-portmapping";
+  prefix org-opendaylight-transportpce-portmapping;
 
-  import org-openroadm-common-types { prefix org-openroadm-common-types; revision-date 2018-10-19; }
-  import org-openroadm-switching-pool-types { prefix org-openroadm-switching-pool-types; revision-date 2017-12-15; }
-  import org-openroadm-port-types {prefix org-openroadm-port-types; revision-date 2018-10-19; }
-
-  import ietf-inet-types { prefix ietf-inet-types; revision-date 2013-07-15; }
+  import org-openroadm-common-types {
+    prefix org-openroadm-common-types;
+    revision-date 2018-10-19;
+  }
+  import org-openroadm-switching-pool-types {
+    prefix org-openroadm-switching-pool-types;
+    revision-date 2017-12-15;
+  }
+  import org-openroadm-port-types {
+    prefix org-openroadm-port-types;
+    revision-date 2018-10-19;
+  }
+  import ietf-inet-types {
+    prefix ietf-inet-types;
+    revision-date 2013-07-15;
+  }
 
   organization
     "transportPCE";
@@ -15,35 +26,35 @@ module transportpce-portmapping {
     "transportPCE committers - ODL";
   description
     "YANG definitions of RPCs supported by OLM. Copyright (c) 2017
-    AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
-    ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
+     AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
+     ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
 
-  revision "2020-01-28" {
-      description "Add necessary parameters to consolidate OTN
-          and address ONAP MDONS use case";
-    }
-
-  revision "2020-01-13" {
-      description "Add OTN data from device and necessary
-          to build node inside otn topology";
-    }
-
-  revision "2019-11-15" {
-    description "OTN support";
+  revision 2020-01-28 {
+    description
+      "Add necessary parameters to consolidate OTN
+       and address ONAP MDONS use case";
   }
-
+  revision 2020-01-13 {
+    description
+      "Add OTN data from device and necessary
+       to build node inside otn topology";
+  }
+  revision 2019-11-15 {
+    description
+      "OTN support";
+  }
   revision 2019-07-02 {
     description
-        "Version 2. To manage device 2.2.1";
+      "Version 2. To manage device 2.2.1";
   }
-
   revision 2017-02-28 {
-    description "Initial revision of port mapping model";
+    description
+      "Initial revision of port mapping model";
   }
 
   container network {
     list nodes {
-      key node-id;
+      key "node-id";
       leaf node-id {
         type string;
         description
@@ -57,12 +68,12 @@ module transportpce-portmapping {
         }
         leaf openroadm-version {
           type enumeration {
-            enum "1.2.1" {
+            enum 1.2.1 {
               value 1;
               description
                 "Version 1.2.1";
             }
-            enum "2.2.1" {
+            enum 2.2.1 {
               value 2;
               description
                 "Version 2.2.1";
@@ -90,12 +101,11 @@ module transportpce-portmapping {
             "Current IP Address of device";
         }
       }
-
       list mapping {
+        key "logical-connection-point";
         description
           "Mapping for Physical circuit pack/port/parent interfaces corresponding
-          to each logical connection point present in the node.";
-        key logical-connection-point;
+           to each logical connection point present in the node.";
         leaf logical-connection-point {
           type string;
         }
@@ -123,25 +133,25 @@ module transportpce-portmapping {
           type string;
           description
             "Useful for line port of XPDR, for which there is no indication
-            in its logical-termination-point naming";
+             in its logical-termination-point naming";
         }
         leaf port-qual {
           type string;
           description
             "Useful to identify from portmapping client from network ports
-            of XPDR";
+             of XPDR";
         }
-        leaf supporting-ethernet{
+        leaf supporting-ethernet {
           type string;
           description
             "Ethernet interface provisioned on the port";
         }
-        leaf supporting-odu4{
+        leaf supporting-odu4 {
           type string;
           description
             "ODU4 interface provisioned on the port";
         }
-        leaf rate{
+        leaf rate {
           type string;
           description
             "Rate supported by the port";
@@ -158,20 +168,20 @@ module transportpce-portmapping {
           type string;
           description
             "For XPDR, associate two logical-connection-points from device/connnection-map
-            data";
+             data";
         }
         leaf partner-lcp {
           type string;
           description
             "For XPDR unidirectional NETWORK port, associate two logical-connection-points
-            from device/partner port data";
+             from device/partner port data";
         }
       }
       list cp-to-degree {
+        key "circuit-pack-name";
         description
           "This mapping helps locate degree number of the circuitpack that
-          does lldp protocol management";
-        key circuit-pack-name;
+           does lldp protocol management";
         leaf circuit-pack-name {
           type string;
         }
@@ -182,11 +192,10 @@ module transportpce-portmapping {
           type string;
         }
       }
-
       list switching-pool-lcp {
+        key "switching-pool-number";
         description
           "For MUXPDR and SWITCH, associates from device/odu-switching-pools data, the logical-connection-points";
-        key "switching-pool-number";
         leaf switching-pool-number {
           type uint16;
           description

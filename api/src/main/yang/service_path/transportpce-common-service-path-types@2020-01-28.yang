@@ -75,56 +75,53 @@ module transportpce-common-service-path-types {
 
   revision 2020-01-28 {
     description
-        "Version 1.7";
-        // General consolidation to handle OTN and ONAP MDONS use case
+      "Version 1.7";
+    // General consolidation to handle OTN and ONAP MDONS use case
   }
-
   revision 2019-10-09 {
     description
       "Version 1.6.1";
   }
-
   revision 2017-10-16 {
     description
       "Version 1.6";
   }
-
   revision 2017-04-26 {
-      description
-        "Version 1.5";
+    description
+      "Version 1.5";
   }
 
   typedef service-path-notification-types {
     type enumeration {
-      enum "path-computation-request" {
+      enum path-computation-request {
         value 1;
       }
-      enum "cancel-resource-reserve" {
+      enum cancel-resource-reserve {
         value 2;
       }
-      enum "service-implementation-request" {
+      enum service-implementation-request {
         value 3;
       }
-      enum "service-delete" {
+      enum service-delete {
         value 4;
       }
     }
   }
 
   typedef rpc-status-ex {
-    description
-      "extended status of RPC ";
     type enumeration {
-      enum "Successful" {
+      enum Successful {
         value 1;
       }
-      enum "Failed" {
+      enum Failed {
         value 2;
       }
-      enum "Pending" {
+      enum Pending {
         value 3;
       }
     }
+    description
+      "extended status of RPC ";
   }
 
   grouping rpc-response-status-ex {
@@ -133,22 +130,19 @@ module transportpce-common-service-path-types {
       mandatory true;
       description
         "Successful, Failed or Pending";
-
-        }
-
+    }
     leaf status-message {
-        type string;
-        description
-          "Gives a more detailed reason for failure";
-        }
-
-   }
+      type string;
+      description
+        "Gives a more detailed reason for failure";
+    }
+  }
 
   grouping response-parameters-sp {
     container response-parameters {
       uses transportpce-routing-constraints:routing-constraints-sp;
       container path-description {
-           uses transportpce-pathDescription:path-description;
+        uses transportpce-pathDescription:path-description;
       }
     }
   }
@@ -161,40 +155,44 @@ module transportpce-common-service-path-types {
         "Format of the requested service: Ethernet, OTU, etc.";
     }
     leaf service-rate {
-      when "../service-format!='OMS'"{
-        description "service rate not applicable when service format is roadmline";
+      when "../service-format!='OMS'" {
+        description
+          "service rate not applicable when service format is roadmline";
       }
       type uint32;
       mandatory true;
       description
-            "Rate of the requested service in GBps";
+        "Rate of the requested service in GBps";
     }
     leaf otu-service-rate {
       when "../service-format='OTU'" {
-        description "service rate not applicable when service format is OTU";
+        description
+          "service rate not applicable when service format is OTU";
       }
       type identityref {
         base org-openroadm-otn-common-types:otu-rate-identity;
       }
       mandatory false;
       description
-            "OTU Rate of the requested service";
+        "OTU Rate of the requested service";
     }
     leaf odu-service-rate {
       when "../service-format='ODU'" {
-        description "service rate not applicable when service format is ODU";
+        description
+          "service rate not applicable when service format is ODU";
       }
       type identityref {
         base org-openroadm-otn-common-types:odu-rate-identity;
       }
       mandatory false;
       description
-            "OTU Rate of the requested service";
+        "OTU Rate of the requested service";
     }
     leaf other-service-format-and-rate {
       type string;
-      description "This value encodes both the service format and the rate supported.
-            This field should not be specified when service format != other.";
+      description
+        "This value encodes both the service format and the rate supported.
+         This field should not be specified when service format != other.";
     }
     leaf clli {
       type string;
@@ -203,14 +201,15 @@ module transportpce-common-service-path-types {
         "CLLI";
     }
     leaf node-id {
-         type string;
+      type string;
     }
     container tx-direction {
       leaf logical-connection-point {
         type string;
-        description "PCE works on topology --> change from port (device) to node-id+logical-connection-point
-                (topology) assuming Portmapping will be used by both the Renderer
-                and the SH to make the conversion from device to topology";
+        description
+          "PCE works on topology --> change from port (device) to node-id+logical-connection-point
+           (topology) assuming Portmapping will be used by both the Renderer
+           and the SH to make the conversion from device to topology";
       }
       uses org-openroadm-common-service-types:service-port;
       //     uses service-lgx;
@@ -219,9 +218,10 @@ module transportpce-common-service-path-types {
     container rx-direction {
       leaf logical-connection-point {
         type string;
-        description "PCE works on topology --> change from port (device) to node-id+logical-connection-point
-                (topology) assuming Portmapping will be used by both the Renderer
-                and the SH to make the conversion from device to topology";
+        description
+          "PCE works on topology --> change from port (device) to node-id+logical-connection-point
+           (topology) assuming Portmapping will be used by both the Renderer
+           and the SH to make the conversion from device to topology";
       }
       uses org-openroadm-common-service-types:service-port;
       //     uses service-lgx;
@@ -229,7 +229,7 @@ module transportpce-common-service-path-types {
     }
   }
 
-    grouping service-handler-header {
+  grouping service-handler-header {
     container service-handler-header {
       leaf request-id {
         type string;
@@ -241,12 +241,11 @@ module transportpce-common-service-path-types {
   grouping service-path {
     leaf service-path-name {
       type string;
+      mandatory true;
       description
         "Identifier for the service-path to be calculated by the PCE";
-      mandatory true;
     }
     uses service-handler-header;
-
     container service-a-end {
       uses service-endpoint-sp;
     }
@@ -254,7 +253,6 @@ module transportpce-common-service-path-types {
       uses service-endpoint-sp;
     }
     uses transportpce-routing-constraints:routing-constraints-sp;
-
     leaf latency {
       type uint32;
       description
@@ -270,14 +268,13 @@ module transportpce-common-service-path-types {
       uses org-openroadm-resource-types:srg-number;
     }
     leaf-list supporting-service-name {
+      type string;
       description
         "The service name that this runs over top. If connection-type is service, then this is the related
          connection-type = infrastructure service, for example.";
-      type string;
     }
     container path-description {
       uses transportpce-pathDescription:path-description;
     }
   }
-
 }

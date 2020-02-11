@@ -1,100 +1,106 @@
 module transportpce-networkutils {
-    yang-version 1;
-    namespace "http://org/opendaylight/transportpce/networkutils";
-    prefix "org-opendaylight-transportpce-networkutils";
+  yang-version 1;
+  namespace "http://org/opendaylight/transportpce/networkutils";
+  prefix org-opendaylight-transportpce-networkutils;
 
-    revision "2017-08-18" {
-        description "Initial revision of networkutils model";
-    }
+  revision 2017-08-18 {
+    description
+      "Initial revision of networkutils model";
+  }
 
-    grouping links-input-grouping {
-        container links-input {
-            description "This is the input to initialize the nodes";
-            leaf xpdr-node {
-                type string;
-            }
-            leaf xpdr-num {
-                type uint8;
-            }
-            leaf network-num {
-                type uint8;
-            }
-            leaf rdm-node {
-                type string;
-            }
-            leaf srg-num {
-                type uint8;
-            }
-            leaf termination-point-num {
-                type string;
-            }
-        }
+  grouping links-input-grouping {
+    container links-input {
+      description
+        "This is the input to initialize the nodes";
+      leaf xpdr-node {
+        type string;
+      }
+      leaf xpdr-num {
+        type uint8;
+      }
+      leaf network-num {
+        type uint8;
+      }
+      leaf rdm-node {
+        type string;
+      }
+      leaf srg-num {
+        type uint8;
+      }
+      leaf termination-point-num {
+        type string;
+      }
     }
+  }
 
-    rpc init-roadm-nodes {
-        description "This rpc initiates roadm to roadm link";
-        input {
-            leaf rdm-a-node {
-                type string;
-            }
-            leaf deg-a-num {
-                type uint8;
-            }
-            leaf termination-point-a {
-                type string;
-            }
-            leaf rdm-z-node {
-                type string;
-            }
-            leaf deg-z-num {
-                type uint8;
-            }
-            leaf termination-point-z {
-                type string;
-            }
-        }
-        output {
-            leaf result {
-                type string;
-            }
-        }
+  rpc init-roadm-nodes {
+    description
+      "This rpc initiates roadm to roadm link";
+    input {
+      leaf rdm-a-node {
+        type string;
+      }
+      leaf deg-a-num {
+        type uint8;
+      }
+      leaf termination-point-a {
+        type string;
+      }
+      leaf rdm-z-node {
+        type string;
+      }
+      leaf deg-z-num {
+        type uint8;
+      }
+      leaf termination-point-z {
+        type string;
+      }
     }
+    output {
+      leaf result {
+        type string;
+      }
+    }
+  }
 
-    rpc init-xpdr-rdm-links {
-        description "This rpc initiates xponder to rdm link";
-        input {
-            uses links-input-grouping;
-        }
-        output {
-            leaf result {
-                type string;
-            }
-        }
+  rpc init-xpdr-rdm-links {
+    description
+      "This rpc initiates xponder to rdm link";
+    input {
+      uses links-input-grouping;
     }
+    output {
+      leaf result {
+        type string;
+      }
+    }
+  }
 
-    rpc init-rdm-xpdr-links {
-        description "This rpc initiates rdm to xponder link";
-        input {
-            uses links-input-grouping;
-        }
-        output {
-            leaf result {
-                type string;
-            }
-        }
+  rpc init-rdm-xpdr-links {
+    description
+      "This rpc initiates rdm to xponder link";
+    input {
+      uses links-input-grouping;
     }
-    rpc delete-link {
-        description "This rpc deletes a given link in openroadm Topology layer";
-        input {
-            leaf link-id {
-                type string;
-            }
-        }
-        output {
-            leaf result {
-              type string;
-            }
-        }
+    output {
+      leaf result {
+        type string;
+      }
     }
+  }
 
+  rpc delete-link {
+    description
+      "This rpc deletes a given link in openroadm Topology layer";
+    input {
+      leaf link-id {
+        type string;
+      }
+    }
+    output {
+      leaf result {
+        type string;
+      }
+    }
+  }
 }

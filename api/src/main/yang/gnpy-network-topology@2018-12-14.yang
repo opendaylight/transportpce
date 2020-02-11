@@ -1,32 +1,30 @@
 module gnpy-network-topology {
   yang-version 1;
   namespace "gnpy:gnpy-network-topology";
-
-  prefix "gnpynt";
-
+  prefix gnpynt;
 
   import gnpy-eqpt-config {
-    prefix "geqpt";
+    prefix geqpt;
   }
-
   import ietf-inet-types {
     prefix inet;
   }
 
   organization
     "Telecom Infra Project OOPT PSE Working Group";
-
   contact
     "WG Web:   <https://github.com/Telecominfraproject/oopt-gnpy>
      contact:  <mailto:ahmed.triki@orange.com>
      contact:  <mailto:esther.lerouzic@orange.com>
-   ";
+    ";
+  description
+    "YANG model for gnpy network input for path computation - transportPCE preversion";
 
-  description "YANG model for gnpy network input for path computation - transportPCE preversion";
-
-  revision "2018-12-14" {
-    description "first draft";
-    reference "YANG model for network input for path computation with gnpy";
+  revision 2018-12-14 {
+    description
+      "first draft";
+    reference
+      "YANG model for network input for path computation with gnpy";
   }
 
   identity type-element {
@@ -65,20 +63,24 @@ module gnpy-network-topology {
   }
 
   identity length-unit {
-    description "length unit" ;
+    description
+      "length unit";
   }
 
   identity km {
-    base length-unit ;
-    description "kilometers" ;
+    base length-unit;
+    description
+      "kilometers";
   }
 
-  identity m{
-    base length-unit ;
-    description "meter" ;
+  identity m {
+    base length-unit;
+    description
+      "meter";
   }
+
   typedef Coordinate {
-    type  decimal64 {
+    type decimal64 {
       fraction-digits 6;
     }
   }
@@ -86,12 +88,12 @@ module gnpy-network-topology {
   typedef te-node-id {
     type inet:ip-address;
     description
-          "An identifier for a node in a topology.
-           The identifier is represented as 32-bit unsigned integer in
-           the dotted-quad notation.
-           This attribute is mapped to Router ID in
-           RFC3630, RFC5329, RFC5305, and RFC6119.";
-   }
+      "An identifier for a node in a topology.
+       The identifier is represented as 32-bit unsigned integer in
+       the dotted-quad notation.
+       This attribute is mapped to Router ID in
+       RFC3630, RFC5329, RFC5305, and RFC6119.";
+  }
 
   typedef Coef {
     type decimal64 {
@@ -99,180 +101,178 @@ module gnpy-network-topology {
     }
   }
 
-
   grouping location-attributes {
-      container location {
-        leaf city {
-          type string;
-          mandatory true ;
-        }
-        leaf region {
-          type string;
-          mandatory true ;
-        }
-        leaf latitude {
-          type Coordinate;
-          mandatory true ;
-        }
-        leaf longitude {
-          type Coordinate;
-          mandatory true ;
-        }
+    container location {
+      leaf city {
+        type string;
+        mandatory true;
+      }
+      leaf region {
+        type string;
+        mandatory true;
+      }
+      leaf latitude {
+        type Coordinate;
+        mandatory true;
+      }
+      leaf longitude {
+        type Coordinate;
+        mandatory true;
+      }
     }
   }
 
   grouping fiber-params {
-    description "....." ;
+    description
+      ".....";
     leaf length {
-      mandatory true ;
       type decimal64 {
         fraction-digits 2;
       }
+      mandatory true;
     }
-    leaf loss_coef{
-      mandatory true ;
+    leaf loss_coef {
       type decimal64 {
         fraction-digits 2;
       }
+      mandatory true;
     }
-    leaf length_units{
+    leaf length_units {
       type identityref {
-        base length-unit ;
+        base length-unit;
       }
-      mandatory true ;
+      mandatory true;
     }
-    leaf att_in{
+    leaf att_in {
       type decimal64 {
         fraction-digits 2;
       }
-      mandatory true ;
+      mandatory true;
     }
-    leaf con_in{
+    leaf con_in {
       type decimal64 {
         fraction-digits 2;
       }
-      mandatory true ;
+      mandatory true;
     }
-    leaf con_out{
+    leaf con_out {
       type decimal64 {
         fraction-digits 2;
       }
-      mandatory true ;
+      mandatory true;
     }
   }
 
   grouping edfa-params {
     container operational {
+      description
+        "Operational values for the Edfa ";
       leaf gain-target {
         type decimal64 {
           fraction-digits 2;
         }
-        mandatory true ;
-        units dB ;
-        description ".." ;
+        units "dB";
+        mandatory true;
+        description
+          "..";
       }
       leaf tilt-target {
         type decimal64 {
           fraction-digits 2;
         }
-        mandatory true ;
-        description ".." ;
+        mandatory true;
+        description
+          "..";
       }
       leaf out-voa {
         type decimal64 {
           fraction-digits 2;
         }
-        mandatory true ;
-        units dB ;
-        description ".." ;
+        units "dB";
+        mandatory true;
+        description
+          "..";
       }
-      description "Operational values for the Edfa " ;
     }
   }
 
-  grouping roadm-params{
-    leaf  target_pch_out_db{
+  grouping roadm-params {
+    leaf target_pch_out_db {
       type decimal64 {
         fraction-digits 2;
       }
-      units dB ;
-      description ".." ;
+      units "dB";
+      description
+        "..";
     }
   }
 
-  grouping transceiver-params{
+  grouping transceiver-params;
 
-  }
+  grouping fused-params;
 
-  grouping fused-params{
-
-  }
-
-  grouping element-type-choice{
-    choice element-type{
-      case Edfa{
-        when "type = 'Edfa'" ;
-        uses edfa-params ;
+  grouping element-type-choice {
+    choice element-type {
+      case Edfa {
+        when "type = 'Edfa'";
+        uses edfa-params;
       }
-      case FiberRoadm{
+      case FiberRoadm {
         container params {
-          choice fiberroadm{
-            case Fiber{
-              when "type = 'Fiber'" ;
-              uses fiber-params ;
+          choice fiberroadm {
+            case Fiber {
+              when "type = 'Fiber'";
+              uses fiber-params;
             }
-            case Roadm{
-              when "type = 'Roadm'" ;
-              uses roadm-params ;
+            case Roadm {
+              when "type = 'Roadm'";
+              uses roadm-params;
             }
           }
         }
       }
-      case Transceiver{
-        when "type = 'Transceiver'" ;
+      case Transceiver {
+        when "type = 'Transceiver'";
       }
-
-      case Fused{
-        when "type = 'Fused'" ;
+      case Fused {
+        when "type = 'Fused'";
       }
     }
   }
 
   grouping topo {
-      list elements {
-        key uid;
-        leaf uid {
-            type string;
-        }
-        leaf type {
-          type identityref {
-            base type-element ;
-          }
-          mandatory true ;
-        }
-        leaf type_variety {
-            type string ;
-            mandatory false ;
-          }
-        container metadata {
-          uses location-attributes ;
-        }
-
-        uses element-type-choice ;
+    list elements {
+      key "uid";
+      leaf uid {
+        type string;
       }
-
-      list connections {
-        config false ;
-        leaf from_node {
-          type leafref{
-            path "/topo/elements/uid" ;
-          }
+      leaf type {
+        type identityref {
+          base type-element;
         }
-        leaf to_node {
-          type leafref{
-            path "/topo/elements/uid" ;
-          }
+        mandatory true;
+      }
+      leaf type_variety {
+        type string;
+        mandatory false;
+      }
+      container metadata {
+        uses location-attributes;
+      }
+      uses element-type-choice;
+    }
+    list connections {
+      config false;
+      leaf from_node {
+        type leafref {
+          path "/topo/elements/uid";
         }
       }
+      leaf to_node {
+        type leafref {
+          path "/topo/elements/uid";
+        }
+      }
+    }
   }
 }

@@ -45,13 +45,12 @@ module transportpce-servicepath {
       POSSIBILITY OF SUCH DAMAGE";
 
   revision 2017-10-17 {
-      description
-        "Version 1.6";
+    description
+      "Version 1.6";
   }
-
   revision 2017-04-26 {
-      description
-        "Version 1.5";
+    description
+      "Version 1.5";
   }
 
   container service-path-list {
@@ -62,5 +61,4 @@ module transportpce-servicepath {
       uses transportpce-common-service-path-types:service-path;
     }
   }
-
 }

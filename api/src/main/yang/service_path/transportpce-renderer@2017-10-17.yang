@@ -1,6 +1,6 @@
 module transportpce-renderer {
-    namespace "http://org/opendaylight/transportpce/renderer";
-    prefix "org-opendaylight-transportpce-renderer";
+  namespace "http://org/opendaylight/transportpce/renderer";
+  prefix org-opendaylight-transportpce-renderer;
 
   import ietf-yang-types {
     prefix yang;
@@ -57,19 +57,19 @@ module transportpce-renderer {
     description
       "Version 1.6";
   }
-
-  revision "2017-02-28" {
-      description "Initial revision of renderer model version 1.5";
+  revision 2017-02-28 {
+    description
+      "Initial revision of renderer model version 1.5";
   }
 
   rpc service-implementation-request {
     input {
       leaf service-name {
         type string;
+        mandatory true;
         description
           "Identifier for the service to be created in
            the ROADM network, e.g., CLFI, CLCI, etc. This is reported against the service, but may not get reflected in the service in the network.";
-        mandatory true;
       }
       uses transportpce-common-service-path-types:service-handler-header;
       container service-a-end {
@@ -83,7 +83,7 @@ module transportpce-renderer {
       }
     }
     output {
-       uses org-openroadm-common-service-types:configuration-response-common;
+      uses org-openroadm-common-service-types:configuration-response-common;
     }
   }
 
@@ -91,19 +91,19 @@ module transportpce-renderer {
     input {
       leaf service-name {
         type string;
+        mandatory true;
         description
           "Identifier for the service to be created in
            the ROADM network, e.g., CLFI, CLCI, etc. This is reported against the service, but may not get reflected in the service in the network.";
-        mandatory true;
       }
       uses transportpce-common-service-path-types:service-handler-header;
     }
     output {
-         uses org-openroadm-common-service-types:configuration-response-common;
+      uses org-openroadm-common-service-types:configuration-response-common;
     }
   }
 
-notification service-rpc-result-sp {
+  notification service-rpc-result-sp {
     description
       "This Notification indicates result of  service RPC and provides the topology";
     leaf notification-type {
