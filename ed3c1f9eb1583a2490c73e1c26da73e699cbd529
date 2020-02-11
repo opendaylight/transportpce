@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0b7fedd_28de2352",
+        "filename": "api/src/main/yang/service_path/transportpce-common-types@2020-01-28.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-11T23:06:19Z",
+      "side": 1,
+      "message": "must reconsider SP1.7 if we need to keep that",
+      "range": {
+        "startLine": 633,
+        "startChar": 0,
+        "endLine": 650,
+        "endChar": 4
+      },
+      "revId": "ed3c1f9eb1583a2490c73e1c26da73e699cbd529",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f01a1e0_0b1e658e",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2020-01-28.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-11T23:06:19Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 122,
+        "startChar": 41,
+        "endLine": 122,
+        "endChar": 45
+      },
+      "revId": "ed3c1f9eb1583a2490c73e1c26da73e699cbd529",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f06a2a46_a35e07cc",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2020-01-28.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-11T23:06:19Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 3
+      },
+      "revId": "ed3c1f9eb1583a2490c73e1c26da73e699cbd529",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c61f83af_2416a9a3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-11T23:06:19Z",
+      "side": 1,
+      "message": "network ?",
+      "range": {
+        "startLine": 176,
+        "startChar": 49,
+        "endLine": 176,
+        "endChar": 56
+      },
+      "revId": "ed3c1f9eb1583a2490c73e1c26da73e699cbd529",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
