@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c349cd33_9b8cdb25",
+        "filename": "api/src/main/yang/service_path/transportpce-common-types@2017-09-07.yang",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-11T09:25:49Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "c989fb71_49a3bda2",
+      "revId": "089d73183c3c3fa233b4f475ddec2c2882a68ff2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2383288_db925c23",
         "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2017-02-28.yang",
         "patchSetId": 19
@@ -33,6 +51,24 @@
       "revId": "089d73183c3c3fa233b4f475ddec2c2882a68ff2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4054296_235310e7",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2017-02-28.yang",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-11T09:25:49Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "e2383288_db925c23",
+      "revId": "089d73183c3c3fa233b4f475ddec2c2882a68ff2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
