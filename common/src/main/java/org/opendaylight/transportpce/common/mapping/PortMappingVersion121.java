@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -483,7 +484,7 @@ public class PortMappingVersion121 {
                 degrees.add(ordmDegreeObject.get());
             }
         }
-        LOG.info("Device {} has {} degree", degrees.size());
+        LOG.info("Device {} has {} degree", deviceId, degrees.size());
         return degrees;
     }
 
@@ -608,7 +609,7 @@ public class PortMappingVersion121 {
             interfaceName = interfaceList.get(circuitPackName);
         }
         return new CpToDegreeBuilder().withKey(new CpToDegreeKey(circuitPackName)).setCircuitPackName(circuitPackName)
-            .setDegreeNumber(new Long(degreeNumber)).setInterfaceName(interfaceName).build();
+            .setDegreeNumber(Long.valueOf(degreeNumber)).setInterfaceName(interfaceName).build();
     }
 
     private Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
@@ -673,6 +674,7 @@ public class PortMappingVersion121 {
 
     // some LOG messages are too long
     @SuppressWarnings("checkstyle:linelength")
+    @SuppressFBWarnings("DM_CONVERT_CASE")
     private boolean createTtpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for degree TTP's
         List<Degree> degrees = getDegrees(nodeId, deviceInfo);
@@ -752,7 +754,7 @@ public class PortMappingVersion121 {
                                 && Direction.Tx.getIntValue() == port2.getPortDirection().getIntValue()
                                 && port1.getPartnerPort() != null && port2.getPartnerPort() != null
                                 && port1.getPartnerPort().getCircuitPackName().equals(cp2Name)
-                                && port1.getPartnerPort().getPortName().equals(port2.getPortName().toString())
+                                && port1.getPartnerPort().getPortName().equals(port2.getPortName())
                                 && port2.getPartnerPort().getCircuitPackName().equals(cp1Name)
                                 && port2.getPartnerPort().getPortName().equals(port1.getPortName()))
                                 ||
@@ -762,9 +764,9 @@ public class PortMappingVersion121 {
                                 && Direction.Tx.getIntValue() == port1.getPortDirection().getIntValue()
                                 && port1.getPartnerPort() != null && port2.getPartnerPort() != null
                                 && port1.getPartnerPort().getCircuitPackName().equals(cp2Name)
-                                && port1.getPartnerPort().getPortName().equals(port2.getPortName().toString())
+                                && port1.getPartnerPort().getPortName().equals(port2.getPortName())
                                 && port2.getPartnerPort().getCircuitPackName().equals(cp1Name)
-                                && port2.getPartnerPort().getPortName().equals(port1.getPortName().toString()))) {
+                                && port2.getPartnerPort().getPortName().equals(port1.getPortName()))) {
                             String logicalConnectionPoint1 = new StringBuilder("DEG").append(k).append("-TTP-")
                                 .append(port1.getPortDirection().getName().toUpperCase()).toString();
                             LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,

@@ -91,7 +91,7 @@ public class CrossConnectImpl121 {
             LOG.info("Roadm-connection successfully created: {}-{}-{}", srcTp, destTp, waveNumber);
             return Optional.of(connectionNumber);
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to post {}. Exception: {}", rdmConnBldr.build(), e);
+            LOG.warn("Failed to post {}. Exception: ", rdmConnBldr.build(), e);
         }
         return Optional.empty();
     }
@@ -193,8 +193,8 @@ public class CrossConnectImpl121 {
 
         Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, connectionNumber);
         if (rdmConnOpt.isPresent()) {
-            RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
-            rdmConnBldr.setOpticalControlMode(OpticalControlMode.class.cast(mode));
+            RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get())
+                    .setOpticalControlMode(OpticalControlMode.class.cast(mode));
             if (powerValue != null) {
                 rdmConnBldr.setTargetOutputPower(new PowerDBm(powerValue));
             }

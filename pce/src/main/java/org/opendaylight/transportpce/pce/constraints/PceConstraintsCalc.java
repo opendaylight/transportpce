@@ -262,7 +262,7 @@ public class PceConstraintsCalc {
                         }
                         break;
                     default:
-                        LOG.info("in readDiversity unsupported divercity type", rt);
+                        LOG.info("in readDiversity unsupported divercity type {}", rt);
                 }
 
             } else {
@@ -289,7 +289,7 @@ public class PceConstraintsCalc {
             return true;
         }).map(aToZ -> {
             Node node = ((Node) aToZ.getResource().getResource());
-            return node.getNodeId().toString();
+            return node.getNodeId();
         }).collect(Collectors.toList());
     }
 

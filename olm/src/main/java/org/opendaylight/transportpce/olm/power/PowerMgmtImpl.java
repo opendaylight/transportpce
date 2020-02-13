@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.olm.power;
 
+//import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +59,7 @@ public class PowerMgmtImpl implements PowerMgmt {
      * @return true/false based on status of operation.
      */
     //TODO Need to Case Optical Power mode/NodeType in case of 2.2 devices
+    //@SuppressFBwarnings("DM_CONVERT_CASE")
     public Boolean setPower(ServicePowerSetupInput input) {
         LOG.info("Olm-setPower initiated");
         for (int i = 0; i < input.getNodes().size(); i++) {
@@ -261,7 +263,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                                     OpticalControlMode.Power, powerValue, connectionNumber);
                             LOG.info("Success Value is {}", setXconnPowerSuccessVal);
                             if (setXconnPowerSuccessVal) {
-                                LOG.info("Roadm-connection: {} updated ");
+                                LOG.info("Roadm-connection: {} updated ", connectionNumber);
                                 //The value recommended by the white paper is 20 seconds and not 60.
                                 //TODO - commented code because one vendor is not supporting
                                 //GainLoss with target-output-power
@@ -274,7 +276,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 return false;
                             }
                         } catch (InterruptedException e) {
-                            LOG.error("Olm-setPower wait failed {}", e);
+                            LOG.error("Olm-setPower wait failed :", e);
                             return false;
                         }
                     }
@@ -336,7 +338,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                     }
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
-                    LOG.error("Olm-powerTurnDown wait failed {}",e);
+                    LOG.error("Olm-powerTurnDown wait failed: ",e);
                     return false;
                 }
             }

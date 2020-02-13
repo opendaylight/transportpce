@@ -188,7 +188,7 @@ public final class PowerMgmtVersion121 {
             LOG.info("Transponder Power update is committed");
             return true;
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("Setting transponder power failed {}", e);
+            LOG.error("Setting transponder power failed: ", e);
             return false;
         }
 

@@ -295,7 +295,7 @@ public class R2RLinkDiscovery {
         }
         return this.openRoadmFactory.deleteLink(nodeId.getValue() + "-" + srcDegId.toString(),
                 destNodeId.getValue() + "-" + destDegId.toString(),
-                srcTpTx.toString(), destTpRx.toString(),networkTransactionService)
+                srcTpTx.toString(), destTpRx.toString(), networkTransactionService)
             && this.openRoadmFactory.deleteLink(destNodeId.getValue() + "-" + destDegId.toString(),
                 nodeId.getValue() + "-" + srcDegId.toString(), destTpTx, srcTpRx,
                 networkTransactionService);

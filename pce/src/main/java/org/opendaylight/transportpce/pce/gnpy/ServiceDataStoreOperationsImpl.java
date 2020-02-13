@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.gnpy;
 
 import com.google.common.base.Function;
+//false positive in SpotBug -> cannot be used with FluentIterable...
 import com.google.common.collect.FluentIterable;
 
 import java.io.BufferedWriter;

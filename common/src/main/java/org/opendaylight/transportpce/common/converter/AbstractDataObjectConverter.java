@@ -7,7 +7,7 @@
  */
 package org.opendaylight.transportpce.common.converter;
 
-import com.google.common.base.Preconditions;
+//import com.google.common.base.Preconditions;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -75,7 +75,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
     public <T extends DataObject> Optional<T> getDataObject(
             @Nonnull NormalizedNode<?, ?> normalizedNode,
             @Nonnull QName rootNode) {
-        Preconditions.checkNotNull(normalizedNode);
+        //Preconditions.checkNotNull(normalizedNode);
         if (normalizedNode instanceof ContainerNode) {
             YangInstanceIdentifier.PathArgument directChildIdentifier =
                     YangInstanceIdentifier.of(rootNode).getLastPathArgument();

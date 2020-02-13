@@ -100,7 +100,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
             XMLStreamReader reader = this.xmlInputFactory.createXMLStreamReader(inputStream);
             return parseInputXML(reader);
         } catch (XMLStreamException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.warn("XMLStreamException: {}", e.getMessage());
             return Optional.empty();
         }
     }
@@ -111,7 +111,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
             XMLStreamReader reader = this.xmlInputFactory.createXMLStreamReader(inputReader);
             return parseInputXML(reader, parentSchema);
         } catch (XMLStreamException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.warn("XMLStreamException: {}", e.getMessage());
             return Optional.empty();
         }
     }
@@ -129,7 +129,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
             XMLStreamReader reader = this.xmlInputFactory.createXMLStreamReader(inputReader);
             return parseInputXML(reader);
         } catch (XMLStreamException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.warn("XMLStreamException: {}", e.getMessage());
             return Optional.empty();
         }
     }
@@ -195,7 +195,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
              XmlParserStream xmlParser = XmlParserStream.create(streamWriter, getSchemaContext(), parentSchemaNode)) {
             xmlParser.parse(reader);
         } catch (XMLStreamException | URISyntaxException | IOException | SAXException e) {
-            LOG.warn("An error {} occured during parsing XML input stream", e.getMessage(), e);
+            LOG.warn("An error occured during parsing XML input stream", e);
             return Optional.empty();
         }
         return Optional.ofNullable(result.getResult());
@@ -234,7 +234,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
             factory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, true);
             xmlStreamWriter = factory.createXMLStreamWriter(backingWriter);
         } catch (XMLStreamException | FactoryConfigurationError e) {
-            LOG.error("Error [{}] while creating XML writer", e.getMessage(), e);
+            LOG.error("Error while creating XML writer: ", e);
             throw new IllegalStateException(e);
         }
         return xmlStreamWriter;

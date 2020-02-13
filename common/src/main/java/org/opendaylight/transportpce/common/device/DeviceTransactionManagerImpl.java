@@ -106,9 +106,9 @@ public class DeviceTransactionManagerImpl implements DeviceTransactionManager {
                         LOG.debug("Timeout to submit transaction run out! Transaction was {} submitted or canceled.",
                                 deviceTx.wasSubmittedOrCancelled().get() ? "" : "not");
                         if (!deviceTx.wasSubmittedOrCancelled().get()) {
-                            LOG.error(String.format("Transaction for node %s was not submitted or canceled after %s"
-                                            + " milliseconds! Cancelling transaction!", deviceId,
-                                    timeoutToSubmit));
+                            LOG.error(
+                                "Transaction for node {} not submitted/canceled after {} ms. Cancelling transaction.",
+                                deviceId, timeoutToSubmit);
                             deviceTx.cancel();
                         }
                     }
