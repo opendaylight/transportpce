@@ -314,7 +314,7 @@ public final class OpenRoadmOtnTopology {
         } else if (OpenroadmTpType.XPONDERNETWORK.equals(tpType)) {
             nbTps = node.getNbTpNetwork();
         } else {
-            LOG.warn("Wrong tp-type {}, cannot create tp {}", tpType.getName());
+            LOG.warn("Wrong tp-type {}, cannot create tp {}", tpType, tpType.getName());
         }
 
         for (int i = 1; i <= nbTps; i++) {

@@ -129,7 +129,7 @@ public class PceLink {
             for (int i = 0; i < this.omsAttributesSpan.getLinkConcatenation().size(); i++) {
                 //Length is expressed in meter and latency is expressed in ms according to OpenROADM MSA
                 tmp += this.omsAttributesSpan.getLinkConcatenation().get(i).getSRLGLength() / CELERITY;
-                LOG.info("In PceLink: The latency of link {} == {}",link.getLinkId(),tmplatency);
+                LOG.info("In PceLink: The latency of link {} == {}",link.getLinkId(),tmp);
             }
             tmplatency = (long) Math.ceil(tmp);
         } catch (NullPointerException e) {

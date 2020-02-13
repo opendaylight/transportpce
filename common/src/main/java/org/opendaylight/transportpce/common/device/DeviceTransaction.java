@@ -122,7 +122,7 @@ public class DeviceTransaction {
         future.addCallback(new FutureCallback<CommitInfo>() {
             @Override
             public void onSuccess(@Nullable CommitInfo result) {
-                LOG.debug("Transaction with lock {} successfully committed:", deviceLock, result);
+                LOG.debug("Transaction with lock {} successfully committed: {}", deviceLock, result);
                 afterClose();
             }
 

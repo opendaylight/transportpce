@@ -54,7 +54,7 @@ public final class TapiUtils {
         String txPortName, String rxPortDeviceName, String rxPortName) {
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder().setClli(clli).setNodeId(new NodeIdType(nodeid)).setOpticType(
             OpticTypes.Gray).setServiceFormat(
-                ServiceFormat.Ethernet).setServiceRate(new Long(100))
+                ServiceFormat.Ethernet).setServiceRate(Long.valueOf(100))
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName(txPortDeviceName).setPortName(txPortName)
@@ -76,7 +76,7 @@ public final class TapiUtils {
         String txPortName, String rxPortDeviceName, String rxPortName) {
         ServiceZEnd serviceZEnd = new ServiceZEndBuilder().setClli(clli).setNodeId(new NodeIdType(nodeid)).setOpticType(
             OpticTypes.Gray).setServiceFormat(
-                ServiceFormat.Ethernet).setServiceRate(new Long(100))
+                ServiceFormat.Ethernet).setServiceRate(Long.valueOf(100))
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName(txPortDeviceName).setPortName(txPortName)

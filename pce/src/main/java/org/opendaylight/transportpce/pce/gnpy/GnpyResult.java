@@ -8,7 +8,7 @@
 
 package org.opendaylight.transportpce.pce.gnpy;
 
-import com.google.common.base.Preconditions;
+//import com.google.common.base.Preconditions;
 import com.google.gson.stream.JsonReader;
 
 import java.io.ByteArrayInputStream;
@@ -274,11 +274,11 @@ public class GnpyResult {
     public <T extends DataObject> Optional<T> getDataObject(@Nonnull NormalizedNode<?, ?> normalizedNode,
         @Nonnull QName rootNode, BindingNormalizedNodeSerializer codecRegistry) {
         if (normalizedNode != null) {
-            LOG.debug("GNPy: The codecRegistry is ", codecRegistry.toString());
+            LOG.debug("GNPy: The codecRegistry is {}", codecRegistry.toString());
         } else {
             LOG.warn("GNPy: The codecRegistry is null");
         }
-        Preconditions.checkNotNull(normalizedNode);
+        //Preconditions.checkNotNull(normalizedNode);
         if (normalizedNode instanceof ContainerNode) {
             YangInstanceIdentifier.PathArgument directChildIdentifier = YangInstanceIdentifier.of(rootNode)
                 .getLastPathArgument();
@@ -288,10 +288,10 @@ public class GnpyResult {
                 throw new IllegalStateException(String.format("Could not get the direct child of %s", rootNode));
             }
             normalizedNode = directChild.get();
-            LOG.debug("GNPy: the normalized node is ", normalizedNode.getNodeType());
+            LOG.debug("GNPy: the normalized node is {}", normalizedNode.getNodeType());
         }
         YangInstanceIdentifier rootNodeYangInstanceIdentifier = YangInstanceIdentifier.of(rootNode);
-        LOG.debug("GNPy: the root Node Yang Instance Identifier is ", rootNodeYangInstanceIdentifier.toString());
+        LOG.debug("GNPy: the root Node Yang Instance Identifier is {}", rootNodeYangInstanceIdentifier.toString());
         Map.Entry<?, ?> bindingNodeEntry = codecRegistry.fromNormalizedNode(rootNodeYangInstanceIdentifier,
             normalizedNode);
         if (bindingNodeEntry == null) {

@@ -111,7 +111,7 @@ public class PceOpticalNode implements PceNode {
                         LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
                         this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
                     } else {
-                        LOG.warn("initSrgTpList: SRG-PP tp = {} found is busy !!");
+                        LOG.warn("initSrgTpList: SRG-PP tp = {} found is busy !!", tp.getTpId().getValue());
                     }
                     break;
                 default:
@@ -245,7 +245,7 @@ public class PceOpticalNode implements PceNode {
         OpenroadmTpType srgType = null;
         OpenroadmTpType cpType = this.availableSrgCp.get(tp);
         if (cpType == null) {
-            LOG.error("getRdmSrgClient: tp {} not existed in SRG CPterminationPoint list");
+            LOG.error("getRdmSrgClient: tp {} not existed in SRG CPterminationPoint list", tp);
             return null;
         }
         switch (cpType) {

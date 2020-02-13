@@ -296,7 +296,7 @@ public class R2RLinkDiscovery {
         }
         return TopologyUtils.deleteLink(nodeId.getValue() + "-" + srcDegId.toString(),
                 destNodeId.getValue() + "-" + destDegId.toString(),
-                srcTpTx.toString(), destTpRx.toString(),networkTransactionService)
+                srcTpTx.toString(), destTpRx.toString(), networkTransactionService)
             && TopologyUtils.deleteLink(destNodeId.getValue() + "-" + destDegId.toString(),
                 nodeId.getValue() + "-" + srcDegId.toString(), destTpTx, srcTpRx,
                 networkTransactionService);

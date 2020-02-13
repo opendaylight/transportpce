@@ -52,7 +52,7 @@ public class OlmPowerSetupRollbackTask extends RollbackTask {
         if (FAILED.equals(powerTurndownResult.getResult().getResult())) {
             LOG.warn("Olmp power setup rollback for {} was not successful!", this.getId());
         } else {
-            LOG.info("Olm power setup rollback for {} was successful.");
+            LOG.info("Olm power setup rollback for {} was successful.", this.getId());
         }
         return null;
     }

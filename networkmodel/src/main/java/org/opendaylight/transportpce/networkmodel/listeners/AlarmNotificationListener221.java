@@ -68,7 +68,7 @@ public class AlarmNotificationListener221 implements OrgOpenroadmAlarmListener {
                 }
             }
         } catch (InterruptedException | ExecutionException ex) {
-            LOG.warn("Exception thrown while reading Logical Connection Point value from {} {}", ex);
+            LOG.warn("Exception thrown while reading Logical Connection Point value", ex);
         }
         StringBuilder sb = new StringBuilder(notification.getResource().getDevice().getNodeId().getValue())
             .append(PIPE);

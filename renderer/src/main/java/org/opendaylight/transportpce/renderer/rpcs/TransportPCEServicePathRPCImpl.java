@@ -35,7 +35,7 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
     @Override
     public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
         String serviceName = input.getServiceName();
-        LOG.info("Calling RPC service delete request {} {}", serviceName);
+        LOG.info("Calling RPC service delete request {}", serviceName);
         ServiceDeleteOutput output = null;
         try {
             output = this.rendererServiceOperations.serviceDelete(input).get();
@@ -49,7 +49,7 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
     public ListenableFuture<RpcResult<ServiceImplementationRequestOutput>> serviceImplementationRequest(
             ServiceImplementationRequestInput input) {
         String serviceName = input.getServiceName();
-        LOG.info("Calling RPC service impl request {} {}", serviceName);
+        LOG.info("Calling RPC service impl request {}", serviceName);
         ServiceImplementationRequestOutput output = null;
         try {
             output = this.rendererServiceOperations.serviceImplementation(input).get();

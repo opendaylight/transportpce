@@ -57,7 +57,7 @@ public class StubPceServiceOperations implements PathComputationService {
             LOG.info("putting notification : {}", notif);
             notificationPublishService.putNotification(notif);
         } catch (InterruptedException e) {
-            LOG.info("notification offer rejected : ", e.getMessage());
+            LOG.info("notification offer rejected: ", e);
         }
     }
 

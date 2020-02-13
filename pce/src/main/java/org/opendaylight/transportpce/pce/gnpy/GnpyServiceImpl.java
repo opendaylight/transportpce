@@ -261,7 +261,7 @@ public class GnpyServiceImpl {
         }
 
         for (Elements element : this.elements) {
-            if (element.getUid().contains(ipAddress.getIpv4Address().getValue().toString())) {
+            if (element.getUid().contains(ipAddress.getIpv4Address().getValue())) {
                 if ((this.currentNodeIpAddress == null) || (this.currentNodeIpAddress != ipAddress)) {
                     this.currentNodeIpAddress = ipAddress;
                     RouteObjectIncludeExclude routeObjectIncludeExclude = addRouteObjectIncludeExclude(ipAddress, 1);
@@ -280,7 +280,7 @@ public class GnpyServiceImpl {
     //Add a link to the route object
     private void addLinkToRouteObject(String linkId) throws GnpyException {
         if (linkId == null) {
-            throw new GnpyException(String.format("In GnpyServiceImpl: the linkId %s does not exist",linkId));
+            throw new GnpyException(String.format("In GnpyServiceImpl: the linkId does not exist"));
         }
         //Only the ROADM-to-ROADM link are included in the route object
         if (!mapLinkFiber.containsKey(linkId)) {
@@ -308,7 +308,7 @@ public class GnpyServiceImpl {
         TeTpId teTpId = new TeTpId(teTpValue);
         NumUnnumHop numUnnumHop = new org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.type.num
             .unnum.hop.NumUnnumHopBuilder()
-                .setNodeId(teNodeId.getIpv4Address().getValue().toString())
+                .setNodeId(teNodeId.getIpv4Address().getValue())
                 .setLinkTpId(teTpId.getUint32().toString())
                 .setHopType(TeHopType.STRICT).build();
         Type type1 = new NumUnnumHopBuilder().setNumUnnumHop(numUnnumHop).build();
@@ -348,8 +348,8 @@ public class GnpyServiceImpl {
             .setDisjointness(new TePathDisjointness(true, true, false))
             .setRequestIdNumber(requestIdNumber).build();
         List<Synchronization> synchro = new ArrayList<>();
-        Synchronization synchronization1 = new SynchronizationBuilder().setSynchronizationId(new Long(0)).setSvec(svec)
-            .build();
+        Synchronization synchronization1 = new SynchronizationBuilder().setSynchronizationId(Long.valueOf(0))
+                .setSvec(svec).build();
         synchro.add(synchronization1);
         return (synchro);
     }

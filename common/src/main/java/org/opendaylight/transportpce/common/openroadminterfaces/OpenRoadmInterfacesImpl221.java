@@ -198,13 +198,13 @@ public class OpenRoadmInterfacesImpl221 {
         CircuitPacksBuilder cpBldr = new CircuitPacksBuilder(cp);
         boolean change = false;
         if (activate) {
-            if (cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().getName()
-                .equals(States.NotReservedInuse)) {
+            if (cpBldr.getEquipmentState() != null
+                    && !cpBldr.getEquipmentState().getName().equals(States.NotReservedInuse)) {
                 cpBldr.setEquipmentState(States.NotReservedInuse);
                 change = true;
             }
-        } else if ((cpBldr.getEquipmentState() != null && !cpBldr.getEquipmentState().getName()
-            .equals(States.NotReservedAvailable))) {
+        } else if ((cpBldr.getEquipmentState() != null
+                && !cpBldr.getEquipmentState().getName().equals(States.NotReservedAvailable))) {
             cpBldr.setEquipmentState(States.NotReservedAvailable);
             change = true;
         }

@@ -471,6 +471,7 @@ public class PceCalculation {
         Node1 node1 = node.augmentation(Node1.class);
         if (node1 == null) {
             LOG.error("getNodeType: no Node1 (type) Augmentation for node: [{}]. Node is ignored", node.getNodeId());
+            return false;
         }
         OpenroadmNodeType nodeType = node1.getNodeType();
 

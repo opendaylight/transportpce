@@ -88,7 +88,7 @@ public class PathComputationServiceImpl implements PathComputationService {
         try {
             notificationPublishService.putNotification(this.notification);
         } catch (InterruptedException e) {
-            LOG.info("notification offer rejected : ", e.getMessage());
+            LOG.info("notification offer rejected: ", e);
         }
     }
 

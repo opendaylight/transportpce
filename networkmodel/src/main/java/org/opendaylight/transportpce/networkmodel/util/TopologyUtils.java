@@ -72,7 +72,7 @@ public final class TopologyUtils {
         LOG.info("deleting link for {}-{}", srcNode, dstNode);
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp);
         if (deleteLinkLinkId(linkId, networkTransactionService)) {
-            LOG.debug("Link Id {} updated to have admin state down");
+            LOG.debug("Link Id {} updated to have admin state down", linkId);
             return true;
         } else {
             LOG.debug("Link Id not found for Source {} and Dest {}", srcNode, dstNode);

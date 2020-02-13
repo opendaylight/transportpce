@@ -81,7 +81,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
             JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
             return parseInputJSON(reader);
         } catch (IOException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.warn("IOException {}",e.getMessage());
             return Optional.empty();
         }
     }
@@ -140,7 +140,7 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
                 getSchemaContext())) {
             jsonParser.parse(reader);
         } catch (IOException e) {
-            LOG.warn("An error {} occured during parsing Json input stream", e.getMessage(), e);
+            LOG.warn("An error occured during parsing Json input stream", e);
             return Optional.empty();
         }
         return Optional.ofNullable(result.getResult());

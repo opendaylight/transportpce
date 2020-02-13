@@ -104,14 +104,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         try {
             notificationPublishService.putNotification(this.notification);
         } catch (InterruptedException e) {
-            LOG.info("notification offer rejected : ", e.getMessage());
+            LOG.info("notification offer rejected: ", e);
         }
     }
 
     @Override
     public ListenableFuture<ServiceImplementationRequestOutput>
             serviceImplementation(ServiceImplementationRequestInput input) {
-        LOG.info("Calling service impl request {} {}", input.getServiceName());
+        LOG.info("Calling service impl request {}", input.getServiceName());
         return executor.submit(new Callable<ServiceImplementationRequestOutput>() {
 
             @Override
@@ -202,7 +202,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     @Override
     public ListenableFuture<ServiceDeleteOutput> serviceDelete(ServiceDeleteInput input) {
         String serviceName = input.getServiceName();
-        LOG.info("Calling service delete request {} {}", input.getServiceName());
+        LOG.info("Calling service delete request {}", input.getServiceName());
         return executor.submit(new Callable<ServiceDeleteOutput>() {
 
             @Override

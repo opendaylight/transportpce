@@ -490,7 +490,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             }
         } catch (OpenRoadmInterfaceException e) {
             // TODO Auto-generated catch block
-            LOG.error("OpenRoadmInterfaceException occured {}",e);
+            LOG.error("OpenRoadmInterfaceException occured: ",e);
         } /**catch (InterruptedException e) {
          // TODO Auto-generated catch block
          } catch (ExecutionException e) {
@@ -517,9 +517,9 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         LOG.info("Executing GetLinkSpanLoss");
         BigDecimal spanLoss = new BigDecimal(0);
         for (RoadmLinks link : roadmLinks) {
-            String sourceNodeId = link.getSrcNodeId().toString();
+            String sourceNodeId = link.getSrcNodeId();
             String sourceTpId = link.getSrcTpId();
-            String destNodeId = link.getDestNodeId().toString();
+            String destNodeId = link.getDestNodeId();
             String destTpId = link.getDestTpid();
             OtsPmHolder srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutput");
             OtsPmHolder destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
@@ -550,7 +550,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
         try (ReadTransaction readOnlyTransaction = this.dataBroker.newReadOnlyTransaction()) {
             realNode = readOnlyTransaction.read(LogicalDatastoreType.CONFIGURATION, mappedNodeII).get();
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Error on getRealNodeId {} :", mappedNodeId, e);
             throw new IllegalStateException(e);
         }
         if (!realNode.isPresent() || (realNode.get().getSupportingNode() == null)) {

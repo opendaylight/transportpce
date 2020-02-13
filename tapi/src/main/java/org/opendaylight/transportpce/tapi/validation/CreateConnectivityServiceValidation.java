@@ -75,7 +75,7 @@ public final class CreateConnectivityServiceValidation {
 
         } catch (NullPointerException e) {
             LOG.error("one of input parameter is null ", e);
-            OperationResult.failed("one of input parameter is null.");
+            return OperationResult.failed("one of input parameter is null.");
         }
         return OperationResult.ok("Validation successful.");
     }

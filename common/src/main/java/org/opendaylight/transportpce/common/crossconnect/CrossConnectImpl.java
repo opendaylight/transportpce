@@ -47,7 +47,7 @@ public class CrossConnectImpl implements CrossConnect {
         else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             return crossConnectImpl221.getCrossConnect(nodeId,connectionNumber);
         }
-        return null;
+        return Optional.empty();
     }
 
 
@@ -63,7 +63,7 @@ public class CrossConnectImpl implements CrossConnect {
             return crossConnectImpl221.postCrossConnect(nodeId, waveNumber, srcTp, destTp);
         }
         LOG.info("Device Version not found");
-        return null;
+        return Optional.empty();
 
     }
 

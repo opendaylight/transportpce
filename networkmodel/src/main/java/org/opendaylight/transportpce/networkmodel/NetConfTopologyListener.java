@@ -7,6 +7,8 @@
  */
 package org.opendaylight.transportpce.networkmodel;
 
+//import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+//even with @SuppressFBwarnings generate a checkstyles error...
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -14,9 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
 import javax.annotation.Nonnull;
-
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType;
@@ -213,6 +213,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     }
 
     @Override
+    //@SuppressFBwarnings("SF_SWITCH_FALLTHROUGH")
     public void onDataTreeChanged(@Nonnull Collection<DataTreeModification<Node>> changes) {
         LOG.info("onDataTreeChanged");
         for (DataTreeModification<Node> change : changes) {

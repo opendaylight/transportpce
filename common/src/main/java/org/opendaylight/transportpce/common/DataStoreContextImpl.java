@@ -150,7 +150,7 @@ public class DataStoreContextImpl implements DataStoreContext {
         return store;
     }
 
-    private final class SchemaContextHolder implements DOMSchemaService, SchemaContextProvider {
+    private static final class SchemaContextHolder implements DOMSchemaService, SchemaContextProvider {
 
         private final SchemaContext schemaContext;
         private final ListenerRegistry<SchemaContextListener> listeners;

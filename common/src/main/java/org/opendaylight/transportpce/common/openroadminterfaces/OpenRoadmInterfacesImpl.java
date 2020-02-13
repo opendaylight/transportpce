@@ -67,7 +67,7 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
             LOG.info("getInterface for 2.2.1 device {}", nodeId);
             return (Optional<T>) openRoadmInterfacesImpl221.getInterface(nodeId,interfaceName);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

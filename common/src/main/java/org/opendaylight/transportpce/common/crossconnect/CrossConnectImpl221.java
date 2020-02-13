@@ -98,7 +98,7 @@ public class CrossConnectImpl221 {
             LOG.info("Roadm-connection successfully created: {}-{}-{}", srcTp, destTp, waveNumber);
             return Optional.of(connectionNumber);
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to post {}. Exception: {}", rdmConnBldr.build(), e);
+            LOG.warn("Failed to post {}. Exception: ", rdmConnBldr.build(), e);
         }
         return Optional.empty();
     }
@@ -109,8 +109,7 @@ public class CrossConnectImpl221 {
         Optional<RoadmConnections> xc = getCrossConnect(deviceId, connectionName);
         //Check if cross connect exists before delete
         if (xc.isPresent()) {
-            String name = xc.get().getSource().getSrcIf();
-            name.replace("nmc", "mc");
+            String name = xc.get().getSource().getSrcIf().replace("nmc", "mc");
             interfList.add(xc.get().getSource().getSrcIf());
             interfList.add(xc.get().getDestination().getDstIf());
             interfList.add(xc.get().getSource().getSrcIf().replace("nmc", "mc"));

@@ -190,15 +190,14 @@ public class GnpyTopoImpl {
                 if (commonNetworkNode1.getNodeType().getName().equals("ROADM")) {
                     if (!nodesList.contains(nodeRef)) {
                         Elements element = createElementsRoadm(LATITUDE, LONGITUTE, nodeRef,
-                                openRoadmNetNode1.getShelf(),TARGET_PCH_OUT_DB, ipAddress.getIpv4Address().getValue()
-                                .toString());
+                                openRoadmNetNode1.getShelf(),TARGET_PCH_OUT_DB, ipAddress.getIpv4Address().getValue());
                         this.elements.add(element);
                         nodesList.add(nodeRef);
                     }
                 } else if (commonNetworkNode1.getNodeType().getName().equals("XPONDER")) {
                     if (!nodesList.contains(nodeRef)) {
                         Elements element = createElementsTransceiver(LATITUDE, LONGITUTE, nodeRef,
-                                openRoadmNetNode1.getShelf(),ipAddress.getIpv4Address().getValue().toString());
+                                openRoadmNetNode1.getShelf(),ipAddress.getIpv4Address().getValue());
                         this.elements.add(element);
                         nodesList.add(nodeRef);
                         trxList.add(nodeRef);
@@ -309,7 +308,7 @@ public class GnpyTopoImpl {
         Elements element = createElementsEdfa(LATITUDE, LONGITUTE, REGION, CITY,
                 ila.getGain().getValue(), ila.getTilt().getValue(),
                 ila.getOutVoaAtt().getValue(), "std_medium_gain",
-                ipEdfa.getIpv4Address().getValue().toString());
+                ipEdfa.getIpv4Address().getValue());
         this.elements.add(element);
         return ipEdfa;
     }
