@@ -293,12 +293,14 @@ public class OpenRoadmInterface221 {
         return oduInterfaceBldr.getName();
     }
 
+
+
     public String createOpenRoadmOtu4Interface(String nodeId, String logicalConnPoint, String supportOchInterface)
         throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(
-                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
+                String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s",
                     nodeId, logicalConnPoint));
         }
         // Create generic interface
@@ -322,6 +324,52 @@ public class OpenRoadmInterface221 {
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, otuInterfaceBldr);
         return otuInterfaceBldr.getName();
+    }
+
+    public String createOpenRoadmOtu4Interface(String AnodeId, String AlogicalConnPoint, String AsupportOchInterface,
+                                               String ZnodeId, String ZlogicalConnPoint)
+        throws OpenRoadmInterfaceException {
+        Mapping portMapA = portMapping.getMapping(AnodeId, AlogicalConnPoint);
+        Mapping portMapZ = portMapping.getMapping(ZnodeId, ZlogicalConnPoint);
+        if (portMapA == null) {
+            throw new OpenRoadmInterfaceException(
+                    String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s ",
+                            AnodeId, AlogicalConnPoint));
+        }
+        // On the Zside
+        if (portMapZ == null){
+            throw new OpenRoadmInterfaceException(
+                    String.format("Unable to get mapping from PortMapping for node %s and logical connection port %s ",
+                            ZnodeId, AlogicalConnPoint));
+
+        }
+        // Create generic interface builder
+        InterfaceBuilder otuInterfaceBldr = createGenericInterfaceBuilder(portMapA, OtnOtu.class,
+                AlogicalConnPoint + "-OTU");
+
+        // Set the supporting interface data
+        otuInterfaceBldr.setSupportingInterface(AsupportOchInterface);
+
+
+        // OTU interface specific data
+        OtuBuilder otuIfBuilder = new OtuBuilder();
+        otuIfBuilder.setFec(OtuAttributes.Fec.Scfec);
+        otuIfBuilder.setRate(OTU4.class);
+        otuIfBuilder.setTxSapi(AnodeId+AlogicalConnPoint);
+        otuIfBuilder.setTxDapi(ZnodeId+ZlogicalConnPoint);
+
+
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder otuIf1Builder =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder();
+
+        otuInterfaceBldr.addAugmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
+                otuIf1Builder.setOtu(otuIfBuilder.build()).build());
+
+        // Post interface on the device
+        openRoadmInterfaces.postInterface(AnodeId, otuInterfaceBldr);
+        return otuInterfaceBldr.getName();
+
     }
 
     public String createOpenRoadmOchInterfaceName(String logicalConnectionPoint, Long waveNumber) {
