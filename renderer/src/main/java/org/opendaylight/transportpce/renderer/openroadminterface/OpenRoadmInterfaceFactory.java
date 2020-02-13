@@ -137,6 +137,19 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
+    /**
+     * This methods creates an OTU interface on the given termination point.
+     *
+     * @param AnodeId node ID for A side
+     * @param AlogicalConnPoint logical connection point
+     * @param AsupportOchInterface supporting OCH interface
+     * @param ZnodeId
+     * @param ZlogicalConnPoint
+     * @return Name of the interface if successful, otherwise return null.
+     *
+     * @throws OpenRoadmInterfaceException OpenRoadm interface exception
+     */
+
     public String createOpenRoadmOtu4Interface(String AnodeId, String AlogicalConnPoint, String AsupportOchInterface,
     String ZnodeId, String ZlogicalConnPoint)
             throws OpenRoadmInterfaceException {
