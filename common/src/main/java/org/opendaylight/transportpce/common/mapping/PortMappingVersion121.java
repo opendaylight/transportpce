@@ -195,7 +195,8 @@ public class PortMappingVersion121 {
         Map<String, String> lcpMap = new HashMap<>();
         Map<String, Mapping> mappingMap = new HashMap<>();
 
-        List<CircuitPacks> circuitPackList = deviceObject.get().getCircuitPacks();
+        // com.google.common.collect.ImmutableList implementation of List
+        List<CircuitPacks> circuitPackList = new ArrayList<>(deviceObject.get().getCircuitPacks());
         circuitPackList.sort(Comparator.comparing(CircuitPack::getCircuitPackName));
 
         for (CircuitPacks cp : circuitPackList) {
@@ -204,7 +205,9 @@ public class PortMappingVersion121 {
                 LOG.warn("Ports were not found for circuit pack: {}", circuitPackName);
                 continue;
             }
-            List<Ports> portList = cp.getPorts();
+
+            // com.google.common.collect.ImmutableList implementation of List
+            List<Ports> portList = new ArrayList<>(cp.getPorts());
             portList.sort(Comparator.comparing(Ports::getPortName));
             for (Ports port : portList) {
                 if (port.getPortQual() == null) {
@@ -366,8 +369,9 @@ public class PortMappingVersion121 {
                     LOG.warn("{} : Circuit pack {} not found or without ports.", nodeId, circuitPackName);
                     continue;
                 }
+                // com.google.common.collect.ImmutableList implementation of List
                 @Nullable
-                List<Ports> portList = circuitPackObject.get().getPorts();
+                List<Ports> portList = new ArrayList<>(circuitPackObject.get().getPorts());
                 Collections.sort(portList, new SortPort121ByName());
                 int portIndex = 1;
                 for (Ports port : portList) {

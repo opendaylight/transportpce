@@ -89,13 +89,11 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
     public void useWavelengths(PathDescription pathDescription) {
 
         List<NodeIdPair> atozTpIds = getAToZTpList(pathDescription);
-        List<NodeIdPair> ztoaTpIds = getZToATpList(pathDescription);
-
         deleteAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
                 pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava());
+        List<NodeIdPair> ztoaTpIds = getZToATpList(pathDescription);
         deleteAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
                 pathDescription.getZToADirection().getZToAWavelengthNumber().toJava());
-
         addUsedWL(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava(), atozTpIds);
         addUsedWL(pathDescription.getZToADirection().getZToAWavelengthNumber().toJava(), ztoaTpIds);
     }
@@ -107,7 +105,6 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
 
         deleteUsedWL(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava(), atozTpIds);
         deleteUsedWL(pathDescription.getZToADirection().getZToAWavelengthNumber().toJava(), ztoaTpIds);
-
         addAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
                 pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava());
         addAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
@@ -234,14 +231,11 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                         degreeAttributesBuilder = new DegreeAttributesBuilder(degreeAttributes);
                     }
                     List<org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes
-                            .AvailableWavelengths> availableDegreeWLs =
-                            degreeAttributesBuilder.getAvailableWavelengths();
-                    if (availableDegreeWLs == null) {
-                        availableDegreeWLs = new ArrayList<>();
-                        degreeAttributesBuilder.setAvailableWavelengths(availableDegreeWLs);
-                    }
+                        .AvailableWavelengths> availableDegreeWLs = new ArrayList<>(degreeAttributesBuilder
+                        .getAvailableWavelengths());
                     availableDegreeWLs.add(new org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree
                             .node.attributes.AvailableWavelengthsBuilder().setIndex(wavelengthNumber).build());
+                    degreeAttributesBuilder.setAvailableWavelengths(availableDegreeWLs);
                     node1Builder.setDegreeAttributes(degreeAttributesBuilder.build());
                     break;
                 case SRG:
@@ -253,12 +247,10 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                         srgAttributesBuilder = new SrgAttributesBuilder(srgAttributes);
                     }
                     List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-                            .AvailableWavelengths> availableSrgWLs = srgAttributesBuilder.getAvailableWavelengths();
-                    if (availableSrgWLs == null) {
-                        availableSrgWLs = new ArrayList<>();
-                        srgAttributesBuilder.setAvailableWavelengths(availableSrgWLs);
-                    }
+                        .AvailableWavelengths> availableSrgWLs = new ArrayList<>(srgAttributesBuilder
+                        .getAvailableWavelengths());
                     availableSrgWLs.add(new AvailableWavelengthsBuilder().setIndex(wavelengthNumber).build());
+                    srgAttributesBuilder.setAvailableWavelengths(availableSrgWLs);
                     node1Builder.setSrgAttributes(srgAttributesBuilder.build());
                     break;
 
@@ -494,43 +486,41 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 case DEGREETXTTP:
                 case DEGREETXRXTTP:
                     TxTtpAttributes txTtpAttributes = null;
+                    List<UsedWavelengths> usedDegreeTxTtpWls;
                     if (tp1 != null) {
                         txTtpAttributes = tp1.getTxTtpAttributes();
                     }
                     TxTtpAttributesBuilder txTtpAttributesBuilder;
                     if (txTtpAttributes == null) {
                         txTtpAttributesBuilder = new TxTtpAttributesBuilder();
+                        usedDegreeTxTtpWls = new ArrayList<>();
                     } else {
                         txTtpAttributesBuilder = new TxTtpAttributesBuilder(txTtpAttributes);
-                    }
-                    List<UsedWavelengths> usedDegreeTxTtpWls = txTtpAttributesBuilder.getUsedWavelengths();
-                    if (usedDegreeTxTtpWls == null) {
-                        usedDegreeTxTtpWls = new ArrayList<>();
-                        txTtpAttributesBuilder.setUsedWavelengths(usedDegreeTxTtpWls);
+                        usedDegreeTxTtpWls = new ArrayList<>(txTtpAttributesBuilder.getUsedWavelengths());
                     }
                     usedDegreeTxTtpWls.add(new UsedWavelengthsBuilder().setIndex(wavelengthIndex)
                         .setFrequency(centralTHz).setWidth(FrequencyGHz.getDefaultInstance("40")).build());
+                    txTtpAttributesBuilder.setUsedWavelengths(usedDegreeTxTtpWls);
                     tp1Builder.setTxTtpAttributes(txTtpAttributesBuilder.build());
                     break;
 
                 case DEGREERXTTP:
                     RxTtpAttributes rxTtpAttributes = null;
+                    List<UsedWavelengths> usedDegreeRxTtpWls;
                     if (tp1 != null) {
                         rxTtpAttributes = tp1.getRxTtpAttributes();
                     }
                     RxTtpAttributesBuilder rxTtpAttributesBuilder;
                     if (rxTtpAttributes == null) {
                         rxTtpAttributesBuilder = new RxTtpAttributesBuilder();
+                        usedDegreeRxTtpWls = new ArrayList<>();
                     } else {
                         rxTtpAttributesBuilder = new RxTtpAttributesBuilder(rxTtpAttributes);
-                    }
-                    List<UsedWavelengths> usedDegreeRxTtpWls = rxTtpAttributesBuilder.getUsedWavelengths();
-                    if (usedDegreeRxTtpWls == null) {
-                        usedDegreeRxTtpWls = new ArrayList<>();
-                        rxTtpAttributesBuilder.setUsedWavelengths(usedDegreeRxTtpWls);
+                        usedDegreeRxTtpWls = new ArrayList<>(rxTtpAttributesBuilder.getUsedWavelengths());
                     }
                     usedDegreeRxTtpWls.add(new UsedWavelengthsBuilder().setIndex(wavelengthIndex)
                         .setFrequency(centralTHz).setWidth(FrequencyGHz.getDefaultInstance("40")).build());
+                    rxTtpAttributesBuilder.setUsedWavelengths(usedDegreeRxTtpWls);
                     tp1Builder.setRxTtpAttributes(rxTtpAttributesBuilder.build());
                     break;
 
@@ -538,22 +528,21 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 case DEGREERXCTP:
                 case DEGREETXRXCTP:
                     CtpAttributes ctpAttributes = null;
+                    List<UsedWavelengths> usedDegreeCtpWls;
                     if (tp1 != null) {
                         ctpAttributes = tp1.getCtpAttributes();
                     }
                     CtpAttributesBuilder ctpAttributesBuilder;
                     if (ctpAttributes == null) {
                         ctpAttributesBuilder = new CtpAttributesBuilder();
+                        usedDegreeCtpWls = new ArrayList<>();
                     } else {
                         ctpAttributesBuilder = new CtpAttributesBuilder(ctpAttributes);
-                    }
-                    List<UsedWavelengths> usedDegreeCtpWls = ctpAttributesBuilder.getUsedWavelengths();
-                    if (usedDegreeCtpWls == null) {
-                        usedDegreeCtpWls = new ArrayList<>();
-                        ctpAttributesBuilder.setUsedWavelengths(usedDegreeCtpWls);
+                        usedDegreeCtpWls = new ArrayList<>(ctpAttributesBuilder.getUsedWavelengths());
                     }
                     usedDegreeCtpWls.add(new UsedWavelengthsBuilder().setIndex(wavelengthIndex)
                         .setFrequency(centralTHz).setWidth(FrequencyGHz.getDefaultInstance("40")).build());
+                    ctpAttributesBuilder.setUsedWavelengths(usedDegreeCtpWls);
                     tp1Builder.setCtpAttributes(ctpAttributesBuilder.build());
                     break;
 
@@ -561,26 +550,24 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 case SRGRXCP:
                 case SRGTXRXCP:
                     CpAttributes cpAttributes = null;
+                    List<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network
+                        .node.termination.point.cp.attributes.UsedWavelengths> usedDegreeCpWls;
                     if (tp1 != null) {
                         cpAttributes = tp1.getCpAttributes();
                     }
                     CpAttributesBuilder cpAttributesBuilder;
                     if (cpAttributes == null) {
                         cpAttributesBuilder = new CpAttributesBuilder();
+                        usedDegreeCpWls = new ArrayList<>();
                     } else {
                         cpAttributesBuilder = new CpAttributesBuilder(cpAttributes);
-                    }
-                    List<org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network
-                        .node.termination.point.cp.attributes.UsedWavelengths> usedDegreeCpWls = cpAttributesBuilder
-                        .getUsedWavelengths();
-                    if (usedDegreeCpWls == null) {
-                        usedDegreeCpWls = new ArrayList<>();
-                        cpAttributesBuilder.setUsedWavelengths(usedDegreeCpWls);
+                        usedDegreeCpWls = new ArrayList<>(cpAttributesBuilder.getUsedWavelengths());
                     }
                     usedDegreeCpWls.add(new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                            .networks.network.node.termination.point.cp.attributes.UsedWavelengthsBuilder()
-                            .setIndex(wavelengthIndex)
-                            .setFrequency(centralTHz).setWidth(FrequencyGHz.getDefaultInstance("40")).build());
+                        .networks.network.node.termination.point.cp.attributes.UsedWavelengthsBuilder()
+                        .setIndex(wavelengthIndex)
+                        .setFrequency(centralTHz).setWidth(FrequencyGHz.getDefaultInstance("40")).build());
+                    cpAttributesBuilder.setUsedWavelengths(usedDegreeCpWls);
                     tp1Builder.setCpAttributes(cpAttributesBuilder.build());
                     break;
 
@@ -588,22 +575,21 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 case SRGRXPP:
                 case SRGTXPP:
                     PpAttributes ppAttributes = null;
+                    List<UsedWavelength> usedDegreePpWls;
                     if (tp1 != null) {
                         ppAttributes = tp1.getPpAttributes();
                     }
                     PpAttributesBuilder ppAttributesBuilder;
                     if (ppAttributes == null) {
                         ppAttributesBuilder = new PpAttributesBuilder();
+                        usedDegreePpWls = new ArrayList<>();
                     } else {
                         ppAttributesBuilder = new PpAttributesBuilder(ppAttributes);
-                    }
-                    List<UsedWavelength> usedDegreePpWls = ppAttributesBuilder.getUsedWavelength();
-                    if (usedDegreePpWls == null) {
-                        usedDegreePpWls = new ArrayList<>();
-                        ppAttributesBuilder.setUsedWavelength(usedDegreePpWls);
+                        usedDegreePpWls = new ArrayList<>(ppAttributesBuilder.getUsedWavelength());
                     }
                     usedDegreePpWls.add(new UsedWavelengthBuilder().setIndex(wavelengthIndex)
                         .setFrequency(centralTHz).setWidth(FrequencyGHz.getDefaultInstance("40")).build());
+                    ppAttributesBuilder.setUsedWavelength(usedDegreePpWls);
                     tp1Builder.setPpAttributes(ppAttributesBuilder.build());
                     break;
 
