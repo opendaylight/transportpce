@@ -172,7 +172,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_OK, OPERATION_SUCCESSFUL);
             }
         });
-
     }
 
     @SuppressWarnings("checkstyle:IllegalCatch")

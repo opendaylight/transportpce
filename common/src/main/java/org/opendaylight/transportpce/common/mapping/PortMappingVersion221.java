@@ -208,7 +208,7 @@ public class PortMappingVersion221 {
             LOG.warn("Circuit Packs are not present for {}", nodeId);
             return false;
         } else {
-            circuitPackList = deviceObject.get().getCircuitPacks();
+            circuitPackList = new ArrayList<>(deviceObject.get().getCircuitPacks());
             circuitPackList.sort(Comparator.comparing(CircuitPack::getCircuitPackName));
         }
         if (device.getXponder() == null) {
@@ -219,7 +219,7 @@ public class PortMappingVersion221 {
                     LOG.warn("Ports were not found for circuit pack: {}", circuitPackName);
                     continue;
                 }
-                List<Ports> portList = cp.getPorts();
+                List<Ports> portList = new ArrayList<>(cp.getPorts());
                 portList.sort(Comparator.comparing(Ports::getPortName));
                 for (Ports port : portList) {
                     if (port.getPortQual() == null) {
@@ -519,7 +519,7 @@ public class PortMappingVersion221 {
                     LOG.warn("{} : Circuit pack {} not found or without ports.", nodeId, circuitPackName);
                     continue;
                 }
-                List<Ports> portList = circuitPackObject.get().getPorts();
+                List<Ports> portList = new ArrayList<>(circuitPackObject.get().getPorts());
                 Collections.sort(portList, new SortPort221ByName());
                 int portIndex = 1;
                 for (Ports port : portList) {

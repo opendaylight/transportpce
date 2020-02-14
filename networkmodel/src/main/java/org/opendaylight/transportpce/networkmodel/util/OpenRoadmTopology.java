@@ -87,7 +87,7 @@ public final class OpenRoadmTopology {
             // transform flat mapping list to per degree and per srg mapping lists
             Map<String, List<Mapping>> mapDeg = new HashMap<>();
             Map<String, List<Mapping>> mapSrg = new HashMap<>();
-            List<Mapping> mappingList = mappingNode.getMapping();
+            List<Mapping> mappingList = new ArrayList<>(mappingNode.getMapping());
             mappingList.sort(Comparator.comparing(Mapping::getLogicalConnectionPoint));
 
             List<String> nodeShardList = new ArrayList<>();

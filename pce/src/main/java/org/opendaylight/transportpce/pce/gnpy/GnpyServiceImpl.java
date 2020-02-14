@@ -170,7 +170,8 @@ public class GnpyServiceImpl {
         ExplicitRouteObjects explicitRouteObjects = new ExplicitRouteObjectsBuilder()
             .setRouteObjectIncludeExclude(routeObjectIncludeExcludes).build();
         //Create Path Constraint
-        PathConstraints pathConstraints = createPathConstraints(ztoa.getRate(),ztoa.getZToAWavelengthNumber());
+        PathConstraints pathConstraints = createPathConstraints(ztoa.getRate().toJava(),
+            ztoa.getZToAWavelengthNumber().toJava());
 
         // Create the path request
         List<PathRequest> pathRequestList = new ArrayList<>();
