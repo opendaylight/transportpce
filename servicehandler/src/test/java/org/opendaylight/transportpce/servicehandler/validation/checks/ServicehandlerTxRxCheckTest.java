@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.servicehandler.ServiceEndpointType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEndBuilder;
@@ -108,6 +109,7 @@ public class ServicehandlerTxRxCheckTest {
         Assert.assertEquals(ServiceEndpointType.SERVICEAEND + " is not set", result.getMessage());
     }
 
+    @Ignore
     @Test
     public void checkForServiceRateNull() {
         ComplianceCheckResult result =
