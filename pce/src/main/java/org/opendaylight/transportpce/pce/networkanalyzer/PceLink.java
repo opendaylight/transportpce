@@ -115,12 +115,13 @@ public class PceLink {
         return tmpoppositeLink;
     }
 
-    //Compute the link latency : if the latency is not defined, the latency it is computed from the omsAttributesSpan
+    //Compute the link latency : if the latency is not defined, the latency is computed from the omsAttributesSpan
     private Long calcLatency(Link link) {
         Link1 link1 = null;
+        Long tmplatency;
         link1 = link.augmentation(Link1.class);
-        Long tmplatency = link1.getLinkLatency().toJava();
-        if (tmplatency != null) {
+        if (link1.getLinkLatency() != null) {
+            tmplatency = link1.getLinkLatency().toJava();
             return tmplatency;
         }
 
