@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "88dad842_d67249f6",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2020-01-28.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-14T11:41:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f06a2a46_a35e07cc",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 3
+      },
+      "revId": "ed3c1f9eb1583a2490c73e1c26da73e699cbd529",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c61f83af_2416a9a3",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 2
