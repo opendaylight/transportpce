@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2a47672b_6a9da364",
+        "filename": "api/src/main/yang/service_path/transportpce-common-types@2019-12-12.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-14T11:45:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55e56546_78b31e5a",
+      "range": {
+        "startLine": 524,
+        "startChar": 0,
+        "endLine": 540,
+        "endChar": 4
+      },
+      "revId": "3e2dd75c78a96a515e2b4e64ac6916afc3203458",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9392438_f2c067c1",
         "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2019-12-12.yang",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "3e2dd75c78a96a515e2b4e64ac6916afc3203458",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7979adab_f1de23e0",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2019-12-12.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-14T11:45:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9392438_f2c067c1",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 3
+      },
+      "revId": "3e2dd75c78a96a515e2b4e64ac6916afc3203458",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
