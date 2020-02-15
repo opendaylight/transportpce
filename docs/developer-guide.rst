@@ -590,7 +590,7 @@ Most important parameters for this REST RPC is the *service-name*.
 Help
 ----
 
--  `TransportPCE Wiki <https://wiki.opendaylight.org/view/TransportPCE:Main>`__
+-  `TransportPCE Wiki <https://wiki.lfnetworking.org/display/ODL/Projects>`__
 
 -  TransportPCE Mailing List
    (`developer <https://lists.opendaylight.org/mailman/listinfo/transportpce-dev>`__)
