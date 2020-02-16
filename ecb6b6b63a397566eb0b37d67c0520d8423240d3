@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fba7841_e6b6367e",
+        "filename": "api/src/main/yang/service_path/transportpce-pce@2020-01-28.yang",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-16T08:59:53Z",
+      "side": 1,
+      "message": "This forces SP models to use the previous revision.\nA better approach would be to remove those old ORDM service models and update java code imports where needed.",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 13,
+        "endChar": 29
+      },
+      "revId": "ecb6b6b63a397566eb0b37d67c0520d8423240d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
