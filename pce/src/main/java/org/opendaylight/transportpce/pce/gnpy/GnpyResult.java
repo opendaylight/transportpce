@@ -33,13 +33,13 @@ import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecR
 import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
 import org.opendaylight.mdsal.binding.generator.util.BindingRuntimeContext;
 import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.Result;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.type.NumUnnumHop;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.generic.path.properties.path.properties.PathMetric;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.generic.path.properties.path.properties.PathRouteObjects;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.result.Response;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.result.response.response.type.NoPathCase;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.result.response.response.type.PathCase;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type.NumUnnumHop;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathMetric;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathRouteObjects;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.Response;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.NoPathCase;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.PathCase;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.General;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.GeneralBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Include;
@@ -102,7 +102,7 @@ public class GnpyResult {
             new BindingNormalizedNodeCodecRegistry(bindingRuntimeContext);
 
         // Create the data object
-        QName pathQname = QName.create("gnpy:path", "2019-05-02", "result");
+        QName pathQname = QName.create("gnpy:path", "2020-02-02", "result");
         LOG.debug("the Qname is {} / namesapce {} ; module {}; ", pathQname.toString(), pathQname.getNamespace(),
             pathQname.getModule());
         YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
@@ -188,7 +188,7 @@ public class GnpyResult {
         int counter = 0;
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
-                NumUnnumHop numUnnumHop = (org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.type
+                NumUnnumHop numUnnumHop = (org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type
                     .NumUnnumHop) pathRouteObjects.getPathRouteObject().getType();
                 String nodeIp = numUnnumHop.getNumUnnumHop().getNodeId();
                 try {

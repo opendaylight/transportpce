@@ -47,7 +47,7 @@ public class PostAlgoPathValidator {
         }
 
         int tribSlotNb = 1;
-        //variable to deal wih 1GE (Nb=1) and 10GE (Nb=10) cases
+        //variable to deal with 1GE (Nb=1) and 10GE (Nb=10) cases
         switch (serviceType) {
 
             case "100GE":
@@ -62,9 +62,6 @@ public class PostAlgoPathValidator {
                 }
                 pceResult.setResultWavelength(waveL);
                 LOG.info("In PostAlgoPathValidator: chooseWavelength WL found {} {}", waveL, path.toString());
-
-                // TODO here other post algo validations can be added
-                // more data can be sent to PceGraph module via PceResult structure if required
 
                 // Check the OSNR
                 if (!checkOSNR(path)) {
@@ -87,12 +84,17 @@ public class PostAlgoPathValidator {
                     pceResult.setLocalCause(PceResult.LocalCause.HD_NODE_INCLUDE);
                     return pceResult;
                 }
+
+                // TODO here other post algo validations can be added
+                // more data can be sent to PceGraph module via PceResult structure if required
+
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
+                pceResult.setLocalCause(PceResult.LocalCause.NONE);
+
                 break;
 
             case "10GE":
                 tribSlotNb = 10;
-            //fallthrough
             case "1GE":
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                 pceResult.setServiceType(serviceType);
@@ -120,10 +122,8 @@ public class PostAlgoPathValidator {
                     serviceType, path.toString());
                 break;
         }
-        return pceResult;
 
-        // TODO other post algo validations can be added anf if needed,
-        // more data can be sent to PceGraph module via PceResult structure
+        return pceResult;
     }
 
     // Choose the first available wavelength from the source to the destination
@@ -431,9 +431,6 @@ public class PostAlgoPathValidator {
         if ((osnrDb + SYS_MARGIN) < MIN_OSNR_W100G) {
             return false;
         }
-        double localOsnr = 0L;
-        LOG.info("In OSNR Stub: {}", localOsnr);
-        // TODO : change this to return OSNR value and validate or invalidate the path
         return true;
     }
 

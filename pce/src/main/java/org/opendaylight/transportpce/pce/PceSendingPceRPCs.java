@@ -101,7 +101,7 @@ public class PceSendingPceRPCs {
         LOG.info("PceGraph ...");
         PceGraph graph = new PceGraph(nwAnalizer.getaendPceNode(),
                 nwAnalizer.getzendPceNode(), nwAnalizer.getAllPceNodes(),
-                pceHardConstraints, pceSoftConstraints, rc, serviceType);
+                hardConstraints, softConstraints, rc, serviceType);
         graph.calcPath();
         rc = graph.getReturnStructure();
         if (!rc.getStatus()) {

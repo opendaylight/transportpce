@@ -125,12 +125,7 @@ public class PceResult {
     }
 
     public void setLocalCause(LocalCause lc) {
-        // For now keep the very first fatal problem
-        // TODO. Later this value might become history of algo if all
-        // significant problems are added here as to List
-        if (localCause == LocalCause.NONE) {
-            this.localCause = lc;
-        }
+        this.localCause = lc;
     }
 
     public void setCalcMessage(String calcMessage) {

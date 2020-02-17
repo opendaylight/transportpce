@@ -18,9 +18,9 @@ import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.gnpy.api.ServiceFile
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.gnpy.api.TopologyFileBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Connections;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Elements;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.generic.path.properties.path.properties.PathRouteObjects;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.service.PathRequest;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.Synchronization;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathRouteObjects;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.service.PathRequest;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.synchronization.info.Synchronization;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirectionBuilder;
@@ -46,7 +46,6 @@ public class GnpyUtilitiesImpl {
     private GnpyResult gnpyAtoZ;
     private GnpyResult gnpyZtoA;
     private Long requestId;
-    //private boolean status;
 
     public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input)
         throws GnpyException {
