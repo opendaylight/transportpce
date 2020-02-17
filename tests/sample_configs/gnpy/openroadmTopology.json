@@ -506,17 +506,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-2-DEG1-to-OpenROADM-1-DEG1",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 28.4,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 100000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 12,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 29,
+                            "engineered-spanloss": 30.2,
                             "clfi": "fiber12",
                             "auto-spanloss": true
                         },
@@ -543,7 +543,7 @@
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 100000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
@@ -572,17 +572,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-1-DEG1-to-OpenROADM-2-DEG1",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 28.4,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 100000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 12,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 29,
+                            "engineered-spanloss": 30.2,
                             "clfi": "fiber21",
                             "auto-spanloss": true
                         },
@@ -605,17 +605,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-3-DEG2-to-OpenROADM-2-DEG2",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 28.4,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 140000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 12,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 29,
+                            "engineered-spanloss": 30.2,
                             "clfi": "fiber23",
                             "auto-spanloss": true
                         },
@@ -638,17 +638,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-5-DEG3-to-OpenROADM-2-DEG3",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 7.1,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 149000,
+                                    "SRLG-length": 60000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 38,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 7.2,
+                            "engineered-spanloss": 7.5,
                             "clfi": "fiber25",
                             "auto-spanloss": true
                         },
@@ -675,7 +675,7 @@
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 100000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
@@ -704,17 +704,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-2-DEG2-to-OpenROADM-3-DEG2",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 28.4,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 140000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 12,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 29,
+                            "engineered-spanloss": 30.2,
                             "clfi": "fiber32",
                             "auto-spanloss": true
                         },
@@ -737,17 +737,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-5-DEG2-to-OpenROADM-3-DEG3",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 7.1,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 149000,
+                                    "SRLG-length": 60000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 38,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 7.2,
+                            "engineered-spanloss": 7.5,
                             "clfi": "fiber35",
                             "auto-spanloss": true
                         },
@@ -770,17 +770,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-4-DEG2-to-OpenROADM-3-DEG4",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 28.4,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 100000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 12,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 29,
+                            "engineered-spanloss": 30.2,
                             "clfi": "fiber34",
                             "auto-spanloss": true
                         },
@@ -803,17 +803,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-4-DEG1-to-OpenROADM-5-DEG1",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 28.4,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 100000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 12,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 29,
+                            "engineered-spanloss": 30.2,
                             "clfi": "fiber45",
                             "auto-spanloss": true
                         },
@@ -836,17 +836,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-3-DEG4-to-OpenROADM-4-DEG2",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 28.4,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 100000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 12,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 29,
+                            "engineered-spanloss": 30.2,
                             "clfi": "fiber43",
                             "auto-spanloss": true
                         },
@@ -869,17 +869,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-4-DEG1-to-OpenROADM-5-DEG1",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 28.4,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 70000,
+                                    "SRLG-length": 100000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 12,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 29,
+                            "engineered-spanloss": 30.2,
                             "clfi": "fiber54",
                             "auto-spanloss": true
                         },
@@ -902,17 +902,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-3-DEG3-to-OpenROADM-5-DEG2",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 7.1,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 149000,
+                                    "SRLG-length": 60000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 38,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 7.2,
+                            "engineered-spanloss": 7.5,
                             "clfi": "fiber53",
                             "auto-spanloss": true
                         },
@@ -935,17 +935,17 @@
                     "org-openroadm-network-topology:OMS-attributes": {
                         "opposite-link": "OpenROADM-2-DEG3-to-OpenROADM-5-DEG3",
                         "span": {
-                            "spanloss-base": 11.4,
+                            "spanloss-base": 7.1,
                             "link-concatenation": [
                                 {
                                     "SRLG-Id": 0,
-                                    "SRLG-length": 149000,
+                                    "SRLG-length": 60000,
                                     "pmd": 0.5,
                                     "fiber-type": "smf"
                                 }
                             ],
-                            "spanloss-current": 38,
-                            "engineered-spanloss": 12.2,
+                            "spanloss-current": 7.2,
+                            "engineered-spanloss": 7.5,
                             "clfi": "fiber52",
                             "auto-spanloss": true
                         },
@@ -1416,6 +1416,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-1"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node1"
                         }
                     ]
                 },
@@ -1479,6 +1483,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-1"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node1"
                         }
                     ]
                 },
@@ -1542,6 +1550,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-1"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node1"
                         }
                     ]
                 },
@@ -1636,6 +1648,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-2"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node2"
                         }
                     ]
                 },
@@ -1699,6 +1715,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-2"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node2"
                         }
                     ]
                 },
@@ -1762,6 +1782,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-2"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node2"
                         }
                     ]
                 },
@@ -1825,6 +1849,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-2"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node2"
                         }
                     ]
                 },
@@ -1919,6 +1947,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-3"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node3"
                         }
                     ]
                 },
@@ -1982,6 +2014,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-3"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node3"
                         }
                     ]
                 },
@@ -2045,6 +2081,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-3"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node3"
                         }
                     ]
                 },
@@ -2108,6 +2148,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-3"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node3"
                         }
                     ]
                 },
@@ -2171,6 +2215,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-3"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node3"
                         }
                     ]
                 },
@@ -2265,6 +2313,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-4"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node4"
                         }
                     ]
                 },
@@ -2328,6 +2380,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-4"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node4"
                         }
                     ]
                 },
@@ -2391,6 +2447,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-4"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node4"
                         }
                     ]
                 },
@@ -2485,6 +2545,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-5"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node5"
                         }
                     ]
                 },
@@ -2548,6 +2612,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-5"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node5"
                         }
                     ]
                 },
@@ -2611,6 +2679,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-5"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node5"
                         }
                     ]
                 },
@@ -2674,6 +2746,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "OpenROADM-5"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node5"
                         }
                     ]
                 },
@@ -2756,6 +2832,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "XPONDER-1"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node1"
                         }
                     ]
                 },
@@ -2838,6 +2918,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "XPONDER-2"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node2"
                         }
                     ]
                 },
@@ -2920,6 +3004,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "XPONDER-3"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node3"
                         }
                     ]
                 },
@@ -3002,6 +3090,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "XPONDER-4"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node4"
                         }
                     ]
                 },
@@ -3084,6 +3176,10 @@
                         {
                             "network-ref":"openroadm-network",
                             "node-ref": "XPONDER-5"
+                        },
+                        {
+                            "network-ref":"clli-network",
+                            "node-ref": "Node5"
                         }
                     ]
                 }

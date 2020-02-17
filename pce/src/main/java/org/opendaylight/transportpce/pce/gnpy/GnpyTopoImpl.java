@@ -169,7 +169,11 @@ public class GnpyTopoImpl {
         for (Node openRoadmTopoNode : openRoadmTopoNodeList) {
             // Retrieve the supporting node and the type of the node in openRoadm network
             List<SupportingNode> supportingNodeList = openRoadmTopoNode.getSupportingNode();
+
             for (SupportingNode supportingNode : supportingNodeList) {
+                if (!supportingNode.getNetworkRef().getValue().equals("openroadm-network")) {
+                    continue;
+                }
                 IpAddress ipAddress = null;
                 String nodeRef = supportingNode.getNodeRef().getValue();
                 // Retrieve the mapping between the openRoadm topology and openRoadm network

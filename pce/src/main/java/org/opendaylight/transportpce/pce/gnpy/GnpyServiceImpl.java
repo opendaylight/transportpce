@@ -19,30 +19,30 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Elements;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.RouteIncludeEro;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TeHopType;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TeNodeId;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TePathDisjointness;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.TeTpId;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.common.constraints_config.TeBandwidth;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.common.constraints_config.TeBandwidthBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.Type;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.type.NumUnnumHopBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.type.num.unnum.hop.NumUnnumHop;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.generic.path.constraints.PathConstraints;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.generic.path.constraints.PathConstraintsBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.gnpy.specific.parameters.EffectiveFreqSlot;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.gnpy.specific.parameters.EffectiveFreqSlotBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.path.route.objects.ExplicitRouteObjects;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.path.route.objects.ExplicitRouteObjectsBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.path.route.objects.explicit.route.objects.RouteObjectIncludeExclude;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.path.route.objects.explicit.route.objects.RouteObjectIncludeExcludeBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.service.PathRequest;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.service.PathRequestBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.Synchronization;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.SynchronizationBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.synchronization.Svec;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev190502.synchronization.info.synchronization.SvecBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.RouteIncludeEro;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.TeHopType;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.TeNodeId;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.TePathDisjointness;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.TeTpId;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.common.constraints_config.TeBandwidth;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.common.constraints_config.TeBandwidthBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.Type;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type.NumUnnumHopBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type.num.unnum.hop.NumUnnumHop;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.constraints.PathConstraints;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.constraints.PathConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.gnpy.specific.parameters.EffectiveFreqSlot;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.gnpy.specific.parameters.EffectiveFreqSlotBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.path.route.objects.ExplicitRouteObjects;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.path.route.objects.ExplicitRouteObjectsBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.path.route.objects.explicit.route.objects.RouteObjectIncludeExclude;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.path.route.objects.explicit.route.objects.RouteObjectIncludeExcludeBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.service.PathRequest;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.service.PathRequestBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.synchronization.info.Synchronization;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.synchronization.info.SynchronizationBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.synchronization.info.synchronization.Svec;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.synchronization.info.synchronization.SvecBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
@@ -142,7 +142,8 @@ public class GnpyServiceImpl {
         List<PathRequest> pathRequestList = new ArrayList<>();
         PathRequest pathRequestEl = new PathRequestBuilder().setRequestId(requestId)
             .setSource(this.mapNodeRefIp.get(sourceNode)).setDestination(this.mapNodeRefIp.get(destNode))
-            .setSrcTpId("srcTpId".getBytes()).setDstTpId("dstTpId".getBytes()).setPathConstraints(pathConstraints)
+            .setSrcTpId("srcTpId".getBytes()).setDstTpId("dstTpId".getBytes())
+            .setBidirectional(false).setPathConstraints(pathConstraints).setPathConstraints(pathConstraints)
             .setExplicitRouteObjects(explicitRouteObjects).build();
         pathRequestList.add(pathRequestEl);
         LOG.debug("In GnpyServiceImpl: path request AToZ is extracted");
@@ -167,14 +168,14 @@ public class GnpyServiceImpl {
         ExplicitRouteObjects explicitRouteObjects = new ExplicitRouteObjectsBuilder()
             .setRouteObjectIncludeExclude(routeObjectIncludeExcludes).build();
         //Create Path Constraint
-        //to be deleted
-        //Long wavelengthNumber = (ztoa.getZToAWavelengthNumber() != null) ? ztoa.getZToAWavelengthNumber() : null;
         PathConstraints pathConstraints = createPathConstraints(ztoa.getRate(),ztoa.getZToAWavelengthNumber());
+
         // Create the path request
         List<PathRequest> pathRequestList = new ArrayList<>();
         PathRequest pathRequestEl = new PathRequestBuilder().setRequestId(requestId)
             .setSource(this.mapNodeRefIp.get(sourceNode)).setDestination(this.mapNodeRefIp.get(destNode))
-            .setSrcTpId("srcTpId".getBytes()).setDstTpId("dstTpId".getBytes()).setPathConstraints(pathConstraints)
+            .setSrcTpId("srcTpId".getBytes()).setDstTpId("dstTpId".getBytes())
+            .setBidirectional(false).setPathConstraints(pathConstraints)
             .setExplicitRouteObjects(explicitRouteObjects).build();
         pathRequestList.add(pathRequestEl);
         LOG.debug("In GnpyServiceImpl: path request ZToA is extracted");
@@ -306,7 +307,7 @@ public class GnpyServiceImpl {
     private RouteObjectIncludeExclude addRouteObjectIncludeExclude(IpAddress ipAddress, long teTpValue) {
         TeNodeId teNodeId = new TeNodeId(ipAddress);
         TeTpId teTpId = new TeTpId(teTpValue);
-        NumUnnumHop numUnnumHop = new org.opendaylight.yang.gen.v1.gnpy.path.rev190502.explicit.route.hop.type.num
+        NumUnnumHop numUnnumHop = new org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type.num
             .unnum.hop.NumUnnumHopBuilder()
                 .setNodeId(teNodeId.getIpv4Address().getValue())
                 .setLinkTpId(teTpId.getUint32().toString())
