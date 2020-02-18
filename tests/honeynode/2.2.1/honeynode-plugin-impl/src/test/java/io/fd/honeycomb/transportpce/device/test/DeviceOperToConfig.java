@@ -47,7 +47,7 @@ public class DeviceOperToConfig {
     private static final String PM_LIST_OPER = "src/test/resources/oper-ROADMA-cpm.xml";
     private static final String CONFIG_XSL = "src/main/resources/honeycomb-minimal-resources/config/device/config.xsl";
     private static final String DEVICE_XSL = "src/main/resources/honeycomb-minimal-resources/config/device/OperToConfig.xsl";
-    private static final String NAMESPACE_TRIMER_XSL = "src/main/resources/honeycomb-minimal-resources/config/device/NamespaceTrimmer.xslt";
+
 
 
     /**
@@ -57,29 +57,18 @@ public class DeviceOperToConfig {
      */
     public static String operToConfig() {
         String result =null;
-        LOG.info("process to transform xml file ");
+        LOG.info("process to transform xml file {}",DEVICE_OPER);
         TransformerFactory factory = TransformerFactory.newInstance();
         Source xslt = new StreamSource(new File(DEVICE_XSL));
-        Transformer transformer;
-        Source text;
-        StringWriter tmpwriter = new StringWriter();
-        StringReader reader;
         try {
+           StringWriter tmpwriter = new StringWriter();
             LOG.info("transforming xml data to config device ...");
-            transformer = factory.newTransformer(xslt);
-            text = new StreamSource(new File(DEVICE_OPER));
+            Transformer transformer = factory.newTransformer(xslt);
+            Source text = new StreamSource(new File(DEVICE_OPER));
             transformer.transform(text, new StreamResult(tmpwriter));
-            LOG.info("removing namespace ...");
-            xslt = new StreamSource(new File(NAMESPACE_TRIMER_XSL));
-            transformer = factory.newTransformer(xslt);
-            reader = new StringReader(tmpwriter.toString());
-            StringWriter device_config = new StringWriter();
-            text = new StreamSource(reader);
-            transformer.transform(text, new StreamResult(device_config));
-            //LOG.info("xml transformed : {}\n", device_config.toString());
-            result = device_config.toString();
+            result = tmpwriter.toString();
         } catch (TransformerException e) {
-            LOG.error("Transformer failed ");
+            LOG.error("Transformer failed ", e);
         }
         return result;
     }
@@ -133,8 +122,6 @@ public class DeviceOperToConfig {
     }
 
     public static void main(String[] args) {
-//        String xml = DeviceOperToConfig.getDeviceFromXML(DeviceOperToConfig.operToConfig());
-//        DeviceOperToConfig.createDeviceFromString(xml);
         DeviceOperToConfig.createPmListFromFile();
 
     }

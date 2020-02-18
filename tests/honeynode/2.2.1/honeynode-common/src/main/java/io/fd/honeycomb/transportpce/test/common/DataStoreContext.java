@@ -15,7 +15,7 @@
  */
 package io.fd.honeycomb.transportpce.test.common;
 
-import org.opendaylight.yangtools.binding.data.codec.impl.BindingNormalizedNodeCodecRegistry;
+import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
 import org.opendaylight.yangtools.yang.model.api.SchemaContext;
 
 public interface DataStoreContext {

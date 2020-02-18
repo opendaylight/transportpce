@@ -30,8 +30,7 @@ import java.io.Writer;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
-
-import org.opendaylight.yangtools.binding.data.codec.impl.BindingNormalizedNodeCodecRegistry;
+import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
@@ -48,7 +47,7 @@ import org.opendaylight.yangtools.yang.model.api.SchemaNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JSONDataObjectConverter extends AbstractDataObjectConverter {
+public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JSONDataObjectConverter.class);
 
@@ -145,7 +144,7 @@ public class JSONDataObjectConverter extends AbstractDataObjectConverter {
         NormalizedNodeResult result = new NormalizedNodeResult();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
             JsonParserStream jsonParser = JsonParserStream.create(streamWriter, getSchemaContext(),
-            getSchemaContext())) {
+                getSchemaContext())) {
             jsonParser.parse(reader);
         } catch (IOException e) {
             LOG.warn("An error {} occured during parsing Json input stream", e.getMessage(), e);

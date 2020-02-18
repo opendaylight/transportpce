@@ -18,17 +18,19 @@ package io.fd.honeycomb.infra.distro.schema;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
-import org.opendaylight.controller.md.sal.binding.impl.BindingToNormalizedNodeCodec;
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingToNormalizedNodeCodec;
 import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
+import org.opendaylight.mdsal.dom.api.DOMSchemaService;
 
 public class SchemaModule extends AbstractModule {
 
     @Override
     protected void configure() {
         bind(ModuleInfoBackedContext.class).toProvider(ModuleInfoBackedCtxProvider.class).in(Singleton.class);
-        bind(SchemaService.class).toProvider(SchemaServiceProvider.class).in(Singleton.class);
+        bind(DOMSchemaService.class).toProvider(SchemaServiceProvider.class).in(Singleton.class);
         bind(BindingToNormalizedNodeCodec.class).toProvider(SerializerProvider.class).in(Singleton.class);
+        bind(org.opendaylight.controller.md.sal.binding.impl.BindingToNormalizedNodeCodec.class)
+                .toProvider(LegacySerializerProvider.class).in(Singleton.class);
     }
 
 }

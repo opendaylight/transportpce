@@ -25,10 +25,10 @@ import io.fd.honeycomb.notification.impl.TranslationUtil;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
-import org.opendaylight.controller.md.sal.dom.api.DOMNotification;
-import org.opendaylight.controller.md.sal.dom.api.DOMNotificationListener;
-import org.opendaylight.controller.md.sal.dom.broker.impl.DOMNotificationRouter;
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
+import org.opendaylight.mdsal.dom.api.DOMNotification;
+import org.opendaylight.mdsal.dom.api.DOMNotificationListener;
+import org.opendaylight.mdsal.dom.api.DOMSchemaService;
+import org.opendaylight.mdsal.dom.broker.DOMNotificationRouter;
 import org.opendaylight.netconf.notifications.NetconfNotificationCollector;
 import org.opendaylight.netconf.notifications.NotificationPublisherRegistration;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.StreamNameType;
@@ -46,7 +46,7 @@ public final class HoneycombNotification2NetconfProvider
     @Inject
     private DOMNotificationRouter notificationRouter;
     @Inject
-    private SchemaService schemaService;
+    private DOMSchemaService schemaService;
     @Inject
     private NetconfConfiguration cfgAttributes;
     @Inject
@@ -112,10 +112,10 @@ public final class HoneycombNotification2NetconfProvider
 
         private final NotificationPublisherRegistration netconfNotifReg;
         private final StreamNameType streamType;
-        private final SchemaService schemaService;
+        private final DOMSchemaService schemaService;
 
         TranslatingNotificationListener(final NotificationPublisherRegistration netconfNotifReg,
-                                               final StreamNameType streamType, final SchemaService schemaService) {
+                                               final StreamNameType streamType, final DOMSchemaService schemaService) {
             this.netconfNotifReg = netconfNotifReg;
             this.streamType = streamType;
             this.schemaService = schemaService;
