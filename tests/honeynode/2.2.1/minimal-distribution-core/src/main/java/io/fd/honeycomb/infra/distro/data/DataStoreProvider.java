@@ -18,26 +18,53 @@ package io.fd.honeycomb.infra.distro.data;
 
 import com.google.inject.Inject;
 import io.fd.honeycomb.binding.init.ProviderTrait;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.dom.store.impl.InMemoryDOMDataStore;
-import org.opendaylight.controller.md.sal.dom.store.impl.InMemoryDOMDataStoreFactory;
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
+
+import java.util.concurrent.ExecutorService;
+
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+
+import org.opendaylight.mdsal.dom.api.DOMSchemaService;
+import org.opendaylight.mdsal.dom.store.inmemory.InMemoryDOMDataStore;
+import org.opendaylight.mdsal.dom.store.inmemory.InMemoryDOMDataStoreConfigProperties;
+import org.opendaylight.mdsal.dom.store.inmemory.InMemoryDOMDataStoreFactory;
+import org.opendaylight.yangtools.util.concurrent.SpecialExecutors;
+
+
 
 public final class DataStoreProvider extends ProviderTrait<InMemoryDOMDataStore> {
 
     @Inject
-    private SchemaService schemaService;
+    private DOMSchemaService schemaService;
     private String name;
     private LogicalDatastoreType type;
 
-    public DataStoreProvider(final String name,
-                             final LogicalDatastoreType type) {
+    public DataStoreProvider(final String name, final  LogicalDatastoreType type) {
         this.name = name;
-        this.type = type;
+        this.type=type;
     }
 
     @Override
     protected InMemoryDOMDataStore create() {
-        return InMemoryDOMDataStoreFactory.create(name, type, schemaService, false, null);
+         final ExecutorService dataChangeListenerExecutor = createExecutorService(name, InMemoryDOMDataStoreConfigProperties.getDefault());
+         final InMemoryDOMDataStore dataStore = new InMemoryDOMDataStore(name, this.type, dataChangeListenerExecutor,
+                 InMemoryDOMDataStoreConfigProperties.getDefault().getMaxDataChangeListenerQueueSize(), InMemoryDOMDataStoreConfigProperties.getDefault().getDebugTransactions());
+
+         if (schemaService != null) {
+             schemaService.registerSchemaContextListener(dataStore);
+         }
+
+         return dataStore;
     }
+
+    private static ExecutorService createExecutorService(final String name,
+            final InMemoryDOMDataStoreConfigProperties props) {
+        // For DataChangeListener notifications we use an executor that provides the fastest
+        // task execution time to get higher throughput as DataChangeListeners typically provide
+        // much of the business logic for a data model. If the executor queue size limit is reached,
+        // subsequent submitted notifications will block the calling thread.
+        return SpecialExecutors.newBlockingBoundedFastThreadPool(
+            props.getMaxDataChangeExecutorPoolSize(), props.getMaxDataChangeExecutorQueueSize(),
+            name + "-DCL", InMemoryDOMDataStore.class);
+    }
+
 }

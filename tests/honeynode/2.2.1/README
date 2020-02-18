@@ -1,12 +1,12 @@
 = This is a Honeycomb distribution
 
 Built from: io.fd.honeycomb.transportpce/honeynode-distribution
-Version: 1.18.01
+Version: 1.19.04
 
 https://wiki.fd.io/view/Honeycomb
 
 == Structure
-(under folder honeynode-distribution/target/honeynode-distribution-1.18.0.1-hc/honeynode-distribution-1.18.0.1)
+(under folder honeynode-distribution/target/honeynode-distribution-1.19.04-hc/honeynode-distribution-1.19.04)
 
 Structure of the distribution:
 

@@ -15,9 +15,6 @@
  */
 package io.fd.honeycomb.transportpce.device.tools;
 
-import io.fd.honeycomb.transportpce.binding.converter.XMLDataObjectConverter;
-import io.fd.honeycomb.transportpce.test.common.DataStoreContext;
-
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -35,9 +32,11 @@ import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.fd.honeycomb.transportpce.binding.converter.XMLDataObjectConverter;
+import io.fd.honeycomb.transportpce.test.common.DataStoreContext;
+
 /**
- * Factory for creating the {@link Netconf} from the XML stored in
- * classpath.
+ * Factory for creating the {@link Netconf} from the XML stored in classpath.
  *
  * @author Martial COULIBALY ( martial.coulibaly@gfi.com ) on behalf of Orange
  */
@@ -46,8 +45,7 @@ public class DefaultNetconfFactory {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultNetconfFactory.class);
 
     /**
-     * Returns a new instance of {@link Netconf} from the loaded XML stored
-     * in File.
+     * Returns a new instance of {@link Netconf} from the loaded XML stored in File.
      *
      * @return {@link Netconf}
      */
@@ -60,31 +58,34 @@ public class DefaultNetconfFactory {
             try {
                 targetStream = new FileInputStream(netconf_data_config);
                 Optional<NormalizedNode<?, ?>> transformIntoNormalizedNode = null;
-                transformIntoNormalizedNode =
-                        XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
+                transformIntoNormalizedNode = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
                         .transformIntoNormalizedNode(targetStream);
                 if (!transformIntoNormalizedNode.isPresent()) {
                     throw new IllegalStateException(
-                            String.format("Could not transform the input %s into normalized nodes",
-                            config));
+                            String.format("Could not transform the input %s into normalized nodes", config));
                 }
                 Optional<DataObject> dataObject = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
                         .getDataObject(transformIntoNormalizedNode.get(), Netconf.QNAME);
                 if (!dataObject.isPresent()) {
-                    throw new IllegalStateException("Could not transform normalized nodes into data object");
+                    LOG.warn("Could not transform normalized nodes into data object");
+                    return null;
                 }
-                result =  (Netconf) dataObject.get();
+                result = (Netconf) dataObject.get();
             } catch (FileNotFoundException e) {
                 LOG.error("File not found : {} at {}", e.getMessage(), e.getLocalizedMessage());
+            } catch (IllegalStateException e) {
+                LOG.warn("Could not transform the input Netconf into normalized nodes");
+                return null;
             }
         } else {
             LOG.info("netconf xml file not existed at : '{}'", netconf_data_config.getAbsolutePath());
         }
         return result;
     }
+
     /**
-     * Returns a new instance of {@link Netconf} from the loaded XML stored
-     * in String.
+     * Returns a new instance of {@link Netconf} from the loaded XML stored in
+     * String.
      *
      * @return {@link Netconf}
      */
@@ -93,27 +94,31 @@ public class DefaultNetconfFactory {
         if (netconf_data_config != null) {
             LOG.info("Netconf data config string is ok ");
             InputStream targetStream;
-            targetStream = new ByteArrayInputStream(netconf_data_config.getBytes());
-            Optional<NormalizedNode<?, ?>> transformIntoNormalizedNode = null;
-            transformIntoNormalizedNode =
-                    XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
-                    .transformIntoNormalizedNode(targetStream);
-            if (!transformIntoNormalizedNode.isPresent()) {
-                throw new IllegalStateException(
-                        String.format("Could not transform the input %s into normalized nodes"));
+            try {
+                targetStream = new ByteArrayInputStream(netconf_data_config.getBytes());
+                Optional<NormalizedNode<?, ?>> transformIntoNormalizedNode = null;
+                transformIntoNormalizedNode = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
+                        .transformIntoNormalizedNode(targetStream);
+                if (!transformIntoNormalizedNode.isPresent()) {
+                    throw new IllegalStateException(
+                            String.format("Could not transform the input %s into normalized nodes"));
+                }
+                Optional<DataObject> dataObject = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
+                        .getDataObject(transformIntoNormalizedNode.get(), Netconf.QNAME);
+                if (!dataObject.isPresent()) {
+                    LOG.warn("Could not transform normalized nodes into data object");
+                    return null;
+                }
+                result = (Netconf) dataObject.get();
+            } catch (IllegalStateException e) {
+                LOG.warn("Could not transform the input Netconf into normalized nodes");
+                return null;
             }
-            Optional<DataObject> dataObject = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
-                    .getDataObject(transformIntoNormalizedNode.get(), Netconf.QNAME);
-            if (!dataObject.isPresent()) {
-                throw new IllegalStateException("Could not transform normalized nodes into data object");
-            }
-            result =  (Netconf) dataObject.get();
         } else {
             LOG.info("netconf data config string is null!");
         }
         return result;
     }
-
 
     /**
      * create an XML String from an instance of {@link Netconf}.
@@ -122,18 +127,16 @@ public class DefaultNetconfFactory {
     public void createXMLFromNetconf(DataStoreContext dataStoreContextUtil, Netconf netconf, String output) {
         if (netconf != null) {
             Optional<NormalizedNode<?, ?>> transformIntoNormalizedNode = null;
-            transformIntoNormalizedNode =
-                    XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
+            transformIntoNormalizedNode = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
                     .toNormalizedNodes(netconf, Netconf.class);
             if (!transformIntoNormalizedNode.isPresent()) {
-                throw new IllegalStateException(String.format("Could not transform the input %s into normalized nodes",
-                        netconf));
+                throw new IllegalStateException(
+                        String.format("Could not transform the input %s into normalized nodes", netconf));
             }
             XMLDataObjectConverter createWithDataStoreUtil = XMLDataObjectConverter
                     .createWithDataStoreUtil(dataStoreContextUtil);
-            Writer writerFromDataObject =
-                    createWithDataStoreUtil.writerFromDataObject(netconf, Netconf.class,
-                            createWithDataStoreUtil.dataContainer());
+            Writer writerFromDataObject = createWithDataStoreUtil.writerFromDataObject(netconf, Netconf.class,
+                    createWithDataStoreUtil.dataContainer());
             try {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(output));
                 writer.write(writerFromDataObject.toString());

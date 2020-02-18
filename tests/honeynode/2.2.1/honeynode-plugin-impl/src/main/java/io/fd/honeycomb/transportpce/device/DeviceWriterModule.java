@@ -20,6 +20,8 @@ import com.google.inject.multibindings.Multibinder;
 
 import io.fd.honeycomb.translate.write.WriterFactory;
 import io.fd.honeycomb.transportpce.device.write.DeviceWriterFactory;
+import io.fd.honeycomb.transportpce.device.write.OcPlatformWriterFactory;
+import io.fd.honeycomb.transportpce.device.write.OcTerminalDeviceWriterFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +35,10 @@ public class DeviceWriterModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        LOG.info("Initializing Device Writers Module");
+        LOG.info("Initializing Honeynode Writers Module");
         final Multibinder<WriterFactory> writerFactoryBinder = Multibinder.newSetBinder(binder(), WriterFactory.class);
         writerFactoryBinder.addBinding().to(DeviceWriterFactory.class);
+        writerFactoryBinder.addBinding().to(OcPlatformWriterFactory.class);
+        writerFactoryBinder.addBinding().to(OcTerminalDeviceWriterFactory.class);
     }
 }

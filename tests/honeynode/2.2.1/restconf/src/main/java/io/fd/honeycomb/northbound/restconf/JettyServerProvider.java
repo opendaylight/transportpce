@@ -27,10 +27,21 @@ import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Password;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
+import org.opendaylight.netconf.sal.rest.impl.JsonNormalizedNodeBodyReader;
+import org.opendaylight.netconf.sal.rest.impl.NormalizedNodeJsonBodyWriter;
+import org.opendaylight.netconf.sal.rest.impl.NormalizedNodeXmlBodyWriter;
+import org.opendaylight.netconf.sal.rest.impl.RestconfApplication;
+import org.opendaylight.netconf.sal.rest.impl.RestconfDocumentedExceptionMapper;
+import org.opendaylight.netconf.sal.rest.impl.XmlNormalizedNodeBodyReader;
+import org.opendaylight.netconf.sal.restconf.impl.ControllerContext;
+import org.opendaylight.netconf.sal.restconf.impl.RestconfImpl;
 
 final class JettyServerProvider extends ProviderTrait<Server> {
 
@@ -41,12 +52,22 @@ final class JettyServerProvider extends ProviderTrait<Server> {
         "application/yang.data+xml",
         "application/json",
         "application/yang.data+json"};
+    public static final String RESTCONF_APP_NAME = "JAXRSRestconf";
 
     @Inject
     private RestconfConfiguration cfg;
 
     @Inject
     private CredentialsConfiguration credentialsCfg;
+
+    @Inject
+    private RestconfApplication restconfApplication;
+
+    @Inject
+    private RestconfImpl restconf;
+
+    @Inject
+    private ControllerContext controllerContext;
 
     @Override
     protected Server create() {
@@ -62,7 +83,26 @@ final class JettyServerProvider extends ProviderTrait<Server> {
         final URL resource = getClass().getResource("/");
         WebAppContext webapp = new WebAppContext(resource.getPath(), cfg.restconfRootPath.get());
 
+        // Create Restconf application implementation for server
+        ResourceConfig resourceConfig = new ResourceConfig();
+        resourceConfig.setApplicationName(RESTCONF_APP_NAME);
+        resourceConfig = resourceConfig.registerInstances(restconf, new NormalizedNodeJsonBodyWriter(),
+                new NormalizedNodeXmlBodyWriter(), new XmlNormalizedNodeBodyReader(controllerContext),
+                new JsonNormalizedNodeBodyReader(controllerContext),
+                new RestconfDocumentedExceptionMapper(controllerContext));
+        // register Restconf Application classes
+        resourceConfig.registerClasses(restconfApplication.getClasses());
+
+        // Create Servlet container which holds configured application
+        ServletContainer servlet = new ServletContainer(resourceConfig);
+        ServletHolder servletHolder = new ServletHolder(RESTCONF_APP_NAME, servlet);
+        // init on startup
+        servletHolder.setInitOrder(1);
+        // set service handler
         server.setHandler(getGzip(service, webapp));
+
+        //add servlet with "/*" mapping
+        webapp.addServlet(servletHolder, "/*");
         return server;
     }
 

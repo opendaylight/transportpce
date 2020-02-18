@@ -4,9 +4,7 @@
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at:
-
      http://www.apache.org/licenses/LICENSE-2.0
-
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,16 +16,12 @@
     <parent>
         <groupId>io.fd.honeycomb.common</groupId>
         <artifactId>minimal-distribution-parent</artifactId>
-        <version>1.18.01</version>
-        <relativePath/>
+        <version>1.19.04</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.fd.honeycomb.transportpce</groupId>
     <artifactId>minimal-distribution</artifactId>
     <name>${project.artifactId}</name>
-    <version>1.18.01</version>
-
     <properties>
         <main.class>io.fd.honeycomb.infra.distro.Main</main.class>
         <distribution.modules>
@@ -39,7 +33,7 @@
             io.fd.honeycomb.northbound.CredentialsModule,
             io.fd.honeycomb.northbound.netconf.NetconfModule,
             io.fd.honeycomb.northbound.netconf.NetconfReadersModule,
-            //io.fd.honeycomb.northbound.restconf.RestconfModule,
+            io.fd.honeycomb.northbound.restconf.RestconfModule,
             io.fd.honeycomb.infra.distro.cfgattrs.CfgAttrsModule,
             // io.fd.honeycomb.infra.bgp.BgpModule,
             // io.fd.honeycomb.infra.bgp.BgpReadersModule,
@@ -52,15 +46,20 @@
             // io.fd.honeycomb.northbound.bgp.extension.LinkstateModule,
             // io.fd.honeycomb.footprint.FootprintModule
         </distribution.modules>
+         <honeycomb.version>1.19.04</honeycomb.version>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <guice.version>4.2.2</guice.version>
+        <guice.config.version>1.4.1</guice.config.version>
     </properties>
-
     <dependencies>
         <!-- DI-->
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
         </dependency>
-
         <!-- TPCE Distribution core -->
         <dependency>
             <groupId>io.fd.honeycomb.transportpce</groupId>
@@ -77,77 +76,169 @@
             <artifactId>netconf</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <!-- Distribution core -->
+        <dependency>
+            <groupId>io.fd.honeycomb</groupId>
+            <artifactId>minimal-distribution-core</artifactId>
+            <version>${honeycomb.version}</version>
+        </dependency>
         <!-- Northbound interfaces -->
         <dependency>
             <groupId>io.fd.honeycomb.northbound</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-        <!-- <dependency>
-            <groupId>io.fd.honeycomb.northbound</groupId>
-            <artifactId>restconf</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.fd.honeycomb.northbound</groupId>
-            <artifactId>netconf</artifactId>
-            <version>${project.version}</version>
-        </dependency>-->
+<!--         <dependency> -->
+<!--             <groupId>io.fd.honeycomb.northbound</groupId> -->
+<!--             <artifactId>restconf</artifactId> -->
+<!--             <version>${honeycomb.version}</version> -->
+<!--         </dependency> -->
+<!--         <dependency> -->
+<!--             <groupId>io.fd.honeycomb.northbound</groupId> -->
+<!--             <artifactId>netconf</artifactId> -->
+<!--             <version>${honeycomb.version}</version> -->
+<!--         </dependency> -->
         <dependency>
             <groupId>io.fd.honeycomb.northbound</groupId>
             <artifactId>bgp</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-
         <!-- Bgp extension modules -->
         <dependency>
             <groupId>io.fd.honeycomb.northbound.bgp</groupId>
             <artifactId>extension-common</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.fd.honeycomb.northbound.bgp</groupId>
             <artifactId>evpn</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.fd.honeycomb.northbound.bgp</groupId>
             <artifactId>inet</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.fd.honeycomb.northbound.bgp</groupId>
             <artifactId>l3-vpn-v4</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.fd.honeycomb.northbound.bgp</groupId>
             <artifactId>l3-vpn-v6</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.fd.honeycomb.northbound.bgp</groupId>
             <artifactId>linkstate</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.fd.honeycomb.northbound.bgp</groupId>
             <artifactId>labeled-unicast</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-
         <!-- Footprint api -->
         <dependency>
             <groupId>io.fd.honeycomb.footprint</groupId>
             <artifactId>impl</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
     </dependencies>
+        <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration> <!-- add this to disable checking -->
+                                <doclint>none</doclint>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--This plugin's configuration is used to store Eclipse m2e settings
+                    only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.gmaven</groupId>
+                                        <artifactId>groovy-maven-plugin</artifactId>
+                                        <versionRange>[2.0,)</versionRange>
+                                        <goals>
+                                            <goal>execute</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-checkstyle-plugin</artifactId>
+                                        <versionRange>[3.0.0,)</versionRange>
+                                        <goals>
+                                            <goal>check</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[2.10,)</versionRange>
+                                        <goals>
+                                            <goal>copy-dependencies</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.gmavenplus</groupId>
+                                        <artifactId>gmavenplus-plugin</artifactId>
+                                        <versionRange>[1.6.2,)</versionRange>
+                                        <goals>
+                                            <goal>execute</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

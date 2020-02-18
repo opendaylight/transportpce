@@ -19,6 +19,7 @@ package io.fd.honeycomb.northbound.netconf;
 import com.google.common.net.InetAddresses;
 import com.google.inject.Inject;
 import io.fd.honeycomb.binding.init.ProviderTrait;
+import io.fd.honeycomb.data.init.ShutdownHandler;
 import io.fd.honeycomb.infra.distro.InitializationException;
 import io.fd.honeycomb.northbound.NetconfConfiguration;
 import io.netty.channel.ChannelFuture;
@@ -37,6 +38,8 @@ public final class NetconfTcpServerProvider extends ProviderTrait<NetconfTcpServ
     private NetconfServerDispatcher dispatcher;
     @Inject
     private NetconfConfiguration cfgAttributes;
+    @Inject
+    private ShutdownHandler shutdownHandler;
 
     @Override
     protected NetconfTcpServer create() {
@@ -48,20 +51,25 @@ public final class NetconfTcpServerProvider extends ProviderTrait<NetconfTcpServ
         final InetAddress name = InetAddresses.forString(cfgAttributes.netconfTcpBindingAddress.get());
         final InetSocketAddress unresolved = new InetSocketAddress(name, cfgAttributes.netconfTcpBindingPort.get());
 
-        ChannelFuture tcpServer = dispatcher.createServer(unresolved);
-        tcpServer.addListener(new TcpLoggingListener(unresolved));
-        return new NetconfTcpServer(tcpServer);
+        ChannelFuture tcpServerFuture = dispatcher.createServer(unresolved);
+        tcpServerFuture.addListener(new TcpLoggingListener(unresolved));
+        final NetconfTcpServer tcpServer = new NetconfTcpServer(tcpServerFuture);
+        shutdownHandler.register("netconf-northbound-tcp-server", tcpServer);
+        return tcpServer;
     }
 
-    public static final class NetconfTcpServer {
-        private Object tcpServer;
+    public static final class NetconfTcpServer implements AutoCloseable {
+        private ChannelFuture channelFuture;
 
-        NetconfTcpServer(final ChannelFuture tcpServer) {
-            this.tcpServer = tcpServer;
+        NetconfTcpServer(final ChannelFuture channelFuture) {
+            this.channelFuture = channelFuture;
         }
 
-        public Object getTcpServer() {
-            return tcpServer;
+        @Override
+        public void close() throws Exception {
+            LOG.info("Stopping Netconf TCP server");
+            channelFuture.channel().close();
+            LOG.info("Netconf TCP server stopped successfully");
         }
     }
 

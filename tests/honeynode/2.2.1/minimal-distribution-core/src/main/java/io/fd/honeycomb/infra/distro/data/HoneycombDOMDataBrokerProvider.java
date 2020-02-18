@@ -21,7 +21,7 @@ import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.data.ModifiableDataManager;
 import io.fd.honeycomb.data.ReadableDataManager;
 import io.fd.honeycomb.data.impl.DataBroker;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 
 public final class HoneycombDOMDataBrokerProvider extends ProviderTrait<DOMDataBroker> {
 

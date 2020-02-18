@@ -56,13 +56,15 @@ final class HttpsConnectorProvider extends ProviderTrait<ServerConnector> {
         // openssl pkcs12 -inkey honeycomb.key -in honeycomb.crt -export -out honeycomb.pkcs12
         // keytool -importkeystore -srckeystore honeycomb.pkcs12 -srcstoretype PKCS12 -destkeystore honeycomb-keystore
         SslContextFactory sslContextFactory = new SslContextFactory();
+        //CHECKSTYLE:OFF
         URL keystoreURL = getClass().getResource(cfg.restconfKeystore.get());
         sslContextFactory.setKeyStorePath(keystoreURL.getPath());
         sslContextFactory.setKeyStorePassword(cfg.keystorePassword.get());
-        sslContextFactory.setKeyManagerPassword((cfg.keystoreManagerPassword.get()));
+        sslContextFactory.setKeyManagerPassword(cfg.keystoreManagerPassword.get());
         URL truststoreURL = getClass().getResource(cfg.restconfTruststore.get());
+        //CHECKSTYLE:ON
         sslContextFactory.setTrustStorePath(truststoreURL.getPath());
-        sslContextFactory.setTrustStorePassword((cfg.truststorePassword.get()));
+        sslContextFactory.setTrustStorePassword(cfg.truststorePassword.get());
         // TODO HONEYCOMB-167 make this more configurable
         sslContextFactory.setExcludeCipherSuites("SSL_RSA_WITH_DES_CBC_SHA", "SSL_DHE_RSA_WITH_DES_CBC_SHA",
                 "SSL_DHE_DSS_WITH_DES_CBC_SHA", "SSL_RSA_EXPORT_WITH_RC4_40_MD5",

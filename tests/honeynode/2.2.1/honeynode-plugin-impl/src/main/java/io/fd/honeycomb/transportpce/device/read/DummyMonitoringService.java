@@ -15,20 +15,13 @@
  */
 package io.fd.honeycomb.transportpce.device.read;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
 import java.util.Collections;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.opendaylight.controller.config.util.capability.Capability;
+import org.opendaylight.netconf.api.capability.Capability;
 import org.opendaylight.netconf.api.monitoring.NetconfManagementSession;
 import org.opendaylight.netconf.api.monitoring.NetconfMonitoringService;
 import org.opendaylight.netconf.api.monitoring.SessionEvent;
@@ -47,6 +40,12 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.mon
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.rev101004.netconf.state.schemas.SchemaBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.rev101004.netconf.state.schemas.SchemaKey;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 public class DummyMonitoringService implements NetconfMonitoringService {
 
     private static final Sessions EMPTY_SESSIONS = new SessionsBuilder().setSession(Collections.emptyList()).build();
@@ -63,7 +62,7 @@ public class DummyMonitoringService implements NetconfMonitoringService {
                     .setFormat(Yang.class)
                     .setVersion(capability.getRevision().get())
                     .setLocation(Collections.singletonList(new Location(Enumeration.NETCONF)))
-                    .setKey(new SchemaKey(Yang.class, capability.getModuleName().get(),
+                    .withKey(new SchemaKey(Yang.class, capability.getModuleName().get(),
                         capability.getRevision().get()))
                     .build();
         }
@@ -121,17 +120,6 @@ public class DummyMonitoringService implements NetconfMonitoringService {
         return schemas;
     }
 
-    @Override
-    public String getSchemaForCapability(final String moduleName, final Optional<String> revision) {
-
-        for (Capability capability : capabilityMultiMap.get(moduleName)) {
-            if (capability.getRevision().get().equals(revision.get())) {
-                return capability.getCapabilitySchema().get();
-            }
-        }
-        throw new IllegalArgumentException(
-            "Module with name: " + moduleName + " and revision: " + revision + " does not exist");
-    }
 
     @Override
     public Capabilities getCapabilities() {
@@ -147,5 +135,16 @@ public class DummyMonitoringService implements NetconfMonitoringService {
     public AutoCloseable registerSessionsListener(final SessionsListener listener) {
         return null;
     }
+
+@Override
+public String getSchemaForCapability(String moduleName, java.util.Optional<String> revision) {
+   for (Capability capability : capabilityMultiMap.get(moduleName)) {
+            if (capability.getRevision().get().equals(revision.get())) {
+                return capability.getCapabilitySchema().get();
+            }
+        }
+        throw new IllegalArgumentException(
+            "Module with name: " + moduleName + " and revision: " + revision + " does not exist");
+}
 
 }
