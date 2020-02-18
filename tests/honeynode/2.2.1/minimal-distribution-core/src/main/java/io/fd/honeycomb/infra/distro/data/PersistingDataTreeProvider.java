@@ -18,26 +18,19 @@ package io.fd.honeycomb.infra.distro.data;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.data.impl.PersistingDataTreeAdapter;
 import io.fd.honeycomb.infra.distro.cfgattrs.HoneycombConfiguration;
 import io.fd.honeycomb.infra.distro.data.context.ContextPipelineModule;
-
 import java.nio.file.Paths;
-
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
+import org.opendaylight.mdsal.dom.api.DOMSchemaService;
 import org.opendaylight.yangtools.yang.data.api.schema.tree.DataTree;
 import org.opendaylight.yangtools.yang.data.api.schema.tree.TreeType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class PersistingDataTreeProvider extends ProviderTrait<DataTree> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PersistingDataTreeProvider.class);
-
     @Inject
-    private SchemaService schemaService;
+    private DOMSchemaService schemaService;
     @Inject
     protected HoneycombConfiguration config;
 

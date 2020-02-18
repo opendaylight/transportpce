@@ -1,4 +1,6 @@
 package org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215;
+import java.lang.String;
+import java.lang.UnsupportedOperationException;
 
 /**
  * The purpose of generated class in src/main/java for Union types is to create new instances of unions from a string representation.
@@ -10,9 +12,12 @@ package org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215;
  *
  */
 public class PmDataTypeBuilder {
+    private PmDataTypeBuilder() {
+        //Exists only to defeat instantiation.
+    }
 
-    public static PmDataType getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+    public static PmDataType getDefaultInstance(String defaultValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
 }

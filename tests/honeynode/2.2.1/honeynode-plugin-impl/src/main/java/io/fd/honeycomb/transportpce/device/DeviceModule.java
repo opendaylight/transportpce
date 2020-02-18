@@ -15,6 +15,12 @@
  */
 package io.fd.honeycomb.transportpce.device;
 
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.dom.store.inmemory.InMemoryDOMDataStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.PrivateModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
@@ -23,14 +29,9 @@ import io.fd.honeycomb.infra.distro.data.DataStoreProvider;
 import io.fd.honeycomb.infra.distro.data.InmemoryDOMDataBrokerProvider;
 import io.fd.honeycomb.transportpce.device.configuration.DeviceConfigurationModule;
 import io.fd.honeycomb.transportpce.device.configuration.NetconfConfigurationModule;
+import io.fd.honeycomb.transportpce.device.configuration.OcPlatformConfigurationModule;
+import io.fd.honeycomb.transportpce.device.configuration.OcTerminalDeviceConfigurationModule;
 import io.fd.honeycomb.transportpce.device.configuration.PmConfigurationModule;
-
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-import org.opendaylight.controller.md.sal.dom.store.impl.InMemoryDOMDataStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Module class instantiating device-plugin plugin components.
@@ -44,14 +45,14 @@ public final class DeviceModule extends PrivateModule {
 
     @Override
     protected void configure() {
-        LOG.info("Initializing Device Module");
+        LOG.info("Initializing Honeynode Modules");
         // Create inmemory config data store for DEVICE
         bind(InMemoryDOMDataStore.class).annotatedWith(Names.named(InmemoryDOMDataBrokerProvider.CONFIG))
-            .toProvider(new DataStoreProvider(InmemoryDOMDataBrokerProvider.CONFIG, LogicalDatastoreType.CONFIGURATION))
+            .toProvider(new DataStoreProvider(InmemoryDOMDataBrokerProvider.CONFIG, org.opendaylight.mdsal.common.api.LogicalDatastoreType.CONFIGURATION))
             .in(Singleton.class);
         // Create inmemory operational data store for DEVICE
         bind(InMemoryDOMDataStore.class).annotatedWith(Names.named(InmemoryDOMDataBrokerProvider.OPERATIONAL))
-            .toProvider(new DataStoreProvider(InmemoryDOMDataBrokerProvider.OPERATIONAL, LogicalDatastoreType.OPERATIONAL))
+            .toProvider(new DataStoreProvider(InmemoryDOMDataBrokerProvider.OPERATIONAL, org.opendaylight.mdsal.common.api.LogicalDatastoreType.OPERATIONAL))
             .in(Singleton.class);
 
         // Wrap datastores as DOMDataBroker
@@ -70,11 +71,19 @@ public final class DeviceModule extends PrivateModule {
 
         //install pm configuration module
         install(new PmConfigurationModule());
-        LOG.info("Device Module intitailized !");
+        LOG.info("Device Module initialized !");
 
-      //install netconf configuration module
+        // install oc-platform configuration module
+        install(new OcPlatformConfigurationModule());
+        LOG.info("oc-platform-configuration Module initialized !");
+
+        // install oc-terminal-device configuration module
+        install(new OcTerminalDeviceConfigurationModule());
+        LOG.info("oc-terminal-device Module initialized !");
+
+        //install netconf configuration module
         install(new NetconfConfigurationModule());
-        LOG.info("Netconf Module intitailized !");
+        LOG.info("Netconf Module initialized !");
     }
 
 }

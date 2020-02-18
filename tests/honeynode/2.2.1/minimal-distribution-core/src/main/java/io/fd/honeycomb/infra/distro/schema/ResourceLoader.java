@@ -58,6 +58,10 @@ public interface ResourceLoader {
 
     final class ResourceLoaderIml {
 
+        private ResourceLoaderIml() {
+            throw new UnsupportedOperationException();
+        }
+
         private static Set<String> readFromFolder(final URL folderUrl) {
             final File folder = new File(folderUrl.getPath());
             final File[] files = checkNotNull(folder.listFiles(), "No files present on path %s", folderUrl);

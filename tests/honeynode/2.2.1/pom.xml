@@ -17,21 +17,23 @@
 
   <groupId>io.fd.honeycomb.transportpce</groupId>
   <artifactId>honeynode-plugin-aggregator</artifactId>
-  <version>1.18.01</version>
+  <version>1.19.04</version>
   <name>honeynode-plugin-aggregator</name>
   <packaging>pom</packaging>
   <modelVersion>4.0.0</modelVersion>
 
-  <modules>
+
+ <modules>
+    <module>netconf-impl</module>
+    <module>netconf</module>
+    <module>restconf</module>
     <module>minimal-distribution-core</module>
     <module>minimal-distribution</module>
     <module>honeynode-common</module>
     <module>honeynode-plugin-api</module>
     <module>honeynode-plugin-impl</module>
-    <module>netconf-netty-util</module>
-    <module>netconf</module>
-    <module>restconf</module>
     <module>honeynode-distribution</module>
+    
   </modules>
 
   <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
