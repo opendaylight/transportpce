@@ -16,30 +16,27 @@
 
 package io.fd.honeycomb.northbound.netconf;
 
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.dom.api.DOMRpcService;
+import org.opendaylight.mdsal.dom.api.DOMSchemaService;
+import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactory;
+import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactoryListener;
+import org.opendaylight.netconf.mdsal.connector.MdsalNetconfOperationServiceFactory;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import io.fd.honeycomb.binding.init.ProviderTrait;
 
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-import org.opendaylight.controller.md.sal.dom.api.DOMRpcService;
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
-import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
-import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactory;
-import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactoryListener;
-import org.opendaylight.netconf.mdsal.connector.MdsalNetconfOperationServiceFactory;
-
 public final class NetconfMdsalMapperProvider extends ProviderTrait<NetconfOperationServiceFactory> {
 
     @Inject
-    private SchemaService schemaService;
+    private DOMSchemaService schemaService;
     @Inject
     private NetconfOperationServiceFactoryListener aggregator;
     @Inject
-    private ModuleInfoBackedContext moduleInfoBackedContext;
-    @Inject
-//    @Named(HONEYCOMB_CONFIG)
-    //Modified in order to connect TPCE to device config datastore
+    // @Named(HONEYCOMB_CONFIG)
+    // Modified in order to connect TPCE to device config datastore
     @Named("device-databroker")
     private DOMDataBroker domBroker;
     @Inject
@@ -49,8 +46,7 @@ public final class NetconfMdsalMapperProvider extends ProviderTrait<NetconfOpera
 
     @Override
     protected MdsalNetconfOperationServiceFactory create() {
-        MdsalNetconfOperationServiceFactory mdsalNetconfOperationServiceFactory =
-                new MdsalNetconfOperationServiceFactory(schemaService, moduleInfoBackedContext, netconfOperationServiceFactoryListener, domBroker, rpcService);
-        return mdsalNetconfOperationServiceFactory;
+        return new MdsalNetconfOperationServiceFactory(schemaService, netconfOperationServiceFactoryListener, domBroker,
+                rpcService);
     }
 }

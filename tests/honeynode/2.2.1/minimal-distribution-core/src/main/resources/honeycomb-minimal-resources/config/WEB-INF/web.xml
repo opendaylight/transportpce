@@ -19,20 +19,6 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
     version="3.0">
 
-    <servlet>
-        <servlet-name>JAXRSRestconf</servlet-name>
-        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-        <init-param>
-            <param-name>javax.ws.rs.Application</param-name>
-            <param-value>org.opendaylight.netconf.sal.rest.impl.RestconfApplication</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>JAXRSRestconf</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
     <filter>
         <filter-name>cross-origin-restconf</filter-name>
         <filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>

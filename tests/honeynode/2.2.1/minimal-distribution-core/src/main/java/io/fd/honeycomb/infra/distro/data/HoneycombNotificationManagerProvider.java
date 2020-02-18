@@ -26,9 +26,9 @@ import io.fd.honeycomb.notification.impl.NotificationProducerRegistry;
 import io.fd.honeycomb.notification.impl.NotificationProducerTracker;
 import java.util.HashSet;
 import java.util.Set;
-import org.opendaylight.controller.md.sal.binding.impl.BindingDOMNotificationPublishServiceAdapter;
-import org.opendaylight.controller.md.sal.binding.impl.BindingToNormalizedNodeCodec;
-import org.opendaylight.controller.md.sal.dom.broker.impl.DOMNotificationRouter;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMNotificationPublishServiceAdapter;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingToNormalizedNodeCodec;
+import org.opendaylight.mdsal.dom.broker.DOMNotificationRouter;
 
 public final class HoneycombNotificationManagerProvider extends ProviderTrait<NotificationCollector> {
 
@@ -47,7 +47,7 @@ public final class HoneycombNotificationManagerProvider extends ProviderTrait<No
 
         // Create BA version of notification service (implementation is free from ODL)
         BindingDOMNotificationPublishServiceAdapter bindingDOMNotificationPublishServiceAdapter =
-                new BindingDOMNotificationPublishServiceAdapter(codec, notificationRouter);
+                new BindingDOMNotificationPublishServiceAdapter(notificationRouter, codec);
 
         // Create Collector on top of BA notification service and registry
         HoneycombNotificationCollector honeycombNotificationCollector =

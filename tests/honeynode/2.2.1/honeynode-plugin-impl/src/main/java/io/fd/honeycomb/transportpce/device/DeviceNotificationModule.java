@@ -33,7 +33,7 @@ public class DeviceNotificationModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        LOG.info("Initializing Device Notification Module");
+        LOG.info("Initializing Honeynode Notification Module");
         final Multibinder<ManagedNotificationProducer> notifFactoryBinder = Multibinder.newSetBinder(binder(),
                 ManagedNotificationProducer.class);
         notifFactoryBinder.addBinding().to(DeviceNotificationProducer.class);

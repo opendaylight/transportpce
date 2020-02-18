@@ -1,6 +1,6 @@
 #/bin/bash
 
-sudo yum install -y java-1.8.0-openjdk-devel
+sudo yum install -y java-11-openjdk-devel
 wget -nv https://www-us.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp
 sudo mkdir -p /opt
 sudo tar xf /tmp/apache-maven-3.6.3-bin.tar.gz -C /opt

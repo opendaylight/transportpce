@@ -18,17 +18,15 @@ package io.fd.honeycomb.infra.distro.initializer;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.data.ModifiableDataManager;
 import io.fd.honeycomb.data.impl.ModifiableDataTreeDelegator;
 import io.fd.honeycomb.infra.distro.data.ConfigAndOperationalPipelineModule;
 import io.fd.honeycomb.infra.distro.data.context.ContextPipelineModule;
 import io.fd.honeycomb.translate.util.write.NoopWriterRegistry;
-
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.impl.BindingToNormalizedNodeCodec;
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingToNormalizedNodeCodec;
+import org.opendaylight.mdsal.dom.api.DOMSchemaService;
 import org.opendaylight.yangtools.yang.data.api.schema.tree.DataTree;
 
 public final class ModifiableDTDelegInitProvider extends ProviderTrait<ModifiableDataManager> {
@@ -37,13 +35,12 @@ public final class ModifiableDTDelegInitProvider extends ProviderTrait<Modifiabl
     private BindingToNormalizedNodeCodec serializer;
     @Inject
     @Named(ConfigAndOperationalPipelineModule.HONEYCOMB_CONFIG_NONPERSIST)
-    //solve writing in ./persist/config/data.json
     private DataTree dataTree;
     @Inject
     @Named(ContextPipelineModule.HONEYCOMB_CONTEXT)
     private DataBroker contextBroker;
     @Inject
-    private SchemaService schemaService;
+    private DOMSchemaService schemaService;
 
     @Override
     public ModifiableDataTreeDelegator create() {

@@ -87,6 +87,7 @@ public class RestconfConfiguration {
     }
 
     @Override
+  //CHECKSTYLE:OFF
     public String toString() {
         return "RestconfConfiguration{" +
             "restconfHttp='" + restconfHttp + '\'' +

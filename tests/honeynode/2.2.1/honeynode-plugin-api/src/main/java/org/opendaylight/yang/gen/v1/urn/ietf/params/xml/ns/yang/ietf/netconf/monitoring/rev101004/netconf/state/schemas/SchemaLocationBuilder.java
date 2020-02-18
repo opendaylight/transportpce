@@ -1,5 +1,6 @@
 package org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.rev101004.netconf.state.schemas;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.rev101004.netconf.state.schemas.Schema.Location;
+import java.lang.String;
+import java.lang.UnsupportedOperationException;
 
 /**
  * The purpose of generated class in src/main/java for Union types is to create new instances of unions from a string representation.
@@ -11,9 +12,12 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.mon
  *
  */
 public class SchemaLocationBuilder {
+    private SchemaLocationBuilder() {
+        //Exists only to defeat instantiation.
+    }
 
-    public static Location getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+    public static Schema.Location getDefaultInstance(String defaultValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
 }

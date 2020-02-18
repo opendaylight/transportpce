@@ -20,8 +20,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.impl.FakeBindingAwareBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 
 public final class NetconfBindingBrokerProvider extends ProviderTrait<BindingAwareBroker> {
 

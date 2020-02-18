@@ -53,7 +53,7 @@ public class CreatePmListFromXMLFileTest {
         result = defaultPmListFactory.createDefaultPmList(dataStoreContextUtil,pm_list_data);
         if (result != null) {
             LOG.info("result pm list size : {}", result.getCurrentPmEntry().size());
-            Assert.assertEquals("result pm list size : {}", result.getCurrentPmEntry().size());
+            Assert.assertEquals("result pm list size should be 4",4, result.getCurrentPmEntry().size());
         }
         LOG.info("Test Succeed");
     }
