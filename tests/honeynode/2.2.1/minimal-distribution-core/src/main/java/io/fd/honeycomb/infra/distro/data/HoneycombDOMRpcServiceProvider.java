@@ -20,8 +20,8 @@ import com.google.inject.Inject;
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.rpc.HoneycombDOMRpcService;
 import io.fd.honeycomb.rpc.RpcRegistry;
-import org.opendaylight.controller.md.sal.binding.impl.BindingToNormalizedNodeCodec;
-import org.opendaylight.controller.md.sal.dom.api.DOMRpcService;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingToNormalizedNodeCodec;
+import org.opendaylight.mdsal.dom.api.DOMRpcService;
 
 public final class HoneycombDOMRpcServiceProvider extends ProviderTrait<DOMRpcService> {
 

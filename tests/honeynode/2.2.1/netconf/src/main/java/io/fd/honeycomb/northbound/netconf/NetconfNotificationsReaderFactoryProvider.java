@@ -16,6 +16,8 @@
 
 package io.fd.honeycomb.northbound.netconf;
 
+import static org.opendaylight.mdsal.common.api.LogicalDatastoreType.OPERATIONAL;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.fd.honeycomb.binding.init.ProviderTrait;
@@ -23,8 +25,7 @@ import io.fd.honeycomb.translate.read.ReaderFactory;
 import io.fd.honeycomb.translate.read.registry.ModifiableReaderRegistryBuilder;
 import io.fd.honeycomb.translate.util.read.BindingBrokerReader;
 import javax.annotation.Nonnull;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.Netconf;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.NetconfBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -49,8 +50,9 @@ public final class NetconfNotificationsReaderFactoryProvider extends ProviderTra
 
         @Override
         public void init(@Nonnull final ModifiableReaderRegistryBuilder registry) {
-            registry.add(new BindingBrokerReader<>(InstanceIdentifier.create(Netconf.class), netconfDataBroker,
-                    LogicalDatastoreType.OPERATIONAL, NetconfBuilder.class));
+            registry.add(
+                    new BindingBrokerReader<>(InstanceIdentifier.create(Netconf.class), netconfDataBroker, OPERATIONAL,
+                            NetconfBuilder.class));
         }
 
     }

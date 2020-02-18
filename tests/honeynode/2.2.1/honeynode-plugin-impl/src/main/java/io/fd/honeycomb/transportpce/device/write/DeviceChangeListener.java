@@ -15,24 +15,22 @@
  */
 package io.fd.honeycomb.transportpce.device.write;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
-import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
+import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
+import org.opendaylight.mdsal.binding.api.DataTreeModification;
+import org.opendaylight.mdsal.binding.api.ReadTransaction;
+import org.opendaylight.mdsal.binding.api.WriteTransaction;
+import org.opendaylight.mdsal.common.api.CommitInfo;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.PortsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacks;
@@ -50,6 +48,9 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
+import com.google.common.util.concurrent.FluentFuture;
 
 /**
  * @author Martial COULIBALY ( mcoulibaly.ext@orange.com ) on behalf of Orange
@@ -75,11 +76,11 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                 final OrgOpenroadmDevice dataAfter = rootNode.getDataAfter();
                 LOG.info("Received Device change({}):\n before={} \n after={}", rootNode.getModificationType(), dataBefore,
                         dataAfter);
-                Collection<DataObjectModification<? extends DataObject>> modifiedChildren = rootNode.getModifiedChildren();
+                Collection<? extends DataObjectModification<? extends DataObject>> modifiedChildren = rootNode.getModifiedChildren();
                 switch (rootNode.getModificationType()) {
                     case SUBTREE_MODIFIED:
                         if (!modifiedChildren.isEmpty()) {
-                            Iterator<DataObjectModification<? extends DataObject>> iterator = modifiedChildren.iterator();
+                            Iterator<? extends DataObjectModification<? extends DataObject>> iterator = modifiedChildren.iterator();
                             while (iterator.hasNext()) {
                                 DataObjectModification<? extends DataObject> modified = iterator.next();
                                 LOG.info("modified = \ndataType : {}\nid : {}\nmodifiedType : {}\noldData : {}\nnewData : {} \n",
@@ -155,7 +156,7 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                 try {
                     LOG.info("deleting container element from device oper DS ...");
                     writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
-                    Future<Void> future = writeTx.submit();
+                    FluentFuture< ? extends @NonNull CommitInfo> future = writeTx.commit();
                     future.get();
                     LOG.info("container element '{}' deleted from device oper datastore", iid);
                 } catch (InterruptedException | ExecutionException e) {
@@ -201,7 +202,7 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
             if(dataAfter != null) {
                 String deviceId = dataAfter.getInfo().getNodeId().getValue();
                 writeTx.merge(LogicalDatastoreType.OPERATIONAL, id, dataAfter);
-                Future<Void> future = writeTx.submit();
+                FluentFuture< ? extends @NonNull CommitInfo> future = writeTx.commit();
                 try {
                     future.get();
                     LOG.info("device '{}' merged to device oper datastore", deviceId);
@@ -373,7 +374,7 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
             try {
                 LOG.info("updating container circuitpacks from device oper DS ...");
                 writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid,circuitPacks);
-                Future<Void> future = writeTx.submit();
+                FluentFuture< ? extends @NonNull CommitInfo> future = writeTx.commit();
                 future.get();
                 LOG.info("container circuitpacks '{}' merged to device oper datastore", iid);
             } catch (InterruptedException | ExecutionException e) {
@@ -399,7 +400,7 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
             LOG.info("ReadTransaction is ok");
             try {
                 LOG.info("reading device from device oper DS ...");
-                Optional<OrgOpenroadmDevice> device = readTx.read(LogicalDatastoreType.OPERATIONAL, id).get();
+                java.util.Optional<OrgOpenroadmDevice> device = readTx.read(LogicalDatastoreType.OPERATIONAL, id).get();
                 if (device.isPresent()) {
                     result = device.get();
                     LOG.info("device gets from device oper datastore");

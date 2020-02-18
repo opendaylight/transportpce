@@ -23,8 +23,8 @@ import io.fd.honeycomb.data.ModifiableDataManager;
 import io.fd.honeycomb.data.init.InitializerRegistry;
 import io.fd.honeycomb.infra.distro.data.BindingDataBrokerProvider;
 import io.fd.honeycomb.infra.distro.data.HoneycombDOMDataBrokerProvider;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 
 public final class InitializerPipelineModule extends PrivateModule {
 

@@ -18,27 +18,36 @@ package io.fd.honeycomb.transportpce.device;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 
-import io.fd.honeycomb.translate.read.ReaderFactory;
-import io.fd.honeycomb.transportpce.device.read.DeviceReaderFactory;
-import io.fd.honeycomb.transportpce.device.read.PmReaderFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.fd.honeycomb.translate.read.ReaderFactory;
+import io.fd.honeycomb.transportpce.device.read.DeviceReaderFactory;
+import io.fd.honeycomb.transportpce.device.read.NetconfStateReaderFactory;
+import io.fd.honeycomb.transportpce.device.read.OcPlatformReaderFactory;
+import io.fd.honeycomb.transportpce.device.read.OcTerminalDeviceReaderFactory;
+import io.fd.honeycomb.transportpce.device.read.PmReaderFactory;
 
 /**
  * @author Martial COULIBALY ( martial.coulibaly@gfi.com ) on behalf of Orange
  */
 public class DeviceReaderModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(DeviceReaderModule.class);
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     *
      * @see com.google.inject.AbstractModule#configure()
      */
     @Override
     protected void configure() {
-        LOG.info("Initializing Device, PM and Netconf Readers Module");
+        LOG.info("Initializing Device, PM, Netconf, OcPlatform and OcTerminalDevice Readers Module");
         final Multibinder<ReaderFactory> binder = Multibinder.newSetBinder(binder(), ReaderFactory.class);
+        binder.addBinding().to(NetconfStateReaderFactory.class);
         binder.addBinding().to(DeviceReaderFactory.class);
         binder.addBinding().to(PmReaderFactory.class);
+        binder.addBinding().to(OcPlatformReaderFactory.class);
+        binder.addBinding().to(OcTerminalDeviceReaderFactory.class);
     }
 
 }
