@@ -16,15 +16,11 @@
 package io.fd.honeycomb.transportpce.binding.converter;
 
 import com.google.common.base.Preconditions;
-
 import io.fd.honeycomb.transportpce.binding.converter.api.DataObjectConverter;
-
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-
 import javax.annotation.Nonnull;
-
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
 import org.opendaylight.yangtools.yang.binding.DataContainer;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -92,7 +88,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
             YangInstanceIdentifier.PathArgument directChildIdentifier =
                     YangInstanceIdentifier.of(rootNode).getLastPathArgument();
             Optional<NormalizedNode<?, ?>> directChild =
-                    NormalizedNodes.getDirectChild(normalizedNode, directChildIdentifier).toJavaUtil();
+                    NormalizedNodes.getDirectChild(normalizedNode, directChildIdentifier);
             if (!directChild.isPresent()) {
                 throw new IllegalStateException(String.format("Could not get the direct child of %s", rootNode));
             }

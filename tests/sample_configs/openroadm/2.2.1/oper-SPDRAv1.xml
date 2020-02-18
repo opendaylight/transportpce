@@ -63,6 +63,9 @@
       </slots>
     </shelves>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP0</circuit-pack-name>
       <circuit-pack-type>Base_Switchponder_circuit_pack</circuit-pack-type>
       <circuit-pack-product-code>baseSPDR</circuit-pack-product-code>
@@ -120,6 +123,9 @@
       </cp-slots>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP5-CFP</circuit-pack-name>
       <circuit-pack-type>line_pluggable_cfp2</circuit-pack-type>
       <circuit-pack-product-code>Line_NW_P</circuit-pack-product-code>
@@ -271,6 +277,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP6-CFP</circuit-pack-name>
       <circuit-pack-type>line_pluggable_cfp2</circuit-pack-type>
       <circuit-pack-product-code>Line_NW_P</circuit-pack-product-code>
@@ -422,6 +431,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP7-CFP</circuit-pack-name>
       <circuit-pack-type>line_pluggable_cfp2</circuit-pack-type>
       <circuit-pack-product-code>Line_NW_P</circuit-pack-product-code>
@@ -573,6 +585,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP8-CFP</circuit-pack-name>
       <circuit-pack-type>line_pluggable_cfp2</circuit-pack-type>
       <circuit-pack-product-code>Line_NW_P</circuit-pack-product-code>
@@ -724,6 +739,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP1</circuit-pack-name>
       <circuit-pack-type>client_mother-board-muxponder</circuit-pack-type>
       <circuit-pack-product-code>Client_MB_Muxponder</circuit-pack-product-code>
@@ -794,6 +812,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP1-SFP1</circuit-pack-name>
       <circuit-pack-type>client_pluggable_sfp</circuit-pack-type>
       <circuit-pack-product-code>Client_CL_P</circuit-pack-product-code>
@@ -909,6 +930,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP1-SFP2</circuit-pack-name>
       <circuit-pack-type>client_pluggable_sfp</circuit-pack-type>
       <circuit-pack-product-code>Client_CL_P</circuit-pack-product-code>
@@ -1024,6 +1048,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP1-SFP3</circuit-pack-name>
       <circuit-pack-type>client_pluggable_sfp</circuit-pack-type>
       <circuit-pack-product-code>Client_CL_P</circuit-pack-product-code>
@@ -1140,6 +1167,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP1-SFP4</circuit-pack-name>
       <circuit-pack-type>client_pluggable_sfp</circuit-pack-type>
       <circuit-pack-product-code>Client_CL_P</circuit-pack-product-code>
@@ -1256,6 +1286,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP1-CFP0</circuit-pack-name>
       <circuit-pack-type>network_pluggable_cfp2</circuit-pack-type>
       <circuit-pack-product-code>Line_NW_P</circuit-pack-product-code>
@@ -1407,6 +1440,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP2</circuit-pack-name>
       <circuit-pack-type>client_mother-board-switch</circuit-pack-type>
       <circuit-pack-product-code>Client_MB_Switch</circuit-pack-product-code>
@@ -1448,6 +1484,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP2-QSFP1</circuit-pack-name>
       <circuit-pack-type>client_pluggable_qsfp28</circuit-pack-type>
       <circuit-pack-product-code>Client_CL_P</circuit-pack-product-code>
@@ -1487,6 +1526,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP2-QSFP2</circuit-pack-name>
       <circuit-pack-type>client_pluggable_qsfp28</circuit-pack-type>
       <circuit-pack-product-code>Client_CL_P</circuit-pack-product-code>
@@ -1526,6 +1568,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP2-QSFP3</circuit-pack-name>
       <circuit-pack-type>client_pluggable_qsfp28</circuit-pack-type>
       <circuit-pack-product-code>Client_CL_P</circuit-pack-product-code>
@@ -1565,6 +1610,9 @@
       </parent-circuit-pack>
     </circuit-packs>
     <circuit-packs>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>CP2-QSFP4</circuit-pack-name>
       <circuit-pack-type>client_pluggable_qsfp28</circuit-pack-type>
       <circuit-pack-product-code>Client_CL_P</circuit-pack-product-code>

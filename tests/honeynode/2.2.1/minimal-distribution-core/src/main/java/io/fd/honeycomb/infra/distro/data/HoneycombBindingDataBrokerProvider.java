@@ -21,10 +21,10 @@ import static io.fd.honeycomb.infra.distro.data.ConfigAndOperationalPipelineModu
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.fd.honeycomb.binding.init.ProviderTrait;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.impl.BindingDOMDataBrokerAdapter;
-import org.opendaylight.controller.md.sal.binding.impl.BindingToNormalizedNodeCodec;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMDataBrokerAdapter;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingToNormalizedNodeCodec;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 
 /**
  * Provides binding adapter for {@link io.fd.honeycomb.data.impl.DataBroker}.
@@ -39,7 +39,6 @@ final class HoneycombBindingDataBrokerProvider extends ProviderTrait<DataBroker>
 
     @Override
     protected BindingDOMDataBrokerAdapter create() {
-
         return new BindingDOMDataBrokerAdapter(domDataBroker, mappingService);
     }
 }

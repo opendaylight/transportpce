@@ -1,5 +1,6 @@
 package org.opendaylight.yang.gen.v1.http.org.openroadm.syslog.rev171215.syslog.selector.log.selector.selector.facility.log.facility;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.syslog.rev171215.syslog.selector.log.selector.selector.facility.log.facility.LogFacility.Facility;
+import java.lang.String;
+import java.lang.UnsupportedOperationException;
 
 /**
  * The purpose of generated class in src/main/java for Union types is to create new instances of unions from a string representation.
@@ -11,9 +12,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.syslog.rev171215.syslog.s
  *
  */
 public class LogFacilityFacilityBuilder {
+    private LogFacilityFacilityBuilder() {
+        //Exists only to defeat instantiation.
+    }
 
-    public static Facility getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+    public static LogFacility.Facility getDefaultInstance(String defaultValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
 }

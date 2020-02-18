@@ -2,8 +2,8 @@ import os
 import subprocess
 
 def start_xpdra_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode1.log', 'w') as outfile:
             return subprocess.Popen(
@@ -11,8 +11,8 @@ def start_xpdra_honeynode():
                 stdout=outfile)
 
 def start_roadma_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode2.log', 'w') as outfile:
             return subprocess.Popen(
@@ -20,8 +20,8 @@ def start_roadma_honeynode():
                 stdout=outfile)
 
 def start_roadmb_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode5.log', 'w') as outfile:
             return subprocess.Popen(
@@ -29,8 +29,8 @@ def start_roadmb_honeynode():
                 stdout=outfile)
 
 def start_roadmc_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode3.log', 'w') as outfile:
             return subprocess.Popen(
@@ -38,8 +38,8 @@ def start_roadmc_honeynode():
                 stdout=outfile)
 
 def start_xpdrc_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode4.log', 'w') as outfile:
             return subprocess.Popen(
@@ -47,8 +47,8 @@ def start_xpdrc_honeynode():
                 stdout=outfile)
 
 def start_spdra_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode6.log', 'w') as outfile:
             return subprocess.Popen(

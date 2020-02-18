@@ -40,7 +40,7 @@
             </description>
         </module>
         <module>
-            <package>org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev130712</package>
+            <package>org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021</package>
             <description>
                 Required for mounting of netconf devices(Operational read does not work without it)
             </description>

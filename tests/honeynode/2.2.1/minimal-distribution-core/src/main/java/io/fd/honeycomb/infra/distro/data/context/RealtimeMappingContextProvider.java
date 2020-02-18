@@ -21,7 +21,7 @@ import com.google.inject.name.Named;
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.translate.MappingContext;
 import io.fd.honeycomb.translate.util.RealtimeMappingContext;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 
 public final class RealtimeMappingContextProvider extends ProviderTrait<MappingContext> {
 
