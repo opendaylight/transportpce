@@ -25,8 +25,8 @@ import io.fd.honeycomb.infra.distro.data.BindingDataBrokerProvider;
 import io.fd.honeycomb.infra.distro.data.DataTreeProvider;
 import io.fd.honeycomb.infra.distro.data.PersistingDataTreeProvider;
 import io.fd.honeycomb.translate.MappingContext;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 import org.opendaylight.yangtools.yang.data.api.schema.tree.DataTree;
 
 public class ContextPipelineModule extends PrivateModule {

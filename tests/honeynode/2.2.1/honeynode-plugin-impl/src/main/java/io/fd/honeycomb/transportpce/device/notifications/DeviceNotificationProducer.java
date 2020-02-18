@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
+
 import io.fd.honeycomb.notification.ManagedNotificationProducer;
 import io.fd.honeycomb.notification.NotificationCollector;
 
@@ -30,12 +31,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+
+
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.DataObjectModification;
+import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
+import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
+import org.opendaylight.mdsal.binding.api.DataTreeModification;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.ChangeNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.ChangeNotification.Datastore;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.ChangeNotificationBuilder;
@@ -87,9 +90,8 @@ public class DeviceNotificationProducer implements ManagedNotificationProducer {
     public void start(NotificationCollector collector) {
         LOG.info("Starting notification stream for OrgOpenroadmDevice");
         Preconditions.checkArgument(this.dataBroker != null, "Device datastore is null");
-        this.dataBroker.registerDataTreeChangeListener(
-                new DataTreeIdentifier<>(LogicalDatastoreType.OPERATIONAL, DEVICE_CONTAINER_ID),
-                new DataTreeChangeListener<OrgOpenroadmDevice>() {
+        this.dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(LogicalDatastoreType.OPERATIONAL, DEVICE_CONTAINER_ID),
+                 new DataTreeChangeListener<OrgOpenroadmDevice>() {
                     @Override
                     public void onDataTreeChanged(Collection<DataTreeModification<OrgOpenroadmDevice>> changes) {
                         LOG.info("onDataTreeChanged");
@@ -124,11 +126,11 @@ public class DeviceNotificationProducer implements ManagedNotificationProducer {
             final DataObjectModification<OrgOpenroadmDevice> rootNode = change.getRootNode();
             final DataTreeIdentifier<OrgOpenroadmDevice> rootPath = change.getRootPath();
             if (rootNode != null) {
-                Collection<DataObjectModification<? extends DataObject>> modifiedChildren = rootNode.getModifiedChildren();
+                Collection<? extends DataObjectModification<? extends DataObject>> modifiedChildren = rootNode.getModifiedChildren();
                 switch (rootNode.getModificationType()) {
                 case SUBTREE_MODIFIED: // OrgOpenroadmDevice
                     if (!modifiedChildren.isEmpty()) {
-                        Iterator<DataObjectModification<? extends DataObject>> iterator = modifiedChildren.iterator();
+                        Iterator<? extends DataObjectModification<? extends DataObject>> iterator = modifiedChildren.iterator();
                         while (iterator.hasNext()) {
                             DataObjectModification<? extends DataObject> modified = iterator.next();
                             LOG.info(

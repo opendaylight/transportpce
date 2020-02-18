@@ -15,6 +15,20 @@
  */
 package io.fd.honeycomb.transportpce.device.read;
 
+import java.util.concurrent.ExecutionException;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.WriteTransaction;
+import org.opendaylight.mdsal.common.api.CommitInfo;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmListBuilder;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -23,18 +37,6 @@ import io.fd.honeycomb.translate.read.ReaderFactory;
 import io.fd.honeycomb.translate.read.registry.ModifiableReaderRegistryBuilder;
 import io.fd.honeycomb.translate.util.read.BindingBrokerReader;
 import io.fd.honeycomb.transportpce.device.configuration.PmConfiguration;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmListBuilder;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Martial COULIBALY ( mcoulibaly.ext@orange.com ) on behalf of Orange
@@ -77,7 +79,7 @@ public class PmReaderFactory implements ReaderFactory {
             if (writeTx != null ) {
                 LOG.info("WriteTransaction is ok, copy currentPmList to oper datastore");
                 writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, result.build());
-                Future<Void> future = writeTx.submit();
+                FluentFuture< ? extends @NonNull CommitInfo> future = writeTx.commit();
                 try {
                     Futures.getChecked(future, ExecutionException.class);
                     LOG.info("currentPmList writed to oper datastore");

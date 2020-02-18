@@ -21,7 +21,7 @@ import com.google.inject.name.Named;
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import org.opendaylight.controller.config.yang.netconf.mdsal.monitoring.MdsalMonitoringMapperFactory;
 import org.opendaylight.controller.config.yang.netconf.mdsal.monitoring.MonitoringToMdsalWriter;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.netconf.api.monitoring.NetconfMonitoringService;
 import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactory;
 import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactoryListener;
