@@ -1,4 +1,6 @@
 package org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715;
+import java.lang.String;
+import java.lang.UnsupportedOperationException;
 
 /**
  * The purpose of generated class in src/main/java for Union types is to create new instances of unions from a string representation.
@@ -10,9 +12,12 @@ package org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types
  *
  */
 public class HostBuilder {
+    private HostBuilder() {
+        //Exists only to defeat instantiation.
+    }
 
-    public static Host getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+    public static Host getDefaultInstance(String defaultValue) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
 }

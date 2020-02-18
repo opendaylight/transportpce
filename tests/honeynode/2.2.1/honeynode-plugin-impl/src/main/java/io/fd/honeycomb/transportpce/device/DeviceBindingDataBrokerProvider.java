@@ -20,10 +20,13 @@ import com.google.inject.name.Named;
 
 import io.fd.honeycomb.binding.init.ProviderTrait;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.impl.BindingDOMDataBrokerAdapter;
-import org.opendaylight.controller.md.sal.binding.impl.BindingToNormalizedNodeCodec;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
+
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMDataBrokerAdapter;
+import org.opendaylight.mdsal.binding.dom.adapter.BindingToNormalizedNodeCodec;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
+
+
 
 /**
  * @author Martial COULIBALY ( mcoulibaly.ext@orange.com ) on behalf of Orange

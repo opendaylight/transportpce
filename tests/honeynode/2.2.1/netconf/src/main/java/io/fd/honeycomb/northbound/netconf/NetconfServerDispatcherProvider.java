@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import org.opendaylight.netconf.api.NetconfServerDispatcher;
 import org.opendaylight.netconf.api.monitoring.NetconfMonitoringService;
 import org.opendaylight.netconf.impl.NetconfServerDispatcherImpl;
+import org.opendaylight.netconf.impl.ServerChannelInitializer;
 import org.opendaylight.netconf.impl.SessionIdProvider;
 import org.opendaylight.netconf.impl.osgi.AggregatedNetconfOperationServiceFactory;
 import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactory;
@@ -51,8 +52,7 @@ public final class NetconfServerDispatcherProvider extends ProviderTrait<Netconf
         NetconfServerSessionNegotiatorFactory serverNegotiatorFactory =
                 new NetconfServerSessionNegotiatorFactory(timer, netconfOperationProvider, new SessionIdProvider(),
                         CONNECTION_TIMEOUT_MILLIS, monitoringService);
-        NetconfServerDispatcherImpl.ServerChannelInitializer serverChannelInitializer =
-                new NetconfServerDispatcherImpl.ServerChannelInitializer(serverNegotiatorFactory);
+        ServerChannelInitializer serverChannelInitializer = new ServerChannelInitializer(serverNegotiatorFactory);
 
         return new NetconfServerDispatcherImpl(serverChannelInitializer, nettyThreadgroup, nettyThreadgroup);
     }
