@@ -1,0 +1,411 @@
+module nokia-openconfig-telemetry-ext {
+
+  yang-version "1";
+
+  namespace "http://nokia.com/yang/nokia-openconfig-telemetry-ext";
+
+  prefix "n-oc-telem-ext";
+
+  // import statements
+  import openconfig-terminal-device      { prefix oc-opt-term; }
+  import openconfig-platform             { prefix oc-platform; }
+  import openconfig-platform-types       { prefix oc-platform-types; }
+  import openconfig-platform-transceiver { prefix oc-transceiver; }
+  import openconfig-transport-types      { prefix oc-opt-types; }
+  import openconfig-yang-types           { prefix oc-yang; }
+
+  // meta
+  organization
+    "Nokia";
+
+  contact
+    "Nokia Optical Networks";
+
+  description
+    "This module contains a set of type definitions that are used
+    to extend the OpenConfig models for Nokia needs. It can be
+    imported by modules that make use of these types.";
+
+  revision "2017-11-13" {
+    description
+      "Initial version";
+  }
+
+  // extension statements
+
+  // feature statements
+
+  // identity statements
+
+  // typedef statements
+
+  // grouping statements
+
+  grouping threshold-config-precision2 {
+    leaf  absolute-threshold {
+      type decimal64 {
+        fraction-digits 2;
+      }
+      description
+        " absolute threshold with precision 2 - not unit dependent.";
+    }
+    leaf  delta-threshold {
+      type decimal64 {
+        fraction-digits 2;
+      }
+      description
+        " delta threshold with precision 2 - not unit dependent.";
+    }
+  }
+
+  grouping threshold-config-precision18 {
+    leaf  absolute-threshold {
+      type decimal64 {
+        fraction-digits 18;
+      }
+      description
+        " absolute threshold with precision 18 - not unit dependent.";
+    }
+    leaf  delta-threshold {
+      type decimal64 {
+        fraction-digits 18;
+      }
+      description
+        " delta threshold with precision 18 - not unit dependent.";
+    }
+  }
+
+  grouping threshold-config-counter64 {
+    leaf  absolute-threshold {
+       type oc-yang:counter64;
+        description
+          " absolute threshold with count64";
+     }
+     leaf  delta-threshold {
+      type oc-yang:counter64;
+      description
+        " delta threshold with count64";
+    }
+  }
+
+  grouping optical-channel-config {
+    description
+      "Configuration data for Nokia optical-channel extensions";
+
+    container output-power-thresholds {
+      uses threshold-config-precision2;
+    }
+    container input-power-thresholds {
+      uses threshold-config-precision2;
+    }
+    container chromatic-dispersion-thresholds {
+      uses threshold-config-precision2;
+    }
+    container differential-group-delay-thresholds {
+      uses threshold-config-precision2;
+    }
+  }
+
+  grouping optical-channel-state {
+    description
+      "Operational state data for Nokia optical-channel telemetry extensions";
+
+    container differential-group-delay {
+      description
+        "Differential-Group-Delay (DGD) is the report of
+        the maximum delay between any polarization states.
+        It is reported in pico-seconds (ps) and is fiber tpe dependent";
+      uses oc-opt-types:avg-min-max-instant-stats-precision2-ps;
+    }
+  }
+
+  grouping optical-channel-top {
+    description
+      "Top-level grouping for Nokia optical-channel telemetry extensions";
+
+    container nokia-telemetry-ext {
+      description
+        "Top-level container for Nokia optical-channel telemetry extension";
+
+      container config {
+        description
+          "Configuration data for Nokia optical-channel telemetry extensions";
+
+        uses optical-channel-config;
+      }
+
+      container state {
+
+        config false;
+
+        description
+          "Operational state data for Nokia optical-channel telemetry extensions";
+
+        uses optical-channel-config;
+        uses optical-channel-state;
+      }
+    }
+  }
+
+  grouping transceiver-config {
+    description
+      "Configuration data for Nokia transceiver telemetry extensions";
+
+    container output-power-thresholds {
+      uses threshold-config-precision2;
+    }
+    container input-power-thresholds {
+      uses threshold-config-precision2;
+    }
+  }
+
+  grouping transceiver-state {
+    description
+      "Operational state data for Nokia transceiver telemetry extensions";
+
+  }
+
+  grouping transceiver-top {
+    description
+      "Top-level grouping for transceiver telemetry extensions";
+
+    container nokia-telemetry-ext {
+      description
+        "Top-level container for Nokia transceiver telemetry extension";
+
+      container config {
+        description
+          "Configuration data for Nokia transceiver telemetry extensions";
+
+        uses transceiver-config;
+      }
+
+      container state {
+
+        config false;
+
+        description
+          "Operational state data for Nokia transceiver telemetry extensions";
+
+        uses transceiver-config;
+        uses transceiver-state;
+      }
+    }
+  }
+
+  grouping physical-channel-config {
+    description
+      "Configuration data for Nokia physical-channel telemetry extensions";
+
+    container output-power-thresholds {
+      uses threshold-config-precision2;
+    }
+    container input-power-thresholds {
+      uses threshold-config-precision2;
+    }
+  }
+
+  grouping physical-channel-state {
+    description
+      "Operational state data for Nokia physical-channel telemetry extensions";
+
+  }
+
+  grouping physical-channel-top {
+    description
+      "Top-level grouping for Nokia physical-channel telemetry extensions";
+
+    container nokia-telemetry-ext {
+      description
+        "Top-level container for Nokia physical-channel telemetry extension";
+
+      container config {
+        description
+          "Configuration data for Nokia physical-channel telemetry extensions";
+
+        uses physical-channel-config;
+      }
+
+      container state {
+
+        config false;
+
+        description
+          "Operational state data for Nokia physical-channel telemetry extensions";
+
+        uses physical-channel-config;
+        uses physical-channel-state;
+      }
+    }
+  }
+
+  grouping otn-config {
+    description
+      "Configuration data for Nokia otn telemetry extensions";
+
+    container pre-fec-ber-thresholds {
+      uses threshold-config-precision18;
+    }
+    container post-fec-ber-thresholds {
+      uses threshold-config-precision18;
+    }
+  }
+
+  grouping otn-state {
+    description
+      "Operational state data for Nokia otn telemetry extensions";
+  }
+
+  grouping otn-top {
+    description
+      "Top-level grouping for Nokia otn telemetry extensions";
+
+    container nokia-telemetry-ext {
+      description
+        "Top-level container for Nokia otn telemetry extension";
+
+      container config {
+        description
+          "Configuration data for Nokia otn telemetry extensions";
+
+        uses otn-config;
+      }
+
+      container state {
+
+        config false;
+
+        description
+          "Operational state data for Nokia otn telemetry extensions";
+
+        uses otn-config;
+        uses otn-state;
+      }
+    }
+  }
+
+  grouping ethernet-config {
+    description
+      "Configuration data for Nokia ethernet telemetry extensions";
+
+    container errored-seconds-thresholds {
+      uses threshold-config-counter64;
+    }
+  }
+
+  grouping ethernet-state {
+    description
+      "Operational state data for Nokia ethernet telemetry extensions";
+
+     leaf errored-seconds {
+      type oc-yang:counter64;
+      description
+        "The number of seconds that at least one errored blocks
+        occurs, at least one code violation occurs, loss of sync is
+        detected or loss of signal is detected";
+    }
+  }
+
+  grouping ethernet-top {
+    description
+      "Top-level grouping for Nokia ethernet telemetry extensions";
+
+    container nokia-telemetry-ext {
+      description
+        "Top-level container for Nokia ethernet telemetry extension";
+
+      container config {
+        description
+          "Configuration data for Nokia ethernet telemetry extensions";
+
+        uses ethernet-config;
+      }
+
+      container state {
+
+        config false;
+
+        description
+          "Operational state data for Nokia ethernet telemetry extensions";
+
+        uses ethernet-config;
+        uses ethernet-state;
+      }
+    }
+  }
+
+  // data definition statements
+
+  // augment statements
+
+  augment /oc-platform:components/oc-platform:component/oc-opt-term:optical-channel {
+    description
+      "Adding Nokia optical-channel data extension to optical-channel";
+
+    uses optical-channel-top {
+      when "/oc-platform:components/oc-platform:component/" +
+        "oc-platform:state/oc-platform:type = 'oc-opt-types:OPTICAL-CHANNEL'" {
+          description
+            "Augment is active when component is of type oc-opt-types:OPTICAL-CHANNEL";
+        }
+    }
+  }
+
+  augment "/oc-platform:components/oc-platform:component/" +
+    "oc-transceiver:transceiver" {
+     description
+      "Adding Nokia transceiver data extension to transceiver";
+
+    uses transceiver-top {
+      when "/oc-platform:components/oc-platform:component/" +
+        "oc-platform:state/oc-platform:type = 'oc-platform-types:TRANSCEIVER'" {
+          description
+            "Augment is active when component is of type oc-platform-types:TRANSCEIVER";
+        }
+    }
+  }
+
+  augment "/oc-platform:components/oc-platform:component/" +
+    "oc-transceiver:transceiver/oc-transceiver:physical-channels/oc-transceiver:channel" {
+    description
+      "Adding Nokia transceiver data extension to transceiver";
+
+    uses physical-channel-top {
+      when "/oc-platform:components/oc-platform:component/" +
+        "oc-platform:state/oc-platform:type = 'oc-platform-types:TRANSCEIVER'" {
+          description
+            "Augment is active when component is of type oc-platform-types:TRANSCEIVER";
+        }
+    }
+  }
+
+  augment "/oc-opt-term:terminal-device/oc-opt-term:logical-channels/" +
+    "oc-opt-term:channel/oc-opt-term:otn" {
+      description
+        "Adding Nokia otn data extension to otn container of a logical-channel";
+
+    uses otn-top {
+      when "/oc-opt-term:terminal-device/oc-opt-term:logical-channels/" +
+        "oc-opt-term:channel/oc-opt-term:config/oc-opt-term:logical-channel-type = 'oc-opt-types:PROT_OTN'" {
+          description
+            "Augment is active when logical-channel is of type oc-opt-types:PROT_OTN";
+        }
+    }
+  }
+
+  augment "/oc-opt-term:terminal-device/oc-opt-term:logical-channels/" +
+    "oc-opt-term:channel/oc-opt-term:ethernet" {
+      description
+        "Adding Nokia ethernet data extension to ethernet container of a logical-channel";
+
+    uses ethernet-top {
+      when "/oc-opt-term:terminal-device/oc-opt-term:logical-channels/" +
+        "oc-opt-term:channel/oc-opt-term:config/" +
+          "oc-opt-term:logical-channel-type = 'oc-opt-types:PROT_ETHERNET'" {
+          description
+            "Augment is active when logical-channel is of type oc-opt-types:PROT_ETHERNET";
+        }
+    }
+  }
+
+}

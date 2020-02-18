@@ -14,40 +14,31 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>impl-parent</artifactId>
         <groupId>io.fd.honeycomb.common</groupId>
-        <version>1.18.01</version>
-        <relativePath/>
+        <version>1.19.04</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>io.fd.honeycomb.transportpce</groupId>
     <artifactId>netconf</artifactId>
-    <version>1.18.01</version>
-
+    <name>${project.artifactId}</name>
     <properties>
         <yang.modules.whitelist>
             ${project.basedir}/src/main/resources/honeycomb-minimal-resources/config/netconf-whitelist.xml
         </yang.modules.whitelist>
+         <honeycomb.version>1.19.04</honeycomb.version>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <guice.version>4.2.2</guice.version>
+        <guice.config.version>1.4.1</guice.config.version>
     </properties>
-
     <dependencies>
-        <!-- TPCE dependencies  -->
-        <dependency>
-            <groupId>io.fd.honeycomb.transportpce</groupId>
-            <artifactId>honeynode-plugin-impl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.fd.honeycomb.transportpce</groupId>
-            <artifactId>minimal-distribution-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- DI-->
         <dependency>
             <groupId>com.google.inject</groupId>
@@ -64,15 +55,19 @@
         <dependency>
             <groupId>io.fd.honeycomb</groupId>
             <artifactId>binding-init</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.fd.honeycomb.transportpce</groupId>
+            <artifactId>minimal-distribution-core</artifactId>
+            <version>1.19.04</version>
         </dependency>
         <!-- Northbound -->
         <dependency>
             <groupId>io.fd.honeycomb.northbound</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
-
         <!-- ODL-Netconf -->
         <dependency>
             <groupId>org.opendaylight.netconf</groupId>
@@ -80,7 +75,7 @@
         </dependency>
         <dependency>
             <groupId>org.opendaylight.netconf</groupId>
-            <artifactId>netconf-ssh</artifactId>
+            <artifactId>mdsal-netconf-ssh</artifactId>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.netconf</groupId>
@@ -102,22 +97,100 @@
             <groupId>org.opendaylight.netconf</groupId>
             <artifactId>ietf-netconf-monitoring-extension</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.fd.honeycomb</groupId>
             <artifactId>data-impl</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
         <dependency>
             <groupId>io.fd.honeycomb</groupId>
             <artifactId>honeycomb-impl</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
         <dependency>
             <groupId>io.fd.honeycomb</groupId>
             <artifactId>notification-impl</artifactId>
-            <version>${project.version}</version>
+            <version>${honeycomb.version}</version>
         </dependency>
     </dependencies>
+ <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
 
+                <!--This plugin's configuration is used to store Eclipse m2e settings
+                    only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.gmaven</groupId>
+                                        <artifactId>groovy-maven-plugin</artifactId>
+                                        <versionRange>[2.0,)</versionRange>
+                                        <goals>
+                                            <goal>execute</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-checkstyle-plugin</artifactId>
+                                        <versionRange>[3.0.0,)</versionRange>
+                                        <goals>
+                                            <goal>check</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[2.10,)</versionRange>
+                                        <goals>
+                                            <goal>copy-dependencies</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.gmavenplus</groupId>
+                                        <artifactId>gmavenplus-plugin</artifactId>
+                                        <versionRange>[1.6.2,)</versionRange>
+                                        <goals>
+                                            <goal>execute</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

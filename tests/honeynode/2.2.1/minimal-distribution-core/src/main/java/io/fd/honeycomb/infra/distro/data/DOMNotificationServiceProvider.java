@@ -19,7 +19,7 @@ package io.fd.honeycomb.infra.distro.data;
 import com.google.inject.Inject;
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.infra.distro.cfgattrs.HoneycombConfiguration;
-import org.opendaylight.controller.md.sal.dom.broker.impl.DOMNotificationRouter;
+import org.opendaylight.mdsal.dom.broker.DOMNotificationRouter;
 
 public final class DOMNotificationServiceProvider extends ProviderTrait<DOMNotificationRouter> {
 
