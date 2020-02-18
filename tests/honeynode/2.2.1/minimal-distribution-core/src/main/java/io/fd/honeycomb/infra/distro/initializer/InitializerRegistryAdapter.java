@@ -22,10 +22,8 @@ import io.fd.honeycomb.translate.MappingContext;
 import io.fd.honeycomb.translate.ModificationCache;
 import io.fd.honeycomb.translate.read.ReadContext;
 import io.fd.honeycomb.translate.read.registry.InitRegistry;
-
 import javax.annotation.Nonnull;
-
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +52,7 @@ final class InitializerRegistryAdapter implements InitializerRegistry {
     @Override
     public void initialize() throws DataTreeInitializer.InitializeException {
         LOG.info("Config initialization started");
+
         try {
             // Initialize contexts first so that other initializers can find any relevant mapping before initializing
             // configuration to what is already in VPP

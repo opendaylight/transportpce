@@ -19,7 +19,6 @@ package io.fd.honeycomb.northbound.netconf;
 import com.google.inject.Singleton;
 import com.google.inject.binder.AnnotatedElementBuilder;
 import com.google.inject.name.Names;
-
 import io.fd.honeycomb.infra.distro.data.BindingDataBrokerProvider;
 import io.fd.honeycomb.infra.distro.data.DataStoreProvider;
 import io.fd.honeycomb.infra.distro.data.HoneycombNotificationManagerProvider;
@@ -30,21 +29,20 @@ import io.fd.honeycomb.notification.NotificationCollector;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timer;
-
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-import org.opendaylight.controller.md.sal.dom.store.impl.InMemoryDOMDataStore;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.dom.store.inmemory.InMemoryDOMDataStore;
 import org.opendaylight.netconf.api.NetconfServerDispatcher;
 import org.opendaylight.netconf.api.monitoring.NetconfMonitoringService;
 import org.opendaylight.netconf.impl.osgi.AggregatedNetconfOperationServiceFactory;
 import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactory;
 import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactoryListener;
+import org.opendaylight.netconf.mdsal.notification.impl.NetconfNotificationManager;
 import org.opendaylight.netconf.notifications.NetconfNotificationCollector;
 import org.opendaylight.netconf.notifications.NetconfNotificationListener;
 import org.opendaylight.netconf.notifications.NetconfNotificationRegistry;
-import org.opendaylight.netconf.notifications.impl.NetconfNotificationManager;
+import org.opendaylight.netconf.ssh.NetconfNorthboundSshServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,13 +71,13 @@ public class NetconfModule extends NorthboundPrivateModule<NetconfConfiguration>
         // Create inmemory data store for HONEYCOMB_NETCONF config metadata
         bind(InMemoryDOMDataStore.class).annotatedWith(Names.named(InmemoryDOMDataBrokerProvider.CONFIG))
                 .toProvider(
-                        new DataStoreProvider(InmemoryDOMDataBrokerProvider.CONFIG, LogicalDatastoreType.CONFIGURATION))
+                        new DataStoreProvider(InmemoryDOMDataBrokerProvider.CONFIG, org.opendaylight.mdsal.common.api.LogicalDatastoreType.CONFIGURATION))
                 .in(Singleton.class);
 
         // Create inmemory data store for HONEYCOMB_NETCONF operational metadata
         bind(InMemoryDOMDataStore.class).annotatedWith(Names.named(InmemoryDOMDataBrokerProvider.OPERATIONAL))
-                .toProvider(new DataStoreProvider(InmemoryDOMDataBrokerProvider.OPERATIONAL,
-                        LogicalDatastoreType.OPERATIONAL))
+                .toProvider(new DataStoreProvider(InmemoryDOMDataBrokerProvider.OPERATIONAL, org.opendaylight.mdsal.common.api.LogicalDatastoreType.OPERATIONAL
+                ))
                 .in(Singleton.class);
         // Wrap datastores as DOMDataBroker
         bind(DOMDataBroker.class).toProvider(InmemoryDOMDataBrokerProvider.class).in(Singleton.class);
@@ -140,8 +138,7 @@ public class NetconfModule extends NorthboundPrivateModule<NetconfConfiguration>
         bind(NetconfTcpServerProvider.NetconfTcpServer.class).toProvider(NetconfTcpServerProvider.class)
                 .asEagerSingleton();
         expose(NetconfTcpServerProvider.NetconfTcpServer.class);
-        bind(NetconfSshServerProvider.NetconfSshServer.class).toProvider(NetconfSshServerProvider.class)
-                .asEagerSingleton();
-        return expose(NetconfSshServerProvider.NetconfSshServer.class);
+        bind(NetconfNorthboundSshServer.class).toProvider(NetconfSshServerProvider.class).asEagerSingleton();
+        return expose(NetconfNorthboundSshServer.class);
     }
 }

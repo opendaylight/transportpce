@@ -26,15 +26,14 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.ProvisionException;
 import com.google.inject.name.Names;
-
 import io.fd.honeycomb.data.init.DataTreeInitializer;
 import io.fd.honeycomb.data.init.InitializerRegistry;
 import io.fd.honeycomb.infra.distro.activation.ActivationModule;
 import io.fd.honeycomb.infra.distro.activation.ActiveModules;
 import io.fd.honeycomb.infra.distro.initializer.InitializerPipelineModule;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public final class Main {
 
@@ -73,8 +72,8 @@ public final class Main {
                 LOG.error("Unable to initialize configuration", e);
             }
 
-
             LOG.info("Honeycomb started successfully!");
+
             return injector;
         } catch (CreationException | ProvisionException | ConfigurationException e) {
             LOG.error("Failed to initialize Honeycomb components", e);

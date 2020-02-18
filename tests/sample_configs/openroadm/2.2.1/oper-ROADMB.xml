@@ -45,6 +45,7 @@
       </user>
     </users>
     <circuit-packs>
+      <is-pluggable-optics>true</is-pluggable-optics>
       <circuit-pack-name>1/0</circuit-pack-name>
       <circuit-pack-type>WSSDEG</circuit-pack-type>
       <circuit-pack-product-code>DegW</circuit-pack-product-code>
@@ -140,6 +141,7 @@
       </ports>
     </circuit-packs>
     <circuit-packs>
+      <is-pluggable-optics>true</is-pluggable-optics>
       <circuit-pack-name>1/0/ETH-PLUG</circuit-pack-name>
       <circuit-pack-type>port</circuit-pack-type>
       <circuit-pack-product-code>Eth</circuit-pack-product-code>
@@ -176,6 +178,10 @@
       </ports>
     </circuit-packs>
     <circuit-packs>
+      <is-pluggable-optics>true</is-pluggable-optics>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>1/0/OSC-PLUG</circuit-pack-name>
       <circuit-pack-type>port</circuit-pack-type>
       <administrative-state>inService</administrative-state>
@@ -206,6 +212,7 @@
       </ports>
     </circuit-packs>
     <circuit-packs>
+      <is-pluggable-optics>true</is-pluggable-optics>
       <circuit-pack-name>2/0</circuit-pack-name>
       <circuit-pack-type>WSSDEG</circuit-pack-type>
       <circuit-pack-product-code>DegE</circuit-pack-product-code>
@@ -301,6 +308,7 @@
       </ports>
     </circuit-packs>
     <circuit-packs>
+      <is-pluggable-optics>true</is-pluggable-optics>
       <circuit-pack-name>2/0/ETH-PLUG</circuit-pack-name>
       <circuit-pack-type>port</circuit-pack-type>
       <circuit-pack-product-code>Eth</circuit-pack-product-code>
@@ -337,6 +345,10 @@
       </ports>
     </circuit-packs>
     <circuit-packs>
+      <is-pluggable-optics>true</is-pluggable-optics>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
       <circuit-pack-name>2/0/OSC-PLUG</circuit-pack-name>
       <circuit-pack-type>port</circuit-pack-type>
       <administrative-state>inService</administrative-state>

@@ -1,32 +1,43 @@
- <configuration scan="true">
+<configuration scan="true">
 
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>%date{"yyyy-MM-dd HH:mm:ss.SSS z"} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
-  <appender name="honeycomb.log" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>./log/honeycomb/honeycomb.log</file>
+    <appender name="STDOUT"
+        class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{"yyyy-MM-dd HH:mm:ss.SSS z"} [%thread] %-5level
+                %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="honeycomb.log"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<file>${logback.logs.directory}/honeycomb-${DEVICE}.log</file>
 
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>./log/honeycomb/logs/honeycomb.%d.log.zip</fileNamePattern>
-      <maxHistory>1</maxHistory>
-    </rollingPolicy>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>3</maxIndex>
+	    <FileNamePattern>${logback.logs.directory}/honeycomb-${DEVICE}.log.%i</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy
+            class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10000KB</MaxFileSize>
+        </triggeringPolicy>
 
-    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-      <maxFileSize>10MB</maxFileSize>
-    </triggeringPolicy>
+        <encoder>
+            <pattern>%date{"yyyy-MM-dd HH:mm:ss.SSS z"} [%thread] %-5level
+                %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-    <encoder>
-      <pattern>%date{"yyyy-MM-dd HH:mm:ss.SSS z"} [%thread] %-5level %logger{35} - %msg%n</pattern>
-    </encoder>
-  </appender>
+    <root level="WARN">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="honeycomb.log" />
+    </root>
 
-  <root level="warn">
-    <appender-ref ref="STDOUT" />
-    <appender-ref ref="honeycomb.log" />
-  </root>
-
-  <logger name="org.opendaylight" level="INFO"/>
-  <logger name="io.fd" level="INFO"/>
+    <logger name="org.opendaylight" level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="honeycomb.log" />
+    </logger>
+    <logger name="io.fd" level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="honeycomb.log" />
+    </logger>
 </configuration>

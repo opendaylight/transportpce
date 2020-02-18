@@ -16,59 +16,55 @@
 
 package io.fd.honeycomb.infra.distro.schema;
 
+import com.google.common.collect.ClassToInstanceMap;
+import com.google.common.collect.ImmutableClassToInstanceMap;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.inject.Inject;
 import io.fd.honeycomb.binding.init.ProviderTrait;
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
 import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
+import org.opendaylight.mdsal.dom.api.DOMSchemaService;
+import org.opendaylight.mdsal.dom.api.DOMSchemaServiceExtension;
+import org.opendaylight.mdsal.dom.api.DOMYangTextSourceProvider;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.model.api.Module;
 import org.opendaylight.yangtools.yang.model.api.SchemaContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaContextListener;
+import org.opendaylight.yangtools.yang.model.repo.api.SourceIdentifier;
+import org.opendaylight.yangtools.yang.model.repo.api.YangTextSchemaSource;
 
-public final class SchemaServiceProvider extends ProviderTrait<SchemaService> {
+public final class SchemaServiceProvider extends ProviderTrait<DOMSchemaService> {
 
     @Inject
     private ModuleInfoBackedContext mibCtx;
 
     @Override
     public StaticSchemaService create() {
-        return new StaticSchemaService(mibCtx.getSchemaContext());
+        return new StaticSchemaService(mibCtx);
     }
 
     /**
      * Static schema context provider service.
      */
-    private static final class StaticSchemaService implements SchemaService {
-        private final SchemaContext schemaContext;
+    private static final class StaticSchemaService implements DOMSchemaService, DOMYangTextSourceProvider {
+        private final ModuleInfoBackedContext moduleInfoBackedContext;
 
-        StaticSchemaService(SchemaContext schemaContext) {
-            this.schemaContext = schemaContext;
-        }
-
-        @Override
-        public void addModule(final Module module) {
-            throw new UnsupportedOperationException("Static service");
-        }
-
-        @Override
-        public void removeModule(final Module module) {
-            throw new UnsupportedOperationException("Static service");
+        StaticSchemaService(ModuleInfoBackedContext moduleInfoBackedContext) {
+            this.moduleInfoBackedContext = moduleInfoBackedContext;
         }
 
         @Override
         public SchemaContext getSessionContext() {
-            return schemaContext;
+            return moduleInfoBackedContext.getSchemaContext();
         }
 
         @Override
         public SchemaContext getGlobalContext() {
-            return schemaContext;
+            return moduleInfoBackedContext.getSchemaContext();
         }
 
         @Override
         public ListenerRegistration<SchemaContextListener> registerSchemaContextListener(
                 final SchemaContextListener listener) {
-            listener.onGlobalContextUpdated(schemaContext);
+            listener.onGlobalContextUpdated(moduleInfoBackedContext.getSchemaContext());
             return new ListenerRegistration<SchemaContextListener>() {
                 @Override
                 public void close() {}
@@ -79,6 +75,16 @@ public final class SchemaServiceProvider extends ProviderTrait<SchemaService> {
                 }
 
             };
+        }
+
+        @Override
+        public ClassToInstanceMap<DOMSchemaServiceExtension> getExtensions() {
+            return ImmutableClassToInstanceMap.of(DOMYangTextSourceProvider.class, this);
+        }
+
+        @Override
+        public ListenableFuture<? extends YangTextSchemaSource> getSource(final SourceIdentifier sourceIdentifier) {
+            return moduleInfoBackedContext.getSource(sourceIdentifier);
         }
     }
 }
