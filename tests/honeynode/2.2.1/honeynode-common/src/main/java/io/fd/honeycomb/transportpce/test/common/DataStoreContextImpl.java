@@ -21,13 +21,14 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 
 import org.opendaylight.controller.md.sal.binding.impl.BindingToNormalizedNodeCodec;
+import org.opendaylight.mdsal.binding.dom.codec.gen.impl.StreamWriterGenerator;
+import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
 import org.opendaylight.mdsal.binding.generator.impl.GeneratedClassLoadingStrategy;
 import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
 import org.opendaylight.mdsal.binding.generator.util.BindingRuntimeContext;
 import org.opendaylight.mdsal.binding.generator.util.JavassistUtils;
 import org.opendaylight.mdsal.dom.api.DOMSchemaService;
-import org.opendaylight.yangtools.binding.data.codec.gen.impl.StreamWriterGenerator;
-import org.opendaylight.yangtools.binding.data.codec.impl.BindingNormalizedNodeCodecRegistry;
+import org.opendaylight.mdsal.dom.api.DOMSchemaServiceExtension;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.util.ListenerRegistry;
 import org.opendaylight.yangtools.yang.binding.YangModelBindingProvider;
@@ -37,6 +38,8 @@ import org.opendaylight.yangtools.yang.model.api.SchemaContextListener;
 import org.opendaylight.yangtools.yang.model.api.SchemaContextProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ClassToInstanceMap;
 
 import javassist.ClassPool;
 
@@ -142,7 +145,7 @@ public class DataStoreContextImpl implements DataStoreContext {
 //        return store;
 //    }
 
-    private class SchemaContextHolder implements DOMSchemaService, SchemaContextProvider {
+    private final class SchemaContextHolder implements DOMSchemaService, SchemaContextProvider {
 
         private final SchemaContext schemaContext;
         private final ListenerRegistry<SchemaContextListener> listeners;
@@ -174,8 +177,7 @@ public class DataStoreContextImpl implements DataStoreContext {
          */
         private SchemaContext getSchemaContext(List<YangModuleInfo> moduleInfos) {
             this.moduleInfoBackedCntxt.addModuleInfos(moduleInfos);
-            Optional<SchemaContext> tryToCreateSchemaContext =
-                    this.moduleInfoBackedCntxt.tryToCreateSchemaContext().toJavaUtil();
+            Optional<SchemaContext> tryToCreateSchemaContext = this.moduleInfoBackedCntxt.tryToCreateSchemaContext();
             if (!tryToCreateSchemaContext.isPresent()) {
                 LOG.error("Could not create the initial schema context. Schema context is empty");
                 throw new IllegalStateException();
@@ -206,8 +208,8 @@ public class DataStoreContextImpl implements DataStoreContext {
          */
         private List<YangModuleInfo> loadModuleInfos() {
             List<YangModuleInfo> moduleInfos = new LinkedList<>();
-            ServiceLoader<YangModelBindingProvider> yangProviderLoader =
-                    ServiceLoader.load(YangModelBindingProvider.class);
+            ServiceLoader<YangModelBindingProvider> yangProviderLoader = ServiceLoader
+                    .load(YangModelBindingProvider.class);
             for (YangModelBindingProvider yangModelBindingProvider : yangProviderLoader) {
                 moduleInfos.add(yangModelBindingProvider.getModuleInfo());
                 LOG.debug("Adding [{}] module into known modules", yangModelBindingProvider.getModuleInfo());
@@ -221,12 +223,23 @@ public class DataStoreContextImpl implements DataStoreContext {
          * @return BindingNormalizedNodeCodecRegistry the resulting binding registry
          */
         private BindingNormalizedNodeCodecRegistry createBindingRegistry() {
-            BindingRuntimeContext bindingContext = BindingRuntimeContext.create(this.moduleInfoBackedCntxt, this.schemaContext);
-            BindingNormalizedNodeCodecRegistry bindingNormalizedNodeCodecRegistry =
-                    new BindingNormalizedNodeCodecRegistry(
-                            StreamWriterGenerator.create(JavassistUtils.forClassPool(ClassPool.getDefault())));
+            BindingRuntimeContext bindingContext = BindingRuntimeContext.create(this.moduleInfoBackedCntxt,
+                    this.schemaContext);
+            BindingNormalizedNodeCodecRegistry bindingNormalizedNodeCodecRegistry = new BindingNormalizedNodeCodecRegistry(
+                    StreamWriterGenerator.create(JavassistUtils.forClassPool(ClassPool.getDefault())));
             bindingNormalizedNodeCodecRegistry.onBindingRuntimeContextUpdated(bindingContext);
             return bindingNormalizedNodeCodecRegistry;
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see org.opendaylight.mdsal.dom.api.DOMExtensibleService#getExtensions()
+         */
+        @Override
+        public ClassToInstanceMap<DOMSchemaServiceExtension> getExtensions() {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
 }

@@ -16,10 +16,6 @@
 
 package io.fd.honeycomb.transportpce.device.configuration;
 
-import io.fd.honeycomb.transportpce.device.tools.DefaultNetconfFactory;
-import io.fd.honeycomb.transportpce.test.common.DataStoreContext;
-import io.fd.honeycomb.transportpce.test.common.DataStoreContextImpl;
-
 import java.io.File;
 
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.rev080714.Netconf;
@@ -27,6 +23,9 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netmod.notification.r
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.fd.honeycomb.transportpce.device.tools.DefaultNetconfFactory;
+import io.fd.honeycomb.transportpce.test.common.DataStoreContext;
+import io.fd.honeycomb.transportpce.test.common.DataStoreContextImpl;
 import net.jmob.guice.conf.core.BindConfig;
 import net.jmob.guice.conf.core.InjectConfig;
 import net.jmob.guice.conf.core.Syntax;
@@ -69,6 +68,8 @@ public final class NetconfConfiguration {
             } catch (NullPointerException e) {
                 LOG.error("failed to get Netconf Streams");
             }
+        } else {
+            LOG.warn("failed to get Netconf Streams");
         }
         return result;
     }

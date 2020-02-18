@@ -1,6 +1,6 @@
 {
   "netconf-netty-threads": 2,
-  "netconf-tcp-enabled": "false",
+  "netconf-tcp-enabled": "true",
   "netconf-tcp-binding-address": "127.0.0.1",
   "netconf-tcp-binding-port": 7777,
   "netconf-ssh-enabled": "true",

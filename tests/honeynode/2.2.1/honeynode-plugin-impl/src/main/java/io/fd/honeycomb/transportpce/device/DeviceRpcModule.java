@@ -35,7 +35,7 @@ public class DeviceRpcModule extends AbstractModule {
      */
     @Override
     protected void configure() {
-        LOG.info("Initializing Device Rpcs Module");
+        LOG.info("Initializing Honeynode Rpcs Module");
         // TODO Auto-generated method stub
         final Multibinder<RpcService> rpcsBinder = Multibinder.newSetBinder(binder(), RpcService.class);
         rpcsBinder.addBinding().to(ConnectionPortTrailService.class);
