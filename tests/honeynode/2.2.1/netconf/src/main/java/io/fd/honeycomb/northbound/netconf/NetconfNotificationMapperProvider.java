@@ -20,14 +20,13 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.data.init.ShutdownHandler;
-import org.opendaylight.controller.config.yang.netconf.mdsal.notification.CapabilityChangeNotificationProducer;
-import org.opendaylight.controller.config.yang.netconf.mdsal.notification.NotificationToMdsalWriter;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactory;
 import org.opendaylight.netconf.mapping.api.NetconfOperationServiceFactoryListener;
-import org.opendaylight.netconf.mdsal.notification.NetconfNotificationOperationServiceFactory;
+import org.opendaylight.netconf.mdsal.notification.impl.CapabilityChangeNotificationProducer;
+import org.opendaylight.netconf.mdsal.notification.impl.NetconfNotificationOperationServiceFactory;
+import org.opendaylight.netconf.mdsal.notification.impl.NotificationToMdsalWriter;
 import org.opendaylight.netconf.notifications.NetconfNotificationCollector;
 import org.opendaylight.netconf.notifications.NetconfNotificationRegistry;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.rev101004.NetconfState;
@@ -65,14 +64,16 @@ public class NetconfNotificationMapperProvider extends ProviderTrait<NetconfOper
         writer.start();
 
         LOG.trace("Initializing CapabilityChangeNotificationProducer");
-        final DataTreeChangeListener<Capabilities> publisher =
+        final CapabilityChangeNotificationProducer capabilityChangeNotificationProducer =
             new CapabilityChangeNotificationProducer(notificationCollector, dataBroker);
 
         LOG.trace("Providing NetconfNotificationOperationServiceFactory");
-        NetconfNotificationOperationServiceFactory netconfNotificationOperationServiceFactory =
+        final NetconfNotificationOperationServiceFactory netconfNotificationOperationServiceFactory =
             new NetconfNotificationOperationServiceFactory(notificationRegistry, aggregator);
 
         shutdownHandler.register("netconf-notification-service-factory", netconfNotificationOperationServiceFactory);
+        shutdownHandler.register("capability-change-notification-producer",
+            capabilityChangeNotificationProducer::close);
         shutdownHandler.register("notification-to-mdsal-writer", writer);
         return netconfNotificationOperationServiceFactory;
     }

@@ -16,6 +16,12 @@
 
 package io.fd.honeycomb.infra.distro.data;
 
+import java.nio.file.Paths;
+
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.dom.api.DOMSchemaService;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -23,30 +29,20 @@ import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.data.init.RestoringInitializer;
 import io.fd.honeycomb.infra.distro.cfgattrs.HoneycombConfiguration;
 
-import java.nio.file.Paths;
-
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 final class PersistedConfigInitializerProvider extends ProviderTrait<RestoringInitializer> {
-    private static final Logger LOG = LoggerFactory.getLogger(PersistedConfigInitializerProvider.class);
 
     @Inject
-    private SchemaService schemaService;
+    private DOMSchemaService schemaService;
     @Inject
     protected HoneycombConfiguration cfgAttributes;
     @Inject
-//    @Named(ConfigAndOperationalPipelineModule.HONEYCOMB_CONFIG)
-    //mofified to be able to restore config to device config datastore
+    // @Named(HONEYCOMB_CONFIG)
+    // modified to be able to restore config to device config datastore
     @Named("device-databroker")
     private DOMDataBroker domDataBroker;
 
     @Override
     public RestoringInitializer create() {
-        LOG.info("RestoringInitializer ...");
         return new RestoringInitializer(schemaService, Paths.get(cfgAttributes.peristConfigPath), domDataBroker,
                 RestoringInitializer.RestorationType.valueOf(cfgAttributes.persistedConfigRestorationType),
                 LogicalDatastoreType.CONFIGURATION);

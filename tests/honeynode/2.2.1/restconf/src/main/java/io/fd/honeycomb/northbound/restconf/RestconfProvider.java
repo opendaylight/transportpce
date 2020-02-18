@@ -17,18 +17,11 @@
 package io.fd.honeycomb.northbound.restconf;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
-
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.data.init.ShutdownHandler;
-
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-import org.opendaylight.controller.md.sal.dom.api.DOMMountPointService;
-import org.opendaylight.controller.md.sal.dom.api.DOMRpcService;
-import org.opendaylight.controller.md.sal.dom.broker.impl.DOMNotificationRouter;
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
 import org.opendaylight.netconf.sal.rest.api.RestConnector;
 import org.opendaylight.netconf.sal.restconf.impl.RestconfProviderImpl;
+import org.opendaylight.netconf.sal.restconf.impl.StatisticsRestconfServiceWrapper;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddressBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
 
@@ -37,28 +30,15 @@ final class RestconfProvider extends ProviderTrait<RestConnector> {
     @Inject
     private RestconfConfiguration cfg;
     @Inject
-//    @Named(HONEYCOMB_CONFIG)
-    //Modified in order to connect TPCE to device config datastore
-    @Named("device-databroker")
-    private DOMDataBroker domDataBroker;
-    @Inject
-    private SchemaService schemaService;
-    @Inject
-    private DOMRpcService rpcService;
-    @Inject
-    private DOMNotificationRouter notificationService;
-    @Inject
     private ShutdownHandler shutdownHandler;
     @Inject
-    private DOMMountPointService mountPointService;
+    private StatisticsRestconfServiceWrapper statsServiceWrapper;
 
     @Override
     protected RestconfProviderImpl create() {
-        final RestconfProviderImpl instance = new RestconfProviderImpl(domDataBroker, schemaService, rpcService,
-            notificationService, mountPointService,
-            IpAddressBuilder.getDefaultInstance(cfg.restconfWebsocketAddress.get()),
-            new PortNumber(cfg.restconfWebsocketPort.get()));
-
+        final RestconfProviderImpl instance = new RestconfProviderImpl(statsServiceWrapper,
+                IpAddressBuilder.getDefaultInstance(cfg.restconfWebsocketAddress.get()),
+                new PortNumber(cfg.restconfWebsocketPort.get()));
         // Required to properly initialize restconf (broker, schema ctx, etc.).
         // Without that restconf would fail with 503 (service not available).
         instance.start();

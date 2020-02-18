@@ -1,7 +1,7 @@
 {
   "restconf-http-enabled": "true",
   "restconf-root-path": "/restconf",
-  "restconf-binding-address": "127.0.0.1",
+  "restconf-binding-address": "0.0.0.0",
   "restconf-port": 8183,
   "restconf-https-enabled": "true",
   "restconf-https-binding-address": "0.0.0.0",

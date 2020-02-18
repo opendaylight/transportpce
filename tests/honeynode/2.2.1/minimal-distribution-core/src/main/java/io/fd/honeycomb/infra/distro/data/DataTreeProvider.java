@@ -19,40 +19,39 @@ package io.fd.honeycomb.infra.distro.data;
 import com.google.inject.Inject;
 import io.fd.honeycomb.binding.init.ProviderTrait;
 import io.fd.honeycomb.infra.distro.cfgattrs.HoneycombConfiguration;
-import org.opendaylight.controller.sal.core.api.model.SchemaService;
+import org.opendaylight.mdsal.dom.api.DOMSchemaService;
 import org.opendaylight.yangtools.yang.data.api.schema.tree.DataTree;
-import org.opendaylight.yangtools.yang.data.api.schema.tree.TipProducingDataTree;
-import org.opendaylight.yangtools.yang.data.api.schema.tree.TreeType;
+import org.opendaylight.yangtools.yang.data.api.schema.tree.DataTreeConfiguration;
 import org.opendaylight.yangtools.yang.data.impl.schema.tree.InMemoryDataTreeFactory;
 
 public abstract class DataTreeProvider extends ProviderTrait<DataTree> {
 
     @Inject
-    private SchemaService schemaService;
+    private DOMSchemaService schemaService;
     @Inject
     private HoneycombConfiguration config;
 
     @Override
-    public TipProducingDataTree create() {
-        TipProducingDataTree delegate = InMemoryDataTreeFactory.getInstance().create(getType());
+    public DataTree create() {
+        DataTree delegate = new InMemoryDataTreeFactory().create(getType());
         delegate.setSchemaContext(schemaService.getGlobalContext());
         return delegate;
     }
 
-    public abstract TreeType getType();
+    public abstract DataTreeConfiguration getType();
 
     public static class ConfigDataTreeProvider extends DataTreeProvider {
         @Override
-        public TreeType getType() {
-            return TreeType.CONFIGURATION;
+        public DataTreeConfiguration getType() {
+            return DataTreeConfiguration.DEFAULT_CONFIGURATION;
         }
 
     }
 
     public static class ContextDataTreeProvider extends DataTreeProvider {
         @Override
-        public TreeType getType() {
-            return TreeType.OPERATIONAL;
+        public DataTreeConfiguration getType() {
+            return DataTreeConfiguration.DEFAULT_OPERATIONAL;
         }
 
     }

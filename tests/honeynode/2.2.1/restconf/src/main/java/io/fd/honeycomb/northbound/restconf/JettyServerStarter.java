@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import io.fd.honeycomb.binding.init.ProviderTrait;
 
+import io.fd.honeycomb.data.init.ShutdownHandler;
 import javax.annotation.Nullable;
 
 import org.eclipse.jetty.server.Server;
@@ -31,7 +32,7 @@ import org.opendaylight.netconf.sal.rest.api.RestConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class JettyServerStarter extends ProviderTrait<JettyServerStarter.ServerInit> {
+class JettyServerStarter extends ProviderTrait<JettyServerStarter.RestconfJettyServer> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JettyServerStarter.class);
 
@@ -54,21 +55,41 @@ class JettyServerStarter extends ProviderTrait<JettyServerStarter.ServerInit> {
     @Named(RESTCONF_HTTPS)
     private ServerConnector httpsConnectorInit;
 
-    @Override
-    protected ServerInit create() {
-        try {
-            LOG.info("Starting RESTCONF Jetty server");
-            server.start();
-            LOG.info("RESTCONF Jetty server successfully started");
-        } catch (Exception e) {
-            LOG.error("Unable to start RESTCONF Jetty server", e);
-            throw new IllegalStateException("Unable to start RESTCONF Jetty server", e);
-        }
+    @Inject
+    private ShutdownHandler shutdownHandler;
 
-        return new ServerInit() {
-        };
+    @Override
+    protected RestconfJettyServer create() {
+        final RestconfJettyServer jettyServer = new RestconfJettyServer(server);
+        shutdownHandler.register(RestconfJettyServer.class.getCanonicalName(), jettyServer);
+        jettyServer.start();
+        return jettyServer;
     }
 
-    interface ServerInit {
+    final class RestconfJettyServer implements AutoCloseable {
+        private final Server server;
+
+        private RestconfJettyServer(final Server server) {
+            this.server = server;
+        }
+
+        private void start() {
+            try {
+                LOG.info("Starting RESTCONF Jetty server");
+                server.start();
+                LOG.info("RESTCONF Jetty server successfully started");
+            } catch (Exception e) {
+                LOG.error("Unable to start RESTCONF Jetty server", e);
+                throw new IllegalStateException("Unable to start RESTCONF Jetty server", e);
+            }
+        }
+
+        @Override
+        public void close() throws Exception {
+            LOG.info("Stopping RESTCONF Jetty server");
+            server.stop();
+            server.destroy();
+            LOG.info("RESTCONF Jetty server successfully stopped");
+        }
     }
 }

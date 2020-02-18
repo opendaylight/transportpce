@@ -16,16 +16,15 @@
 
 package io.fd.honeycomb.transportpce.device.configuration;
 
-import io.fd.honeycomb.transportpce.device.tools.DefaultPmListFactory;
-import io.fd.honeycomb.transportpce.test.common.DataStoreContext;
-import io.fd.honeycomb.transportpce.test.common.DataStoreContextImpl;
-
 import java.io.File;
 
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.fd.honeycomb.transportpce.device.tools.DefaultPmListFactory;
+import io.fd.honeycomb.transportpce.test.common.DataStoreContext;
+import io.fd.honeycomb.transportpce.test.common.DataStoreContextImpl;
 import net.jmob.guice.conf.core.BindConfig;
 import net.jmob.guice.conf.core.InjectConfig;
 import net.jmob.guice.conf.core.Syntax;
@@ -60,11 +59,11 @@ public final class PmConfiguration {
     public CurrentPmList getDataPm() {
         CurrentPmList result = null;
         File pm_list_data = new File(classLoader.getResource(PM_DATA_SAMPLE_OPER_XML).getFile());
-        result = defaultPmListFactory.createDefaultPmList(dataStoreContextUtil,pm_list_data);
+        result = defaultPmListFactory.createDefaultPmList(dataStoreContextUtil, pm_list_data);
         if (result != null) {
             LOG.info("result pm list size : {}", result.getCurrentPmEntry().size());
         } else {
-            LOG.error("no current-pm-list retreived from initial xml file");
+            LOG.warn("Failed to get PM info !");
         }
         return result;
     }

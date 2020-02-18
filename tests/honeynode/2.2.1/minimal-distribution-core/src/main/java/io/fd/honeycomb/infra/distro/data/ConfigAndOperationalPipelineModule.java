@@ -19,13 +19,11 @@ package io.fd.honeycomb.infra.distro.data;
 import com.google.inject.PrivateModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
-
 import io.fd.honeycomb.data.ModifiableDataManager;
 import io.fd.honeycomb.data.ReadableDataManager;
 import io.fd.honeycomb.data.init.DataTreeInitializer;
 import io.fd.honeycomb.data.init.ShutdownHandler;
 import io.fd.honeycomb.impl.EmptyDomMountService;
-import io.fd.honeycomb.impl.ShutdownHandlerImpl;
 import io.fd.honeycomb.infra.distro.data.config.WriterRegistryProvider;
 import io.fd.honeycomb.infra.distro.data.oper.ReadableDTDelegProvider;
 import io.fd.honeycomb.infra.distro.data.oper.ReaderRegistryProvider;
@@ -33,13 +31,11 @@ import io.fd.honeycomb.rpc.RpcRegistry;
 import io.fd.honeycomb.rpc.RpcRegistryBuilder;
 import io.fd.honeycomb.translate.read.registry.ReaderRegistry;
 import io.fd.honeycomb.translate.write.registry.WriterRegistry;
-
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-import org.opendaylight.controller.md.sal.dom.api.DOMMountPointService;
-import org.opendaylight.controller.md.sal.dom.api.DOMRpcService;
-import org.opendaylight.controller.md.sal.dom.broker.impl.DOMNotificationRouter;
-import org.opendaylight.controller.sal.core.api.Broker;
+import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.opendaylight.mdsal.dom.api.DOMDataBroker;
+import org.opendaylight.mdsal.dom.api.DOMMountPointService;
+import org.opendaylight.mdsal.dom.api.DOMRpcService;
+import org.opendaylight.mdsal.dom.broker.DOMNotificationRouter;
 import org.opendaylight.yangtools.yang.data.api.schema.tree.DataTree;
 
 public class ConfigAndOperationalPipelineModule extends PrivateModule {
@@ -49,7 +45,7 @@ public class ConfigAndOperationalPipelineModule extends PrivateModule {
 
     @Override
     protected void configure() {
-        bind(ShutdownHandler.class).to(ShutdownHandlerImpl.class).in(Singleton.class);
+        bind(ShutdownHandler.class).toProvider(ShutdownHandlerProvider.class).in(Singleton.class);
         expose(ShutdownHandler.class);
 
         // Mount point service is required by notification service and restconf
@@ -101,9 +97,6 @@ public class ConfigAndOperationalPipelineModule extends PrivateModule {
         // Create notification service
         bind(DOMNotificationRouter.class).toProvider(DOMNotificationServiceProvider.class).in(Singleton.class);
         expose(DOMNotificationRouter.class);
-        // Wrap notification service, data broker and schema service in a Broker MD-SAL API
-        bind(Broker.class).toProvider(HoneycombDOMBrokerProvider.class).in(Singleton.class);
-        expose(Broker.class);
     }
 
     private void configureRpcs() {
