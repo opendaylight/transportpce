@@ -2,66 +2,66 @@ import os
 import subprocess
 
 def start_xpdra_honeynode():
-    executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode1.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17830", "sample_configs/openroadm/2.1/oper-XPDRA.xml"],
+                [executable, "17830", "sample_configs/openroadm/1.2.1/oper-XPDRA.xml"],
                 stdout=outfile)
 
 def start_roadma_full_honeynode():
-    executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode2.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17821", "sample_configs/openroadm/2.1/oper-ROADMA-full.xml"],
+                [executable, "17821", "sample_configs/openroadm/1.2.1/oper-ROADMA-full.xml"],
                 stdout=outfile)
 
 def start_roadma_honeynode():
-    executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode2.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17831", "sample_configs/openroadm/2.1/oper-ROADMA.xml"],
+                [executable, "17831", "sample_configs/openroadm/1.2.1/oper-ROADMA.xml"],
                 stdout=outfile)
 
 def start_roadmb_honeynode():
-    executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode3.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17832", "sample_configs/openroadm/2.1/oper-ROADMB.xml"],
+                [executable, "17832", "sample_configs/openroadm/1.2.1/oper-ROADMB.xml"],
                 stdout=outfile)
 
 def start_roadmc_full_honeynode():
-    executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode3.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17823", "sample_configs/openroadm/2.1/oper-ROADMC-full.xml"],
+                [executable, "17823", "sample_configs/openroadm/1.2.1/oper-ROADMC-full.xml"],
                 stdout=outfile)
 
 def start_roadmc_honeynode():
-    executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode4.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17833", "sample_configs/openroadm/2.1/oper-ROADMC.xml"],
+                [executable, "17833", "sample_configs/openroadm/1.2.1/oper-ROADMC.xml"],
                 stdout=outfile)
 
 def start_xpdrc_honeynode():
-    executable = ("./honeynode/2.1/honeynode-distribution/target/honeynode-distribution-1.18.01-hc"
-                  "/honeynode-distribution-1.18.01/honeycomb-tpce")
+    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
+                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
     if os.path.isfile(executable):
         with open('honeynode4.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17834", "sample_configs/openroadm/2.1/oper-XPDRC.xml"],
+                [executable, "17834", "sample_configs/openroadm/1.2.1/oper-XPDRC.xml"],
                 stdout=outfile)
 
 def start_tpce():
