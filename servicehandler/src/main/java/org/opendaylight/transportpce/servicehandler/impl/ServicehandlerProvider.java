@@ -14,11 +14,12 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
+import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.TransportpcePceListener;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.TransportpceRendererListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.OrgOpenroadmServiceService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
@@ -46,11 +47,13 @@ public class ServicehandlerProvider {
     private PathComputationService pathComputationService;
     private RendererServiceOperations rendererServiceOperations;
 
+
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderService rpcProviderService,
             NotificationService notificationService, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations,
             NetworkModelWavelengthService networkModelWavelengthService,
-            NotificationPublishService notificationPublishService) {
+            NotificationPublishService notificationPublishService,
+            OtnDeviceRendererService otnDeviceRendererService) {
         this.dataBroker = dataBroker;
         this.rpcService = rpcProviderService;
         this.notificationService = notificationService;
@@ -58,6 +61,7 @@ public class ServicehandlerProvider {
         this.rendererServiceOperations = rendererServiceOperations;
         this.networkModelWavelengthService = networkModelWavelengthService;
         this.notificationPublishService = notificationPublishService;
+
     }
 
     /**
