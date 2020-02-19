@@ -100,9 +100,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <service ref="deviceRenderer"
            interface="org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService" />
-
   <service ref="rendererServiceOperations"
            interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
   <service ref="networkModelWavelengthService"
            interface="org.opendaylight.transportpce.renderer.NetworkModelWavelengthService" />
+  <service ref="otnDeviceRenderer"
+            interface="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService"/>
+
 </blueprint>
