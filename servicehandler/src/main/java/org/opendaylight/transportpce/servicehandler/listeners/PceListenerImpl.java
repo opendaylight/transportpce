@@ -11,6 +11,7 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
@@ -21,6 +22,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescriptionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
@@ -34,6 +36,7 @@ public class PceListenerImpl implements TransportpcePceListener {
 
     private ServicePathRpcResult servicePathRpcResult;
     private RendererServiceOperations rendererServiceOperations;
+    private OtnDeviceRendererService otnDeviceRendererService;
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private PCEServiceWrapper pceServiceWrapper;
     private ServiceInput input;
@@ -45,6 +48,7 @@ public class PceListenerImpl implements TransportpcePceListener {
             PathComputationService pathComputationService, NotificationPublishService notificationPublishService,
             ServiceDataStoreOperations serviceDataStoreOperations) {
         this.rendererServiceOperations = rendererServiceOperations;
+        this.otnDeviceRendererService = otnDeviceRendererService;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         setServiceReconfigure(false);
@@ -102,10 +106,55 @@ public class PceListenerImpl implements TransportpcePceListener {
                                 if (!operationServicePathSaveResult.isSuccess()) {
                                     LOG.error("Service Path not created in datastore !");
                                 }
-                                ServiceImplementationRequestInput serviceImplementationRequest =
-                                        ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
-                                LOG.info("Sending serviceImplementation request : {}", serviceImplementationRequest);
-                                this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest);
+
+                                switch (input.getConnectionType()){
+                                    case Service:
+                                        // TODO: Use if state to check the service-rate and differenciate between
+                                        // Use the service-rate, otu-service-rate and odu-service-rate
+                                        if (input.getServiceAEnd().getServiceRate().equals("100")) {
+                                            ServiceImplementationRequestInput serviceImplementationRequest =
+                                                ModelMappingUtils
+                                                    .createServiceImplementationRequest(input, pathDescription);
+                                            LOG.info("Sending serviceImplementation request : {}",
+                                                serviceImplementationRequest);
+                                            this.rendererServiceOperations
+                                                .serviceImplementation(serviceImplementationRequest);
+                                            // TODO: If the node-type is switch, then we need otn-service-path?
+                                            // If it is on OTN, then use otn-service-path rpc
+                                        }
+                                        // For 1G and 10G service
+                                        if (input.getServiceAEnd().getServiceRate().equals("10") ||
+                                            input.getServiceAEnd().getServiceRate().equals("1")) {
+                                            LOG.info("Creating a ODU service");
+                                            // TODO: Check the available BW on the WDM channel
+                                            // If available, then create use the same o.w create a new
+                                            ServiceImplementationRequestInput serviceImplementationRequest =
+                                                ModelMappingUtils
+                                                    .createServiceImplementationRequest(input, pathDescription);
+                                            LOG.info("Sending serviceImplementation request : {}",
+                                                serviceImplementationRequest);
+                                            this.rendererServiceOperations
+                                                .serviceImplementation(serviceImplementationRequest);
+
+                                            OtnServicePathInput otnServicePathInput = ModelMappingUtils.
+                                                createOtnServicePathInput(input, pathDescription);
+
+                                            LOG.info("Sending the OTN service implementation request: {}",
+                                                otnServicePathInput);
+                                            this.otnDeviceRendererService.setupOtnServicePath(otnServicePathInput);
+
+                                        }
+                                    case Infrastructure:
+                                        LOG.info("This is for OTU4 service {}", input.getConnectionType());
+                                        // TODO: We should also create an ODU4 interfaces
+                                        ServiceImplementationRequestInput serviceImplementationRequest =
+                                            ModelMappingUtils
+                                                .createServiceImplementationRequest(input, pathDescription);
+                                        LOG.info("Sending serviceImplementation request : {}",
+                                            serviceImplementationRequest);
+                                        this.rendererServiceOperations
+                                            .serviceImplementation(serviceImplementationRequest);
+                                }
                             } else {
                                 LOG.warn("service-feasibility-check RPC ");
                             }

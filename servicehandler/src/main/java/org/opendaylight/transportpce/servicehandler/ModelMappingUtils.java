@@ -18,6 +18,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommonBuilder;
@@ -64,6 +66,8 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+
+import org.opendaylight.yangtools.yang.common.Uint16;
 
 public final class ModelMappingUtils {
 
@@ -117,6 +121,43 @@ public final class ModelMappingUtils {
             .setZToADirection(pathDescription.getZToADirection());
         serviceImplementationRequestInputBuilder.setPathDescription(pathDescBuilder.build());
         return serviceImplementationRequestInputBuilder.build();
+    }
+
+    // TODO: Create an input for the otn-service-path RPC
+    public static OtnServicePathInput createOtnServicePathInput(ServiceInput input,
+        PathDescription pathDescription){
+        OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder();
+
+
+
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.otn.service.
+            path.input.AEndApiInfoBuilder aEndApiInfo = new org.opendaylight.yang.gen.v1.http.org.opendaylight.
+                transportpce.renderer.device.rev200128.otn.service.path.input.AEndApiInfoBuilder();
+        //TODO: Need to set the exact values for SAPI and DAPI
+        aEndApiInfo.setNodeId(new NodeIdType(input.getServiceAEnd().getNodeId().getValue()).getValue())
+            .setSapi("").setExpectedSapi("");
+
+
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.otn.service.
+            path.input.ZEndApiInfoBuilder zEndApiInfo = new org.opendaylight.yang.gen.v1.http.org.opendaylight.
+            transportpce.renderer.device.rev200128.otn.service.path.input.ZEndApiInfoBuilder();
+
+        zEndApiInfo.setNodeId(new NodeIdType(input.getServiceAEnd().getNodeId().getValue()).getValue())
+            .setDapi("").setExpectedDapi("");
+
+
+
+        otnServicePathInputBuilder
+            .setAEndApiInfo(aEndApiInfo.build())
+            .setZEndApiInfo(zEndApiInfo.build())
+            .setServiceName(input.getServiceName())
+            .setServiceType("Ethernet") //TODO
+            .setTribSlot((short) 1)
+            .setTribPortNumber((short) 1);
+
+
+        return otnServicePathInputBuilder.build();
+
     }
 
     public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017

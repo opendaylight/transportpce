@@ -317,7 +317,11 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             justification = "call in call() method")
     private List<DeviceRenderingResult> deviceRendering(RollbackProcessor rollbackProcessor,
             ServicePathInputData servicePathDataAtoZ, ServicePathInputData servicePathDataZtoA) {
+
         LOG.info(RENDERING_DEVICES_A_Z_MSG);
+
+        // TODO: This is where Service handler will differenciate the OTN vs WDM service
+        LOG.info("Rendering devices A-Z");
         sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
                 servicePathDataAtoZ.getServicePathInput().getServiceName(), RpcStatusEx.Pending,
                 RENDERING_DEVICES_A_Z_MSG);
