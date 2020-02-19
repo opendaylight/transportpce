@@ -46,6 +46,7 @@ public class ServicehandlerProvider {
     private PathComputationService pathComputationService;
     private RendererServiceOperations rendererServiceOperations;
 
+
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderService rpcProviderService,
             NotificationService notificationService, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations,
@@ -58,6 +59,7 @@ public class ServicehandlerProvider {
         this.rendererServiceOperations = rendererServiceOperations;
         this.networkModelWavelengthService = networkModelWavelengthService;
         this.notificationPublishService = notificationPublishService;
+
     }
 
     /**
