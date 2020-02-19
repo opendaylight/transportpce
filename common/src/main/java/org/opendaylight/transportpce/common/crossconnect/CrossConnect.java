@@ -53,11 +53,12 @@ public interface CrossConnect {
      *            Device id.
      * @param connectionNumber
      *            Name of the cross connect.
+     * @param isOtn
+     *            True for odu-connection, False for roadm-connection.
      *
      * @return true/false based on status of operation.
      */
-
-    List<String> deleteCrossConnect(String deviceId, String connectionNumber);
+    List<String> deleteCrossConnect(String deviceId, String connectionNumber, Boolean isOtn);
 
     /**
      * This public method returns the list of ports (port-trail) for a roadm's
