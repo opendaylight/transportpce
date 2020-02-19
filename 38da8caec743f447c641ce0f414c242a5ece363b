@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1ba359b_632050c4",
+        "filename": "tests/installMavenCentOS.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T14:32:22Z",
+      "side": 0,
+      "message": "should not be removed until 1.2.1 devices support is ready",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 44
+      },
+      "revId": "38da8caec743f447c641ce0f414c242a5ece363b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
