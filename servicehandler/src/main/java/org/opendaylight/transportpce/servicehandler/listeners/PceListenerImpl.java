@@ -22,7 +22,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.TransportpcePceListener;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescriptionBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
@@ -43,8 +43,9 @@ public class PceListenerImpl implements TransportpcePceListener {
     private Boolean serviceFeasiblity;
 
     public PceListenerImpl(RendererServiceOperations rendererServiceOperations,
-            PathComputationService pathComputationService, NotificationPublishService notificationPublishService,
-            ServiceDataStoreOperations serviceDataStoreOperations) {
+                           PathComputationService pathComputationService,
+                           NotificationPublishService notificationPublishService,
+                           ServiceDataStoreOperations serviceDataStoreOperations) {
         this.rendererServiceOperations = rendererServiceOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.serviceDataStoreOperations = serviceDataStoreOperations;
@@ -104,7 +105,7 @@ public class PceListenerImpl implements TransportpcePceListener {
                                     LOG.error("Service Path not created in datastore !");
                                 }
                                 ServiceImplementationRequestInput serviceImplementationRequest =
-                                        ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
+                                    ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
                                 LOG.info("Sending serviceImplementation request : {}", serviceImplementationRequest);
                                 this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest);
                             } else {
