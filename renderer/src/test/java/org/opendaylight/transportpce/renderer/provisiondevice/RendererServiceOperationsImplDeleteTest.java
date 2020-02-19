@@ -57,8 +57,8 @@ import org.opendaylight.transportpce.renderer.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.handler.header.ServiceHandlerHeaderBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
@@ -85,6 +85,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     private PortMappingVersion121 portMappingVersion121;
     private CrossConnectImpl121 crossConnectImpl121;
     private CrossConnectImpl221 crossConnectImpl221;
+    private OtnDeviceRendererService otnDeviceRendererService;
 
     private void setMountPoint(MountPoint mountPoint) {
         MountPointService mountPointService = new MountPointServiceStub(mountPoint);
@@ -117,6 +118,10 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         this.deviceRenderer = new DeviceRendererServiceImpl(this.getDataBroker(),
             this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect,
             this.portMapping, null);
+
+        this.otnDeviceRendererService = new OtnDeviceRendererServiceImpl(openRoadmInterfaceFactory, crossConnect,
+            openRoadmInterfaces, this.deviceTransactionManager, null);
+
     }
 
     @Before
@@ -128,8 +133,9 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
             MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
         this.networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(getDataBroker());
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
-        this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer, olmService,
-                getDataBroker(), this.networkModelWavelengthService, notificationPublishService);
+        this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer,
+            this.otnDeviceRendererService, olmService, getDataBroker(), this.networkModelWavelengthService,
+            notificationPublishService);
 
     }
 
