@@ -134,11 +134,12 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 // Here is the switch statement that distinguishes on the connection-type
                 LOG.info("Connection-type is {} for {}", input.getConnectionType(), input.getServiceName());
                 switch (input.getConnectionType()) {
-                    case Service: // This takes into account of Ethernet 100G, 1G, 10G and ODU4
+                    case Service: case RoadmLine: // This takes into account of Ethernet 100G, 1G, 10G and ODU4
                         LOG.info("RPC implementation for {}", input.getConnectionType());
-                        if ((input.getServiceAEnd().getServiceRate() != null) // Since service-rate could be null
-                            && (input.getServiceAEnd().getServiceRate().intValue() == 100)
-                            && (input.getServiceAEnd().getServiceFormat().getName().equals("Ethernet"))) {
+                        if (((input.getServiceAEnd().getServiceRate() != null)
+                            && (input.getServiceAEnd().getServiceRate().intValue() == 100))
+                            && ((input.getServiceAEnd().getServiceFormat().getName().equals("Ethernet"))
+                                || (input.getServiceAEnd().getServiceFormat().getName().equals("OC")))) {
                             LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
                                 input.getServiceAEnd().getServiceFormat(), input.getServiceAEnd().getServiceRate());
                             ServicePathInputData servicePathInputDataAtoZ = ModelMappingUtils
@@ -200,8 +201,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             }
                             // If Service activation is success update Network ModelMappingUtils
                             networkModelWavelengthService.useWavelengths(input.getPathDescription());
-                            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
                         } else { // This implies, service-rate is 1 or 10G
                             // This includes the lower-order odu (1 G, 10 G) and
                             LOG.info("RPC implementation for LO-ODU");
@@ -234,9 +233,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                                     OPERATION_FAILED);
                             }
                             LOG.info("OTN rendering result size {}", otnRenderingResults.size());
-                            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
                         }
+                        sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
+                            input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
                         break;
                     case Infrastructure:
                         LOG.info("RPC implementation for {}", input.getConnectionType());
@@ -304,7 +303,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             // First create the OCH and OTU interfaces
                             String serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
                             LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
-                                input.getServiceAEnd().getOtuServiceRate(), serviceRate);
+                                input.getServiceAEnd().getOduServiceRate(), serviceRate);
                             // Now start rendering ODU4 interface
                             String serviceFormat = "ODU"; // Since we need to create ODU4 Ttp interfaces as well
                             // This is A-Z side

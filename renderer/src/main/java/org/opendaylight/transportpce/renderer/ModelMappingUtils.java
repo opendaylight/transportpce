@@ -119,11 +119,15 @@ public final class ModelMappingUtils {
         // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
         List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input.Nodes> nodes =
             new ArrayList<>();
-        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
-        if (!asideToZside) {
+        NodeLists nodeLists = null;
+        if (asideToZside) {
+            nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
+        } else {
             nodeLists = getNodesListZtoA(pathDescription.getZToADirection().getZToA().iterator());
         }
-        for (Nodes node: nodeLists.getList()) {
+        LOG.info("These are node-lists {}, {}", nodeLists.getList(), nodeLists.getOlmList());
+        for (int i = 0; i < nodeLists.getList().size(); i++) {
+            Nodes node = nodeLists.getList().get(i);
             if (serviceRate.equals("100G")) {
                 nodes.add(
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input
@@ -133,13 +137,25 @@ public final class ModelMappingUtils {
                         .build());
             }
             else { // For any other service rate (1G or 10G)
-                nodes.add(
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input
-                        .NodesBuilder()
-                        .setNodeId(node.getNodeId())
-                        .setClientTp(node.getSrcTp())
-                        .setNetworkTp(node.getDestTp())
-                        .build());
+                // For the last node in the list, clientTp and NetworkTp has to be reversed
+                if (i == nodeLists.getList().size() - 1) {
+                    nodes.add(
+                        new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input
+                            .NodesBuilder()
+                            .setNodeId(node.getNodeId())
+                            .setClientTp(node.getDestTp())
+                            .setNetworkTp(node.getSrcTp())
+                            .build());
+
+                } else {
+                    nodes.add(
+                        new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input
+                            .NodesBuilder()
+                            .setNodeId(node.getNodeId())
+                            .setClientTp(node.getSrcTp())
+                            .setNetworkTp(node.getDestTp())
+                            .build());
+                }
             }
         }
         OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder()
@@ -203,7 +219,7 @@ public final class ModelMappingUtils {
                 } else if ("Link".equals(resourceType)) {
                     LOG.info("The type is link");
                 } else {
-                    LOG.info("The type is not indentified: {}", resourceType);
+                    LOG.info("The type is not identified: {}", resourceType);
                 }
             } catch (IllegalArgumentException | SecurityException e) {
                 LOG.error("Dont find the getResource method", e);
@@ -230,7 +246,7 @@ public final class ModelMappingUtils {
             try {
                 if (TERMINATION_POINT.equals(resourceType)) {
                     tp = (TerminationPoint) pathDesObj.getResource().getResource();
-                    LOG.info(" TP is {} {}", tp.getTpId(),
+                    LOG.info("TP is {} {}", tp.getTpId(),
                             tp.getTpNodeId());
                     tpID = tp.getTpId();
                     nodeID = tp.getTpNodeId();
@@ -256,11 +272,11 @@ public final class ModelMappingUtils {
                 } else if ("Link".equals(resourceType)) {
                     LOG.info("The type is link");
                 } else {
-                    LOG.info("The type is not indentified: {}", resourceType);
+                    LOG.info("The type is not identified: {}", resourceType);
                 }
             } catch (IllegalArgumentException | SecurityException e) {
                 //TODO: Auto-generated catch block
-                LOG.error("Dont find the getResource method", e);
+                LOG.error("Did not find the getResource method", e);
             }
         }
         populateNodeLists(treeMap, list, olmList);
