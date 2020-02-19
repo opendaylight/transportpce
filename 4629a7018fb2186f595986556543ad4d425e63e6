@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "2ad3e53d_65ae557a",
+        "filename": "tests/honeynode/2.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/yang/openconfig/nokia-openconfig-exttypes@2017-10-26.yang",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T21:28:09Z",
+      "side": 1,
+      "message": "openconfig support added here should be mentioned in the commit message",
+      "revId": "4629a7018fb2186f595986556543ad4d425e63e6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "250e9577_39b51cbe",
         "filename": "tox.ini",
         "patchSetId": 5
