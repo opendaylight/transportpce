@@ -42,6 +42,40 @@
     },
     {
       "key": {
+        "uuid": "b0baac9d_c430e478",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-ROADMA.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T15:33:05Z",
+      "side": 1,
+      "message": "tab",
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9852a97a_e6840839",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-ROADMA.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T15:33:05Z",
+      "side": 1,
+      "message": "tab",
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be6fb501_e00bf766",
         "filename": "tox.ini",
         "patchSetId": 3
