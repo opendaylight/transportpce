@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.common.openroadminterfaces;
 
 import com.google.common.util.concurrent.FluentFuture;
+
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -65,7 +66,6 @@ public class OpenRoadmInterfacesImpl221 {
             throw new OpenRoadmInterfaceException(String.format("Failed to obtain device transaction for node %s!",
                 nodeId), e);
         }
-
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(
             Interface.class, new InterfaceKey(ifBuilder.getName()));
         LOG.info("POST INTERF for {} : InterfaceBuilder : name = {} \t type = {}", nodeId, ifBuilder.getName(),
