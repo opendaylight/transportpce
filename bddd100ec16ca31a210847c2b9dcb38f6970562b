@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f78bb8e1_969bfcdf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:53:33Z",
+      "side": 1,
+      "message": "- rename 2.1 folder into 1.2.1 to reflect the openroadm device version rather than the openroadm common version\n- delete old testtool 1.2.1 sample configs",
+      "revId": "bddd100ec16ca31a210847c2b9dcb38f6970562b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef4cd3ae_2f1f87a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:53:33Z",
+      "side": 1,
+      "message": "correct.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 28
+      },
+      "revId": "bddd100ec16ca31a210847c2b9dcb38f6970562b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a11bf244_d1ba87a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:53:33Z",
+      "side": 1,
+      "message": "Yes. Now releng tox profile is shipped with a JDK installed by default, that was not the case in neon and fluorine releases...",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 15
+      },
+      "revId": "bddd100ec16ca31a210847c2b9dcb38f6970562b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
