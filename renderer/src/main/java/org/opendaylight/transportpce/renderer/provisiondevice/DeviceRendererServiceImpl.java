@@ -98,6 +98,12 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     @Override
     public ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction) {
         List<Nodes> nodes = input.getNodes();
+        Nodes srcNode = nodes.get(0);
+        // If the Node list size is one, then src and tgt are same;
+        // sapi/dapi all have the same value
+        Nodes tgtNode = nodes.get(nodes.size() - 1);
+
+
         // Register node for suppressing alarms
         if (!alarmSuppressionNodeRegistration(input)) {
             LOG.warn("Alarm suppresion node registration failed!!!!");
@@ -129,8 +135,16 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, destTp, waveNumber, ModulationFormat.DpQpsk);
                         createdOchInterfaces.add(supportingOchInterface);
+                        // Here we pass logical connection-point of z-end to set SAPI and DAPI
+                        String znodeId = tgtNode.getNodeId();
+                        String zlogicalConnection = tgtNode.getDestTp();
+                        if (nodeId.equals(tgtNode.getNodeId())) {
+                            znodeId = srcNode.getNodeId(); // if it is final node, then set zSide as source side
+                            zlogicalConnection = srcNode.getDestTp();
+                        }
                         String supportingOtuInterface = this.openRoadmInterfaceFactory
-                                .createOpenRoadmOtu4Interface(nodeId, destTp, supportingOchInterface);
+                                .createOpenRoadmOtu4Interface(nodeId, destTp, supportingOchInterface,
+                                    znodeId, zlogicalConnection);
                         createdOtuInterfaces.add(supportingOtuInterface);
                         if (srcTp == null) {
                             otnNodesProvisioned.add(node);
