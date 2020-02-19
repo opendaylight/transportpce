@@ -42,7 +42,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.Opti
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOdu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOtu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.RateIdentity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.R100G;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.och.container.OchBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.OtsAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
@@ -248,8 +248,8 @@ public class OpenRoadmInterface121 {
         return interfacesCreated;
     }
 
-    public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber, Class<
-            ? extends RateIdentity> rate, OchAttributes.ModulationFormat format) throws OpenRoadmInterfaceException {
+    public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
+        OchAttributes.ModulationFormat format) throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node %s and"
@@ -260,7 +260,7 @@ public class OpenRoadmInterface121 {
         OchBuilder ocIfBuilder = new OchBuilder();
         ocIfBuilder.setWavelengthNumber(waveNumber);
         ocIfBuilder.setModulationFormat(format);
-        ocIfBuilder.setRate(rate);
+        ocIfBuilder.setRate(R100G.class);
         ocIfBuilder.setTransmitPower(new PowerDBm(new BigDecimal("-5")));
 
         // Create Interface1 type object required for adding as augmentation

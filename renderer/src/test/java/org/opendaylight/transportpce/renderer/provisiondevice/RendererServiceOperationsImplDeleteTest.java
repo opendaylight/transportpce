@@ -143,12 +143,12 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
             .setRequestId("request1").build());
         Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
-            Mockito.anyString());
+            Mockito.anyString(), Mockito.eq(false));
         ServiceDeleteOutput serviceDeleteOutput
                 = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verify(this.crossConnect, Mockito.times(2)).deleteCrossConnect(Mockito.any(), Mockito.any());
+        Mockito.verify(this.crossConnect, Mockito.times(2)).deleteCrossConnect(Mockito.any(), Mockito.any(), Mockito.eq(false));
     }
 
     @Test
@@ -159,13 +159,13 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
                 = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.any(), Mockito.any());
+        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.any(), Mockito.any(), Mockito.eq(false));
     }
 
     @Test
     public void serviceDeleteOperationTearDownFailedAtoZ() throws ExecutionException, InterruptedException {
         Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
-            Mockito.anyString());
+            Mockito.anyString(), Mockito.eq(false));
         Mockito.doReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
             .setResult("Failed").build()).buildFuture()).when(this.olmService).servicePowerTurndown(Mockito.any());
 
@@ -179,14 +179,16 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         ServiceDeleteOutput output = serviceDeleteOutput.get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 output.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node1"), Mockito.any());
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node2"), Mockito.any());
+        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node1"), Mockito.any(),
+            Mockito.eq(false));
+        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node2"), Mockito.any(),
+            Mockito.eq(false));
     }
 
     @Test
     public void serviceDeleteOperationTearDownFailedZtoA() throws ExecutionException, InterruptedException {
         Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
-            Mockito.anyString());
+            Mockito.anyString(), Mockito.eq(false));
         Mockito.when(this.olmService.servicePowerTurndown(Mockito.any()))
             .thenReturn(RpcResultBuilder.success((new ServicePowerTurndownOutputBuilder())
                 .setResult("Success").build()).buildFuture())
@@ -203,8 +205,10 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
         Mockito.verify(this.olmService, Mockito.times(2)).servicePowerTurndown(Mockito.any());
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node1"), Mockito.any());
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node2"), Mockito.any());
+        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node1"), Mockito.any(),
+            Mockito.eq(false));
+        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.eq("node2"), Mockito.any(),
+            Mockito.eq(false));
     }
 
     private void writePathDescription() throws ExecutionException, InterruptedException {

@@ -42,10 +42,10 @@ public class CrossConnectImpl implements CrossConnect {
 
     public Optional<?> getCrossConnect(String nodeId, String connectionNumber) {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
             return crossConnectImpl121.getCrossConnect(nodeId,connectionNumber);
         }
-        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
             return crossConnectImpl221.getCrossConnect(nodeId,connectionNumber);
         }
         return Optional.empty();
@@ -55,11 +55,11 @@ public class CrossConnectImpl implements CrossConnect {
     public Optional<String> postCrossConnect(String nodeId, Long waveNumber, String srcTp, String destTp) {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         LOG.info("Cross Connect post request received for node {} with version {}",nodeId,openRoadmVersion);
-        if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
             LOG.info("Device Version is 1.2.1");
             return crossConnectImpl121.postCrossConnect(nodeId, waveNumber, srcTp, destTp);
         }
-        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
             LOG.info("Device Version is 2.2");
             return crossConnectImpl221.postCrossConnect(nodeId, waveNumber, srcTp, destTp);
         }
@@ -69,14 +69,14 @@ public class CrossConnectImpl implements CrossConnect {
     }
 
 
-    public List<String> deleteCrossConnect(String nodeId, String connectionNumber) {
+    public List<String> deleteCrossConnect(String nodeId, String connectionNumber, Boolean isOtn) {
 
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
             return crossConnectImpl121.deleteCrossConnect(nodeId, connectionNumber);
         }
-        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
-            return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber);
+        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
+            return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);
         }
         return null;
     }
@@ -84,10 +84,10 @@ public class CrossConnectImpl implements CrossConnect {
     public List<?> getConnectionPortTrail(String nodeId, Long waveNumber, String srcTp, String destTp)
             throws OpenRoadmInterfaceException {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
             return crossConnectImpl121.getConnectionPortTrail(nodeId, waveNumber, srcTp, destTp);
         }
-        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
             return crossConnectImpl221.getConnectionPortTrail(nodeId, waveNumber, srcTp, destTp);
         }
         return null;
@@ -96,10 +96,10 @@ public class CrossConnectImpl implements CrossConnect {
     public boolean setPowerLevel(String nodeId, Enum mode, BigDecimal powerValue,
                                  String connectionNumber) {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
-        if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+        if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
             return crossConnectImpl121.setPowerLevel(nodeId,mode,powerValue,connectionNumber);
         }
-        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+        else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
             return crossConnectImpl221.setPowerLevel(nodeId,mode,powerValue,connectionNumber);
         }
         return false;
