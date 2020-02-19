@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "a16e4c61_b442d5e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:44:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de4330eb_5aed942d",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 39
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a32f302e_a8e14a70",
         "filename": "tests/honeynode/2.2.1/restconf/src/main/resources/honeycomb-minimal-resources/config/restconf.json",
         "patchSetId": 3
@@ -120,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "26b552b0_e80baeb7",
+        "filename": "tests/honeynode/2.2.1/restconf/src/main/resources/honeycomb-minimal-resources/config/restconf.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:44:10Z",
+      "side": 1,
+      "message": "OK add a note in commit message\nWith a number of files here, people won\u0027t notice it easily otherwise.",
+      "parentUuid": "c2c0c302_4f171abf",
+      "range": {
+        "startLine": 4,
+        "startChar": 31,
+        "endLine": 4,
+        "endChar": 38
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ffe44ea_5cd06b68",
         "filename": "tests/installJDK11CentOS.sh",
         "patchSetId": 3
@@ -131,6 +179,29 @@
       "writtenOn": "2020-02-19T14:32:22Z",
       "side": 1,
       "message": "rebasing on top of 87509 would avoid recreating this file",
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f86083c7_736a7eb0",
+        "filename": "tests/installJDK11CentOS.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:44:10Z",
+      "side": 1,
+      "message": "good idea, should be in the parent change rather than here.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 2
+      },
       "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
@@ -154,6 +225,24 @@
     },
     {
       "key": {
+        "uuid": "17d82f27_a616be0e",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-ROADMA.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:44:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0baac9d_c430e478",
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9852a97a_e6840839",
         "filename": "tests/sample_configs/openroadm/2.2.1/oper-ROADMA.xml",
         "patchSetId": 3
@@ -168,6 +257,24 @@
       "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "071a045b_5893ca26",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-ROADMA.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:44:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9852a97a_e6840839",
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -215,6 +322,30 @@
       "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60bd3ee4_d8949c3d",
+        "filename": "tox.ini",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:44:10Z",
+      "side": 1,
+      "message": "the right scenario would be\n- installation of maven and JDK8\n- installation of 1.2.1 sims with JDK 8\n- installation of JDK11\n- installation of 2.2.1 sims with JDK11\n- etc just as usual\nThis way, there is nothing to touch in 1.2.1 tests and it\u0027s only a minor modification in tox.ini + the gate will work as usual. People can start using this change.",
+      "parentUuid": "07d69e9e_9245b0a4",
+      "range": {
+        "startLine": 21,
+        "startChar": 81,
+        "endLine": 21,
+        "endChar": 114
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
