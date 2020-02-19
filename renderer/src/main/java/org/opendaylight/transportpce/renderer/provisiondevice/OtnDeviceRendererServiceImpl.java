@@ -105,7 +105,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         success = false;
                     }
                 } else {
-                    LOG.warn("Unsupported serivce-rate for service-type Ethernet");
+                    LOG.warn("Unsupported service-rate for service-type Ethernet");
                 }
                 break;
             case "ODU":
@@ -118,11 +118,11 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         success = false;
                     }
                 } else {
-                    LOG.warn("Unsupported serivce-rate for service-type ODU");
+                    LOG.warn("Unsupported service-rate for service-type ODU");
                 }
                 break;
             default:
-                LOG.error("service-type {} not managet yet", input.getServiceType());
+                LOG.error("service-type {} not managed yet", input.getServiceType());
                 break;
         }
         if (success) {
