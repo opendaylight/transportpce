@@ -64,7 +64,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
-
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public class ModelMappingUtilsTest extends AbstractTest {
 
@@ -124,8 +124,10 @@ public class ModelMappingUtilsTest extends AbstractTest {
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
         ResponseParameters responseParameters = new ResponseParametersBuilder()
             .setPathDescription(new PathDescriptionBuilder()
-                .setAToZDirection(new AToZDirectionBuilder().setAToZWavelengthNumber(1L).setRate(1L).build())
-                .setZToADirection(new ZToADirectionBuilder().setZToAWavelengthNumber(1L).setRate(1L).build()).build())
+                .setAToZDirection(new AToZDirectionBuilder().setAToZWavelengthNumber(Uint32.valueOf(1))
+                    .setRate(Uint32.valueOf(1)).build())
+                .setZToADirection(new ZToADirectionBuilder().setZToAWavelengthNumber(Uint32.valueOf(1))
+                    .setRate(Uint32.valueOf(1)).build()).build())
             .build();
         return new PathComputationRequestOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon)
             .setResponseParameters(responseParameters).build();
@@ -179,7 +181,7 @@ public class ModelMappingUtilsTest extends AbstractTest {
         ServiceRerouteInput serviceRerouteinput = new ServiceRerouteInputBuilder().setServiceName("reroute").build();
         Services services = new ServicesBuilder()
             .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build()).build();
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteInput
             serviceDeleteInput =
                     ModelMappingUtils.createServiceDeleteInput(serviceRerouteinput, services);
         Assert.assertEquals("reroute", serviceDeleteInput.getServiceName());
@@ -190,7 +192,7 @@ public class ModelMappingUtilsTest extends AbstractTest {
     public void  createServiceDeleteInputWithServiceReconfigureInput() {
         ServiceReconfigureInput serviceReconfigureInput = new  ServiceReconfigureInputBuilder()
                 .setServiceName("reconf").build();
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteInput
             serviceDeleteInput =
                     ModelMappingUtils.createServiceDeleteInput(serviceReconfigureInput);
         Assert.assertEquals("reconf", serviceDeleteInput.getServiceName());
@@ -203,7 +205,7 @@ public class ModelMappingUtilsTest extends AbstractTest {
             .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build()).build();
         ServiceRestorationInput serviceRestorationInput =
             new ServiceRestorationInputBuilder().setServiceName("rest").build();
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteInput
             serviceDeleteInput =
                     ModelMappingUtils.createServiceDeleteInput(serviceRestorationInput, services);
         Assert.assertEquals("rest", serviceDeleteInput.getServiceName());
