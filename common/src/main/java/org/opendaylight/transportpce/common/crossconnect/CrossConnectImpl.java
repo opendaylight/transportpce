@@ -69,14 +69,14 @@ public class CrossConnectImpl implements CrossConnect {
     }
 
 
-    public List<String> deleteCrossConnect(String nodeId, String connectionNumber) {
+    public List<String> deleteCrossConnect(String nodeId, String connectionNumber, Boolean isOtn) {
 
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
             return crossConnectImpl121.deleteCrossConnect(nodeId, connectionNumber);
         }
         else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
-            return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber);
+            return crossConnectImpl221.deleteCrossConnect(nodeId, connectionNumber, isOtn);
         }
         return null;
     }

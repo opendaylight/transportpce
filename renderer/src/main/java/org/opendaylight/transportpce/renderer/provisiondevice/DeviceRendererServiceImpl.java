@@ -55,9 +55,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.renderer.rollback.output.FailedToRollbackBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.renderer.rollback.output.FailedToRollbackKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.Topology;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes.ModulationFormat;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.R100G;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
@@ -122,14 +120,15 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         crossConnectFlag++;
                         Mapping mapping = this.portMapping.getMapping(nodeId,destTp);
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                nodeId, destTp, waveNumber, R100G.class, ModulationFormat.DpQpsk);
+                                nodeId, destTp, waveNumber, ModulationFormat.DpQpsk);
                         createdOchInterfaces.add(supportingOchInterface);
                         String supportingOtuInterface = this.openRoadmInterfaceFactory
                                 .createOpenRoadmOtu4Interface(nodeId, destTp, supportingOchInterface);
                         createdOtuInterfaces.add(supportingOtuInterface);
-                        if (mapping != null && mapping.getXponderType().getIntValue() == 3) {
-                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOtnOdu4Interface(nodeId,
-                                    destTp, supportingOtuInterface));
+                        if (mapping != null && mapping.getXponderType() != null && (mapping.getXponderType()
+                            .getIntValue() == 3 || mapping.getXponderType().getIntValue() == 2)) {
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory
+                                .createOpenRoadmOtnOdu4Interface(nodeId, destTp, supportingOtuInterface));
                         } else {
                             createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
                                     destTp, supportingOtuInterface));
@@ -143,19 +142,20 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
-                        Mapping mapping = this.portMapping.getMapping(nodeId,srcTp);
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
-                                nodeId, srcTp, waveNumber, R100G.class, ModulationFormat.DpQpsk);
+                                nodeId, srcTp, waveNumber, ModulationFormat.DpQpsk);
                         createdOchInterfaces.add(supportingOchInterface);
                         String supportingOtuInterface = this.openRoadmInterfaceFactory
                                 .createOpenRoadmOtu4Interface(nodeId, srcTp, supportingOchInterface);
                         createdOtuInterfaces.add(supportingOtuInterface);
                         createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
                                 srcTp, supportingOtuInterface));
-                        if (mapping != null && mapping.getXponderType().getIntValue() == 3) {
-                            createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOtnOdu4Interface(nodeId,
-                                    destTp, supportingOtuInterface));
+                        Mapping mapping = this.portMapping.getMapping(nodeId,srcTp);
+                        if (mapping != null && mapping.getXponderType() != null && (mapping.getXponderType()
+                            .getIntValue() == 3 || mapping.getXponderType().getIntValue() == 2)) {
+                            createdOduInterfaces.add(this.openRoadmInterfaceFactory
+                                .createOpenRoadmOtnOdu4Interface(nodeId, destTp, supportingOtuInterface));
                         } else {
                             createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
                                     destTp, supportingOtuInterface));
@@ -258,12 +258,19 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             List<String> interfacesToDelete = new LinkedList<>();
             String nodeId = node.getNodeId();
             LOG.info("Deleting service setup on node {}", nodeId);
-            String srcTp = node.getSrcTp();
-            String destTp = node.getDestTp();
+            String srcTp;
+            String destTp;
             Long waveNumber = input.getWaveNumber();
-            if ((srcTp == null) || (destTp == null)) {
-                LOG.error("Source ({}) or destination ({}) termination point is null.", srcTp, destTp);
+            if (node.getDestTp() == null) {
+                LOG.error("Destination termination point must not be null.");
                 return;
+            } else {
+                destTp = node.getDestTp();
+            }
+            if (node.getSrcTp() != null) {
+                srcTp = node.getSrcTp();
+            } else {
+                srcTp = "";
             }
             // if the node is currently mounted then proceed.
             if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
@@ -272,7 +279,17 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         || srcTp.contains(StringConstants.NETWORK_TOKEN)
                         || destTp.contains(StringConstants.CLIENT_TOKEN)) {
                     if (destTp.contains(StringConstants.NETWORK_TOKEN)) {
-                        interfacesToDelete.add(destTp + "-ODU");
+                        try {
+                            if (this.openRoadmInterfaces.getInterface(nodeId, destTp + "-ODU").isPresent()) {
+                                interfacesToDelete.add(destTp + "-ODU");
+                            }
+                            if (this.openRoadmInterfaces.getInterface(nodeId, destTp + "-ODU4").isPresent()) {
+                                interfacesToDelete.add(destTp + "-ODU4");
+                            }
+                        }
+                        catch (OpenRoadmInterfaceException e) {
+                            LOG.error("impossible to get interface {} or {}", destTp + "-ODU", destTp + "-ODU4", e);
+                        }
                         interfacesToDelete.add(destTp + "-OTU");
                         interfacesToDelete.add(
                                 this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber));
@@ -291,7 +308,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                 } else {
                     String connectionNumber = srcTp + "-" + destTp + "-" + waveNumber;
-                    List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber);
+                    List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, false);
                     connectionNumber = destTp + "-" + srcTp + "-" + waveNumber;
                     if (intToDelete != null) {
                         for (String interf : intToDelete) {
@@ -348,7 +365,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             List<String> failedInterfaces = new ArrayList<>();
             String nodeId = nodeInterfaces.getNodeId();
             for (String connectionId : nodeInterfaces.getConnectionId()) {
-                List<String> listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId);
+                List<String> listInter = this.crossConnect.deleteCrossConnect(nodeId, connectionId, false);
                 if (listInter != null) {
                     LOG.info("Cross connect {} on node {} successfully deleted.", connectionId, nodeId);
                 } else {

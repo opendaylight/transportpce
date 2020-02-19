@@ -74,6 +74,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.xponder.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpenROADMOpticalMultiplex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpticalTransport;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnOdu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.PortConfig;
@@ -148,7 +149,6 @@ public class PortMappingVersion221 {
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
-        LOG.info("Updating Mapping Data {} for node {}", oldMapping, nodeId);
         InstanceIdentifier<Ports> portIId = InstanceIdentifier.create(OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
             .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()));
@@ -161,7 +161,8 @@ public class PortMappingVersion221 {
                     Ports port = portObject.get();
                     Mapping newMapping = createMappingObject(nodeId, port, oldMapping.getSupportingCircuitPackName(),
                         oldMapping.getLogicalConnectionPoint());
-
+                    LOG.info("Updating old mapping Data {} for {} of {} by new mapping data {}", oldMapping,
+                        oldMapping.getLogicalConnectionPoint(), nodeId, newMapping);
                     final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
                     InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
                         .child(Nodes.class, new NodesKey(nodeId))
@@ -760,12 +761,15 @@ public class PortMappingVersion221 {
             .setPortDirection(port.getPortDirection().getName());
 
         // Get OMS and OTS interface provisioned on the TTP's
-        if (logicalConnectionPoint.contains(StringConstants.TTP_TOKEN) && (port.getInterfaces() != null)) {
+        if ((logicalConnectionPoint.contains(StringConstants.TTP_TOKEN)
+            || logicalConnectionPoint.contains(StringConstants.NETWORK_TOKEN)) && (port.getInterfaces() != null)) {
             for (Interfaces interfaces : port.getInterfaces()) {
                 try {
                     Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
                         interfaces.getInterfaceName());
                     if (openRoadmInterface.isPresent()) {
+                        LOG.info("interface get from device is {} and of type {}", openRoadmInterface.get().getName(),
+                            openRoadmInterface.get().getType());
                         Class<? extends InterfaceType> interfaceType
                             = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
                         // Check if interface type is OMS or OTS
@@ -774,6 +778,9 @@ public class PortMappingVersion221 {
                         }
                         if (interfaceType.equals(OpticalTransport.class)) {
                             mpBldr.setSupportingOts(interfaces.getInterfaceName());
+                        }
+                        if (interfaceType.equals(OtnOdu.class)) {
+                            mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
                         }
                     } else {
                         LOG.warn("Interface {} from node {} was null!", interfaces.getInterfaceName(), nodeId);

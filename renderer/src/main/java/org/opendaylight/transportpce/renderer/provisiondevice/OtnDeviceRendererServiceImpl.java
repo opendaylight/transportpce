@@ -25,6 +25,7 @@ import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterf
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathOutputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.node.interfaces.NodeInterface;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.node.interfaces.NodeInterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.node.interfaces.NodeInterfaceKey;
@@ -103,21 +104,28 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             }
             // if the node is currently mounted then proceed.
             if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
+                String connectionNumber = "";
                 switch (input.getServiceRate()) {
                     case("10G"):
-                        interfacesToDelete.add(srcTp + "-ODU2e-" + input.getServiceName());
-                        interfacesToDelete.add(destTp + "-ODU2e-" + input.getServiceName());
+                        connectionNumber = srcTp + "-ODU2e-" + input.getServiceName() + "-x-" + destTp
+                            + "-ODU2e-" + input.getServiceName();
+                        break;
                     case("1G"):
-                        interfacesToDelete.add(srcTp + "-ODU0-" + input.getServiceName());
-                        interfacesToDelete.add(destTp + "-ODU0-" + input.getServiceName());
+                        connectionNumber = srcTp + "-ODU0-" + input.getServiceName() + "-x-" + destTp
+                            + "-ODU2e-" + input.getServiceName();
+                        break;
+                    default:
+                        LOG.error("service rate {} not managed yet", input.getServiceRate());
                 }
-                String connectionNumber = interfacesToDelete.get(0) + "-x-" + interfacesToDelete.get(1);
-                List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber);
+                List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, true);
                 if (intToDelete != null) {
                     for (String interf : intToDelete) {
-                        if (!this.openRoadmInterfaceFactory.isUsedbyXc(nodeId, interf, connectionNumber,
-                                this.deviceTransactionManager)) {
+                        if (!this.openRoadmInterfaceFactory.isUsedbyOtnXc(nodeId, interf, connectionNumber,
+                            this.deviceTransactionManager)) {
                             interfacesToDelete.add(interf);
+                            if (!getSupportedInterface(nodeId, interf).contains("ODU4")) {
+                                interfacesToDelete.add(getSupportedInterface(nodeId, interf));
+                            }
                         }
                     }
                 }
@@ -157,6 +165,21 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
 
     }
 
+    private String getSupportedInterface(String nodeId, String interf) {
+        Optional<Interface> supInterfOpt;
+        try {
+            supInterfOpt = this.openRoadmInterfaces.getInterface(nodeId, interf);
+            if (supInterfOpt.isPresent()) {
+                return supInterfOpt.get().getSupportingInterface();
+            } else {
+                return null;
+            }
+        } catch (OpenRoadmInterfaceException e) {
+            LOG.error("error getting Supported Interface of {} - {}", interf, nodeId, e);
+            return null;
+        }
+    }
+
     private List<NodeInterface> createInterface(OtnServicePathInput input) throws OpenRoadmInterfaceException {
         List<NodeInterface> nodeInterfaces = new ArrayList<>();
         LOG.info("Calling Create Interface entry for OTN service path");
@@ -164,7 +187,6 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             for (Nodes node: input.getNodes()) {
                 LOG.info("Input service is 1G");
                 //check if the node is mounted or not?
-                List<String> createdConnections = new ArrayList<>();
                 List<String> createdEthInterfaces = new ArrayList<>();
                 List<String> createdOduInterfaces = new ArrayList<>();
                 createdEthInterfaces.add(
@@ -178,10 +200,12 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 createdOduInterfaces.add(
                     openRoadmInterfaceFactory.createOpenRoadmOdu0Interface(node.getNodeId(), node.getNetworkTp(),
                         input.getServiceName(), "07", true, input.getTribPortNumber(), input.getTribSlot()));
-                LOG.debug("created odu inteface network side {} {}",createdOduInterfaces.get(0),createdOduInterfaces.get(1));
+                LOG.debug("created odu inteface network side {} {}",createdOduInterfaces.get(0),createdOduInterfaces
+                    .get(1));
 
                 //implement cross connect
                 Optional<String> connectionNameOpt = postCrossConnect(createdOduInterfaces, node);
+                List<String> createdConnections = new ArrayList<>();
                 createdConnections.add(connectionNameOpt.get());
                 LOG.info("Created cross connects");
                 NodeInterfaceBuilder nodeInterfaceBuilder = new NodeInterfaceBuilder()
@@ -199,7 +223,6 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             for (Nodes node: input.getNodes()) {
                 LOG.info("Input service is 10G");
                 //check if the node is mounted or not?
-                List<String> createdConnections = new ArrayList<>();
                 List<String> createdEthInterfaces = new ArrayList<>();
                 List<String> createdOduInterfaces = new ArrayList<>();
                 createdEthInterfaces.add(
@@ -214,6 +237,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         input.getServiceName(),"03" , true ,input.getTribPortNumber(),input.getTribSlot()));
                 //implement cross connect
                 Optional<String> connectionNameOpt = postCrossConnect(createdOduInterfaces, node);
+                List<String> createdConnections = new ArrayList<>();
                 createdConnections.add(connectionNameOpt.get());
                 LOG.info("Created cross connects");
                 LOG.info("Now creating  node interface builder");
@@ -230,7 +254,10 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 nodeInterfaces.add(nodeInterfaceBuilder.build());
                 LOG.info("Everythiong is done and now returning ");
             }
+        } else {
+            LOG.error("Service rate {} not managed yes", input.getServiceRate());
         }
+
         return nodeInterfaces;
     }
 

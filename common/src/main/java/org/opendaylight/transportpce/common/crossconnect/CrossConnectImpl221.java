@@ -62,6 +62,13 @@ public class CrossConnectImpl221 {
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }
 
+    public Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org
+        .openroadm.device.OduConnection> getOtnCrossConnect(String deviceId, String connectionNumber) {
+        //TODO Change it to Operational later for real device
+        return deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.CONFIGURATION,
+                generateOduConnectionIID(connectionNumber), Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+    }
 
     public Optional<String> postCrossConnect(String deviceId, Long waveNumber, String srcTp, String destTp) {
         String connectionNumber = generateConnectionName(srcTp, destTp, waveNumber);
@@ -106,9 +113,11 @@ public class CrossConnectImpl221 {
     }
 
 
-    public List<String> deleteCrossConnect(String deviceId, String connectionName) {
+    public List<String> deleteCrossConnect(String deviceId, String connectionName, boolean isOtn) {
         List<String> interfList = new ArrayList<>();
         Optional<RoadmConnections> xc = getCrossConnect(deviceId, connectionName);
+        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org
+            .openroadm.device.OduConnection> otnXc = getOtnCrossConnect(deviceId, connectionName);
         //Check if cross connect exists before delete
         if (xc.isPresent()) {
             String name = xc.get().getSource().getSrcIf().replace("nmc", "mc");
@@ -116,8 +125,11 @@ public class CrossConnectImpl221 {
             interfList.add(xc.get().getDestination().getDstIf());
             interfList.add(xc.get().getSource().getSrcIf().replace("nmc", "mc"));
             interfList.add(xc.get().getDestination().getDstIf().replace("nmc", "mc"));
+        } else if (otnXc.isPresent()) {
+            interfList.add(otnXc.get().getSource().getSrcIf());
+            interfList.add(otnXc.get().getDestination().getDstIf());
         } else {
-            LOG.warn("Cross connect does not exist, halting delete");
+            LOG.warn("Cross connect {} does not exist, halting delete", connectionName);
             return null;
         }
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(deviceId);
@@ -136,12 +148,16 @@ public class CrossConnectImpl221 {
         }
 
         // post the cross connect on the device
-        deviceTx.delete(LogicalDatastoreType.CONFIGURATION, generateRdmConnectionIID(connectionName));
+        if (isOtn) {
+            deviceTx.delete(LogicalDatastoreType.CONFIGURATION, generateOduConnectionIID(connectionName));
+        } else {
+            deviceTx.delete(LogicalDatastoreType.CONFIGURATION, generateRdmConnectionIID(connectionName));
+        }
         FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
         try {
             commit.get();
-            LOG.info("Roadm connection {} successfully deleted on {}", connectionName, deviceId);
+            LOG.info("Connection {} successfully deleted on {}", connectionName, deviceId);
             return interfList;
         } catch (InterruptedException | ExecutionException e) {
             LOG.warn("Failed to delete {}", connectionName, e);
@@ -243,6 +259,13 @@ public class CrossConnectImpl221 {
     private InstanceIdentifier<RoadmConnections> generateRdmConnectionIID(String connectionNumber) {
         return InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
+    }
+
+    private InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
+        .container.org.openroadm.device.OduConnection> generateOduConnectionIID(String connectionNumber) {
+        return InstanceIdentifier.create(OrgOpenroadmDevice.class).child(org.opendaylight.yang.gen.v1.http.org
+            .openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnection.class,
+            new OduConnectionKey(connectionNumber));
     }
 
     private String generateConnectionName(String srcTp, String destTp, Long waveNumber) {

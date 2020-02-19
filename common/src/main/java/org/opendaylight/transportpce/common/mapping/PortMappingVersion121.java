@@ -143,7 +143,6 @@ public class PortMappingVersion121 {
     }
 
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
-        LOG.info("Updating Mapping Data {} for node {}", oldMapping, nodeId);
         InstanceIdentifier<Ports> portIId = InstanceIdentifier.create(OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
             .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()));
@@ -156,7 +155,8 @@ public class PortMappingVersion121 {
                     Ports port = portObject.get();
                     Mapping newMapping = createMappingObject(nodeId, port, oldMapping.getSupportingCircuitPackName(),
                         oldMapping.getLogicalConnectionPoint());
-
+                    LOG.info("Updating old mapping Data {} for {} of {} by new mapping data {}", oldMapping,
+                        oldMapping.getLogicalConnectionPoint(), nodeId, newMapping);
                     final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
                     InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
                         .child(Nodes.class, new NodesKey(nodeId))
