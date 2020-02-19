@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "cfba62b5_a6f3887f",
+        "filename": "tests/honeynode/2.2.1/restconf/src/main/resources/honeycomb-minimal-resources/config/restconf.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T20:55:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26b552b0_e80baeb7",
+      "range": {
+        "startLine": 4,
+        "startChar": 31,
+        "endLine": 4,
+        "endChar": 38
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ffe44ea_5cd06b68",
         "filename": "tests/installJDK11CentOS.sh",
         "patchSetId": 3
@@ -223,6 +247,30 @@
       "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbf736ec_20ef2cc5",
+        "filename": "tests/installJDK11CentOS.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T20:55:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f86083c7_736a7eb0",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 2
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -355,6 +403,30 @@
       "side": 1,
       "message": "the right scenario would be\n- installation of maven and JDK8\n- installation of 1.2.1 sims with JDK 8\n- installation of JDK11\n- installation of 2.2.1 sims with JDK11\n- etc just as usual\nThis way, there is nothing to touch in 1.2.1 tests and it\u0027s only a minor modification in tox.ini + the gate will work as usual. People can start using this change.",
       "parentUuid": "07d69e9e_9245b0a4",
+      "range": {
+        "startLine": 21,
+        "startChar": 81,
+        "endLine": 21,
+        "endChar": 114
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e0046803_a2390002",
+        "filename": "tox.ini",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T20:55:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60bd3ee4_d8949c3d",
       "range": {
         "startLine": 21,
         "startChar": 81,
