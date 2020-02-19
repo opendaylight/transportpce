@@ -16,6 +16,8 @@ import java.util.TreeMap;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput;
@@ -61,31 +63,31 @@ public final class ModelMappingUtils {
     }
 
     public static ServiceImplementationRequestOutput createServiceImplResponse(String responseCode, String message) {
-        ServiceImplementationRequestOutputBuilder outputBldr = new ServiceImplementationRequestOutputBuilder()
-            .setConfigurationResponseCommon(createCommonResponse(responseCode, message));
-        return outputBldr.build();
+        return new ServiceImplementationRequestOutputBuilder()
+                .setConfigurationResponseCommon(createCommonResponse(responseCode, message))
+                .build();
     }
 
     public static ServiceDeleteOutput createServiceDeleteResponse(String responseCode, String message) {
-        ServiceDeleteOutputBuilder outputBldr = new ServiceDeleteOutputBuilder()
-            .setConfigurationResponseCommon(createCommonResponse(responseCode, message));
-        return outputBldr.build();
+        return new ServiceDeleteOutputBuilder()
+                .setConfigurationResponseCommon(createCommonResponse(responseCode, message))
+                .build();
     }
 
     public static ConfigurationResponseCommon createCommonResponse(String responseCode, String message) {
-        ConfigurationResponseCommonBuilder cmBldr = new ConfigurationResponseCommonBuilder()
-            .setResponseMessage(message)
-            .setResponseCode(responseCode);
-        return cmBldr.build();
+        return new ConfigurationResponseCommonBuilder()
+                .setResponseMessage(message)
+                .setResponseCode(responseCode)
+                .build();
     }
 
     public static ListenableFuture<RpcResult<ServiceImplementationRequestOutput>>
-        createServiceImplementationRpcResponse(ServiceImplementationRequestOutput payload) {
+            createServiceImplementationRpcResponse(ServiceImplementationRequestOutput payload) {
         return RpcResultBuilder.success(payload).buildFuture();
     }
 
     public static ListenableFuture<RpcResult<ServiceDeleteOutput>>
-        createServiceDeleteRpcResponse(ServiceDeleteOutput payload) {
+            createServiceDeleteRpcResponse(ServiceDeleteOutput payload) {
         return RpcResultBuilder.success(payload).buildFuture();
     }
 
@@ -111,12 +113,43 @@ public final class ModelMappingUtils {
         return new ServicePathInputData(servicePathInputBuilder.build(), nodeLists);
     }
 
+    // Adding createOtnServiceInputpath for A-Z and Z-A directions as one method
+    public static OtnServicePathInput rendererCreateOtnServiceInput(String serviceName, String serviceType,
+        String serviceRate, PathDescription pathDescription, boolean asideToZside) {
+        // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
+        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.Nodes> nodes =
+            new ArrayList<>();
+        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
+        if (!asideToZside) {
+            nodeLists = getNodesListZtoA(pathDescription.getZToADirection().getZToA().iterator());
+        }
+        for (Nodes node: nodeLists.getList()) {
+            nodes.add(
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input
+                        .NodesBuilder()
+                            .setNodeId(node.getNodeId())
+                            .setClientTp(node.getSrcTp())
+                            .setNetworkTp(node.getDestTp())
+                            .build());
+        }
+        OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder()
+            .setServiceName(serviceName)
+            .setServiceType(serviceType)
+            .setServiceRate(serviceRate)
+            .setNodes(nodes);
+
+        // set the trib-slots and trib-ports for the lower oder odu
+        if (serviceRate.equals("1G") || (serviceRate.equals("10G"))) {
+            otnServicePathInputBuilder.setTribPortNumber((short) 1).setTribSlot((short) 1);
+
+        }
+        return otnServicePathInputBuilder.build();
+    }
+
     public static ServicePathInput rendererDeleteServiceInput(String serviceName,
             ServiceDeleteInput serviceDeleteInput) {
-        ServicePathInputBuilder servicePathInput = new ServicePathInputBuilder()
-            .setServiceName(serviceName);
         //TODO: finish model-model mapping
-        return servicePathInput.build();
+        return new ServicePathInputBuilder().setServiceName(serviceName).build();
     }
 
     public static NodeLists getNodesListZtoA(Iterator<ZToA> iterator) {
