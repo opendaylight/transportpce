@@ -13,7 +13,7 @@
                         "supported-interface-capability": [
                             "org-openroadm-port-types:if-OCH"
                         ],
-                        "lcp-hash-val": "8e128ba57560403cfd4ffafae38cd942",
+                        "lcp-hash-val": "783222141",
                         "supporting-circuit-pack-name": "1/0/2-PLUG-NET"
                     },
                     {
@@ -25,7 +25,7 @@
                         "supported-interface-capability": [
                             "org-openroadm-port-types:if-OCH"
                         ],
-                        "lcp-hash-val": "8e128ba57560403cfd4ffafae38cd941",
+                        "lcp-hash-val": "-817959205",
                         "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
                     },
                     {
@@ -37,7 +37,7 @@
                         "supported-interface-capability": [
                             "org-openroadm-port-types:if-100GE"
                         ],
-                        "lcp-hash-val": "3ed8ed1336784ac7c2f66c22f2f03d8",
+                        "lcp-hash-val": "-593641522",
                         "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
                     },
                     {
@@ -49,7 +49,7 @@
                         "supported-interface-capability": [
                             "org-openroadm-port-types:if-100GE"
                         ],
-                        "lcp-hash-val": "3ed8ed1336784ac7c2f66c22f2f03db",
+                        "lcp-hash-val": "-593641521",
                         "supporting-circuit-pack-name": "1/0/2-PLUG-CLIENT"
                     }
                 ],
@@ -146,7 +146,7 @@
                         "supported-interface-capability": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
-                        "lcp-hash-val": "1021db8d2affe7386705c438c67ea21f",
+                        "lcp-hash-val": "819687633",
                         "xponder-type": "mpdr",
                         "supporting-circuit-pack-name": "CP1-CFP0"
                     },
@@ -159,7 +159,7 @@
                             "org-openroadm-port-types:if-100GE-ODU4",
                             "org-openroadm-port-types:if-100GE"
                         ],
-                        "lcp-hash-val": "5ccce78a8e7367129679913aaa905e18",
+                        "lcp-hash-val": "-1655532004",
                         "supporting-circuit-pack-name": "CP2-QSFP4"
                     },
                     {
@@ -171,7 +171,7 @@
                             "org-openroadm-port-types:if-100GE-ODU4",
                             "org-openroadm-port-types:if-100GE"
                         ],
-                        "lcp-hash-val": "5ccce78a8e7367129679913aaa905e1e",
+                        "lcp-hash-val": "-1655532006",
                         "supporting-circuit-pack-name": "CP2-QSFP2"
                     },
                     {
@@ -183,7 +183,7 @@
                             "org-openroadm-port-types:if-100GE-ODU4",
                             "org-openroadm-port-types:if-100GE"
                         ],
-                        "lcp-hash-val": "5ccce78a8e7367129679913aaa905e1f",
+                        "lcp-hash-val": "-1655532005",
                         "supporting-circuit-pack-name": "CP2-QSFP3"
                     },
                     {
@@ -195,7 +195,7 @@
                             "org-openroadm-port-types:if-100GE-ODU4",
                             "org-openroadm-port-types:if-100GE"
                         ],
-                        "lcp-hash-val": "5ccce78a8e7367129679913aaa905e1d",
+                        "lcp-hash-val": "-1655532007",
                         "supporting-circuit-pack-name": "CP2-QSFP1"
                     },
                     {
@@ -207,7 +207,7 @@
                             "org-openroadm-port-types:if-10GE-ODU2e",
                             "org-openroadm-port-types:if-10GE-ODU2"
                         ],
-                        "lcp-hash-val": "8b3efff522736722500b5e68fb6e696c",
+                        "lcp-hash-val": "151922458",
                         "supporting-circuit-pack-name": "CP1-SFP2"
                     },
                     {
@@ -220,7 +220,7 @@
                             "org-openroadm-port-types:if-10GE-ODU2",
                             "org-openroadm-port-types:if-10GE"
                         ],
-                        "lcp-hash-val": "8b3efff522736722500b5e68fb6e696b",
+                        "lcp-hash-val": "151922459",
                         "supporting-circuit-pack-name": "CP1-SFP3"
                     },
                     {
@@ -233,7 +233,7 @@
                             "org-openroadm-port-types:if-10GE-ODU2",
                             "org-openroadm-port-types:if-10GE"
                         ],
-                        "lcp-hash-val": "8b3efff522736722500b5e68fb6e696e",
+                        "lcp-hash-val": "151922456",
                         "supporting-circuit-pack-name": "CP1-SFP4"
                     },
                     {
@@ -245,7 +245,7 @@
                             "org-openroadm-port-types:if-10GE-ODU2e",
                             "org-openroadm-port-types:if-10GE-ODU2"
                         ],
-                        "lcp-hash-val": "8b3efff522736722500b5e68fb6e696d",
+                        "lcp-hash-val": "151922457",
                         "supporting-circuit-pack-name": "CP1-SFP1"
                     },
                     {
@@ -256,7 +256,7 @@
                         "supported-interface-capability": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
-                        "lcp-hash-val": "c58e095f5bffd3df5ee0842c78552191",
+                        "lcp-hash-val": "623174129",
                         "xponder-type": "switch",
                         "supporting-circuit-pack-name": "CP6-CFP"
                     },
@@ -268,7 +268,7 @@
                         "supported-interface-capability": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
-                        "lcp-hash-val": "c58e095f5bffd3df5ee0842c78552192",
+                        "lcp-hash-val": "623174128",
                         "xponder-type": "switch",
                         "supporting-circuit-pack-name": "CP5-CFP"
                     },
@@ -280,7 +280,7 @@
                         "supported-interface-capability": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
-                        "lcp-hash-val": "c58e095f5bffd3df5ee0842c78552197",
+                        "lcp-hash-val": "623174131",
                         "xponder-type": "switch",
                         "supporting-circuit-pack-name": "CP8-CFP"
                     },
@@ -292,7 +292,7 @@
                         "supported-interface-capability": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
-                        "lcp-hash-val": "c58e095f5bffd3df5ee0842c78552190",
+                        "lcp-hash-val": "623174130",
                         "xponder-type": "switch",
                         "supporting-circuit-pack-name": "CP7-CFP"
                     }
