@@ -326,8 +326,7 @@ public class OpenRoadmInterface221 {
             .setTxSapi(portMapA.getLcpHashVal())
             .setTxDapi(portMapZ.getLcpHashVal())
             .setExpectedDapi(portMapA.getLcpHashVal()) // Setting the expected Dapi and Sapi values
-            .setExpectedDapi(portMapZ.getLcpHashVal());
-
+            .setExpectedSapi(portMapZ.getLcpHashVal());
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
@@ -397,7 +396,6 @@ public class OpenRoadmInterface221 {
         // Set the supporting interface data
         otuInterfaceBldr.setSupportingInterface(asupportOchInterface);
 
-
         // OTU interface specific data
         OtuBuilder otuIfBuilder = new OtuBuilder()
                 .setFec(OtuAttributes.Fec.Scfec)
@@ -407,12 +405,11 @@ public class OpenRoadmInterface221 {
                 .setExpectedDapi(portMapA.getLcpHashVal()) // setting expected SAPI and DAPI values
                 .setExpectedSapi(portMapZ.getLcpHashVal());
 
-
         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder otuIf1Builder =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder();
 
         otuInterfaceBldr.addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1.class,
                 otuIf1Builder.setOtu(otuIfBuilder.build()).build());
 
         // Post interface on the device
