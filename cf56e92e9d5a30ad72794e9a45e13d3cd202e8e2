@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "de4330eb_5aed942d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T16:23:24Z",
+      "side": 1,
+      "message": "By doing so, you won\u0027t\nIt\u0027s only a matter of letting releng work correctly.\nI\u0027ll push the correction.",
+      "parentUuid": "d4dc40de_9a3bd215",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 39
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a32f302e_a8e14a70",
         "filename": "tests/honeynode/2.2.1/restconf/src/main/resources/honeycomb-minimal-resources/config/restconf.json",
         "patchSetId": 3
