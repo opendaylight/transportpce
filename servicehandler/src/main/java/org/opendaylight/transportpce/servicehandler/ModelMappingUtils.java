@@ -8,15 +8,18 @@
 package org.opendaylight.transportpce.servicehandler;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.List;
+import java.util.Map;
+import org.opendaylight.transportpce.renderer.NodeIdPair;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.path.computation.request.input.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.path.computation.request.input.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.path.computation.request.input.ServiceZEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescription;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommonBuilder;
@@ -61,10 +64,18 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.NodesKey;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ModelMappingUtils {
+
+    private static final Logger LOG =
+        LoggerFactory.getLogger(org.opendaylight.transportpce.servicehandler.ModelMappingUtils.class);
+    private static final String TERMINATION_POINT = "TerminationPoint";
 
     private ModelMappingUtils() {
     }
@@ -72,15 +83,15 @@ public final class ModelMappingUtils {
     public static ServiceImplementationRequestInput createServiceImplementationRequest(ServiceInput input,
             PathDescription pathDescription) {
         ServiceImplementationRequestInputBuilder serviceImplementationRequestInputBuilder =
-                new ServiceImplementationRequestInputBuilder();
+            new ServiceImplementationRequestInputBuilder();
         if (input.isServiceReconfigure()) {
             serviceImplementationRequestInputBuilder.setServiceName(input.getNewServiceName());
         } else {
             serviceImplementationRequestInputBuilder.setServiceName(input.getServiceName());
         }
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.service.implementation
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.service.implementation
             .request.input.ServiceAEndBuilder serviceAEnd = new org.opendaylight.yang.gen.v1.http.org.opendaylight
-                .transportpce.renderer.rev171017.service.implementation.request.input.ServiceAEndBuilder();
+            .transportpce.renderer.rev200520.service.implementation.request.input.ServiceAEndBuilder();
         serviceAEnd.setServiceFormat(input.getServiceAEnd().getServiceFormat())
             .setServiceRate(input.getServiceAEnd().getServiceRate()).setClli(input.getServiceAEnd().getClli())
             .setNodeId(new NodeIdType(input.getServiceAEnd().getNodeId().getValue()).getValue())
@@ -90,9 +101,9 @@ public final class ModelMappingUtils {
             .setRxDirection(new org.opendaylight.yang.gen.v1.http.org
                 .transportpce.b.c._interface.service.types.rev200128.service.endpoint.sp.RxDirectionBuilder()
                 .setPort(input.getServiceAEnd().getRxDirection().getPort()).build());
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.service.implementation
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.service.implementation
             .request.input.ServiceZEndBuilder serviceZEnd = new org.opendaylight.yang.gen.v1.http.org.opendaylight
-                .transportpce.renderer.rev171017.service.implementation.request.input.ServiceZEndBuilder();
+            .transportpce.renderer.rev200520.service.implementation.request.input.ServiceZEndBuilder();
         serviceZEnd.setServiceFormat(input.getServiceZEnd().getServiceFormat())
             .setServiceRate(input.getServiceZEnd().getServiceRate()).setClli(input.getServiceZEnd().getClli())
             .setNodeId(new NodeIdType(input.getServiceZEnd().getNodeId().getValue()).getValue())
@@ -107,10 +118,10 @@ public final class ModelMappingUtils {
             .setServiceZEnd(serviceZEnd.build())
             .setServiceHandlerHeader(
                 new ServiceHandlerHeaderBuilder().setRequestId(input.getSdncRequestHeader().getRequestId()).build());
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.service.implementation
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.service.implementation
             .request.input.PathDescriptionBuilder pathDescBuilder = new org.opendaylight.yang.gen.v1.http.org
-                .opendaylight.transportpce.renderer.rev171017.service.implementation.request.input
-                    .PathDescriptionBuilder();
+            .opendaylight.transportpce.renderer.rev200520.service.implementation.request.input
+            .PathDescriptionBuilder();
         pathDescBuilder
             .setAToZDirection(pathDescription.getAToZDirection())
             .setZToADirection(pathDescription.getZToADirection());
@@ -118,8 +129,8 @@ public final class ModelMappingUtils {
         return serviceImplementationRequestInputBuilder.build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-        .ServiceDeleteInput createServiceDeleteInput(ServiceInput serviceInput) {
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
+            .ServiceDeleteInput createServiceDeleteInput(ServiceInput serviceInput) {
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder()
             .setServiceName(serviceInput.getServiceName())
             .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder()
@@ -127,8 +138,8 @@ public final class ModelMappingUtils {
         return builder.build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-        .ServiceDeleteInput createServiceDeleteInput(ServiceRerouteInput serviceRerouteinput, Services services) {
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
+            .ServiceDeleteInput createServiceDeleteInput(ServiceRerouteInput serviceRerouteinput, Services services) {
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder()
             .setServiceName(serviceRerouteinput.getServiceName())
             .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId(
@@ -136,9 +147,9 @@ public final class ModelMappingUtils {
         return builder.build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-        .ServiceDeleteInput createServiceDeleteInput(ServiceRestorationInput serviceRestorationInput,
-                Services services) {
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
+            .ServiceDeleteInput createServiceDeleteInput(ServiceRestorationInput serviceRestorationInput,
+            Services services) {
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder()
             .setServiceName(serviceRestorationInput.getServiceName())
             .setServiceHandlerHeader(new ServiceHandlerHeaderBuilder().setRequestId(
@@ -146,7 +157,7 @@ public final class ModelMappingUtils {
         return builder.build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput
+    public static org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteInput
             createServiceDeleteInput(ServiceReconfigureInput serviceReconfigureInput) {
         String serviceName = serviceReconfigureInput.getServiceName();
         ServiceDeleteInputBuilder builder = new ServiceDeleteInputBuilder()
@@ -156,8 +167,8 @@ public final class ModelMappingUtils {
         return builder.build();
     }
 
-    public static ServiceAEnd createServiceAEnd(org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
-            .rev190531.ServiceEndpoint serviceAEnd) {
+    public static ServiceAEnd createServiceAEnd(org.opendaylight.yang.gen.v1
+            .http.org.openroadm.common.service.types.rev190531.ServiceEndpoint serviceAEnd) {
         ServiceAEndBuilder serviceAEndBuilder = new ServiceAEndBuilder()
             .setClli(serviceAEnd.getClli())
             .setNodeId(serviceAEnd.getNodeId().getValue())
@@ -168,8 +179,8 @@ public final class ModelMappingUtils {
         return serviceAEndBuilder.build();
     }
 
-    public static ServiceZEnd createServiceZEnd(org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
-            .rev190531.ServiceEndpoint serviceZEnd) {
+    public static ServiceZEnd createServiceZEnd(org.opendaylight.yang.gen.v1
+            .http.org.openroadm.common.service.types.rev190531.ServiceEndpoint serviceZEnd) {
         ServiceZEndBuilder serviceZEndBuilder = new ServiceZEndBuilder()
             .setClli(serviceZEnd.getClli())
             .setNodeId(serviceZEnd.getNodeId().getValue())
@@ -180,14 +191,14 @@ public final class ModelMappingUtils {
         return serviceZEndBuilder.build();
     }
 
-    public static RxDirection createRxDirection(org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types
-            .rev190531.service.endpoint.RxDirection rxDirection) {
+    public static RxDirection createRxDirection(org.opendaylight.yang.gen.v1
+            .http.org.openroadm.common.service.types.rev190531.service.endpoint.RxDirection rxDirection) {
         RxDirectionBuilder rxDirectionBuilder = new RxDirectionBuilder().setPort(rxDirection.getPort());
         return rxDirectionBuilder.build();
     }
 
-    public static TxDirection createTxDirection(org.opendaylight.yang.gen.v1.http.org.openroadm.common.service
-            .types.rev190531.service.endpoint.TxDirection txDirection) {
+    public static TxDirection createTxDirection(org.opendaylight.yang.gen.v1
+            .http.org.openroadm.common.service.types.rev190531.service.endpoint.TxDirection txDirection) {
         TxDirectionBuilder txDirectionBuilder = new TxDirectionBuilder().setPort(txDirection.getPort());
         return txDirectionBuilder.build();
     }
@@ -195,7 +206,7 @@ public final class ModelMappingUtils {
     public static ListenableFuture<RpcResult<ServiceDeleteOutput>> createDeleteServiceReply(ServiceDeleteInput input,
             String finalAck, String message, String responseCode) {
         ConfigurationResponseCommonBuilder builder = new ConfigurationResponseCommonBuilder()
-                .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
+            .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
         if (input.getSdncRequestHeader() != null) {
             builder.setRequestId(input.getSdncRequestHeader().getRequestId());
         } else {
@@ -203,20 +214,20 @@ public final class ModelMappingUtils {
         }
         ConfigurationResponseCommon configurationResponseCommon = builder.build();
         ServiceDeleteOutput output =
-                new ServiceDeleteOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon).build();
+            new ServiceDeleteOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon).build();
         return RpcResultBuilder.success(output).buildFuture();
     }
 
     public static ListenableFuture<RpcResult<TempServiceDeleteOutput>> createDeleteServiceReply(
             TempServiceDeleteInput input, String finalAck, String message, String responseCode) {
         ConfigurationResponseCommonBuilder builder = new ConfigurationResponseCommonBuilder()
-                .setAckFinalIndicator(finalAck)
-                .setResponseMessage(message)
-                .setResponseCode(responseCode)
-                .setRequestId(null);
+            .setAckFinalIndicator(finalAck)
+            .setResponseMessage(message)
+            .setResponseCode(responseCode)
+            .setRequestId(null);
         ConfigurationResponseCommon configurationResponseCommon = builder.build();
         TempServiceDeleteOutput output = new TempServiceDeleteOutputBuilder()
-                .setConfigurationResponseCommon(configurationResponseCommon).build();
+            .setConfigurationResponseCommon(configurationResponseCommon).build();
         return RpcResultBuilder.success(output).buildFuture();
     }
 
@@ -224,15 +235,15 @@ public final class ModelMappingUtils {
             String finalAck, String message, String responseCode) {
         ResponseParametersBuilder responseParameters = new ResponseParametersBuilder();
         ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
-                .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
+            .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
         if (input.getSdncRequestHeader() != null) {
             configurationResponseCommon.setRequestId(input.getSdncRequestHeader().getRequestId());
         } else {
             configurationResponseCommon.setRequestId(null);
         }
         ServiceCreateOutputBuilder output =
-                new ServiceCreateOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon.build())
-                        .setResponseParameters(responseParameters.build());
+            new ServiceCreateOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon.build())
+                .setResponseParameters(responseParameters.build());
         return RpcResultBuilder.success(output.build()).buildFuture();
     }
 
@@ -240,15 +251,15 @@ public final class ModelMappingUtils {
             TempServiceCreateInput input, String finalAck, String message, String responseCode) {
         ResponseParametersBuilder responseParameters = new ResponseParametersBuilder();
         ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
-                .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
+            .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
         if (input.getSdncRequestHeader() != null) {
             configurationResponseCommon.setRequestId(input.getSdncRequestHeader().getRequestId());
         } else {
             configurationResponseCommon.setRequestId(null);
         }
         TempServiceCreateOutputBuilder output =
-                new TempServiceCreateOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon.build())
-                        .setResponseParameters(responseParameters.build());
+            new TempServiceCreateOutputBuilder().setConfigurationResponseCommon(configurationResponseCommon.build())
+                .setResponseParameters(responseParameters.build());
         return RpcResultBuilder.success(output.build()).buildFuture();
     }
 
@@ -256,41 +267,41 @@ public final class ModelMappingUtils {
             ServiceFeasibilityCheckInput input, String finalAck, String message, String responseCode) {
         ResponseParametersBuilder responseParameters = new ResponseParametersBuilder();
         ConfigurationResponseCommonBuilder configurationResponseCommon = new ConfigurationResponseCommonBuilder()
-                .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
+            .setAckFinalIndicator(finalAck).setResponseMessage(message).setResponseCode(responseCode);
         if (input.getSdncRequestHeader() != null) {
             configurationResponseCommon.setRequestId(input.getSdncRequestHeader().getRequestId());
         } else {
             configurationResponseCommon.setRequestId(null);
         }
         ServiceFeasibilityCheckOutputBuilder output = new ServiceFeasibilityCheckOutputBuilder()
-                .setConfigurationResponseCommon(configurationResponseCommon.build())
-                        .setResponseParameters(responseParameters.build());
+            .setConfigurationResponseCommon(configurationResponseCommon.build())
+            .setResponseParameters(responseParameters.build());
         return RpcResultBuilder.success(output.build()).buildFuture();
     }
 
     public static ListenableFuture<RpcResult<ServiceReconfigureOutput>> createCreateServiceReply(
             ServiceReconfigureInput input, String message, RpcStatus rpcStatus) {
         ServiceReconfigureOutputBuilder output = new ServiceReconfigureOutputBuilder()
-                .setStatus(rpcStatus)
-                .setStatusMessage(message);
+            .setStatus(rpcStatus)
+            .setStatusMessage(message);
         return RpcResultBuilder.success(output.build()).buildFuture();
     }
 
     public static ListenableFuture<RpcResult<ServiceRerouteOutput>> createRerouteServiceReply(ServiceRerouteInput input,
             String finalAckYes, String message, RpcStatus status) {
         ServiceRerouteOutputBuilder output = new ServiceRerouteOutputBuilder()
-                .setHardConstraints(null)
-                .setSoftConstraints(null)
-                .setStatus(status)
-                .setStatusMessage(message);
+            .setHardConstraints(null)
+            .setSoftConstraints(null)
+            .setStatus(status)
+            .setStatusMessage(message);
         return RpcResultBuilder.success(output.build()).buildFuture();
     }
 
     public static ListenableFuture<RpcResult<ServiceRestorationOutput>> createRestoreServiceReply(String message,
             RpcStatus status) {
         ServiceRestorationOutputBuilder output = new ServiceRestorationOutputBuilder()
-                .setStatus(status)
-                .setStatusMessage(message);
+            .setStatus(status)
+            .setStatusMessage(message);
         return RpcResultBuilder.success(output.build()).buildFuture();
     }
 
@@ -301,56 +312,56 @@ public final class ModelMappingUtils {
         ServicesBuilder service = new ServicesBuilder();
         if (serviceCreateInput != null) {
             aend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                    .ServiceAEndBuilder(serviceCreateInput.getServiceAEnd()).build();
+                .ServiceAEndBuilder(serviceCreateInput.getServiceAEnd()).build();
             zend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                    .ServiceZEndBuilder(serviceCreateInput.getServiceZEnd()).build();
+                .ServiceZEndBuilder(serviceCreateInput.getServiceZEnd()).build();
             service.setServiceName(serviceCreateInput.getServiceName()).setAdministrativeState(AdminStates.OutOfService)
-                    .setOperationalState(State.OutOfService).setCommonId(serviceCreateInput.getCommonId())
-                    .setConnectionType(serviceCreateInput.getConnectionType())
-                    .setCustomer(serviceCreateInput.getCustomer())
-                    .setCustomerContact(serviceCreateInput.getCustomerContact())
-                    .setHardConstraints(serviceCreateInput.getHardConstraints())
-                    .setSoftConstraints(serviceCreateInput.getSoftConstraints())
-                    .setSdncRequestHeader(serviceCreateInput.getSdncRequestHeader())
-                    .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
+                .setOperationalState(State.OutOfService).setCommonId(serviceCreateInput.getCommonId())
+                .setConnectionType(serviceCreateInput.getConnectionType())
+                .setCustomer(serviceCreateInput.getCustomer())
+                .setCustomerContact(serviceCreateInput.getCustomerContact())
+                .setHardConstraints(serviceCreateInput.getHardConstraints())
+                .setSoftConstraints(serviceCreateInput.getSoftConstraints())
+                .setSdncRequestHeader(serviceCreateInput.getSdncRequestHeader())
+                .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
         } else if (serviceReconfigureInput != null) {
             aend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                    .ServiceAEndBuilder(serviceReconfigureInput.getServiceAEnd()).build();
+                .ServiceAEndBuilder(serviceReconfigureInput.getServiceAEnd()).build();
             zend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                    .ServiceZEndBuilder(serviceReconfigureInput.getServiceZEnd()).build();
+                .ServiceZEndBuilder(serviceReconfigureInput.getServiceZEnd()).build();
             service.setServiceName(serviceReconfigureInput.getServiceName())
-                    .setAdministrativeState(AdminStates.OutOfService)
-                    .setOperationalState(State.OutOfService).setCommonId(serviceReconfigureInput.getCommonId())
-                    .setConnectionType(serviceReconfigureInput.getConnectionType())
-                    .setCustomer(serviceReconfigureInput.getCustomer())
-                    .setCustomerContact(serviceReconfigureInput.getCustomerContact())
-                    .setHardConstraints(serviceReconfigureInput.getHardConstraints())
-                    .setSoftConstraints(serviceReconfigureInput.getSoftConstraints())
-                    .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
+                .setAdministrativeState(AdminStates.OutOfService)
+                .setOperationalState(State.OutOfService).setCommonId(serviceReconfigureInput.getCommonId())
+                .setConnectionType(serviceReconfigureInput.getConnectionType())
+                .setCustomer(serviceReconfigureInput.getCustomer())
+                .setCustomerContact(serviceReconfigureInput.getCustomerContact())
+                .setHardConstraints(serviceReconfigureInput.getHardConstraints())
+                .setSoftConstraints(serviceReconfigureInput.getSoftConstraints())
+                .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
         }
         return service.build();
     }
 
-    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-        .Services mappingServices(TempServiceCreateInput tempServiceCreateInput) {
+    public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.Services
+            mappingServices(TempServiceCreateInput tempServiceCreateInput) {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEnd aend = null;
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceZEnd zend = null;
         org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
             .ServicesBuilder service = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp
-                .service.list.ServicesBuilder();
+            .service.list.ServicesBuilder();
         aend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                .ServiceAEndBuilder(tempServiceCreateInput.getServiceAEnd()).build();
+            .ServiceAEndBuilder(tempServiceCreateInput.getServiceAEnd()).build();
         zend = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service
-                .ServiceZEndBuilder(tempServiceCreateInput.getServiceZEnd()).build();
+            .ServiceZEndBuilder(tempServiceCreateInput.getServiceZEnd()).build();
         service.setServiceName(tempServiceCreateInput.getCommonId()).setAdministrativeState(AdminStates.OutOfService)
-                .setOperationalState(State.OutOfService).setCommonId(tempServiceCreateInput.getCommonId())
-                .setConnectionType(tempServiceCreateInput.getConnectionType())
-                .setCustomer(tempServiceCreateInput.getCustomer())
-                .setCustomerContact(tempServiceCreateInput.getCustomerContact())
-                .setHardConstraints(tempServiceCreateInput.getHardConstraints())
-                .setSoftConstraints(tempServiceCreateInput.getSoftConstraints())
-                .setSdncRequestHeader(tempServiceCreateInput.getSdncRequestHeader())
-                .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
+            .setOperationalState(State.OutOfService).setCommonId(tempServiceCreateInput.getCommonId())
+            .setConnectionType(tempServiceCreateInput.getConnectionType())
+            .setCustomer(tempServiceCreateInput.getCustomer())
+            .setCustomerContact(tempServiceCreateInput.getCustomerContact())
+            .setHardConstraints(tempServiceCreateInput.getHardConstraints())
+            .setSoftConstraints(tempServiceCreateInput.getSoftConstraints())
+            .setSdncRequestHeader(tempServiceCreateInput.getSdncRequestHeader())
+            .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
         return service.build();
     }
 
@@ -373,8 +384,8 @@ public final class ModelMappingUtils {
                     .setPort(serviceInput.getServiceAEnd().getRxDirection().getPort()).build());
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128
                 .service.path.ServiceZEndBuilder serviceZEnd =
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128
-                        .service.path.ServiceZEndBuilder();
+                new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128
+                    .service.path.ServiceZEndBuilder();
             serviceZEnd.setServiceFormat(serviceInput.getServiceZEnd().getServiceFormat())
                 .setServiceRate(serviceInput.getServiceZEnd().getServiceRate())
                 .setClli(serviceInput.getServiceZEnd().getClli())
@@ -388,7 +399,7 @@ public final class ModelMappingUtils {
             servicePathBuilder.setServiceAEnd(serviceAEnd.build());
             servicePathBuilder.setServiceZEnd(serviceZEnd.build());
             MappingConstraints mapConstraints = new MappingConstraints(serviceInput.getHardConstraints(),
-                    serviceInput.getSoftConstraints());
+                serviceInput.getSoftConstraints());
             mapConstraints.serviceToServicePathConstarints();
             if (mapConstraints.getServicePathHardConstraints() != null) {
                 HardConstraintsBuilder hardConstraintBuilder = new HardConstraintsBuilder()
@@ -404,14 +415,70 @@ public final class ModelMappingUtils {
             }
             servicePathBuilder.setServicePathName(serviceInput.getServiceName());
             servicePathBuilder.setServiceHandlerHeader(new ServiceHandlerHeaderBuilder()
-                    .setRequestId(serviceInput.getSdncRequestHeader().getRequestId()).build());
+                .setRequestId(serviceInput.getSdncRequestHeader().getRequestId()).build());
             if (output.getResponseParameters().getPathDescription() != null) {
                 PathDescriptionBuilder pathDescBuilder =
-                        new PathDescriptionBuilder(output.getResponseParameters().getPathDescription());
+                    new PathDescriptionBuilder(output.getResponseParameters().getPathDescription());
                 servicePathBuilder.setPathDescription(pathDescBuilder.build());
             }
         }
 
         return servicePathBuilder.build();
+    }
+
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value = "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
+        justification = "not relevant to return and zero length array as we need real pos")
+    public static int[] findTheLongestSubstring(String s1, String s2) {
+        if ((s1 == null) || (s2 == null)) {
+            return null;
+        }
+        int[][] dp = new int[s1.length() + 1][s2.length() + 1];
+        int maxLen = 0;
+        int endPos = 0;
+        for (int i = 1; i < dp.length; i++) {
+            for (int j = 1; j < dp[0].length; j++) {
+                char ch1 = s1.charAt(i - 1);
+                char ch2 = s2.charAt(j - 1);
+                if (ch1 == ch2) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    if (dp[i][j] >= maxLen) {
+                        maxLen = dp[i][j];
+                        endPos = i;
+                    }
+                }
+            }
+        }
+        return new int[] { endPos - maxLen, endPos };
+    }
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value = { "NP_LOAD_OF_KNOWN_NULL_VALUE", "RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE" },
+        justification = "loop when value is not always null - "
+            + "TODO: check if something exists in Java lib")
+    private static void populateNodeLists(Map<Integer, NodeIdPair> treeMap, List<Nodes> list) {
+        String desID = null;
+        String srcID = null;
+        for (NodeIdPair values : treeMap.values()) {
+            if (srcID == null) {
+                srcID = values.getTpID();
+            } else if (desID == null) {
+                desID = values.getTpID();
+
+                org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128
+                    .otn.renderer.input.NodesBuilder nb =
+                        new  org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128
+                            .otn.renderer.input.NodesBuilder()
+                                .withKey(new NodesKey(values.getNodeID()))
+                                .setNetworkTp(desID)
+                                .setClientTp(srcID);
+                list.add(nb.build());
+                srcID = null;
+                desID = null;
+            } else {
+                LOG.warn("both, the source and destination id are null!");
+            }
+        }
     }
 }
