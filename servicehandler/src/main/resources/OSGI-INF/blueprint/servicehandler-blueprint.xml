@@ -34,6 +34,9 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <reference id="rendererServiceOperations"
              interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
 
+    <reference id="otnDeviceRenderService"
+            interface="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService" />
+
     <reference id="networkModelWavelengthService"
            interface="org.opendaylight.transportpce.renderer.NetworkModelWavelengthService" />
 
@@ -46,6 +49,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="pathComputationService" />
         <argument ref="notificationPublishService" />
         <argument ref="serviceDatastoreOperation" />
+        <argument ref="otnDeviceRenderService" />
     </bean>
 
      <bean id="rendererListerner" class="org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl">
