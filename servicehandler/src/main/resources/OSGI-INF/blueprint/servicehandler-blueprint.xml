@@ -34,6 +34,9 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <reference id="rendererServiceOperations"
              interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
 
+    <reference id="otnDeviceRenderService"
+            interface="org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService" />
+
     <reference id="networkModelWavelengthService"
            interface="org.opendaylight.transportpce.renderer.NetworkModelWavelengthService" />
 
@@ -41,14 +44,15 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="dataBroker"/>
       </bean>
 
-     <bean id="pceListerner" class="org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl">
+     <bean id="pceListener" class="org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl">
         <argument ref="rendererServiceOperations" />
         <argument ref="pathComputationService" />
         <argument ref="notificationPublishService" />
         <argument ref="serviceDatastoreOperation" />
+        <argument ref="otnDeviceRenderService" />
     </bean>
 
-     <bean id="rendererListerner" class="org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl">
+     <bean id="rendererListener" class="org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl">
         <argument ref="pathComputationService" />
         <argument ref="notificationPublishService" />
     </bean>
@@ -59,8 +63,8 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="notificationPublishService" />
         <argument ref="rendererServiceOperations" />
         <argument ref="networkModelWavelengthService" />
-        <argument ref="pceListerner" />
-        <argument ref="rendererListerner" />
+        <argument ref="pceListener" />
+        <argument ref="rendererListener" />
     </bean>
 
     <bean id="provider"
@@ -73,6 +77,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="pathComputationService" />
         <argument ref="rendererServiceOperations" />
         <argument ref="networkModelWavelengthService" />
+        <argument ref="otnDeviceRenderService" />
     </bean>
 
     <service ref="serviceHandlerImpl"

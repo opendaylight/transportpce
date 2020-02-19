@@ -14,6 +14,7 @@ import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
+import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
@@ -45,12 +46,15 @@ public class ServicehandlerProvider {
     private ObjectRegistration<OrgOpenroadmServiceService> rpcRegistration;
     private PathComputationService pathComputationService;
     private RendererServiceOperations rendererServiceOperations;
+    private OtnDeviceRendererService otnDeviceRendererService;
+
 
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderService rpcProviderService,
             NotificationService notificationService, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations,
             NetworkModelWavelengthService networkModelWavelengthService,
-            NotificationPublishService notificationPublishService) {
+            NotificationPublishService notificationPublishService,
+            OtnDeviceRendererService otnDeviceRendererService) {
         this.dataBroker = dataBroker;
         this.rpcService = rpcProviderService;
         this.notificationService = notificationService;
@@ -58,6 +62,8 @@ public class ServicehandlerProvider {
         this.rendererServiceOperations = rendererServiceOperations;
         this.networkModelWavelengthService = networkModelWavelengthService;
         this.notificationPublishService = notificationPublishService;
+        this.otnDeviceRendererService = otnDeviceRendererService;
+
     }
 
     /**
@@ -66,7 +72,8 @@ public class ServicehandlerProvider {
     public void init() {
         LOG.info("ServicehandlerProvider Session Initiated");
         final PceListenerImpl pceListenerImpl = new PceListenerImpl(rendererServiceOperations,
-                pathComputationService, notificationPublishService, null);
+                pathComputationService, notificationPublishService, null,
+            otnDeviceRendererService);
         final RendererListenerImpl rendererListenerImpl =
                 new RendererListenerImpl(pathComputationService, notificationPublishService);
         pcelistenerRegistration = notificationService.registerNotificationListener(pceListenerImpl);

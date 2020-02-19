@@ -176,14 +176,14 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             Optional<Services> service = this.serviceDataStoreOperations.getService(serviceName);
             if (!service.isPresent()) {
                 message = "Service '" + serviceName + "' does not exist in datastore";
-                LOG.error(message);
+                LOG.error("Service '" + serviceName + "' does not exist in datastore");
                 return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                         message, ResponseCodes.RESPONSE_FAILED);
             }
         } catch (NullPointerException e) {
             LOG.error("failed to get service '{}' from datastore : ", serviceName, e);
             message = "Service '" + serviceName + "' does not exist in datastore";
-            LOG.error(message);
+            LOG.error("Service '" + serviceName + "' does not exist in datastore");
             return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES, message,
                     ResponseCodes.RESPONSE_FAILED);
         }
@@ -473,7 +473,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                 .Services> service = this.serviceDataStoreOperations.getTempService(commonId);
             if (!service.isPresent()) {
                 message = "Service '" + commonId + "' does not exist in datastore";
-                LOG.error(message);
+                LOG.error("Service '" + commonId + "' does not exist in datastore");
                 return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                         message, ResponseCodes.RESPONSE_FAILED);
             }
