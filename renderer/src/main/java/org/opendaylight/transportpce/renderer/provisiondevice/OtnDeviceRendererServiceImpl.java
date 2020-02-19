@@ -363,11 +363,21 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
 
     private void createODU4TtpInterface(OtnServicePathInput input, List<NodeInterface> nodeInterfaces,
         CopyOnWriteArrayList<Nodes> otnNodesProvisioned) throws OpenRoadmInterfaceException {
-        for (Nodes node : input.getNodes()) {
+
+        for (int i = 0; i < input.getNodes().size(); i++) {
+            Nodes node = input.getNodes().get(i);
             String supportingOtuInterface = node.getNetworkTp() + "-OTU";
             List<String> createdOdu4Interfaces = new ArrayList<>();
+            // Adding SAPI/DAPI information to the
+            Nodes tgtNode = null;
+            if (i + 1 == input.getNodes().size()) {
+                // For the end node, tgtNode becomes the first node in the list
+                tgtNode = input.getNodes().get(0);
+            } else {
+                tgtNode = input.getNodes().get(i + 1);
+            }
             createdOdu4Interfaces.add(openRoadmInterfaceFactory.createOpenRoadmOtnOdu4Interface(node.getNodeId(),
-                node.getNetworkTp(), supportingOtuInterface));
+                node.getNetworkTp(), supportingOtuInterface, tgtNode.getNodeId(), tgtNode.getNetworkTp()));
             NodeInterfaceBuilder nodeInterfaceBuilder = new NodeInterfaceBuilder()
                 .withKey(new NodeInterfaceKey(node.getNodeId()))
                 .setNodeId(node.getNodeId())

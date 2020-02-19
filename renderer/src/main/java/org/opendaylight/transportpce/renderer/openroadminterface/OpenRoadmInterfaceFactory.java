@@ -325,4 +325,17 @@ public class OpenRoadmInterfaceFactory {
                 return null;
         }
     }
+
+    public String createOpenRoadmOtnOdu4Interface(String anodeId, String alogicalConnPoint,
+        String asupportingOtuInterface, String znodeId, String zlogicalConnPoint)
+        throws OpenRoadmInterfaceException {
+        switch (mappingUtils.getOpenRoadmVersion(anodeId)) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                return openRoadmInterface221
+                    .createOpenRoadmOtnOdu4Interface(anodeId, alogicalConnPoint, asupportingOtuInterface,
+                        znodeId, zlogicalConnPoint);
+            default:
+                return null;
+        }
+    }
 }

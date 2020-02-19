@@ -98,11 +98,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     @Override
     public ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction) {
         List<Nodes> nodes = input.getNodes();
-        Nodes srcNode = nodes.get(0);
-        // If the Node list size is one, then src and tgt are same;
-        // sapi/dapi all have the same value
-        Nodes tgtNode = nodes.get(nodes.size() - 1);
-
 
         // Register node for suppressing alarms
         if (!alarmSuppressionNodeRegistration(input)) {
@@ -115,8 +110,11 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         ServiceListTopology topology = new ServiceListTopology();
         AtomicBoolean success = new AtomicBoolean(true);
         ForkJoinPool forkJoinPool = new ForkJoinPool();
+
         ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
             String nodeId = node.getNodeId();
+            // take the index of the node
+            int nodeIndex = nodes.indexOf(node);
             LOG.info("Starting provisioning for node : {}", nodeId);
             List<String> createdEthInterfaces = new ArrayList<>();
             List<String> createdOtuInterfaces = new ArrayList<>();
@@ -136,15 +134,17 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                                 nodeId, destTp, waveNumber, ModulationFormat.DpQpsk);
                         createdOchInterfaces.add(supportingOchInterface);
                         // Here we pass logical connection-point of z-end to set SAPI and DAPI
-                        String znodeId = tgtNode.getNodeId();
-                        String zlogicalConnection = tgtNode.getDestTp();
-                        if (nodeId.equals(tgtNode.getNodeId())) {
-                            znodeId = srcNode.getNodeId(); // if it is final node, then set zSide as source side
-                            zlogicalConnection = srcNode.getDestTp();
+                        Nodes tgtNode = null;
+                        if (nodeIndex + 1 == nodes.size()) {
+                            // For the end node, tgtNode becomes the first node in the list
+                            tgtNode = nodes.get(0);
+                        } else {
+                            tgtNode = nodes.get(nodeIndex + 1);
                         }
+                        // tgtNode srcTp is null in this if cond
                         String supportingOtuInterface = this.openRoadmInterfaceFactory
                                 .createOpenRoadmOtu4Interface(nodeId, destTp, supportingOchInterface,
-                                    znodeId, zlogicalConnection);
+                                    tgtNode.getNodeId(), tgtNode.getDestTp());
                         createdOtuInterfaces.add(supportingOtuInterface);
                         if (srcTp == null) {
                             otnNodesProvisioned.add(node);
