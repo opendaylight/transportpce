@@ -1,0 +1,12 @@
+{
+  "persist-context": "true",
+  "persisted-context-path": "persist/data-context.json",
+  "persisted-context-restoration-type": "Merge",
+  "persist-config": "true",
+  "persisted-config-path": "persist/data-config.json",
+  "persisted-config-restoration-type": "Merge",
+  "notification-service-queue-depth": 1,  
+  "netconf-initial-config-xml" : "device/oper-ROADMA.xml",
+  "netconf-initial-pm-xml" : "device/oper-ROADMA-cpm.xml"
+  
+}
