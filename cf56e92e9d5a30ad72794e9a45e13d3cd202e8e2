@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "a32f302e_a8e14a70",
+        "filename": "tests/honeynode/2.2.1/restconf/src/main/resources/honeycomb-minimal-resources/config/restconf.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T15:35:32Z",
+      "side": 1,
+      "message": "any reason for this ?\nif yes, it should be in the commit message.",
+      "range": {
+        "startLine": 4,
+        "startChar": 31,
+        "endLine": 4,
+        "endChar": 38
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ffe44ea_5cd06b68",
         "filename": "tests/installJDK11CentOS.sh",
         "patchSetId": 3
