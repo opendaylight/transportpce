@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ORDMVERSION=${1:-2.1}
+ORDMVERSION=${1:-1.2.1}
 
 set -e
 cd honeynode/$ORDMVERSION
