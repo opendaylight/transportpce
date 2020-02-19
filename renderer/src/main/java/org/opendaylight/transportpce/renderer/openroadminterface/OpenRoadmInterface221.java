@@ -326,8 +326,7 @@ public class OpenRoadmInterface221 {
             .setTxSapi(portMapA.getLcpHashVal())
             .setTxDapi(portMapZ.getLcpHashVal())
             .setExpectedDapi(portMapA.getLcpHashVal()) // Setting the expected Dapi and Sapi values
-            .setExpectedDapi(portMapZ.getLcpHashVal());
-
+            .setExpectedSapi(portMapZ.getLcpHashVal());
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
@@ -397,7 +396,6 @@ public class OpenRoadmInterface221 {
         // Set the supporting interface data
         otuInterfaceBldr.setSupportingInterface(asupportOchInterface);
 
-
         // OTU interface specific data
         OtuBuilder otuIfBuilder = new OtuBuilder()
                 .setFec(OtuAttributes.Fec.Scfec)
@@ -407,12 +405,11 @@ public class OpenRoadmInterface221 {
                 .setExpectedDapi(portMapA.getLcpHashVal()) // setting expected SAPI and DAPI values
                 .setExpectedSapi(portMapZ.getLcpHashVal());
 
-
         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder otuIf1Builder =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1Builder();
 
         otuInterfaceBldr.addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev181019.Interface1.class,
                 otuIf1Builder.setOtu(otuIfBuilder.build()).build());
 
         // Post interface on the device
@@ -573,4 +570,58 @@ public class OpenRoadmInterface221 {
         return oduInterfaceBldr.getName();
     }
 
+    public String createOpenRoadmOtnOdu4Interface(String anodeId, String alogicalConnPoint,
+        String asupportingOtuInterface, String znodeId, String zlogicalConnPoint)
+        throws OpenRoadmInterfaceException {
+        Mapping portMapA = portMapping.getMapping(anodeId, alogicalConnPoint);
+        if (portMapA == null) {
+            throw new OpenRoadmInterfaceException(
+                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    anodeId, alogicalConnPoint));
+        }
+        Mapping portMapZ = portMapping.getMapping(znodeId, zlogicalConnPoint);
+        if (portMapZ == null) {
+            throw new OpenRoadmInterfaceException(
+                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    znodeId, zlogicalConnPoint));
+        }
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(portMapA, OtnOdu.class,
+            alogicalConnPoint + "-ODU4");
+        oduInterfaceBldr.setSupportingInterface(asupportingOtuInterface);
+
+        // ODU interface specific data
+        OduBuilder oduIfBuilder = new OduBuilder()
+            .setRate(ODU4.class)
+            .setMonitoringMode(OduAttributes.MonitoringMode.Terminated)
+            .setTxSapi(portMapA.getLcpHashVal())
+            .setTxDapi(portMapZ.getLcpHashVal())
+            .setExpectedSapi(portMapZ.getLcpHashVal())
+            .setExpectedDapi(portMapA.getLcpHashVal());
+
+
+        // Set Opu attributes
+        OpuBuilder opuBldr = new OpuBuilder()
+            .setPayloadType(PayloadTypeDef.getDefaultInstance("21"))
+            .setExpPayloadType(PayloadTypeDef.getDefaultInstance("21"));
+        oduIfBuilder.setOduFunction(ODUTTP.class)
+            .setOpu(opuBldr.build());
+
+        // Create Interface1 type object required for adding as augmentation
+        // TODO look at imports of different versions of class
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder oduIf1Builder =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
+        oduInterfaceBldr.addAugmentation(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
+            oduIf1Builder.setOdu(oduIfBuilder.build()).build());
+
+        // Post interface on the device
+        openRoadmInterfaces.postInterface(anodeId, oduInterfaceBldr);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            LOG.error("Error waiting post interface on device", e);
+        }
+        this.portMapping.updateMapping(anodeId, portMapA);
+        return oduInterfaceBldr.getName();
+    }
 }

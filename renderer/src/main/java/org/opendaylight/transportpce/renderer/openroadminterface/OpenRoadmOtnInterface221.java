@@ -146,7 +146,7 @@ public class OpenRoadmOtnInterface221 {
         if (supportingInterface == null) {
             throw new OpenRoadmInterfaceException(
                     "Interface Creation failed because of missing supported "
-                    + "ODU4 on network end or Eth iface on client");
+                    + "ODU4 on network end or Ethernet on client");
         }
 
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(
