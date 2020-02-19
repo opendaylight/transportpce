@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d4dc40de_9a3bd215",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-02-19T16:14:26Z",
+      "side": 1,
+      "message": "it\u0027s as it until the next change supporting devices 1.2.1 submit\nI dit not want to put devices 221 and 121 in the same commit",
+      "parentUuid": "fd93bdc2_77f3c987",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 39
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a32f302e_a8e14a70",
         "filename": "tests/honeynode/2.2.1/restconf/src/main/resources/honeycomb-minimal-resources/config/restconf.json",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-19T15:35:32Z",
       "side": 1,
       "message": "any reason for this ?\nif yes, it should be in the commit message.",
+      "range": {
+        "startLine": 4,
+        "startChar": 31,
+        "endLine": 4,
+        "endChar": 38
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2c0c302_4f171abf",
+        "filename": "tests/honeynode/2.2.1/restconf/src/main/resources/honeycomb-minimal-resources/config/restconf.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-02-19T16:14:26Z",
+      "side": 1,
+      "message": "to allow to send request to node remotely",
+      "parentUuid": "a32f302e_a8e14a70",
       "range": {
         "startLine": 4,
         "startChar": 31,
@@ -110,6 +158,30 @@
       "writtenOn": "2020-02-19T14:32:22Z",
       "side": 1,
       "message": "misplaced, sould be after 1.2.1 honeynode build...",
+      "range": {
+        "startLine": 21,
+        "startChar": 81,
+        "endLine": 21,
+        "endChar": 114
+      },
+      "revId": "cf56e92e9d5a30ad72794e9a45e13d3cd202e8e2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07d69e9e_9245b0a4",
+        "filename": "tox.ini",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-02-19T16:14:26Z",
+      "side": 1,
+      "message": "first installation of JDK 11, then maven installation and last maven build as 1.2.1 tests are disabled",
+      "parentUuid": "be6fb501_e00bf766",
       "range": {
         "startLine": 21,
         "startChar": 81,
