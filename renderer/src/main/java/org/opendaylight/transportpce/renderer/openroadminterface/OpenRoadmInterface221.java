@@ -29,6 +29,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.R1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev171215.AdminStates;
@@ -414,6 +416,26 @@ public class OpenRoadmInterface221 {
         return false;
     }
 
+    public boolean isUsedByOtnXc(String nodeId, String interfaceName, String xc,
+        DeviceTransactionManager deviceTransactionManager) {
+        InstanceIdentifier<OduConnection> xciid = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+            .child(OduConnection.class, new OduConnectionKey(xc));
+        LOG.info("reading xc {} in node {}", xc, nodeId);
+        Optional<OduConnection> oduConnectionOpt = deviceTransactionManager.getDataFromDevice(nodeId,
+            LogicalDatastoreType.CONFIGURATION, xciid, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (oduConnectionOpt.isPresent()) {
+            OduConnection oduXc = oduConnectionOpt.get();
+            LOG.info("xc {} found", xc);
+            if (oduXc.getSource().getSrcIf().equals(interfaceName)
+                || oduXc.getDestination().getDstIf().equals(interfaceName)) {
+                return true;
+            }
+        } else {
+            LOG.info("xc {} not found !", xc);
+        }
+        return false;
+    }
+
     public String createOpenRoadmOtnOdu4Interface(String nodeId, String logicalConnPoint, String supportingOtuInterface)
             throws OpenRoadmInterfaceException {
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
@@ -452,6 +474,11 @@ public class OpenRoadmInterface221 {
 
         // Post interface on the device
         openRoadmInterfaces.postInterface(nodeId, oduInterfaceBldr);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            LOG.error("Error waiting post interface on device", e);
+        }
         this.portMapping.updateMapping(nodeId, portMap);
         return oduInterfaceBldr.getName();
     }

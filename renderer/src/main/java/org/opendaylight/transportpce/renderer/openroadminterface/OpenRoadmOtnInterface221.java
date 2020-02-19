@@ -21,9 +21,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.Interface1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev181019.ethernet.container.EthernetBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.EthernetCsmacd;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.InterfaceType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOdu;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.EthernetCsmacd;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnOdu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODU0;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODU2;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev171215.ODU2e;
@@ -87,7 +87,7 @@ public class OpenRoadmOtnInterface221 {
             .setAdministrativeState(AdminStates.InService)
             //TODO get rid of unchecked cast warning
             .setType(
-                (Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType>)
+                (Class<? extends InterfaceType>)
                 type
             )
             .setName(key)
