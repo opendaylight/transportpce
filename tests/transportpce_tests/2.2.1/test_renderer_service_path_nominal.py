@@ -136,7 +136,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
              'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
-             'lcp-hash-val': 'e54EtOovlcE='},
+             'lcp-hash-val': 'AMkDwQ7xTmRI'},
             res['nodes'][0]['mapping'])
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
@@ -144,7 +144,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'BIyxYXnFEFA='},
+             'lcp-hash-val': 'AJUUr6I5fALj'},
             res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
@@ -334,9 +334,11 @@ class TransportPCERendererTesting(unittest.TestCase):
                  }, **res['interface'][0]),
             res['interface'][0]
         )
-        self.assertDictEqual(
-            {u'rate': u'org-openroadm-otn-common-types:OTU4',
-             u'fec': u'scfec'},
+        input_dict_2 = {'tx-sapi': 'AMkDwQ7xTmRI',
+                        'expected-dapi': 'AMkDwQ7xTmRI',
+                        'rate': 'org-openroadm-otn-common-types:OTU4',
+                        'fec': 'scfec'}
+        self.assertDictEqual(input_dict_2,
             res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_13_service_path_create_xpdr_check(self):
