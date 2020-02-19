@@ -262,7 +262,11 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOdu',
                         'supporting-port': 'CP1-CFP0-P1'}
         input_dict_2 = {'odu-function': 'org-openroadm-otn-common-types:ODU-TTP',
-                        'rate': 'org-openroadm-otn-common-types:ODU4'}
+                        'rate': 'org-openroadm-otn-common-types:ODU4',
+                        'expected-dapi': '819687633',
+                        'expected-sapi': '819687633',
+                        'tx-dapi': '819687633',
+                        'tx-sapi': '819687633'}
 
         self.assertDictEqual(dict(input_dict_1, **res['interface'][0]),
                              res['interface'][0])
