@@ -304,7 +304,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             // First create the OCH and OTU interfaces
                             String serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
                             LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
-                                input.getServiceAEnd().getOtuServiceRate(), serviceRate);
+                                input.getServiceAEnd().getOduServiceRate(), serviceRate);
                             // Now start rendering ODU4 interface
                             String serviceFormat = "ODU"; // Since we need to create ODU4 Ttp interfaces as well
                             // This is A-Z side
