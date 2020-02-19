@@ -59,8 +59,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.Measurements;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.MeasurementsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceImplementationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.get.pm.input.ResourceIdentifierBuilder;
@@ -73,6 +73,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
     private RendererServiceOperationsImpl rendererServiceOperations;
     private OpenRoadmInterfaces openRoadmInterfaces;
     private DeviceRendererService deviceRenderer;
+    private OtnDeviceRendererService otnDeviceRendererService;
     private PortMapping portMapping;
     private OpenRoadmInterfaceFactory openRoadmInterfaceFactory;
     private CrossConnect crossConnect;
@@ -121,14 +122,16 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         this.networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(getDataBroker());
         this.deviceRenderer = new DeviceRendererServiceImpl(this.getDataBroker(), this.deviceTransactionManager,
             openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect, portMapping, null);
+        this.otnDeviceRendererService = new OtnDeviceRendererServiceImpl(openRoadmInterfaceFactory, this.crossConnect,
+            openRoadmInterfaces, this.deviceTransactionManager, null);
         Mockito.doNothing().when(this.openRoadmInterfaces).postEquipmentState(Mockito.anyString(),
             Mockito.anyString(), Mockito.anyBoolean());
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
-
         this.olmService = Mockito.spy(this.olmService);
         this.deviceRenderer = Mockito.spy(this.deviceRenderer);
-        this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer, this.olmService,
-            getDataBroker(), this.networkModelWavelengthService, notificationPublishService);
+        this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer,
+            this.otnDeviceRendererService, this.olmService, getDataBroker(), this.networkModelWavelengthService,
+            notificationPublishService);
 
         ServicePathOutputBuilder mockOutputBuilder = new ServicePathOutputBuilder().setResult("success")
             .setSuccess(true);
