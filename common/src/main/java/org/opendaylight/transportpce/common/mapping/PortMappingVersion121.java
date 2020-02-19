@@ -673,7 +673,7 @@ public class PortMappingVersion121 {
         } else {
             // create a new mapping
             mpBldr = new MappingBuilder();
-            String nodeIdLcp = nodeId + logicalConnectionPoint;
+            String nodeIdLcp = nodeId + "-" + logicalConnectionPoint;
             mpBldr.withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
