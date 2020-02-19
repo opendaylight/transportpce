@@ -43,8 +43,9 @@ public class PceListenerImpl implements TransportpcePceListener {
     private Boolean serviceFeasiblity;
 
     public PceListenerImpl(RendererServiceOperations rendererServiceOperations,
-            PathComputationService pathComputationService, NotificationPublishService notificationPublishService,
-            ServiceDataStoreOperations serviceDataStoreOperations) {
+                           PathComputationService pathComputationService,
+                           NotificationPublishService notificationPublishService,
+                           ServiceDataStoreOperations serviceDataStoreOperations) {
         this.rendererServiceOperations = rendererServiceOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.serviceDataStoreOperations = serviceDataStoreOperations;
@@ -104,7 +105,7 @@ public class PceListenerImpl implements TransportpcePceListener {
                                     LOG.error("Service Path not created in datastore !");
                                 }
                                 ServiceImplementationRequestInput serviceImplementationRequest =
-                                        ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
+                                    ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
                                 LOG.info("Sending serviceImplementation request : {}", serviceImplementationRequest);
                                 this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest);
                             } else {
