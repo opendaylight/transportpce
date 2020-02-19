@@ -16,6 +16,8 @@ import java.util.TreeMap;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput;
@@ -109,6 +111,67 @@ public final class ModelMappingUtils {
             .setWaveNumber(Long.valueOf(pathDescription.getZToADirection().getZToAWavelengthNumber().toJava()))
             .setNodes(nodeLists.getList());
         return new ServicePathInputData(servicePathInputBuilder.build(), nodeLists);
+    }
+
+    public static OtnServicePathInput rendererCreateOtnServiceInputAToZ(String serviceName, String serviceType,
+        String serviceRate, PathDescription pathDescription) {
+
+        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.Nodes> nodes =
+            new ArrayList<>();
+        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
+        for (Nodes node: nodeLists.getList()) {
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.NodesBuilder
+                nodesBuilder = new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn
+                .renderer.input.NodesBuilder();
+            nodesBuilder.setNodeId(node.getNodeId());
+            nodesBuilder.setClientTp(node.getSrcTp());
+            nodesBuilder.setNetworkTp(node.getDestTp());
+            nodes.add(nodesBuilder.build());
+        }
+        OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder()
+            .setServiceName(serviceName)
+            .setServiceType(serviceType)
+            .setServiceRate(serviceRate)
+            .setNodes(nodes);
+
+        // set the trib-slots and trib-ports for the lower oder odu
+        if (serviceRate.equals("1G") || (serviceRate.equals("10G"))) {
+            otnServicePathInputBuilder.setTribPortNumber((short) 1)
+                .setTribSlot((short) 1);
+
+        }
+        return otnServicePathInputBuilder.build();
+    }
+
+    public static OtnServicePathInput rendererCreateOtnServiceInputZtoA(String serviceName, String serviceType,
+        String serviceRate, PathDescription pathDescription) {
+
+        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.Nodes> nodes =
+            new ArrayList<>();
+        NodeLists nodeLists = getNodesListZtoA(pathDescription.getZToADirection().getZToA().iterator());
+        for (Nodes node: nodeLists.getList()) {
+            org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.NodesBuilder
+                nodesBuilder = new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn
+                .renderer.input.NodesBuilder();
+            nodesBuilder.setNodeId(node.getNodeId());
+            nodesBuilder.setClientTp(node.getSrcTp());
+            nodesBuilder.setNetworkTp(node.getDestTp());
+            nodesBuilder.build();
+        }
+        OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder()
+            .setServiceName(serviceName)
+            .setServiceType(serviceType)
+            .setServiceRate(serviceRate)
+            .setNodes(nodes);
+
+        // set the trib-slots and trib-ports for the lower oder odu
+        if (serviceRate.equals("1G") || (serviceRate.equals("10G"))) {
+            otnServicePathInputBuilder.setTribPortNumber((short) 1)
+                .setTribSlot((short) 1);
+
+        }
+
+        return otnServicePathInputBuilder.build();
     }
 
     public static ServicePathInput rendererDeleteServiceInput(String serviceName,
