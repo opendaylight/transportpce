@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba31938a_dc0a9c1a",
+        "filename": "tests/honeynode/1.2.1/honeynode-plugin-api/src/main/yang/openconfig/nokia-openconfig-exttypes@2017-10-26.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T21:26:47Z",
+      "side": 1,
+      "message": "openconfig support added here should be mentioned in the commit message.",
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23d82ec3_155da563",
+        "filename": "tests/honeynode/1.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/device/OperToConfig.xsl",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T21:26:47Z",
+      "side": 1,
+      "message": "this file is now using the MSDOS format rather than Unix",
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2fcbb33_6f29b763",
+        "filename": "tests/honeynode/1.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/device/ocplatformOperToConfig.xsl",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T21:26:47Z",
+      "side": 1,
+      "message": "this file is now using the MSDOS format rather than Unix",
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a236bbc_43a54910",
+        "filename": "tests/honeynode/1.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/device/octerminaldeviceOperToConfig.xsl",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T21:26:47Z",
+      "side": 1,
+      "message": "this file is now using the MSDOS format rather than Unix",
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2083e76_b1367fb7",
+        "filename": "tests/honeynode/1.2.1/restconf/src/main/resources/honeycomb-minimal-resources/config/restconf.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T21:26:47Z",
+      "side": 1,
+      "message": "idem 221",
+      "range": {
+        "startLine": 4,
+        "startChar": 31,
+        "endLine": 4,
+        "endChar": 39
+      },
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7eba9d98_286ef4d4",
+        "filename": "tests/installJDK11CentOS.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T21:26:47Z",
+      "side": 1,
+      "message": "tabs and trailing blank",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "757a195d_a4a68dc6",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-19T21:26:47Z",
+      "side": 1,
+      "message": "should be merged with installMavenCentOS.sh sicne we don\u0027t need JDK8 anymore at that stage.\nAlso since \"if [ ! `which mvn` ]; then\" is no more present, this script will be run when launching tox locally...\nThis can break the possibility to run tox profile or induce unwanted side-effects, in particular this script assumes we are using a CentOS/RH distro with yum and RPM, which is OK for the gate and not wishable in a general approach.",
+      "range": {
+        "startLine": 20,
+        "startChar": 147,
+        "endLine": 20,
+        "endChar": 172
+      },
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
