@@ -334,9 +334,12 @@ class TransportPCERendererTesting(unittest.TestCase):
                  }, **res['interface'][0]),
             res['interface'][0]
         )
-        self.assertDictEqual(
-            {u'rate': u'org-openroadm-otn-common-types:OTU4',
-             u'fec': u'scfec'},
+        input_dict_2 = {'tx-sapi': '-817959205',
+                        'expected-dapi':
+                        '-817959205',
+                        'rate': 'org-openroadm-otn-common-types:OTU4',
+                        'fec': 'scfec'}
+        self.assertDictEqual(input_dict_2,
             res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_13_service_path_create_xpdr_check(self):
