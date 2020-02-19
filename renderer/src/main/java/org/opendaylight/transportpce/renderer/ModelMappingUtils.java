@@ -16,6 +16,8 @@ import java.util.TreeMap;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput;
@@ -61,31 +63,31 @@ public final class ModelMappingUtils {
     }
 
     public static ServiceImplementationRequestOutput createServiceImplResponse(String responseCode, String message) {
-        ServiceImplementationRequestOutputBuilder outputBldr = new ServiceImplementationRequestOutputBuilder()
-            .setConfigurationResponseCommon(createCommonResponse(responseCode, message));
-        return outputBldr.build();
+        return new ServiceImplementationRequestOutputBuilder()
+                .setConfigurationResponseCommon(createCommonResponse(responseCode, message))
+                .build();
     }
 
     public static ServiceDeleteOutput createServiceDeleteResponse(String responseCode, String message) {
-        ServiceDeleteOutputBuilder outputBldr = new ServiceDeleteOutputBuilder()
-            .setConfigurationResponseCommon(createCommonResponse(responseCode, message));
-        return outputBldr.build();
+        return new ServiceDeleteOutputBuilder()
+                .setConfigurationResponseCommon(createCommonResponse(responseCode, message))
+                .build();
     }
 
     public static ConfigurationResponseCommon createCommonResponse(String responseCode, String message) {
-        ConfigurationResponseCommonBuilder cmBldr = new ConfigurationResponseCommonBuilder()
-            .setResponseMessage(message)
-            .setResponseCode(responseCode);
-        return cmBldr.build();
+        return new ConfigurationResponseCommonBuilder()
+                .setResponseMessage(message)
+                .setResponseCode(responseCode)
+                .build();
     }
 
     public static ListenableFuture<RpcResult<ServiceImplementationRequestOutput>>
-        createServiceImplementationRpcResponse(ServiceImplementationRequestOutput payload) {
+            createServiceImplementationRpcResponse(ServiceImplementationRequestOutput payload) {
         return RpcResultBuilder.success(payload).buildFuture();
     }
 
     public static ListenableFuture<RpcResult<ServiceDeleteOutput>>
-        createServiceDeleteRpcResponse(ServiceDeleteOutput payload) {
+            createServiceDeleteRpcResponse(ServiceDeleteOutput payload) {
         return RpcResultBuilder.success(payload).buildFuture();
     }
 
@@ -111,12 +113,53 @@ public final class ModelMappingUtils {
         return new ServicePathInputData(servicePathInputBuilder.build(), nodeLists);
     }
 
+    // Adding createOtnServiceInputpath for A-Z and Z-A directions as one method
+    public static OtnServicePathInput rendererCreateOtnServiceInput(String serviceName, String serviceType,
+        String serviceRate, PathDescription pathDescription, boolean asideToZside) {
+        // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
+        List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input.Nodes> nodes =
+            new ArrayList<>();
+        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
+        if (!asideToZside) {
+            nodeLists = getNodesListZtoA(pathDescription.getZToADirection().getZToA().iterator());
+        }
+        for (Nodes node: nodeLists.getList()) {
+            if (serviceRate.equals("100G")) {
+                nodes.add(
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input
+                        .NodesBuilder()
+                        .setNodeId(node.getNodeId())
+                        .setNetworkTp(node.getDestTp())
+                        .build());
+            }
+            else { // For any other service rate (1G or 10G)
+                nodes.add(
+                    new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input
+                        .NodesBuilder()
+                        .setNodeId(node.getNodeId())
+                        .setClientTp(node.getSrcTp())
+                        .setNetworkTp(node.getDestTp())
+                        .build());
+            }
+        }
+        OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder()
+            .setServiceName(serviceName)
+            .setServiceType(serviceType)
+            .setServiceRate(serviceRate)
+            .setNodes(nodes);
+
+        //TODO: set the trib-slots and trib-ports for the lower oder odu, this should from SH rather than setting here
+        if (serviceRate.equals("1G") || (serviceRate.equals("10G"))) {
+            otnServicePathInputBuilder.setTribPortNumber((short) 1).setTribSlot((short) 1);
+
+        }
+        return otnServicePathInputBuilder.build();
+    }
+
     public static ServicePathInput rendererDeleteServiceInput(String serviceName,
             ServiceDeleteInput serviceDeleteInput) {
-        ServicePathInputBuilder servicePathInput = new ServicePathInputBuilder()
-            .setServiceName(serviceName);
         //TODO: finish model-model mapping
-        return servicePathInput.build();
+        return new ServicePathInputBuilder().setServiceName(serviceName).build();
     }
 
     public static NodeLists getNodesListZtoA(Iterator<ZToA> iterator) {
@@ -166,7 +209,6 @@ public final class ModelMappingUtils {
                 LOG.error("Dont find the getResource method", e);
             }
         }
-
         populateNodeLists(treeMap, list, olmList);
         return new NodeLists(olmList, list);
     }
@@ -221,7 +263,6 @@ public final class ModelMappingUtils {
                 LOG.error("Dont find the getResource method", e);
             }
         }
-
         populateNodeLists(treeMap, list, olmList);
         return new NodeLists(olmList, list);
     }
@@ -234,9 +275,45 @@ public final class ModelMappingUtils {
             List<Nodes> list, List<Nodes> olmList) {
         String desID = null;
         String srcID = null;
+        int cnt = 0; // This is a counter to check for NETWORK_TOKEN
         for (NodeIdPair values : treeMap.values()) {
+            cnt++;
             if (srcID == null) {
                 srcID = values.getTpID();
+                // This code is added in support of OTU4 service
+                if ((srcID.contains(StringConstants.NETWORK_TOKEN)) && cnt == 1) {
+                    NodesBuilder nb = new NodesBuilder()
+                        .withKey(new NodesKey(values.getNodeID()))
+                        .setDestTp(srcID) // desTp is assigned to the srcID
+                        .setSrcTp(null); // srcTp is set to null to create OTU service
+                    list.add(nb.build());
+
+                    NodesBuilder olmNb = new NodesBuilder()
+                        .setNodeId(values.getNodeID())
+                        .setDestTp(srcID) // desTp is assigned to the srcID
+                        .setSrcTp(null); // srcTp is set to null to create OTU service
+                    olmList.add(olmNb.build());
+                    srcID = null;
+                    desID = null;
+                    continue; // Continue to the next element in the for loop
+                }
+                if ((srcID.contains(StringConstants.NETWORK_TOKEN)) && cnt == treeMap.size()) {
+                    // For last node
+                    NodesBuilder nb = new NodesBuilder()
+                        .withKey(new NodesKey(values.getNodeID()))
+                        .setDestTp(srcID) //TODO: check this assignment
+                        .setSrcTp(null); //
+                    list.add(nb.build());
+
+                    NodesBuilder olmNb = new NodesBuilder()
+                        .setNodeId(values.getNodeID())
+                        .setDestTp(null) // In the case of final node, destTp is set to null
+                        .setSrcTp(srcID); // srcTp is srcTp
+                    olmList.add(olmNb.build());
+                    srcID = null;
+                    desID = null;
+                }
+            // End of code for support of ODT4 service
             } else if (desID == null) {
                 desID = values.getTpID();
                 NodesBuilder nb = new NodesBuilder()
