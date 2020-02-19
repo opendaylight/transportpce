@@ -70,13 +70,14 @@ public class PowerMgmtImpl implements PowerMgmt {
             // If node type is transponder
             if (inputNodeOptional.isPresent()
                     && (inputNodeOptional.get().getNodeInfo().getNodeType() != null)
-                    && inputNodeOptional.get().getNodeInfo().getNodeType().equals(NodeTypes.Xpdr)) {
+                    && inputNodeOptional.get().getNodeInfo().getNodeType().equals(NodeTypes.Xpdr)
+                    && destTpId != null) {
 
                 Nodes inputNode = inputNodeOptional.get();
                 OpenroadmVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
                 LOG.info("Getting data from input node {}", inputNode.getNodeInfo().getNodeType());
                 LOG.info("Getting mapping data for node is {}", inputNode.getMapping().stream().filter(o -> o.key()
-                        .equals(new MappingKey(destTpId))).findFirst().toString());
+                         .equals(new MappingKey(destTpId))).findFirst().toString());
                 // If its A-End transponder
                 if (destTpId.toLowerCase().contains("network")) {
                     java.util.Optional<Mapping> mappingObject = inputNode.getMapping().stream().filter(o -> o.key()

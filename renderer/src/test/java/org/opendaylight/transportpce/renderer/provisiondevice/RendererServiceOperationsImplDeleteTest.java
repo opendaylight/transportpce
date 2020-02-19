@@ -85,6 +85,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     private PortMappingVersion121 portMappingVersion121;
     private CrossConnectImpl121 crossConnectImpl121;
     private CrossConnectImpl221 crossConnectImpl221;
+    private OtnDeviceRendererService otnDeviceRendererService;
 
     private void setMountPoint(MountPoint mountPoint) {
         MountPointService mountPointService = new MountPointServiceStub(mountPoint);
@@ -117,6 +118,10 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         this.deviceRenderer = new DeviceRendererServiceImpl(this.getDataBroker(),
             this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect,
             this.portMapping, null);
+
+        this.otnDeviceRendererService = new OtnDeviceRendererServiceImpl(openRoadmInterfaceFactory, crossConnect,
+            openRoadmInterfaces, this.deviceTransactionManager, null);
+
     }
 
     @Before
@@ -128,8 +133,9 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
             MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
         this.networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(getDataBroker());
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
-        this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer, olmService,
-                getDataBroker(), this.networkModelWavelengthService, notificationPublishService);
+        this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer,
+            this.otnDeviceRendererService, olmService, getDataBroker(), this.networkModelWavelengthService,
+            notificationPublishService);
 
     }
 

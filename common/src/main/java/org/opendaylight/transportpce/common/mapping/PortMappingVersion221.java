@@ -835,14 +835,13 @@ public class PortMappingVersion221 {
             mpBldr = new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp);
         } else {
             // create a new mapping
-            String nodeIdLcp = nodeId + logicalConnectionPoint;
+            String nodeIdLcp = nodeId + "-" + logicalConnectionPoint;
             mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
-                // fnv hash is generated for the combination nodeID and logical connection point; used for SAPI/DAPI
                 .setLcpHashVal(fnv(nodeIdLcp));
 
             if (port.getPortQual() != null) {
