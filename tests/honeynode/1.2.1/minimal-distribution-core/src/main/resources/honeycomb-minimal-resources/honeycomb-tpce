@@ -1,0 +1,63 @@
+#!/bin/sh -
+STATUS=100
+JAVA_CMD="java"
+[ -n "$JAVA_HOME" ] && JAVA_CMD="$JAVA_HOME/bin/java"
+JAVA_VER=$("$JAVA_CMD" -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*".*$/\1\2/p;')
+echo $JAVA_VER
+[ "$JAVA_VER" -ge 110 ] && echo "ok, java is 11 or newer" || { echo "it's too old..."; exit 1; }
+if [ -d  $(dirname $0)/config/yang/common ]; then
+	mv  $(dirname $0)/config/yang/common/*  $(dirname $0)/config/yang/.
+	rm -rf  $(dirname $0)/config/yang/common 
+fi
+if [ -d  $(dirname $0)/config/yang/devices ]; then
+	mv  $(dirname $0)/config/yang/devices/*  $(dirname $0)/config/yang/.
+	rm -rf  $(dirname $0)/config/yang/devices 
+fi
+if [ -d  $(dirname $0)/config/yang/openconfig ]; then
+	mv  $(dirname $0)/config/yang/openconfig/*  $(dirname $0)/config/yang/.
+	rm -rf  $(dirname $0)/config/yang/openconfig 
+fi
+
+if [ "$#" -ge 2 ]
+then
+    PORT=$1
+    CONFIG=$2
+    if [ -e $CONFIG ]
+    then
+        mkdir -p  $(dirname $0)/persist
+        mkdir -p  $(dirname $0)/logs
+        REST_HTTP=$(echo 81`echo $PORT | tail -c 3`)
+        REST_WEBSOCKET=$(echo 77`echo $PORT | tail -c 3`)
+        cp $CONFIG $(dirname $0)/config/device/
+        filename=$(basename -- "$CONFIG")
+        device=$(basename "$CONFIG" .xml)
+        echo "changing netconf port with $PORT in netconf.json file ..."
+        sed -i "/netconf-ssh-binding-port/c\  \"netconf-ssh-binding-port\" : "$PORT"," $(dirname $0)/config/netconf.json
+        echo "changing restconf http port with $REST_HTTP in restconf.json file ..."
+        sed -i "/restconf-port/c\  \"restconf-port\" : "$REST_HTTP"," $(dirname $0)/config/restconf.json
+        echo "changing restconf websocket with $REST_WEBSOCKET in restconf.json file ..."
+        sed -i "/restconf-websocket-port/c\  \"restconf-websocket-port\" : "$REST_WEBSOCKET"," $(dirname $0)/config/restconf.json
+        echo "changing restconf-https-enabled to false in restconf.json file ..."
+        sed -i "/restconf-https-enabled/c\  \"restconf-https-enabled\" : \"false\"," $(dirname $0)/config/restconf.json
+        echo "changing persist-context and persist-config to false in honeycomb.json file ..."
+        sed -i "/persist-context/c\  \"persist-context\" : \"false\"," $(dirname $0)/config/honeycomb.json
+        sed -i "/persist-config/c\  \"persist-config\" : \"false\"," $(dirname $0)/config/honeycomb.json
+        echo "changing netconf-initial-config-xml location with $CONFIG in honeycomb.json file ..."
+        sed -i "/netconf-initial-config-xml/c\  \"netconf-initial-config-xml\" : \"device/$filename\"," $(dirname $0)/config/honeycomb.json
+         while [ $STATUS -eq 100 ]
+         do
+           "$JAVA_CMD" -DDEVICE=${device} -Dlogback.logs.directory=$(dirname $0)/logs -Xms512m -Xmn512m -Xmx1024m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -jar $(dirname $0)/honeynode-distribution-1.19.04.jar
+           STATUS=$?
+           echo "Honeycomb exited with status: $STATUS"
+           if [ $STATUS -eq 100 ]
+           then
+             echo "Restarting..."
+           fi
+         done
+    else
+        echo "initial config file doesn't exist !"
+    fi
+else 
+    echo "honeycomb-tpce port initial-config-xml"
+    echo "Eg : honeycomb-tpce 17832 sample-config-ROADM.xml (rest-http port will be 81 + netconf-port last two digits : 8132)"
+fi
