@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32463147_293cb750",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T21:17:28Z",
+      "side": 1,
+      "message": "installMavenCentOS",
+      "range": {
+        "startLine": 18,
+        "startChar": 11,
+        "endLine": 18,
+        "endChar": 30
+      },
+      "revId": "0b90cf53f540925d23dcf0f674a3f15c2b777e58",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c771e7de_bb80bd0f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T21:17:28Z",
+      "side": 1,
+      "message": "OK but this part should be removed from commit message and better be in gerrit comments.\nEven better  is to raise a JIRA ticket for this and/or if you know the solution, propose a patch to releng/builder projet and update transportpce YAML config accordingly (or something similar) ?",
+      "range": {
+        "startLine": 19,
+        "startChar": 5,
+        "endLine": 22,
+        "endChar": 60
+      },
+      "revId": "0b90cf53f540925d23dcf0f674a3f15c2b777e58",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02812c22_c02b2d3e",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T21:17:28Z",
+      "side": 1,
+      "message": "it makes sense since jdk_env.sh was removed in previous PS.\nI am not sure it is better or worse than sourcing an empty file.\nIt is heavier to read in my opinion but not that much so why not.\nDo you have any reason for prefering that ?",
+      "range": {
+        "startLine": 21,
+        "startChar": 74,
+        "endLine": 21,
+        "endChar": 121
+      },
+      "revId": "0b90cf53f540925d23dcf0f674a3f15c2b777e58",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}

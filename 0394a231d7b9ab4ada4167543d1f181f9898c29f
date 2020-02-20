@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b2132e6_4fac5b6a",
+        "filename": "tests/honeynode/2.2.1/honeynode-plugin-api/src/main/yang/openconfig/nokia-openconfig-exttypes@2017-10-26.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T21:17:28Z",
+      "side": 1,
+      "message": "OK but it should have already been removed from parent change 87866 since it concerns 221 sims.",
+      "revId": "0394a231d7b9ab4ada4167543d1f181f9898c29f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea980208_cd78d8e1",
+        "filename": "tests/honeynode/2.2.1/honeynode-plugin-api/src/main/yang/openconfig/nokia-openconfig-telemetry-ext@2017-11-13.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T21:17:28Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "0394a231d7b9ab4ada4167543d1f181f9898c29f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9789ce43_d584dc88",
+        "filename": "tests/honeynode/2.2.1/honeynode-plugin-api/src/main/yang/openconfig/nokia-openconfig-userlabel-ext@2017-12-10.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T21:17:28Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "0394a231d7b9ab4ada4167543d1f181f9898c29f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd9abf03_cb1c2125",
+        "filename": "tests/honeynode/2.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/yang/openconfig/nokia-openconfig-exttypes@2017-10-26.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T21:17:28Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "0394a231d7b9ab4ada4167543d1f181f9898c29f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29e651ee_ec134ee7",
+        "filename": "tests/honeynode/2.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/yang/openconfig/nokia-openconfig-telemetry-ext@2017-11-13.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T21:17:28Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "0394a231d7b9ab4ada4167543d1f181f9898c29f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31644571_846efa43",
+        "filename": "tests/honeynode/2.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/yang/openconfig/nokia-openconfig-userlabel-ext@2017-12-10.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T21:17:28Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "0394a231d7b9ab4ada4167543d1f181f9898c29f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
