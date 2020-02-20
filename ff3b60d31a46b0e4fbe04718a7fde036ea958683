@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "f2dc85b6_045dca16",
+        "filename": "tests/honeynode/1.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/device/OperToConfig.xsl",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T10:02:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23d82ec3_155da563",
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2fcbb33_6f29b763",
         "filename": "tests/honeynode/1.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/device/ocplatformOperToConfig.xsl",
         "patchSetId": 2
@@ -67,6 +85,24 @@
       "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00193e9c_20b736d5",
+        "filename": "tests/honeynode/1.2.1/honeynode-plugin-impl/src/main/resources/honeycomb-minimal-resources/config/device/octerminaldeviceOperToConfig.xsl",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T10:02:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a236bbc_43a54910",
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +176,30 @@
     },
     {
       "key": {
+        "uuid": "fe018afb_ca907b9b",
+        "filename": "tests/installJDK11CentOS.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T10:02:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7eba9d98_286ef4d4",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "757a195d_a4a68dc6",
         "filename": "tox.ini",
         "patchSetId": 2
@@ -160,6 +220,30 @@
       "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6213e87_fde67d79",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T10:02:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "757a195d_a4a68dc6",
+      "range": {
+        "startLine": 20,
+        "startChar": 147,
+        "endLine": 20,
+        "endChar": 172
+      },
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
