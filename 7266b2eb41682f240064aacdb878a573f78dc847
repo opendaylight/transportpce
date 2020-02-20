@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f38d84c4_e4a742d8",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnect.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-02-20T17:12:14Z",
+      "side": 1,
+      "message": "Missing javadoc for isOtn",
+      "revId": "7266b2eb41682f240064aacdb878a573f78dc847",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1c9d110_21320398",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-02-20T17:12:14Z",
+      "side": 1,
+      "message": "Can mappingUtils.getOpenRoadmVersion(nodeId) return null ? If yes, openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1) should be OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion) to avoid NullPointerException",
+      "revId": "7266b2eb41682f240064aacdb878a573f78dc847",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99bd4d18_5b21fd00",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-02-20T17:12:14Z",
+      "side": 1,
+      "message": "For more readability, perhaps put this code in a private method createInterfaceFor1G ?",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 218,
+        "endChar": 13
+      },
+      "revId": "7266b2eb41682f240064aacdb878a573f78dc847",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c02aa948_65ba76ab",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-02-20T17:12:14Z",
+      "side": 1,
+      "message": "For more readability, perhaps put this code in a private method createInterfaceFor10G ?",
+      "range": {
+        "startLine": 221,
+        "startChar": 7,
+        "endLine": 256,
+        "endChar": 13
+      },
+      "revId": "7266b2eb41682f240064aacdb878a573f78dc847",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
