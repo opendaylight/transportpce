@@ -93,6 +93,30 @@
     },
     {
       "key": {
+        "uuid": "489d6268_609b40ad",
+        "filename": "tests/honeynode/1.2.1/restconf/src/main/resources/honeycomb-minimal-resources/config/restconf.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-20T09:53:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2083e76_b1367fb7",
+      "range": {
+        "startLine": 4,
+        "startChar": 31,
+        "endLine": 4,
+        "endChar": 39
+      },
+      "revId": "ff3b60d31a46b0e4fbe04718a7fde036ea958683",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7eba9d98_286ef4d4",
         "filename": "tests/installJDK11CentOS.sh",
         "patchSetId": 2
