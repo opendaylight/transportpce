@@ -39,6 +39,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfac
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDeviceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnection;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduConnectionKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.port.Interfaces;
@@ -130,6 +132,8 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                 + ".org.openroadm.device.container.org.openroadm.device.RoadmConnections";
         final String INTERFACE_GRP = "interface org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019"
                 + ".interfaces.grp.Interface";
+        final String ODU_CONNECTIONS = "interface org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019"
+                + ".org.openroadm.device.container.org.openroadm.device.OduConnection";
         Class<? extends DataObject> type = modified.getDataType();
         PathArgument path = modified.getIdentifier();
         LOG.info("deleting container type '{}' with id '{}' ...", type.toString(), path);
@@ -146,6 +150,12 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                     LOG.info("interface ....");
                     iid = rootPath.getRootIdentifier().child(Interface.class,
                             new InterfaceKey(key));
+                    break;
+                case ODU_CONNECTIONS:
+                    LOG.info("Deleting odu connections");
+                    iid = rootPath.getRootIdentifier().child(OduConnection.class,
+                            new OduConnectionKey(key));
+                    break;
                 default:
                     break;
             }
