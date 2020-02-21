@@ -22,6 +22,30 @@
       "revId": "3c42e6977bfaa4a5fea24652548fcd51e08bfce4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e631488_6f546d4d",
+        "filename": "tests/honeynode/2.2.1/.m2/settings.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-21T09:01:18Z",
+      "side": 0,
+      "message": "seems OK at least with the previous versions\nhttps://docs.fd.io/hc2vpp/1.18.01/hc2vpp-parent/release-notes-aggregator/install_manual_build.html\n\nDone",
+      "parentUuid": "319dd933_bbf68bb5",
+      "range": {
+        "startLine": 136,
+        "startChar": 19,
+        "endLine": 136,
+        "endChar": 40
+      },
+      "revId": "3c42e6977bfaa4a5fea24652548fcd51e08bfce4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
