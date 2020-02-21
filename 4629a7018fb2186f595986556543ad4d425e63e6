@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "a7f67f4f_e3559ef3",
+        "filename": "tests/honeynode/2.2.1/.m2/settings.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-21T08:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9baa8cc_8e47e080",
+      "revId": "4629a7018fb2186f595986556543ad4d425e63e6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44e7d3e4_47a95325",
         "filename": "tests/honeynode/2.2.1/honeynode-plugin-api/src/main/yang/openconfig/nokia-openconfig-exttypes@2017-10-26.yang",
         "patchSetId": 5
