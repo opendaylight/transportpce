@@ -116,6 +116,30 @@
       "revId": "0b90cf53f540925d23dcf0f674a3f15c2b777e58",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aba92b1_615c54e6",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-21T09:10:34Z",
+      "side": 1,
+      "message": "waiting feedback here but this is clearly a minor issue",
+      "parentUuid": "02812c22_c02b2d3e",
+      "range": {
+        "startLine": 21,
+        "startChar": 74,
+        "endLine": 21,
+        "endChar": 121
+      },
+      "revId": "0b90cf53f540925d23dcf0f674a3f15c2b777e58",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
