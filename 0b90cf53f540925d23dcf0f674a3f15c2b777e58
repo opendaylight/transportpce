@@ -140,6 +140,30 @@
       "revId": "0b90cf53f540925d23dcf0f674a3f15c2b777e58",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "671c0783_62f5bf7e",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-21T22:59:04Z",
+      "side": 1,
+      "message": "I guess we can remove jdk_env.sh sourcing introduced in 87509 since JAVA_HOME is only needed for Javadoc.\nBoth sims and controller are now built with the option \u0027-Dmaven.javadoc.skip\u003dtrue\u0027",
+      "parentUuid": "7aba92b1_615c54e6",
+      "range": {
+        "startLine": 21,
+        "startChar": 74,
+        "endLine": 21,
+        "endChar": 121
+      },
+      "revId": "0b90cf53f540925d23dcf0f674a3f15c2b777e58",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
