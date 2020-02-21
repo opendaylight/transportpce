@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "91f64705_97e950a9",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnect.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-02-21T10:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f38d84c4_e4a742d8",
+      "revId": "7266b2eb41682f240064aacdb878a573f78dc847",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a1c9d110_21320398",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "7266b2eb41682f240064aacdb878a573f78dc847",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ba26618_84aac7a2",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-02-21T10:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1c9d110_21320398",
+      "revId": "7266b2eb41682f240064aacdb878a573f78dc847",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -79,6 +115,30 @@
       "revId": "7266b2eb41682f240064aacdb878a573f78dc847",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a1aeca3_f6199b4f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-02-21T10:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c02aa948_65ba76ab",
+      "range": {
+        "startLine": 221,
+        "startChar": 7,
+        "endLine": 256,
+        "endChar": 13
+      },
+      "revId": "7266b2eb41682f240064aacdb878a573f78dc847",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
