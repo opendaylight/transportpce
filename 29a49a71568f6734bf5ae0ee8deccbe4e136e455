@@ -1,0 +1,389 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ee3ab63_adb66f8c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "using Enum for interfaceType here would allow to use switch/case rater than chained if...",
+      "range": {
+        "startLine": 773,
+        "startChar": 1,
+        "endLine": 784,
+        "endChar": 25
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d836b913_d94c4758",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl221.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "I don\u0027t think the modifications here brings something...",
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b76033aa_88ecd616",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "avoiding concatenation with LF improves readability\n\n            throw new OpenRoadmInterfaceException(String.format(\n                \"Unable to get mapping from PortMapping for node % and logical connection port %s\",\n                nodeId, logicalConnPoint));",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 76
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21223944_2b1c2546",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "can be factorized",
+      "range": {
+        "startLine": 80,
+        "startChar": 60,
+        "endLine": 85,
+        "endChar": 35
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1878ee02_f6936eea",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "can be factorized",
+      "range": {
+        "startLine": 105,
+        "startChar": 66,
+        "endLine": 113,
+        "endChar": 56
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a2a2415_09e2176f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 131,
+        "startChar": 64,
+        "endLine": 132,
+        "endChar": 76
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3530b6cc_f64b80fc",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 172,
+        "startChar": 64,
+        "endLine": 173,
+        "endChar": 76
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b19ada88_0127e0f2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "can be factorized",
+      "range": {
+        "startLine": 180,
+        "startChar": 50,
+        "endLine": 183,
+        "endChar": 0
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e747e80_e62bb15a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "can be factorized and better placed before oduIfBuilder",
+      "range": {
+        "startLine": 185,
+        "startChar": 46,
+        "endLine": 187,
+        "endChar": 40
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85be4fe7_e91e3f6e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "can be factorized",
+      "range": {
+        "startLine": 228,
+        "startChar": 49,
+        "endLine": 229,
+        "endChar": 52
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d3cbfb7_96d3954e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 255,
+        "startChar": 0,
+        "endLine": 256,
+        "endChar": 75
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ac77154_6961b4b5",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "can be factorized.",
+      "range": {
+        "startLine": 260,
+        "startChar": 49,
+        "endLine": 264,
+        "endChar": 72
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40d77801_66910705",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "LF would better be here",
+      "range": {
+        "startLine": 315,
+        "startChar": 110,
+        "endLine": 315,
+        "endChar": 111
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2653574b_06bd5d3b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "can be factorized",
+      "range": {
+        "startLine": 318,
+        "startChar": 54,
+        "endLine": 319,
+        "endChar": 67
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5165265_cd6c3527",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "would that make sense to return nothing at that stage rather than pursuing ?",
+      "range": {
+        "startLine": 118,
+        "startChar": 92,
+        "endLine": 118,
+        "endChar": 93
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58352889_aae07da9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "a switch/case structure with a default would add some protection here.",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 217,
+        "endChar": 62
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "716f1780_6ae9a1ca",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T13:57:49Z",
+      "side": 1,
+      "message": "I agree it is better without excessive LOG messages.",
+      "range": {
+        "startLine": 237,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 61
+      },
+      "revId": "29a49a71568f6734bf5ae0ee8deccbe4e136e455",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
