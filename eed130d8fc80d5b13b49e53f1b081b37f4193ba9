@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c006faf9_e0dfa6ce",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyTopoImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T10:04:04Z",
+      "side": 1,
+      "message": "missing whitespace",
+      "range": {
+        "startLine": 174,
+        "startChar": 18,
+        "endLine": 174,
+        "endChar": 19
+      },
+      "revId": "eed130d8fc80d5b13b49e53f1b081b37f4193ba9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
