@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56a067f8_5be1e031",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T14:02:16Z",
+      "side": 1,
+      "message": "can be factorized",
+      "range": {
+        "startLine": 430,
+        "startChar": 0,
+        "endLine": 432,
+        "endChar": 80
+      },
+      "revId": "1f29be10fe4dc2d4ad1ac333965c416579e5b508",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9a6db8a_1afe19c3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T14:02:16Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 434,
+        "startChar": 0,
+        "endLine": 435,
+        "endChar": 39
+      },
+      "revId": "1f29be10fe4dc2d4ad1ac333965c416579e5b508",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de401ea3_3e6b9aa6",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T14:02:16Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 437,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 0
+      },
+      "revId": "1f29be10fe4dc2d4ad1ac333965c416579e5b508",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d909324_f0d7f130",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T14:02:16Z",
+      "side": 1,
+      "message": "LOGs are added here and then removed in 87918...",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 67
+      },
+      "revId": "1f29be10fe4dc2d4ad1ac333965c416579e5b508",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
