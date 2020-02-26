@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74e916ec_04baef0e",
+        "filename": "api/src/main/yang/transportpce-olm@2017-04-18.yang",
+        "patchSetId": 24
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-26T14:04:58Z",
+      "side": 1,
+      "message": "Source",
+      "range": {
+        "startLine": 115,
+        "startChar": 11,
+        "endLine": 115,
+        "endChar": 17
+      },
+      "revId": "9b31dd9de5790f5f115d2290d9a489258ce23cf5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
