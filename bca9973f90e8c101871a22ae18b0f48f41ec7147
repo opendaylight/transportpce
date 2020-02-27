@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "379b6e00_ede48bdc",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T19:03:20Z",
+      "side": 1,
+      "message": "versions",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 33
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "755e7754_353f1133",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T19:03:20Z",
+      "side": 1,
+      "message": "sends",
+      "range": {
+        "startLine": 112,
+        "startChar": 74,
+        "endLine": 112,
+        "endChar": 78
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13703aa8_e74fe6b8",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T19:03:20Z",
+      "side": 1,
+      "message": "reference RFCs would be ice",
+      "range": {
+        "startLine": 126,
+        "startChar": 51,
+        "endLine": 126,
+        "endChar": 66
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63fd3bff_0fc9bcae",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T19:03:20Z",
+      "side": 1,
+      "message": "tabs here",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 3
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc4db72d_2f30a19e",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T19:03:20Z",
+      "side": 1,
+      "message": "indentation",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 422,
+        "endChar": 60
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcb85d85_9946db7c",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T19:03:20Z",
+      "side": 1,
+      "message": "tabs here",
+      "range": {
+        "startLine": 689,
+        "startChar": 0,
+        "endLine": 695,
+        "endChar": 6
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a031d3b_775b6c07",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T19:03:20Z",
+      "side": 1,
+      "message": "regression",
+      "range": {
+        "startLine": 738,
+        "startChar": 23,
+        "endLine": 738,
+        "endChar": 76
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
