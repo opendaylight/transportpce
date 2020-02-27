@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d511362e_ac6cbe0c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-02-27T20:33:33Z",
+      "side": 1,
+      "message": "catching NullPointerException is not a good practice (please have a look here https://rules.sonarsource.com/java/RSPEC-1696)\nA more compliant code could be\n    private Long calcLatency(Link link) {\n        Link1 link1 \u003d link.augmentation(Link1.class);\n        if (link1.getLinkLatency() !\u003d null) {\n            return link1.getLinkLatency().toJava();\n        }\n\n        double tmpLatency \u003d 0;\n        if(this.omsAttributesSpan.getLinkConcatenation() !\u003d null) {\n            for (LinkConcatenation linkConcatenation : this.omsAttributesSpan.getLinkConcatenation()) {\n                if (linkConcatenation !\u003d null \u0026\u0026 linkConcatenation.getSRLGLength() !\u003d null) {\n                    tmpLatency +\u003d linkConcatenation.getSRLGLength().toJava() / CELERITY;\n                    LOG.info(\"In PceLink: The latency of link {} \u003d\u003d {}\", link.getLinkId(), tmpLatency);\n                }\n            }\n        }\n        return (long)Math.ceil(tmpLatency);\n\n    }\nPlease note that the \"if(this.omsAttributesSpan.getLinkConcatenation() !\u003d null)\" is not mandatory if this.omsAttributesSpan.getLinkConcatenation() never return a null List",
+      "range": {
+        "startLine": 119,
+        "startChar": 3,
+        "endLine": 141,
+        "endChar": 5
+      },
+      "revId": "50b9f0f52f388da8d04f06d748192e7be3f040c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
