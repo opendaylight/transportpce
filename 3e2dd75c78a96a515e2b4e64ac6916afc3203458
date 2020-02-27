@@ -259,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "2a95c8a8_e1112a54",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T16:00:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "349bc4d9_da89c8c5",
+      "range": {
+        "startLine": 82,
+        "startChar": 8,
+        "endLine": 108,
+        "endChar": 9
+      },
+      "revId": "3e2dd75c78a96a515e2b4e64ac6916afc3203458",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b40b0799_68a33a00",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 1
@@ -306,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "eddef247_c2534e54",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T16:00:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f3be3104_5e195a53",
+      "range": {
+        "startLine": 122,
+        "startChar": 49,
+        "endLine": 123,
+        "endChar": 51
+      },
+      "revId": "3e2dd75c78a96a515e2b4e64ac6916afc3203458",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81c44b5a_2030b9d8",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 1
@@ -326,6 +374,30 @@
       "revId": "3e2dd75c78a96a515e2b4e64ac6916afc3203458",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8799f30b_0918e998",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T16:00:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "81c44b5a_2030b9d8",
+      "range": {
+        "startLine": 169,
+        "startChar": 1,
+        "endLine": 169,
+        "endChar": 90
+      },
+      "revId": "3e2dd75c78a96a515e2b4e64ac6916afc3203458",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
