@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "d2c1bdac_b5debb71",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer-device@2019-12-12.yang",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ae762a00_2cf52d33",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 11
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a2da279_b5c096c5",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
         "patchSetId": 11
@@ -80,6 +104,30 @@
       "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ede217e_5b4196a7",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4a2da279_b5c096c5",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 5
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -106,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "6733092a_71f97c51",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "20f30e6c_21d0cdd2",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 200,
+        "endChar": 27
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5077cabf_7e26bfba",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
         "patchSetId": 11
@@ -126,6 +198,30 @@
       "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4169d213_6a932e75",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5077cabf_7e26bfba",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 208,
+        "endChar": 5
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -152,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "bb03ca4e_eaa62aa2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3e401a2b_33244452",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 37
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41b207c4_deb85403",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
         "patchSetId": 11
@@ -172,6 +292,30 @@
       "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d304e65_d3380f22",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "41b207c4_deb85403",
+      "range": {
+        "startLine": 111,
+        "startChar": 1,
+        "endLine": 112,
+        "endChar": 37
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -198,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "53404f31_fa26fe1f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6a83554e_dcd9fda3",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 50
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "283b58f1_5cd6f100",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
         "patchSetId": 11
@@ -218,6 +386,30 @@
       "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56de5fb2_077e0d45",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "283b58f1_5cd6f100",
+      "range": {
+        "startLine": 159,
+        "startChar": 1,
+        "endLine": 161,
+        "endChar": 47
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -244,6 +436,30 @@
     },
     {
       "key": {
+        "uuid": "43058e99_35cb28b5",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "376f9354_461298c2",
+      "range": {
+        "startLine": 247,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 50
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08eeae61_57b63e37",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
         "patchSetId": 11
@@ -264,6 +480,30 @@
       "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d3ffbcf_4378fd50",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOTNInterface.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "08eeae61_57b63e37",
+      "range": {
+        "startLine": 274,
+        "startChar": 1,
+        "endLine": 276,
+        "endChar": 33
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -290,6 +530,30 @@
     },
     {
       "key": {
+        "uuid": "8dfa0919_f635b176",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5a4ea662_5d09fd6a",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 56
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "312cdfca_aed9d6c2",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 11
@@ -310,6 +574,30 @@
       "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b81ef6ef_5342ad1c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T15:58:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "312cdfca_aed9d6c2",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 112
+      },
+      "revId": "c9df6f19a7a1ff52998f1002c159930aeab41ca8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
