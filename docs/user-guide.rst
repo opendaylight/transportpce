@@ -17,11 +17,11 @@ request coming from a higher layer controller and/or an orchestrator.
 This capability may rely on the controller only or it may be delegated to
 distributed (standardized) protocols.
 
-It provides alarm/fault and performance
-monitoring, but this function might be externalized to improve the scalability.
-A Graphical User Interface could be developed in a later step, but is not
-considered as a priority since automated control does not imply user
-interactions at the transport controller level.
+It provides basic alarm/fault and performance monitoring,
+but this function might be externalized to improve the scalability.
+A Graphical User Interface has been developped separately and is not proposed
+here since automated control does not imply user interactions at the transport
+controller level.
 
 TransportPCE modular architecture is described on the next diagram. Each main
 function such as Topology management, Path Calculation Engine (PCE), Service
@@ -53,6 +53,14 @@ TransportPCE User-Facing Features
 
    -  This feature contains all OpenROADM models : Common, Device, Network and Service models.
 
+-  **bundle transportpce-tapimodels**
+
+   -  This bundle contains models coming from TAPI version 2.1.2.
+
+-  **bundle transportpce-tapis**
+
+   -  This bundle contains limited support of TAPI version 2.1.2 Northbound interface.
+
 
 How To Start
 ------------
@@ -61,8 +69,8 @@ Preparing for Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Devices must support the standard OpenROADM Models more precisely versions
-   1.2.1 and 2.1. Experimental support is provided for 2.2 and 2.2.1 devices
-   (portmapping only at this moment).
+   1.2.1 and 2.1. Limited support is provided for 2.2 and 2.2.1 devices.
+   If WDM is supported on them, the OTN support is considererd experimental at that date.
 
 2. Devices must support configuration through NETCONF protocol/API.
 
