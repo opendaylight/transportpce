@@ -33,9 +33,9 @@ relying on open models, each of them communicating through published APIs.
 
    TransportPCE architecture
 
-The current version of transportPCE is dedicated to the control of WDM transport
-infrastructure. OTN layer will be integrated in a later step. The WDM layer is
-built from colorless ROADMs and transponders.
+Fluorine, Neon and Sodium version of transportPCE are dedicated to the control
+of WDM transport infrastructure. The WDM layer is built from colorless ROADMs
+and transponders.
 
 The interest of using a controller to provision automatically services strongly
 relies on its ability to handle end to end optical services that spans through
@@ -46,6 +46,15 @@ element to get the benefit of automated control.
 Initial design of TransportPCE leverages Open ROADM Multi-Source-Agreement (MSA)
 which defines interoperability specifications, consisting of both Optical
 interoperability and Yang data models.
+
+Experimental support of OTN layer is introduced in Magnesium release of
+OpenDaylight. By experimental, we mean not all features can be accessed through
+northbound API based on RESTCONF encoded OpenROADM Service model. In the meanwhile,
+"east/west" APIs shall be used to trigger a path computation in the PCE (using
+path-computation -request RPC) and to create services (using otn-service-path RPC.
+OTN support will be improved in the following magnesium releases.
+
+
 
 Module description
 ~~~~~~~~~~~~~~~~~~
@@ -65,12 +74,14 @@ Renderer and the OLM to delete connections and reset power levels associated wit
 service. The service-list is updated following a successful service deletion. In Neon SR0 is
 added the support for service from ROADM to ROADM, which brings additional flexibility and
 notably allows reserving resources when transponders are not in place at day one.
+The full support of OTN services, including OTU, HO-ODU and LO-ODU will be introduced
+in next release of Magnesium.
 
 PCE
 ^^^^^^^^^^^^^^
 
 The Path Computation Element (PCE) is the component responsible for path
-calculation. An interface allows the Renderer or external components such as an
+calculation. An interface allows the Service Handler or external components such as an
 orchestrator to request a path computation and get a response from the PCE
 including the computed path(s) in case of success, or errors and indication of
 the reason for the failure in case the request cannot be satisfied. Additional
@@ -89,12 +100,30 @@ also added. PCE handles the following constraints as hard constraints:
 -   **SRLG exclusion**
 -   **Maximum latency**
 
+In Magnesium SR0, the interconnection of the PCE with GNPY (Gaussian Noise Python), an
+open-source library developed in the scope of the Telecom Infra Project for building route
+planning and optimizing performance in optical mesh networks, is fully supported.
+
+If the OSNR calculated by the PCE is too close to the limit defined in OpenROADM
+specifications, the PCE forwards through a REST interface to GNPY external tool the topology
+and the pre-computed path translated in routing constraints. GNPy calculates a set of Quality of
+Transmission metric for this path using its own library which includes models for OpenROADM.
+The result is sent back to the PCE. If the path is validated, the PCE sends back a response to
+the service handler. In case of invalidation of the path by GNPY, the PCE send a new request to
+GNPY, including only the constraints expressed in the path-computation-request initiated by the
+Service Handler. GNPy then tries to calculate a path based on these relaxed constraints. The result
+of the path computation is provided to the PCE which translates the path according to the topology
+handled in transportPCE and forwards the results to the Service Handler.
+
+GNPy relies on SNR and takes into account the linear and non-linear impairments to check feasibility.
+In the related tests, GNPy module runs externally in a docker and the communication with T-PCE is
+ensured via HTTPs.
 
 Topology Management
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Topology management module builds the Topology according to the Network model
-defined in OpenROADM. The topology is aligned with I2RS model. It includes
+defined in OpenROADM. The topology is aligned with IETF/I2RS model. It includes
 several network layers:
 
 -  **CLLI layer corresponds to the locations that host equipment**
@@ -103,9 +132,13 @@ several network layers:
 -  **Topology layer introduces a second level of disaggregation where ROADMs
    Add/Drop modules ("SRGs") are separated from the degrees which includes line
    amplifiers and WSS that switch wavelengths from one to another degree**
+-  **OTN layer introduced in Magnesium includes transponders as well as switch-ponders
+   having the ability to switch OTN containers from client to line cards. SR0 release
+   includes creation of the switching pool (used to model cross-connect matrices),
+   tributary-ports and tributary-slots at the initial connection of NETCONF devices.
+   However, the population of OTN links, and the adjustment of the tributary ports/slots
+   pull occupancy when OTN services are created will be handled in later Magnesium release.**
 
-OTN layer which includes OTN elements having or not the ability to switch OTN
-containers from client to line cards is not currently implemented.
 
 Renderer
 ^^^^^^^^
@@ -115,12 +148,16 @@ implementation-request /service delete rpc, sets/deletes the path corresponding 
 service between A and Z ends. The path description provided by the service-handler to the
 renderer is based on abstracted resources (nodes, links and termination-points), as provided
 by the PCE module. The renderer converts this path-description in a path topology based on
-device resources (circuit-packs, ports,…). The conversion from abstracted resources to
-device resources is performed relying on the portmapping module which maintains the
-connections between these different resource types. In Neon (SR0), portmapping modules
-has been enriched to support both openroadm 1.2.1 and 2.2 device models. The full support
-of openroadm 2.2 device models (both in the topology management and the rendering
-function) is planned at a later step (ORD2.2 full support is targeted for Neon SR1).
+device resources (circuit-packs, ports,…).
+
+The conversion from abstracted resources to device resources is performed relying on the
+portmapping module which maintains the connections between these different resource types.
+Portmapping module also allows to keep the topology independant from the devices releases.
+In Neon (SR0), portmapping module has been enriched to support both openroadm 1.2.1 and 2.2.1
+device models. The full support of openroadm 2.2.1 device models (both in the topology management
+and the renderingfunction) has been added in Neon SR1. In Magnesium, portmapping is enriched with
+the supported-interface-capability, OTN supporting-interfaces, and switching-pools (reflecting
+cross-connection capabilities of OTN switch-ponders).
 
 After the path is provided, the renderer first checks what are the existing interfaces on the
 ports of the different nodes that the path crosses. It then creates missing interfaces. After all
@@ -129,6 +166,12 @@ notifies the Service Handler on the status of the path creation. Path is created
 (from A to Z and Z to A). In case the path between A and Z could not be fully created, a
 rollback function is called to set the equipment on the path back to their initial configuration
 (as they were before invoking the Renderer).
+
+Magnesium brings the support of OTN services. SR0 supports the creation of OTU4, ODU4, ODU2/ODU2e
+and ODU1 interfaces. The creation of these interfaces must be triggered through otn-service-path
+RPC. Full support (service-implementation-request /service delete rpc, topology alignement after
+the service has been created) will be provided in later releases of Magnesium.
+
 
 OLM
 ^^^^^^^^
@@ -203,7 +246,6 @@ Netconf Service
 
    -  node list : composed of netconf nodes in topology-netconf
 
-
 Internal APIs
 ~~~~~~~~~~~~~
 
@@ -235,6 +277,11 @@ Renderer Service
    -  service-implementation-request (given service-name, service-aend, service-zend)
 
    -  service-delete (given service-name)
+
+   -  otn-service-path (given service-name, service-aend, service-zend) used in SR0 as
+      an intermediate solution to address directly the renderer from a REST NBI for
+	  otn-service creation. Otn service-creation through service-implementation-request
+	  call from the Service Handler will be supported in later Magnesium releases
 
 -  Data structure
 
@@ -279,6 +326,25 @@ odl-transportpce-stubmodels
    -  This feature provides function to be able to stub some of TransportPCE modules, pce and
       renderer (Stubpce and Stubrenderer).
       Stubs are used for development purposes and can be used for some of the functionnal tests.
+
+Interfaces to external software
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It defines the interfaces implemented to interconnect TransportPCE modules with other software in
+order to perform specific tasks
+
+GNPy interface
+^^^^^^^^^^^^^^
+
+-  Request structure
+
+   -  topology : composed of list of elements and connections
+   -  service : source, destination, explicit-route-objects, path-constraints
+
+-  Response structure
+
+   -  path-properties/path-metric : OSNR-0.1nm, OSNR-bandwidth, SNR-0.1nm, SNR-bandwidth,
+   -  path-properties/path-route-objects : composed of path elements
 
 
 Running transportPCE project
@@ -347,16 +413,13 @@ Use the following JSON RPC to check that function internally named *portMapping*
 
 .. note::
 
-    in Neon SR0, the support of openroadm 2.2 device model is added. Thus 2.2 nodes can be
-    discovered and added to the portmapping node list. However, full topology management
-    support (and notably link discovery) is not provided for 2.2 nodes. The support for link
-    discovery and full topology management with 1.2.1 and 2.2 nodes will be added in a next release.
-
-.. note::
-
-    In ``org-openroadm-device.yang``, two types of optical nodes can be managed:
+    In ``org-openroadm-device.yang``, four types of optical nodes can be managed:
         * rdm: ROADM device (optical switch)
         * xpdr: Xponder device (device that converts client to optical channel interface)
+                * ila: in line amplifier (optical amplifier)
+                * extplug: external pluggable (an optical pluggable that can be inserted in an external unit such as a router)
+
+                TransportPCE currently supports rdm and xpdr
 
 Depending on the kind of open ROADM device connected, different kind of *Logical Connection Points*
 should appear, if the node configuration is not empty:
@@ -449,9 +512,44 @@ From rdm to xpdr:
       }
     }
 
+OTN topology
+~~~~~~~~~~~~
+
+Before creating an OTN service, your topology must contain at least two xpdr devices of MUXPDR or
+SWITCH type connected to two different rdm devices. To check that these xpdr are present in the
+OTN topology, use the following command on the REST API :
+
+**REST API** : *GET /restconf/config/ietf-network:network/otn-topology*
+
+An optical connectivity service shall have been created in a first setp. In Magnesium SR0, the OTN
+links are not automatically populated in the topology after the Och, OTU4 and ODU4 interfaces have
+been created on the two network ports of the xpdr. Thus the otn link must be posted manually through
+the REST API (APIDoc).
+
+**REST API** : *POST /restconf/config/ietf-network:network/otn-topology/link*
+
+XXXXXXXXXXXXXXXXXX TO BE COMPLETED  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+
+
 
 Creating a service
 ~~~~~~~~~~~~~~~~~~
+
+In Magnesium SR0, two different kind of services can be created with transportPCE using the Northbound
+REST API:
+
+- 100GE services from client port to client port of two transponders (TPDR)
+- an OTU-4/ODU-4 service from network port to network port of two Xponders (MUXPDR/SWITCH)
+
+For the creation of 1GE and 10GE services the user has to check using internal API the connectivity
+between nodes and the possibility to create a service through the path-computation-request rpc. The
+service creation is performed using internal otn-service-path rpc.
+
+100GE service creation:
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Use the following REST RPC to invoke *service handler* module in order to create a bidirectional
 end-to-end optical connectivity service between two xpdr over an optical network composed of rdm
@@ -556,9 +654,56 @@ Most important parameters for this REST RPC are the identification of the two ph
 on xpdr nodes.This RPC invokes the *PCE* module to compute a path over the *openroadm-topology* and
 then invokes *renderer* and *OLM* to implement the end-to-end path into the devices.
 
+OTU4/ODU4 service creation :
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the following REST RPC to invoke *service handler* module in order to create a bidirectional
+end-to-end optical connectivity service between two xpdr over an optical network composed of rdm
+nodes.
+
+XXXXXXXXXXXXXXX (TO BE COMPLETED )XXXXXXXXXXXXXXXXX
+
+
+1GE/ODU0 and 10GE/ODU2e service creation :
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the following REST RPC to invoke *PCE* module in order to check connectivity between xponder
+nodes and the availability of a supporting optical connectivity between the network-ports of the
+nodes.
+
+
+XXXXXXXXXXXXXXX (TO BE COMPLETED )XXXXXXXXXXXXXXXXX
+
+After end-to-end optical connectivity between the two xpdr has been checked, use the otn-service-path
+rpc to invoke the *Renderer* and create the corresponding interfaces :
+
+- 1GE and ODU0 interfaces for 1GE services
+- 10GE and ODU2e interfaces for 10GE services
+
+The following example corresponds to the creation of a 10GE service
+
+
+XXXXXXXXXXXXXXX (TO BE COMPLETED )XXXXXXXXXXXXXXXXX
+
+.. note::
+	OTN links are not automatically populated in the topology after the ODU2e interfaces have
+	been created on the two client ports of the xpdr. The otn link can be posted manually through
+	the REST API (APIDoc).
+
+	.. note::
+	With Magnesium SR0, the service-list corresponding to 1GE/10GE and OTU4/ODU4 services is not
+	updated in the datastore after the interfaces have been created in the device.
+
+
+XXXXXXXXXXXXXXX (TO BE COMPLETED )XXXXXXXXXXXXXXXXX
 
 Deleting a service
 ~~~~~~~~~~~~~~~~~~
+
+XXXXXXXXXXXXXXX (TO BE COMPLETED according to what we can do with 100GE/OTU4/1GE/10GE services )XXXXXXXXXXXXXXXXX
+
+Deleting a 100GE service
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Use the following REST RPC to invoke *service handler* module in order to delete a given optical
 connectivity service.
@@ -590,7 +735,7 @@ Most important parameters for this REST RPC is the *service-name*.
 Help
 ----
 
--  `TransportPCE Wiki <https://wiki.lfnetworking.org/display/ODL/Projects>`__
+-  `TransportPCE Wiki <https://wiki.opendaylight.org/view/TransportPCE:Main>`__
 
 -  TransportPCE Mailing List
    (`developer <https://lists.opendaylight.org/mailman/listinfo/transportpce-dev>`__)
