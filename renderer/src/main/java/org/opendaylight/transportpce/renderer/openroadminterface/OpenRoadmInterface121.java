@@ -72,17 +72,18 @@ public class OpenRoadmInterface121 {
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(String.format(
+                "Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
 
         // Ethernet interface specific data
-        EthernetBuilder ethIfBuilder = new EthernetBuilder();
-        ethIfBuilder.setAutoNegotiation(EthAttributes.AutoNegotiation.Enabled);
-        ethIfBuilder.setDuplex(EthAttributes.Duplex.Full);
-        ethIfBuilder.setFec(EthAttributes.Fec.Off);
-        ethIfBuilder.setSpeed(100000L);
-        ethIfBuilder.setMtu(9000L);
+        EthernetBuilder ethIfBuilder = new EthernetBuilder()
+                .setAutoNegotiation(EthAttributes.AutoNegotiation.Enabled)
+                .setDuplex(EthAttributes.Duplex.Full)
+                .setFec(EthAttributes.Fec.Off)
+                .setSpeed(100000L)
+                .setMtu(9000L);
 
         InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.class,
                                                                           logicalConnPoint + "-ETHERNET");
@@ -102,15 +103,15 @@ public class OpenRoadmInterface121 {
 
     private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap, Class<? extends InterfaceType> type,
                                                            String key) {
-        InterfaceBuilder interfaceBuilder = new InterfaceBuilder();
-        interfaceBuilder.setDescription("  TBD   ");
-        interfaceBuilder.setCircuitId("   TBD    ");
-        interfaceBuilder.setSupportingCircuitPackName(portMap.getSupportingCircuitPackName());
-        interfaceBuilder.setSupportingPort(portMap.getSupportingPort());
-        interfaceBuilder.setAdministrativeState(AdminStates.InService);
-        interfaceBuilder.setType(type);
-        interfaceBuilder.setName(key);
-        interfaceBuilder.withKey(new InterfaceKey(key));
+        InterfaceBuilder interfaceBuilder = new InterfaceBuilder()
+                .setDescription("  TBD   ")
+                .setCircuitId("   TBD    ")
+                .setSupportingCircuitPackName(portMap.getSupportingCircuitPackName())
+                .setSupportingPort(portMap.getSupportingPort())
+                .setAdministrativeState(AdminStates.InService)
+                .setType(type)
+                .setName(key)
+                .withKey(new InterfaceKey(key));
         return interfaceBuilder;
     }
     /**
@@ -128,8 +129,9 @@ public class OpenRoadmInterface121 {
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(String.format(
+                "Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
         // Create generic interface
         InterfaceBuilder otuInterfaceBldr = createGenericInterfaceBuilder(portMap, OtnOtu.class, logicalConnPoint
@@ -137,9 +139,9 @@ public class OpenRoadmInterface121 {
         otuInterfaceBldr.setSupportingInterface(supportOchInterface);
 
         // OTU interface specific data
-        OtuBuilder otuIfBuilder = new OtuBuilder();
-        otuIfBuilder.setFec(OtuAttributes.Fec.Scfec);
-        otuIfBuilder.setRate(OTU4.class);
+        OtuBuilder otuIfBuilder = new OtuBuilder()
+                .setFec(OtuAttributes.Fec.Scfec)
+                .setRate(OTU4.class);
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
@@ -169,23 +171,23 @@ public class OpenRoadmInterface121 {
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node % and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(String.format(
+                "Unable to get mapping from PortMapping for node % and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(portMap, OtnOdu.class, logicalConnPoint
                 + "-ODU");
         oduInterfaceBldr.setSupportingInterface(supportingOtuInterface);
 
         // ODU interface specific data
-        OduBuilder oduIfBuilder = new OduBuilder();
-        oduIfBuilder.setRate(ODU4.class);
-        oduIfBuilder.setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
-
         // Set Opu attributes
-        OpuBuilder opuBldr = new OpuBuilder();
-        opuBldr.setPayloadType("07");
-        opuBldr.setExpPayloadType("07");
-        oduIfBuilder.setOpu(opuBldr.build());
+        OpuBuilder opuBldr = new OpuBuilder()
+                .setPayloadType("07")
+                .setExpPayloadType("07");
+        OduBuilder oduIfBuilder = new OduBuilder()
+                .setRate(ODU4.class)
+                .setMonitoringMode(OduAttributes.MonitoringMode.Terminated)
+                .setOpu(opuBldr.build());
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
@@ -217,16 +219,16 @@ public class OpenRoadmInterface121 {
 
         Mapping portMap = portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node %s and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(String.format(
+                "Unable to get mapping from PortMapping for node %s and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.class,
             createOpenRoadmOchInterfaceName(logicalConnPoint, waveNumber));
 
         // OCH interface specific data
-        OchBuilder ocIfBuilder = new OchBuilder();
-        ocIfBuilder.setWavelengthNumber(waveNumber);
+        OchBuilder ocIfBuilder = new OchBuilder().setWavelengthNumber(waveNumber);
 
         // Add supporting OMS interface
         if (portMap.getSupportingOms() != null) {
@@ -252,16 +254,17 @@ public class OpenRoadmInterface121 {
         OchAttributes.ModulationFormat format) throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format("Unable to get mapping from PortMapping for node %s and"
-                + " logical connection port %s", nodeId, logicalConnPoint));
+            throw new OpenRoadmInterfaceException(String.format(
+                "Unable to get mapping from PortMapping for node %s and logical connection port %s",
+                    nodeId, logicalConnPoint));
         }
 
         // OCH interface specific data
-        OchBuilder ocIfBuilder = new OchBuilder();
-        ocIfBuilder.setWavelengthNumber(waveNumber);
-        ocIfBuilder.setModulationFormat(format);
-        ocIfBuilder.setRate(R100G.class);
-        ocIfBuilder.setTransmitPower(new PowerDBm(new BigDecimal("-5")));
+        OchBuilder ocIfBuilder = new OchBuilder()
+                .setWavelengthNumber(waveNumber)
+                .setModulationFormat(format)
+                .setRate(R100G.class)
+                .setTransmitPower(new PowerDBm(new BigDecimal("-5")));
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class

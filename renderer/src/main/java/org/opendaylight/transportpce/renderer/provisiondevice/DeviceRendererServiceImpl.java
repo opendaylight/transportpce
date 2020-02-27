@@ -143,7 +143,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                     if ((srcTp != null) && srcTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
-                        Mapping mapping = this.portMapping.getMapping(nodeId,srcTp);
                         // create OpenRoadm Xponder Line Interfaces
                         String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, srcTp, waveNumber, ModulationFormat.DpQpsk);
@@ -153,6 +152,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         createdOtuInterfaces.add(supportingOtuInterface);
                         createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
                                 srcTp, supportingOtuInterface));
+                        Mapping mapping = this.portMapping.getMapping(nodeId,srcTp);
                         if (mapping != null && mapping.getXponderType() != null
                             && (mapping.getXponderType().getIntValue() == 3
                             || mapping.getXponderType().getIntValue() == 2)) {

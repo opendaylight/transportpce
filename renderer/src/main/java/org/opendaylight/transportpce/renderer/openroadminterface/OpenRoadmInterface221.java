@@ -87,9 +87,9 @@ public class OpenRoadmInterface221 {
         }
 
         // Ethernet interface specific data
-        EthernetBuilder ethIfBuilder = new EthernetBuilder();
-        ethIfBuilder.setFec(EthAttributes.Fec.Off);
-        ethIfBuilder.setSpeed(100000L);
+        EthernetBuilder ethIfBuilder = new EthernetBuilder()
+            .setFec(EthAttributes.Fec.Off)
+            .setSpeed(100000L);
 
         InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.class,
             logicalConnPoint + "-ETHERNET");
@@ -152,18 +152,19 @@ public class OpenRoadmInterface221 {
         // TODO : Check this method
 
         InterfaceBuilder mcInterfaceBldr = createGenericInterfaceBuilder(portMap,
-            MediaChannelTrailTerminationPoint.class, logicalConnPoint + "-mc" + "-" + waveNumber);
-        mcInterfaceBldr.setSupportingInterface(portMap.getSupportingOms());
+                MediaChannelTrailTerminationPoint.class, logicalConnPoint + "-mc" + "-" + waveNumber)
+            .setSupportingInterface(portMap.getSupportingOms());
 
-        McTtpBuilder mcTtpBuilder = new McTtpBuilder();
-        mcTtpBuilder.setMinFreq(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getStart())));
-        mcTtpBuilder.setMaxFreq(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getStop())));
+        McTtpBuilder mcTtpBuilder = new McTtpBuilder()
+            .setMinFreq(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getStart())))
+            .setMaxFreq(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getStop())));
 
         // Create Interface1 type object required for adding as augmentation
         org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.Interface1Builder
             interface1Builder =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.Interface1Builder();
-        interface1Builder.setMcTtp(mcTtpBuilder.build());
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.Interface1Builder()
+                .setMcTtp(mcTtpBuilder.build());
+
         mcInterfaceBldr.addAugmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.Interface1.class,
             interface1Builder.build());
@@ -197,17 +198,15 @@ public class OpenRoadmInterface221 {
             nmcInterfaceBldr.setSupportingInterface(logicalConnPoint + "-mc" + "-" + waveNumber);
         }
 
-        NmcCtpBuilder nmcCtpIfBuilder = new NmcCtpBuilder();
-
-        nmcCtpIfBuilder.setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())));
-        nmcCtpIfBuilder.setWidth(FrequencyGHz.getDefaultInstance("40"));
+        NmcCtpBuilder nmcCtpIfBuilder = new NmcCtpBuilder()
+                .setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())))
+                .setWidth(FrequencyGHz.getDefaultInstance("40"));
 
         // Create Interface1 type object required for adding as augmentation
         org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019.Interface1Builder
-            nmcCtpI1fBuilder = new
-             org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019
-                .Interface1Builder();
-        nmcCtpI1fBuilder.setNmcCtp(nmcCtpIfBuilder.build());
+            nmcCtpI1fBuilder =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019
+                    .Interface1Builder().setNmcCtp(nmcCtpIfBuilder.build());
         nmcInterfaceBldr.addAugmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019.Interface1.class,
             nmcCtpI1fBuilder.build());
@@ -231,11 +230,10 @@ public class OpenRoadmInterface221 {
         }
 
         // OCH interface specific data
-        OchBuilder ocIfBuilder = new OchBuilder();
-
-        ocIfBuilder.setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())));
-        ocIfBuilder.setRate(R100G.class);
-        ocIfBuilder.setTransmitPower(new PowerDBm(new BigDecimal("-5")));
+        OchBuilder ocIfBuilder = new OchBuilder()
+                .setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())))
+                .setRate(R100G.class)
+                .setTransmitPower(new PowerDBm(new BigDecimal("-5")));
 
         // Create generic interface
         InterfaceBuilder ochInterfaceBldr = createGenericInterfaceBuilder(portMap, OpticalChannel.class,
@@ -273,15 +271,14 @@ public class OpenRoadmInterface221 {
         oduInterfaceBldr.setSupportingInterface(supportingOtuInterface);
 
         // ODU interface specific data
-        OduBuilder oduIfBuilder = new OduBuilder();
-        oduIfBuilder.setRate(ODU4.class);
-        oduIfBuilder.setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
-
         // Set Opu attributes
-        OpuBuilder opuBldr = new OpuBuilder();
-        opuBldr.setPayloadType(PayloadTypeDef.getDefaultInstance("07"));
-        opuBldr.setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"));
-        oduIfBuilder.setOpu(opuBldr.build());
+        OpuBuilder opuBldr = new OpuBuilder()
+                .setPayloadType(PayloadTypeDef.getDefaultInstance("07"))
+                .setExpPayloadType(PayloadTypeDef.getDefaultInstance("07"));
+        OduBuilder oduIfBuilder = new OduBuilder()
+                .setRate(ODU4.class)
+                .setMonitoringMode(OduAttributes.MonitoringMode.Terminated)
+                .setOpu(opuBldr.build());
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
@@ -333,15 +330,15 @@ public class OpenRoadmInterface221 {
 
     private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap, Class<? extends InterfaceType> type,
         String key) {
-        InterfaceBuilder interfaceBuilder = new InterfaceBuilder();
-        interfaceBuilder.setDescription("  TBD   ");
-        interfaceBuilder.setCircuitId("   TBD    ");
-        interfaceBuilder.setSupportingCircuitPackName(portMap.getSupportingCircuitPackName());
-        interfaceBuilder.setSupportingPort(portMap.getSupportingPort());
-        interfaceBuilder.setAdministrativeState(AdminStates.InService);
-        interfaceBuilder.setType(type);
-        interfaceBuilder.setName(key);
-        interfaceBuilder.withKey(new InterfaceKey(key));
+        InterfaceBuilder interfaceBuilder = new InterfaceBuilder()
+                .setDescription("  TBD   ")
+                .setCircuitId("   TBD    ")
+                .setSupportingCircuitPackName(portMap.getSupportingCircuitPackName())
+                .setSupportingPort(portMap.getSupportingPort())
+                .setAdministrativeState(AdminStates.InService)
+                .setType(type)
+                .setName(key)
+                .withKey(new InterfaceKey(key));
         return interfaceBuilder;
     }
 
@@ -449,20 +446,19 @@ public class OpenRoadmInterface221 {
         oduInterfaceBldr.setSupportingInterface(supportingOtuInterface);
 
         // ODU interface specific data
-        OduBuilder oduIfBuilder = new OduBuilder();
-        oduIfBuilder.setRate(ODU4.class);
-        oduIfBuilder.setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
+        OduBuilder oduIfBuilder = new OduBuilder()
+                .setRate(ODU4.class)
+                .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
         if (!nodeId.toLowerCase().contains("eci")) {
             oduIfBuilder.setTxDapi("");
             oduIfBuilder.setTxSapi("");
         }
-        oduIfBuilder.setOduFunction(ODUTTP.class);
-
         // Set Opu attributes
-        OpuBuilder opuBldr = new OpuBuilder();
-        opuBldr.setPayloadType(PayloadTypeDef.getDefaultInstance("21"));
-        opuBldr.setExpPayloadType(PayloadTypeDef.getDefaultInstance("21"));
-        oduIfBuilder.setOpu(opuBldr.build());
+        OpuBuilder opuBldr = new OpuBuilder()
+                .setPayloadType(PayloadTypeDef.getDefaultInstance("21"))
+                .setExpPayloadType(PayloadTypeDef.getDefaultInstance("21"));
+        oduIfBuilder.setOduFunction(ODUTTP.class)
+                .setOpu(opuBldr.build());
 
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class

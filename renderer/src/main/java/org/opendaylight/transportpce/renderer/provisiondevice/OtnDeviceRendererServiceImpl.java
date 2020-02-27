@@ -116,6 +116,10 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                         break;
                     default:
                         LOG.error("service rate {} not managed yet", input.getServiceRate());
+                        String result = input.getServiceRate() + " is not supported";
+                        results.add(result);
+                        success.set(false);
+                        return;
                 }
                 List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, true);
                 if (intToDelete != null) {
@@ -203,30 +207,37 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
             //check if the node is mounted or not?
             List<String> createdEthInterfaces = new ArrayList<>();
             List<String> createdOduInterfaces = new ArrayList<>();
-            if ("1G".equals(input.getServiceRate())) {
-                LOG.info("Input service is 1G");
-                createdEthInterfaces.add(
-                    openRoadmInterfaceFactory.createOpenRoadmEth1GInterface(node.getNodeId(), node.getClientTp()));
-                createdOduInterfaces.add(
-                    //suppporting interface?, payload ?
-                    openRoadmInterfaceFactory.createOpenRoadmOdu0Interface(node.getNodeId(), node.getClientTp(),
-                        input.getServiceName(), "07", false, input.getTribPortNumber(), input.getTribSlot()));
-                createdOduInterfaces.add(
-                    openRoadmInterfaceFactory.createOpenRoadmOdu0Interface(node.getNodeId(), node.getNetworkTp(),
-                        input.getServiceName(), "07", true, input.getTribPortNumber(), input.getTribSlot()));
-            } else if ("10G".equals(input.getServiceRate())) {
-                LOG.info("Input service is 10G");
-                createdEthInterfaces.add(
-                    openRoadmInterfaceFactory.createOpenRoadmEth10GInterface(node.getNodeId(), node.getClientTp()));
-                createdOduInterfaces.add(
-                    //suppporting interface?, payload ?
-                    openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(), node.getClientTp(),
-                        input.getServiceName(),"03", false ,input.getTribPortNumber(),input.getTribSlot()));
-                createdOduInterfaces.add(
-                    // supporting interface? payload ?
-                    openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(), node.getNetworkTp(),
-                        input.getServiceName(),"03" , true ,input.getTribPortNumber(),input.getTribSlot()));
+            switch (input.getServiceRate()) {
+                case("1G"):
+                    LOG.info("Input service is 1G");
+                    createdEthInterfaces.add(
+                        openRoadmInterfaceFactory.createOpenRoadmEth1GInterface(node.getNodeId(), node.getClientTp()));
+                    createdOduInterfaces.add(
+                        //suppporting interface?, payload ?
+                        openRoadmInterfaceFactory.createOpenRoadmOdu0Interface(node.getNodeId(), node.getClientTp(),
+                            input.getServiceName(), "07", false, input.getTribPortNumber(), input.getTribSlot()));
+                    createdOduInterfaces.add(
+                        openRoadmInterfaceFactory.createOpenRoadmOdu0Interface(node.getNodeId(), node.getNetworkTp(),
+                            input.getServiceName(), "07", true, input.getTribPortNumber(), input.getTribSlot()));
+                    break;
+                case("10G"):
+                    LOG.info("Input service is 10G");
+                    createdEthInterfaces.add(
+                        openRoadmInterfaceFactory.createOpenRoadmEth10GInterface(node.getNodeId(), node.getClientTp()));
+                    createdOduInterfaces.add(
+                        //suppporting interface?, payload ?
+                        openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(), node.getClientTp(),
+                            input.getServiceName(),"03", false ,input.getTribPortNumber(),input.getTribSlot()));
+                    createdOduInterfaces.add(
+                        // supporting interface? payload ?
+                        openRoadmInterfaceFactory.createOpenRoadmOdu2eInterface(node.getNodeId(), node.getNetworkTp(),
+                            input.getServiceName(),"03" , true ,input.getTribPortNumber(),input.getTribSlot()));
+                    break;
+                default:
+                    LOG.error("service rate {} not managed yet", input.getServiceRate());
+                    return;
             }
+
             //implement cross connect
             List<String> createdConnections = new ArrayList<>();
             if (!createdOduInterfaces.isEmpty()) {

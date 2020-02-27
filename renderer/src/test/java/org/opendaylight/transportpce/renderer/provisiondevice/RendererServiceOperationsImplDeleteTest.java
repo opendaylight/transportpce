@@ -148,7 +148,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
                 = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verify(this.crossConnect, Mockito.times(2)).deleteCrossConnect(Mockito.any(), Mockito.any(), Mockito.eq(false));
+        Mockito.verify(this.crossConnect, Mockito.times(2))
+                .deleteCrossConnect(Mockito.any(), Mockito.any(), Mockito.eq(false));
     }
 
     @Test
@@ -159,7 +160,8 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
                 = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
-        Mockito.verify(this.crossConnect, Mockito.times(0)).deleteCrossConnect(Mockito.any(), Mockito.any(), Mockito.eq(false));
+        Mockito.verify(this.crossConnect, Mockito.times(0))
+                .deleteCrossConnect(Mockito.any(), Mockito.any(), Mockito.eq(false));
     }
 
     @Test
