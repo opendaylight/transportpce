@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "130677f4_af5ade07",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T23:01:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "379b6e00_ede48bdc",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 33
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "755e7754_353f1133",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 2
@@ -94,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "f0bb9e17_2551ca06",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T23:01:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63fd3bff_0fc9bcae",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 3
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc4db72d_2f30a19e",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 2
@@ -114,6 +162,30 @@
       "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55611883_20cd2a4d",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T23:01:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc4db72d_2f30a19e",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 422,
+        "endChar": 60
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "c2462add_6524bcb6",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T23:01:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcb85d85_9946db7c",
+      "range": {
+        "startLine": 689,
+        "startChar": 0,
+        "endLine": 695,
+        "endChar": 6
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a031d3b_775b6c07",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 2
@@ -160,6 +256,30 @@
       "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11d966a4_51f44372",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-27T23:01:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a031d3b_775b6c07",
+      "range": {
+        "startLine": 738,
+        "startChar": 23,
+        "endLine": 738,
+        "endChar": 76
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
