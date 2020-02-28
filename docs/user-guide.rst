@@ -53,14 +53,17 @@ TransportPCE User-Facing Features
 
    -  This feature contains all OpenROADM models : Common, Device, Network and Service models.
 
--  **bundle transportpce-tapimodels**
+-  **feature odl-transportpce-tapimodels**
 
-   -  This bundle contains models coming from TAPI version 2.1.2.
+   -  This feature contains models coming from TAPI version 2.1.2.
 
--  **bundle transportpce-tapis**
+-  **feature odl-transportpce-tapi**
 
-   -  This bundle contains limited support of TAPI version 2.1.2 Northbound interface.
+   -  This feature provides transportPCE a limited support of TAPI version 2.1.2 Northbound interface.
 
+-  **feature odl-transportpce-inventory**
+
+   -  This feature provides transportPCE an external connector to a MariaDB inventory currently limited to openROADM 1.2.1 devices.
 
 How To Start
 ------------

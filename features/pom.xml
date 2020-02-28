@@ -23,9 +23,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <packaging>pom</packaging>
 
   <modules>
-    <module>odl-transportpce-ordmodels</module>
-    <module>odl-transportpce-api</module>
     <module>odl-transportpce</module>
+    <module>odl-transportpce-tapi</module>
     <module>odl-transportpce-inventory</module>
   </modules>
 </project>
