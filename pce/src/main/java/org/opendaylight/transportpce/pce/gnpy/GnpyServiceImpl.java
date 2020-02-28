@@ -137,8 +137,11 @@ public class GnpyServiceImpl {
         ExplicitRouteObjects explicitRouteObjects = new ExplicitRouteObjectsBuilder()
             .setRouteObjectIncludeExclude(routeObjectIncludeExcludes).build();
         //Create Path Constraint
-        PathConstraints pathConstraints =
-            createPathConstraints(atoz.getRate().toJava(),atoz.getAToZWavelengthNumber().toJava());
+        Long atozWavelength = null;
+        if (atoz.getAToZWavelengthNumber() != null) {
+            atozWavelength = atoz.getAToZWavelengthNumber().toJava();
+        }
+        PathConstraints pathConstraints = createPathConstraints(atoz.getRate().toJava(), atozWavelength);
 
         // Create the path request
         List<PathRequest> pathRequestList = new ArrayList<>();
@@ -170,8 +173,11 @@ public class GnpyServiceImpl {
         ExplicitRouteObjects explicitRouteObjects = new ExplicitRouteObjectsBuilder()
             .setRouteObjectIncludeExclude(routeObjectIncludeExcludes).build();
         //Create Path Constraint
-        PathConstraints pathConstraints = createPathConstraints(ztoa.getRate().toJava(),
-            ztoa.getZToAWavelengthNumber().toJava());
+        Long ztoaWavelength = null;
+        if (ztoa.getZToAWavelengthNumber() != null) {
+            ztoaWavelength = ztoa.getZToAWavelengthNumber().toJava();
+        }
+        PathConstraints pathConstraints = createPathConstraints(ztoa.getRate().toJava(), ztoaWavelength);
 
         // Create the path request
         List<PathRequest> pathRequestList = new ArrayList<>();
