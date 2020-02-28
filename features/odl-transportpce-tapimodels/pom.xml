@@ -11,23 +11,29 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
-    <artifactId>odlparent-lite</artifactId>
+    <artifactId>single-feature-parent</artifactId>
     <version>6.0.4</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.transportpce</groupId>
-  <artifactId>features-aggregator</artifactId>
+  <artifactId>odl-transportpce-tapimodels</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <name>${project.artifactId}</name>
-  <packaging>pom</packaging>
+  <packaging>feature</packaging>
 
-  <modules>
-    <module>odl-transportpce-ordmodels</module>
-    <module>odl-transportpce-api</module>
-    <module>odl-transportpce</module>
-    <module>odl-transportpce-tapimodels</module>
-    <module>odl-transportpce-tapi</module>
-    <module>odl-transportpce-inventory</module>
-  </modules>
+  <name>OpenDaylight :: transportpce :: tapimodels</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-tapimodels</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <maven.deploy.skip>true</maven.deploy.skip>
+    <maven.install.skip>true</maven.install.skip>
+  </properties>
+
 </project>

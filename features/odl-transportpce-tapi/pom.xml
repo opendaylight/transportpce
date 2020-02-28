@@ -17,31 +17,23 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </parent>
 
   <groupId>org.opendaylight.transportpce</groupId>
-  <artifactId>odl-transportpce-ordmodels</artifactId>
+  <artifactId>odl-transportpce-tapi</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>feature</packaging>
 
-  <name>OpenDaylight :: transportpce :: ordmodels</name>
+  <name>OpenDaylight :: transportpce :: tapi</name>
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-common</artifactId>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>odl-transportpce-tapimodels</artifactId>
       <version>${project.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-network</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-service</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}.ordmodels</groupId>
-      <artifactId>transportpce-ordmodels-device</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>transportpce-tapi</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
@@ -50,5 +42,18 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <maven.deploy.skip>true</maven.deploy.skip>
     <maven.install.skip>true</maven.install.skip>
   </properties>
+
+<!-- skipping test since this is an umbrella project / folder -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
