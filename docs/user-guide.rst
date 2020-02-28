@@ -41,26 +41,18 @@ TransportPCE User-Facing Features
    -  This feature contains all other features/bundles of TransportPCE project.
       If you install it, it provides all functions that the TransportPCE project
       can support.
-
--  **odl-transportpce-api**
-
-   -  This feature contains all Transportpce project specific models defined in "Service-path".
+      It exposes all Transportpce project specific models defined in "Service-path".
       These models complement OpenROADM models describing South and Northbound APIs, and define the
       data structure used to interconnect the generic blocks/functions described on the previous
       diagram.
 
--  **odl-transportpce-ordmodels**
+-  **feature odl-transportpce-tapi**
 
-   -  This feature contains all OpenROADM models : Common, Device, Network and Service models.
+   -  This feature provides transportPCE a limited support of TAPI version 2.1.2 Northbound interface.
 
--  **bundle transportpce-tapimodels**
+-  **feature odl-transportpce-inventory**
 
-   -  This bundle contains models coming from TAPI version 2.1.2.
-
--  **bundle transportpce-tapis**
-
-   -  This bundle contains limited support of TAPI version 2.1.2 Northbound interface.
-
+   -  This feature provides transportPCE an external connector to a MariaDB inventory currently limited to openROADM 1.2.1 devices.
 
 How To Start
 ------------
@@ -82,5 +74,13 @@ Installation Feature
 Run OpenDaylight and install TransportPCE Service *odl-transportpce* as below::
 
    feature:install odl-transportpce
+
+if you need TAPI limited support, then run::
+
+   feature:install odl-transportpce-tapi
+
+if you need the inventory external connector support limited to 1.2.1 OpenROADM devices, then run::
+
+   feature:install odl-transportpce-inventory
 
 For a more detailed overview of the TransportPCE, see the :ref:`transportpce-dev-guide`.
