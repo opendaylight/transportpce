@@ -280,6 +280,30 @@
       "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c7edcfa_aa8a9cec",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-02-28T09:37:52Z",
+      "side": 1,
+      "message": "seems there is a wiki-archive website available at\nhttps://wiki-archive.opendaylight.org/view/TransportPCE:Main",
+      "parentUuid": "11d966a4_51f44372",
+      "range": {
+        "startLine": 738,
+        "startChar": 23,
+        "endLine": 738,
+        "endChar": 76
+      },
+      "revId": "bca9973f90e8c101871a22ae18b0f48f41ec7147",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
