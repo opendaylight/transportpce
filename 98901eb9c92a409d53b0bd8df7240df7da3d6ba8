@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4220ad77_bc412f85",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-03-02T14:46:25Z",
+      "side": 1,
+      "message": "ok, changed",
+      "parentUuid": "210ba53e_4823d889",
+      "range": {
+        "startLine": 32,
+        "startChar": 21,
+        "endLine": 32,
+        "endChar": 42
+      },
+      "revId": "98901eb9c92a409d53b0bd8df7240df7da3d6ba8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95ff3bbb_679f6c0d",
         "filename": "docs/user-guide.rst",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "98901eb9c92a409d53b0bd8df7240df7da3d6ba8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6564e1b5_803131dc",
+        "filename": "docs/user-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-03-02T14:46:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "95ff3bbb_679f6c0d",
+      "range": {
+        "startLine": 64,
+        "startChar": 19,
+        "endLine": 64,
+        "endChar": 20
+      },
+      "revId": "98901eb9c92a409d53b0bd8df7240df7da3d6ba8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
