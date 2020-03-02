@@ -29,7 +29,7 @@ handler, Renderer responsible for the path configuration through optical
 equipment and Optical Line Management (OLM) is associated with a generic block
 relying on open models, each of them communicating through published APIs.
 
-.. figure:: ./images/tpce_architecture.jpg
+.. figure:: ./TransportPCE-Diagramm-Magnesium.jpg
    :alt: TransportPCE architecture
 
    TransportPCE architecture
@@ -61,8 +61,8 @@ Preparing for Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Devices must support the standard OpenROADM Models more precisely versions
-   1.2.1 and 2.1. Limited support is provided for 2.2 and 2.2.1 devices.
-   If WDM is supported on them, the OTN support is considererd experimental at that date.
+   1.2.1 and 2.2.1.
+   Since Magnesium SR0, an OTN experimental support is provided for OpenROADM devices 2.2.1.
 
 2. Devices must support configuration through NETCONF protocol/API.
 
