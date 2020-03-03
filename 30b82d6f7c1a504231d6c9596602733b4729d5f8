@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4bfa5d8_bb38fa10",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "missing )",
+      "range": {
+        "startLine": 54,
+        "startChar": 55,
+        "endLine": 54,
+        "endChar": 81
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1277db8_902c008b",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "rendering function",
+      "range": {
+        "startLine": 158,
+        "startChar": 8,
+        "endLine": 158,
+        "endChar": 25
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79bc5afa_80743ca3",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "Please look at comments on line  344 and 587 and add the following : \n_service-path (given service-name, service-aend, service-zend) used in Magnesium SR0 as\nan intermediate solution to address directly the renderer from a REST NBI for the creation of \nan OTU4 service from network to network ports\n-otn-service-path (given service-name, service-aend, service-zend) used in Magnesium SR0 as\nan intermediate solution to address directly the renderer from a REST NBI for \notn-service creation. Otn service-creation through service-implementation-request \ncall from the Service Handler will be supported in later Magnesium releases",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 41
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afba8835_203de0a1",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "composed of nodes identified by their node-id\ncomposed of linkss identified by their link-id",
+      "range": {
+        "startLine": 296,
+        "startChar": 3,
+        "endLine": 297,
+        "endChar": 37
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a075215a_080a19a2",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "Don\u0027t understand why this has been moved here : using otn-service-path which is an internal API between Renderer and service Handler is only a workaround to wait until the final end to end implementation of OTN service created from northbound API is available. Please move back to Renderer dervice as part of the RPC call",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 24
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4254242b_8d185482",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "de type MUXPDR ou SWITCH --\u003e of MUXPDR or SWITCH type",
+      "range": {
+        "startLine": 522,
+        "startChar": 88,
+        "endLine": 523,
+        "endChar": 9
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2119d3b_46c10e37",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "Implies to add a description of corresponding rpc (see comment line 287)",
+      "range": {
+        "startLine": 587,
+        "startChar": 0,
+        "endLine": 588,
+        "endChar": 29
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94d05c77_e6005da2",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "Don\u0027t see the ODU4 interface \n           \"odu-interface-id\": [\t\n             \"XPDR\u003cnumber\u003e-NETWORK\u003cport-number\u003e-ODU4\"\n???????",
+      "range": {
+        "startLine": 838,
+        "startChar": 11,
+        "endLine": 838,
+        "endChar": 12
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b993bda7_cfa41576",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "I guess this is not supported at that time and shall be removed from the json file (will be used for higher rates, not in Magnesium. When used, will not correspond to          \"\u003ctrib-slot-number-inside-supported-ODU4\u003e but more to          \"\u003ctrib-slot-number-inside-supported-OPUCn\u003e",
+      "range": {
+        "startLine": 869,
+        "startChar": 0,
+        "endLine": 870,
+        "endChar": 50
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d82a3cbc_54336afb",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "Please Add note : trib-slot is used when the equipment supports contiguous trib-slot allocation (supported in Magnesium SR0). The trib-slot provided corresponds to the first of the used trib-slots. complex-trib-slots will be used when the equipment does not support contiguous trib-slot allocation. In this case a list of the different trib-slots to be used shall be provided. The support for non contiguous trib-slot allocation is planned for later Magnesium release.",
+      "range": {
+        "startLine": 885,
+        "startChar": 0,
+        "endLine": 885,
+        "endChar": 9
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27392cce_462f96d5",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "Not used, to be removed",
+      "range": {
+        "startLine": 947,
+        "startChar": 7,
+        "endLine": 948,
+        "endChar": 51
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61823532_db56e070",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "ODU4 handled at the same time? separately?",
+      "range": {
+        "startLine": 994,
+        "startChar": 12,
+        "endLine": 995,
+        "endChar": 53
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bb2ecc0_83353189",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-03-03T15:08:47Z",
+      "side": 1,
+      "message": "ODU?",
+      "range": {
+        "startLine": 1074,
+        "startChar": 31,
+        "endLine": 1074,
+        "endChar": 37
+      },
+      "revId": "30b82d6f7c1a504231d6c9596602733b4729d5f8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
