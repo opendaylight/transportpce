@@ -52,7 +52,8 @@ TransportPCE User-Facing Features
 
 -  **feature odl-transportpce-inventory**
 
-   -  This feature provides transportPCE an external connector to a MariaDB inventory currently limited to openROADM 1.2.1 devices.
+   -  This feature is considered experimental.
+      It provides transportPCE an external connector to a MariaDB inventory currently limited to OpenROADM 1.2.1 devices.
 
 How To Start
 ------------
@@ -60,8 +61,7 @@ How To Start
 Preparing for Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Devices must support the standard OpenROADM Models more precisely versions
-   1.2.1 and 2.2.1.
+1. Devices must support the standard OpenROADM Models more precisely versions 1.2.1 and 2.2.1.
    Since Magnesium SR0, an OTN experimental support is provided for OpenROADM devices 2.2.1.
 
 2. Devices must support configuration through NETCONF protocol/API.
