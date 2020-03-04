@@ -194,6 +194,57 @@ calculating the right power settings, sending it to the device, and check the
 PM retrieved from the device to verify that the setting was correctly applied
 and the configuration was successfully completed.
 
+
+Inventory
+^^^^^^^^^
+
+TransportPCE Inventory module is responsible to keep track of devices connected in an external MariaDB database.
+Other databases may be used as long as they comply with SQL and are compatible with OpenDaylight (for example MySQL).
+At present, the module supports extracting and persisting inventory of devices OpenROADM MSA version 1.2.1.
+Inventory module changes to support newer device models (2.2.1, etc) and other models (network, service, etc)
+will be progressively included.
+
+The inventory module can be activated by the associated karaf feature (odl-transporpce-inventory)
+The database properties are supplied in the “opendaylight-release” and “opendaylight-snapshots” profiles.
+Below is the settings.xml with properties included in the distribution.
+The module can be rebuild from sources with different parameters.
+
+Sample entry in settings.xml to include inventory:
+::
+
+    <profiles>
+      <profile>
+          <id>opendaylight-release</id>
+    [..]
+         <properties>
+                 <transportpce.db.host><<hostname>>:3306</transportpce.db.host>
+                 <transportpce.db.database><<databasename>></transportpce.db.database>
+                 <transportpce.db.username><<username>></transportpce.db.username>
+                 <transportpce.db.password><<password>></transportpce.db.password>
+                 <karaf.localFeature>odl-transportpce-inventory</karaf.localFeature>
+         </properties>
+    </profile>
+    [..]
+    <profile>
+          <id>opendaylight-snapshots</id>
+    [..]
+         <properties>
+                 <transportpce.db.host><<hostname>>:3306</transportpce.db.host>
+                 <transportpce.db.database><<databasename>></transportpce.db.database>
+                 <transportpce.db.username><<username>></transportpce.db.username>
+                 <transportpce.db.password><<password>></transportpce.db.password>
+                 <karaf.localFeature>odl-transportpce-inventory</karaf.localFeature>
+         </properties>
+        </profile>
+    </profiles>
+
+
+Once the project built and when karaf is started, the cfg file is generated in etc folder with the corresponding properties
+supplied in settings.xml. When devices with OpenROADM 1.2.1 device model are mounted, the device listener in the inventory
+module loads several device attributes to various tables as per the supplied database.
+The databsase structure details can be retrieved from the file tests/inventory/initdb.sql in project sources.
+Installation scripts and a docker file are also provided.
+
 Key APIs and Interfaces
 -----------------------
 
