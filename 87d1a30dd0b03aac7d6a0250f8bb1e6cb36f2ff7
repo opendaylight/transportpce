@@ -70,6 +70,30 @@
       "revId": "87d1a30dd0b03aac7d6a0250f8bb1e6cb36f2ff7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d901f35a_a9c9b31d",
+        "filename": "features/odl-transportpce-tapi/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-03-04T16:25:56Z",
+      "side": 0,
+      "message": "It doesn\u0027t break anything, but it is unuseless and may bring confusion.",
+      "parentUuid": "a2d8d7ae_cc12b13b",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 16
+      },
+      "revId": "87d1a30dd0b03aac7d6a0250f8bb1e6cb36f2ff7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }

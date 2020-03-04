@@ -45,6 +45,30 @@
       "revId": "0981aad1b9d371883408dfd21ec76c0eb1c05a6f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6576e20_aeca2f77",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-03-04T16:25:56Z",
+      "side": 1,
+      "message": "Ok. Commit message has been changed to take your comment.",
+      "parentUuid": "2bac3a3a_58e614ef",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "0981aad1b9d371883408dfd21ec76c0eb1c05a6f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
