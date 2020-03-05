@@ -52,8 +52,8 @@ TransportPCE User-Facing Features
 
 -  **feature odl-transportpce-inventory**
 
-   -  This feature is considered experimental.
-      It provides transportPCE an external connector to a MariaDB inventory currently limited to OpenROADM 1.2.1 devices.
+   -  This feature is considered experimental. It provides transportPCE with an external connector to
+      a MariaDB inventory currently limited to OpenROADM 1.2.1 devices.
 
 How To Start
 ------------

@@ -209,7 +209,7 @@ The database properties are supplied in the “opendaylight-release” and “op
 Below is the settings.xml with properties included in the distribution.
 The module can be rebuild from sources with different parameters.
 
-Sample entry in settings.xml to include inventory:
+Sample entry in settings.xml to declare an external inventory database:
 ::
 
     <profiles>
@@ -239,10 +239,10 @@ Sample entry in settings.xml to include inventory:
     </profiles>
 
 
-Once the project built and when karaf is started, the cfg file is generated in etc folder with the corresponding properties
-supplied in settings.xml. When devices with OpenROADM 1.2.1 device model are mounted, the device listener in the inventory
-module loads several device attributes to various tables as per the supplied database.
-The databsase structure details can be retrieved from the file tests/inventory/initdb.sql in project sources.
+Once the project built and when karaf is started, the cfg file is generated in etc folder with the corresponding
+properties supplied in settings.xml. When devices with OpenROADM 1.2.1 device model are mounted, the device listener in
+the inventory module loads several device attributes to various tables as per the supplied database.
+The database structure details can be retrieved from the file tests/inventory/initdb.sql inside project sources.
 Installation scripts and a docker file are also provided.
 
 Key APIs and Interfaces
