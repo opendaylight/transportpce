@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aca669cf_256c8f13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-16T08:04:59Z",
+      "side": 1,
+      "message": "LF needed after title\notherwise, the body message is interpreted as a part of the title, what pollutes Gerrit dashboard",
+      "range": {
+        "startLine": 7,
+        "startChar": 51,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "476fbaa59ab0688420a822e7711d939b22f6aadd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
