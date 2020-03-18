@@ -22,6 +22,30 @@
       "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ee316e9_c46d1018",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-18T13:34:32Z",
+      "side": 1,
+      "message": "1- those ports are using inside docker container and are mapped to another port outside, so I don\u0027t see what\u0027s the problem\n2- if we use 830 as it\u0027s \u003c 1024 we have to run honeynode in the container as root and  it\u0027s not a good practise following docker recommendations.",
+      "parentUuid": "38d409f6_918ce3ee",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
