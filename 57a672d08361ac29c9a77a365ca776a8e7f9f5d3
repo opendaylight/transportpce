@@ -118,6 +118,30 @@
       "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "192b325c_99ee4eba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-18T16:30:23Z",
+      "side": 1,
+      "message": "8080 and 8180 ports scope is inside container so they are not reachable outside the container. To be reachable outside they have to be mapped when running the container (with -p option, like in startsims121.sh -\u003e -p 17822:8080 -p 18822:8180 ) So they cannot be reused by another service.",
+      "parentUuid": "036ffc5a_1e820f21",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
