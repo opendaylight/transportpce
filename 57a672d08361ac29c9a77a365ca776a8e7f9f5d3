@@ -46,6 +46,30 @@
       "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92f072d3_b1786e0b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T13:55:16Z",
+      "side": 1,
+      "message": "The mapping outside is OK.\n\nThe problem is that\n8080 or 8081 are officialy reserved for alternate HTTP services and netconf is transported over SSH...\n\nIf you can\u0027t use 830 inside, in that case, prefer something else such as 1830 or 17830, those ports are not officially reserved or are not usually consumed by a popular service.\n\nAlso are you sure of that ? I\u0027ve not tested but at my sense, you only need to be root inside the container.\nIf not, it\u0027s likely because of the EXPOSE parameter you added but you probably don\u0027t need it since you specify a mapping in the docker run command.\n\nHope this helps",
+      "parentUuid": "7ee316e9_c46d1018",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
