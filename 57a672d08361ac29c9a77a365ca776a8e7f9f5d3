@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38d409f6_918ce3ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T13:25:13Z",
+      "side": 1,
+      "message": "OK for restconf but netconf official port is 830, please don\u0027t use 8080 or 8081 they are officialy reserved for alternate HTTP services...",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
