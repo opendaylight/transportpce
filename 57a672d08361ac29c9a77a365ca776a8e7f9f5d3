@@ -70,6 +70,30 @@
       "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c345d42b_d64ea6f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-18T15:18:55Z",
+      "side": 1,
+      "message": "1. EXPOSE in Dockerfile is just an information for the final user of the image to document which port are available for port mapping on run. \n\n2.Being root in the container is a bad security practise",
+      "parentUuid": "92f072d3_b1786e0b",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
