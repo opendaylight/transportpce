@@ -70,12 +70,12 @@ def start_tpce():
         executable = "../lighty/target/lighty-transportpce-12.0.0-SNAPSHOT/clean-start-controller.sh"
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
-                ["bash", executable], stdout=outfile, stderr=outfile,
+                ["sh", executable], stdout=outfile, stderr=outfile,
                 stdin=open(os.devnull))
     else:
         print ("starting KARAF TransportPCE build...")
         executable = "../karaf/target/assembly/bin/karaf"
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
-                ["bash", executable, "server"], stdout=outfile, stderr=outfile,
+                ["sh", executable, "server"], stdout=outfile, stderr=outfile,
                 stdin=open(os.devnull))
