@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3c56bfdc_097a37fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-03-18T15:01:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fe5652a_15d27717",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 16
+      },
+      "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da1e1cb5_c359eaf9",
         "filename": "tests/Xtesting/DockerSims/build_sims.sh",
         "patchSetId": 3
