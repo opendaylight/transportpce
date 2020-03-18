@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "ae0f864a_cfb999e4",
+        "filename": "tests/Xtesting/DockerSims/build_sims.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-18T13:19:40Z",
+      "side": 1,
+      "message": "Please have look here https://docs.docker.com/install/linux/linux-postinstall/\n\"docker\" group is the only group available to run docker without sudo so for me the comment is not relevant",
+      "parentUuid": "da1e1cb5_c359eaf9",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f94eff0_ece8b26a",
         "filename": "tests/Xtesting/DockerSims/start_sims121.sh",
         "patchSetId": 3
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "933053d3_a1a05fe3",
+        "filename": "tests/Xtesting/DockerSims/start_sims121.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-18T13:19:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f94eff0_ece8b26a",
+      "range": {
+        "startLine": 23,
+        "startChar": 58,
+        "endLine": 23,
+        "endChar": 115
+      },
+      "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89285baf_d4270a4a",
         "filename": "tests/Xtesting/DockerSims/start_sims221.sh",
         "patchSetId": 3
@@ -91,6 +139,30 @@
       "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b423bebc_c96856f7",
+        "filename": "tests/Xtesting/DockerSims/start_sims221.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-18T13:19:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89285baf_d4270a4a",
+      "range": {
+        "startLine": 24,
+        "startChar": 58,
+        "endLine": 24,
+        "endChar": 115
+      },
+      "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
