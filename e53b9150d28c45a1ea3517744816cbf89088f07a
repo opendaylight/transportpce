@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5d8343a_a42dfe21",
+        "filename": "tests/Xtesting/DockerSims/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T11:41:37Z",
+      "side": 1,
+      "message": "trailing blank",
+      "range": {
+        "startLine": 30,
+        "startChar": 41,
+        "endLine": 30,
+        "endChar": 42
+      },
+      "revId": "e53b9150d28c45a1ea3517744816cbf89088f07a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f31b07bc_4d1e1823",
+        "filename": "tests/Xtesting/DockerSims/start_sims121.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T11:41:37Z",
+      "side": 1,
+      "message": "trailing blank",
+      "range": {
+        "startLine": 1,
+        "startChar": 9,
+        "endLine": 1,
+        "endChar": 10
+      },
+      "revId": "e53b9150d28c45a1ea3517744816cbf89088f07a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24621046_fc159e03",
+        "filename": "tests/Xtesting/DockerSims/start_sims121.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T11:41:37Z",
+      "side": 1,
+      "message": "trailing blank",
+      "range": {
+        "startLine": 17,
+        "startChar": 44,
+        "endLine": 17,
+        "endChar": 45
+      },
+      "revId": "e53b9150d28c45a1ea3517744816cbf89088f07a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

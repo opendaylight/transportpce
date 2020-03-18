@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a637a70_b305090a",
+        "filename": "tests/Xtesting/DockerSims/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T11:41:37Z",
+      "side": 1,
+      "message": "I think it can be merged on one line\nEXPOSE 8080/tcp 8180/tcp",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 15
+      },
+      "revId": "7bd447bd8cdc91670495f723bbd4b2c290ce2323",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

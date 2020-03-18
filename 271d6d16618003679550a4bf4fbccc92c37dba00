@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fe5652a_15d27717",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T11:41:37Z",
+      "side": 1,
+      "message": "management",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 16
+      },
+      "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da1e1cb5_c359eaf9",
+        "filename": "tests/Xtesting/DockerSims/build_sims.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T11:41:37Z",
+      "side": 1,
+      "message": "I am not fan of this, groups can be distribution specifics.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f94eff0_ece8b26a",
+        "filename": "tests/Xtesting/DockerSims/start_sims121.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T11:41:37Z",
+      "side": 1,
+      "message": "since those options are used several times along with \"-e DEVICE_VERSION\u003d1.2.1\" and \"-dit honeynode:alpine-jre11\", it\u0027s worth to be put them in a variable.",
+      "range": {
+        "startLine": 23,
+        "startChar": 58,
+        "endLine": 23,
+        "endChar": 115
+      },
+      "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89285baf_d4270a4a",
+        "filename": "tests/Xtesting/DockerSims/start_sims221.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T11:41:37Z",
+      "side": 1,
+      "message": "since those options are used several times along with \"-e DEVICE_VERSION\u003d2.2.1\" and \"-dit honeynode:alpine-jre11\", it\u0027s worth to be put them in a variable.",
+      "range": {
+        "startLine": 24,
+        "startChar": 58,
+        "endLine": 24,
+        "endChar": 115
+      },
+      "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
