@@ -142,6 +142,30 @@
       "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c94ef3f3_927962c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T16:45:27Z",
+      "side": 1,
+      "message": "I\u0027ve seen but this is still bad practice and this is at least confusing ( I can\u0027t know easily which one is for netconf and which one is for restconf since they are both HTTP standard ports )",
+      "parentUuid": "192b325c_99ee4eba",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
