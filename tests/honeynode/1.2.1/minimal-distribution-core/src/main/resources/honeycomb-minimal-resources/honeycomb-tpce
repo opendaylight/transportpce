@@ -32,18 +32,18 @@ then
         filename=$(basename -- "$CONFIG")
         device=$(basename "$CONFIG" .xml)
         echo "changing netconf port with $PORT in netconf.json file ..."
-        sed -i' ' "/netconf-ssh-binding-port/c\  \"netconf-ssh-binding-port\" : "$PORT"," $(dirname $0)/config/netconf.json
+        sed  -i' ' "s/\"netconf-ssh-binding-port\".*,/\"netconf-ssh-binding-port\" : "$PORT",/g" $(dirname $0)/config/netconf.json
         echo "changing restconf http port with $REST_HTTP in restconf.json file ..."
-        sed -i' ' "/restconf-port/c\  \"restconf-port\" : "$REST_HTTP"," $(dirname $0)/config/restconf.json
+        sed  -i' ' "s/\"restconf-port\".*,/\"restconf-port\" : "$REST_HTTP",/g" $(dirname $0)/config/restconf.json
         echo "changing restconf websocket with $REST_WEBSOCKET in restconf.json file ..."
-        sed -i' ' "/restconf-websocket-port/c\  \"restconf-websocket-port\" : "$REST_WEBSOCKET"," $(dirname $0)/config/restconf.json
+        sed  -i' ' "s/\"restconf-websocket-port\".*,/\"restconf-websocket-port\" : "$REST_WEBSOCKET",/g" $(dirname $0)/config/restconf.json
         echo "changing restconf-https-enabled to false in restconf.json file ..."
-        sed -i' ' "/restconf-https-enabled/c\  \"restconf-https-enabled\" : \"false\"," $(dirname $0)/config/restconf.json
+        sed  -i' ' "s/\"restconf-https-enabled\".*,/\"restconf-https-enabled\" : \"false\",/g" $(dirname $0)/config/restconf.json
         echo "changing persist-context and persist-config to false in honeycomb.json file ..."
-        sed -i' ' "/persist-context/c\  \"persist-context\" : \"false\"," $(dirname $0)/config/honeycomb.json
-        sed -i' ' "/persist-config/c\  \"persist-config\" : \"false\"," $(dirname $0)/config/honeycomb.json
+        sed  -i' ' "s/\"persist-context\".*,/\"persist-context\" : \"false\",/g" $(dirname $0)/config/honeycomb.json
+        sed  -i' ' "s/\"persist-config\".*,/\"persist-config\" : \"false\",/g" $(dirname $0)/config/honeycomb.json
         echo "changing netconf-initial-config-xml location with $CONFIG in honeycomb.json file ..."
-        sed -i' ' "/netconf-initial-config-xml/c\  \"netconf-initial-config-xml\" : \"device/$filename\"," $(dirname $0)/config/honeycomb.json
+        sed -i' ' "s@\"netconf-initial-config-xml\".*,@\"netconf-initial-config-xml\" : \"device/$filename\",@g" $(dirname $0)/config/honeycomb.json
          while [ $STATUS -eq 100 ]
          do
            . $(dirname $0)/../../../../../../reflectwarn.sh
