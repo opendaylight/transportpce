@@ -94,6 +94,30 @@
       "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "036ffc5a_1e820f21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-18T16:04:52Z",
+      "side": 1,
+      "message": "1. yes, that\u0027s what docker (very bad) documentation says\n  and no, you can exploit it at least with \"docker run -P\"\n\n\n2. Yes, workins as root is not recommended as a general security matter, but there are cases where you have no other solution (e.g. privileged ports). That\u0027s why sudo has been created.\n   Logical consequences of this remark would be:\n   - we can\u0027t use privileged standard ports inside a docker internal network\n   - the LFN should review its jenkins security policy.\n   - docker is a bad security practice, ( what I agree since I prefer jails \u003d\u003e Troll +Cédric)\nThis is intended for test purpose and not production use, so I am fine with that risk. Also, this is a pure docker isolation problems, but other implementation that supports Docker file (e.g. k8s) may have a better isolation system.\nIf you really think there is a strict need for security, we can still use non privileged ports as long as there is low risk they are reused by another service ( what is not the case with 8180 and 8080 ).",
+      "parentUuid": "c345d42b_d64ea6f5",
+      "range": {
+        "startLine": 19,
+        "startChar": 2,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "57a672d08361ac29c9a77a365ca776a8e7f9f5d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
