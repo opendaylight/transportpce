@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 public class PostAlgoPathValidator {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceGraph.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PostAlgoPathValidator.class);
 
     // TODO hard-coded 96
     private static final int MAX_WAWELENGTH = 96;

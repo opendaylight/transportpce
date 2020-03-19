@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 public class PceOtnNode implements PceNode {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PceOtnNode.class);
     ////////////////////////// OTN NODES ///////////////////////////
     /*
      * For This Class the node passed shall be at the otn-openroadm Layer
@@ -369,7 +369,7 @@ public class PceOtnNode implements PceNode {
                 for (NonBlockingList nbll : nbl) {
                     if (nbll.getAvailableInterconnectBandwidth().toJava() >= neededBW) {
                         List<TpId> tplist = new ArrayList<TpId>(nbll.getTpList());
-                        if ((tplist.contains(tp1.getTpId())) & (tplist.contains(tp2.getTpId()))) {
+                        if ((tplist.contains(tp1.getTpId())) && (tplist.contains(tp2.getTpId()))) {
                             LOG.debug("validateSwitchingPoolBandwidth: couple  of tp {} x {} valid for crossconnection",
                                 tp1.getTpId().toString(), tp2.getTpId().toString());
                             return true;
@@ -453,10 +453,12 @@ public class PceOtnNode implements PceNode {
         return valid;
     }
 
+    @Override
     public void addOutgoingLink(PceLink outLink) {
         this.outgoingLinks.add(outLink);
     }
 
+    @Override
     public List<PceLink> getOutgoingLinks() {
         return outgoingLinks;
     }
@@ -466,6 +468,7 @@ public class PceOtnNode implements PceNode {
         return this.clientPerNwTp.get(tp);
     }
 
+    @Override
     public String toString() {
         return "PceNode type=" + nodeType + " ID=" + nodeId.getValue() + " CLLI=" + this.getSupClliNodeId();
     }

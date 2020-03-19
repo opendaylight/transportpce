@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceGraph.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InAlgoPathValidator.class);
 
     public InAlgoPathValidator() {
         super();
