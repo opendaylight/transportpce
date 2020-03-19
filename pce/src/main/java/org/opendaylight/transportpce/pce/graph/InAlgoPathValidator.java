@@ -11,13 +11,12 @@ package org.opendaylight.transportpce.pce.graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.PathValidator;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
-//import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceGraph.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InAlgoPathValidator.class);
 
     public InAlgoPathValidator() {
         super();
@@ -32,11 +31,7 @@ public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> 
         LOG.debug("InAlgoPathValidator: partialPath size: {} prev edge {} new edge {}",
             size, edge.link().getlinkType(), partialPath.getEdgeList().get(size - 1).link().getlinkType());
 
-        if ((!checkTurn(partialPath.getEdgeList().get(size - 1).link().getlinkType(), edge.link().getlinkType()))) {
-            return false;
-        } else {
-            return true;
-        }
+        return (checkTurn(partialPath.getEdgeList().get(size - 1).link().getlinkType(), edge.link().getlinkType()));
     }
 
     private boolean checkTurn(OpenroadmLinkType prevType, OpenroadmLinkType nextType) {

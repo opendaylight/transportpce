@@ -28,9 +28,8 @@ import org.slf4j.LoggerFactory;
 
 public class PostAlgoPathValidator {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceGraph.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PostAlgoPathValidator.class);
 
-    // TODO hard-coded 96
     private static final int MAX_WAWELENGTH = 96;
     private static final double MIN_OSNR_W100G = 17;
     private static final double TRX_OSNR = 33;
@@ -42,7 +41,7 @@ public class PostAlgoPathValidator {
         PceResult pceResult, PceConstraints pceHardConstraints, String serviceType) {
 
         // check if the path is empty
-        if (path.getEdgeList().size() == 0) {
+        if (path.getEdgeList().isEmpty()) {
             pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
             return pceResult;
         }
@@ -62,7 +61,7 @@ public class PostAlgoPathValidator {
                     return pceResult;
                 }
                 pceResult.setResultWavelength(waveL);
-                LOG.info("In PostAlgoPathValidator: chooseWavelength WL found {} {}", waveL, path.toString());
+                LOG.info("In PostAlgoPathValidator: chooseWavelength WL found {} {}", waveL, path);
 
                 // Check the OSNR
                 if (!checkOSNR(path)) {
@@ -115,13 +114,13 @@ public class PostAlgoPathValidator {
 
             case "ODU4":
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
-                LOG.info("In PostAlgoPathValidator: ODU4 path found {}", path.toString());
+                LOG.info("In PostAlgoPathValidator: ODU4 path found {}", path);
                 break;
 
             default:
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                 LOG.warn("In PostAlgoPathValidator checkPath: unsupported serviceType {} found {}",
-                    serviceType, path.toString());
+                    serviceType, path);
                 break;
         }
 
@@ -133,9 +132,9 @@ public class PostAlgoPathValidator {
         Long wavelength = -1L;
         for (long i = 1; i <= MAX_WAWELENGTH; i++) {
             boolean completed = true;
-            LOG.debug("In chooseWavelength: {} {}", path.getLength(), path.toString());
+            LOG.debug("In chooseWavelength: {} {}", path.getLength(), path);
             for (PceGraphEdge edge : path.getEdgeList()) {
-                LOG.debug("In chooseWavelength: source {} ", edge.link().getSourceId().toString());
+                LOG.debug("In chooseWavelength: source {} ", edge.link().getSourceId());
                 PceNode pceNode = allPceNodes.get(edge.link().getSourceId());
                 if (!pceNode.checkWL(i)) {
                     completed = false;
@@ -163,10 +162,7 @@ public class PostAlgoPathValidator {
                     edge.link().getLinkId().getValue());
             }
         }
-        if (latency > maxLatency) {
-            return false;
-        }
-        return true;
+        return (latency < maxLatency);
     }
 
     // Check the inclusion if it is defined in the hard constraints
@@ -179,17 +175,17 @@ public class PostAlgoPathValidator {
         List<PceGraphEdge> pathEdges = path.getEdgeList();
         LOG.debug(" in checkInclude vertex list: [{}]", path.getVertexList());
 
-        List<String> listOfElementsSubNode = new ArrayList<String>();
+        List<String> listOfElementsSubNode = new ArrayList<>();
         listOfElementsSubNode.add(pathEdges.get(0).link().getsourceNetworkSupNodeId());
         listOfElementsSubNode.addAll(listOfElementsBuild(pathEdges, PceConstraints.ResourceType.NODE,
             pceHardConstraintsInput));
 
-        List<String> listOfElementsCLLI = new ArrayList<String>();
+        List<String> listOfElementsCLLI = new ArrayList<>();
         listOfElementsCLLI.add(pathEdges.get(0).link().getsourceCLLI());
         listOfElementsCLLI.addAll(listOfElementsBuild(pathEdges, PceConstraints.ResourceType.CLLI,
             pceHardConstraintsInput));
 
-        List<String> listOfElementsSRLG = new ArrayList<String>();
+        List<String> listOfElementsSRLG = new ArrayList<>();
         // first link is XPONDEROUTPUT, no SRLG for it
         listOfElementsSRLG.add("NONE");
         listOfElementsSRLG.addAll(listOfElementsBuild(pathEdges, PceConstraints.ResourceType.SRLG,
@@ -237,7 +233,7 @@ public class PostAlgoPathValidator {
     private List<String> listOfElementsBuild(List<PceGraphEdge> pathEdges, PceConstraints.ResourceType type,
         PceConstraints pceHardConstraints) {
 
-        List<String> listOfElements = new ArrayList<String>();
+        List<String> listOfElements = new ArrayList<>();
         for (PceGraphEdge link : pathEdges) {
             switch (type) {
                 case NODE:
@@ -262,7 +258,6 @@ public class PostAlgoPathValidator {
                             listOfElements.add(srlgStr);
                             LOG.info("listOfElementsBuild. FOUND SRLG {} in link {}", srlgStr, link.link());
                             found = true;
-                            continue;
                         }
                     }
                     if (!found) {
@@ -279,7 +274,7 @@ public class PostAlgoPathValidator {
 
     private Map<String, Uint16> chooseTribPort(GraphPath<String,
         PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes) {
-        LOG.info("In choosetribPort: edgeList = {} ", path.getEdgeList().toString());
+        LOG.info("In choosetribPort: edgeList = {} ", path.getEdgeList());
         Map<String, Uint16> tribPortMap = new HashMap<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
@@ -308,7 +303,7 @@ public class PostAlgoPathValidator {
 
     private Map<String, List<Uint16>> chooseTribSlot(GraphPath<String,
         PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, int nbSlot) {
-        LOG.info("In choosetribSlot2: edgeList = {} ", path.getEdgeList().toString());
+        LOG.info("In choosetribSlot2: edgeList = {} ", path.getEdgeList());
         Map<String, List<Uint16>> tribSlotMap = new HashMap<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
@@ -334,7 +329,7 @@ public class PostAlgoPathValidator {
                 discontinue = false;
                 Integer val = commonEdgeTsPool.get(index).toJava();
                 for (int i = 0; i < nbSlot; i++) {
-                    if (commonEdgeTsPool.get(index + i).equals(val + i)) {
+                    if (commonEdgeTsPool.get(index + i).equals(Uint16.valueOf(val + i))) {
                         tribSlotList.add(commonEdgeTsPool.get(index + i));
                     } else {
                         discontinue = true;
@@ -360,19 +355,17 @@ public class PostAlgoPathValidator {
             LOG.debug("In choosetribSlot: AllPceNodes contains PceNode instance, no trib port search");
             return tribSlot;
         } else if (nodeClass.getClass().isInstance(PceNode.class)) {
-            LOG.debug("In choosetribPort: {} {}", path.getLength(), path.toString());
+            LOG.debug("In choosetribPort: {} {}", path.getLength(), path);
         }
         for (PceGraphEdge edge : path.getEdgeList()) {
-            LOG.debug("In chooseTribSlot: source {} ", edge.link().getSourceId().toString());
+            LOG.debug("In chooseTribSlot: source {} ", edge.link().getSourceId());
             PceNode pceNode = allPceNodes.get(edge.link().getSourceId());
             Object tps = allPceNodes.get(edge.link().getSourceTP());
             Object tpd = allPceNodes.get(edge.link().getDestTP());
             if ((pceNode.getAvailableTribSlots().containsKey(tps.toString()))
                 && (pceNode.getAvailableTribSlots().containsKey(tpd.toString()))) {
-                List<Uint16> tribSlotEdgeSourceN = new ArrayList<>();
-                List<Uint16> tribSlotEdgeDestN = new ArrayList<>();
-                tribSlotEdgeSourceN = pceNode.getAvailableTribSlots().get(tps.toString());
-                tribSlotEdgeDestN = pceNode.getAvailableTribSlots().get(tps.toString());
+                List<Uint16> tribSlotEdgeSourceN = pceNode.getAvailableTribSlots().get(tps.toString());
+                List<Uint16> tribSlotEdgeDestN = pceNode.getAvailableTribSlots().get(tps.toString());
                 check = false;
                 for (int i = 0; i <= 79; i++) {
                     if (tribSlotEdgeSourceN.get(i) == null) {
@@ -381,12 +374,12 @@ public class PostAlgoPathValidator {
                     // TODO This will need to be modified as soon as the trib-slots allocation per
                     // trib-port
                     // policy applied by the different manufacturer is known
-                    if (tribSlotEdgeSourceN.get(i) == tribSlotEdgeDestN.get(i)) {
+                    if (tribSlotEdgeSourceN.get(i).equals(tribSlotEdgeDestN.get(i))) {
                         check = true;
                     } else {
                         check = false;
                         LOG.debug("In chooseTribSlot: Misalignement of trib slots between source {} and dest {}",
-                            edge.link().getSourceId().toString(), edge.link().getDestId().toString());
+                            edge.link().getSourceId(), edge.link().getDestId());
                         break;
                     }
                 }
@@ -395,7 +388,7 @@ public class PostAlgoPathValidator {
                 }
             } else {
                 LOG.debug("In chooseTribSlot: source {} does not have provisonned hosting HO interface ",
-                    edge.link().getSourceId().toString());
+                    edge.link().getSourceId());
                 statusOK = false;
             }
         }
@@ -430,10 +423,7 @@ public class PostAlgoPathValidator {
             return false;
         }
         LOG.info("In checkOSNR: OSNR of the path is {} dB", osnrDb);
-        if ((osnrDb + SYS_MARGIN) < MIN_OSNR_W100G) {
-            return false;
-        }
-        return true;
+        return ((osnrDb + SYS_MARGIN) > MIN_OSNR_W100G);
     }
 
     private double getOsnrDb(double osnrLu) {

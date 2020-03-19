@@ -8,6 +8,10 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.List;
 
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
@@ -21,8 +25,9 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PceLink {
+public class PceLink implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceLink.class);
     ///////////////////////// LINKS ////////////////////
@@ -40,8 +45,8 @@ public class PceLink {
     private final OpenroadmLinkType linkType;
     private final NodeId sourceId;
     private final NodeId destId;
-    private final Object sourceTP;
-    private final Object destTP;
+    private transient Object sourceTP;
+    private transient Object destTP;
     private final String sourceNetworkSupNodeId;
     private final String destNetworkSupNodeId;
     private final String sourceCLLI;
@@ -52,7 +57,7 @@ public class PceLink {
     private final Long usedBandwidth;
     private final List<Long> srlgList;
     private final double osnr;
-    private final Span omsAttributesSpan;
+    private final transient Span omsAttributesSpan;
     private static final double CELERITY = 2.99792458 * 1e5; //meter per ms
     private static final double NOISE_MASK_A = 0.571429;
     private static final double NOISE_MASK_B = 39.285714;
@@ -102,7 +107,7 @@ public class PceLink {
             this.availableBandwidth = 0L;
             this.usedBandwidth = 0L;
         }
-        LOG.debug("PceLink: created PceLink  {}", toString());
+        LOG.debug("PceLink: created PceLink  {}", linkId);
     }
 
     //Retrieve the opposite link
@@ -231,7 +236,7 @@ public class PceLink {
     }
 
     public Long getUsedBandwidth() {
-        return availableBandwidth;
+        return usedBandwidth;
     }
 
     public String getsourceNetworkSupNodeId() {
@@ -302,7 +307,7 @@ public class PceLink {
             return false;
         }
 
-        long neededBW = 0L;
+        long neededBW;
         OtnLinkType neededType = null;
         switch (serviceType) {
 
@@ -363,8 +368,20 @@ public class PceLink {
         return true;
     }
 
+    @Override
     public String toString() {
         return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latency=" + latency;
     }
 
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(this.sourceTP);
+        out.writeObject(this.destTP);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException,ClassNotFoundException {
+        in.defaultReadObject();
+        this.sourceTP = in.readObject();
+        this.destTP = in.readObject();
+    }
 }

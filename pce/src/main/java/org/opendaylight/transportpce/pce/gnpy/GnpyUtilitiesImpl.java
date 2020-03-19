@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 public class GnpyUtilitiesImpl {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GnpyResult.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GnpyUtilitiesImpl.class);
     private NetworkTransactionService networkTransaction;
     private PathComputationRequestInput input;
     private GnpyTopoImpl gnpyTopo = null;
@@ -87,14 +87,14 @@ public class GnpyUtilitiesImpl {
             synchronizationList);
         // Analyze the response
         if (gnpyResponse == null) {
-            throw new GnpyException("In GnpyUtilities: no respnse from GNPy server");
+            throw new GnpyException("In GnpyUtilities: no response from GNPy server");
         }
         GnpyResult result = new GnpyResult(gnpyResponse, gnpyTopo);
         result.analyzeResult();
         return result;
     }
 
-    public HardConstraints askNewPathFromGnpy(HardConstraints gnpyPathAsHC, PceConstraints pceHardConstraints)
+    public HardConstraints askNewPathFromGnpy(PceConstraints pceHardConstraints)
             throws GnpyException, Exception {
 
         AToZDirection atoztmp = new AToZDirectionBuilder()
@@ -105,16 +105,14 @@ public class GnpyUtilitiesImpl {
         GnpyResult result = gnpyResponseOneDirection(gnpySvc);
 
         if (result == null) {
-            throw new GnpyException("In GnpyUtilities: no response from the GNPy server");
+            throw new GnpyException("In GnpyUtilities: no result from the GNPy server");
         }
 
         if (!result.getPathFeasibility()) {
             return null;
         }
         List<PathRouteObjects> pathRouteObjectList = result.analyzeResult();
-        gnpyPathAsHC = result.computeHardConstraintsFromGnpyPath(pathRouteObjectList);
-
-        return gnpyPathAsHC;
+        return result.computeHardConstraintsFromGnpyPath(pathRouteObjectList);
     }
 
     public String getGnpyResponse(List<Elements> elementsList, List<Connections> connectionsList,
@@ -136,8 +134,7 @@ public class GnpyUtilitiesImpl {
             .replace("gnpy-path-computation-simplified:", "")
             .replace("gnpy-network-topology:", "");
 
-        String gnpyResponse = connect.gnpyCnx(gnpyJsonModified);
-        return gnpyResponse;
+        return connect.returnGnpyResponse(gnpyJsonModified);
     }
 
     public GnpyResult getGnpyAtoZ() {
