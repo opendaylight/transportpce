@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -39,7 +40,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -200,7 +200,7 @@ public class PceConstraintsCalc {
                             .rev171017.ordered.constraints.sp.hop.type.hop.type.Node
                             node = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
                             .constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.Node) hoptype;
-                    constraints.setListToInclude(constraints.new ResourcePair(PceConstraints.ResourceType.NODE,
+                    constraints.setListToInclude(new PceConstraints.ResourcePair(PceConstraints.ResourceType.NODE,
                             node.getNodeId()));
                     break;
                 case "SRLG":
@@ -208,7 +208,7 @@ public class PceConstraintsCalc {
                             .rev171017.ordered.constraints.sp.hop.type.hop.type.SRLG
                             srlg = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
                             .constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.SRLG) hoptype;
-                    constraints.setListToInclude(constraints.new ResourcePair(PceConstraints.ResourceType.SRLG,
+                    constraints.setListToInclude(new PceConstraints.ResourcePair(PceConstraints.ResourceType.SRLG,
                             srlg.getSRLG()));
                     break;
                 case "Clli":
@@ -216,7 +216,7 @@ public class PceConstraintsCalc {
                             .rev171017.ordered.constraints.sp.hop.type.hop.type.Clli
                             clli = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
                             .constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.Clli) hoptype;
-                    constraints.setListToInclude(constraints.new ResourcePair(PceConstraints.ResourceType.CLLI,
+                    constraints.setListToInclude(new PceConstraints.ResourcePair(PceConstraints.ResourceType.CLLI,
                             clli.getClli()));
                     break;
                 default:

@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 public class PceOtnNode implements PceNode {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PceOtnNode.class);
     ////////////////////////// OTN NODES ///////////////////////////
     /*
      * For This Class the node passed shall be at the otn-openroadm Layer
@@ -362,16 +362,15 @@ public class PceOtnNode implements PceNode {
                 node.augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1.class);
             SwitchingPools sp = node1.getSwitchingPools();
-            List<OduSwitchingPools> osp = new ArrayList<OduSwitchingPools>();
-            osp = sp.getOduSwitchingPools();
+            List<OduSwitchingPools> osp = sp.getOduSwitchingPools();
             for (OduSwitchingPools ospx : osp) {
                 List<NonBlockingList> nbl = ospx.getNonBlockingList();
                 for (NonBlockingList nbll : nbl) {
                     if (nbll.getAvailableInterconnectBandwidth().toJava() >= neededBW) {
-                        List<TpId> tplist = new ArrayList<TpId>(nbll.getTpList());
-                        if ((tplist.contains(tp1.getTpId())) & (tplist.contains(tp2.getTpId()))) {
+                        List<TpId> tplist = new ArrayList<>(nbll.getTpList());
+                        if ((tplist.contains(tp1.getTpId())) && (tplist.contains(tp2.getTpId()))) {
                             LOG.debug("validateSwitchingPoolBandwidth: couple  of tp {} x {} valid for crossconnection",
-                                tp1.getTpId().toString(), tp2.getTpId().toString());
+                                tp1.getTpId(), tp2.getTpId());
                             return true;
                         }
                     }
@@ -453,10 +452,12 @@ public class PceOtnNode implements PceNode {
         return valid;
     }
 
+    @Override
     public void addOutgoingLink(PceLink outLink) {
         this.outgoingLinks.add(outLink);
     }
 
+    @Override
     public List<PceLink> getOutgoingLinks() {
         return outgoingLinks;
     }
@@ -466,6 +467,7 @@ public class PceOtnNode implements PceNode {
         return this.clientPerNwTp.get(tp);
     }
 
+    @Override
     public String toString() {
         return "PceNode type=" + nodeType + " ID=" + nodeId.getValue() + " CLLI=" + this.getSupClliNodeId();
     }

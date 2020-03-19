@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 public class PostAlgoPathValidator {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceGraph.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PostAlgoPathValidator.class);
 
     // TODO hard-coded 96
     private static final int MAX_WAWELENGTH = 96;
@@ -334,7 +334,7 @@ public class PostAlgoPathValidator {
                 discontinue = false;
                 Integer val = commonEdgeTsPool.get(index).toJava();
                 for (int i = 0; i < nbSlot; i++) {
-                    if (commonEdgeTsPool.get(index + i).equals(val + i)) {
+                    if (commonEdgeTsPool.get(index + i).equals(Uint16.valueOf(val + i))) {
                         tribSlotList.add(commonEdgeTsPool.get(index + i));
                     } else {
                         discontinue = true;
@@ -369,10 +369,8 @@ public class PostAlgoPathValidator {
             Object tpd = allPceNodes.get(edge.link().getDestTP());
             if ((pceNode.getAvailableTribSlots().containsKey(tps.toString()))
                 && (pceNode.getAvailableTribSlots().containsKey(tpd.toString()))) {
-                List<Uint16> tribSlotEdgeSourceN = new ArrayList<>();
-                List<Uint16> tribSlotEdgeDestN = new ArrayList<>();
-                tribSlotEdgeSourceN = pceNode.getAvailableTribSlots().get(tps.toString());
-                tribSlotEdgeDestN = pceNode.getAvailableTribSlots().get(tps.toString());
+                List<Uint16> tribSlotEdgeSourceN = pceNode.getAvailableTribSlots().get(tps.toString());
+                List<Uint16> tribSlotEdgeDestN = pceNode.getAvailableTribSlots().get(tps.toString());
                 check = false;
                 for (int i = 0; i <= 79; i++) {
                     if (tribSlotEdgeSourceN.get(i) == null) {

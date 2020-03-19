@@ -8,9 +8,11 @@
 package org.opendaylight.transportpce.pce;
 
 import com.google.common.collect.ImmutableList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
@@ -114,7 +116,7 @@ public class PcePathDescription {
         Resource clientResource = new ResourceBuilder().setResource(stp).build();
         AToZ firstResource = new AToZBuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
         etoeList.add(firstResource);
-        index++;
+        index += 1;
         for (PceLink pcelink : path) {
             String srcName = pcelink.getSourceId().getValue();
             // Nodes
@@ -127,7 +129,7 @@ public class PcePathDescription {
             AToZKey sourceKey = new AToZKey(index.toString());
             Resource nodeResource1 = new ResourceBuilder().setResource(sourceNode).build();
             AToZ srcResource = new AToZBuilder().setId(srcName).withKey(sourceKey).setResource(nodeResource1).build();
-            index++;
+            index += 1;
             etoeList.add(srcResource);
 
             // source TP
@@ -140,7 +142,7 @@ public class PcePathDescription {
             AToZKey srcTPKey = new AToZKey(index.toString());
             Resource tpResource1 = new ResourceBuilder().setResource(stp).build();
             AToZ stpResource = new AToZBuilder().setId(tpName).withKey(srcTPKey).setResource(tpResource1).build();
-            index++;
+            index += 1;
             etoeList.add(stpResource);
 
             String linkName = pcelink.getLinkId().getValue();
@@ -154,7 +156,7 @@ public class PcePathDescription {
             AToZKey linkKey = new AToZKey(index.toString());
             Resource nodeResource2 = new ResourceBuilder().setResource(atozLink).build();
             AToZ linkResource = new AToZBuilder().setId(linkName).withKey(linkKey).setResource(nodeResource2).build();
-            index++;
+            index += 1;
             etoeList.add(linkResource);
 
             String destName = pcelink.getDestId().getValue();
@@ -168,7 +170,7 @@ public class PcePathDescription {
             AToZKey destTPKey = new AToZKey(index.toString());
             Resource tpResource2 = new ResourceBuilder().setResource(dtp).build();
             AToZ ttpResource = new AToZBuilder().setId(tpName).withKey(destTPKey).setResource(tpResource2).build();
-            index++;
+            index += 1;
             etoeList.add(ttpResource);
 
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce
@@ -193,8 +195,7 @@ public class PcePathDescription {
                 .setTpNodeId(xname).setTpId(tpName)
                 .build();
 
-
-        index++;
+        index += 1;
         clientKey = new AToZKey(index.toString());
         clientResource = new ResourceBuilder().setResource(stp).build();
         lastResource = new AToZBuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
@@ -219,7 +220,7 @@ public class PcePathDescription {
         Resource clientResource = new ResourceBuilder().setResource(stp).build();
         ZToA firstResource = new ZToABuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
         etoelist.add(firstResource);
-        index++;
+        index += 1;
 
         for (PceLink pcelinkAtoZ : path) {
 
@@ -239,7 +240,7 @@ public class PcePathDescription {
             ZToAKey sourceKey = new ZToAKey(index.toString());
             Resource nodeResource1 = new ResourceBuilder().setResource(sourceNode).build();
             ZToA srcResource = new ZToABuilder().setId(srcName).withKey(sourceKey).setResource(nodeResource1).build();
-            index++;
+            index += 1;
             etoelist.add(srcResource);
 
             // source TP
@@ -252,7 +253,7 @@ public class PcePathDescription {
             ZToAKey srcTPKey = new ZToAKey(index.toString());
             Resource tpResource1 = new ResourceBuilder().setResource(stp).build();
             ZToA stpResource = new ZToABuilder().setId(tpName).withKey(srcTPKey).setResource(tpResource1).build();
-            index++;
+            index += 1;
             etoelist.add(stpResource);
 
             String linkName = pcelink.getLinkId().getValue();
@@ -265,7 +266,7 @@ public class PcePathDescription {
             ZToAKey linkKey = new ZToAKey(index.toString());
             Resource nodeResource2 = new ResourceBuilder().setResource(ztoaLink).build();
             ZToA linkResource = new ZToABuilder().setId(linkName).withKey(linkKey).setResource(nodeResource2).build();
-            index++;
+            index += 1;
             etoelist.add(linkResource);
 
             String destName = pcelink.getDestId().getValue();
@@ -278,7 +279,7 @@ public class PcePathDescription {
             ZToAKey destTPKey = new ZToAKey(index.toString());
             Resource tpResource2 = new ResourceBuilder().setResource(ttp).build();
             ZToA ttpResource = new ZToABuilder().setId(tpName).withKey(destTPKey).setResource(tpResource2).build();
-            index++;
+            index += 1;
             etoelist.add(ttpResource);
 
 
@@ -301,7 +302,7 @@ public class PcePathDescription {
                 .setTpNodeId(xname).setTpId(tpName).build();
 
 
-        index++;
+        index += 1;
         clientKey = new ZToAKey(index.toString());
         clientResource = new ResourceBuilder().setResource(stp).build();
         lastResource = new ZToABuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();

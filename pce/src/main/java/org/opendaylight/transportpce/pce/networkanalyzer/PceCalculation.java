@@ -147,18 +147,18 @@ public class PceCalculation {
             //And casting to int bumps the limit here.
             //Passing by ENUM or String are possible alternatives.
             //Maybe HashMap and similar options should also be considered here.
-        } else if (serviceFormatA == "Ethernet") {
+        } else if ("Ethernet".equals(serviceFormatA)) {
         //only rate 100L is currently supported except in Ethernet
             if (serviceRate == 10L) {
                 serviceType = "10GE";
             } else if (serviceRate == 1L) {
                 serviceType = "1GE";
             } else {
-                LOG.debug("parseInput: unsupported service type: Format Ethernet Rate {}", String.valueOf(serviceRate));
+                LOG.debug("parseInput: unsupported service type: Format Ethernet Rate {}", serviceRate);
             }
         } else {
             LOG.debug("parseInput: unsupported service type: Format {} Rate {}",
-                serviceFormatA, String.valueOf(serviceRate));
+                serviceFormatA, serviceRate);
         }
 
         returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
@@ -588,9 +588,8 @@ public class PceCalculation {
     private void dropOppositeLink(Link link) {
         LinkId opplink = MapUtils.extractOppositeLink(link);
 
-        PceLink oppPceLink = allPceLinks.get(opplink);
-        if (oppPceLink != null) {
-            allPceLinks.remove(oppPceLink);
+        if (allPceLinks.containsKey(opplink)) {
+            allPceLinks.remove(opplink);
         } else {
             linksToExclude.add(opplink);
         }

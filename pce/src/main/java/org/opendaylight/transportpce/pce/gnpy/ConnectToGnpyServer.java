@@ -16,6 +16,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,8 @@ public class ConnectToGnpyServer {
         try {
             URL url = new URL(URL_GNPY);
             String userCredentials = "gnpy:gnpy";
-            String basicAuth = "Basic " + new String(java.util.Base64.getEncoder().encode(userCredentials.getBytes()));
+            String basicAuth = "Basic " + new String(java.util.Base64.getEncoder()
+                .encode(userCredentials.getBytes(StandardCharsets.UTF_8)),StandardCharsets.UTF_8);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
@@ -47,14 +50,14 @@ public class ConnectToGnpyServer {
 
             // Send the request to the GNPy
             OutputStream os = conn.getOutputStream();
-            os.write(jsonTxt.getBytes());
+            os.write(jsonTxt.getBytes(StandardCharsets.UTF_8));
             os.flush();
             if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
                 throw new GnpyException(String.format(
                     "In connectToGnpyServer: could not connect to GNPy - response code: %s",conn.getResponseCode()));
             }
-            InputStreamReader response = new InputStreamReader((conn.getInputStream()));
-            if (response != null) {
+            InputStreamReader response = new InputStreamReader((conn.getInputStream()),StandardCharsets.UTF_8);
+            if (response.ready()) {
                 jsonRespTxt = CharStreams.toString(response);
             }
             conn.disconnect();
@@ -69,7 +72,8 @@ public class ConnectToGnpyServer {
         try {
             URL url = new URL(URL_GNPY);
             String userCredentials = "gnpy:gnpy";
-            String basicAuth = "Basic " + new String(java.util.Base64.getEncoder().encode(userCredentials.getBytes()));
+            String basicAuth = "Basic " + new String(java.util.Base64.getEncoder()
+                .encode(userCredentials.getBytes(StandardCharsets.UTF_8)),StandardCharsets.UTF_8);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("HEAD");

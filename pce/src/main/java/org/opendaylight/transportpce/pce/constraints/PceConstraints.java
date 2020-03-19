@@ -155,7 +155,8 @@ public class PceConstraints {
         this.pceNodesToInclude.add(node);
     }
 
-    public class ResourcePair {
+    public static class ResourcePair {
+
         public ResourcePair(ResourceType type, String name) {
             super();
             this.type = type;
@@ -163,7 +164,6 @@ public class PceConstraints {
         }
 
         private ResourceType type = ResourceType.NODE;
-
         private String name = "";
 
         public ResourceType getType() {
