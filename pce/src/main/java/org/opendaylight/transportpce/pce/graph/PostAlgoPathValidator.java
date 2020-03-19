@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 public class PostAlgoPathValidator {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceGraph.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PostAlgoPathValidator.class);
 
     // TODO hard-coded 96
     private static final int MAX_WAWELENGTH = 96;
@@ -334,7 +334,7 @@ public class PostAlgoPathValidator {
                 discontinue = false;
                 Integer val = commonEdgeTsPool.get(index).toJava();
                 for (int i = 0; i < nbSlot; i++) {
-                    if (commonEdgeTsPool.get(index + i).equals(val + i)) {
+                    if (commonEdgeTsPool.get(index + i).equals(Uint16.valueOf(val + i))) {
                         tribSlotList.add(commonEdgeTsPool.get(index + i));
                     } else {
                         discontinue = true;

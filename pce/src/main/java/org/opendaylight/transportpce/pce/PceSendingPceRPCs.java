@@ -81,7 +81,7 @@ public class PceSendingPceRPCs {
             // sleep for 10s
             Thread.sleep(10000);
         } catch (InterruptedException e) {
-            LOG.error(e.toString());
+            LOG.error("in PCESendingPceRPC: ",e);
         }
         success = true;
         LOG.info("cancelResourceReserve ...");
@@ -130,7 +130,6 @@ public class PceSendingPceRPCs {
         rc = description.getReturnStructure();
         if (!rc.getStatus()) {
             LOG.error("In pathComputationWithConstraints, description: result = {}", rc.toString());
-            return;
         }
     }
 
@@ -163,15 +162,12 @@ public class PceSendingPceRPCs {
                 callGnpyToComputeNewPath(gnpy);
             } else {
                 setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
-                return;
             }
         }
         catch (GnpyException e) {
             LOG.error("Exception raised by GNPy {}",e.getMessage());
             setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
-            return;
         }
-        return;
     }
 
     private boolean gnpyToCheckFeasiblity(AToZDirection atoz, ZToADirection ztoa, GnpyUtilitiesImpl gnpy)
@@ -192,7 +188,7 @@ public class PceSendingPceRPCs {
         //Call GNPy in the case of non feasibility
         LOG.info("In pceSendingPceRPC: the path is not feasible according to Gnpy");
         HardConstraints gnpyPathAsHC = null;
-        gnpyPathAsHC = gnpy.askNewPathFromGnpy(gnpyPathAsHC, pceHardConstraints);
+        gnpyPathAsHC = gnpy.askNewPathFromGnpy(pceHardConstraints);
         if (gnpyPathAsHC == null) {
             LOG.info("In pceSendingPceRPC: GNPy failed to find another path");
             this.success = false;

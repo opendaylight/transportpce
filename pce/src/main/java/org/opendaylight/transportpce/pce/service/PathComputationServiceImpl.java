@@ -22,7 +22,6 @@ import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
-
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.Response;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveOutput;
@@ -110,7 +109,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 } else {
                     message = "Cancelling ResourceReserve failed !";
                 }
-                LOG.info(message);
+                LOG.info("in PathComputationServiceImpl : {}",message);
                 sendNotifications(ServicePathNotificationTypes.CancelResourceReserve, input.getServiceName(),
                         RpcStatusEx.Successful, "cancel Resource Reserve successful!", null);
                 ConfigurationResponseCommonBuilder configurationResponseCommon =

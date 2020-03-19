@@ -102,7 +102,7 @@ public class PceLink {
             this.availableBandwidth = 0L;
             this.usedBandwidth = 0L;
         }
-        LOG.debug("PceLink: created PceLink  {}", toString());
+        LOG.debug("PceLink: created PceLink  {}", linkId);
     }
 
     //Retrieve the opposite link
@@ -231,7 +231,7 @@ public class PceLink {
     }
 
     public Long getUsedBandwidth() {
-        return availableBandwidth;
+        return usedBandwidth;
     }
 
     public String getsourceNetworkSupNodeId() {
@@ -363,6 +363,7 @@ public class PceLink {
         return true;
     }
 
+    @Override
     public String toString() {
         return "PceLink type=" + linkType + " ID=" + linkId.getValue() + " latency=" + latency;
     }

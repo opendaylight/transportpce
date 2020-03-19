@@ -156,6 +156,7 @@ public class PceConstraints {
     }
 
     public class ResourcePair {
+
         public ResourcePair(ResourceType type, String name) {
             super();
             this.type = type;

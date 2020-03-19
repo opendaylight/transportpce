@@ -81,13 +81,13 @@ public class GnpyTopoImpl {
     private List<Connections> connections = new ArrayList<>();
     //Mapping elements
     //Mapping between the ord-topo and ord-ntw node
-    private Map<String, String> mapDisgNodeRefNode = new HashMap<String, String>();
+    private Map<String, String> mapDisgNodeRefNode = new HashMap<>();
     //Mapping between the ord-ntw and node ip
-    private Map<String, IpAddress> mapNodeRefIp = new HashMap<String, IpAddress>();
+    private Map<String, IpAddress> mapNodeRefIp = new HashMap<>();
     //Mapping between the ROADM-ROADM linkId/secElement and the linkId
-    private Map<String, List<String>> mapLinkFiber = new HashMap<String, List<String>>();
+    private Map<String, List<String>> mapLinkFiber = new HashMap<>();
     //Mapping between the ROADM-ROADM linkId/secElement and ipAddress
-    private Map<String, IpAddress> mapFiberIp = new HashMap<String, IpAddress>();
+    private Map<String, IpAddress> mapFiberIp = new HashMap<>();
     //List of Xponders
     private List<String> trxList = new ArrayList<>();
     //Initialize the 32 bit identifiers for the edfa and the fiber.
@@ -141,7 +141,7 @@ public class GnpyTopoImpl {
                     .read(LogicalDatastoreType.CONFIGURATION, insIdrOpenRoadmNet).get();
             if (openRoadmNet.isPresent() && openRoadmTopo.isPresent()) {
                 extractElements(openRoadmTopo,openRoadmNet);
-                extractConnections(openRoadmTopo,openRoadmNet);
+                extractConnections(openRoadmTopo);
                 LOG.debug("In GnpyTopoImpl : elements and connections are well extracted");
             }
             else {
@@ -157,6 +157,9 @@ public class GnpyTopoImpl {
 
     private void extractElements(java.util.Optional<Network> openRoadmTopo,
             java.util.Optional<Network> openRoadmNet) throws GnpyException {
+        if ((!openRoadmNet.isPresent()) || (!openRoadmTopo.isPresent())) {
+            throw new GnpyException("In gnpyTopoImpl: openRoadmNet or openRoadmTopo is not present");
+        }
         // Create the list of nodes
         List<Node> openRoadmNetNodeList = openRoadmNet.get().getNode();
         List<Node> openRoadmTopoNodeList = openRoadmTopo.get().getNode();
@@ -176,6 +179,9 @@ public class GnpyTopoImpl {
                 }
                 IpAddress ipAddress = null;
                 String nodeRef = supportingNode.getNodeRef().getValue();
+                if (nodeRef == null) {
+                    throw new GnpyException("In gnpyTopoImpl: nodeRef is null");
+                }
                 // Retrieve the mapping between the openRoadm topology and openRoadm network
                 mapDisgNodeRefNode.put(openRoadmTopoNode.getNodeId().getValue(), nodeRef);
                 Node1 openRoadmNetNode1 = null;
@@ -187,9 +193,16 @@ public class GnpyTopoImpl {
                         commonNetworkNode1 = openRoadmNetNode.augmentation(org.opendaylight.yang.gen.v1
                             .http.org.openroadm.common.network.rev181130.Node1.class);
                         ipAddress = openRoadmNetNode1.getIp();
+                        if (ipAddress == null) {
+                            throw new GnpyException(String.format(
+                                "In gnpyTopoImpl: ipAddress of node %s is null",nodeRef));
+                        }
                         mapNodeRefIp.put(nodeRef, ipAddress);
                         break;
                     }
+                }
+                if (commonNetworkNode1 == null) {
+                    throw new GnpyException(String.format("In gnpyTopoImpl: the node type of %s is null",nodeRef));
                 }
                 if (commonNetworkNode1.getNodeType().getName().equals("ROADM")) {
                     if (!nodesList.contains(nodeRef)) {
@@ -213,9 +226,11 @@ public class GnpyTopoImpl {
         }
     }
 
-    private void extractConnections(java.util.Optional<Network> openRoadmTopo,
-            java.util.Optional<Network> openRoadmNet) throws GnpyException {
+    private void extractConnections(java.util.Optional<Network> openRoadmTopo) throws GnpyException {
         // Create the list of connections
+        if (!openRoadmTopo.isPresent()) {
+            throw new GnpyException("In gnpyTopoImpl: openroadmTopo is not present");
+        }
         Network1 nw1 = openRoadmTopo.get().augmentation(Network1.class);
         List<Link> linksList = nw1.getLink();
         // 1:EXPRESS-LINK    2:ADD-LINK       3:DROP-LINK
@@ -232,6 +247,9 @@ public class GnpyTopoImpl {
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
                 .Link1 openroadmNetworkLink1 = link.augmentation(org.opendaylight.yang.gen.v1.http.org
                 .openroadm.network.topology.rev181130.Link1.class);
+            if (link1.getLinkType() == null) {
+                throw new GnpyException("In gnpyTopoImpl: the link type is null");
+            }
             int linkType = link1.getLinkType().getIntValue();
             if (! IntStream.of(externalLink).anyMatch(x -> x == linkType)) {
                 continue;
@@ -281,7 +299,7 @@ public class GnpyTopoImpl {
                 //Case of Span
                 if (amplifiedLink.getSectionElement().getSectionElement() instanceof Span) {
                     Span span = (Span) amplifiedLink.getSectionElement().getSectionElement();
-                    destIp = extractSpan((SpanAttributes) span.getSpan(), linkId, secElt);
+                    destIp = extractSpan(span.getSpan(), linkId, secElt);
                 }
                 // Create a new link
                 if (createNewConnection(srcIp,destIp)) {
@@ -296,7 +314,7 @@ public class GnpyTopoImpl {
         throws GnpyException {
 
         SpanAttributes span = omsAttributes.getSpan();
-        IpAddress destIp = extractSpan((SpanAttributes) span, linkId, linkId);
+        IpAddress destIp = extractSpan(span, linkId, linkId);
         if (createNewConnection(srcIp, destIp)) {
             return destIp;
         }
@@ -338,6 +356,10 @@ public class GnpyTopoImpl {
             //convert to kilometer
             length += srlgLength / CONVERT_KM_M;
         }
+        if (length == 0) {
+            throw new GnpyException(String.format(
+                "In gnpyTopoImpl: length of the link %s is equal to zero",linkId));
+        }
         double lossCoef = span.getSpanlossCurrent().getValue().doubleValue() / length;
         Elements element = createElementsFiber(LATITUDE, LONGITUTE, REGION, CITY,
             ipFiber.getIpv4Address().getValue(), length, attIn, lossCoef, connIn, connOut, typeVariety);
@@ -352,20 +374,20 @@ public class GnpyTopoImpl {
     private Elements createElementsFiber(double latitude, double longitude, String region, String city, String uidFiber,
             double length, double attIn, double lossCoef, double connIn, double connOut, String typeVariety) {
         // Create an amplifier after the ROADM
-        Coordinate c1 = new Coordinate(new BigDecimal(latitude));
-        Coordinate c2 = new Coordinate(new BigDecimal(longitude));
+        Coordinate c1 = new Coordinate(BigDecimal.valueOf(latitude));
+        Coordinate c2 = new Coordinate(BigDecimal.valueOf(longitude));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
-        Fiber fiber = new FiberBuilder().setLength(new BigDecimal(length)).setLengthUnits(Km.class)
-                .setAttIn(new BigDecimal(attIn)).setLossCoef(new BigDecimal(lossCoef)).setConIn(new BigDecimal(connIn))
-                .setConOut(new BigDecimal(connOut)).build();
+        Fiber fiber = new FiberBuilder().setLength(BigDecimal.valueOf(length)).setLengthUnits(Km.class)
+                .setAttIn(BigDecimal.valueOf(attIn)).setLossCoef(BigDecimal.valueOf(lossCoef))
+                .setConIn(BigDecimal.valueOf(connIn))
+                .setConOut(BigDecimal.valueOf(connOut)).build();
         Params params1 = new ParamsBuilder().setFiberroadm(fiber).build();
-        Elements element1 = new ElementsBuilder().setUid(uidFiber)
+        return new ElementsBuilder().setUid(uidFiber)
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Fiber.class)
                 .setTypeVariety(typeVariety).setMetadata(metadata1)
                 .setElementType(new FiberRoadmBuilder().setParams(params1).build()).build();
-        return element1;
     }
 
     /*
@@ -374,8 +396,8 @@ public class GnpyTopoImpl {
     private Elements createElementsEdfa(double latitude, double longitude, String region, String city,
             BigDecimal gainTarget, BigDecimal tiltTarget, BigDecimal outVoa, String typeVariety, String uidEdfa) {
         // Create an amplifier after the ROADM
-        Coordinate c1 = new Coordinate(new BigDecimal(latitude));
-        Coordinate c2 = new Coordinate(new BigDecimal(longitude));
+        Coordinate c1 = new Coordinate(BigDecimal.valueOf(latitude));
+        Coordinate c2 = new Coordinate(BigDecimal.valueOf(longitude));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
@@ -383,10 +405,9 @@ public class GnpyTopoImpl {
                 .setOutVoa(outVoa).build();
         Edfa edfa = new EdfaBuilder()
                 .setOperational(operational).build();
-        Elements element1 = new ElementsBuilder().setUid(uidEdfa)
+        return new ElementsBuilder().setUid(uidEdfa)
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Edfa.class)
                 .setMetadata(metadata1).setElementType(edfa).setTypeVariety(typeVariety).build();
-        return element1;
     }
 
     /*
@@ -395,17 +416,16 @@ public class GnpyTopoImpl {
     private Elements createElementsRoadm(double latitude, double longitude, String region, String city,
             double targetPchOutDb, String uidRoadm) {
 
-        Coordinate c1 = new Coordinate(new BigDecimal(latitude));
-        Coordinate c2 = new Coordinate(new BigDecimal(longitude));
+        Coordinate c1 = new Coordinate(BigDecimal.valueOf(latitude));
+        Coordinate c2 = new Coordinate(BigDecimal.valueOf(longitude));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
-        Roadm roadm = new RoadmBuilder().setTargetPchOutDb(new BigDecimal(targetPchOutDb)).build();
+        Roadm roadm = new RoadmBuilder().setTargetPchOutDb(BigDecimal.valueOf(targetPchOutDb)).build();
         Params params1 = new ParamsBuilder().setFiberroadm(roadm).build();
-        Elements element1 = new ElementsBuilder().setUid(uidRoadm)
+        return new ElementsBuilder().setUid(uidRoadm)
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Roadm.class)
                 .setMetadata(metadata1).setElementType(new FiberRoadmBuilder().setParams(params1).build()).build();
-        return element1;
     }
 
     /*
@@ -413,16 +433,15 @@ public class GnpyTopoImpl {
      */
     private Elements createElementsTransceiver(double latitude, double longitude, String region, String city,
             String uidTrans) {
-        Coordinate c1 = new Coordinate(new BigDecimal(latitude));
-        Coordinate c2 = new Coordinate(new BigDecimal(longitude));
+        Coordinate c1 = new Coordinate(BigDecimal.valueOf(latitude));
+        Coordinate c2 = new Coordinate(BigDecimal.valueOf(longitude));
         Location location1 = new LocationBuilder().setRegion(region).setCity(city).setLatitude(c1).setLongitude(c2)
                 .build();
         Metadata metadata1 = new MetadataBuilder().setLocation(location1).build();
         Transceiver transceiver = new TransceiverBuilder().build();
-        Elements element1 = new ElementsBuilder().setUid(uidTrans)
+        return new ElementsBuilder().setUid(uidTrans)
                 .setType(org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.Transceiver.class)
                 .setMetadata(metadata1).setElementType(transceiver).build();
-        return element1;
     }
 
     /*
@@ -434,7 +453,7 @@ public class GnpyTopoImpl {
         }
         String fromNode = srcIp.getIpv4Address().getValue();
         String toNode = destIp.getIpv4Address().getValue();
-        if (fromNode == toNode) {
+        if (fromNode.equals(toNode)) {
             return false;
         }
         Connections connection = new ConnectionsBuilder().setFromNode(fromNode).setToNode(toNode).build();
@@ -471,8 +490,7 @@ public class GnpyTopoImpl {
         }
         fields[3] = Integer.toString(intF3);
         String nidString = fields[0] + "." + fields[1] + "." + fields[2] + "." + fields[3];
-        Ipv4Address nid = new Ipv4Address(nidString);
-        return nid;
+        return new Ipv4Address(nidString);
     }
 
     public List<Elements> getElements() {

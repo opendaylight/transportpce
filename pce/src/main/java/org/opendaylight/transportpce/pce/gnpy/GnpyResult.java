@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -67,7 +67,6 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
 import org.opendaylight.yangtools.yang.model.api.SchemaContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,8 +81,7 @@ public class GnpyResult {
 
     private static final Logger LOG = LoggerFactory.getLogger(GnpyResult.class);
     private Response response = null;
-    private Map<String, IpAddress> mapNodeRefIp = new HashMap<String, IpAddress>();
-    //private Map<String, IpAddress> mapFiberIp = new HashMap<String, IpAddress>();
+    private Map<String, IpAddress> mapNodeRefIp = new HashMap<>();
 
     public GnpyResult(String gnpyResponseString, GnpyTopoImpl gnpyTopo) throws GnpyException, Exception {
         this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
@@ -103,14 +101,14 @@ public class GnpyResult {
 
         // Create the data object
         QName pathQname = QName.create("gnpy:path", "2020-02-02", "result");
-        LOG.debug("the Qname is {} / namesapce {} ; module {}; ", pathQname.toString(), pathQname.getNamespace(),
+        LOG.debug("the Qname is {} / namesapce {} ; module {}; ", pathQname, pathQname.getNamespace(),
             pathQname.getModule());
         YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
         DataObject dataObject = null;
 
         // Create the object response
         InputStream streamGnpyRespnse = new ByteArrayInputStream(gnpyResponseString.getBytes(StandardCharsets.UTF_8));
-        InputStreamReader gnpyResultReader = new InputStreamReader(streamGnpyRespnse);
+        InputStreamReader gnpyResultReader = new InputStreamReader(streamGnpyRespnse,StandardCharsets.UTF_8);
         JsonReader jsonReader = new JsonReader(gnpyResultReader);
         Optional<NormalizedNode<? extends PathArgument, ?>> transformIntoNormalizedNode = parseInputJSON(jsonReader,
             Result.class);
@@ -134,7 +132,6 @@ public class GnpyResult {
         boolean isFeasible = false;
         if (response != null) {
             if (response.getResponseType() instanceof NoPathCase) {
-                isFeasible = false;
                 LOG.info("In GnpyResult: The path is not feasible ");
             } else if (response.getResponseType() instanceof PathCase) {
                 isFeasible = true;
@@ -217,13 +214,11 @@ public class GnpyResult {
     }
 
     private String findOrdNetworkNodeId(IpAddress nodeIpAddress) {
-        String nodeId;
-        Set<String> keySet = this.mapNodeRefIp.keySet();
-        Iterator<String> it = keySet.iterator();
+        Iterator<Map.Entry<String,IpAddress>> it = this.mapNodeRefIp.entrySet().iterator();
         while (it.hasNext()) {
-            nodeId = it.next();
-            if (this.mapNodeRefIp.get(nodeId).equals(nodeIpAddress)) {
-                return nodeId;
+            Entry<String, IpAddress> entry = it.next();
+            if (entry.getValue().equals(nodeIpAddress)) {
+                return entry.getKey();
             }
         }
         return null;
@@ -274,7 +269,7 @@ public class GnpyResult {
     public <T extends DataObject> Optional<T> getDataObject(@Nonnull NormalizedNode<?, ?> normalizedNode,
         @Nonnull QName rootNode, BindingNormalizedNodeSerializer codecRegistry) {
         if (normalizedNode != null) {
-            LOG.debug("GNPy: The codecRegistry is {}", codecRegistry.toString());
+            LOG.debug("GNPy: The codecRegistry is {}", codecRegistry);
         } else {
             LOG.warn("GNPy: The codecRegistry is null");
         }
@@ -291,7 +286,7 @@ public class GnpyResult {
             LOG.debug("GNPy: the normalized node is {}", normalizedNode.getNodeType());
         }
         YangInstanceIdentifier rootNodeYangInstanceIdentifier = YangInstanceIdentifier.of(rootNode);
-        LOG.debug("GNPy: the root Node Yang Instance Identifier is {}", rootNodeYangInstanceIdentifier.toString());
+        LOG.debug("GNPy: the root Node Yang Instance Identifier is {}", rootNodeYangInstanceIdentifier);
         Map.Entry<?, ?> bindingNodeEntry = codecRegistry.fromNormalizedNode(rootNodeYangInstanceIdentifier,
             normalizedNode);
         if (bindingNodeEntry == null) {

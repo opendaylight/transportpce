@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PceOpticalNode implements PceNode {
-    private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PceOpticalNode.class);
 
     private boolean valid = true;
 
@@ -333,6 +333,7 @@ public class PceOpticalNode implements PceNode {
         return nodeId;
     }
 
+    @Override
     public String toString() {
         return "PceNode type=" + nodeType + " ID=" + nodeId.getValue() + " CLLI=" + this.getSupClliNodeId();
     }
