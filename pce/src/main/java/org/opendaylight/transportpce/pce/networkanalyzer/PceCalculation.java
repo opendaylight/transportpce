@@ -59,9 +59,9 @@ public class PceCalculation {
     private PceConstraints pceHardConstraints;
 
     ///////////// Intermediate data/////////////////
-    private List<PceLink> addLinks = new ArrayList<PceLink>();
-    private List<PceLink> dropLinks = new ArrayList<PceLink>();
-    private HashSet<NodeId> azSrgs = new HashSet<NodeId>();
+    private List<PceLink> addLinks = new ArrayList<>();
+    private List<PceLink> dropLinks = new ArrayList<>();
+    private HashSet<NodeId> azSrgs = new HashSet<>();
 
     private PceNode aendPceNode = null;
     private PceNode zendPceNode = null;
@@ -70,11 +70,11 @@ public class PceCalculation {
     private List<Node> allNodes = null;
 
     // this List serves graph calculation
-    private Map<NodeId, PceNode> allPceNodes = new HashMap<NodeId, PceNode>();
+    private Map<NodeId, PceNode> allPceNodes = new HashMap<>();
     // this List serves calculation of ZtoA path description
     // TODO maybe better solution is possible
-    private Map<LinkId, PceLink> allPceLinks = new HashMap<LinkId, PceLink>();
-    private Set<LinkId> linksToExclude = new HashSet<LinkId>();
+    private Map<LinkId, PceLink> allPceLinks = new HashMap<>();
+    private Set<LinkId> linksToExclude = new HashSet<>();
     private PceResult returnStructure;
 
     private enum ConstraintTypes {
@@ -147,18 +147,18 @@ public class PceCalculation {
             //And casting to int bumps the limit here.
             //Passing by ENUM or String are possible alternatives.
             //Maybe HashMap and similar options should also be considered here.
-        } else if (serviceFormatA == "Ethernet") {
+        } else if ("Ethernet".equals(serviceFormatA)) {
         //only rate 100L is currently supported except in Ethernet
             if (serviceRate == 10L) {
                 serviceType = "10GE";
             } else if (serviceRate == 1L) {
                 serviceType = "1GE";
             } else {
-                LOG.debug("parseInput: unsupported service type: Format Ethernet Rate {}", String.valueOf(serviceRate));
+                LOG.debug("parseInput: unsupported service type: Format Ethernet Rate {}", serviceRate);
             }
         } else {
             LOG.debug("parseInput: unsupported service type: Format {} Rate {}",
-                serviceFormatA, String.valueOf(serviceRate));
+                serviceFormatA, serviceRate);
         }
 
         returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
@@ -190,7 +190,7 @@ public class PceCalculation {
                 networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier).get();
             if (nwOptional.isPresent()) {
                 nw = nwOptional.get();
-                LOG.debug("readMdSal: network nodes: nwOptional.isPresent = true {}", nw.toString());
+                LOG.debug("readMdSal: network nodes: nwOptional.isPresent = true {}", nw);
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("readMdSal: Error reading topology {}", nwInstanceIdentifier);
@@ -219,14 +219,14 @@ public class PceCalculation {
             return false;
         }
         LOG.info("readMdSal: network nodes: {} nodes added", allNodes.size());
-        LOG.debug("readMdSal: network nodes: {} nodes added", allNodes.toString());
+        LOG.debug("readMdSal: network nodes: {} nodes added", allNodes);
 
         if (allLinks == null || allLinks.isEmpty()) {
             LOG.error("readMdSal: no links ");
             return false;
         }
         LOG.info("readMdSal: network links: {} links added", allLinks.size());
-        LOG.debug("readMdSal: network links: {} links added", allLinks.toString());
+        LOG.debug("readMdSal: network links: {} links added", allLinks);
 
         return true;
     }
@@ -272,7 +272,7 @@ public class PceCalculation {
                 validateOtnNode(node);
             }
 
-            LOG.info("analyzeNw: allPceNodes {}", allPceNodes.toString());
+            LOG.info("analyzeNw: allPceNodes {}", allPceNodes);
 
             if (aendPceNode == null || zendPceNode == null) {
                 LOG.error("analyzeNw: Error in reading nodes: A or Z do not present in the network");
@@ -289,8 +289,8 @@ public class PceCalculation {
             return false;
         }
 
-        LOG.debug("analyzeNw: allPceNodes {}", allPceNodes.toString());
-        LOG.debug("analyzeNw: allPceLinks {}", allPceLinks.toString());
+        LOG.debug("analyzeNw: allPceNodes {}", allPceNodes);
+        LOG.debug("analyzeNw: allPceLinks {}", allPceLinks);
 
         return true;
     }
@@ -302,7 +302,7 @@ public class PceCalculation {
         if (azSrgs.contains(nodeId)) {
             allPceLinks.put(pcelink.getLinkId(), pcelink);
             allPceNodes.get(nodeId).addOutgoingLink(pcelink);
-            LOG.debug("analyzeNw: Add_LINK added to source and to allPceLinks {}", pcelink.getLinkId().toString());
+            LOG.debug("analyzeNw: Add_LINK added to source and to allPceLinks {}", pcelink.getLinkId());
             return true;
         }
 
@@ -320,7 +320,7 @@ public class PceCalculation {
         if (azSrgs.contains(nodeId)) {
             allPceLinks.put(pcelink.getLinkId(), pcelink);
             allPceNodes.get(nodeId).addOutgoingLink(pcelink);
-            LOG.debug("analyzeNw: Drop_LINK added to dest and to allPceLinks {}", pcelink.getLinkId().toString());
+            LOG.debug("analyzeNw: Drop_LINK added to dest and to allPceLinks {}", pcelink.getLinkId());
             return true;
         }
 
@@ -332,7 +332,7 @@ public class PceCalculation {
     }
 
     private boolean validateLink(Link link) {
-        LOG.info("validateLink: link {} ", link.toString());
+        LOG.info("validateLink: link {} ", link);
 
         NodeId sourceId = link.getSource().getSourceNode();
         NodeId destId = link.getDestination().getDestNode();
@@ -359,13 +359,10 @@ public class PceCalculation {
                 return false;
             }
             LinkId linkId = pcelink.getLinkId();
-            switch (validateLinkConstraints(pcelink)) {
-                case HARD_EXCLUDE:
-                    dropOppositeLink(link);
-                    LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
-                    return false;
-                default:
-                    break;
+            if (validateLinkConstraints(pcelink).equals(ConstraintTypes.HARD_EXCLUDE)) {
+                dropOppositeLink(link);
+                LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
+                return false;
             }
             switch (pcelink.getlinkType()) {
                 case ROADMTOROADM:
@@ -373,17 +370,17 @@ public class PceCalculation {
                     allPceLinks.put(linkId, pcelink);
                     source.addOutgoingLink(pcelink);
                     LOG.debug("validateLink: {}-LINK added to allPceLinks {}",
-                        pcelink.getlinkType(), pcelink.toString());
+                        pcelink.getlinkType(), pcelink);
                     break;
                 case ADDLINK:
                     pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString()));
                     addLinks.add(pcelink);
-                    LOG.debug("validateLink: ADD-LINK saved  {}", pcelink.toString());
+                    LOG.debug("validateLink: ADD-LINK saved  {}", pcelink);
                     break;
                 case DROPLINK:
                     pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString()));
                     dropLinks.add(pcelink);
-                    LOG.debug("validateLink: DROP-LINK saved  {}", pcelink.toString());
+                    LOG.debug("validateLink: DROP-LINK saved  {}", pcelink);
                     break;
                 case XPONDERINPUT:
                     // store separately all SRG links directly
@@ -391,7 +388,7 @@ public class PceCalculation {
                     // connected to A/Z
                     if (!dest.checkTP(pcelink.getDestTP().toString())) {
                         LOG.debug(
-                            "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink.toString());
+                            "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
                         return false;
                     }
                     if (dest.getXpdrClient(pcelink.getDestTP().toString()) != null) {
@@ -399,7 +396,7 @@ public class PceCalculation {
                     }
                     allPceLinks.put(linkId, pcelink);
                     source.addOutgoingLink(pcelink);
-                    LOG.debug("validateLink: XPONDER-INPUT link added to allPceLinks {}", pcelink.toString());
+                    LOG.debug("validateLink: XPONDER-INPUT link added to allPceLinks {}", pcelink);
                     break;
                 // does it mean XPONDER==>>SRG ?
                 case XPONDEROUTPUT:
@@ -408,7 +405,7 @@ public class PceCalculation {
                     // connected to A/Z
                     if (!source.checkTP(pcelink.getSourceTP().toString())) {
                         LOG.debug(
-                            "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink.toString());
+                            "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
                         return false;
                     }
                     if (source.getXpdrClient(pcelink.getSourceTP().toString()) != null) {
@@ -416,10 +413,10 @@ public class PceCalculation {
                     }
                     allPceLinks.put(linkId, pcelink);
                     source.addOutgoingLink(pcelink);
-                    LOG.debug("validateLink: XPONDER-OUTPUT link added to allPceLinks {}", pcelink.toString());
+                    LOG.debug("validateLink: XPONDER-OUTPUT link added to allPceLinks {}", pcelink);
                     break;
                 default:
-                    LOG.warn("validateLink: link type is not supported {}", pcelink.toString());
+                    LOG.warn("validateLink: link type is not supported {}", pcelink);
             }
             return true;
 
@@ -434,14 +431,12 @@ public class PceCalculation {
             }
 
             LinkId linkId = pceOtnLink.getLinkId();
-            switch (validateLinkConstraints(pceOtnLink)) {
-                case HARD_EXCLUDE:
-                    dropOppositeLink(link);
-                    LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
-                    return false;
-                default:
-                    break;
+            if (validateLinkConstraints(pceOtnLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
+                dropOppositeLink(link);
+                LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
+                return false;
             }
+
             switch (pceOtnLink.getlinkType()) {
                 case OTNLINK:
                     if (dest.getXpdrClient(pceOtnLink.getDestTP().toString()) != null) {
@@ -450,10 +445,10 @@ public class PceCalculation {
 
                     allPceLinks.put(linkId, pceOtnLink);
                     source.addOutgoingLink(pceOtnLink);
-                    LOG.info("validateLink: OTN-LINK added to allPceLinks {}", pceOtnLink.toString());
+                    LOG.info("validateLink: OTN-LINK added to allPceLinks {}", pceOtnLink);
                     break;
                 default:
-                    LOG.warn("validateLink: link type is not supported {}", pceOtnLink.toString());
+                    LOG.warn("validateLink: link type is not supported {}", pceOtnLink);
             }
             return true;
 
@@ -465,7 +460,7 @@ public class PceCalculation {
     }
 
     private boolean validateNode(Node node) {
-        LOG.debug("validateNode: node {} ", node.toString());
+        LOG.debug("validateNode: node {} ", node);
 
         // PceNode will be used in Graph algorithm
         Node1 node1 = node.augmentation(Node1.class);
@@ -485,19 +480,15 @@ public class PceCalculation {
             return false;
         }
 
-        switch (validateNodeConstraints(pceNode)) {
-            case HARD_EXCLUDE:
-                return false;
-
-            default:
-                break;
+        if (validateNodeConstraints(pceNode).equals(ConstraintTypes.HARD_EXCLUDE)) {
+            return false;
         }
         if ((pceNode.getSupNetworkNodeId().equals(anodeId) && (this.aendPceNode == null))
-            && (endPceNode(nodeType, pceNode.getNodeId(), pceNode))) {
+            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
             this.aendPceNode = pceNode;
         }
         if ((pceNode.getSupNetworkNodeId().equals(znodeId) && (this.zendPceNode == null))
-            && (endPceNode(nodeType, pceNode.getNodeId(), pceNode))) {
+            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
             this.zendPceNode = pceNode;
         }
 
@@ -520,11 +511,8 @@ public class PceCalculation {
                 LOG.warn(" validateOtnNode: Node {} is ignored", node.getNodeId().getValue());
                 return false;
             }
-            switch (validateNodeConstraints(pceOtnNode)) {
-                case HARD_EXCLUDE:
-                    return false;
-                default:
-                    break;
+            if (validateNodeConstraints(pceOtnNode).equals(ConstraintTypes.HARD_EXCLUDE)) {
+                return false;
             }
             if (pceOtnNode.getNodeId().getValue().equals(anodeId) && this.aendPceNode == null) {
                 this.aendPceNode = pceOtnNode;
@@ -575,7 +563,7 @@ public class PceCalculation {
             return ConstraintTypes.NONE;
         }
 
-        List<Long> constraints = new ArrayList<Long>(pceHardConstraints.getExcludeSRLG());
+        List<Long> constraints = new ArrayList<>(pceHardConstraints.getExcludeSRLG());
         constraints.retainAll(link.getsrlgList());
         if (!constraints.isEmpty()) {
             LOG.info("validateLinkConstraints: {}", link.getLinkId().getValue());
@@ -588,9 +576,8 @@ public class PceCalculation {
     private void dropOppositeLink(Link link) {
         LinkId opplink = MapUtils.extractOppositeLink(link);
 
-        PceLink oppPceLink = allPceLinks.get(opplink);
-        if (oppPceLink != null) {
-            allPceLinks.remove(oppPceLink);
+        if (allPceLinks.containsKey(opplink)) {
+            allPceLinks.remove(opplink);
         } else {
             linksToExclude.add(opplink);
         }
@@ -646,7 +633,7 @@ public class PceCalculation {
         while (nodes.hasNext()) {
             PceNode pcenode = nodes.next().getValue();
             List<PceLink> links = pcenode.getOutgoingLinks();
-            LOG.info("In printNodes in node {} : outgoing links {} ", pcenode.getNodeId().getValue(), links.toString());
+            LOG.info("In printNodes in node {} : outgoing links {} ", pcenode.getNodeId().getValue(), links);
         }
     }
 }

@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.pce.gnpy;
 
-import com.google.common.base.Function;
 //false positive in SpotBug -> cannot be used with FluentIterable...
 import com.google.common.collect.FluentIterable;
 
@@ -17,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -30,9 +30,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
 import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
-import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
@@ -40,8 +38,6 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONNormalizedNodeStreamW
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonWriterFactory;
 import org.opendaylight.yangtools.yang.model.api.SchemaContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaPath;
-import org.opendaylight.yangtools.yang.model.parser.api.YangSyntaxErrorException;
-import org.opendaylight.yangtools.yang.parser.spi.meta.ReactorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +48,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public ServiceDataStoreOperationsImpl(NetworkTransactionService networkTransactionService) {
     }
 
+    @Override
     public void createXMLFromDevice(DataStoreContext dataStoreContextUtil, OrgOpenroadmDevice device, String output)
         throws GnpyException {
 
@@ -66,68 +63,59 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             }
             Writer writerFromDataObject =
                 cwDsU.writerFromDataObject(device, OrgOpenroadmDevice.class,cwDsU.dataContainer());
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(output));
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(output,StandardCharsets.UTF_8))) {
                 writer.write(writerFromDataObject.toString());
-                writer.close();
             } catch (IOException e) {
                 throw new GnpyException(
-                    String.format("In ServiceDataStoreOperationsImpl : Bufferwriter error"),e);
+                    String.format("In ServiceDataStoreOperationsImpl : Bufferwriter error %s",e));
             }
-            LOG.debug("GNPy: device xml : {}", writerFromDataObject.toString());
+            LOG.debug("GNPy: device xml : {}", writerFromDataObject);
         }
     }
 
+    @Override
     public String createJsonStringFromDataObject(final InstanceIdentifier<?> id, DataObject object)
         throws GnpyException, Exception {
 
-        final SchemaPath scPath = SchemaPath
-                .create(FluentIterable.from(id.getPathArguments()).transform(new Function<PathArgument, QName>() {
-                    @Override
-                    public QName apply(final PathArgument input) {
-                        return BindingReflections.findQName(input.getType());
-                    }
-                }), true);
+        final SchemaPath scPath = SchemaPath.create(FluentIterable
+                .from(id.getPathArguments())
+                .transform(input -> BindingReflections.findQName(input.getType())), true);
+
+        // Prepare the variables
+        final ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
+        Iterable<? extends YangModuleInfo> moduleInfos = Collections
+                .singleton(BindingReflections.getModuleInfo(object.getClass()));
+        moduleContext.addModuleInfos(moduleInfos);
+        SchemaContext schemaContext = moduleContext.tryToCreateSchemaContext().get();
+        BindingRuntimeContext bindingContext;
+        bindingContext = BindingRuntimeContext.create(moduleContext, schemaContext);
+        final BindingNormalizedNodeCodecRegistry codecRegistry =
+            new BindingNormalizedNodeCodecRegistry(bindingContext);
+
+        /*
+         * This function needs : - context - scPath.getParent() -
+         * scPath.getLastComponent().getNamespace(), -
+         * JsonWriterFactory.createJsonWriter(writer)
+         */
         final Writer writer = new StringWriter();
-        NormalizedNodeStreamWriter domWriter;
 
-        try {
-            // Prepare the variables
-            final ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
-            Iterable<? extends YangModuleInfo> moduleInfos = Collections
-                    .singleton(BindingReflections.getModuleInfo(object.getClass()));
-            moduleContext.addModuleInfos(moduleInfos);
-            SchemaContext schemaContext = moduleContext.tryToCreateSchemaContext().get();
-            BindingRuntimeContext bindingContext;
-            bindingContext = BindingRuntimeContext.create(moduleContext, schemaContext);
-            final BindingNormalizedNodeCodecRegistry codecRegistry =
-                new BindingNormalizedNodeCodecRegistry(bindingContext);
-
-            /*
-             * This function needs : - context - scPath.getParent() -
-             * scPath.getLastComponent().getNamespace(), -
-             * JsonWriterFactory.createJsonWriter(writer)
-             */
-            domWriter = JSONNormalizedNodeStreamWriter.createExclusiveWriter(
+        try (NormalizedNodeStreamWriter domWriter = JSONNormalizedNodeStreamWriter.createExclusiveWriter(
                 JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.createSimple(schemaContext),
                 scPath.getParent(), scPath.getLastComponent().getNamespace(),
-                JsonWriterFactory.createJsonWriter(writer, 2));
+                JsonWriterFactory.createJsonWriter(writer, 2));) {
             // The write part
             codecRegistry.getSerializer(id.getTargetType()).serialize(object, codecRegistry.newWriter(id, domWriter));
-            domWriter.close();
-            writer.close();
-        } catch (IOException | YangSyntaxErrorException | ReactorException e) {
+        } catch (IOException e) {
             throw new GnpyException("In ServiceDataStoreOperationsImpl: exception during json file creation",e);
         }
         return writer.toString();
     }
 
     // Write the json as a string in a file
+    @Override
     public void writeStringFile(String jsonString, String fileName) throws GnpyException {
-        try {
-            FileWriter file = new FileWriter(fileName);
+        try (FileWriter file = new FileWriter(fileName,StandardCharsets.UTF_8)) {
             file.write(jsonString);
-            file.close();
         } catch (IOException e) {
             throw new GnpyException("In ServiceDataStoreOperationsImpl : exception during file writing",e);
         }

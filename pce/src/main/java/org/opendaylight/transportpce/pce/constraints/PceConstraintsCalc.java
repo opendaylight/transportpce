@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -39,7 +40,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +60,7 @@ public class PceConstraintsCalc {
         this.networkTransactionService = networkTransactionService;
 
         // TODO. for now metrics are set into hard structure
-        LOG.info("In PceConstraintsCalc: read PceMetric {}", pceMetrics.toString());
+        LOG.info("In PceConstraintsCalc: read PceMetric {}", pceMetrics);
         pceHardConstraints.setPceMetrics(pceMetrics);
 
         calcHardconstraints(input);
@@ -103,21 +103,17 @@ public class PceConstraintsCalc {
         CoRouting tmpCoRouting = null;
 
         if (coRoutingOrGeneral instanceof General) {
-            LOG.info("In readconstraints General {}", coRoutingOrGeneral.toString());
+            LOG.info("In readconstraints General {}", coRoutingOrGeneral);
             tmpGeneral = (General) coRoutingOrGeneral;
             readGeneralContrains(tmpGeneral, constraints);
             return;
         }
 
         if (coRoutingOrGeneral instanceof CoRouting) {
-            LOG.info("In readconstraints CoRouting {}", coRoutingOrGeneral.toString());
+            LOG.info("In readconstraints CoRouting {}", coRoutingOrGeneral);
             tmpCoRouting = (CoRouting) coRoutingOrGeneral;
             readCoRoutingContrains(tmpCoRouting, constraints);
-            return;
         }
-
-        return;
-
     }
 
     private void readGeneralContrains(General tmpGeneral, PceConstraints constraints) {
@@ -131,7 +127,7 @@ public class PceConstraintsCalc {
         Latency latency = tmpGeneral.getLatency();
         if (latency != null) {
             constraints.setMaxLatency(latency.getMaxLatency().toJava());
-            LOG.info("In readGeneralContrains: read latency {}", latency.toString());
+            LOG.info("In readGeneralContrains: read latency {}", latency);
         }
 
         Exclude exclude = tmpGeneral.getExclude();
@@ -144,7 +140,7 @@ public class PceConstraintsCalc {
 
             elementsToExclude = exclude.getSRLG();
             if (elementsToExclude != null) {
-                List<Long> srlgToExclude = new ArrayList<Long>();
+                List<Long> srlgToExclude = new ArrayList<>();
                 for (String str : elementsToExclude) {
                     srlgToExclude.add(Long.parseLong(str));
                 }
@@ -163,7 +159,7 @@ public class PceConstraintsCalc {
             if (listHops != null) {
                 readIncludeNodes(listHops, constraints);
             }
-            LOG.debug("in readGeneralContrains INCLUDE {} ", include.toString());
+            LOG.debug("in readGeneralContrains INCLUDE {} ", include);
         }
 
         Diversity diversity = tmpGeneral.getDiversity();
@@ -173,16 +169,16 @@ public class PceConstraintsCalc {
             if (temp == null) {
                 return;
             }
-            if (temp.isNode()) {
+            if (Boolean.TRUE.equals(temp.isNode())) {
                 rt = PceConstraints.ResourceType.NODE;
             }
-            if (temp.isSrlg()) {
+            if (Boolean.TRUE.equals(temp.isSrlg())) {
                 rt = PceConstraints.ResourceType.SRLG;
             }
-            if (temp.isClli()) {
+            if (Boolean.TRUE.equals(temp.isClli())) {
                 rt = PceConstraints.ResourceType.CLLI;
             }
-            LOG.info("in readGeneralContrains {} list is :{}", rt, diversity.toString());
+            LOG.info("in readGeneralContrains {} list is :{}", rt, diversity);
             readDiversity(diversity.getExistingService(), constraints, rt);
         }
 
@@ -200,7 +196,7 @@ public class PceConstraintsCalc {
                             .rev171017.ordered.constraints.sp.hop.type.hop.type.Node
                             node = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
                             .constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.Node) hoptype;
-                    constraints.setListToInclude(constraints.new ResourcePair(PceConstraints.ResourceType.NODE,
+                    constraints.setListToInclude(new PceConstraints.ResourcePair(PceConstraints.ResourceType.NODE,
                             node.getNodeId()));
                     break;
                 case "SRLG":
@@ -208,7 +204,7 @@ public class PceConstraintsCalc {
                             .rev171017.ordered.constraints.sp.hop.type.hop.type.SRLG
                             srlg = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
                             .constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.SRLG) hoptype;
-                    constraints.setListToInclude(constraints.new ResourcePair(PceConstraints.ResourceType.SRLG,
+                    constraints.setListToInclude(new PceConstraints.ResourcePair(PceConstraints.ResourceType.SRLG,
                             srlg.getSRLG()));
                     break;
                 case "Clli":
@@ -216,7 +212,7 @@ public class PceConstraintsCalc {
                             .rev171017.ordered.constraints.sp.hop.type.hop.type.Clli
                             clli = (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
                             .constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.Clli) hoptype;
-                    constraints.setListToInclude(constraints.new ResourcePair(PceConstraints.ResourceType.CLLI,
+                    constraints.setListToInclude(new PceConstraints.ResourcePair(PceConstraints.ResourceType.CLLI,
                             clli.getClli()));
                     break;
                 default:
@@ -227,25 +223,23 @@ public class PceConstraintsCalc {
 
     private void readDiversity(List<String> srvList, PceConstraints constraints, PceConstraints.ResourceType rt) {
 
-        List<String> elementsToExclude = new ArrayList<String>();
-        LOG.info("in readDiversity {}", srvList.toString());
+        List<String> elementsToExclude = new ArrayList<>();
+        LOG.info("in readDiversity {}", srvList);
 
         for (String srv : srvList) {
             Optional<PathDescription> service = getPathDescriptionFromDatastore(srv);
             if (service.isPresent()) {
-                LOG.info("in readDiversity service list {}", service.toString());
+                LOG.info("in readDiversity service list {}", service);
                 switch (rt) {
                     case NODE:
-                        elementsToExclude
-                                .addAll(getAToZNodeList(service.get()));
+                        elementsToExclude.addAll(getAToZNodeList(service.get()));
                         LOG.info("readDiversity NODE : {}", elementsToExclude);
                         if (elementsToExclude != null) {
                             constraints.setExcludeNodes(elementsToExclude);
                         }
                         break;
                     case SRLG:
-                        elementsToExclude
-                                .addAll(getSRLGList(service.get()));
+                        elementsToExclude.addAll(getSRLGList(service.get()));
                         LOG.info("readDiversity SRLG : {}", elementsToExclude);
                         if (elementsToExclude != null) {
                             constraints.setExcludeSrlgLinks(elementsToExclude);
@@ -254,8 +248,7 @@ public class PceConstraintsCalc {
                     case CLLI:
                         /// Retrieve nodes into dedicated CLLI list
                         /// during node validation check their CLLI and build CLLI exclude list
-                        elementsToExclude
-                                .addAll(getAToZNodeList(service.get()));
+                        elementsToExclude.addAll(getAToZNodeList(service.get()));
                         LOG.info("readDiversity CLLI : {}", elementsToExclude);
                         if (elementsToExclude != null) {
                             constraints.setExcludeClliNodes(elementsToExclude);
@@ -343,7 +336,6 @@ public class PceConstraintsCalc {
 
         if (tmpcoRouting == null) {
             LOG.info("In readCoRoutingContrains: no General constraints.");
-            return;
         }
 
     }

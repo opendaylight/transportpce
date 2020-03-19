@@ -25,7 +25,6 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult.LocalCause;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +40,7 @@ public class PceGraph {
     private int mhopsPerPath = 50;
 
     // input
-    private Map<NodeId, PceNode> allPceNodes = new HashMap<NodeId, PceNode>();
+    private Map<NodeId, PceNode> allPceNodes = new HashMap<>();
     private PceNode apceNode = null;
     private PceNode zpceNode = null;
     private String serviceType = "";
@@ -56,7 +55,7 @@ public class PceGraph {
     // for path calculation
     List<GraphPath<String, PceGraphEdge>> allWPaths = null;
 
-    private List<PceLink> pathAtoZ = new ArrayList<PceLink>();
+    private List<PceLink> pathAtoZ = new ArrayList<>();
 
     public PceGraph(PceNode aendNode, PceNode zendNode, Map<NodeId, PceNode> allPceNodes,
             PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult pceResult,
@@ -70,8 +69,8 @@ public class PceGraph {
         this.pceSoftConstraints = pceSoftConstraints;
         this.serviceType = serviceType;
 
-        LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode.toString(), zendNode.toString());
-        LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes.toString());
+        LOG.info("In GraphCalculator: A and Z = {} / {} ", aendNode, zendNode);
+        LOG.debug("In GraphCalculator: allPceNodes size {}, nodes {} ", allPceNodes.size(), allPceNodes);
     }
 
     public boolean calcPath() {
@@ -79,12 +78,12 @@ public class PceGraph {
         LOG.info(" In PCE GRAPH calcPath : K SHORT PATHS algorithm ");
 
         DefaultDirectedWeightedGraph<String, PceGraphEdge> weightedGraph =
-                new DefaultDirectedWeightedGraph<String, PceGraphEdge>(PceGraphEdge.class);
+                new DefaultDirectedWeightedGraph<>(PceGraphEdge.class);
         populateWithNodes(weightedGraph);
         populateWithLinks(weightedGraph);
 
         if (!runKgraphs(weightedGraph)) {
-            LOG.info("In calcPath : pceResult {}", pceResult.toString());
+            LOG.info("In calcPath : pceResult {}", pceResult);
             return false;
         }
 
@@ -97,7 +96,7 @@ public class PceGraph {
                     pceResult.getResponseCode(), ResponseCodes.RESPONSE_OK);
 
             if (!pceResult.getResponseCode().equals(ResponseCodes.RESPONSE_OK)) {
-                LOG.info("In calcPath: post algo validations DROPPED the path {}", path.toString());
+                LOG.info("In calcPath: post algo validations DROPPED the path {}", path);
                 continue;
             }
 
@@ -110,12 +109,12 @@ public class PceGraph {
             shortestPathAtoZ = new ArrayList<>(pathAtoZ);
             if (("100GE".equals(serviceType)) || ("OTU4".equals(serviceType))) {
                 LOG.info("In calcPath Path FOUND path for wl [{}], hops {}, distance per metrics {}, path AtoZ {}",
-                        pceResult.getResultWavelength(), pathAtoZ.size(), path.getWeight(), pathAtoZ.toString());
+                        pceResult.getResultWavelength(), pathAtoZ.size(), path.getWeight(), pathAtoZ);
                 break;
             } else {
                 // Service is at OTN layer and is relying on a supporting wavelength service
                 LOG.info("In calcPath Path FOUND path for hops {}, distance per metrics {}, path AtoZ {}",
-                        pathAtoZ.size(), path.getWeight(), pathAtoZ.toString());
+                        pathAtoZ.size(), path.getWeight(), pathAtoZ);
                 break;
             }
 
@@ -123,9 +122,9 @@ public class PceGraph {
 
         if (shortestPathAtoZ != null) {
             LOG.info("In calcPath CHOOSEN PATH for wl [{}], hops {}, path AtoZ {}",
-                    pceResult.getResultWavelength(), shortestPathAtoZ.size(), shortestPathAtoZ.toString());
+                    pceResult.getResultWavelength(), shortestPathAtoZ.size(), shortestPathAtoZ);
         }
-        LOG.info("In calcPath : pceResult {}", pceResult.toString());
+        LOG.info("In calcPath : pceResult {}", pceResult);
         return (pceResult.getStatus());
     }
 
@@ -138,7 +137,7 @@ public class PceGraph {
 
         // KShortestPaths on weightedGraph
         KShortestSimplePaths<String, PceGraphEdge> swp =
-            new KShortestSimplePaths<String, PceGraphEdge>(weightedGraph, mhopsPerPath, wpv);
+            new KShortestSimplePaths<>(weightedGraph, mhopsPerPath, wpv);
         allWPaths = swp.getPaths(apceNode.getNodeId().getValue(), zpceNode.getNodeId().getValue(), kpathsToBring);
 
         if (allWPaths.isEmpty()) {
@@ -150,7 +149,7 @@ public class PceGraph {
 
         // debug print
         for (GraphPath<String, PceGraphEdge> path : allWPaths) {
-            LOG.debug("path Weight: {} : {}", path.getWeight(), path.getVertexList().toString());
+            LOG.debug("path Weight: {} : {}", path.getWeight(), path.getVertexList());
         }
 
         return true;
@@ -162,14 +161,14 @@ public class PceGraph {
         PceNode dest = allPceNodes.get(pcelink.getDestId());
 
         if (source == null) {
-            LOG.error("In addLinkToGraph link source node is null : {}", pcelink.toString());
+            LOG.error("In addLinkToGraph link source node is null : {}", pcelink);
             return false;
         }
         if (dest == null) {
-            LOG.error("In addLinkToGraph link dest node is null : {}", pcelink.toString());
+            LOG.error("In addLinkToGraph link dest node is null : {}", pcelink);
             return false;
         }
-        LOG.debug("In addLinkToGraph link to nodes : {}{} {}", pcelink.toString(), source.toString(), dest.toString());
+        LOG.debug("In addLinkToGraph link to nodes : {}{} {}", pcelink, source, dest);
         return true;
     }
 
@@ -178,7 +177,7 @@ public class PceGraph {
         while (nodes.hasNext()) {
             Map.Entry<NodeId, PceNode> node = nodes.next();
             weightedGraph.addVertex(node.getValue().getNodeId().getValue());
-            LOG.debug("In populateWithNodes in node :  {}", node.getValue().toString());
+            LOG.debug("In populateWithNodes in node :  {}", node.getValue());
         }
     }
 
@@ -192,10 +191,10 @@ public class PceGraph {
             PceNode pcenode = node.getValue();
             List<PceLink> links = pcenode.getOutgoingLinks();
 
-            LOG.debug("In populateGraph: use node for graph {}", pcenode.toString());
+            LOG.debug("In populateGraph: use node for graph {}", pcenode);
 
             for (PceLink link : links) {
-                LOG.debug("In populateGraph node {} : add edge to graph {}", pcenode.toString(), link.toString());
+                LOG.debug("In populateGraph node {} : add edge to graph {}", pcenode, link);
 
                 if (!validateLinkforGraph(link)) {
                     continue;
@@ -216,15 +215,15 @@ public class PceGraph {
         switch (pceHardConstraints.getPceMetrics()) {
             case HopCount :
                 weight = 1;
-                LOG.debug("In PceGraph HopCount is used as a metrics. {}", link.toString());
+                LOG.debug("In PceGraph HopCount is used as a metrics. {}", link);
                 break;
             case PropagationDelay :
                 weight = link.getLatency();
-                LOG.debug("In PceGraph PropagationDelay is used as a metrics. {}", link.toString());
+                LOG.debug("In PceGraph PropagationDelay is used as a metrics. {}", link);
                 if ((("1GE".equals(serviceType)) || ("10GE".equals(serviceType)) || ("ODU4".equals(serviceType)))
                         && (weight == 0)) {
                     LOG.warn("PropagationDelay set as metric, but latency is null: is latency set for OTN link {}?",
-                        link.toString());
+                        link);
                 }
                 break;
             // TODO implement IGPMetric and TEMetric - low priority.

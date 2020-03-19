@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 public class PceOtnNode implements PceNode {
     /* Logging. */
-    private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PceOtnNode.class);
     ////////////////////////// OTN NODES ///////////////////////////
     /*
      * For This Class the node passed shall be at the otn-openroadm Layer
@@ -54,18 +54,18 @@ public class PceOtnNode implements PceNode {
     private final String pceNodeType;
     private final String otnServiceType;
 
-    private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<String, List<Uint16>>();
-    private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<String, List<Uint16>>();
-    private Map<String, OpenroadmTpType> availableXponderTp = new TreeMap<String, OpenroadmTpType>();
-    private List<String> usedXpdrNWTps = new ArrayList<String>();
+    private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<>();
+    private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<>();
+    private Map<String, OpenroadmTpType> availableXponderTp = new TreeMap<>();
+    private List<String> usedXpdrNWTps = new ArrayList<>();
     private List<TpId> availableXpdrNWTps;
     private List<TpId> usableXpdrNWTps;
-    private List<String> usedXpdrClientTps = new ArrayList<String>();
+    private List<String> usedXpdrClientTps = new ArrayList<>();
     private List<TpId> availableXpdrClientTps;
     private List<TpId> usableXpdrClientTps;
 
-    private List<PceLink> outgoingLinks = new ArrayList<PceLink>();
-    private Map<String, String> clientPerNwTp = new HashMap<String, String>();
+    private List<PceLink> outgoingLinks = new ArrayList<>();
+    private Map<String, String> clientPerNwTp = new HashMap<>();
 
     public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String pceNodeType, String serviceType) {
         this.node = node;
@@ -75,11 +75,11 @@ public class PceOtnNode implements PceNode {
         this.otnServiceType = serviceType;
         this.tpAvailableTribSlot.clear();
         this.usedXpdrNWTps.clear();
-        this.availableXpdrNWTps = new ArrayList<TpId>();
-        this.usableXpdrNWTps = new ArrayList<TpId>();
+        this.availableXpdrNWTps = new ArrayList<>();
+        this.usableXpdrNWTps = new ArrayList<>();
         this.usedXpdrClientTps.clear();
-        this.availableXpdrClientTps = new ArrayList<TpId>();
-        this.usableXpdrClientTps = new ArrayList<TpId>();
+        this.availableXpdrClientTps = new ArrayList<>();
+        this.usableXpdrClientTps = new ArrayList<>();
         this.tpAvailableTribPort.clear();
         checkAvailableTribPort();
         this.tpAvailableTribSlot.clear();
@@ -102,7 +102,7 @@ public class PceOtnNode implements PceNode {
             .node.TerminationPoint> allTps = nodeTp.getTerminationPoint();
         this.valid = false;
         if (allTps == null) {
-            LOG.error("PceOtnNode: initXndrTps: XPONDER TerminationPoint list is empty for node {}", this.toString());
+            LOG.error("PceOtnNode: initXndrTps: XPONDER TerminationPoint list is empty for node {}", this);
             return;
         }
 
@@ -238,12 +238,11 @@ public class PceOtnNode implements PceNode {
             && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getOdtuType()
                 .equals(ODTU4TsAllocated.class)
-            && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getTpnPool().size() >= 1
-            && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb) {
+            && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getTpnPool().isEmpty()
+            && (ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     private boolean checkClientTp(TerminationPoint1 ontTp1) {
@@ -357,30 +356,28 @@ public class PceOtnNode implements PceNode {
             Long neededBW) {
         if (this.nodeType != OpenroadmNodeType.TPDR) {
             return true;
-        } else {
-            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1 node1 =
-                node.augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1.class);
-            SwitchingPools sp = node1.getSwitchingPools();
-            List<OduSwitchingPools> osp = new ArrayList<OduSwitchingPools>();
-            osp = sp.getOduSwitchingPools();
-            for (OduSwitchingPools ospx : osp) {
-                List<NonBlockingList> nbl = ospx.getNonBlockingList();
-                for (NonBlockingList nbll : nbl) {
-                    if (nbll.getAvailableInterconnectBandwidth().toJava() >= neededBW) {
-                        List<TpId> tplist = new ArrayList<TpId>(nbll.getTpList());
-                        if ((tplist.contains(tp1.getTpId())) & (tplist.contains(tp2.getTpId()))) {
-                            LOG.debug("validateSwitchingPoolBandwidth: couple  of tp {} x {} valid for crossconnection",
-                                tp1.getTpId().toString(), tp2.getTpId().toString());
-                            return true;
-                        }
-                    }
+        }
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1 node1 =
+            node.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1.class);
+        SwitchingPools sp = node1.getSwitchingPools();
+        List<OduSwitchingPools> osp = sp.getOduSwitchingPools();
+        for (OduSwitchingPools ospx : osp) {
+            List<NonBlockingList> nbl = ospx.getNonBlockingList();
+            for (NonBlockingList nbll : nbl) {
+                if (nbll.getAvailableInterconnectBandwidth().toJava() >= neededBW && nbll.getTpList() != null
+                        && nbll.getTpList().contains(tp1.getTpId()) && nbll.getTpList().contains(tp2.getTpId())) {
+                    LOG.debug("validateSwitchingPoolBandwidth: couple  of tp {} x {} valid for crossconnection",
+                        tp1.getTpId(), tp2.getTpId());
+                    return true;
                 }
             }
-            LOG.debug("validateSwitchingPoolBandwidth: No valid Switching pool for crossconnecting tp {} and {}",
-                tp1.getTpId().toString(), tp2.getTpId().toString());
-            return false;
         }
+
+        LOG.debug("validateSwitchingPoolBandwidth: No valid Switching pool for crossconnecting tp {} and {}",
+            tp1.getTpId(), tp2.getTpId());
+        return false;
+
     }
 
     public void validateIntermediateSwitch() {
@@ -397,7 +394,6 @@ public class PceOtnNode implements PceNode {
         } else {
             LOG.info("validateIntermediateSwitch: Switch usable for transit == {}", nodeId.getValue());
         }
-        return;
     }
 
     public void checkAvailableTribPort() {
@@ -453,10 +449,12 @@ public class PceOtnNode implements PceNode {
         return valid;
     }
 
+    @Override
     public void addOutgoingLink(PceLink outLink) {
         this.outgoingLinks.add(outLink);
     }
 
+    @Override
     public List<PceLink> getOutgoingLinks() {
         return outgoingLinks;
     }
@@ -466,12 +464,13 @@ public class PceOtnNode implements PceNode {
         return this.clientPerNwTp.get(tp);
     }
 
+    @Override
     public String toString() {
         return "PceNode type=" + nodeType + " ID=" + nodeId.getValue() + " CLLI=" + this.getSupClliNodeId();
     }
 
     public void printLinksOfNode() {
-        LOG.info(" outgoing links of node {} : {} ", nodeId.getValue(), this.getOutgoingLinks().toString());
+        LOG.info(" outgoing links of node {} : {} ", nodeId.getValue(), this.getOutgoingLinks());
     }
 
     @Override
@@ -509,7 +508,6 @@ public class PceOtnNode implements PceNode {
 
     @Override
     public String getRdmSrgClient(String tp) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -520,13 +518,11 @@ public class PceOtnNode implements PceNode {
 
     @Override
     public boolean checkTP(String tp) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean checkWL(long index) {
-        // TODO Auto-generated method stub
         return false;
     }
 }
