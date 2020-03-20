@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1cbfb34f_a764e3ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-20T17:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18a3364d_ca6e0ca9",
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9e6e6c2_651667f2",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
         "patchSetId": 1
@@ -112,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "d1ec6eae_67ba649f",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-20T17:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66a54ff5_bdebba0d",
+      "range": {
+        "startLine": 84,
+        "startChar": 12,
+        "endLine": 84,
+        "endChar": 64
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d78d1eb_ae8947b3",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
         "patchSetId": 1
@@ -181,6 +223,30 @@
     },
     {
       "key": {
+        "uuid": "fa5824a8_f6e67c1e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-20T17:42:20Z",
+      "side": 1,
+      "message": "I have taken into account your recommendations with some modifications for the domWriter because it is particular in this case since it is related to the codecRegistry",
+      "parentUuid": "348247a8_e8e826b7",
+      "range": {
+        "startLine": 82,
+        "startChar": 3,
+        "endLine": 124,
+        "endChar": 27
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7b2f66f_10922a79",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
         "patchSetId": 1
@@ -201,6 +267,30 @@
       "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "425fe9ec_bbf5e337",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-20T17:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7b2f66f_10922a79",
+      "range": {
+        "startLine": 150,
+        "startChar": 18,
+        "endLine": 150,
+        "endChar": 55
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
