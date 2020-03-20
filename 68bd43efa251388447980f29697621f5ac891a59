@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd4dfa38_8163da25",
+        "filename": "tests/sample_configs/openroadm/1.2.1/oper-XPDRC.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-03-20T09:15:37Z",
+      "side": 1,
+      "message": "Do you use such device information in GNPy?",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "68bd43efa251388447980f29697621f5ac891a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "359334eb_21102a04",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-03-20T09:15:37Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 18,
+        "startChar": 6,
+        "endLine": 18,
+        "endChar": 40
+      },
+      "revId": "68bd43efa251388447980f29697621f5ac891a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c19620e2_dbeb8691",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-03-20T09:15:37Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 21,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "68bd43efa251388447980f29697621f5ac891a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73605a8b_ad07e6bd",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-03-20T09:15:37Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 23,
+        "startChar": 6,
+        "endLine": 23,
+        "endChar": 52
+      },
+      "revId": "68bd43efa251388447980f29697621f5ac891a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b47d94aa_5ed60a18",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-03-20T09:15:37Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 48
+      },
+      "revId": "68bd43efa251388447980f29697621f5ac891a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
