@@ -523,6 +523,10 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             String destTpId = link.getDestTpid();
             OtsPmHolder srcOtsPmHoler = getPmMeasurements(sourceNodeId, sourceTpId, "OpticalPowerOutput");
             OtsPmHolder destOtsPmHoler = getPmMeasurements(destNodeId, destTpId, "OpticalPowerInput");
+            if (srcOtsPmHoler.getOtsInterfaceName() == null || destOtsPmHoler.getOtsInterfaceName() == null) {
+                LOG.warn("OTS is not present for the link {}", link);
+                continue;
+            }
             spanLoss = new BigDecimal(srcOtsPmHoler.getOtsParameterVal() - destOtsPmHoler.getOtsParameterVal())
                 .setScale(0, RoundingMode.HALF_UP);
             LOG.info("Spanloss Calculated as :{}={}-{}",
