@@ -139,7 +139,20 @@ public class PowerMgmtImpl implements PowerMgmt {
                                     LOG.info("Transponder OCH connection: {} power update failed ", interfaceName);
                                 }
                             } else {
-                                LOG.info("SRG Power Range not found");
+                                LOG.info("SRG Power Range not found, setting the Transponder range to default");
+                                String interfaceName = destTpId + "-" + input.getWaveNumber();
+                                if (callSetTransponderPower(nodeId, interfaceName, new BigDecimal(-5),
+                                    openroadmVersion)) {
+                                    LOG.info("Transponder OCH connection: {} power updated ", interfaceName);
+                                    try {
+                                        Thread.sleep(OlmUtils.OLM_TIMER_1);
+                                    } catch (InterruptedException e) {
+                                        // TODO Auto-generated catch block
+                                        LOG.info("Transponder warmup failed for OCH connection: {}", interfaceName, e);
+                                    }
+                                } else {
+                                    LOG.info("Transponder OCH connection: {} power update failed ", interfaceName);
+                                }
                             }
                         } else {
                             LOG.info("Tranponder range not available setting to default power for nodeId: {}", nodeId);
