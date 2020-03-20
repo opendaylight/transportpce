@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "18a3364d_ca6e0ca9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-20T09:15:23Z",
+      "side": 1,
+      "message": "I think there are JIRA tickets on the tech debt and the Mg upgrade.",
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9e6e6c2_651667f2",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
         "patchSetId": 1
@@ -46,6 +63,29 @@
       "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d78d1eb_ae8947b3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-20T09:15:23Z",
+      "side": 1,
+      "message": "Well !",
+      "range": {
+        "startLine": 346,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 80
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
