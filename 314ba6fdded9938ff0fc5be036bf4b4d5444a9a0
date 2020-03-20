@@ -66,6 +66,52 @@
     },
     {
       "key": {
+        "uuid": "fdb18e22_072949cf",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-20T09:44:36Z",
+      "side": 1,
+      "message": "Something more like that I think :-)\n\n    //#FUNCTESTVAL\u003d 3000;\n    public static final long OLM_TIMER_1 \u003d 120000;\n    //#FUNCTESTVAL\u003d 2000;\n    public static final long OLM_TIMER_2 \u003d 20000;",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66a54ff5_bdebba0d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-20T09:44:36Z",
+      "side": 1,
+      "message": "Regarding sonar it\u0027s a good practise to log all the exception\n LOG.error(\"in PCESendingPceRPC: \",e);",
+      "range": {
+        "startLine": 84,
+        "startChar": 12,
+        "endLine": 84,
+        "endChar": 64
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8d78d1eb_ae8947b3",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
         "patchSetId": 1
@@ -86,6 +132,75 @@
       "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66cec010_3124898e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-20T09:44:36Z",
+      "side": 1,
+      "message": "method close of StringWriter does nothing so for Stringwriter you don\u0027t have to call the method\n(cf https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/StringWriter.html)",
+      "range": {
+        "startLine": 124,
+        "startChar": 12,
+        "endLine": 124,
+        "endChar": 26
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "348247a8_e8e826b7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-20T09:44:36Z",
+      "side": 1,
+      "message": "to use the autocloseable functionality of NormalizedNodeStreamWriter, perhaps something like that:\n    @Override\n    public String createJsonStringFromDataObject(final InstanceIdentifier\u003c?\u003e id, DataObject object)\n            throws GnpyException, Exception {\n\n        final SchemaPath scPath \u003d SchemaPath\n                .create(FluentIterable.from(id.getPathArguments()).transform(new Function\u003cPathArgument, QName\u003e() {\n                    @Override\n                    public QName apply(final PathArgument input) {\n                        return BindingReflections.findQName(input.getType());\n                    }\n                }), true);\n\n        // Prepare the variables\n        final ModuleInfoBackedContext moduleContext \u003d ModuleInfoBackedContext.create();\n        Iterable\u003c? extends YangModuleInfo\u003e moduleInfos \u003d Collections\n                .singleton(BindingReflections.getModuleInfo(object.getClass()));\n\n        moduleContext.addModuleInfos(moduleInfos);\n        SchemaContext schemaContext \u003d moduleContext.tryToCreateSchemaContext().get();\n        BindingRuntimeContext bindingContext;\n        bindingContext \u003d BindingRuntimeContext.create(moduleContext, schemaContext);\n        final BindingNormalizedNodeCodecRegistry codecRegistry \u003d new BindingNormalizedNodeCodecRegistry(bindingContext);\n\n        /*\n         * This function needs : - context - scPath.getParent() -\n         * scPath.getLastComponent().getNamespace(), -\n         * JsonWriterFactory.createJsonWriter(writer)\n         */\n        try (Writer writer \u003d new StringWriter();\n                NormalizedNodeStreamWriter domWriter \u003d JSONNormalizedNodeStreamWriter.createExclusiveWriter(\n                        JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.createSimple(schemaContext),\n                        scPath.getParent(), scPath.getLastComponent().getNamespace(),\n                        JsonWriterFactory.createJsonWriter(writer, 2));) {\n\n            // The write part\n            codecRegistry.getSerializer(id.getTargetType()).serialize(object, codecRegistry.newWriter(id, domWriter));\n            return writer.toString();\n\n        } catch (IOException e) {\n            throw new GnpyException(\"In ServiceDataStoreOperationsImpl: exception during json file creation\", e);\n        }\n\n    }",
+      "range": {
+        "startLine": 82,
+        "startChar": 3,
+        "endLine": 124,
+        "endChar": 27
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7b2f66f_10922a79",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-20T09:44:36Z",
+      "side": 1,
+      "message": "\"Ethernet\".equals(serviceFormatA)",
+      "range": {
+        "startLine": 150,
+        "startChar": 18,
+        "endLine": 150,
+        "endChar": 55
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
