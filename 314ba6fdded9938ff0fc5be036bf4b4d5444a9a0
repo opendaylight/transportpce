@@ -22,6 +22,30 @@
       "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99b0c4de_9713212d",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-20T09:03:51Z",
+      "side": 1,
+      "message": "Yes, I have seen that yesterday when I have published the code on gerrit.\nI will fix this in the next patch with other modifications.",
+      "parentUuid": "e9e6e6c2_651667f2",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
