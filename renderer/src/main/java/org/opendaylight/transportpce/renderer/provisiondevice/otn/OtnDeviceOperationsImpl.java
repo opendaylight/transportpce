@@ -7,7 +7,9 @@
  */
 package org.opendaylight.transportpce.renderer.provisiondevice.otn;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
@@ -22,25 +24,30 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev181019
 public class OtnDeviceOperationsImpl implements OtnDeviceOperations {
 
     @Override
-    public String validateClientPort(String nodeID, String circuitPackName, String portName, String capacity) {
+    public String validateClientPort(String circuitPackName, String portName, String capacity,
+            PortGroupRestriction portGroupRestriction) {
 
-        PortGroupRestriction portGroupRestriction = null; //should not be initiated as null
-        List<PortBandwidthSharing> portBandwidthSharingList = portGroupRestriction.getPortBandwidthSharing();
-        for (PortBandwidthSharing portBandwidthSharing: portBandwidthSharingList) {
-            List<PortList> portLists = portBandwidthSharing.getPortList();
-            for (PortList portList: portLists) {
-                if (portList.getCircuitPackName().equals(circuitPackName) && portList.getPortName().equals(portName)) {
-                    if (!usageOfOtherPorts(portBandwidthSharing,
-                            getConfigID(portBandwidthSharing, circuitPackName, portName))) {
-                        return "valid port";
-                    }
-                    else {
-                        return "not a valid port";
+        List<PortBandwidthSharing> portBandwidthSharingList = portGroupRestriction
+                .getPortBandwidthSharing();
+        if (portGroupRestriction.getPortBandwidthSharing() != null) {
+            for (PortBandwidthSharing portBandwidthSharing : portBandwidthSharingList) {
+                List<PortList> portLists = portBandwidthSharing.getPortList();
+                for (PortList portList : portLists) {
+                    if (portList.getCircuitPackName().equals(circuitPackName)
+                            && portList.getPortName().equals(portName)) {
+                        if (!usageOfOtherPorts(portBandwidthSharing,
+                                getConfigID(portBandwidthSharing,
+                                        circuitPackName, portName))) {
+                            return "valid port";
+                        } else {
+                            return "not a valid port";
+                        }
                     }
                 }
             }
         }
-        return "not valid circuitPackName or portName"; // if the client port is not found at all throw exception
+     // if the client port is not found at all throw exception
+        return "not valid circuitPackName or portName";
     }
 
     private Integer getConfigID(PortBandwidthSharing portBandwidthSharing, String circuitPackName, String portName) {
@@ -55,7 +62,8 @@ public class OtnDeviceOperationsImpl implements OtnDeviceOperations {
                 }
             }
         }
-        return null; // throw exception if not able to get config id
+        // throw exception if not able to get config id
+        return null;
     }
 
 
@@ -66,14 +74,11 @@ public class OtnDeviceOperationsImpl implements OtnDeviceOperations {
     @Override
     public List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org
                 .openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList>
-                getPossibleNetworkPorts(String circuitPackName, String portName) {
+                getPossibleNetworkPorts(String circuitPackName, String portName, OduSwitchingPools oduSwitchingPools,
+                        CircuitPacks circuitPacks) {
         List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org
                 .openroadm.device.container.org.openroadm.device.odu.switching
-                .pools.non.blocking.list.PortList> networkPortList = null;
-
-        //need a method to get swtiching pool object from device
-
-        OduSwitchingPools oduSwitchingPools = null; // should not be initiated as null
+                .pools.non.blocking.list.PortList> networkPortList = new ArrayList<>();
         List<NonBlockingList> nonBlockingLists = oduSwitchingPools.getNonBlockingList();
 
 
@@ -86,7 +91,7 @@ public class OtnDeviceOperationsImpl implements OtnDeviceOperations {
                 if (port.getCircuitPackName().equals(circuitPackName) && port.getPortName().equals(portName)) {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
                             .container.org.openroadm.device.odu.switching.pools.non.blocking.list
-                            .PortList networkPort = checkNetworkPorts(nonBlockingList.getPortList());
+                            .PortList networkPort = checkNetworkPorts(nonBlockingList.getPortList(), circuitPacks);
                     if (networkPort != null) {
                         networkPortList.add(networkPort);
                     }
@@ -100,9 +105,8 @@ public class OtnDeviceOperationsImpl implements OtnDeviceOperations {
     private org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
             .container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList
         checkNetworkPorts(List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org
-            .openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList> portList) {
-        CircuitPacks circuitPacks = null;
-
+            .openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList> portList,
+                CircuitPacks circuitPacks) {
         List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs
             .CircuitPacks> circuitPackList = circuitPacks.getCircuitPacks();
 
@@ -113,7 +117,8 @@ public class OtnDeviceOperationsImpl implements OtnDeviceOperations {
                 return searchNetworkPort(port, circuitPack);
             }
         }
-        return null; // throw exception if no available network ports
+     // TODO: throw exception if no available network ports
+        return null;
     }
 
     private org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container
@@ -123,12 +128,15 @@ public class OtnDeviceOperationsImpl implements OtnDeviceOperations {
             org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.circuit.packs.CircuitPacks circuitPack) {
         if (port.getCircuitPackName().equals(circuitPack.getCircuitPackName())) {
             for (Ports prt : circuitPack.getPorts()) {
-                if (port.getPortName().equals(prt.getPortName()) && prt.getPortQual().equals("xpdr-network")) {
+                if (prt.getPortQual() != null
+                        && port.getPortName().equals(prt.getPortName())
+                        && "xpdr-network".equals(prt.getPortQual().getName())) {
                     return port;
                 }
             }
         }
-        return null; // throw exception
+     // TODO: throw exception
+        return null;
     }
 
 

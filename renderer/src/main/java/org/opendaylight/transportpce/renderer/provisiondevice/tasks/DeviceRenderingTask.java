@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.List;
 import java.util.concurrent.Callable;
+
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRenderingResult;
@@ -37,7 +38,7 @@ public class DeviceRenderingTask implements Callable<DeviceRenderingResult> {
     public DeviceRenderingResult call() throws Exception {
         ServicePathOutput output = this.deviceRenderer.setupServicePath(this.servicePathInputData.getServicePathInput(),
                 this.direction);
-        if (! output.isSuccess()) {
+        if (!output.isSuccess()) {
             LOG.warn("Device rendering not successfully finished.");
             return DeviceRenderingResult.failed("Operation Failed");
         }
