@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "8e502060_3c37d950",
+        "filename": "tests/Xtesting/DockerSims/build_sims.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-23T22:07:38Z",
+      "side": 1,
+      "message": "I don\u0027t think so (although I liked a lot your inital idea here of dealing properly with rootless container - note that I checked \"resolved\" in my first comment initially)\nWriting portable scripts is not a task as easy than many people think.\nThose recos from the docker site are pure theory that package and distro maintainers never completely follow, for good or bad reasons up to them. They can\u0027t be forced to follow editors recos.\nYou can take a look at the following URLs about the use of different groups \"sudo\" and \"wheel\" for example.\n    https://en.wikipedia.org/wiki/Wheel_(computing)#Wheel_group\n    https://wiki.debian.org/sudo\n    https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-gaining_privileges\nBut I could also have taken the packaging of maven for example.\n\nIn this particular case, RedHat/CentOS/Fedora have started replacing docker by a CLI compatible solution called podman. https://podman.io/whatis.html\nThe docker package does not exist anymore in CentOS / RHEL 8 since there is a transition package that simply aliases the docker command with podman.\nhttps://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/building_running_and_managing_containers/index\nThis solution does not have anymore a container engine / server and is naturally rootless. There is no more need for the use of a \"docker\" group.\nThe only portable solution in that case is to test the docker command (e.g. with \"docker ps\") rather than checking the appartenance to the docker group. See dockercmd_profile.sh\n\nAlso podman uses cgroups v2 and improves the isolation of container, what illustrates my other point in PS4.\nhttps://www.redhat.com/sysadmin/basic-security-principles-containers\nhttps://www.redhat.com/sysadmin/fedora-31-control-group-v2",
+      "parentUuid": "ae0f864a_cfb999e4",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "271d6d16618003679550a4bf4fbccc92c37dba00",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f94eff0_ece8b26a",
         "filename": "tests/Xtesting/DockerSims/start_sims121.sh",
         "patchSetId": 3

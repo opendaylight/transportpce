@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "881fbe27_56395518",
+        "filename": "tests/Xtesting/DockerSims/start_sims.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-23T22:07:38Z",
+      "side": 1,
+      "message": "I modifed the command to use the ports 81xx rather than 188xx for Netconf so that those containers can be used as a drop-in replacement of the honeycom-tpce script.\n\n./honeycomb-tpce \n[..]\nhoneycomb-tpce port initial-config-xml\nEg : honeycomb-tpce 17832 sample-config-ROADM.xml (rest-http port will be 81 + netconf-port last two digits : 8132)",
+      "range": {
+        "startLine": 21,
+        "startChar": 54,
+        "endLine": 21,
+        "endChar": 68
+      },
+      "revId": "498455b009bc14fea557dca0162d697c64481a71",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
