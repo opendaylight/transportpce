@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9acf6512_1c5b6611",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ConnectToGnpyServer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "Long term improvement: Perhaps using a framework more REST firendly like JERSEY\nhttps://eclipse-ee4j.github.io/jersey/",
+      "range": {
+        "startLine": 40,
+        "startChar": 11,
+        "endLine": 40,
+        "endChar": 40
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61df885e_dad244f5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ConnectToGnpyServer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "should not be hard coded",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 49
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a640f148_a8e46778",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ConnectToGnpyServer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "Could be extracted in a method to avoid code duplication. \nSomething like that :\n    private HttpURLConnection connect(String action) throws IOException {\n        URL url \u003d new URL(URL_GNPY);\n        String userCredentials \u003d \"gnpy:gnpy\";\n        String basicAuth \u003d \"Basic \" + new String(java.util.Base64.getEncoder()\n            .encode(userCredentials.getBytes(StandardCharsets.UTF_8)),StandardCharsets.UTF_8);\n        HttpURLConnection conn \u003d (HttpURLConnection) url.openConnection();\n        conn.setDoOutput(true);\n        conn.setRequestMethod(action);\n        conn.setRequestProperty(\"Authorization\", basicAuth);\n        conn.setRequestProperty(\"Content-Type\", \"application/json\");\n        conn.connect();\n        return conn;\n    }",
+      "range": {
+        "startLine": 40,
+        "startChar": 10,
+        "endLine": 49,
+        "endChar": 72
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e7d2dd6_6b087ade",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ConnectToGnpyServer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "should not be hard coded",
+      "range": {
+        "startLine": 74,
+        "startChar": 12,
+        "endLine": 74,
+        "endChar": 49
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf0133ca_fbca2471",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyResult.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "As you want to have key and value through loop, the following code could be more efficient\n    private String findOrdNetworkNodeId(IpAddress nodeIpAddress) {\n        for (Map.Entry\u003cString, IpAddress\u003e entry : mapNodeRefIp.entrySet()) {\n            if(entry.getValue().equals(nodeIpAddress)) {\n                return entry.getKey();\n            }\n        }\n        return null;\n    }",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 224,
+        "endChar": 20
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be8df6cb_9a2ab3d0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "more usual notation\nLong index \u003d 0L;",
+      "range": {
+        "startLine": 198,
+        "startChar": 7,
+        "endLine": 198,
+        "endChar": 30
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c89fb6e5_c4bb109d",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "more usual notation\nLong index \u003d 0L;",
+      "range": {
+        "startLine": 206,
+        "startChar": 8,
+        "endLine": 206,
+        "endChar": 30
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6241982b_968ad338",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "more usual notation\nLong index \u003d 0L;",
+      "range": {
+        "startLine": 246,
+        "startChar": 12,
+        "endLine": 246,
+        "endChar": 34
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0947c992_eed10694",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "Where will they be used ?",
+      "range": {
+        "startLine": 376,
+        "startChar": 3,
+        "endLine": 386,
+        "endChar": 5
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe3854a0_1f0062ed",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-23T21:33:40Z",
+      "side": 1,
+      "message": "Do you really need tplist variable ?\nPerhaps using directly nbll.getTpList() like in the following example?\nif (nbll.getTpList() !\u003d null \u0026\u0026 nbll.getTpList().contains(tp1.getTpId()) \u0026\u0026 nbll.getTpList().contains(tp2.getTpId())) {",
+      "range": {
+        "startLine": 370,
+        "startChar": 24,
+        "endLine": 371,
+        "endChar": 99
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
