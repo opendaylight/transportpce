@@ -9,14 +9,16 @@
 package org.opendaylight.transportpce.renderer.stub;
 
 import java.util.Optional;
+
 import javax.annotation.Nonnull;
+
 import org.opendaylight.mdsal.binding.api.BindingService;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-public class MountPointStub  implements MountPoint {
+public class MountPointStub implements MountPoint {
 
     private DataBroker dataBroker;
 
@@ -26,7 +28,8 @@ public class MountPointStub  implements MountPoint {
         this.dataBroker = dataBroker;
     }
 
-    public void setRpcConsumerRegistry(RpcConsumerRegistry rpcConsumerRegistry) {
+    public void setRpcConsumerRegistry(
+            RpcConsumerRegistry rpcConsumerRegistry) {
         this.rpcConsumerRegistry = rpcConsumerRegistry;
     }
 
@@ -34,10 +37,10 @@ public class MountPointStub  implements MountPoint {
     @SuppressWarnings("unchecked")
     public <T extends BindingService> Optional<T> getService(Class<T> service) {
         if (service.isInstance(dataBroker)) {
-            return Optional.ofNullable((T)dataBroker);
+            return Optional.ofNullable((T) dataBroker);
         }
         if (service.isInstance(rpcConsumerRegistry)) {
-            return Optional.ofNullable((T)rpcConsumerRegistry);
+            return Optional.ofNullable((T) rpcConsumerRegistry);
         }
         return Optional.empty();
     }
@@ -45,6 +48,6 @@ public class MountPointStub  implements MountPoint {
     @Nonnull
     @Override
     public InstanceIdentifier<?> getIdentifier() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }
