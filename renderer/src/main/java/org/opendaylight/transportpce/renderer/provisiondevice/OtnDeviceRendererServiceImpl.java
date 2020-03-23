@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
+    private static final String ODU2E = "-ODU2e-";
     private static final Logger LOG = LoggerFactory.getLogger(OtnDeviceRendererServiceImpl.class);
     private final OpenRoadmInterfaceFactory openRoadmInterfaceFactory;
     private final CrossConnect crossConnect;
@@ -107,12 +108,12 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 String connectionNumber = "";
                 switch (input.getServiceRate()) {
                     case("10G"):
-                        connectionNumber = srcTp + "-ODU2e-" + input.getServiceName() + "-x-" + destTp
-                            + "-ODU2e-" + input.getServiceName();
+                        connectionNumber = srcTp + ODU2E + input.getServiceName() + "-x-" + destTp
+                            + ODU2E + input.getServiceName();
                         break;
                     case("1G"):
                         connectionNumber = srcTp + "-ODU0-" + input.getServiceName() + "-x-" + destTp
-                            + "-ODU2e-" + input.getServiceName();
+                            + ODU2E + input.getServiceName();
                         break;
                     default:
                         LOG.error("service rate {} not managed yet", input.getServiceRate());
@@ -124,7 +125,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, true);
                 if (intToDelete != null) {
                     for (String interf : intToDelete) {
-                        if (!this.openRoadmInterfaceFactory.isUsedbyOtnXc(nodeId, interf, connectionNumber,
+                        if (!this.openRoadmInterfaceFactory.isUsedByOtnXc(nodeId, interf, connectionNumber,
                             this.deviceTransactionManager)) {
                             interfacesToDelete.add(interf);
                             if (!getSupportedInterface(nodeId, interf).contains("ODU4")) {

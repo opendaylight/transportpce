@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.renderer;
 
 import com.google.common.util.concurrent.ListenableFuture;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,8 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+
 public final class ModelMappingUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(ModelMappingUtils.class);
@@ -50,8 +53,12 @@ public final class ModelMappingUtils {
     public static ServicePowerSetupInput createServicePowerSetupInput(List<Nodes> olmList,
         ServiceImplementationRequestInput input) {
         ServicePowerSetupInputBuilder olmSetupBldr = new ServicePowerSetupInputBuilder()
-            .setNodes(olmList)
-            .setWaveNumber(input.getPathDescription().getAToZDirection().getAToZWavelengthNumber());
+            .setNodes(olmList);
+        if (input != null && input.getPathDescription() != null
+                && input.getPathDescription().getAToZDirection() != null) {
+            olmSetupBldr.setWaveNumber(
+                    input.getPathDescription().getAToZDirection().getAToZWavelengthNumber());
+        }
         return olmSetupBldr.build();
     }
 
@@ -147,44 +154,22 @@ public final class ModelMappingUtils {
                     }
 
                     int[] pos = findTheLongestSubstring(nodeID, tpID);
-                    //TODO: do not rely on nodeId to be integer
-                    int id = Integer.parseInt(sortId);
-                    treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
-                } else if (resourceType.equals("Link")) {
+                    if (pos != null) {
+                        //TODO: do not rely on nodeId to be integer
+                        int id = Integer.parseInt(sortId);
+                        treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
+                    }
+                } else if ("Link".equals(resourceType)) {
                     LOG.info("The type is link");
                 } else {
                     LOG.info("The type is not indentified: {}", resourceType);
                 }
             } catch (IllegalArgumentException | SecurityException e) {
-                // TODO Auto-generated catch block
                 LOG.error("Dont find the getResource method", e);
             }
         }
 
-        String desID = null;
-        String srcID = null;
-        for (NodeIdPair values : treeMap.values()) {
-            if (srcID == null) {
-                srcID = values.getTpID();
-            } else if (desID == null) {
-                desID = values.getTpID();
-                NodesBuilder nb = new NodesBuilder()
-                    .withKey(new NodesKey(values.getNodeID()))
-                    .setDestTp(desID)
-                    .setSrcTp(srcID);
-                list.add(nb.build());
-
-                NodesBuilder olmNb = new NodesBuilder()
-                    .setNodeId(values.getNodeID())
-                    .setDestTp(desID)
-                    .setSrcTp(srcID);
-                olmList.add(olmNb.build());
-                srcID = null;
-                desID = null;
-            } else {
-                LOG.warn("both, the source and destination id are null!");
-            }
-        }
+        populateNodeLists(treeMap, list, olmList);
         return new NodeLists(olmList, list);
     }
 
@@ -223,10 +208,12 @@ public final class ModelMappingUtils {
                     }
 
                     int[] pos = findTheLongestSubstring(nodeID, tpID);
-                    //TODO: do not rely on nodeId to be integer
-                    int id = Integer.parseInt(sortId);
-                    treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
-                } else if (resourceType.equals("Link")) {
+                    if (pos != null) {
+                        //TODO: do not rely on nodeId to be integer
+                        int id = Integer.parseInt(sortId);
+                        treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
+                    }
+                } else if ("Link".equals(resourceType)) {
                     LOG.info("The type is link");
                 } else {
                     LOG.info("The type is not indentified: {}", resourceType);
@@ -237,6 +224,16 @@ public final class ModelMappingUtils {
             }
         }
 
+        populateNodeLists(treeMap, list, olmList);
+        return new NodeLists(olmList, list);
+    }
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+            value = {"NP_LOAD_OF_KNOWN_NULL_VALUE","RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE"},
+            justification = "loop when value is not always null - "
+                    + "TODO: check if something exists in Java lib")
+    private static void populateNodeLists(Map<Integer, NodeIdPair> treeMap,
+            List<Nodes> list, List<Nodes> olmList) {
         String desID = null;
         String srcID = null;
         for (NodeIdPair values : treeMap.values()) {
@@ -261,9 +258,12 @@ public final class ModelMappingUtils {
                 LOG.warn("both, the source and destination id are null!");
             }
         }
-        return new NodeLists(olmList, list);
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+            value = "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
+            justification = "not relevant to return and zero length array"
+                    + " as we need real pos")
     public static int[] findTheLongestSubstring(String s1, String s2) {
         if ((s1 == null) || (s2 == null)) {
             return null;
