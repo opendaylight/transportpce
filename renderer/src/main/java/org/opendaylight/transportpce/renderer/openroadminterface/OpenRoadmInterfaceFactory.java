@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 
 public class OpenRoadmInterfaceFactory {
 
+    private static final String OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG = "OTN funtions "
+            + "are not supported by Openroadm models 1.2.1";
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfaceFactory.class);
     private final MappingUtils mappingUtils;
     private final OpenRoadmInterface121 openRoadmInterface121;
@@ -161,7 +163,7 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
-    public boolean isUsedbyXc(String nodeId, String interfaceName, String xc,
+    public boolean isUsedByXc(String nodeId, String interfaceName, String xc,
                               DeviceTransactionManager deviceTransactionManager) {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
@@ -173,11 +175,11 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
-    public boolean isUsedbyOtnXc(String nodeId, String interfaceName, String xc,
+    public boolean isUsedByOtnXc(String nodeId, String interfaceName, String xc,
         DeviceTransactionManager deviceTransactionManager) {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error("OTN funtions are not supported by Openroadm models 1.2.1");
+                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
                 return false;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221.isUsedByOtnXc(nodeId, interfaceName, xc, deviceTransactionManager);
@@ -190,7 +192,7 @@ public class OpenRoadmInterfaceFactory {
                                                 String logicalConnPoint) throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error("OTN funtions are not supported by Openroadm models 1.2.1");
+                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
                 return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface.createOpenRoadmEth1GInterface(nodeId, logicalConnPoint);
@@ -203,7 +205,7 @@ public class OpenRoadmInterfaceFactory {
                                                  String logicalConnPoint) throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error("OTN funtions are not supported by Openroadm models 1.2.1");
+                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
                 return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface.createOpenRoadmEth10GInterface(nodeId, logicalConnPoint);
@@ -218,7 +220,7 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error("OTN funtions are not supported by Openroadm models 1.2.1");
+                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
                 return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface.createOpenRoadmOdu0Interface(
@@ -233,7 +235,7 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error("OTN funtions are not supported by Openroadm models 1.2.1");
+                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
                 return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface.createOpenRoadmOdu2Interface(
@@ -248,7 +250,7 @@ public class OpenRoadmInterfaceFactory {
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
-                LOG.error("OTN funtions are not supported by Openroadm models 1.2.1");
+                LOG.error(OTN_FUNTIONS_ARE_NOT_SUPPORTED_BY_OPENROADM_MODELS_1_2_1_MSG);
                 return null;
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmOtnInterface.createOpenRoadmOdu2eInterface(

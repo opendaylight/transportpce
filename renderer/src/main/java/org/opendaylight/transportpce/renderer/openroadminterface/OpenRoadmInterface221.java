@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.renderer.openroadminterface;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -449,7 +450,7 @@ public class OpenRoadmInterface221 {
         OduBuilder oduIfBuilder = new OduBuilder()
                 .setRate(ODU4.class)
                 .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
-        if (!nodeId.toLowerCase().contains("eci")) {
+        if (!nodeId.toLowerCase(Locale.getDefault()).contains("eci")) {
             oduIfBuilder.setTxDapi("");
             oduIfBuilder.setTxSapi("");
         }

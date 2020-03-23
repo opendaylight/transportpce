@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
@@ -68,7 +70,10 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+
 public class DeviceRendererServiceImpl implements DeviceRendererService {
+    private static final String ODU4 = "-ODU4";
     private static final Logger LOG = LoggerFactory.getLogger(DeviceRendererServiceImpl.class);
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
@@ -241,7 +246,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
 
     private ConcurrentLinkedQueue<String> processErrorMessage(String message, ForkJoinPool forkJoinPool,
             ConcurrentLinkedQueue<String> messages) {
-        LOG.warn(message);
+        LOG.warn("Received error message {}", message);
         messages.add(message);
         forkJoinPool.shutdown();
         return messages;
@@ -276,51 +281,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             }
             // if the node is currently mounted then proceed.
             if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
-                if (destTp.contains(StringConstants.NETWORK_TOKEN)
-                        || srcTp.contains(StringConstants.CLIENT_TOKEN)
-                        || srcTp.contains(StringConstants.NETWORK_TOKEN)
-                        || destTp.contains(StringConstants.CLIENT_TOKEN)) {
-                    if (destTp.contains(StringConstants.NETWORK_TOKEN)) {
-                        try {
-                            if (this.openRoadmInterfaces.getInterface(nodeId, destTp + "-ODU").isPresent()) {
-                                interfacesToDelete.add(destTp + "-ODU");
-                            }
-                            if (this.openRoadmInterfaces.getInterface(nodeId, destTp + "-ODU4").isPresent()) {
-                                interfacesToDelete.add(destTp + "-ODU4");
-                            }
-                        }
-                        catch (OpenRoadmInterfaceException e) {
-                            LOG.error("impossible to get interface {} or {}", destTp + "-ODU", destTp + "-ODU4", e);
-                        }
-                        interfacesToDelete.add(destTp + "-OTU");
-                        interfacesToDelete.add(
-                                this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber));
-                    }
-                    if (srcTp.contains(StringConstants.NETWORK_TOKEN)) {
-                        interfacesToDelete.add(srcTp + "-ODU");
-                        interfacesToDelete.add(srcTp + "-OTU");
-                        interfacesToDelete
-                                .add(this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(srcTp, waveNumber));
-                    }
-                    if (srcTp.contains(StringConstants.CLIENT_TOKEN)) {
-                        interfacesToDelete.add(srcTp + "-ETHERNET");
-                    }
-                    if (destTp.contains(StringConstants.CLIENT_TOKEN)) {
-                        interfacesToDelete.add(destTp + "-ETHERNET");
-                    }
-                } else {
-                    String connectionNumber = srcTp + "-" + destTp + "-" + waveNumber;
-                    List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, false);
-                    connectionNumber = destTp + "-" + srcTp + "-" + waveNumber;
-                    if (intToDelete != null) {
-                        for (String interf : intToDelete) {
-                            if (!this.openRoadmInterfaceFactory.isUsedbyXc(nodeId, interf, connectionNumber,
-                                this.deviceTransactionManager)) {
-                                interfacesToDelete.add(interf);
-                            }
-                        }
-                    }
-                }
+                interfacesToDelete.addAll(getInterfaces2delete(nodeId, srcTp, destTp,
+                        waveNumber));
             } else {
                 String result = nodeId + " is not mounted on the controller";
                 results.add(result);
@@ -357,6 +319,57 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         } else {
             return delServBldr.setResult(String.join("\n", results)).build();
         }
+    }
+
+    private List<String>  getInterfaces2delete(
+            String nodeId, String srcTp, String destTp, Long waveNumber) {
+        List<String> interfacesToDelete = new LinkedList<>();
+        if (destTp.contains(StringConstants.NETWORK_TOKEN)
+                || srcTp.contains(StringConstants.CLIENT_TOKEN)
+                || srcTp.contains(StringConstants.NETWORK_TOKEN)
+                || destTp.contains(StringConstants.CLIENT_TOKEN)) {
+            if (destTp.contains(StringConstants.NETWORK_TOKEN)) {
+                try {
+                    if (this.openRoadmInterfaces.getInterface(nodeId, destTp + "-ODU").isPresent()) {
+                        interfacesToDelete.add(destTp + "-ODU");
+                    }
+                    if (this.openRoadmInterfaces.getInterface(nodeId, destTp + ODU4).isPresent()) {
+                        interfacesToDelete.add(destTp + ODU4);
+                    }
+                }
+                catch (OpenRoadmInterfaceException e) {
+                    LOG.error("impossible to get interface {} or {}", destTp + "-ODU", destTp + ODU4, e);
+                }
+                interfacesToDelete.add(destTp + "-OTU");
+                interfacesToDelete.add(
+                        this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(destTp, waveNumber));
+            }
+            if (srcTp.contains(StringConstants.NETWORK_TOKEN)) {
+                interfacesToDelete.add(srcTp + "-ODU");
+                interfacesToDelete.add(srcTp + "-OTU");
+                interfacesToDelete
+                        .add(this.openRoadmInterfaceFactory.createOpenRoadmOchInterfaceName(srcTp, waveNumber));
+            }
+            if (srcTp.contains(StringConstants.CLIENT_TOKEN)) {
+                interfacesToDelete.add(srcTp + "-ETHERNET");
+            }
+            if (destTp.contains(StringConstants.CLIENT_TOKEN)) {
+                interfacesToDelete.add(destTp + "-ETHERNET");
+            }
+        } else {
+            String connectionNumber = srcTp + "-" + destTp + "-" + waveNumber;
+            List<String> intToDelete = this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, false);
+            connectionNumber = destTp + "-" + srcTp + "-" + waveNumber;
+            if (intToDelete != null) {
+                for (String interf : intToDelete) {
+                    if (!this.openRoadmInterfaceFactory.isUsedByXc(nodeId, interf, connectionNumber,
+                        this.deviceTransactionManager)) {
+                        interfacesToDelete.add(interf);
+                    }
+                }
+            }
+        }
+        return interfacesToDelete;
     }
 
     @Override
@@ -543,7 +556,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             }
         } else {
             result = input.getNodeId() + " is not mounted on the controller";
-            LOG.warn(result);
+            LOG.warn("{} is not mounted on the controller",input.getNodeId());
         }
         return output.setResult(result).setSuccess(success).build();
     }

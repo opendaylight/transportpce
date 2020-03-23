@@ -22,7 +22,6 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.PowerDBm;
-
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
@@ -33,7 +32,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev16
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev161014.Interface1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev161014.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev161014.ethernet.container.EthernetBuilder;
-
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.EthernetCsmacd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpenROADMOpticalMultiplex;
@@ -59,9 +57,11 @@ import org.slf4j.LoggerFactory;
 
 
 public class OpenRoadmInterface121 {
+    private static final String MAPPING_MSG_ERROR = "Unable to get mapping "
+            + "from PortMapping for node % and logical connection port %s";
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
-    private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfaceFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterface121.class);
 
     public  OpenRoadmInterface121(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces) {
         this.portMapping = portMapping;
@@ -73,7 +73,7 @@ public class OpenRoadmInterface121 {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node % and logical connection port %s",
+                MAPPING_MSG_ERROR,
                     nodeId, logicalConnPoint));
         }
 
@@ -130,7 +130,7 @@ public class OpenRoadmInterface121 {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node % and logical connection port %s",
+                MAPPING_MSG_ERROR,
                     nodeId, logicalConnPoint));
         }
         // Create generic interface
@@ -172,7 +172,7 @@ public class OpenRoadmInterface121 {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
             throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node % and logical connection port %s",
+                MAPPING_MSG_ERROR,
                     nodeId, logicalConnPoint));
         }
         InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(portMap, OtnOdu.class, logicalConnPoint
