@@ -80,6 +80,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         MountPoint mountPoint;
         if (mountPointOpt.isPresent()) {
             mountPoint = mountPointOpt.get();
+            LOG.info("Mount point {} of device {}", mountPoint.toString(), nodeId);
         } else {
             LOG.error("Failed to get mount point for node {}", nodeId);
             return;
@@ -105,7 +106,8 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 accessDeOperationasNotificationListenerRegistration =
                 notificationService.get().registerNotificationListener(deOperationsListener);
 
-            final OrgOpenroadmDeviceListener deviceListener = new DeviceListener();
+            final OrgOpenroadmDeviceListener deviceListener =
+                    new DeviceListener(nodeId, this.deviceTransactionManager, this.dataBroker);
             LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
             final ListenerRegistration<OrgOpenroadmDeviceListener> accessDeviceNotificationListenerRegistration =
                 notificationService.get().registerNotificationListener(deviceListener);

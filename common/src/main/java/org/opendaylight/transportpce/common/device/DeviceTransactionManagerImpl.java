@@ -87,6 +87,7 @@ public class DeviceTransactionManagerImpl implements DeviceTransactionManager {
             DataBroker deviceDataBroker;
             if (deviceDataBrokerOpt.isPresent()) {
                 deviceDataBroker = deviceDataBrokerOpt.get();
+                LOG.info("Device databroker {}", deviceDataBroker.toString());
             } else {
                 newLock.countDown();
                 return Optional.empty();
@@ -159,7 +160,9 @@ public class DeviceTransactionManagerImpl implements DeviceTransactionManager {
         }
         if (deviceTxOpt.isPresent()) {
             DeviceTransaction deviceTx = deviceTxOpt.get();
+            LOG.info("Device transaction operation {}", deviceTx.toString());
             try {
+                // Here is where the error occurs after timeout
                 return deviceTx.read(logicalDatastoreType, path).get(timeout, timeUnit);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
                 LOG.error("Exception thrown while reading data from device {}! IID: {}", deviceId, path, e);
