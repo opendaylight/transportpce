@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "b39f53f6_5d11ec7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T09:29:19Z",
+      "side": 1,
+      "message": "actually they are warnings configured to be reported as error by ODL pom \nWhat about issues instead ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71a8b617_941a624b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T09:29:19Z",
+      "side": 1,
+      "message": "issues ?",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 10
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9acf6512_1c5b6611",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ConnectToGnpyServer.java",
         "patchSetId": 3
