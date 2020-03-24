@@ -39,6 +39,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.conta
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.nbr.list.IfName;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -220,8 +221,8 @@ public class R2RLinkDiscovery {
             "Found a neighbor SrcNodeId: {} , SrcDegId: {} , SrcTPId: {}, DestNodeId:{} , DestDegId: {}, DestTPId: {}",
             nodeId.getValue(), srcDegId, srcTpTx, destNodeId, destDegId, destTpRx);
         InitRoadmNodesInputBuilder r2rlinkBuilderAToZ = new InitRoadmNodesInputBuilder();
-        r2rlinkBuilderAToZ.setRdmANode(nodeId.getValue()).setDegANum(srcDegId.shortValue())
-            .setTerminationPointA(srcTpTx).setRdmZNode(destNodeId.getValue()).setDegZNum(destDegId.shortValue())
+        r2rlinkBuilderAToZ.setRdmANode(nodeId.getValue()).setDegANum(Uint8.valueOf(srcDegId))
+            .setTerminationPointA(srcTpTx).setRdmZNode(destNodeId.getValue()).setDegZNum(Uint8.valueOf(destDegId))
             .setTerminationPointZ(destTpRx);
         if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderAToZ.build(), this.dataBroker)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in A->Z direction", nodeId.getValue(),
@@ -236,10 +237,10 @@ public class R2RLinkDiscovery {
 
         InitRoadmNodesInputBuilder r2rlinkBuilderZToA = new InitRoadmNodesInputBuilder()
             .setRdmANode(destNodeId.getValue())
-            .setDegANum(destDegId.shortValue())
+            .setDegANum(Uint8.valueOf(destDegId))
             .setTerminationPointA(destTpTx)
             .setRdmZNode(nodeId.getValue())
-            .setDegZNum(srcDegId.shortValue())
+            .setDegZNum(Uint8.valueOf(srcDegId))
             .setTerminationPointZ(srcTpRx);
         if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderZToA.build(), this.dataBroker)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in Z->A direction",
@@ -294,12 +295,10 @@ public class R2RLinkDiscovery {
             destTpTx = "DEG" + destDegId + "-TTP-TX";
             destTpRx = "DEG" + destDegId + "-TTP-RX";
         }
-        return TopologyUtils.deleteLink(nodeId.getValue() + "-" + srcDegId.toString(),
-                destNodeId.getValue() + "-" + destDegId.toString(),
-                srcTpTx.toString(), destTpRx.toString(), networkTransactionService)
-            && TopologyUtils.deleteLink(destNodeId.getValue() + "-" + destDegId.toString(),
-                nodeId.getValue() + "-" + srcDegId.toString(), destTpTx, srcTpRx,
-                networkTransactionService);
+        return TopologyUtils.deleteLink(nodeId.getValue() + "-" + srcDegId, destNodeId.getValue() + "-" + destDegId,
+            srcTpTx, destTpRx, networkTransactionService)
+            && TopologyUtils.deleteLink(destNodeId.getValue() + "-" + destDegId, nodeId.getValue() + "-" + srcDegId,
+                destTpTx, srcTpRx, networkTransactionService);
     }
 
     private Integer getDegFromInterface(NodeId nodeId, String interfaceName) {
