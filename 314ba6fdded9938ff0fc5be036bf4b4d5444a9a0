@@ -179,6 +179,30 @@
     },
     {
       "key": {
+        "uuid": "1be2989d_68285b8d",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-24T09:01:31Z",
+      "side": 1,
+      "message": "I have removed this file from this change since the patchset 2",
+      "parentUuid": "c4665956_0b34b9dd",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66a54ff5_bdebba0d",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
         "patchSetId": 1
