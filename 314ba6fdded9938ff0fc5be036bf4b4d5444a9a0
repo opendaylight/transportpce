@@ -155,6 +155,30 @@
     },
     {
       "key": {
+        "uuid": "c4665956_0b34b9dd",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:39:39Z",
+      "side": 1,
+      "message": "Apart the fact that forcing every comments on a separate line is a highly\nquestionnable reco, I totally agree it would be better.\nAt the moment it was done, we didn\u0027t managed to find any elegant solution with maven to do that.\nBut sure, if you have a better way to do it, just propose a change with your solution.\n\nI marked it as resolved since this concerns OLM.",
+      "parentUuid": "609dc542_2ded6d56",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66a54ff5_bdebba0d",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
         "patchSetId": 1
