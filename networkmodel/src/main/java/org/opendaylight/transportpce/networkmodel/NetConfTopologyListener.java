@@ -7,8 +7,8 @@
  */
 package org.opendaylight.transportpce.networkmodel;
 
-//import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-//even with @SuppressFBwarnings generate a checkstyles error...
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
+
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataObjectModification.ModificationType;
@@ -72,10 +73,11 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         this.registrations22 = new ConcurrentHashMap<>();
     }
 
+    @SuppressFBWarnings(
+        value = "RV_RETURN_VALUE_IGNORED",
+        justification = "nothing to verify once rpc has been sent")
     private void onDeviceConnected(final String nodeId, String openRoadmVersion) {
         LOG.info("onDeviceConnected: {}", nodeId);
-        LOG.info(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1);
-        LOG.info(openRoadmVersion);
         Optional<MountPoint> mountPointOpt = this.deviceTransactionManager.getDeviceMountPoint(nodeId);
         MountPoint mountPoint;
         if (mountPointOpt.isPresent()) {
@@ -213,7 +215,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     }
 
     @Override
-    //@SuppressFBwarnings("SF_SWITCH_FALLTHROUGH")
+    @SuppressFBWarnings(
+        value = "SF_SWITCH_FALLTHROUGH",
+        justification = "intentional fallthrough")
     public void onDataTreeChanged(@Nonnull Collection<DataTreeModification<Node>> changes) {
         LOG.info("onDataTreeChanged");
         for (DataTreeModification<Node> change : changes) {
