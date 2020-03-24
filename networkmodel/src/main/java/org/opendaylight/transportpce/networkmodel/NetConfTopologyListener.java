@@ -72,10 +72,11 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
         this.registrations22 = new ConcurrentHashMap<>();
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value = "RV_RETURN_VALUE_IGNORED",
+        justification = "nothing to verify once rpc has been sent")
     private void onDeviceConnected(final String nodeId, String openRoadmVersion) {
         LOG.info("onDeviceConnected: {}", nodeId);
-        LOG.info(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1);
-        LOG.info(openRoadmVersion);
         Optional<MountPoint> mountPointOpt = this.deviceTransactionManager.getDeviceMountPoint(nodeId);
         MountPoint mountPoint;
         if (mountPointOpt.isPresent()) {
@@ -213,7 +214,9 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
     }
 
     @Override
-    //@SuppressFBwarnings("SF_SWITCH_FALLTHROUGH")
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value = "SF_SWITCH_FALLTHROUGH",
+        justification = "intentional fallthrough")
     public void onDataTreeChanged(@Nonnull Collection<DataTreeModification<Node>> changes) {
         LOG.info("onDataTreeChanged");
         for (DataTreeModification<Node> change : changes) {
