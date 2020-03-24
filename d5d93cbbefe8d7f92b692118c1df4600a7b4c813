@@ -255,6 +255,30 @@
     },
     {
       "key": {
+        "uuid": "af72bbe7_80006830",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-03-24T16:40:54Z",
+      "side": 1,
+      "message": "thanks to the help of Emmanuelle, I suggest to add this annotation for this false positive in SpotBigs :\n\n@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(\n                value \u003d \"SF_SWITCH_FALLTHROUGH\",\n                justification \u003d \"not relevant to put a break or a return\")",
+      "parentUuid": "5778ccbc_9bdb1a35",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 23
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2423993c_86c15145",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
         "patchSetId": 3
