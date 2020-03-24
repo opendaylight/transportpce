@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0f202eb_86d92f59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "actually they are warnings configured to be reported as error by ODL pom \nWhat about issues instead ?",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c483e603_e86112d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "Not worth to mention it.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 47
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c82ce400_43346049",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "Concatenation can be avoided with a LF\n\nprivate static final String MAPPING_MSG_ERROR \u003d\n        \"Unable to get mapping from PortMapping for node % and logical connection port %s\";",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 75
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7d6eb96e_515c39fa",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "I guess the LF is superfluous now.",
+      "range": {
+        "startLine": 76,
+        "startChar": 16,
+        "endLine": 77,
+        "endChar": 47
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dcb0419_7752e9c3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface121.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "idem etc",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 47
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdce1415_fc106eef",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterfaceFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "LF here would avoid concatenation",
+      "range": {
+        "startLine": 24,
+        "startChar": 94,
+        "endLine": 24,
+        "endChar": 95
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e49c53e0_87d7b3d8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "not sure it is more readable like this.\nEditor autoindentation ?",
+      "range": {
+        "startLine": 120,
+        "startChar": 58,
+        "endLine": 121,
+        "endChar": 34
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2304e43_79a72806",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "is that a SB issue or the autoindent editor function?\nI though ODL reco was 120 chars per line.",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 68
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "127f39f2_7860d08e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "OK, why not",
+      "range": {
+        "startLine": 187,
+        "startChar": 26,
+        "endLine": 187,
+        "endChar": 31
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e45f659a_8a12c54e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "LF not needed nor coherent",
+      "range": {
+        "startLine": 285,
+        "startChar": 0,
+        "endLine": 285,
+        "endChar": 37
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cdeda14_9ae7123d",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "LF here would avoid concatenation",
+      "range": {
+        "startLine": 73,
+        "startChar": 64,
+        "endLine": 73,
+        "endChar": 65
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81e82c25_2a18238b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T08:17:19Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 75,
+        "startChar": 51,
+        "endLine": 75,
+        "endChar": 52
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
