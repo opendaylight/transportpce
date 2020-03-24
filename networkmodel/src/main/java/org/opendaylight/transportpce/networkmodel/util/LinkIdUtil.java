@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.networkmodel.util;
 
-import java.text.MessageFormat;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.InitRoadmNodesInput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 
@@ -19,7 +18,7 @@ public final class LinkIdUtil {
     private static final String TRANSMIT = "-TX";
     private static final String RECEIVE = "-RX";
     private static final String BIDIRECTIONAL = "-TXRX";
-    private static final MessageFormat LINK_ID_FORMAT = new MessageFormat("{0}-{1}to{2}-{3}");
+    private static final String LINK_ID_FORMAT = "%1$s-%2$sto%3$s-%4$s";
 
     private LinkIdUtil() {
         // utility class
@@ -35,8 +34,7 @@ public final class LinkIdUtil {
      * @return {@link LinkId}
      */
     public static LinkId buildLinkId(String srcNode, String srcTp, String destNode, String destTp) {
-        return new LinkId(LINK_ID_FORMAT
-                .format(new Object[] {srcNode, srcTp, destNode, destTp}, new StringBuffer(), null).toString());
+        return new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
     }
 
     /**
@@ -53,7 +51,7 @@ public final class LinkIdUtil {
 
         Object[] params = buildParams(srcNode, srcTp, destNode, destTp, false);
 
-        return new LinkId(LINK_ID_FORMAT.format(params, new StringBuffer(), null).toString());
+        return new LinkId(String.format(LINK_ID_FORMAT, params));
     }
 
     /**
@@ -83,7 +81,7 @@ public final class LinkIdUtil {
     public static LinkId getOppositeLinkId(String srcNode, String srcTp, String destNode, String destTp,
         boolean checkNode) {
         Object[] params = buildParams(srcNode, srcTp, destNode, destTp, checkNode);
-        return new LinkId(LINK_ID_FORMAT.format(params, new StringBuffer(), null).toString());
+        return new LinkId(String.format(LINK_ID_FORMAT, params));
     }
 
     private static Object[] buildParams(String srcNode, String srcTp, String destNode, String destTp,

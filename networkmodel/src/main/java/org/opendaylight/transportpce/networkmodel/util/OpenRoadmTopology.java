@@ -65,6 +65,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.InstanceIdentifierBuilder;
+import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,8 +100,7 @@ public final class OpenRoadmTopology {
                 }
             }
             for (String str : nodeShardList) {
-                List<Mapping> interList = new ArrayList<>();
-                interList = mappingList.stream().filter(x -> x.getLogicalConnectionPoint().contains(str))
+                List<Mapping> interList = mappingList.stream().filter(x -> x.getLogicalConnectionPoint().contains(str))
                     .collect(Collectors.toList());
                 if (str.contains("DEG")) {
                     mapDeg.put(str, interList);
@@ -110,14 +111,14 @@ public final class OpenRoadmTopology {
                 }
             }
             // create degree nodes
-            for (String k : mapDeg.keySet()) {
-                NodeBuilder ietfNode = createDegree(k, mapDeg.get(k), mappingNode.getNodeId(),
+            for (Map.Entry<String, List<Mapping>> entry : mapDeg.entrySet()) {
+                NodeBuilder ietfNode = createDegree(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
                     mappingNode.getNodeInfo().getNodeClli());
                 nodes.add(ietfNode.build());
             }
             // create srg nodes
-            for (String k : mapSrg.keySet()) {
-                NodeBuilder ietfNode = createSrg(k, mapSrg.get(k), mappingNode.getNodeId(),
+            for (Map.Entry<String, List<Mapping>> entry : mapSrg.entrySet()) {
+                NodeBuilder ietfNode = createSrg(entry.getKey(), entry.getValue(), mappingNode.getNodeId(),
                     mappingNode.getNodeInfo().getNodeClli());
                 nodes.add(ietfNode.build());
             }
@@ -278,7 +279,7 @@ public final class OpenRoadmTopology {
         tpList.add(ietfTpBldr.build());
         // set degree-attributes
         DegreeAttributes degAtt = new DegreeAttributesBuilder()
-            .setDegreeNumber(Integer.valueOf(degNb.split("DEG")[1]))
+            .setDegreeNumber(Uint16.valueOf(degNb.split("DEG")[1]))
             .setAvailableWavelengths(create96AvalWaveDegree()).build();
         // Create ietf node augmentation to support ietf tp-list
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -475,7 +476,7 @@ public final class OpenRoadmTopology {
 
     // This method returns the linkBuilder object for given source and destination
     public static boolean deleteLinkLinkId(LinkId linkId , NetworkTransactionService networkTransactionService) {
-        LOG.info("deleting link for LinkId: {}", linkId);
+        LOG.info("deleting link for LinkId: {}", linkId.getValue());
         try {
             InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Networks.class).child(Network.class,
                 new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).augmentation(Network1.class)
@@ -503,7 +504,7 @@ public final class OpenRoadmTopology {
             }
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Error deleting link {}", linkId.getValue(), e);
             return false;
         }
     }
@@ -513,8 +514,8 @@ public final class OpenRoadmTopology {
 
         for (int i = 1; i < 97; i++) {
             AvailableWavelengthsBuilder avalBldr = new AvailableWavelengthsBuilder()
-                .setIndex((long) i)
-                .withKey(new AvailableWavelengthsKey((long) i));
+                .setIndex(Uint32.valueOf(i))
+                .withKey(new AvailableWavelengthsKey(Uint32.valueOf(i)));
             waveList.add(avalBldr.build());
         }
 
@@ -531,9 +532,9 @@ public final class OpenRoadmTopology {
             org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
                 .AvailableWavelengthsBuilder avalBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.srg
                 .rev181130.srg.node.attributes.AvailableWavelengthsBuilder()
-                .setIndex((long) i)
+                .setIndex(Uint32.valueOf(i))
                 .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-                    .AvailableWavelengthsKey((long) i));
+                    .AvailableWavelengthsKey(Uint32.valueOf(i)));
             waveList.add(avalBldr.build());
         }
         return waveList;
