@@ -82,9 +82,9 @@ public class AlarmNotificationListener implements OrgOpenroadmAlarmListener {
         String message = sb.toString();
         Nodes build = new NodesBuilder().setNodeId(notification.getResource().getDevice().getNodeId()).build();
         if (allNodeList.contains(build)) {
-            LOG.info(message);
+            LOG.info("onAlarmNotification: {}", message);
         } else {
-            LOG.warn(message);
+            LOG.warn("onAlarmNotification: {}", message);
         }
     }
 

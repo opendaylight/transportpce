@@ -176,20 +176,19 @@ final class Rdm2XpdrLink {
         ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction();
         @NonNull
         FluentFuture<Optional<TerminationPoint>> tpFf = readTransaction.read(LogicalDatastoreType.CONFIGURATION, iiTp);
-        TerminationPoint tp = null;
         if (tpFf.isDone()) {
-            Optional<TerminationPoint> tpOpt = null;
+            Optional<TerminationPoint> tpOpt;
             try {
                 tpOpt = tpFf.get();
+                if (tpOpt.isPresent()) {
+                    return tpOpt.get();
+                }
             } catch (InterruptedException | ExecutionException e) {
                 LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
-                    NetworkUtils.OVERLAY_NETWORK_ID);
-            }
-            if (tpOpt.isPresent()) {
-                tp = tpOpt.get();
+                    NetworkUtils.OVERLAY_NETWORK_ID, e);
             }
         }
-        return tp;
+        return null;
     }
 
     private Rdm2XpdrLink() {

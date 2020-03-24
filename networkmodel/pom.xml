@@ -38,10 +38,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </dependency>
   </dependencies>
 
-<!-- checkstyle and spotbugds enforced by odlparent since Magnesium -->
-  <properties>
-    <!-- odlparent.checkstyle.enforce>false</odlparent.checkstyle.enforce -->
-    <odlparent.spotbugs.enforce>false</odlparent.spotbugs.enforce>
-  </properties>
-
 </project>

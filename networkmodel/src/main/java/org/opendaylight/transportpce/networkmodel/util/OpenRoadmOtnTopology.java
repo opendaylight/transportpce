@@ -66,12 +66,17 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPointBuilder;
+import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class OpenRoadmOtnTopology {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmOtnTopology.class);
+    private static final String CLIENT = "-CLIENT";
+    private static final String NETWORK = "-NETWORK";
+    private static final String XPDR = "-XPDR";
 
     private OpenRoadmOtnTopology() {
     }
@@ -107,9 +112,9 @@ public final class OpenRoadmOtnTopology {
             Integer xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
             if (!xpdrMap.containsKey(xpdrNb)) {
                 List<Mapping> xpdrNetMaps = mappingNode.getMapping().stream().filter(k -> k.getLogicalConnectionPoint()
-                    .contains("XPDR" + xpdrNb + "-NETWORK")).collect(Collectors.toList());
+                    .contains("XPDR" + xpdrNb + NETWORK)).collect(Collectors.toList());
                 List<Mapping> xpdrClMaps = mappingNode.getMapping().stream().filter(k -> k.getLogicalConnectionPoint()
-                    .contains("XPDR" + xpdrNb + "-CLIENT")).collect(Collectors.toList());
+                    .contains("XPDR" + xpdrNb + CLIENT)).collect(Collectors.toList());
                 OtnTopoNode otnNode = null;
                 if (mapping.getXponderType() != null) {
                     otnNode = new OtnTopoNode(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
@@ -142,7 +147,7 @@ public final class OpenRoadmOtnTopology {
     private static Node createTpdr(OtnTopoNode node) {
         //create otn-topology node augmentation
         XpdrAttributes xpdrAttr = new XpdrAttributesBuilder()
-            .setXpdrNumber(Integer.valueOf(node.getXpdrNb()))
+            .setXpdrNumber(Uint16.valueOf(node.getXpdrNb()))
             .build();
         Node1 otnNodeAug = new Node1Builder()
             .setXpdrAttributes(xpdrAttr)
@@ -163,8 +168,8 @@ public final class OpenRoadmOtnTopology {
 
         //return ietfNode
         return new NodeBuilder()
-            .setNodeId(new NodeId(node.getNodeId() + "-XPDR" + node.getXpdrNb()))
-            .withKey(new NodeKey(new NodeId(node.getNodeId() + "-XPDR" + node.getXpdrNb())))
+            .setNodeId(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
+            .withKey(new NodeKey(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb())))
             .setSupportingNode(createSupportingNodes(node))
             .addAugmentation(Node1.class, otnNodeAug)
             .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class,
@@ -175,29 +180,30 @@ public final class OpenRoadmOtnTopology {
     }
 
     private static Node createMuxpdr(OtnTopoNode node) {
-        //create otn-topology node augmentation
-        TpBandwidthSharing tpBwSh = new TpBandwidthSharingBuilder().build();    // to be completed
+        // create otn-topology node augmentation
+        // TODO: will need to be completed
+        TpBandwidthSharing tpBwSh = new TpBandwidthSharingBuilder().build();
         XpdrAttributes xpdrAttr = new XpdrAttributesBuilder()
-            .setXpdrNumber(Integer.valueOf(node.getXpdrNb()))
+            .setXpdrNumber(Uint16.valueOf(node.getXpdrNb()))
             .build();
 
         List<NonBlockingList> nblList = new ArrayList<>();
         for (int i = 1; i <= node.getNbTpClient(); i++) {
             List<TpId> tpList = new ArrayList<>();
-            TpId tpId = new TpId("XPDR" + node.getXpdrNb() + "-CLIENT" + i);
+            TpId tpId = new TpId("XPDR" + node.getXpdrNb() + CLIENT + i);
             tpList.add(tpId);
             tpId = new TpId("XPDR" + node.getXpdrNb() + "-NETWORK1");
             tpList.add(tpId);
             NonBlockingList nbl = new NonBlockingListBuilder()
-                .setNblNumber(i)
+                .setNblNumber(Uint16.valueOf(i))
                 .setTpList(tpList)
-                .setAvailableInterconnectBandwidth(Long.valueOf(node.getNbTpNetwork() * 10))
-                .setInterconnectBandwidthUnit(Long.valueOf(1000000000))
+                .setAvailableInterconnectBandwidth(Uint32.valueOf(node.getNbTpNetwork() * 10L))
+                .setInterconnectBandwidthUnit(Uint32.valueOf(1000000000))
                 .build();
             nblList.add(nbl);
         }
         OduSwitchingPools oduSwitchPool = new OduSwitchingPoolsBuilder()
-            .setSwitchingPoolNumber(Integer.valueOf(1))
+            .setSwitchingPoolNumber(Uint16.valueOf(1))
             .setSwitchingPoolType(SwitchingPoolTypes.NonBlocking)
             .setNonBlockingList(nblList)
             .build();
@@ -228,8 +234,8 @@ public final class OpenRoadmOtnTopology {
 
         //return ietfNode
         return new NodeBuilder()
-            .setNodeId(new NodeId(node.getNodeId() + "-XPDR" + node.getXpdrNb()))
-            .withKey(new NodeKey(new NodeId(node.getNodeId() + "-XPDR" + node.getXpdrNb())))
+            .setNodeId(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
+            .withKey(new NodeKey(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb())))
             .setSupportingNode(createSupportingNodes(node))
             .addAugmentation(Node1.class, otnNodeAug)
             .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class,
@@ -243,22 +249,22 @@ public final class OpenRoadmOtnTopology {
         List<TpId> tpl = new ArrayList<>();
         TpId tpId = null;
         for (int i = 1; i <= node.getNbTpClient(); i++) {
-            tpId = new TpId("XPDR" + node.getXpdrNb() + "-CLIENT" + i);
+            tpId = new TpId("XPDR" + node.getXpdrNb() + CLIENT + i);
             tpl.add(tpId);
         }
         for (int i = 1; i <= node.getNbTpNetwork(); i++) {
-            tpId = new TpId("XPDR" + node.getXpdrNb() + "-NETWORK" + i);
+            tpId = new TpId("XPDR" + node.getXpdrNb() + NETWORK + i);
             tpl.add(tpId);
         }
         List<NonBlockingList> nblList = new ArrayList<>();
         NonBlockingList nbl = new NonBlockingListBuilder()
-            .setNblNumber(Integer.valueOf(1))
+            .setNblNumber(Uint16.valueOf(1))
             .setTpList(tpl)
             .build();
         nblList.add(nbl);
 
         OduSwitchingPools oduSwitchPool = new OduSwitchingPoolsBuilder()
-            .setSwitchingPoolNumber(Integer.valueOf(1))
+            .setSwitchingPoolNumber(Uint16.valueOf(1))
             .setSwitchingPoolType(SwitchingPoolTypes.NonBlocking)
             .setNonBlockingList(nblList)
             .build();
@@ -268,10 +274,11 @@ public final class OpenRoadmOtnTopology {
             .setOduSwitchingPools(oduSwitchPoolList)
             .build();
 
-        //create otn-topology node augmentation
-        TpBandwidthSharing tpBwSh = new TpBandwidthSharingBuilder().build();    // to be completed
+        // create otn-topology node augmentation
+        // TODO: will need to be completed
+        TpBandwidthSharing tpBwSh = new TpBandwidthSharingBuilder().build();
         XpdrAttributes xpdrAttr = new XpdrAttributesBuilder()
-            .setXpdrNumber(Integer.valueOf(node.getXpdrNb()))
+            .setXpdrNumber(Uint16.valueOf(node.getXpdrNb()))
             .build();
 
         Node1 otnNodeAug = new Node1Builder()
@@ -295,8 +302,8 @@ public final class OpenRoadmOtnTopology {
 
         //return ietfNode
         return new NodeBuilder()
-            .setNodeId(new NodeId(node.getNodeId() + "-XPDR" + node.getXpdrNb()))
-            .withKey(new NodeKey(new NodeId(node.getNodeId() + "-XPDR" + node.getXpdrNb())))
+            .setNodeId(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
+            .withKey(new NodeKey(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb())))
             .setSupportingNode(createSupportingNodes(node))
             .addAugmentation(Node1.class, otnNodeAug)
             .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class,
@@ -339,20 +346,20 @@ public final class OpenRoadmOtnTopology {
             org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1Builder tpceTp1Bldr =
                 new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1Builder();
             if (OpenroadmTpType.XPONDERNETWORK.equals(tpType)) {
-                TpId tpId = new TpId("XPDR" + node.getXpdrNb() + "-NETWORK" + i);
+                TpId tpId = new TpId("XPDR" + node.getXpdrNb() + NETWORK + i);
                 if (node.getXpdrNetConnectionMap().get(tpId.getValue()) != null) {
                     tpceTp1Bldr.setAssociatedConnectionMapPort(node.getXpdrNetConnectionMap().get(tpId.getValue()));
                 }
                 SupportingTerminationPoint stp = new SupportingTerminationPointBuilder()
                     .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
-                    .setNodeRef(new NodeId(node.getNodeId() + "-XPDR" + node.getXpdrNb()))
-                    .setTpRef("XPDR" + node.getXpdrNb() + "-NETWORK" + i)
+                    .setNodeRef(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
+                    .setTpRef("XPDR" + node.getXpdrNb() + NETWORK + i)
                     .build();
                 List<SupportingTerminationPoint> supportTpList = new ArrayList<>();
                 supportTpList.add(stp);
                 tpList.add(buildIetfTp(tpceTp1Bldr, otnTp1, tpType, tpId, supportTpList));
             } else if (OpenroadmTpType.XPONDERCLIENT.equals(tpType)) {
-                TpId tpId = new TpId("XPDR" + node.getXpdrNb() + "-CLIENT" + i);
+                TpId tpId = new TpId("XPDR" + node.getXpdrNb() + CLIENT + i);
                 if (node.getXpdrCliConnectionMap().get(tpId.getValue()) != null) {
                     tpceTp1Bldr.setAssociatedConnectionMapPort(node.getXpdrCliConnectionMap().get(tpId.getValue()));
                 }
@@ -384,9 +391,9 @@ public final class OpenRoadmOtnTopology {
             .build();
         SupportingNode suppNode2 = new SupportingNodeBuilder()
             .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
-            .setNodeRef(new NodeId(node.getNodeId() + "-XPDR" + node.getXpdrNb()))
+            .setNodeRef(new NodeId(node.getNodeId() + XPDR + node.getXpdrNb()))
             .withKey(new SupportingNodeKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID),
-                new NodeId(node.getNodeId() + "-XPDR" + node.getXpdrNb())))
+                new NodeId(node.getNodeId() + XPDR + node.getXpdrNb())))
             .build();
         SupportingNode suppNode3 = new SupportingNodeBuilder()
             .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
