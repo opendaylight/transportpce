@@ -82,7 +82,7 @@ public final class TopologyUtils {
 
     // This method returns the linkBuilder object for given source and destination
     public static boolean deleteLinkLinkId(LinkId linkId , NetworkTransactionService networkTransactionService) {
-        LOG.info("deleting link for LinkId: {}", linkId);
+        LOG.info("deleting link for LinkId: {}", linkId.getValue());
         try {
             InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
@@ -105,7 +105,7 @@ public final class TopologyUtils {
             }
 
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Error deleting link {}", linkId.getValue(), e);
             return false;
         }
     }
