@@ -186,6 +186,52 @@
     },
     {
       "key": {
+        "uuid": "5778ccbc_9bdb1a35",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T00:31:16Z",
+      "side": 1,
+      "message": "this generates a false positive in SpotBugs that cannot easily be removed\nhttps://jira.opendaylight.org/browse/ODLPARENT-226",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 23
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2423993c_86c15145",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/graph/PostAlgoPathValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-24T00:31:16Z",
+      "side": 1,
+      "message": "method never called",
+      "range": {
+        "startLine": 353,
+        "startChar": 4,
+        "endLine": 354,
+        "endChar": 43
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0947c992_eed10694",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
         "patchSetId": 3
