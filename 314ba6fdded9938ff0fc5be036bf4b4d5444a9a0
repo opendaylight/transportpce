@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "e64322d1_9bf7fdf7",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-24T07:59:20Z",
+      "side": 1,
+      "message": "Perhaps it\u0027s time to use Java or Maven functionalities to manage this like properties, profile instead of doing a sed command",
+      "parentUuid": "609dc542_2ded6d56",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "314ba6fdded9938ff0fc5be036bf4b4d5444a9a0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66a54ff5_bdebba0d",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
         "patchSetId": 1
