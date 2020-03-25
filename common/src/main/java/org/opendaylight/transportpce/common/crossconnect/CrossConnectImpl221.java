@@ -120,7 +120,6 @@ public class CrossConnectImpl221 {
             .openroadm.device.OduConnection> otnXc = getOtnCrossConnect(deviceId, connectionName);
         //Check if cross connect exists before delete
         if (xc.isPresent()) {
-            String name = xc.get().getSource().getSrcIf().replace("nmc", "mc");
             interfList.add(xc.get().getSource().getSrcIf());
             interfList.add(xc.get().getDestination().getDstIf());
             interfList.add(xc.get().getSource().getSrcIf().replace("nmc", "mc"));
@@ -210,11 +209,11 @@ public class CrossConnectImpl221 {
     }
 
 
-    public boolean setPowerLevel(String deviceId, Enum mode, BigDecimal powerValue, String connectionName) {
-        Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, connectionName);
+    public boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue, String ctName) {
+        Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, ctName);
         if (rdmConnOpt.isPresent()) {
             RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get());
-            rdmConnBldr.setOpticalControlMode(OpticalControlMode.values()[mode.ordinal()]);
+            rdmConnBldr.setOpticalControlMode(mode);
             if (powerValue != null) {
                 rdmConnBldr.setTargetOutputPower(new PowerDBm(powerValue));
             }
@@ -238,7 +237,7 @@ public class CrossConnectImpl221 {
 
             // post the cross connect on the device
             InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(RoadmConnections.class, new RoadmConnectionsKey(connectionName));
+                    .child(RoadmConnections.class, new RoadmConnectionsKey(ctName));
             deviceTx.put(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
             FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
@@ -251,7 +250,7 @@ public class CrossConnectImpl221 {
             }
 
         } else {
-            LOG.warn("Roadm-Connection is null in set power level ({})", connectionName);
+            LOG.warn("Roadm-Connection is null in set power level ({})", ctName);
         }
         return false;
     }
@@ -316,7 +315,7 @@ public class CrossConnectImpl221 {
             LOG.info("Otn-connection successfully created: {}-{}", srcTp, dstTp);
             return Optional.of(srcTp + "-x-" + dstTp);
         } catch (InterruptedException | ExecutionException e) {
-            LOG.warn("Failed to post {}. Exception: {}", oduConnectionBuilder.build(), e);
+            LOG.warn("Failed to post {}.", oduConnectionBuilder.build(), e);
         }
         return Optional.empty();
     }

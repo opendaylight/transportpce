@@ -199,12 +199,12 @@ public class OpenRoadmInterfacesImpl221 {
         boolean change = false;
         if (activate) {
             if (cpBldr.getEquipmentState() != null
-                    && !cpBldr.getEquipmentState().getName().equals(States.NotReservedInuse)) {
+                    && !States.NotReservedInuse.equals(cpBldr.getEquipmentState())) {
                 cpBldr.setEquipmentState(States.NotReservedInuse);
                 change = true;
             }
         } else if ((cpBldr.getEquipmentState() != null
-                && !cpBldr.getEquipmentState().getName().equals(States.NotReservedAvailable))) {
+                && !States.NotReservedAvailable.equals(cpBldr.getEquipmentState()))) {
             cpBldr.setEquipmentState(States.NotReservedAvailable);
             change = true;
         }
