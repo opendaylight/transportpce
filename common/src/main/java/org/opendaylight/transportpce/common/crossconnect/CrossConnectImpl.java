@@ -18,6 +18,7 @@ import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.otn.renderer.input.Nodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,14 +94,16 @@ public class CrossConnectImpl implements CrossConnect {
         return null;
     }
 
-    public boolean setPowerLevel(String nodeId, Enum mode, BigDecimal powerValue,
-                                 String connectionNumber) {
+    public boolean setPowerLevel(String nodeId, String mode, BigDecimal powerValue, String connectionNumber) {
         String openRoadmVersion = mappingUtils.getOpenRoadmVersion(nodeId);
         if (OPENROADM_DEVICE_VERSION_1_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl121.setPowerLevel(nodeId,mode,powerValue,connectionNumber);
+            return crossConnectImpl121.setPowerLevel(nodeId,OpticalControlMode.valueOf(mode),
+                powerValue,connectionNumber);
         }
         else if (OPENROADM_DEVICE_VERSION_2_2_1.equals(openRoadmVersion)) {
-            return crossConnectImpl221.setPowerLevel(nodeId,mode,powerValue,connectionNumber);
+            return crossConnectImpl221.setPowerLevel(nodeId,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.OpticalControlMode.valueOf(mode),
+                powerValue,connectionNumber);
         }
         return false;
     }
