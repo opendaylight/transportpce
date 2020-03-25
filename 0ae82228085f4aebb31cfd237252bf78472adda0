@@ -22,6 +22,30 @@
       "revId": "0ae82228085f4aebb31cfd237252bf78472adda0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11f29a55_ca38188a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-03-25T10:04:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80cceb9f_6728b5f1",
+      "range": {
+        "startLine": 180,
+        "startChar": 11,
+        "endLine": 180,
+        "endChar": 45
+      },
+      "revId": "0ae82228085f4aebb31cfd237252bf78472adda0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
