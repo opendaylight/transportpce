@@ -12,8 +12,6 @@ import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
-
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
@@ -123,7 +121,7 @@ public class DeviceTransaction {
 
         future.addCallback(new FutureCallback<CommitInfo>() {
             @Override
-            public void onSuccess(@Nullable CommitInfo result) {
+            public void onSuccess(CommitInfo result) {
                 LOG.debug("Transaction with lock {} successfully committed: {}", deviceLock, result);
                 afterClose();
             }

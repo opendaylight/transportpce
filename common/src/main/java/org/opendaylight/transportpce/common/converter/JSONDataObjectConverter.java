@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
@@ -77,13 +78,8 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
     @Override
     public Optional<NormalizedNode<? extends YangInstanceIdentifier.PathArgument, ?>> transformIntoNormalizedNode(
             @Nonnull InputStream inputStream) {
-        try {
-            JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
-            return parseInputJSON(reader);
-        } catch (IOException e) {
-            LOG.warn("IOException {}",e.getMessage());
-            return Optional.empty();
-        }
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+        return parseInputJSON(reader);
     }
 
     @Override

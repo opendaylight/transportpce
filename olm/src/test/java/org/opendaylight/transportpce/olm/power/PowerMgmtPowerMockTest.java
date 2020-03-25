@@ -55,7 +55,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.OpticalControlMode;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
@@ -225,7 +224,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                         .build()));
         CrossConnect crossConnectMock = Mockito.mock(CrossConnectImpl.class);
         Mockito.when(crossConnectMock
-                .setPowerLevel(Mockito.anyString(), ArgumentMatchers.eq(OpticalControlMode.Power), Mockito.any(),
+                .setPowerLevel(Mockito.anyString(), "Power", Mockito.any(),
                         Mockito.anyString())).thenReturn(true);
         PowerMgmtImpl powerMgmtImpl = getNewPowerMgmt(openRoadmInterfacesImpl121Spy,crossConnectMock);
         boolean output = powerMgmtImpl.setPower(input);
