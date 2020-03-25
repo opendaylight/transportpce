@@ -57,6 +57,10 @@
             <groupId>org.opendaylight.mdsal</groupId>
             <artifactId>mdsal-binding-dom-adapter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
 
         <!-- Sodium bump: javax.annotation.Nullable and friends -->
         <dependency>
@@ -80,11 +84,5 @@
       </plugin>
     </plugins>
   </build>
-
-<!-- checkstyle and spotbugds enforced by odlparent since Magnesium -->
-  <properties>
-    <!-- odlparent.checkstyle.enforce>false</odlparent.checkstyle.enforce -->
-    <odlparent.spotbugs.enforce>false</odlparent.spotbugs.enforce>
-  </properties>
 
 </project>
