@@ -260,7 +260,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                         }
                         try {
                             Boolean setXconnPowerSuccessVal = crossConnect.setPowerLevel(nodeId,
-                                    OpticalControlMode.Power, powerValue, connectionNumber);
+                                OpticalControlMode.GainLoss.getName(), powerValue, connectionNumber);
                             LOG.info("Success Value is {}", setXconnPowerSuccessVal);
                             if (setXconnPowerSuccessVal) {
                                 LOG.info("Roadm-connection: {} updated ", connectionNumber);
@@ -268,7 +268,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 //TODO - commented code because one vendor is not supporting
                                 //GainLoss with target-output-power
                                 Thread.sleep(OlmUtils.OLM_TIMER_1);
-                                crossConnect.setPowerLevel(nodeId, OpticalControlMode.GainLoss, powerValue,
+                                crossConnect.setPowerLevel(nodeId, "GainLoss", powerValue,
                                         connectionNumber);
                             } else {
                                 LOG.info("Set Power failed for Roadm-connection: {} on Node: {}", connectionNumber,
@@ -283,7 +283,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                     // If Drop node leave node is power mode
                 } else if (destTpId.toLowerCase().contains("srg")) {
                     LOG.info("Setting power at drop node");
-                    crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power, null, connectionNumber);
+                    crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power.getName(), null, connectionNumber);
                 }
             } else {
                 LOG.error("OLM-PowerMgmtImpl : Error with node type for node {}", nodeId);
@@ -323,16 +323,17 @@ public class PowerMgmtImpl implements PowerMgmt {
             Long wlNumber = input.getWaveNumber().toJava();
             String connectionNumber =  srcTpId + "-" + destTpId + "-" + wlNumber;
             if (destTpId.toLowerCase().contains("srg")) {
-                crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off, null, connectionNumber);
+                crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off.getName(), null, connectionNumber);
             } else if (destTpId.toLowerCase().contains("deg")) {
                 try {
-                    if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power , new BigDecimal(-60),
+                    if (!crossConnect.setPowerLevel(nodeId, OpticalControlMode.Power.getName(), new BigDecimal(-60),
                             connectionNumber)) {
                         LOG.warn("Power down failed for Roadm-connection: {}", connectionNumber);
                         return false;
                     }
                     Thread.sleep(OlmUtils.OLM_TIMER_2);
-                    if (! crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off , null, connectionNumber)) {
+                    if (! crossConnect.setPowerLevel(nodeId, OpticalControlMode.Off.getName(), null,
+                        connectionNumber)) {
                         LOG.warn("Setting power-control mode off failed for Roadm-connection: {}", connectionNumber);
                         return false;
                     }
