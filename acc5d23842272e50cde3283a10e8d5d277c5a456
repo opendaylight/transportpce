@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0ea1daa4_57747331",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/converter/JSONDataObjectConverter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 649
+      },
+      "writtenOn": "2020-03-25T15:20:19Z",
+      "side": 1,
+      "message": "StandardCharsets.UTF_8",
+      "range": {
+        "startLine": 81,
+        "startChar": 78,
+        "endLine": 81,
+        "endChar": 102
+      },
+      "revId": "acc5d23842272e50cde3283a10e8d5d277c5a456",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "261548ba_f3cf43b8",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl.java",
         "patchSetId": 2
