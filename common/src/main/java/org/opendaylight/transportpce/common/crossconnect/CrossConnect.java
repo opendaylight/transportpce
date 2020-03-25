@@ -97,7 +97,7 @@ public interface CrossConnect {
      *            Name of the cross connect.
      * @return true/false based on status of operation.
      */
-    boolean setPowerLevel(String deviceId, Enum mode, BigDecimal powerValue,
+    boolean setPowerLevel(String deviceId, String mode, BigDecimal powerValue,
                           String connectionNumber);
 
     Optional<String> postOtnCrossConnect(List<String> createdOduInterfaces, Nodes node) throws

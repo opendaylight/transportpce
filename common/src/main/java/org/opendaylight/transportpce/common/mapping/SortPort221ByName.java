@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.common.mapping;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.Port;
@@ -18,7 +19,9 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.Port;
  * @author Martial Coulibaly (martial.coulibaly@gfi.com) on behalf of Orange
  *
  */
-public class SortPort221ByName implements Comparator<Port> {
+public class SortPort221ByName implements Comparator<Port>, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Override
     public int compare(Port port1, Port port2) {
