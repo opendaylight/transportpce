@@ -306,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "6f2d4359_e5c71328",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-25T08:41:20Z",
+      "side": 1,
+      "message": "I let you fix that last issues and since you modify some prototypes, I am waiting for a second review before +2.",
+      "parentUuid": "f2304e43_79a72806",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 68
+      },
+      "revId": "d3590e42832094c87019a6a4159b8a6b4fd72465",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "127f39f2_7860d08e",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmOtnInterface221.java",
         "patchSetId": 1

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc46370e_a6d52c85",
+        "filename": "renderer/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-25T08:41:20Z",
+      "side": 1,
+      "message": "I would have just commented it out but correct, this can be safely removed now.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 15
+      },
+      "revId": "24c55b5ba565853b2118e50291b51931ebd750de",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
