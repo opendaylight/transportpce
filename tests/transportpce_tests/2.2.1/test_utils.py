@@ -1,58 +1,65 @@
 import os
 import subprocess
 
+honeynode_executable=os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "..",
+        "..",
+        "honeynode",
+        "2.2.1",
+        "honeynode-distribution",
+        "target",
+        "honeynode-distribution-1.19.04-hc",
+        "honeynode-distribution-1.19.04",
+        "honeycomb-tpce")
+samples_directory=os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "..",
+        "..",
+        "sample_configs",
+        "openroadm",
+        "2.2.1")
+
 def start_xpdra_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode1.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17840", "sample_configs/openroadm/2.2.1/oper-XPDRA.xml"],
+                [honeynode_executable, "17840", os.path.join(samples_directory,"oper-XPDRA.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_roadma_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode2.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17841", "sample_configs/openroadm/2.2.1/oper-ROADMA.xml"],
+                [honeynode_executable, "17841", os.path.join(samples_directory,"oper-ROADMA.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_roadmb_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode5.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17842", "sample_configs/openroadm/2.2.1/oper-ROADMB.xml"],
+                [honeynode_executable, "17842", os.path.join(samples_directory,"oper-ROADMB.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_roadmc_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode3.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17843", "sample_configs/openroadm/2.2.1/oper-ROADMC.xml"],
+                [honeynode_executable, "17843", os.path.join(samples_directory,"oper-ROADMC.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_xpdrc_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode4.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17844", "sample_configs/openroadm/2.2.1/oper-XPDRC.xml"],
+                [honeynode_executable, "17844", os.path.join(samples_directory,"oper-XPDRC.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_spdra_honeynode():
-    executable = ("./honeynode/2.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode6.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17845", "sample_configs/openroadm/2.2.1/oper-SPDRAv2.xml"],
+                [honeynode_executable, "17845", os.path.join(samples_directory,"oper-SPDRAv2.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_tpce():
