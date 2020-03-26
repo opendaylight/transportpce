@@ -1,80 +1,100 @@
 import os
 import subprocess
 
+honeynode_executable=os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "..",
+        "..",
+        "honeynode",
+        "1.2.1",
+        "honeynode-distribution",
+        "target",
+        "honeynode-distribution-1.19.04-hc",
+        "honeynode-distribution-1.19.04",
+        "honeycomb-tpce")
+samples_directory=os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "..",
+        "..",
+        "sample_configs",
+        "openroadm","1.2.1")
 def start_xpdra_honeynode():
-    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode1.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17830", "sample_configs/openroadm/1.2.1/oper-XPDRA.xml"],
+                [honeynode_executable, "17830", os.path.join(samples_directory,"oper-XPDRA.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_roadma_full_honeynode():
-    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode2.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17821", "sample_configs/openroadm/1.2.1/oper-ROADMA-full.xml"],
+                [honeynode_executable, "17821", os.path.join(samples_directory,"oper-ROADMA-full.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_roadma_honeynode():
-    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode2.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17831", "sample_configs/openroadm/1.2.1/oper-ROADMA.xml"],
+                [honeynode_executable, "17831", os.path.join(samples_directory,"oper-ROADMA.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_roadmb_honeynode():
-    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode3.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17832", "sample_configs/openroadm/1.2.1/oper-ROADMB.xml"],
+                [honeynode_executable, "17832", os.path.join(samples_directory,"oper-ROADMB.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_roadmc_full_honeynode():
-    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode3.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17823", "sample_configs/openroadm/1.2.1/oper-ROADMC-full.xml"],
+                [honeynode_executable, "17823", os.path.join(samples_directory,"oper-ROADMC-full.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_roadmc_honeynode():
-    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode4.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17833", "sample_configs/openroadm/1.2.1/oper-ROADMC.xml"],
+                [honeynode_executable, "17833", os.path.join(samples_directory,"oper-ROADMC.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_xpdrc_honeynode():
-    executable = ("./honeynode/1.2.1/honeynode-distribution/target/honeynode-distribution-1.19.04-hc"
-                  "/honeynode-distribution-1.19.04/honeycomb-tpce")
-    if os.path.isfile(executable):
+    if os.path.isfile(honeynode_executable):
         with open('honeynode4.log', 'w') as outfile:
             return subprocess.Popen(
-                [executable, "17834", "sample_configs/openroadm/1.2.1/oper-XPDRC.xml"],
+                [honeynode_executable, "17834", os.path.join(samples_directory,"oper-XPDRC.xml")],
                 stdout=outfile, stderr=outfile)
 
 def start_tpce():
     if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
         print ("starting LIGHTY.IO TransportPCE build...")
-        executable = "../lighty/target/lighty-transportpce-12.0.0-SNAPSHOT/clean-start-controller.sh"
+        executable = os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "..",
+                "..",
+                "..",
+                "lighty",
+                "target",
+                "lighty-transportpce-12.0.0-SNAPSHOT",
+                "clean-start-controller.sh")
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
                 ["sh", executable], stdout=outfile, stderr=outfile,
                 stdin=open(os.devnull))
     else:
         print ("starting KARAF TransportPCE build...")
-        executable = "../karaf/target/assembly/bin/karaf"
+        executable = os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "..",
+                "..",
+                "..",
+                "karaf",
+                "target",
+                "assembly",
+                "bin",
+                "karaf")
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
                 ["sh", executable, "server"], stdout=outfile, stderr=outfile,
