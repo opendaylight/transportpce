@@ -43,98 +43,98 @@ public class OpenRoadmOtnInterface221 {
 
     private final PortMapping portMapping;
     private final OpenRoadmInterfaces openRoadmInterfaces;
-    private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmOtnInterface221.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(OpenRoadmOtnInterface221.class);
 
-    public  OpenRoadmOtnInterface221(PortMapping portMapping, OpenRoadmInterfaces openRoadmInterfaces) {
+    public OpenRoadmOtnInterface221(PortMapping portMapping,
+            OpenRoadmInterfaces openRoadmInterfaces) {
         this.portMapping = portMapping;
         this.openRoadmInterfaces = openRoadmInterfaces;
     }
 
-    public String createOpenRoadmEth1GInterface(String nodeId, String logicalConnPoint)
-            throws OpenRoadmInterfaceException {
+    public String createOpenRoadmEth1GInterface(String nodeId,
+            String logicalConnPoint) throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node % and logical connection port %s",
-                nodeId, logicalConnPoint));
+            throwException(nodeId, logicalConnPoint);
         }
 
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder();
-        //ethIfBuilder.setAutoNegotiation(EthAttributes.AutoNegotiation.Disabled);
         ethIfBuilder.setSpeed(1000L);
-        InterfaceBuilder ethInterfaceBldr =
-            createGenericInterfaceBuilder(portMap, EthernetCsmacd.class, logicalConnPoint + "-ETHERNET1G");
+        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(
+                portMap, EthernetCsmacd.class,
+                logicalConnPoint + "-ETHERNET1G");
         // Create Interface1 type object required for adding as augmentation
-        Interface1Builder ethIf1Builder = new  Interface1Builder();
-        ethInterfaceBldr.addAugmentation(Interface1.class, ethIf1Builder.setEthernet(ethIfBuilder.build()).build());
+        Interface1Builder ethIf1Builder = new Interface1Builder();
+        ethInterfaceBldr.addAugmentation(Interface1.class,
+                ethIf1Builder.setEthernet(ethIfBuilder.build()).build());
         // Post interface on the device
         this.openRoadmInterfaces.postOTNInterface(nodeId, ethInterfaceBldr);
         // Post the equipment-state change on the device circuit-pack
-        this.openRoadmInterfaces.postOTNEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
-        this.portMapping.updateMapping(nodeId,portMap);
+        this.openRoadmInterfaces.postOTNEquipmentState(nodeId,
+                portMap.getSupportingCircuitPackName(), true);
+        this.portMapping.updateMapping(nodeId, portMap);
         String ethernetInterfaceName = ethInterfaceBldr.getName();
 
         return ethernetInterfaceName;
+    }
+
+    private void throwException(String nodeId, String logicalConnPoint)
+            throws OpenRoadmInterfaceException {
+        throw new OpenRoadmInterfaceException(String.format(
+                "Unable to get mapping from PortMapping for node % and logical connection port %s",
+                nodeId, logicalConnPoint));
     }
 
     private InterfaceBuilder createGenericInterfaceBuilder(Mapping portMap,
             Class<? extends InterfaceType> type, String key) {
         InterfaceBuilder interfaceBuilder = new InterfaceBuilder()
-            //.setDescription("  TBD   ")
-            //.setCircuitId("   TBD    ")
-            .setSupportingCircuitPackName(portMap.getSupportingCircuitPackName())
-            .setSupportingPort(portMap.getSupportingPort())
-            .setAdministrativeState(AdminStates.InService)
-            //TODO get rid of unchecked cast warning
-            .setType(
-                (Class<? extends InterfaceType>)
-                type
-            )
-            .setName(key)
-            .withKey(new InterfaceKey(key));
+                // .setDescription(" TBD ")
+                // .setCircuitId(" TBD ")
+                .setSupportingCircuitPackName(
+                        portMap.getSupportingCircuitPackName())
+                .setSupportingPort(portMap.getSupportingPort())
+                .setAdministrativeState(AdminStates.InService)
+                // TODO get rid of unchecked cast warning
+                .setType(type).setName(key).withKey(new InterfaceKey(key));
         return interfaceBuilder;
     }
 
-    public String createOpenRoadmEth10GInterface(String nodeId, String logicalConnPoint)
-            throws OpenRoadmInterfaceException {
+    public String createOpenRoadmEth10GInterface(String nodeId,
+            String logicalConnPoint) throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(
-                String.format(
-                    "Unable to get mapping from PortMapping for node % and logical connection port %s",
-                    nodeId, logicalConnPoint));
+            throwException(nodeId, logicalConnPoint);
         }
 
         // Ethernet interface specific data
         EthernetBuilder ethIfBuilder = new EthernetBuilder()
-            //.setAutoNegotiation(EthAttributes.AutoNegotiation.Disabled)
-            .setSpeed(10000L);
+                // .setAutoNegotiation(EthAttributes.AutoNegotiation.Disabled)
+                .setSpeed(10000L);
         // Create Interface1 type object required for adding as augmentation
-        Interface1Builder ethIf1Builder = new  Interface1Builder();
-        InterfaceBuilder ethInterfaceBldr =
-            createGenericInterfaceBuilder(portMap, EthernetCsmacd.class, logicalConnPoint + "-ETHERNET10G")
-            .addAugmentation(Interface1.class, ethIf1Builder.setEthernet(ethIfBuilder.build()).build());
+        Interface1Builder ethIf1Builder = new Interface1Builder();
+        InterfaceBuilder ethInterfaceBldr = createGenericInterfaceBuilder(portMap, EthernetCsmacd.class,
+                logicalConnPoint + "-ETHERNET10G").addAugmentation(Interface1.class,
+                        ethIf1Builder.setEthernet(ethIfBuilder.build()).build());
         // Post interface on the device
         this.openRoadmInterfaces.postOTNInterface(nodeId, ethInterfaceBldr);
         // Post the equipment-state change on the device circuit-pack
-        this.openRoadmInterfaces.postOTNEquipmentState(nodeId, portMap.getSupportingCircuitPackName(), true);
-        this.portMapping.updateMapping(nodeId,portMap);
+        this.openRoadmInterfaces.postOTNEquipmentState(nodeId,
+                portMap.getSupportingCircuitPackName(), true);
+        this.portMapping.updateMapping(nodeId, portMap);
         String ethernetInterfaceName = ethInterfaceBldr.getName();
 
         return ethernetInterfaceName;
     }
 
-
-    public String createOpenRoadmOdu2eInterface(
-            String nodeId, String logicalConnPoint, String serviceName,
-            String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlotIndex)
+    public String createOpenRoadmOdu2eInterface(String nodeId,
+            String logicalConnPoint, String serviceName, String payLoad,
+            boolean isNetworkPort, int tribPortNumber, int tribSlotIndex)
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node % and logical connection port %s",
-                nodeId, logicalConnPoint));
+            throwException(nodeId, logicalConnPoint);
         }
         String supportingInterface = null;
 
@@ -146,34 +146,33 @@ public class OpenRoadmOtnInterface221 {
 
         if (supportingInterface == null) {
             throw new OpenRoadmInterfaceException(
-                "Interface Creation failed because of missing supported ODU4 on network end or Eth iface on client");
+                    "Interface Creation failed because of missing supported "
+                    + "ODU4 on network end or Eth iface on client");
         }
 
-        InterfaceBuilder oduInterfaceBldr =
-            createGenericInterfaceBuilder(portMap, OtnOdu.class, logicalConnPoint + "-ODU2e-" + serviceName)
-                .setSupportingInterface(supportingInterface);
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(
+                portMap, OtnOdu.class,
+                logicalConnPoint + "-ODU2e-" + serviceName)
+                        .setSupportingInterface(supportingInterface);
 
         // ODU interface specific data
-        OduBuilder oduIfBuilder = new OduBuilder()
-            .setRate(ODU2e.class)
-            .setOduFunction(ODUTTPCTP.class)
-            .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
-        LOG.debug("Inside the ODU2e creation {} {} {}",isNetworkPort,tribPortNumber,tribSlotIndex);
+        OduBuilder oduIfBuilder = new OduBuilder().setRate(ODU2e.class)
+                .setOduFunction(ODUTTPCTP.class)
+                .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
+        LOG.debug("Inside the ODU2e creation {} {} {}", isNetworkPort,
+                tribPortNumber, tribSlotIndex);
         if (isNetworkPort) {
             List<Uint16> tribSlots = new ArrayList<>();
             Uint16 newIdx = Uint16.valueOf(tribSlotIndex);
             tribSlots.add(newIdx);
-            IntStream.range(tribSlotIndex, tribSlotIndex + 8).forEach(
-                nbr -> tribSlots.add(Uint16.valueOf(nbr))
-            );
+            IntStream.range(tribSlotIndex, tribSlotIndex + 8)
+                    .forEach(nbr -> tribSlots.add(Uint16.valueOf(nbr)));
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
-                .setTribPortNumber(tribPortNumber)
-                .setTribSlots(tribSlots);
+                    .setTribPortNumber(tribPortNumber).setTribSlots(tribSlots);
             oduIfBuilder.setOduFunction(ODUCTP.class)
                     .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
                     .setParentOduAllocation(parentOduAllocationBuilder.build());
-        }
-        else {
+        } else {
             // Set Opu attributes
             OpuBuilder opuBldr = new OpuBuilder()
                     .setPayloadType(new PayloadTypeDef(payLoad))
@@ -182,8 +181,9 @@ public class OpenRoadmOtnInterface221 {
         }
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder oduIf1Builder =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder
+            oduIf1Builder = new
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
         oduInterfaceBldr.addAugmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
                 oduIf1Builder.setOdu(oduIfBuilder.build()).build());
@@ -194,8 +194,9 @@ public class OpenRoadmOtnInterface221 {
         return oduInterfaceBldr.getName();
     }
 
-    public String createOpenRoadmOdu0Interface(String nodeId, String logicalConnPoint,
-            String serviceName, String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlot)
+    public String createOpenRoadmOdu0Interface(String nodeId,
+            String logicalConnPoint, String serviceName, String payLoad,
+            boolean isNetworkPort, int tribPortNumber, int tribSlot)
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         String supportingInterface = null;
@@ -206,27 +207,25 @@ public class OpenRoadmOtnInterface221 {
             supportingInterface = logicalConnPoint + "-ETHERNET1G";
         }
         if (portMap == null) {
-            throw new OpenRoadmInterfaceException(String.format(
-                "Unable to get mapping from PortMapping for node % and logical connection port %s",
-                nodeId, logicalConnPoint));
+            throwException(nodeId, logicalConnPoint);
         }
-        InterfaceBuilder oduInterfaceBldr =
-            createGenericInterfaceBuilder(portMap, OtnOdu.class, logicalConnPoint + "-ODU0-" + serviceName);
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(
+                portMap, OtnOdu.class,
+                logicalConnPoint + "-ODU0-" + serviceName);
         oduInterfaceBldr.setSupportingInterface(supportingInterface);
 
         // ODU interface specific data
-        OduBuilder oduIfBuilder = new OduBuilder()
-            .setRate(ODU0.class)
-            .setOduFunction(ODUTTPCTP.class)
-            .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
+        OduBuilder oduIfBuilder = new OduBuilder().setRate(ODU0.class)
+                .setOduFunction(ODUTTPCTP.class)
+                .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
         if (isNetworkPort) {
             LOG.debug("Network port is true");
             List<Uint16> tribSlots = new ArrayList<>();
-            tribSlots.add(Uint16.valueOf(tribSlot)); //add trib slots
+            // add trib slots
+            tribSlots.add(Uint16.valueOf(tribSlot));
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
-                    //set trib port numbers
-                    .setTribPortNumber(tribPortNumber)
-                    .setTribSlots(tribSlots);
+                    // set trib port numbers
+                    .setTribPortNumber(tribPortNumber).setTribSlots(tribSlots);
             oduIfBuilder.setOduFunction(ODUCTP.class)
                     .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
                     .setParentOduAllocation(parentOduAllocationBuilder.build());
@@ -234,8 +233,7 @@ public class OpenRoadmOtnInterface221 {
                     oduIfBuilder.getParentOduAllocation().getTribSlots(),
                     oduIfBuilder.getRate(),
                     oduIfBuilder.getParentOduAllocation().getTribPortNumber());
-        }
-        else {
+        } else {
             LOG.debug("Current port is a client port");
             OpuBuilder opuBldr = new OpuBuilder()
                     .setPayloadType(new PayloadTypeDef(payLoad))
@@ -244,8 +242,9 @@ public class OpenRoadmOtnInterface221 {
         }
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder oduIf1Builder =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder
+            oduIf1Builder = new
+            org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
         oduInterfaceBldr.addAugmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
                 oduIf1Builder.setOdu(oduIfBuilder.build()).build());
@@ -256,46 +255,41 @@ public class OpenRoadmOtnInterface221 {
         return oduInterfaceBldr.getName();
     }
 
-
-    public String createOpenRoadmOdu2Interface(
-            String nodeId, String logicalConnPoint, String serviceName,
-            String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlotIndex)
+    public String createOpenRoadmOdu2Interface(String nodeId,
+            String logicalConnPoint, String serviceName, String payLoad,
+            boolean isNetworkPort, int tribPortNumber, int tribSlotIndex)
             throws OpenRoadmInterfaceException {
         Mapping portMap = this.portMapping.getMapping(nodeId, logicalConnPoint);
         String supportingInterface = null;
 
-        if (isNetworkPort) {
-            supportingInterface = portMap.getSupportingOdu4();
+        if (portMap != null) {
+            if (isNetworkPort) {
+                supportingInterface = portMap.getSupportingOdu4();
+            } else {
+                supportingInterface = portMap.getSupportingEthernet();
+            }
         } else {
-            supportingInterface = portMap.getSupportingEthernet();
+            throwException(nodeId, logicalConnPoint);
         }
-        if (portMap == null) {
-            throw new OpenRoadmInterfaceException(
-                String.format("Unable to get mapping from PortMapping for node % and logical connection port %s",
-                        nodeId, logicalConnPoint));
-        }
-        InterfaceBuilder oduInterfaceBldr =
-            createGenericInterfaceBuilder(portMap, OtnOdu.class, logicalConnPoint + "-ODU2-" + serviceName)
-                .setSupportingInterface(supportingInterface);
+        InterfaceBuilder oduInterfaceBldr = createGenericInterfaceBuilder(
+                portMap, OtnOdu.class,
+                logicalConnPoint + "-ODU2-" + serviceName)
+                        .setSupportingInterface(supportingInterface);
 
-        OduBuilder oduIfBuilder = new OduBuilder()
-            .setRate(ODU2.class)
-            .setOduFunction(ODUTTPCTP.class)
-            .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
+        OduBuilder oduIfBuilder = new OduBuilder().setRate(ODU2.class)
+                .setOduFunction(ODUTTPCTP.class)
+                .setMonitoringMode(OduAttributes.MonitoringMode.Terminated);
         if (isNetworkPort) {
             List<Uint16> tribSlots = new ArrayList<>();
-            IntStream.range(tribSlotIndex, tribSlotIndex + 8).forEach(
-                nbr -> tribSlots.add(Uint16.valueOf(nbr))
-            );
+            IntStream.range(tribSlotIndex, tribSlotIndex + 8)
+                    .forEach(nbr -> tribSlots.add(Uint16.valueOf(nbr)));
             ParentOduAllocationBuilder parentOduAllocationBuilder = new ParentOduAllocationBuilder()
-                    //set trib port numbers
-                    .setTribPortNumber(tribPortNumber)
-                    .setTribSlots(tribSlots);
+                    // set trib port numbers
+                    .setTribPortNumber(tribPortNumber).setTribSlots(tribSlots);
             oduIfBuilder.setOduFunction(ODUCTP.class)
                     .setMonitoringMode(OduAttributes.MonitoringMode.Monitored)
                     .setParentOduAllocation(parentOduAllocationBuilder.build());
-        }
-        else {
+        } else {
             // Set Opu attributes
             OpuBuilder opuBldr = new OpuBuilder()
                     .setPayloadType(new PayloadTypeDef(payLoad))
@@ -307,8 +301,9 @@ public class OpenRoadmOtnInterface221 {
         // TODO look at imports of different versions of class
         // Create Interface1 type object required for adding as augmentation
         // TODO look at imports of different versions of class
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder oduIf1Builder =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder
+            oduIf1Builder = new
+                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1Builder();
         oduInterfaceBldr.addAugmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev181019.Interface1.class,
                 oduIf1Builder.setOdu(oduIfBuilder.build()).build());

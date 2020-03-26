@@ -40,7 +40,7 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
         try {
             output = this.rendererServiceOperations.serviceDelete(input).get();
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("RPC service delete failed !");
+            LOG.error("RPC service delete failed !", e);
         }
         return ModelMappingUtils.createServiceDeleteRpcResponse(output);
     }
@@ -54,7 +54,7 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
         try {
             output = this.rendererServiceOperations.serviceImplementation(input).get();
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("RPC service implementation failed !");
+            LOG.error("RPC service implementation failed !", e);
         }
         return ModelMappingUtils.createServiceImplementationRpcResponse(output);
     }
