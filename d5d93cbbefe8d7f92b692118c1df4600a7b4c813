@@ -163,6 +163,30 @@
     },
     {
       "key": {
+        "uuid": "5ca7ed61_583f84f0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyResult.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-26T08:50:16Z",
+      "side": 1,
+      "message": "\"the following code could be more efficient\" is not the rigth sentence. The right sentence is \"another way is to use a for loop instead of an iterator\". The result is the same. It\u0027s more a matter of habit :-) I was too fast in my first review ;-)",
+      "parentUuid": "bf0133ca_fbca2471",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 224,
+        "endChar": 20
+      },
+      "revId": "d5d93cbbefe8d7f92b692118c1df4600a7b4c813",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be8df6cb_9a2ab3d0",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
         "patchSetId": 3
