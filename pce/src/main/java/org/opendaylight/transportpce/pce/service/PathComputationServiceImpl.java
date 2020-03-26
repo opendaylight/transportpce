@@ -22,7 +22,6 @@ import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
 import org.opendaylight.transportpce.pce.PceSendingPceRPCs;
 import org.opendaylight.transportpce.pce.gnpy.GnpyResult;
-
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.Response;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveOutput;
@@ -105,12 +104,12 @@ public class PathComputationServiceImpl implements PathComputationService {
                         RpcStatusEx.Pending, "Service compliant, submitting cancelResourceReserve Request ...", null);
                 PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs();
                 sendingPCE.cancelResourceReserve();
-                if (sendingPCE.getSuccess()) {
+                if (Boolean.TRUE.equals(sendingPCE.getSuccess())) {
                     message = "ResourceReserve cancelled !";
                 } else {
                     message = "Cancelling ResourceReserve failed !";
                 }
-                LOG.info(message);
+                LOG.info("in PathComputationServiceImpl : {}",message);
                 sendNotifications(ServicePathNotificationTypes.CancelResourceReserve, input.getServiceName(),
                         RpcStatusEx.Successful, "cancel Resource Reserve successful!", null);
                 ConfigurationResponseCommonBuilder configurationResponseCommon =
@@ -173,7 +172,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 }
                 output.setGnpyResponse(listResponse);
 
-                if (!(sendingPCE.getSuccess()) || (path == null)) {
+                if (Boolean.FALSE.equals(sendingPCE.getSuccess()) || (path == null)) {
                     configurationResponseCommon.setAckFinalIndicator("Yes")
                             .setRequestId(input.getServiceHandlerHeader().getRequestId()).setResponseCode(responseCode)
                             .setResponseMessage(message);
@@ -256,9 +255,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                 feasible = true;
             }
         }
-        GnpyResponse gnpypResp = new GnpyResponseBuilder().setPathDir(pathDir).setResponseType(respType)
-                .setFeasibility(feasible).build();
-        return gnpypResp;
+        return new GnpyResponseBuilder().setPathDir(pathDir).setResponseType(respType).setFeasibility(feasible).build();
     }
 
 }

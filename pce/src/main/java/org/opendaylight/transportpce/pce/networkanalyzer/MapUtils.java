@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
+
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
@@ -38,7 +39,7 @@ public final class MapUtils {
         List<String> excSrlgLinks = pceHardConstraints.getExcludeSrlgLinks();
 
         LOG.info("mapDiversityConstraints before : ExcludeClliNodes {} \n ExcludeNodes {} \n ExcludeSrlgLinks {}",
-                excClliNodes.toString(), excNodes.toString(), excSrlgLinks.toString());
+                excClliNodes, excNodes, excSrlgLinks);
 
         for (Node node : allNodes) {
             if (excClliNodes.contains(node.getNodeId().getValue())) {
@@ -61,16 +62,16 @@ public final class MapUtils {
                     if (!srlg.isEmpty()) {
                         pceHardConstraints.setExcludeSRLG(srlg);
                         LOG.debug("mapDiversityConstraints setExcludeSRLG {} for link {}",
-                                srlg.toString(), link.getLinkId().getValue());
+                                srlg, link.getLinkId().getValue());
                     }
                 }
             }
         }
 
         LOG.info("mapDiversityConstraints after : ExcludeCLLI {} \n ExcludeSupNodes {} \n ExcludeSRLG {}",
-                pceHardConstraints.getExcludeCLLI().toString(),
-                pceHardConstraints.getExcludeSupNodes().toString(),
-                pceHardConstraints.getExcludeSRLG().toString());
+                pceHardConstraints.getExcludeCLLI(),
+                pceHardConstraints.getExcludeSupNodes(),
+                pceHardConstraints.getExcludeSRLG());
 
     }
 
@@ -80,7 +81,7 @@ public final class MapUtils {
     }
 
     public static List<Long> getSRLG(Link link) {
-        List<Long> srlgList = new ArrayList<Long>();
+        List<Long> srlgList = new ArrayList<>();
         try {
             List<LinkConcatenation> linkList = getOmsAttributesSpan(link).getLinkConcatenation();
             for (LinkConcatenation lc : linkList) {
@@ -93,7 +94,7 @@ public final class MapUtils {
     }
 
     public static List<Long> getSRLGfromLink(Link link) {
-        List<Long> srlgList = new ArrayList<Long>();
+        List<Long> srlgList = new ArrayList<>();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 linkC =
             link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class);
         if (linkC == null) {
@@ -137,8 +138,8 @@ public final class MapUtils {
     }
 
     public static TreeMap<String, String> getAllSupNode(Node node) {
-        TreeMap<String, String> allSupNodes = new TreeMap<String, String>();
-        List<SupportingNode> supNodes = new ArrayList<SupportingNode>();
+        TreeMap<String, String> allSupNodes = new TreeMap<>();
+        List<SupportingNode> supNodes = new ArrayList<>();
         try {
             supNodes = node.getSupportingNode();
         } catch (NullPointerException e) {
@@ -231,7 +232,7 @@ public final class MapUtils {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 linkOpposite
             = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class);
         tmpoppositeLink = linkOpposite.getOppositeLink();
-        LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite.toString());
+        LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite);
         if (tmpoppositeLink == null) {
             LOG.error("PceLink: Error reading oppositeLink. Link is ignored {}", link.getLinkId().getValue());
             return null;

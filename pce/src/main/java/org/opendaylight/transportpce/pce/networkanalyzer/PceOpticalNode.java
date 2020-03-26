@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PceOpticalNode implements PceNode {
-    private static final Logger LOG = LoggerFactory.getLogger(PceCalculation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PceOpticalNode.class);
 
     private boolean valid = true;
 
@@ -40,12 +40,12 @@ public class PceOpticalNode implements PceNode {
     private final String pceNodeType;
 
     // wavelength calculation per node type
-    private List<Long> availableWLindex = new ArrayList<Long>();
-    private Map<String, OpenroadmTpType> availableSrgPp = new TreeMap<String, OpenroadmTpType>();
-    private Map<String, OpenroadmTpType> availableSrgCp = new TreeMap<String, OpenroadmTpType>();
-    private List<String> usedXpndrNWTps = new ArrayList<String>();
-    private List<PceLink> outgoingLinks = new ArrayList<PceLink>();
-    private Map<String, String> clientPerNwTp = new HashMap<String, String>();
+    private List<Long> availableWLindex = new ArrayList<>();
+    private Map<String, OpenroadmTpType> availableSrgPp = new TreeMap<>();
+    private Map<String, OpenroadmTpType> availableSrgCp = new TreeMap<>();
+    private List<String> usedXpndrNWTps = new ArrayList<>();
+    private List<PceLink> outgoingLinks = new ArrayList<>();
+    private Map<String, String> clientPerNwTp = new HashMap<>();
 
     public PceOpticalNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, ServiceFormat serviceFormat,
         String pceNodeType) {
@@ -74,7 +74,7 @@ public class PceOpticalNode implements PceNode {
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
             .node.TerminationPoint> allTps = nodeTp.getTerminationPoint();
         if (allTps == null) {
-            LOG.error("initSrgTpList: ROADM TerminationPoint list is empty for node {}", this.toString());
+            LOG.error("initSrgTpList: ROADM TerminationPoint list is empty for node {}", this);
             this.valid = false;
             return;
         }
@@ -85,7 +85,7 @@ public class PceOpticalNode implements PceNode {
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
                 .TerminationPoint1.class);
             OpenroadmTpType type = cntp1.getTpType();
-            LOG.info("type = {} for tp {}", type.getName(), tp.toString());
+            LOG.info("type = {} for tp {}", type.getName(), tp);
 
             switch (type) {
                 case SRGTXRXCP:
@@ -120,13 +120,12 @@ public class PceOpticalNode implements PceNode {
             }
         }
         if (this.availableSrgPp.isEmpty() && this.availableSrgCp.isEmpty()) {
-            LOG.error("initSrgTpList: ROADM SRG TerminationPoint list is empty for node {}", this.toString());
+            LOG.error("initSrgTpList: ROADM SRG TerminationPoint list is empty for node {}", this);
             this.valid = false;
             return;
         }
         LOG.info("initSrgTpList: availableSrgPp size = {} && availableSrgCp size = {} in {}",
-            this.availableSrgPp.size(), this.availableSrgCp.size(), this.toString());
-        return;
+            this.availableSrgPp.size(), this.availableSrgCp.size(), this);
     }
 
     public void initWLlist() {
@@ -142,13 +141,13 @@ public class PceOpticalNode implements PceNode {
                         node1.getSrgAttributes().getAvailableWavelengths();
                 if (srgAvailableWL == null) {
                     this.valid = false;
-                    LOG.error("initWLlist: SRG AvailableWavelengths is empty for node  {}", this.toString());
+                    LOG.error("initWLlist: SRG AvailableWavelengths is empty for node  {}", this);
                     return;
                 }
                 for (org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
                         .AvailableWavelengths awl : srgAvailableWL) {
                     this.availableWLindex.add(awl.getIndex().toJava());
-                    LOG.debug("initWLlist: SRG next = {} in {}", awl.getIndex(), this.toString());
+                    LOG.debug("initWLlist: SRG next = {} in {}", awl.getIndex(), this);
                 }
                 break;
             case DEGREE :
@@ -156,13 +155,13 @@ public class PceOpticalNode implements PceNode {
                     .AvailableWavelengths> degAvailableWL = node1.getDegreeAttributes().getAvailableWavelengths();
                 if (degAvailableWL == null) {
                     this.valid = false;
-                    LOG.error("initWLlist: DEG AvailableWavelengths is empty for node  {}", this.toString());
+                    LOG.error("initWLlist: DEG AvailableWavelengths is empty for node  {}", this);
                     return;
                 }
                 for (org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes
                             .AvailableWavelengths awl : degAvailableWL) {
                     this.availableWLindex.add(awl.getIndex().toJava());
-                    LOG.debug("initWLlist: DEGREE next = {} in {}", awl.getIndex(), this.toString());
+                    LOG.debug("initWLlist: DEGREE next = {} in {}", awl.getIndex(), this);
                 }
                 break;
             case XPONDER :
@@ -172,15 +171,14 @@ public class PceOpticalNode implements PceNode {
                 }
                 break;
             default:
-                LOG.error("initWLlist: unsupported node type {} in node {}", this.nodeType, this.toString());
+                LOG.error("initWLlist: unsupported node type {} in node {}", this.nodeType, this);
                 break;
         }
-        if (this.availableWLindex.size() == 0) {
-            LOG.debug("initWLlist: There are no available wavelengths in node {}", this.toString());
+        if (this.availableWLindex.isEmpty()) {
+            LOG.debug("initWLlist: There are no available wavelengths in node {}", this);
             this.valid = false;
         }
-        LOG.debug("initWLlist: availableWLindex size = {} in {}", this.availableWLindex.size(), this.toString());
-        return;
+        LOG.debug("initWLlist: availableWLindex size = {} in {}", this.availableWLindex.size(), this);
     }
 
     public void initXndrTps() {
@@ -195,7 +193,7 @@ public class PceOpticalNode implements PceNode {
             .node.TerminationPoint> allTps = nodeTp.getTerminationPoint();
         if (allTps == null) {
             this.valid = false;
-            LOG.error("initXndrTps: XPONDER TerminationPoint list is empty for node {}", this.toString());
+            LOG.error("initXndrTps: XPONDER TerminationPoint list is empty for node {}", this);
             return;
         }
         this.valid = false;
@@ -223,8 +221,8 @@ public class PceOpticalNode implements PceNode {
                         this.clientPerNwTp.put(tp.getTpId().getValue(), client);
                         this.valid = true;
                     } else {
-                        LOG.error("initXndrTps: XPONDER {} NW TP doesn't have defined Client {}", this.toString(),
-                            tp.getTpId().getValue());
+                        LOG.error("initXndrTps: XPONDER {} NW TP doesn't have defined Client {}",
+                            this, tp.getTpId().getValue());
                     }
                 } else if (ServiceFormat.OTU.equals(this.serviceFormat)) {
                     LOG.info("Infrastructure OTU4 connection");
@@ -235,8 +233,7 @@ public class PceOpticalNode implements PceNode {
             }
         }
         if (!isValid()) {
-            LOG.error("initXndrTps: XPONDER doesn't have available wavelengths for node  {}", this.toString());
-            return;
+            LOG.error("initXndrTps: XPONDER doesn't have available wavelengths for node  {}", this);
         }
     }
 
@@ -275,13 +272,13 @@ public class PceOpticalNode implements PceNode {
                     .sorted(new SortPortsByName())
                     .findFirst();
             if (!client.isPresent()) {
-                LOG.error("getRdmSrgClient: ROADM {} doesn't have PP Client for CP {}", this.toString(), tp);
+                LOG.error("getRdmSrgClient: ROADM {} doesn't have PP Client for CP {}", this, tp);
                 return null;
             }
             LOG.info("getRdmSrgClient: client PP {} for CP {} found !", client, tp);
             return client.get();
         } else {
-            LOG.error("getRdmSrgClient: SRG TerminationPoint PP list is not available for node {}", this.toString());
+            LOG.error("getRdmSrgClient: SRG TerminationPoint PP list is not available for node {}", this);
             return null;
         }
     }
@@ -333,6 +330,7 @@ public class PceOpticalNode implements PceNode {
         return nodeId;
     }
 
+    @Override
     public String toString() {
         return "PceNode type=" + nodeType + " ID=" + nodeId.getValue() + " CLLI=" + this.getSupClliNodeId();
     }
@@ -364,13 +362,11 @@ public class PceOpticalNode implements PceNode {
 
     @Override
     public Map<String, List<Uint16>> getAvailableTribPorts() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Map<String, List<Uint16>> getAvailableTribSlots() {
-        // TODO Auto-generated method stub
         return null;
     }
 }

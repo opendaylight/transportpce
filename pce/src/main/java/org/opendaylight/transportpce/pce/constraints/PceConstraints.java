@@ -22,28 +22,28 @@ public class PceConstraints {
 
     // TODO. for now metrics are set into hard structure
     private RoutingConstraintsSp.PceMetric pceMetrics = RoutingConstraintsSp.PceMetric.HopCount;
-    private Long maxLatency = (long) -1;
+    private Long maxLatency = -1L;
 
     // Structure related to  EXCLUDE constraints
     // Nodes/CLLI/SRLG lists might consist of two types of elements : (1)from diversity constraints (2)from exclude list
     // e.g.: nodesToExclude - topo-level nodes IDs - comes from diversity constraints
     //     : supNodesToExclude - supporting nodes IDs - comes from exclude list
     // "mapConstraints" class converts diversity elements into correct names
-    private List<String> nodesToExclude = new ArrayList<String>();
-    private List<String> supNodesToExclude = new ArrayList<String>();
+    private List<String> nodesToExclude = new ArrayList<>();
+    private List<String> supNodesToExclude = new ArrayList<>();
 
-    private List<Long> srlgToExclude = new ArrayList<Long>();
-    private List<String> srlgLinksToExclude = new ArrayList<String>();
+    private List<Long> srlgToExclude = new ArrayList<>();
+    private List<String> srlgLinksToExclude = new ArrayList<>();
 
-    private List<String> clliToExclude = new ArrayList<String>();
-    private List<String> clliNodesToExclude = new ArrayList<String>();
+    private List<String> clliToExclude = new ArrayList<>();
+    private List<String> clliNodesToExclude = new ArrayList<>();
 
     ///Structures related to INCLUDE constraints
-    private List<String> nodesToInclude = new ArrayList<String>();
-    private List<PceOpticalNode> pceNodesToInclude = new ArrayList<PceOpticalNode>();
-    private List<ResourcePair> listToInclude = new ArrayList<ResourcePair>();
+    private List<String> nodesToInclude = new ArrayList<>();
+    private List<PceOpticalNode> pceNodesToInclude = new ArrayList<>();
+    private List<ResourcePair> listToInclude = new ArrayList<>();
 
-    private List<String> srlgNames = new ArrayList<String>();
+    private List<String> srlgNames = new ArrayList<>();
 
     public enum ResourceType {
         NONE, NODE, SRLG, CLLI;
@@ -151,11 +151,12 @@ public class PceConstraints {
     }
 
     public void setIncludePceNode(PceOpticalNode node) {
-        LOG.info("in Pceconstraints setIncludePceNode new node = {}", node.toString());
+        LOG.info("in Pceconstraints setIncludePceNode new node = {}", node);
         this.pceNodesToInclude.add(node);
     }
 
-    public class ResourcePair {
+    public static class ResourcePair {
+
         public ResourcePair(ResourceType type, String name) {
             super();
             this.type = type;
@@ -163,7 +164,6 @@ public class PceConstraints {
         }
 
         private ResourceType type = ResourceType.NODE;
-
         private String name = "";
 
         public ResourceType getType() {
