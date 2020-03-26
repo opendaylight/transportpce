@@ -139,7 +139,7 @@ class TransportPCEFulltesting(unittest.TestCase):
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17821",
+             "netconf-node-topology:port": "17831",
              "netconf-node-topology:tcp-only": "false",
              "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -158,7 +158,7 @@ class TransportPCEFulltesting(unittest.TestCase):
              "netconf-node-topology:username": "admin",
              "netconf-node-topology:password": "admin",
              "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17823",
+             "netconf-node-topology:port": "17833",
              "netconf-node-topology:tcp-only": "false",
              "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
