@@ -46,6 +46,30 @@
       "revId": "b255fb68b4bb67e428fad63e673edda676ab0b69",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41ac864e_eaa5c08f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-26T09:58:48Z",
+      "side": 1,
+      "message": "Agreed, I guess the upstreams were modified meanwhile.\nWe can modify the ODLPARENT JIRA ticket type from bug to improvement.\nThere is still no point to double check that with checkstyle and SpotBugs.\nIt just make the code heavier with annotations.",
+      "parentUuid": "b00a883a_35ad6908",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 62
+      },
+      "revId": "b255fb68b4bb67e428fad63e673edda676ab0b69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
