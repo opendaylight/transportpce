@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efc86698_a41c2191",
+        "filename": "tests/Xtesting/DockerSims/dockercmd_profile.sh",
+        "patchSetId": 15
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-27T12:10:23Z",
+      "side": 1,
+      "message": "It was convenient since supported at least by build and stop scripts.\nBut this can be addressed later by improving the Dockerfile parameters.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 6
+      },
+      "revId": "2ccfedc3d71ec43e89fdca0f016c0f3ef1d6a96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
