@@ -46,6 +46,98 @@
       "revId": "3b100e321c27a6777132f33816e80b7f2e58a59c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63a4e24f_3c8a5205",
+        "filename": "tests/Xtesting/DockerSims/build_sims.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-27T07:54:59Z",
+      "side": 1,
+      "message": "can be declared as a variable in source file",
+      "range": {
+        "startLine": 4,
+        "startChar": 37,
+        "endLine": 4,
+        "endChar": 59
+      },
+      "revId": "3b100e321c27a6777132f33816e80b7f2e58a59c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "441800e5_f00e5a71",
+        "filename": "tests/Xtesting/DockerSims/dockercmd_profile.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-27T07:54:59Z",
+      "side": 1,
+      "message": "case / esac statement is more adapted and can deal with supporting both device versions together.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 42
+      },
+      "revId": "3b100e321c27a6777132f33816e80b7f2e58a59c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed758f20_6f5b7e72",
+        "filename": "tests/Xtesting/DockerSims/dockercmd_profile.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-27T07:54:59Z",
+      "side": 1,
+      "message": "tab",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 1
+      },
+      "revId": "3b100e321c27a6777132f33816e80b7f2e58a59c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a8dc659_0eac3a1f",
+        "filename": "tests/Xtesting/DockerSims/start_sims.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-27T07:54:59Z",
+      "side": 1,
+      "message": "can be put in source file",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 35
+      },
+      "revId": "3b100e321c27a6777132f33816e80b7f2e58a59c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
