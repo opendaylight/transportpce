@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a5f5a35d_cc743aa5",
+        "filename": "tests/honeynode/1.2.1/honeynode-distribution/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-27T11:10:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fa44e98_0fc73b60",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 23
+      },
+      "revId": "5c90bb94bd3a60a44bb976ffc9bc1253079ad92c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90140196_80320d08",
         "filename": "tests/honeynode/1.2.1/minimal-distribution/pom.xml",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-27T09:43:04Z",
       "side": 1,
       "message": "idem etc",
+      "range": {
+        "startLine": 243,
+        "startChar": 1,
+        "endLine": 250,
+        "endChar": 18
+      },
+      "revId": "5c90bb94bd3a60a44bb976ffc9bc1253079ad92c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "552f0d88_d091dd6f",
+        "filename": "tests/honeynode/1.2.1/minimal-distribution/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-27T11:10:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90140196_80320d08",
       "range": {
         "startLine": 243,
         "startChar": 1,
