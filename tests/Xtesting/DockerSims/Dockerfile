@@ -25,7 +25,7 @@ LABEL Maintainer="transportpce-dev@lists.opendaylight.org"
 LABEL Url="https://git.opendaylight.org/gerrit/transportpce"
 
 ENV DEVICE_VERSION=1.2.1
-ENV DEVICE_FILE=oper-ROADMA-full.xml
+ENV DEVICE_FILE=1.2.1/oper-ROADMA-full.xml
 RUN addgroup gsimulator && adduser -D usimulator -G gsimulator -u 100001\
   && mkdir -p /opt/application/simulators
 COPY --chown=usimulator:gsimulator --from=builder /tmp/honeynode/ /opt/application/simulators/honeynode
@@ -35,4 +35,4 @@ USER usimulator
 WORKDIR /opt/application/simulators/honeynode
 HEALTHCHECK CMD wget --header "Authorization: Basic `echo -n "${USER}:${PASSWORD}" | base64`"  http://localhost:8130/restconf/ -S -O -
 EXPOSE 1830/tcp 8130/tcp
-CMD /opt/application/simulators/honeynode/honeynode_$DEVICE_VERSION/honeycomb-tpce 1830 /opt/application/simulators/honeynode/config/$DEVICE_VERSION/$DEVICE_FILE
+CMD /opt/application/simulators/honeynode/honeynode_$DEVICE_VERSION/honeycomb-tpce 1830 /opt/application/simulators/honeynode/config/$DEVICE_FILE
