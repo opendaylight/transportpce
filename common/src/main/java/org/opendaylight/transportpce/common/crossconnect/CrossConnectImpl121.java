@@ -189,12 +189,12 @@ public class CrossConnectImpl121 {
         return srcTp + "-" + destTp + "-" + waveNumber;
     }
 
-    public boolean setPowerLevel(String deviceId, Enum mode, BigDecimal powerValue, String connectionNumber) {
+    public boolean setPowerLevel(String deviceId, OpticalControlMode mode, BigDecimal powerValue, String ctNumber) {
 
-        Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, connectionNumber);
+        Optional<RoadmConnections> rdmConnOpt = getCrossConnect(deviceId, ctNumber);
         if (rdmConnOpt.isPresent()) {
             RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder(rdmConnOpt.get())
-                    .setOpticalControlMode(OpticalControlMode.class.cast(mode));
+                    .setOpticalControlMode(mode);
             if (powerValue != null) {
                 rdmConnBldr.setTargetOutputPower(new PowerDBm(powerValue));
             }
@@ -218,7 +218,7 @@ public class CrossConnectImpl121 {
 
             // post the cross connect on the device
             InstanceIdentifier<RoadmConnections> roadmConnIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(RoadmConnections.class, new RoadmConnectionsKey(connectionNumber));
+                    .child(RoadmConnections.class, new RoadmConnectionsKey(ctNumber));
             deviceTx.put(LogicalDatastoreType.CONFIGURATION, roadmConnIID, newRdmConn);
             FluentFuture<? extends @NonNull CommitInfo> commit =
                 deviceTx.commit(Timeouts.DEVICE_WRITE_TIMEOUT, Timeouts.DEVICE_WRITE_TIMEOUT_UNIT);
@@ -231,7 +231,7 @@ public class CrossConnectImpl121 {
             }
 
         } else {
-            LOG.warn("Roadm-Connection is null in set power level ({})", connectionNumber);
+            LOG.warn("Roadm-Connection is null in set power level ({})", ctNumber);
         }
         return false;
     }

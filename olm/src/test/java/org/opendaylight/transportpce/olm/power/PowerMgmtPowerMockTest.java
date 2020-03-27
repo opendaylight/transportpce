@@ -225,7 +225,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                         .build()));
         CrossConnect crossConnectMock = Mockito.mock(CrossConnectImpl.class);
         Mockito.when(crossConnectMock
-                .setPowerLevel(Mockito.anyString(), ArgumentMatchers.eq(OpticalControlMode.Power), Mockito.any(),
+                .setPowerLevel(Mockito.anyString(), OpticalControlMode.Power.getName(), Mockito.any(),
                         Mockito.anyString())).thenReturn(true);
         PowerMgmtImpl powerMgmtImpl = getNewPowerMgmt(openRoadmInterfacesImpl121Spy,crossConnectMock);
         boolean output = powerMgmtImpl.setPower(input);
