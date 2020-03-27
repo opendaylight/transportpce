@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "61ea466a_206c05ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-27T15:38:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9bc135d_b9173499",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 69
+      },
+      "revId": "985cb95c943f023ce67630f610b1e1c16cbc8525",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb4c3495_0e1459d2",
         "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-27T14:41:17Z",
       "side": 1,
       "message": "Using os.path.dirname(os.path.realpath(__file__) is probably a good idea.\nI assume \",\" are used for M$ Windows compatibility but I am not sure there is a point to put one folder per line.\n\nWhat about this ?\n\n        os.path.dirname(os.path.realpath(__file__)),\n        \"..\", \"..\", \"honeynode\", \"2.2.1\", \"honeynode-distribution\", \"target\", \"honeynode-distribution-1.19.04-hc\", \"honeynode-distribution-1.19.04\",\n        \"honeycomb-tpce\")",
+      "range": {
+        "startLine": 6,
+        "startChar": 6,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "985cb95c943f023ce67630f610b1e1c16cbc8525",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc6f88ea_82a443e3",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-27T15:38:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb4c3495_0e1459d2",
       "range": {
         "startLine": 6,
         "startChar": 6,
