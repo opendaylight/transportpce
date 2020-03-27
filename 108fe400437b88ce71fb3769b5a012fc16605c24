@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb927534_4b06b646",
+        "filename": "tests/Xtesting/DockerSims/start_sims.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-27T10:18:31Z",
+      "side": 1,
+      "message": "Contrary to the 2 others, this script can\u0027t work with DEVICE_VERSION\u003d\"all\".\nSupporting it would probably mean reviewing the Dockerfile, adding a check.",
+      "range": {
+        "startLine": 5,
+        "startChar": 75,
+        "endLine": 5,
+        "endChar": 109
+      },
+      "revId": "108fe400437b88ce71fb3769b5a012fc16605c24",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
