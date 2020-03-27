@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "639500e2_4815c547",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-27T10:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3723ab68_09aa8f1f",
+      "range": {
+        "startLine": 18,
+        "startChar": 6,
+        "endLine": 18,
+        "endChar": 40
+      },
+      "revId": "68bd43efa251388447980f29697621f5ac891a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c19620e2_dbeb8691",
         "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
         "patchSetId": 7
@@ -140,6 +164,30 @@
       "revId": "68bd43efa251388447980f29697621f5ac891a59",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90d91460_b31d2b94",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-27T10:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9a3c289_9168da0e",
+      "range": {
+        "startLine": 21,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "68bd43efa251388447980f29697621f5ac891a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "34e49f91_66f237ac",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-27T10:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "699faa59_4cf97301",
+      "range": {
+        "startLine": 23,
+        "startChar": 6,
+        "endLine": 23,
+        "endChar": 52
+      },
+      "revId": "68bd43efa251388447980f29697621f5ac891a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b47d94aa_5ed60a18",
         "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
         "patchSetId": 7
@@ -234,6 +306,30 @@
       "revId": "68bd43efa251388447980f29697621f5ac891a59",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eb88391_c7ac5732",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-XPDRC.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7288
+      },
+      "writtenOn": "2020-03-27T10:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "003e36ee_ca613471",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 48
+      },
+      "revId": "68bd43efa251388447980f29697621f5ac891a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
