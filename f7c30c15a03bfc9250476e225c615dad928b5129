@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c454410_d6b9f664",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListener.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-27T14:04:03Z",
+      "side": 0,
+      "message": "I guess the bug initially reported in ODLPARENT-226 was the use of a lower case \"w\"",
+      "range": {
+        "startLine": 216,
+        "startChar": 17,
+        "endLine": 216,
+        "endChar": 18
+      },
+      "revId": "f7c30c15a03bfc9250476e225c615dad928b5129",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
