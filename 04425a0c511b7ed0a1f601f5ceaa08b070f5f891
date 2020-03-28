@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "462067bd_86d69c2b",
+        "filename": "tests/buildHoneynode.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-28T14:35:31Z",
+      "side": 0,
+      "message": "removing this option make logs more verbose, what slows down the gate i.e. tox job currently in failure because of a timeout",
+      "range": {
+        "startLine": 8,
+        "startChar": 108,
+        "endLine": 8,
+        "endChar": 111
+      },
+      "revId": "04425a0c511b7ed0a1f601f5ceaa08b070f5f891",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
