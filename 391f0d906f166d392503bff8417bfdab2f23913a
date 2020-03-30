@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cff29e5a_b989388b",
+        "filename": "tests/Xtesting/DockerSims/dockercmd_profile.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-30T09:18:50Z",
+      "side": 1,
+      "message": "That\u0027s the solution I have thought initially and it is not a bad solution.\nThere are pros and cons for the 2 approaches.\nIn this first approach, there was not a strong distinction in the config file names.\nThe names \"oper-ROADM[A-C].xml\" are used twice but they refer to 2 different files that depends on the device versions, what is error prone in my opinion.\nBy specifiying a part of the path, there is no more ambiguity.\n\nWe can combine the 2 approaches but it means specifying the device version three times: in the container/image name, the path and in a third parameter.\nThat would burden the script and at that stage, we don\u0027t need really it.",
+      "parentUuid": "ee856c82_18972670",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 39
+      },
+      "revId": "391f0d906f166d392503bff8417bfdab2f23913a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66fd7756_56d8d922",
         "filename": "tests/Xtesting/DockerSims/start_sims.sh",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-30T08:47:53Z",
       "side": 1,
       "message": "If you use structure proposal in dockercmd_profile.sh comment, this part becomes\n\ndeviceversion\u003d`echo -n $image| cut -d: -f4`",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "391f0d906f166d392503bff8417bfdab2f23913a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "427a806e_48c54d45",
+        "filename": "tests/Xtesting/DockerSims/start_sims.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-30T09:18:50Z",
+      "side": 1,
+      "message": "see previous answer.",
+      "parentUuid": "66fd7756_56d8d922",
       "range": {
         "startLine": 11,
         "startChar": 3,
