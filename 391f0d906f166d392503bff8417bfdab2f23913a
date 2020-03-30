@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee856c82_18972670",
+        "filename": "tests/Xtesting/DockerSims/dockercmd_profile.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-30T08:47:53Z",
+      "side": 1,
+      "message": "Why not \nIMAGE121_LIST\u003d\"30:xpdra-1.2.1:oper-XPDRA.xml:1.2.1\n31:roadma-1.2.1:oper-ROADMA.xml:1.2.1\n32:roadmb-1.2.1:oper-ROADMB.xml:1.2.1\n33:roadmc-1.2.1:oper-ROADMC.xml:1.2.1\n34:xpdrc-1.2.1:oper-XPDRC.xml:1.2.1\n21:roadma-full-1.2.1:oper-ROADMA-full.xml:1.2.1\n23:roadmc-full-1.2.1:oper-ROADMC-full.xml:1.2.1\n\"\n\nIMAGE221_LIST\u003d\"40:xpdra-2.2.1:oper-XPDRA.xml:2.2.1\n41:roadma-2.2.1:oper-ROADMA.xml:2.2.1\n42:roadmb-2.2.1:oper-ROADMB.xml:2.2.1\n43:roadmc-2.2.1:oper-ROADMC.xml:2.2.1\n44:xpdrc-2.2.1:oper-XPDRC.xml:2.2.1\n45:spdrav2-2.2.1:oper-SPDRAv2.xml:2.2.1\n46:spdrav1-2.2.1:oper-SPDRAv1.xml:2.2.1\n\"\nto avoid a specific treatment for \"all\" parameter in start_sims.sh ?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 39
+      },
+      "revId": "391f0d906f166d392503bff8417bfdab2f23913a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66fd7756_56d8d922",
+        "filename": "tests/Xtesting/DockerSims/start_sims.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-03-30T08:47:53Z",
+      "side": 1,
+      "message": "If you use structure proposal in dockercmd_profile.sh comment, this part becomes\n\ndeviceversion\u003d`echo -n $image| cut -d: -f4`",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "391f0d906f166d392503bff8417bfdab2f23913a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
