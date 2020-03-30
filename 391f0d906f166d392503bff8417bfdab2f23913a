@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "71c07c58_5ff894ab",
+        "filename": "tests/Xtesting/DockerSims/dockercmd_profile.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-03-30T12:48:25Z",
+      "side": 1,
+      "message": "not coherent,\neither we remove the configs unused by the test, either we keep them and we support them in Docker",
+      "parentUuid": "66682065_03a90495",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 39
+      },
+      "revId": "391f0d906f166d392503bff8417bfdab2f23913a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66fd7756_56d8d922",
         "filename": "tests/Xtesting/DockerSims/start_sims.sh",
         "patchSetId": 2
