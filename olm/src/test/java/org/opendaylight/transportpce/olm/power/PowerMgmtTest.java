@@ -11,7 +11,6 @@ package org.opendaylight.transportpce.olm.power;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -42,7 +41,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownInput;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 
-@Ignore
+
 public class PowerMgmtTest extends AbstractTest {
 
     private MountPoint mountPoint;
@@ -64,7 +63,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void setUp() {
         this.mountPoint = new MountPointStub(this.getDataBroker());
         this.mountPointService = new MountPointServiceStub(mountPoint);
-        this.mappingUtils = new MappingUtilsImpl(getDataBroker());
+        // this.mappingUtils = new MappingUtilsImpl(getDataBroker());
         this.mappingUtils = Mockito.spy(new MappingUtilsImpl(getDataBroker()));
         Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1).when(mappingUtils)
                 .getOpenRoadmVersion(Mockito.anyString());
@@ -82,7 +81,8 @@ public class PowerMgmtTest extends AbstractTest {
                 new PortMappingVersion221(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 =
                 new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
-        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.portMappingVersion121);
+        this.portMapping = new PortMappingImpl(getDataBroker(),
+                this.portMappingVersion22, this.portMappingVersion121);
         this.portMapping = Mockito.spy(this.portMapping);
         this.powerMgmt = new PowerMgmtImpl(this.getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
                 this.deviceTransactionManager);
