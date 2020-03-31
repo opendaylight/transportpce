@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "0e23d0b4_5f8e4efa",
+        "filename": "tests/Xtesting/DockerSims/dockercmd_profile.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-03-31T08:13:19Z",
+      "side": 1,
+      "message": "Yes indeed.\nFunctional tests have been updated in change 88736.\nLet\u0027s notice that due to the fact that both configurations files oper-ROADMA.xml and oper-ROADMA-full.xml have the same node-id, it will be impossible for TransportPCE to connect simultaneously to both nodes.",
+      "parentUuid": "71c07c58_5ff894ab",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 39
+      },
+      "revId": "391f0d906f166d392503bff8417bfdab2f23913a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66fd7756_56d8d922",
         "filename": "tests/Xtesting/DockerSims/start_sims.sh",
         "patchSetId": 2
