@@ -69,7 +69,7 @@ public final class PceTestData {
                 .build();
         ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
                 .setServiceFormat(ServiceFormat.Ethernet)
-                .setServiceRate(0L)
+                .setServiceRate(100L)
                 .setClli("clli11")
                 .setNodeId("XPONDER-2-2")
                 .setTxDirection(new TxDirectionBuilder().setPort(
