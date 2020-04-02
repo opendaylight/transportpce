@@ -118,7 +118,7 @@ public class PceOpticalNode implements PceNode {
                     break;
             }
         }
-        if (this.availableSrgPp.isEmpty() && this.availableSrgCp.isEmpty()) {
+        if (this.availableSrgPp.isEmpty()) {
             LOG.error("initSrgTpList: ROADM SRG TerminationPoint list is empty for node {}", this);
             this.valid = false;
             return;
