@@ -117,7 +117,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
 
         this.deviceRenderer = new DeviceRendererServiceImpl(this.getDataBroker(),
             this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect,
-            this.portMapping);
+            this.portMapping, null);
     }
 
     @Before
