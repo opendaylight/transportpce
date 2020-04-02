@@ -145,7 +145,7 @@ final class Rdm2XpdrLink {
             = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
                 .setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT)
                 .setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
-        LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp)
+        LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null)
             .addAugmentation(Link1.class, lnk1bldr.build())
             .addAugmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
