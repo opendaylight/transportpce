@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 
 /**
  * Data holder for topology fragment.
@@ -19,10 +20,18 @@ public class TopologyShard {
 
     private final List<Node> nodes;
     private final List<Link> links;
+    private final List<TerminationPoint> tps;
 
     public TopologyShard(List<Node> nodes, List<Link> links) {
         this.nodes = nodes;
         this.links = links;
+        this.tps = null;
+    }
+
+    public TopologyShard(List<Node> nodes, List<Link> links, List<TerminationPoint> tps) {
+        this.nodes = nodes;
+        this.links = links;
+        this.tps = tps;
     }
 
     public List<Node> getNodes() {
@@ -31,6 +40,10 @@ public class TopologyShard {
 
     public List<Link> getLinks() {
         return links;
+    }
+
+    public List<TerminationPoint> getTps() {
+        return tps;
     }
 
 }

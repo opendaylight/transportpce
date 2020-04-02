@@ -40,7 +40,8 @@ public final class TopologyUtils {
     }
 
     // This method returns the linkBuilder object for given source and destination
-    public static LinkBuilder createLink(String srcNode, String dstNode, String srcTp, String destTp) {
+    public static LinkBuilder createLink(String srcNode, String dstNode, String srcTp, String destTp,
+        String otnPrefix) {
 
         // Create Destination for link
         DestinationBuilder dstNodeBldr = new DestinationBuilder()
@@ -52,17 +53,25 @@ public final class TopologyUtils {
             .setSourceNode(new NodeId(srcNode))
             .setSourceTp(srcTp);
 
+        LinkId linkId;
+        LinkId oppositeLinkId;
+        if (otnPrefix == null) {
+            linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp);
+            oppositeLinkId = LinkIdUtil.buildLinkId(dstNode, destTp, srcNode, srcTp);
+        } else {
+            linkId = LinkIdUtil.buildOtnLinkId(srcNode, srcTp, dstNode, destTp, otnPrefix);
+            oppositeLinkId = LinkIdUtil.buildOtnLinkId(dstNode, destTp, srcNode, srcTp, otnPrefix);
+        }
+        //set opposite link
+        Link1 lnk1 = new Link1Builder().setOppositeLink(oppositeLinkId).build();
+
         // set link builder attribute
         LinkBuilder lnkBldr = new LinkBuilder()
             .setDestination(dstNodeBldr.build())
             .setSource(srcNodeBldr.build())
-            .setLinkId(LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp));
-        lnkBldr.withKey(new LinkKey(lnkBldr.getLinkId()));
-
-        //set opposite link
-        LinkId oppositeLinkId = LinkIdUtil.getOppositeLinkId(srcNode, srcTp, dstNode, destTp);
-        Link1 lnk1 = new Link1Builder().setOppositeLink(oppositeLinkId).build();
-        lnkBldr.addAugmentation(Link1.class,lnk1);
+            .setLinkId(linkId)
+            .withKey(new LinkKey(linkId))
+            .addAugmentation(Link1.class,lnk1);
         return lnkBldr;
     }
 
