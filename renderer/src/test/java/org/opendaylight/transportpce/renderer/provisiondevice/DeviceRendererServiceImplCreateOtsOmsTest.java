@@ -95,7 +95,7 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         this.crossConnect = Mockito.spy(this.crossConnect);
         this.deviceRendererService = new DeviceRendererServiceImpl(this.getDataBroker(),
             this.deviceTransactionManager, this.openRoadmInterfaceFactory, this.openRoadmInterfaces,
-            this.crossConnect, portMapping);
+            this.crossConnect, portMapping, null);
     }
 
     @Test
