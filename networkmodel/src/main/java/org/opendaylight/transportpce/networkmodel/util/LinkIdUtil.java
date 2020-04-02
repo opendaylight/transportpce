@@ -19,6 +19,7 @@ public final class LinkIdUtil {
     private static final String RECEIVE = "-RX";
     private static final String BIDIRECTIONAL = "-TXRX";
     private static final String LINK_ID_FORMAT = "%1$s-%2$sto%3$s-%4$s";
+    private static final String OTN_LINK_ID_FORMAT = "%5$s-%1$s-%2$sto%3$s-%4$s";
 
     private LinkIdUtil() {
         // utility class
@@ -35,6 +36,21 @@ public final class LinkIdUtil {
      */
     public static LinkId buildLinkId(String srcNode, String srcTp, String destNode, String destTp) {
         return new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
+    }
+
+    /**
+     * Builds the OTN Link id in format {@link LinkIdUtil#OTN_LINK_ID_FORMAT}.
+     *
+     * @param srcNode source node id string
+     * @param srcTp source termination point
+     * @param destNode destination node id
+     * @param destTp destination termination point
+     * @param otnPrefix otn link type prefix
+     * @return {@link LinkId}
+     */
+    public static LinkId buildOtnLinkId(String srcNode, String srcTp, String destNode, String destTp,
+        String otnPrefix) {
+        return new LinkId(String.format(OTN_LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp, otnPrefix));
     }
 
     /**

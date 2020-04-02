@@ -58,7 +58,7 @@ final class OrdLink {
         String destTp = input.getTerminationPointZ();
 
         //IETF link builder
-        LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp);
+        LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null);
 
         linkBuilder.addAugmentation(Link1.class,link1Builder.build());
         linkBuilder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
