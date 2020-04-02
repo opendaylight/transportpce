@@ -120,8 +120,8 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         setMountPoint(new MountPointStub(getDataBroker()));
         this.olmService = new OlmServiceStub();
         this.networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(getDataBroker());
-        this.deviceRenderer = new DeviceRendererServiceImpl(this.getDataBroker(),
-            this.deviceTransactionManager, openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect, portMapping);
+        this.deviceRenderer = new DeviceRendererServiceImpl(this.getDataBroker(), this.deviceTransactionManager,
+            openRoadmInterfaceFactory, openRoadmInterfaces, crossConnect, portMapping, null);
         Mockito.doNothing().when(this.openRoadmInterfaces).postEquipmentState(Mockito.anyString(),
             Mockito.anyString(), Mockito.anyBoolean());
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
