@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e4ba932_1fa90d3d",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T12:30:46Z",
+      "side": 1,
+      "message": "rather LOG.warn(\"Set up service path failed\", e)\n\nUsually, the stack trace is useful.",
+      "range": {
+        "startLine": 103,
+        "startChar": 24,
+        "endLine": 103,
+        "endChar": 79
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fa9363b_fc34b019",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T12:30:46Z",
+      "side": 1,
+      "message": "invalid or unsupported ?",
+      "range": {
+        "startLine": 107,
+        "startChar": 30,
+        "endLine": 107,
+        "endChar": 38
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ed59f832_99b3650f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T12:30:46Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 116,
+        "startChar": 24,
+        "endLine": 116,
+        "endChar": 80
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1f1cf2e_dbeb4ab2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T12:30:46Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 120,
+        "startChar": 30,
+        "endLine": 120,
+        "endChar": 38
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c945b451_4a9dac21",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T12:30:46Z",
+      "side": 1,
+      "message": "tribSolt or tribSlot ?",
+      "range": {
+        "startLine": 388,
+        "startChar": 32,
+        "endLine": 388,
+        "endChar": 42
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
