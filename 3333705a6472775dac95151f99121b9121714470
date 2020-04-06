@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "873c6220_25017623",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T06:43:23Z",
+      "side": 1,
+      "message": "This was discussed already at the docker files creation last year.\nFrom a test perspective, the paradigm one port \u003d one node-id is less good than one port \u003d one config-file.\nFreeing a port can be a time consuming operation. We have to wait for the old JVM stop, then for the new JVM start-up.\nAlso, the ODL controller is perfectly supporting the @IP / port modification of a connected netconf devices. So keeping the same port here does not bring anything.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 59
+      },
+      "revId": "3333705a6472775dac95151f99121b9121714470",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12fb6c03_8264170a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T06:43:23Z",
+      "side": 1,
+      "message": "unused",
+      "range": {
+        "startLine": 13,
+        "startChar": 35,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "3333705a6472775dac95151f99121b9121714470",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d5f3ad0_5c302bee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T06:43:23Z",
+      "side": 1,
+      "message": "I would stick to 120.\nODL standard is 120 for Java and pylint3 default is 100.",
+      "range": {
+        "startLine": 14,
+        "startChar": 8,
+        "endLine": 14,
+        "endChar": 13
+      },
+      "revId": "3333705a6472775dac95151f99121b9121714470",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
