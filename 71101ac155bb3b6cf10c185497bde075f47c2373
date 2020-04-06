@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86e23084_3c8961bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T07:16:43Z",
+      "side": 1,
+      "message": "this should be removed. Think that change can be cherry-picked to another branch.",
+      "range": {
+        "startLine": 9,
+        "startChar": 20,
+        "endLine": 9,
+        "endChar": 38
+      },
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef07e3bf_7ef5cc9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T07:16:43Z",
+      "side": 1,
+      "message": "usually there is a LF with the commit body message.\nand no LF with the Change-id.",
+      "range": {
+        "startLine": 11,
+        "startChar": 1,
+        "endLine": 11,
+        "endChar": 2
+      },
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a57d174_b0cc960d",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T07:16:43Z",
+      "side": 1,
+      "message": "this should not have been modified",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e141022d_6d37d7ec",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java ",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T07:16:43Z",
+      "side": 1,
+      "message": "I guess it appears twice because it was no more followed to avoid tests modification impacts.",
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6550a977_bd63b639",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java ",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T07:16:43Z",
+      "side": 1,
+      "message": "NOK",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c57745b_7644efed",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-types@2019-11-29.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T07:16:43Z",
+      "side": 1,
+      "message": "We have now 6 version of org-openroadm-common-types...\nDo we really need them all ?\n\n$ls  ordmodels/common/src/main/yang/org-openroadm-common-types@201*\nordmodels/common/src/main/yang/org-openroadm-common-types@2016-10-14.yang\nordmodels/common/src/main/yang/org-openroadm-common-types@2017-09-29.yang\nordmodels/common/src/main/yang/org-openroadm-common-types@2018-10-19.yang\nordmodels/common/src/main/yang/org-openroadm-common-types@2018-11-30.yang\nordmodels/common/src/main/yang/org-openroadm-common-types@2019-05-31.yang",
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
