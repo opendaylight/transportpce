@@ -169,6 +169,30 @@
     },
     {
       "key": {
+        "uuid": "73abe121_9ac4778f",
+        "filename": "tests/Xtesting/DockerSims/dockercmd_profile.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T09:48:36Z",
+      "side": 1,
+      "message": "backpedal to PS2.\nPlease propose port reallocation in a separate change.",
+      "parentUuid": "d7987deb_c3c46ccd",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 39
+      },
+      "revId": "391f0d906f166d392503bff8417bfdab2f23913a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66fd7756_56d8d922",
         "filename": "tests/Xtesting/DockerSims/start_sims.sh",
         "patchSetId": 2
@@ -213,6 +237,30 @@
       "revId": "391f0d906f166d392503bff8417bfdab2f23913a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffd98c26_d33eca32",
+        "filename": "tests/Xtesting/DockerSims/start_sims.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-06T09:48:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "427a806e_48c54d45",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "391f0d906f166d392503bff8417bfdab2f23913a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
