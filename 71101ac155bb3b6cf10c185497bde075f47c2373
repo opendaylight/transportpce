@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e1e98923_193e7674",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-07T13:20:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86e23084_3c8961bf",
+      "range": {
+        "startLine": 9,
+        "startChar": 20,
+        "endLine": 9,
+        "endChar": 38
+      },
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef07e3bf_7ef5cc9d",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-04-06T07:16:43Z",
       "side": 1,
       "message": "usually there is a LF with the commit body message.\nand no LF with the Change-id.",
+      "range": {
+        "startLine": 11,
+        "startChar": 1,
+        "endLine": 11,
+        "endChar": 2
+      },
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e872610_1325f81d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-07T13:20:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef07e3bf_7ef5cc9d",
       "range": {
         "startLine": 11,
         "startChar": 1,
@@ -68,6 +116,30 @@
       "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e66df9b_7d612857",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-07T13:20:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a57d174_b0cc960d",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -108,6 +180,30 @@
       "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d777ba93_0605964d",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java ",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-07T13:20:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6550a977_bd63b639",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "71101ac155bb3b6cf10c185497bde075f47c2373",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
