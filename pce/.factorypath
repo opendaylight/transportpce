@@ -1,0 +1,4 @@
+<factorypath>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/immutables/value/2.7.5/value-2.7.5.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/kohsuke/metainf-services/metainf-services/1.8/metainf-services-1.8.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>
