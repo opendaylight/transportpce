@@ -5,4 +5,4 @@ BASEDIR=$(dirname "$0")
 cd ${BASEDIR}
 
 #start controller
-java -ms128m -mx128m -XX:MaxMetaspaceSize=128m -jar lighty-transportpce-12.0.0-SNAPSHOT.jar
+java -ms128m -mx128m -XX:MaxMetaspaceSize=128m -jar lighty-transportpce-12.0.1-SNAPSHOT.jar
