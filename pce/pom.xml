@@ -45,6 +45,12 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <version>3.0.2</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>org.opendaylight.transportpce</groupId>
+      <artifactId>test-common</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <repositories>
