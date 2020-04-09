@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6843255a_90f09c83",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-04-09T14:25:18Z",
+      "side": 1,
+      "message": "1) SAPI and DAPI are coded on 16 bytes (multiframe). This means if we assume that one letter is coded over one Bytes that we will be limited to 16 lettres. We need to find a way to limit the length of the sting made by anodeId + a logicalConnectionPoint because there is ahigh probability that it will not feet. As an example we could translate XPDR to X, Client to C, Network to N.....\n2) Could we add to this a setExpectedSapi and setExpectedDapi (What\u0027s the node is expecing to receive from remote node as SAPI/DAPI --\u003e same elements crossed ExpectedSAPI \u003d DAPI, Expected DAPI \u003d SAPI)",
+      "revId": "9921caac58f836ac94f6d061021d893911940c05",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
