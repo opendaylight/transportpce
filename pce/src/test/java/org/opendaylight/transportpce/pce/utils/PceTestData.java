@@ -63,6 +63,27 @@ public final class PceTestData {
         return input;
     }
 
+    public static PathComputationRequestInput getEmptyPCERequestServiceNameWithRequestId() {
+        ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
+                .setRequestId("request1")
+                .build();
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceName("serviceName")
+                .setServiceHandlerHeader(serviceHandlerHeader)
+                .build();
+        return input;
+    }
+
+    public static PathComputationRequestInput getEmptyPCERequestServiceNameWithOutRequestId() {
+        ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
+                .build();
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceName("serviceName")
+                .setServiceHandlerHeader(serviceHandlerHeader)
+                .build();
+        return input;
+    }
+
     public static PathComputationRequestInput getPCERequest() {
         ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
                 .setRequestId("request1")
