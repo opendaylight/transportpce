@@ -10,15 +10,27 @@ package org.opendaylight.transportpce.pce;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
+import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
+import org.opendaylight.transportpce.test.AbstractTest;
 
-public class PceSendingPceRPCsTest {
+@RunWith(MockitoJUnitRunner.class)
+public class PceSendingPceRPCsTest extends AbstractTest {
 
     private PceSendingPceRPCs pceSendingPceRPCs;
+    private NetworkTransactionImpl networkTransaction;
+
 
     @Before
     public void setUp() {
-        pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(), null);
+        networkTransaction =new NetworkTransactionImpl(new RequestProcessor(this.getNewDataBroker()));
+        pceSendingPceRPCs = new PceSendingPceRPCs();
+        pceSendingPceRPCs =
+                new PceSendingPceRPCs(PceTestData.getPCERequest(), networkTransaction
+                );
     }
 
     @Test
@@ -29,7 +41,6 @@ public class PceSendingPceRPCsTest {
 
     @Test
     public void pathComputationTest() throws Exception {
-
         pceSendingPceRPCs.pathComputation();
 
     }
@@ -45,7 +56,14 @@ public class PceSendingPceRPCsTest {
     }
 
     @Test
-    public void pathComputationWithConstraintsTest() {
-        pceSendingPceRPCs.pathComputationWithConstraints(null, null);
+    public void gnpyAtoZ() {
+        Assert.assertNull(pceSendingPceRPCs.getGnpyAtoZ());
     }
+
+    @Test
+    public void getGnpyZtoA() {
+        Assert.assertNull(pceSendingPceRPCs.getGnpyZtoA());
+    }
+
+
 }
