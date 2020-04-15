@@ -10,11 +10,15 @@ package org.opendaylight.transportpce.pce.constraints;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.test.AbstractTest;
+
+
 
 public class PceConstraintsTest extends AbstractTest {
     private static PceConstraints pceConstraints = new PceConstraints();
@@ -103,4 +107,26 @@ public class PceConstraintsTest extends AbstractTest {
 
     }
 
+
+    @Test
+    public void getIncludePceNodesTest() {
+        Assert.assertTrue(pceConstraints.getIncludePceNodes().size() == 0);
+        pceConstraints.setIncludePceNode(new PceOpticalNode(null, null, null, null, null));
+        Assert.assertTrue(pceConstraints.getIncludePceNodes().size() == 1);
+
+    }
+
+    @Test
+    public void getListToIncludeTest() {
+        Assert.assertTrue(pceConstraints.getListToInclude().size() == 0);
+        PceConstraints.ResourcePair resourcePair = new PceConstraints
+                .ResourcePair(PceConstraints.ResourceType.SRLG, "test");
+        pceConstraints.setListToInclude(resourcePair);
+        Assert.assertTrue(pceConstraints.getListToInclude().size() == 1);
+        Assert.assertTrue(pceConstraints.getSRLGnames().size() == 1);
+
+    }
+
 }
+
+
