@@ -37,7 +37,9 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.ExcludeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.diversity.existing.service.contraints.sp.ExistingServiceApplicability;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.diversity.existing.service.contraints.sp.ExistingServiceApplicabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
@@ -58,6 +60,27 @@ public final class PceTestData {
                 .setRequestId("request1")
                 .build();
         PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceHandlerHeader(serviceHandlerHeader)
+                .build();
+        return input;
+    }
+
+    public static PathComputationRequestInput getEmptyPCERequestServiceNameWithRequestId() {
+        ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
+                .setRequestId("request1")
+                .build();
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceName("serviceName")
+                .setServiceHandlerHeader(serviceHandlerHeader)
+                .build();
+        return input;
+    }
+
+    public static PathComputationRequestInput getEmptyPCERequestServiceNameWithOutRequestId() {
+        ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
+                .build();
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceName("serviceName")
                 .setServiceHandlerHeader(serviceHandlerHeader)
                 .build();
         return input;
@@ -377,6 +400,33 @@ public final class PceTestData {
         outputBuilder.setConfigurationResponseCommon(createCommonSuccessResponse())
                 .setResponseParameters(responseParameters);
         return outputBuilder.build();
+    }
+
+    public static PathComputationRequestInput getPCE_simpletopology_test1_requestSetHardAndSoftConstrains() {
+        ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
+                .setRequestId("request 1")
+                .build();
+        ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
+                .setServiceRate(0L)
+                .setNodeId("XPONDER-1-2")
+                .build();
+        ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
+                .setServiceRate(0L)
+                .setNodeId("XPONDER-3-2")
+                .build();
+        HardConstraints hardConstrains = new HardConstraintsBuilder().build();
+        SoftConstraints softConstraints = new SoftConstraintsBuilder().build();
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceHandlerHeader(serviceHandlerHeader)
+                .setServiceName("service 1")
+                .setResourceReserve(true)
+                .setPceMetric(PceMetric.HopCount)
+                .setServiceAEnd(serviceAEnd)
+                .setServiceZEnd(serviceZEnd)
+                .setHardConstraints(hardConstrains)
+                .setSoftConstraints(softConstraints)
+                .build();
+        return input;
     }
 
     public static PathComputationRequestInput getPCE_simpletopology_test1_request() {
