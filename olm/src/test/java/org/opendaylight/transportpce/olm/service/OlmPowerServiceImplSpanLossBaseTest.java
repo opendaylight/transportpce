@@ -32,6 +32,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl700;
 import org.opendaylight.transportpce.olm.power.PowerMgmt;
 import org.opendaylight.transportpce.olm.power.PowerMgmtImpl;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
@@ -69,6 +70,7 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     private MappingUtils mappingUtils;
     private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
+    private OpenRoadmInterfacesImpl700 openRoadmInterfacesImpl700;
     private OlmPowerService olmPowerService;
     private DataBroker dataBroker;
 
@@ -81,7 +83,7 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
         this.deviceTransactionManager = Mockito.mock(DeviceTransactionManagerImpl.class);
         this.powerMgmt = Mockito.mock(PowerMgmtImpl.class);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(this.deviceTransactionManager, this.mappingUtils,
-                this.openRoadmInterfacesImpl121, this.openRoadmInterfacesImpl221);
+                this.openRoadmInterfacesImpl121, this.openRoadmInterfacesImpl221, this.openRoadmInterfacesImpl700);
         this.olmPowerService = new OlmPowerServiceImpl(this.getDataBroker(), this.powerMgmt,
                 this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
         this.dataBroker = this.getDataBroker();
