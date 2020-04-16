@@ -32,10 +32,12 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion121;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
+import org.opendaylight.transportpce.common.mapping.PortMappingVersion700;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl700;
 import org.opendaylight.transportpce.olm.power.PowerMgmt;
 import org.opendaylight.transportpce.olm.power.PowerMgmtImpl;
 import org.opendaylight.transportpce.olm.service.OlmPowerService;
@@ -90,8 +92,10 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
     private MappingUtils mappingUtils;
     private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
     private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl22;
+    private OpenRoadmInterfacesImpl700 openRoadmInterfacesImpl700;
     private PortMappingVersion221 portMappingVersion22;
     private PortMappingVersion121 portMappingVersion121;
+    private PortMappingVersion700 portMappingVersion700;
 
     @Before
     public void setUp() {
@@ -109,12 +113,14 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
         this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(deviceTransactionManager);
         this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl221(deviceTransactionManager);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl((this.deviceTransactionManager),
-                this.mappingUtils,this.openRoadmInterfacesImpl121,this.openRoadmInterfacesImpl22);
+                this.mappingUtils,this.openRoadmInterfacesImpl121,this.openRoadmInterfacesImpl22,
+                    this.openRoadmInterfacesImpl700);
         this.portMappingVersion22 =
                 new PortMappingVersion221(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 =
                 new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
-        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.portMappingVersion121);
+        this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22, this.portMappingVersion121,
+                this.portMappingVersion700);
         this.portMapping = Mockito.spy(this.portMapping);
         this.powerMgmt = new PowerMgmtImpl(this.getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
             this.deviceTransactionManager);

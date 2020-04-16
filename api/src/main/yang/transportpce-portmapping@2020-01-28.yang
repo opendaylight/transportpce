@@ -3,17 +3,14 @@ module transportpce-portmapping {
   namespace "http://org/opendaylight/transportpce/portmapping";
   prefix org-opendaylight-transportpce-portmapping;
 
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-    revision-date 2018-10-19;
+  import org-openroadm-device-types {
+    prefix org-openroadm-device-types;
   }
   import org-openroadm-switching-pool-types {
     prefix org-openroadm-switching-pool-types;
-    revision-date 2017-12-15;
   }
   import org-openroadm-port-types {
     prefix org-openroadm-port-types;
-    revision-date 2018-10-19;
   }
   import ietf-inet-types {
     prefix ietf-inet-types;
@@ -62,7 +59,7 @@ module transportpce-portmapping {
       }
       container node-info {
         leaf node-type {
-          type org-openroadm-common-types:node-types;
+          type org-openroadm-device-types:node-types;
           description
             "Identifier for node-type e.g Roadm, xponder";
         }
@@ -77,6 +74,11 @@ module transportpce-portmapping {
               value 2;
               description
                 "Version 2.2.1";
+            }
+            enum 7.0.0 {
+              value 3;
+              description
+                "Version 7.0.0";
             }
           }
         }
@@ -162,7 +164,7 @@ module transportpce-portmapping {
           }
         }
         leaf xponder-type {
-          type org-openroadm-common-types:xpdr-node-types;
+          type org-openroadm-device-types:xpdr-node-types;
         }
         leaf connection-map-lcp {
           type string;

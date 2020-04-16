@@ -71,14 +71,14 @@ public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
         Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1).when(mappingUtils)
                 .getOpenRoadmVersion(Mockito.anyString());
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
-            openRoadmInterfacesImpl121, openRoadmInterfacesImpl221);
+            openRoadmInterfacesImpl121, openRoadmInterfacesImpl221, null);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
         this.portMappingVersion22 = new PortMappingVersion221(getDataBroker(), this.deviceTransactionManager,
             this.openRoadmInterfaces);
         this.portMappingVersion121 = new PortMappingVersion121(getDataBroker(), this.deviceTransactionManager,
             this.openRoadmInterfaces);
         PortMapping portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22,
-            this.portMappingVersion121);
+            this.portMappingVersion121, null);
         FixedFlexInterface fixedFlexInterface = new FixedFlexImpl();
         OpenRoadmInterface121 openRoadmInterface121 = new OpenRoadmInterface121(portMapping,openRoadmInterfaces);
         OpenRoadmInterface221 openRoadmInterface221 = new OpenRoadmInterface221(portMapping,openRoadmInterfaces,

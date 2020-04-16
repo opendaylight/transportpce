@@ -819,9 +819,11 @@ public class PortMappingVersion121 {
         if (deviceInfo.getNodeType() != null) {
             nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._121);
             if (deviceInfo.getNodeType().getIntValue() == 1) {
-                nodeInfoBldr.setNodeType(NodeTypes.Rdm);
+                nodeInfoBldr.setNodeType(org.opendaylight.yang.gen.v1.http.org.openroadm
+                        .device.types.rev191129.NodeTypes.forValue(NodeTypes.Rdm.getIntValue()));
             } else if (deviceInfo.getNodeType().getIntValue() == 2) {
-                nodeInfoBldr.setNodeType(NodeTypes.Xpdr);
+                nodeInfoBldr.setNodeType(org.opendaylight.yang.gen.v1.http.org.openroadm
+                    .device.types.rev191129.NodeTypes.forValue(NodeTypes.Xpdr.getIntValue()));
             } else {
                 LOG.error("Error with node-type of {}", deviceInfo.getNodeId());
             }
