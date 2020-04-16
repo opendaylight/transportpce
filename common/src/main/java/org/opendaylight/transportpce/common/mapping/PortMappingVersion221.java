@@ -72,6 +72,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.xponder.XpdrPort;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpenROADMOpticalMultiplex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpticalTransport;
@@ -79,6 +80,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.PortConfig;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -431,7 +434,7 @@ public class PortMappingVersion221 {
                 }
                 SwitchingPoolLcp splBldr = new SwitchingPoolLcpBuilder()
                     .setSwitchingPoolNumber(odp.getSwitchingPoolNumber())
-                    .setSwitchingPoolType(odp.getSwitchingPoolType())
+                    .setSwitchingPoolType(SwitchingPoolTypes.forValue(odp.getSwitchingPoolType().getIntValue()))
                     .setNonBlockingList(nblList)
                     .build();
                 switchingPoolList.add(splBldr);
@@ -814,10 +817,19 @@ public class PortMappingVersion221 {
                 mpBldr.setPortQual(port.getPortQual().getName());
             }
             if (port.getSupportedInterfaceCapability() != null) {
-                mpBldr.setSupportedInterfaceCapability(port.getSupportedInterfaceCapability());
+                List<Class<? extends SupportedIfCapability>> supportedInterfaceCapabilityList = new ArrayList<>();
+                for (Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019
+                    .SupportedIfCapability>
+                    supportedInterfaceCapability:port.getSupportedInterfaceCapability()) {
+                    supportedInterfaceCapabilityList.add((Class<? extends SupportedIfCapability>)
+                        supportedInterfaceCapability);
+                }
+                mpBldr.setSupportedInterfaceCapability(supportedInterfaceCapabilityList);
             }
             if (xpdrNodeType != null) {
-                mpBldr.setXponderType(xpdrNodeType);
+                mpBldr.setXponderType(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.device.types
+                        .rev191129.XpdrNodeTypes.forValue(xpdrNodeType.getIntValue()));
             }
             if (partnerLcp != null) {
                 mpBldr.setPartnerLcp(partnerLcp);
@@ -961,7 +973,8 @@ public class PortMappingVersion221 {
     private NodeInfo createNodeInfo(Info deviceInfo) {
         NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder();
         if (deviceInfo.getNodeType() != null) {
-            nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._221).setNodeType(deviceInfo.getNodeType());
+            nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._221).setNodeType(NodeTypes
+                .forValue(deviceInfo.getNodeType().getIntValue()));
             if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
                 nodeInfoBldr.setNodeClli(deviceInfo.getClli());
             } else {

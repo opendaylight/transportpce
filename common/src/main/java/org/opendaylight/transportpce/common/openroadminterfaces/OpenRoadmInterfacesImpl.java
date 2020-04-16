@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.openroadminterfaces;
 
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_0_0;
 
 import java.util.Optional;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -18,21 +19,23 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfac
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmInterfacesImpl.class);
 
     OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
     OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
+    OpenRoadmInterfacesImpl700 openRoadmInterfacesImpl700;
     MappingUtils mappingUtils;
 
     public OpenRoadmInterfacesImpl(DeviceTransactionManager deviceTransactionManager, MappingUtils mappingUtils,
                                    OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121,
-                                   OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221) {
+                                   OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221,
+                                   OpenRoadmInterfacesImpl700 openRoadmInterfacesImpl700) {
         this.mappingUtils = mappingUtils;
         this.openRoadmInterfacesImpl121 = openRoadmInterfacesImpl121;
         this.openRoadmInterfacesImpl221 = openRoadmInterfacesImpl221;
+        this.openRoadmInterfacesImpl700 = openRoadmInterfacesImpl700;
     }
 
     @Override
@@ -51,6 +54,13 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
                 .device.rev181019.interfaces.grp.InterfaceBuilder.class);
             openRoadmInterfacesImpl221.postInterface(nodeId,ifBuilder22);
         }
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_7_0_0)) {
+            LOG.info("postInterface for 7.7.1 device {}", nodeId);
+            org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200327.interfaces.grp.InterfaceBuilder
+                ifBuilder700 = convertInstanceOfInterface(ifBuilder, org.opendaylight.yang.gen.v1.http.org.openroadm
+                    .device.rev200327.interfaces.grp.InterfaceBuilder.class);
+            openRoadmInterfacesImpl700.postInterface(nodeId,ifBuilder700);
+        }
     }
 
     @Override
@@ -66,6 +76,10 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             LOG.info("getInterface for 2.2.1 device {}", nodeId);
             return (Optional<T>) openRoadmInterfacesImpl221.getInterface(nodeId,interfaceName);
+        }
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_7_0_0)) {
+            LOG.info("getInterface for 7.0.0 device {}", nodeId);
+            return (Optional<T>) openRoadmInterfacesImpl700.getInterface(nodeId,interfaceName);
         }
         return Optional.empty();
     }
@@ -83,6 +97,9 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             openRoadmInterfacesImpl221.deleteInterface(nodeId,interfaceName);
         }
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_7_0_0)) {
+            openRoadmInterfacesImpl700.deleteInterface(nodeId,interfaceName);
+        }
     }
 
     @Override
@@ -98,6 +115,9 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
         else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             openRoadmInterfacesImpl221.postEquipmentState(nodeId, circuitPackName, activate);
         }
+        else if (openRoadmVersion.equals(OPENROADM_DEVICE_VERSION_7_0_0)) {
+            openRoadmInterfacesImpl700.postEquipmentState(nodeId, circuitPackName, activate);
+        }
 
     }
 
@@ -110,8 +130,8 @@ public class OpenRoadmInterfacesImpl implements OpenRoadmInterfaces {
     }
 
     @Override
-    public void postOTNEquipmentState(String nodeId, String circuitPackName, boolean activate)
-        throws OpenRoadmInterfaceException {
+        public void postOTNEquipmentState(String nodeId, String circuitPackName, boolean activate)
+            throws OpenRoadmInterfaceException {
         openRoadmInterfacesImpl221.postEquipmentState(nodeId, circuitPackName, activate);
     }
 
