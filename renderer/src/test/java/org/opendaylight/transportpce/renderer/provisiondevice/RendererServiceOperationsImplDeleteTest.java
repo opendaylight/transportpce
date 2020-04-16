@@ -93,14 +93,14 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         this.openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(deviceTransactionManager);
         this.mappingUtils = new MappingUtilsImpl(getDataBroker());
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
-            openRoadmInterfacesImpl121, openRoadmInterfacesImpl221);
+            openRoadmInterfacesImpl121, openRoadmInterfacesImpl221, null);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
         this.portMappingVersion22 =
             new PortMappingVersion221(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 =
             new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
         this.portMapping = new PortMappingImpl(getDataBroker(), this.portMappingVersion22,
-            this.portMappingVersion121);
+            this.portMappingVersion121, null);
         this.crossConnectImpl121 = new CrossConnectImpl121(deviceTransactionManager);
         this.crossConnectImpl221 = new CrossConnectImpl221(deviceTransactionManager);
         this.crossConnect = new CrossConnectImpl(deviceTransactionManager, this.mappingUtils, this.crossConnectImpl121,
