@@ -30,19 +30,19 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print ("starting honeynode1...")
+        print("starting honeynode1...")
         cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
         time.sleep(20)
 
-        print ("starting honeynode2...")
+        print("starting honeynode2...")
         cls.honeynode_process2 = test_utils.start_roadma_honeynode()
         time.sleep(20)
-        print ("all honeynodes started")
+        print("all honeynodes started")
 
-        print ("starting opendaylight...")
+        print("starting opendaylight...")
         cls.odl_process = test_utils.start_tpce()
         time.sleep(60)
-        print ("opendaylight started")
+        print("opendaylight started")
 
     @classmethod
     def tearDownClass(cls):
@@ -63,13 +63,13 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         cls.honeynode_process2.wait()
 
     def setUp(self):
-        print ("execution of {}".format(self.id().split(".")[-1]))
+        print("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(10)
 
     def test_01_rdm_device_connected(self):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADM-A1"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"node": [{
             "node-id": "ROADM-A1",
             "netconf-node-topology:username": "admin",
@@ -110,10 +110,10 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertEqual(
             {u'node-info': {u'node-type': u'rdm',
-             u'node-ip-address': u'127.0.0.11',
-             u'node-clli': u'NodeA',
-             u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
-             u'node-model': u'model2'}},
+                            u'node-ip-address': u'127.0.0.11',
+                            u'node-clli': u'NodeA',
+                            u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
+                            u'node-model': u'model2'}},
             res)
         time.sleep(3)
 
@@ -178,7 +178,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_08_xpdr_device_connected(self):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/XPDR-A1"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"node": [{
             "node-id": "XPDR-A1",
             "netconf-node-topology:username": "admin",
@@ -219,10 +219,10 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         res = response.json()
         self.assertEqual(
             {u'node-info': {u'node-type': u'xpdr',
-             u'node-ip-address': u'1.2.3.4',
-             u'node-clli': u'NodeA',
-             u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
-             u'node-model': u'model2'}},
+                            u'node-ip-address': u'1.2.3.4',
+                            u'node-clli': u'NodeA',
+                            u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
+                            u'node-model': u'model2'}},
             res)
         time.sleep(3)
 
@@ -294,12 +294,12 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_15_xpdr_device_disconnected(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/XPDR-A1"
+               "network-topology/topology/topology-netconf/node/XPDR-A1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "DELETE", url, headers=headers,
-             auth=('admin', 'admin'))
+            "DELETE", url, headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(20)
 
@@ -312,8 +312,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist"},
+            {"error-type": "application", "error-tag": "data-missing",
+             "error-message": "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
     def test_17_xpdr_device_disconnected(self):
@@ -324,8 +324,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist"},
+            {"error-type": "application", "error-tag": "data-missing",
+             "error-message": "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
     def test_18_rdm_device_disconnected(self):
@@ -333,8 +333,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "DELETE", url, headers=headers,
-             auth=('admin', 'admin'))
+            "DELETE", url, headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(20)
 
@@ -347,8 +347,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist"},
+            {"error-type": "application", "error-tag": "data-missing",
+             "error-message": "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
     def test_20_rdm_device_disconnected(self):
@@ -359,8 +359,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist"},
+            {"error-type": "application", "error-tag": "data-missing",
+             "error-message": "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
 

@@ -95,13 +95,13 @@ class TransportPCEFulltesting(unittest.TestCase):
                "network-topology/topology/topology-netconf/node/XPDRA01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-          "node-id": "XPDRA01",
-          "netconf-node-topology:username": "admin",
-          "netconf-node-topology:password": "admin",
-          "netconf-node-topology:host": "127.0.0.1",
-          "netconf-node-topology:port": "17830",
-          "netconf-node-topology:tcp-only": "false",
-          "netconf-node-topology:pass-through": {}}]}
+            "node-id": "XPDRA01",
+            "netconf-node-topology:username": "admin",
+            "netconf-node-topology:password": "admin",
+            "netconf-node-topology:host": "127.0.0.1",
+            "netconf-node-topology:port": "17830",
+            "netconf-node-topology:tcp-only": "false",
+            "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "PUT", url, data=json.dumps(data), headers=headers,
@@ -114,13 +114,13 @@ class TransportPCEFulltesting(unittest.TestCase):
                "network-topology/topology/topology-netconf/node/XPDRC01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-          "node-id": "XPDRC01",
-          "netconf-node-topology:username": "admin",
-          "netconf-node-topology:password": "admin",
-          "netconf-node-topology:host": "127.0.0.1",
-          "netconf-node-topology:port": "17834",
-          "netconf-node-topology:tcp-only": "false",
-          "netconf-node-topology:pass-through": {}}]}
+            "node-id": "XPDRC01",
+            "netconf-node-topology:username": "admin",
+            "netconf-node-topology:password": "admin",
+            "netconf-node-topology:host": "127.0.0.1",
+            "netconf-node-topology:port": "17834",
+            "netconf-node-topology:tcp-only": "false",
+            "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "PUT", url, data=json.dumps(data), headers=headers,
@@ -133,13 +133,13 @@ class TransportPCEFulltesting(unittest.TestCase):
                "network-topology/topology/topology-netconf/node/ROADMA01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-          "node-id": "ROADMA01",
-          "netconf-node-topology:username": "admin",
-          "netconf-node-topology:password": "admin",
-          "netconf-node-topology:host": "127.0.0.1",
-          "netconf-node-topology:port": "17821",
-          "netconf-node-topology:tcp-only": "false",
-          "netconf-node-topology:pass-through": {}}]}
+            "node-id": "ROADMA01",
+            "netconf-node-topology:username": "admin",
+            "netconf-node-topology:password": "admin",
+            "netconf-node-topology:host": "127.0.0.1",
+            "netconf-node-topology:port": "17821",
+            "netconf-node-topology:tcp-only": "false",
+            "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "PUT", url, data=json.dumps(data), headers=headers,
@@ -152,13 +152,13 @@ class TransportPCEFulltesting(unittest.TestCase):
                "network-topology/topology/topology-netconf/node/ROADMC01"
                .format(self.restconf_baseurl))
         data = {"node": [{
-          "node-id": "ROADMC01",
-          "netconf-node-topology:username": "admin",
-          "netconf-node-topology:password": "admin",
-          "netconf-node-topology:host": "127.0.0.1",
-          "netconf-node-topology:port": "17823",
-          "netconf-node-topology:tcp-only": "false",
-          "netconf-node-topology:pass-through": {}}]}
+            "node-id": "ROADMC01",
+            "netconf-node-topology:username": "admin",
+            "netconf-node-topology:password": "admin",
+            "netconf-node-topology:host": "127.0.0.1",
+            "netconf-node-topology:port": "17823",
+            "netconf-node-topology:tcp-only": "false",
+            "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "PUT", url, data=json.dumps(data), headers=headers,
@@ -170,16 +170,16 @@ class TransportPCEFulltesting(unittest.TestCase):
         url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".\
             format(self.restconf_baseurl)
         data = {
-          "networkutils:input": {
-            "networkutils:links-input": {
-              "networkutils:xpdr-node": "XPDRA01",
-              "networkutils:xpdr-num": "1",
-              "networkutils:network-num": "1",
-              "networkutils:rdm-node": "ROADMA01",
-              "networkutils:srg-num": "1",
-              "networkutils:termination-point-num": "SRG1-PP1-TXRX"
+            "networkutils:input": {
+                "networkutils:links-input": {
+                    "networkutils:xpdr-node": "XPDRA01",
+                    "networkutils:xpdr-num": "1",
+                    "networkutils:network-num": "1",
+                    "networkutils:rdm-node": "ROADMA01",
+                    "networkutils:srg-num": "1",
+                    "networkutils:termination-point-num": "SRG1-PP1-TXRX"
+                }
             }
-          }
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -195,16 +195,16 @@ class TransportPCEFulltesting(unittest.TestCase):
         url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".\
             format(self.restconf_baseurl)
         data = {
-          "networkutils:input": {
-            "networkutils:links-input": {
-              "networkutils:xpdr-node": "XPDRA01",
-              "networkutils:xpdr-num": "1",
-              "networkutils:network-num": "1",
-              "networkutils:rdm-node": "ROADMA01",
-              "networkutils:srg-num": "1",
-              "networkutils:termination-point-num": "SRG1-PP1-TXRX"
+            "networkutils:input": {
+                "networkutils:links-input": {
+                    "networkutils:xpdr-node": "XPDRA01",
+                    "networkutils:xpdr-num": "1",
+                    "networkutils:network-num": "1",
+                    "networkutils:rdm-node": "ROADMA01",
+                    "networkutils:srg-num": "1",
+                    "networkutils:termination-point-num": "SRG1-PP1-TXRX"
+                }
             }
-          }
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -220,16 +220,16 @@ class TransportPCEFulltesting(unittest.TestCase):
         url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".\
             format(self.restconf_baseurl)
         data = {
-          "networkutils:input": {
-            "networkutils:links-input": {
-              "networkutils:xpdr-node": "XPDRC01",
-              "networkutils:xpdr-num": "1",
-              "networkutils:network-num": "1",
-              "networkutils:rdm-node": "ROADMC01",
-              "networkutils:srg-num": "1",
-              "networkutils:termination-point-num": "SRG1-PP1-TXRX"
+            "networkutils:input": {
+                "networkutils:links-input": {
+                    "networkutils:xpdr-node": "XPDRC01",
+                    "networkutils:xpdr-num": "1",
+                    "networkutils:network-num": "1",
+                    "networkutils:rdm-node": "ROADMC01",
+                    "networkutils:srg-num": "1",
+                    "networkutils:termination-point-num": "SRG1-PP1-TXRX"
+                }
             }
-          }
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -245,16 +245,16 @@ class TransportPCEFulltesting(unittest.TestCase):
         url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".\
             format(self.restconf_baseurl)
         data = {
-          "networkutils:input": {
-            "networkutils:links-input": {
-              "networkutils:xpdr-node": "XPDRC01",
-              "networkutils:xpdr-num": "1",
-              "networkutils:network-num": "1",
-              "networkutils:rdm-node": "ROADMC01",
-              "networkutils:srg-num": "1",
-              "networkutils:termination-point-num": "SRG1-PP1-TXRX"
+            "networkutils:input": {
+                "networkutils:links-input": {
+                    "networkutils:xpdr-node": "XPDRC01",
+                    "networkutils:xpdr-num": "1",
+                    "networkutils:network-num": "1",
+                    "networkutils:rdm-node": "ROADMC01",
+                    "networkutils:srg-num": "1",
+                    "networkutils:termination-point-num": "SRG1-PP1-TXRX"
+                }
             }
-          }
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -269,12 +269,12 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_09_add_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA-ROADMC oms-attributes
         url = (
-          "{}/config/ietf-network:"
-          "networks/network/openroadm-topology/ietf-network-topology:"
-          "link/ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX/"
-          "org-openroadm-network-topology:"
-          "OMS-attributes/span"
-          .format(self.restconf_baseurl))
+            "{}/config/ietf-network:"
+            "networks/network/openroadm-topology/ietf-network-topology:"
+            "link/ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX/"
+            "org-openroadm-network-topology:"
+            "OMS-attributes/span"
+            .format(self.restconf_baseurl))
         data = {"span": {
             "clfi": "fiber1",
             "auto-spanloss": "true",
@@ -295,23 +295,23 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_10_add_omsAttributes_ROADMC_ROADMA(self):
         # Config ROADMC-ROADMA oms-attributes
         url = (
-          "{}/config/ietf-network:"
-          "networks/network/openroadm-topology/ietf-network-topology:"
-          "link/ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX/"
-          "org-openroadm-network-topology:"
-          "OMS-attributes/span"
-          .format(self.restconf_baseurl))
+            "{}/config/ietf-network:"
+            "networks/network/openroadm-topology/ietf-network-topology:"
+            "link/ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX/"
+            "org-openroadm-network-topology:"
+            "OMS-attributes/span"
+            .format(self.restconf_baseurl))
         data = {"span": {
-          "clfi": "fiber1",
-          "auto-spanloss": "true",
-          "spanloss-base": 11.4,
-          "spanloss-current": 12,
-          "engineered-spanloss": 12.2,
-          "link-concatenation": [{
-            "SRLG-Id": 0,
-            "fiber-type": "smf",
-            "SRLG-length": 100000,
-            "pmd": 0.5}]}}
+            "clfi": "fiber1",
+            "auto-spanloss": "true",
+            "spanloss-base": 11.4,
+            "spanloss-current": 12,
+            "engineered-spanloss": 12.2,
+            "link-concatenation": [{
+                "SRLG-Id": 0,
+                "fiber-type": "smf",
+                "SRLG-length": 100000,
+                "pmd": 0.5}]}}
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "PUT", url, data=json.dumps(data), headers=headers,
@@ -429,7 +429,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         res = response.json()
         self.assertIn('PCE calculation in progress',
                       res['output']['configuration-response-common'][
-                        'response-message'])
+                          'response-message'])
         time.sleep(self.WAITING)
 
     def test_12_get_eth_service1(self):
