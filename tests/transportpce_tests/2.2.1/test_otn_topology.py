@@ -30,14 +30,14 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print ("starting honeynode1...")
+        print("starting honeynode1...")
         cls.honeynode_process1 = test_utils.start_spdra_honeynode()
         time.sleep(20)
 
-        print ("starting opendaylight...")
+        print("starting opendaylight...")
         cls.odl_process = test_utils.start_tpce()
         time.sleep(60)
-        print ("opendaylight started")
+        print("opendaylight started")
 
     @classmethod
     def tearDownClass(cls):
@@ -57,20 +57,20 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_01_connect_SPDR_SA1(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/SPDR-SA1"
+               "network-topology/topology/topology-netconf/node/SPDR-SA1"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "SPDR-SA1",
-             "netconf-node-topology:username": "admin",
-             "netconf-node-topology:password": "admin",
-             "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17845",
-             "netconf-node-topology:tcp-only": "false",
-             "netconf-node-topology:pass-through": {}}]}
+            "node-id": "SPDR-SA1",
+            "netconf-node-topology:username": "admin",
+            "netconf-node-topology:password": "admin",
+            "netconf-node-topology:host": "127.0.0.1",
+            "netconf-node-topology:port": "17845",
+            "netconf-node-topology:tcp-only": "false",
+            "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "PUT", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
+            "PUT", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(10)
         url = ("{}/operational/network-topology:"
@@ -86,7 +86,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_02_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -98,7 +98,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_03_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -114,7 +114,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_04_getLinks_OpenroadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -125,7 +125,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_05_getNodes_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -184,7 +184,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_06_getLinks_OtnTopology(self):
         url = ("{}/config/ietf-network:networks/network/otn-topology"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -194,7 +194,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_07_getNodes_OtnTopology(self):
         url = ("{}/config/ietf-network:networks/network/otn-topology"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -214,7 +214,8 @@ class TransportPCEtesting(unittest.TestCase):
                               res['network'][0]['node'][i]['supporting-node'])
                 self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
                               res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:xpdr-attributes']['xpdr-number'], 1)
+                self.assertEqual(res['network'][0]['node'][i]
+                                 ['org-openroadm-otn-network-topology:xpdr-attributes']['xpdr-number'], 1)
                 nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 client = 0
                 network = 0
@@ -223,19 +224,27 @@ class TransportPCEtesting(unittest.TestCase):
                     tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                     if (tpType == 'XPONDER-CLIENT'):
                         client += 1
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-supported-interfaces']['supported-interface-capability'][0]['if-cap-type'], 'org-openroadm-port-types:if-10GE-ODU2e')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']['rate'], 'org-openroadm-otn-common-types:ODU2e')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-supported-interfaces']
+                                         ['supported-interface-capability'][0]['if-cap-type'], 'org-openroadm-port-types:if-10GE-ODU2e')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                         ['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']['rate'], 'org-openroadm-otn-common-types:ODU2e')
                     elif (tpType == 'XPONDER-NETWORK'):
                         network += 1
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-supported-interfaces']['supported-interface-capability'][0]['if-cap-type'], 'org-openroadm-port-types:if-OCH-OTU4-ODU4')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']['rate'], 'org-openroadm-otn-common-types:ODU4')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['supporting-termination-point'][0]['network-ref'], 'openroadm-topology')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['supporting-termination-point'][0]['node-ref'], 'SPDR-SA1-XPDR1')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['supporting-termination-point'][0]['tp-ref'], 'XPDR1-NETWORK1')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-supported-interfaces']
+                                         ['supported-interface-capability'][0]['if-cap-type'], 'org-openroadm-port-types:if-OCH-OTU4-ODU4')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                         ['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']['rate'], 'org-openroadm-otn-common-types:ODU4')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point']
+                                         [j]['supporting-termination-point'][0]['network-ref'], 'openroadm-topology')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point']
+                                         [j]['supporting-termination-point'][0]['node-ref'], 'SPDR-SA1-XPDR1')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point']
+                                         [j]['supporting-termination-point'][0]['tp-ref'], 'XPDR1-NETWORK1')
                 self.assertTrue(client == 4)
                 self.assertTrue(network == 1)
                 listNode.remove(nodeId)
-                nbNbl = len(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']['odu-switching-pools'][0]['non-blocking-list'])
+                nbNbl = len(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']
+                            ['odu-switching-pools'][0]['non-blocking-list'])
                 self.assertEqual(nbNbl, 4)
                 for k in range(0, nbNbl):
                     nbl = res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']['odu-switching-pools'][0]['non-blocking-list'][k]
@@ -254,7 +263,8 @@ class TransportPCEtesting(unittest.TestCase):
                               res['network'][0]['node'][i]['supporting-node'])
                 self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
                               res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:xpdr-attributes']['xpdr-number'], 2)
+                self.assertEqual(res['network'][0]['node'][i]
+                                 ['org-openroadm-otn-network-topology:xpdr-attributes']['xpdr-number'], 2)
                 nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 client = 0
                 network = 0
@@ -263,19 +273,27 @@ class TransportPCEtesting(unittest.TestCase):
                     tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                     if (tpType == 'XPONDER-CLIENT'):
                         client += 1
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-supported-interfaces']['supported-interface-capability'][0]['if-cap-type'], 'org-openroadm-port-types:if-100GE-ODU4')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']['rate'], 'org-openroadm-otn-common-types:ODU4')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-supported-interfaces']
+                                         ['supported-interface-capability'][0]['if-cap-type'], 'org-openroadm-port-types:if-100GE-ODU4')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                         ['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']['rate'], 'org-openroadm-otn-common-types:ODU4')
                     elif (tpType == 'XPONDER-NETWORK'):
                         network += 1
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-supported-interfaces']['supported-interface-capability'][0]['if-cap-type'], 'org-openroadm-port-types:if-OCH-OTU4-ODU4')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']['rate'], 'org-openroadm-otn-common-types:ODU4')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['supporting-termination-point'][0]['network-ref'], 'openroadm-topology')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['supporting-termination-point'][0]['node-ref'], 'SPDR-SA1-XPDR2')
-                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['supporting-termination-point'][0]['tp-ref'], tpId)
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-otn-network-topology:tp-supported-interfaces']
+                                         ['supported-interface-capability'][0]['if-cap-type'], 'org-openroadm-port-types:if-OCH-OTU4-ODU4')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                         ['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']['rate'], 'org-openroadm-otn-common-types:ODU4')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point']
+                                         [j]['supporting-termination-point'][0]['network-ref'], 'openroadm-topology')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point']
+                                         [j]['supporting-termination-point'][0]['node-ref'], 'SPDR-SA1-XPDR2')
+                        self.assertEqual(res['network'][0]['node'][i]['ietf-network-topology:termination-point']
+                                         [j]['supporting-termination-point'][0]['tp-ref'], tpId)
                 self.assertTrue(client == 4)
                 self.assertTrue(network == 4)
                 listNode.remove(nodeId)
-                nbNbl = len(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']['odu-switching-pools'][0]['non-blocking-list'])
+                nbNbl = len(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']
+                            ['odu-switching-pools'][0]['non-blocking-list'])
                 self.assertEqual(nbNbl, 1)
                 nbl = res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']['odu-switching-pools'][0]['non-blocking-list'][0]
                 self.assertIn('XPDR2-NETWORK1', nbl['tp-list'])
@@ -293,7 +311,7 @@ class TransportPCEtesting(unittest.TestCase):
     def test_08_disconnect_SPDR_SA1(self):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/SPDR-SA1"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {}
         headers = {'content-type': 'application/json'}
         response = requests.request(
@@ -303,7 +321,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_09_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -315,7 +333,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_10_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -325,7 +343,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_11_getNodes_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
@@ -334,7 +352,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_12_getNodes_OtnTopology(self):
         url = ("{}/config/ietf-network:networks/network/otn-topology"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
