@@ -58,8 +58,8 @@ class TransportGNPYtesting(unittest.TestCase):
                 body = clli_net.read()
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "PUT", url, data=body, headers=headers,
-             auth=('admin', 'admin'))
+            "PUT", url, data=body, headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
@@ -72,8 +72,8 @@ class TransportGNPYtesting(unittest.TestCase):
                 body = ord_net.read()
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "PUT", url, data=body, headers=headers,
-             auth=('admin', 'admin'))
+            "PUT", url, data=body, headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
@@ -86,8 +86,8 @@ class TransportGNPYtesting(unittest.TestCase):
                 body = ord_topo.read()
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "PUT", url, data=body, headers=headers,
-             auth=('admin', 'admin'))
+            "PUT", url, data=body, headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
@@ -125,10 +125,10 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
-                             'response-code'], '200')
+            'response-code'], '200')
         self.assertEqual(res['output']['configuration-response-common'][
-                             'response-message'],
-                         'Path is calculated by PCE')
+            'response-message'],
+            'Path is calculated by PCE')
         self.assertEqual(res['output']['gnpy-response'][0]['path-dir'],
                          'A-to-Z')
         self.assertEqual(res['output']['gnpy-response'][0]['feasibility'], True)
@@ -196,10 +196,10 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
-                             'response-code'], '500')
+            'response-code'], '500')
         self.assertEqual(res['output']['configuration-response-common'][
-                             'response-message'],
-                         'No path available by PCE and GNPy ')
+            'response-message'],
+            'No path available by PCE and GNPy ')
         self.assertEqual(res['output']['gnpy-response'][0]['path-dir'],
                          'A-to-Z')
         self.assertEqual(res['output']['gnpy-response'][0]['feasibility'],
@@ -262,10 +262,10 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
-                             'response-code'], '200')
+            'response-code'], '200')
         self.assertEqual(res['output']['configuration-response-common'][
-                             'response-message'],
-                         'Path is calculated by GNPy')
+            'response-message'],
+            'Path is calculated by GNPy')
         self.assertEqual(res['output']['gnpy-response'][0]['path-dir'],
                          'A-to-Z')
         self.assertEqual(res['output']['gnpy-response'][0]['feasibility'], True)
@@ -338,10 +338,10 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
-                             'response-code'], '500')
+            'response-code'], '500')
         self.assertEqual(res['output']['configuration-response-common'][
-                             'response-message'],
-                         'No path available by PCE and GNPy ')
+            'response-message'],
+            'No path available by PCE and GNPy ')
         time.sleep(5)
 
     # Disconnect the different topologies
@@ -351,8 +351,8 @@ class TransportGNPYtesting(unittest.TestCase):
         data = {}
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
@@ -362,8 +362,8 @@ class TransportGNPYtesting(unittest.TestCase):
         data = {}
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
@@ -373,8 +373,8 @@ class TransportGNPYtesting(unittest.TestCase):
         data = {}
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "DELETE", url, data=json.dumps(data), headers=headers,
-             auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 

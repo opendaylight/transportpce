@@ -29,33 +29,33 @@ class TransportPCEFulltesting(unittest.TestCase):
     honeynode_process3 = None
     honeynode_process4 = None
     restconf_baseurl = "http://localhost:8181/restconf"
-    WAITING = 20      #nominal value is 300
+    WAITING = 20  # nominal value is 300
 
-#START_IGNORE_XTESTING
+# START_IGNORE_XTESTING
 
     @classmethod
     def setUpClass(cls):
-        print ("starting honeynode1...")
+        print("starting honeynode1...")
         cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
         time.sleep(20)
 
-        print ("starting honeynode2...")
+        print("starting honeynode2...")
         cls.honeynode_process2 = test_utils.start_roadma_honeynode()
         time.sleep(20)
 
-        print ("starting honeynode3...")
+        print("starting honeynode3...")
         cls.honeynode_process3 = test_utils.start_roadmc_honeynode()
         time.sleep(20)
 
-        print ("starting honeynode4...")
+        print("starting honeynode4...")
         cls.honeynode_process4 = test_utils.start_xpdrc_honeynode()
         time.sleep(20)
-        print ("all honeynodes started")
+        print("all honeynodes started")
 
-        print ("starting opendaylight...")
+        print("starting opendaylight...")
         cls.odl_process = test_utils.start_tpce()
         time.sleep(80)
-        print ("opendaylight started")
+        print("opendaylight started")
 
     @classmethod
     def tearDownClass(cls):
@@ -84,18 +84,18 @@ class TransportPCEFulltesting(unittest.TestCase):
             child.wait()
         cls.honeynode_process4.send_signal(signal.SIGINT)
         cls.honeynode_process4.wait()
-        print ("all processes killed")
+        print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
-        print ("execution of {}".format(self.id().split(".")[-1]))
+        print("execution of {}".format(self.id().split(".")[-1]))
 
-#END_IGNORE_XTESTING
+# END_IGNORE_XTESTING
 
 #  connect netconf devices
     def test_01_connect_xpdrA(self):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/XPDR-A1"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"node": [{
             "node-id": "XPDR-A1",
             "netconf-node-topology:username": "admin",
@@ -114,7 +114,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_02_connect_xpdrC(self):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/XPDR-C1"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"node": [{
             "node-id": "XPDR-C1",
             "netconf-node-topology:username": "admin",
@@ -135,17 +135,17 @@ class TransportPCEFulltesting(unittest.TestCase):
                "network-topology/topology/topology-netconf/node/ROADM-A1"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADM-A1",
-             "netconf-node-topology:username": "admin",
-             "netconf-node-topology:password": "admin",
-             "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17841",
-             "netconf-node-topology:tcp-only": "false",
-             "netconf-node-topology:pass-through": {}}]}
+            "node-id": "ROADM-A1",
+            "netconf-node-topology:username": "admin",
+            "netconf-node-topology:password": "admin",
+            "netconf-node-topology:host": "127.0.0.1",
+            "netconf-node-topology:port": "17841",
+            "netconf-node-topology:tcp-only": "false",
+            "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "PUT", url, data=json.dumps(data), headers=headers,
-              auth=('admin', 'admin'))
+            "PUT", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(20)
 
@@ -154,17 +154,17 @@ class TransportPCEFulltesting(unittest.TestCase):
                "network-topology/topology/topology-netconf/node/ROADM-C1"
                .format(self.restconf_baseurl))
         data = {"node": [{
-             "node-id": "ROADM-C1",
-             "netconf-node-topology:username": "admin",
-             "netconf-node-topology:password": "admin",
-             "netconf-node-topology:host": "127.0.0.1",
-             "netconf-node-topology:port": "17843",
-             "netconf-node-topology:tcp-only": "false",
-             "netconf-node-topology:pass-through": {}}]}
+            "node-id": "ROADM-C1",
+            "netconf-node-topology:username": "admin",
+            "netconf-node-topology:password": "admin",
+            "netconf-node-topology:host": "127.0.0.1",
+            "netconf-node-topology:port": "17843",
+            "netconf-node-topology:tcp-only": "false",
+            "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "PUT", url, data=json.dumps(data), headers=headers,
-              auth=('admin', 'admin'))
+            "PUT", url, data=json.dumps(data), headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.created)
         time.sleep(20)
 
@@ -184,8 +184,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "POST", url, data=json.dumps(data),
-             headers=headers, auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
@@ -207,8 +207,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "POST", url, data=json.dumps(data),
-             headers=headers, auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
@@ -230,8 +230,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "POST", url, data=json.dumps(data),
-             headers=headers, auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
@@ -253,8 +253,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "POST", url, data=json.dumps(data),
-             headers=headers, auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
@@ -304,10 +304,10 @@ class TransportPCEFulltesting(unittest.TestCase):
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.created)
 
-#test service-create for Eth service from xpdr to xpdr
+# test service-create for Eth service from xpdr to xpdr
     def test_11_create_eth_service1(self):
         url = ("{}/operations/org-openroadm-service:service-create"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -394,24 +394,24 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "due-date": "2016-11-28T00:00:01Z",
                 "operator-contact": "pw1234"
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         time.sleep(self.WAITING)
 
     def test_12_get_eth_service1(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/service1"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -433,20 +433,20 @@ class TransportPCEFulltesting(unittest.TestCase):
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertDictContainsSubset(
-             {'connection-name': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
-              'opticalControlMode': 'gainLoss',
-              'target-output-power': -3.0},
-             res['roadm-connections'][0])
+            {'connection-name': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
+             'opticalControlMode': 'gainLoss',
+             'target-output-power': -3.0},
+            res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
-             res['roadm-connections'][0]['source'])
+            {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
+            res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG2-TTP-TXRX-nmc-1'},
-             res['roadm-connections'][0]['destination'])
+            {'dst-if': 'DEG2-TTP-TXRX-nmc-1'},
+            res['roadm-connections'][0]['destination'])
         time.sleep(5)
 
     def test_14_check_xc1_ROADMC(self):
@@ -456,27 +456,27 @@ class TransportPCEFulltesting(unittest.TestCase):
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertDictContainsSubset(
-             {'connection-name': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
-              'opticalControlMode': 'gainLoss',
-              'target-output-power': -3.0},
-             res['roadm-connections'][0])
+            {'connection-name': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
+             'opticalControlMode': 'gainLoss',
+             'target-output-power': -3.0},
+            res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
-             res['roadm-connections'][0]['source'])
+            {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
+            res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG1-TTP-TXRX-nmc-1'},
-             res['roadm-connections'][0]['destination'])
+            {'dst-if': 'DEG1-TTP-TXRX-nmc-1'},
+            res['roadm-connections'][0]['destination'])
         time.sleep(5)
 
     def test_15_check_topo_XPDRA(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDR-A1-XPDR1"
-               .format(self.restconf_baseurl))
+                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url1, auth=('admin', 'admin'))
+            "GET", url1, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
@@ -484,7 +484,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             if ele['tp-id'] == 'XPDR1-NETWORK1':
                 self.assertEqual({u'frequency': 196.1,
                                   u'width': 40},
-                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
+                                 ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             if ele['tp-id'] == 'XPDR1-CLIENT2' or ele['tp-id'] == 'XPDR1-CLIENT1':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
             if ele['tp-id'] == 'XPDR1-NETWORK2':
@@ -493,42 +493,42 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_16_check_topo_ROADMA_SRG1(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADM-A1-SRG1"
-               .format(self.restconf_baseurl))
+                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url1, auth=('admin', 'admin'))
+            "GET", url1, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn({u'index': 1},
-                          res['node'][0][u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
+                         res['node'][0][u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
                 self.assertIn({u'index': 1, u'frequency': 196.1,
                                u'width': 40},
-                               ele['org-openroadm-network-topology:pp-attributes']['used-wavelength'])
+                              ele['org-openroadm-network-topology:pp-attributes']['used-wavelength'])
             if ele['tp-id'] == 'SRG1-PP2-TXRX':
                 self.assertNotIn('used-wavelength', dict.keys(ele))
         time.sleep(3)
 
     def test_17_check_topo_ROADMA_DEG1(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADM-A1-DEG2"
-               .format(self.restconf_baseurl))
+                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url1, auth=('admin', 'admin'))
+            "GET", url1, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn({u'index': 1},
-                          res['node'][0][u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
+                         res['node'][0][u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 self.assertIn({u'index': 1, u'frequency': 196.1,
                                u'width': 40},
-                               ele['org-openroadm-network-topology:ctp-attributes']['used-wavelengths'])
+                              ele['org-openroadm-network-topology:ctp-attributes']['used-wavelengths'])
             if ele['tp-id'] == 'DEG2-TTP-TXRX':
                 self.assertIn({u'index': 1, u'frequency': 196.1,
                                u'width': 40},
-                               ele['org-openroadm-network-topology:tx-ttp-attributes']['used-wavelengths'])
+                              ele['org-openroadm-network-topology:tx-ttp-attributes']['used-wavelengths'])
         time.sleep(3)
 
     def test_18_connect_xprdA_N2_to_roadmA_PP2(self):
@@ -547,8 +547,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "POST", url, data=json.dumps(data),
-             headers=headers, auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
@@ -570,8 +570,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "POST", url, data=json.dumps(data),
-             headers=headers, auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
@@ -593,8 +593,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "POST", url, data=json.dumps(data),
-             headers=headers, auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
@@ -616,8 +616,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         }
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "POST", url, data=json.dumps(data),
-             headers=headers, auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data),
+            headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
@@ -625,7 +625,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_22_create_eth_service2(self):
         url = ("{}/operations/org-openroadm-service:service-create"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -712,24 +712,24 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "due-date": "2016-11-28T00:00:01Z",
                 "operator-contact": "pw1234"
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         time.sleep(self.WAITING)
 
     def test_23_get_eth_service2(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/service2"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -752,25 +752,25 @@ class TransportPCEFulltesting(unittest.TestCase):
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertDictContainsSubset(
-             {'connection-name': 'DEG2-TTP-TXRX-SRG1-PP2-TXRX-2',
-              'opticalControlMode': 'power'},
-             res['roadm-connections'][0])
+            {'connection-name': 'DEG2-TTP-TXRX-SRG1-PP2-TXRX-2',
+             'opticalControlMode': 'power'},
+            res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'DEG2-TTP-TXRX-nmc-2'},
-             res['roadm-connections'][0]['source'])
+            {'src-if': 'DEG2-TTP-TXRX-nmc-2'},
+            res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'SRG1-PP2-TXRX-nmc-2'},
-             res['roadm-connections'][0]['destination'])
+            {'dst-if': 'SRG1-PP2-TXRX-nmc-2'},
+            res['roadm-connections'][0]['destination'])
 
     def test_25_check_topo_XPDRA(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDR-A1-XPDR1"
-               .format(self.restconf_baseurl))
+                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url1, auth=('admin', 'admin'))
+            "GET", url1, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
@@ -778,64 +778,68 @@ class TransportPCEFulltesting(unittest.TestCase):
             if ele['tp-id'] == 'XPDR1-NETWORK1':
                 self.assertEqual({u'frequency': 196.1,
                                   u'width': 40},
-                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
+                                 ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             if ele['tp-id'] == 'XPDR1-NETWORK2':
                 self.assertEqual({u'frequency': 196.05,
                                   u'width': 40},
-                                  ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
+                                 ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
             if ele['tp-id'] == 'XPDR1-CLIENT1' or ele['tp-id'] == 'XPDR1-CLIENT2':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
         time.sleep(10)
 
     def test_26_check_topo_ROADMA_SRG1(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADM-A1-SRG1"
-               .format(self.restconf_baseurl))
+                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url1, auth=('admin', 'admin'))
+            "GET", url1, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertNotIn({u'index': 1}, res['node'][0][u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
-        self.assertNotIn({u'index': 2}, res['node'][0][u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
+        self.assertNotIn({u'index': 1}, res['node'][0]
+                         [u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
+        self.assertNotIn({u'index': 2}, res['node'][0]
+                         [u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
                 self.assertIn({u'index': 1, u'frequency': 196.1,
                                u'width': 40},
-                               ele['org-openroadm-network-topology:pp-attributes']['used-wavelength'])
+                              ele['org-openroadm-network-topology:pp-attributes']['used-wavelength'])
                 self.assertNotIn({u'index': 2, u'frequency': 196.05,
                                   u'width': 40},
-                                  ele['org-openroadm-network-topology:pp-attributes']['used-wavelength'])
+                                 ele['org-openroadm-network-topology:pp-attributes']['used-wavelength'])
             if ele['tp-id'] == 'SRG1-PP2-TXRX':
                 self.assertIn({u'index': 2, u'frequency': 196.05, u'width': 40},
                               ele['org-openroadm-network-topology:pp-attributes']['used-wavelength'])
                 self.assertNotIn({u'index': 1, u'frequency': 196.1,
                                   u'width': 40},
-                                  ele['org-openroadm-network-topology:pp-attributes']['used-wavelength'])
+                                 ele['org-openroadm-network-topology:pp-attributes']['used-wavelength'])
             if ele['tp-id'] == 'SRG1-PP3-TXRX':
                 self.assertNotIn('org-openroadm-network-topology:pp-attributes', dict.keys(ele))
         time.sleep(10)
 
     def test_27_check_topo_ROADMA_DEG2(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADM-A1-DEG2"
-               .format(self.restconf_baseurl))
+                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url1, auth=('admin', 'admin'))
+            "GET", url1, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertNotIn({u'index': 1}, res['node'][0][u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
-        self.assertNotIn({u'index': 2}, res['node'][0][u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
+        self.assertNotIn({u'index': 1}, res['node'][0]
+                         [u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
+        self.assertNotIn({u'index': 2}, res['node'][0]
+                         [u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 self.assertIn({u'index': 1, u'frequency': 196.1,
                                u'width': 40},
-                               ele['org-openroadm-network-topology:ctp-attributes']['used-wavelengths'])
+                              ele['org-openroadm-network-topology:ctp-attributes']['used-wavelengths'])
                 self.assertIn({u'index': 2, u'frequency': 196.05, u'width': 40},
                               ele['org-openroadm-network-topology:ctp-attributes']['used-wavelengths'])
             if ele['tp-id'] == 'DEG2-TTP-TXRX':
                 self.assertIn({u'index': 1, u'frequency': 196.1,
                                u'width': 40},
-                               ele['org-openroadm-network-topology:tx-ttp-attributes']['used-wavelengths'])
+                              ele['org-openroadm-network-topology:tx-ttp-attributes']['used-wavelengths'])
                 self.assertIn({u'index': 2, u'frequency': 196.05, u'width': 40},
                               ele['org-openroadm-network-topology:tx-ttp-attributes']['used-wavelengths'])
         time.sleep(10)
@@ -843,7 +847,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 #     creation service test on a non-available resource
     def test_28_create_eth_service3(self):
         url = ("{}/operations/org-openroadm-service:service-create"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -930,24 +934,24 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "due-date": "2016-11-28T00:00:01Z",
                 "operator-contact": "pw1234"
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         self.assertIn('200', res['output']['configuration-response-common']['response-code'])
         time.sleep(self.WAITING)
 
 # add a test that check the openroadm-service-list still only contains 2 elements
     def test_29_delete_eth_service3(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -959,8 +963,8 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-name": "service3",
                     "tail-retention": "no"
                 }
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
@@ -968,13 +972,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Service \'service3\' does not exist in datastore',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         self.assertIn('500', res['output']['configuration-response-common']['response-code'])
         time.sleep(20)
 
     def test_30_delete_eth_service1(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -986,8 +990,8 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-name": "service1",
                     "tail-retention": "no"
                 }
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
@@ -995,12 +999,12 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         time.sleep(20)
 
     def test_31_delete_eth_service2(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -1012,8 +1016,8 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-name": "service2",
                     "tail-retention": "no"
                 }
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
@@ -1021,7 +1025,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         time.sleep(20)
 
     def test_32_check_no_xc_ROADMA(self):
@@ -1029,7 +1033,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url, auth=('admin', 'admin'))
+            "GET", url, auth=('admin', 'admin'))
         res = response.json()
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertNotIn('roadm-connections', dict.keys(res['org-openroadm-device']))
@@ -1037,9 +1041,9 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_33_check_topo_XPDRA(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPDR-A1-XPDR1"
-               .format(self.restconf_baseurl))
+                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url1, auth=('admin', 'admin'))
+            "GET", url1, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
@@ -1047,19 +1051,23 @@ class TransportPCEFulltesting(unittest.TestCase):
             if ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-CLIENT':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
             elif (ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK'):
-                self.assertIn(u'tail-equipment-id', dict.keys(ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
-                self.assertNotIn('wavelength', dict.keys(ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
+                self.assertIn(u'tail-equipment-id',
+                              dict.keys(ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
+                self.assertNotIn('wavelength', dict.keys(
+                    ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
         time.sleep(10)
 
     def test_34_check_topo_ROADMA_SRG1(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADM-A1-SRG1"
-               .format(self.restconf_baseurl))
+                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url1, auth=('admin', 'admin'))
+            "GET", url1, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn({u'index': 1}, res['node'][0][u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
-        self.assertIn({u'index': 2}, res['node'][0][u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
+        self.assertIn({u'index': 1}, res['node'][0]
+                      [u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
+        self.assertIn({u'index': 2}, res['node'][0]
+                      [u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX' or ele['tp-id'] == 'SRG1-PP1-TXRX':
@@ -1070,13 +1078,15 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_35_check_topo_ROADMA_DEG2(self):
         url1 = ("{}/config/ietf-network:networks/network/openroadm-topology/node/ROADM-A1-DEG2"
-               .format(self.restconf_baseurl))
+                .format(self.restconf_baseurl))
         response = requests.request(
-             "GET", url1, auth=('admin', 'admin'))
+            "GET", url1, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn({u'index': 1}, res['node'][0][u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
-        self.assertIn({u'index': 2}, res['node'][0][u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
+        self.assertIn({u'index': 1}, res['node'][0]
+                      [u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
+        self.assertIn({u'index': 2}, res['node'][0]
+                      [u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
@@ -1088,7 +1098,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 # test service-create for Optical Channel (OC) service from srg-pp to srg-pp
     def test_36_create_oc_service1(self):
         url = ("{}/operations/org-openroadm-service:service-create"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -1175,24 +1185,24 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "due-date": "2016-11-28T00:00:01Z",
                 "operator-contact": "pw1234"
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         time.sleep(self.WAITING)
 
     def test_37_get_oc_service1(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/service1"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1215,20 +1225,20 @@ class TransportPCEFulltesting(unittest.TestCase):
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertDictContainsSubset(
-             {'connection-name': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
-              'opticalControlMode': 'gainLoss',
-              'target-output-power': -3.0},
-             res['roadm-connections'][0])
+            {'connection-name': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
+             'opticalControlMode': 'gainLoss',
+             'target-output-power': -3.0},
+            res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
-             res['roadm-connections'][0]['source'])
+            {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
+            res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG2-TTP-TXRX-nmc-1'},
-             res['roadm-connections'][0]['destination'])
+            {'dst-if': 'DEG2-TTP-TXRX-nmc-1'},
+            res['roadm-connections'][0]['destination'])
         time.sleep(7)
 
     def test_39_check_xc1_ROADMC(self):
@@ -1238,25 +1248,25 @@ class TransportPCEFulltesting(unittest.TestCase):
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertDictContainsSubset(
-             {'connection-name': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
-              'opticalControlMode': 'gainLoss',
-              'target-output-power': -3.0},
-             res['roadm-connections'][0])
+            {'connection-name': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
+             'opticalControlMode': 'gainLoss',
+             'target-output-power': -3.0},
+            res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
-             res['roadm-connections'][0]['source'])
+            {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
+            res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG1-TTP-TXRX-nmc-1'},
-             res['roadm-connections'][0]['destination'])
+            {'dst-if': 'DEG1-TTP-TXRX-nmc-1'},
+            res['roadm-connections'][0]['destination'])
         time.sleep(7)
 
     def test_40_create_oc_service2(self):
         url = ("{}/operations/org-openroadm-service:service-create"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -1343,24 +1353,24 @@ class TransportPCEFulltesting(unittest.TestCase):
                 },
                 "due-date": "2016-11-28T00:00:01Z",
                 "operator-contact": "pw1234"
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
             auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         time.sleep(self.WAITING)
 
     def test_41_get_oc_service2(self):
         url = ("{}/operational/org-openroadm-service:service-list/services/service2"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1383,20 +1393,20 @@ class TransportPCEFulltesting(unittest.TestCase):
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertDictContainsSubset(
-             {'connection-name': 'SRG1-PP2-TXRX-DEG2-TTP-TXRX-2',
-              'opticalControlMode': 'gainLoss',
-              'target-output-power': -3.0},
-             res['roadm-connections'][0])
+            {'connection-name': 'SRG1-PP2-TXRX-DEG2-TTP-TXRX-2',
+             'opticalControlMode': 'gainLoss',
+             'target-output-power': -3.0},
+            res['roadm-connections'][0])
         self.assertDictEqual(
-             {'src-if': 'SRG1-PP2-TXRX-nmc-2'},
-             res['roadm-connections'][0]['source'])
+            {'src-if': 'SRG1-PP2-TXRX-nmc-2'},
+            res['roadm-connections'][0]['source'])
         self.assertDictEqual(
-             {'dst-if': 'DEG2-TTP-TXRX-nmc-2'},
-             res['roadm-connections'][0]['destination'])
+            {'dst-if': 'DEG2-TTP-TXRX-nmc-2'},
+            res['roadm-connections'][0]['destination'])
         time.sleep(2)
 
     def test_43_check_topo_ROADMA(self):
@@ -1406,7 +1416,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_44_delete_oc_service1(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -1418,8 +1428,8 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-name": "service1",
                     "tail-retention": "no"
                 }
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
@@ -1427,12 +1437,12 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         time.sleep(20)
 
     def test_45_delete_oc_service2(self):
         url = ("{}/operations/org-openroadm-service:service-delete"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -1444,8 +1454,8 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "service-name": "service2",
                     "tail-retention": "no"
                 }
-            }
-        }
+                }
+                }
         headers = {'content-type': 'application/json'}
         response = requests.request(
             "POST", url, data=json.dumps(data), headers=headers,
@@ -1453,31 +1463,31 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
-            res['output']['configuration-response-common']['response-message'])
+                      res['output']['configuration-response-common']['response-message'])
         time.sleep(20)
 
     def test_46_get_no_oc_services(self):
-        print ("start test")
+        print("start test")
         url = ("{}/operational/org-openroadm-service:service-list"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
-            {"error-type":"application", "error-tag":"data-missing",
-             "error-message":"Request could not be completed because the relevant data model content does not exist"},
+            {"error-type": "application", "error-tag": "data-missing",
+             "error-message": "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
         time.sleep(1)
 
     def test_47_get_no_xc_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf"
                "/node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-              .format(self.restconf_baseurl))
+               .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
-        "Accept": "application/json"}
+                   "Accept": "application/json"}
         response = requests.request(
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1490,15 +1500,15 @@ class TransportPCEFulltesting(unittest.TestCase):
         self.test_35_check_topo_ROADMA_DEG2()
 
     def test_49_loop_create_eth_service(self):
-        for i in range(1,6):
-            print ("trial number {}".format(i))
+        for i in range(1, 6):
+            print("trial number {}".format(i))
             print("eth service creation")
             self.test_11_create_eth_service1()
-            print ("check xc in ROADM-A1")
+            print("check xc in ROADM-A1")
             self.test_13_check_xc1_ROADMA()
-            print ("check xc in ROADM-C1")
+            print("check xc in ROADM-C1")
             self.test_14_check_xc1_ROADMC()
-            print ("eth service deletion\n")
+            print("eth service deletion\n")
             self.test_30_delete_eth_service1()
 
     def test_50_loop_create_oc_service(self):
@@ -1514,69 +1524,69 @@ class TransportPCEFulltesting(unittest.TestCase):
                     "rpc-action": "service-delete",
                     "request-system-id": "appname",
                     "notification-url": "http://localhost:8585/NotificationServer/notify"
-            },
+                },
                 "service-delete-req-info": {
                     "service-name": "service1",
                     "tail-retention": "no"
-            }
                 }
+            }
             }
             headers = {'content-type': 'application/json'}
             requests.request("POST", url, data=json.dumps(data), headers=headers, auth=('admin', 'admin'))
             time.sleep(5)
 
-        for i in range(1,6):
-            print ("trial number {}".format(i))
+        for i in range(1, 6):
+            print("trial number {}".format(i))
             print("oc service creation")
             self.test_36_create_oc_service1()
-            print ("check xc in ROADM-A1")
+            print("check xc in ROADM-A1")
             self.test_38_check_xc1_ROADMA()
-            print ("check xc in ROADM-C1")
+            print("check xc in ROADM-C1")
             self.test_39_check_xc1_ROADMC()
-            print ("oc service deletion\n")
+            print("oc service deletion\n")
             self.test_44_delete_oc_service1()
 
     def test_51_disconnect_XPDRA(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/XPDR-A1"
+               "network-topology/topology/topology-netconf/node/XPDR-A1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "DELETE", url, headers=headers,
-             auth=('admin', 'admin'))
+            "DELETE", url, headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(10)
 
     def test_52_disconnect_XPDRC(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/XPDR-C1"
+               "network-topology/topology/topology-netconf/node/XPDR-C1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "DELETE", url, headers=headers,
-             auth=('admin', 'admin'))
+            "DELETE", url, headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(10)
 
     def test_53_disconnect_ROADMA(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADM-A1"
+               "network-topology/topology/topology-netconf/node/ROADM-A1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "DELETE", url, headers=headers,
-             auth=('admin', 'admin'))
+            "DELETE", url, headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(10)
 
     def test_54_disconnect_ROADMC(self):
         url = ("{}/config/network-topology:"
-                "network-topology/topology/topology-netconf/node/ROADM-C1"
+               "network-topology/topology/topology-netconf/node/ROADM-C1"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json'}
         response = requests.request(
-             "DELETE", url, headers=headers,
-             auth=('admin', 'admin'))
+            "DELETE", url, headers=headers,
+            auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(10)
 
