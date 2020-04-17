@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f20ae15b_a550c944",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-17T09:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e4ba932_1fa90d3d",
+      "range": {
+        "startLine": 103,
+        "startChar": 24,
+        "endLine": 103,
+        "endChar": 79
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fa9363b_fc34b019",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-04-06T12:30:46Z",
       "side": 1,
       "message": "invalid or unsupported ?",
+      "range": {
+        "startLine": 107,
+        "startChar": 30,
+        "endLine": 107,
+        "endChar": 38
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6ff12873_77633d31",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-17T09:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fa9363b_fc34b019",
       "range": {
         "startLine": 107,
         "startChar": 30,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "6a09945c_afee1ca8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-17T09:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed59f832_99b3650f",
+      "range": {
+        "startLine": 116,
+        "startChar": 24,
+        "endLine": 116,
+        "endChar": 80
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1f1cf2e_dbeb4ab2",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2020-04-06T12:30:46Z",
       "side": 1,
       "message": "see above",
+      "range": {
+        "startLine": 120,
+        "startChar": 30,
+        "endLine": 120,
+        "endChar": 38
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "06f9a999_65725bb9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-17T09:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1f1cf2e_dbeb4ab2",
       "range": {
         "startLine": 120,
         "startChar": 30,
@@ -114,6 +210,30 @@
       "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2df7d694_627f4c6c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-17T09:22:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c945b451_4a9dac21",
+      "range": {
+        "startLine": 388,
+        "startChar": 32,
+        "endLine": 388,
+        "endChar": 42
+      },
+      "revId": "dfa8eb9898216420c684fe724771fc9a586fb643",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
