@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ed796539_7150c4ec",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-20T08:19:44Z",
+      "side": 1,
+      "message": "This modification follows feedback received from the Product Owner:\nSince an ODU4 High order otn container may support up to 80 low order (1GE/ODU0) services, it must be possible to have 80 trib solts, each of them supported on one trib port.\nThe previous version (10 trib port) only managed the transport of 10 x 10GE/ODU2e services over an ODU4.",
+      "parentUuid": "c8c7e74a_2ca70340",
+      "range": {
+        "startLine": 269,
+        "startChar": 27,
+        "endLine": 269,
+        "endChar": 36
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51e0fd84_8e25cd43",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9496a97_34c1de18",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-20T08:19:44Z",
+      "side": 1,
+      "message": "See previous answer.",
+      "parentUuid": "51e0fd84_8e25cd43",
+      "range": {
+        "startLine": 300,
+        "startChar": 40,
+        "endLine": 300,
+        "endChar": 41
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
