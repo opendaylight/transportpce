@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12607358_a61e1d98",
+        "filename": "tox.ini",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-20T09:35:44Z",
+      "side": 1,
+      "message": "not executed if pylint fails \u003d\u003e forcing success",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 111
+      },
+      "revId": "18768f74dffb949dcdaafaf30a2ebe1a737d3fa5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
