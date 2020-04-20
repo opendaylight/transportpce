@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a42e0d9_241a35d5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "update otn links from otn-topology instead of delete :-)",
+      "range": {
+        "startLine": 82,
+        "startChar": 7,
+        "endLine": 82,
+        "endChar": 42
+      },
+      "revId": "5360d1f14c31a6c79eb8cf08e46e5cb88afa844f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8764a5d_a42358d0",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "Use Map (interface) instead of HashMap (implementation) for declaration\ncf https://rules.sonarsource.com/java/RSPEC-1319",
+      "range": {
+        "startLine": 69,
+        "startChar": 3,
+        "endLine": 69,
+        "endChar": 70
+      },
+      "revId": "5360d1f14c31a6c79eb8cf08e46e5cb88afa844f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

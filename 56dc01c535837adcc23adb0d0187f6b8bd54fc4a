@@ -2,6 +2,167 @@
   "comments": [
     {
       "key": {
+        "uuid": "9ad59a0a_59734dd9",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/dto/TopologyShard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "not needed because by defautl if no value is assigned to a class member, the default vale will be null",
+      "range": {
+        "startLine": 28,
+        "startChar": 8,
+        "endLine": 28,
+        "endChar": 24
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81b7724f_18884a71",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "I don\u0027t know if this naming rule is used in another place in the code but perhaps it could be usefull to add an util class or something else to compute node name",
+      "range": {
+        "startLine": 260,
+        "startChar": 16,
+        "endLine": 260,
+        "endChar": 109
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a619b70_698ad29e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "only log ? It\u0027s not blocking if otn links are not in otn-topology ?",
+      "range": {
+        "startLine": 306,
+        "startChar": 12,
+        "endLine": 306,
+        "endChar": 67
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "784e0ca1_32fac2f3",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "call default constructor ?",
+      "range": {
+        "startLine": 328,
+        "startChar": 35,
+        "endLine": 328,
+        "endChar": 65
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a803a1_e51f853f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "why not returning tps ?",
+      "range": {
+        "startLine": 522,
+        "startChar": 11,
+        "endLine": 522,
+        "endChar": 24
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e380faed_517641b7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "why not returning empty list tps ?",
+      "range": {
+        "startLine": 554,
+        "startChar": 12,
+        "endLine": 554,
+        "endChar": 24
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "882a2740_e69514ac",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "to avoid running split twice, perhaps put split result in a variable and access the variable. you could also check the length of the array, if needed, to be sure it contains at least 2 items",
+      "range": {
+        "startLine": 602,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 47
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8c7e74a_2ca70340",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
@@ -61,6 +222,30 @@
       "side": 1,
       "message": "Fine but the conclusion of this exchange is that this value was not obvious,was it ?\nIn my opinion, this deserves a little comment to explain this hardcoded value that comes out of the hat.",
       "parentUuid": "ed796539_7150c4ec",
+      "range": {
+        "startLine": 269,
+        "startChar": 27,
+        "endLine": 269,
+        "endChar": 36
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64d8a547_11c24a02",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T10:29:28Z",
+      "side": 1,
+      "message": "why no creating a constant with an explicit name ? :-) like NB_TRIB_SLOTS\u003d80",
+      "parentUuid": "c09f0244_8121194d",
       "range": {
         "startLine": 269,
         "startChar": 27,
