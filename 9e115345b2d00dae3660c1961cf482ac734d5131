@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e936ac40_0c0a7fb7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-20T07:39:05Z",
+      "side": 1,
+      "message": "the problem seems to be that __init__.py are handled differently after python 3.2 ... and pylint3 still seems to stick with the old fashion.\nhttp://python-notes.curiousefficiency.org/en/latest/python_concepts/import_traps.html\n\n\n@Cédric: what do you advise here, I propose to create those files in the pylint profile and removing them after.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "9e115345b2d00dae3660c1961cf482ac734d5131",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

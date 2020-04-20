@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "caeb7cf0_10e27c84",
+        "filename": "tests/transportpce_tests/1.2.1/__init__.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-20T07:39:05Z",
+      "side": 1,
+      "message": "__init__.py modify import test_utils behavior with nosetests.",
+      "revId": "6662c99e7fa6f34df7c8836562e398d13f425bf2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
