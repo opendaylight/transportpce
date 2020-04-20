@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b265de6c_29b2de95",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T12:05:43Z",
+      "side": 1,
+      "message": "why not directly\nString srcTp \u003d node.getSrcTp();\nString destTp \u003d node.getDestTp();",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 21
+      },
+      "revId": "05652f4f3231f98e3e5bde19e3fed1ab170bc96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92c6817b_62ea78a4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T12:05:43Z",
+      "side": 1,
+      "message": "perhaps a constant ?",
+      "range": {
+        "startLine": 313,
+        "startChar": 56,
+        "endLine": 313,
+        "endChar": 61
+      },
+      "revId": "05652f4f3231f98e3e5bde19e3fed1ab170bc96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f61fedaa_35e3df99",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-20T12:05:43Z",
+      "side": 1,
+      "message": "perhaps a constant ?",
+      "range": {
+        "startLine": 334,
+        "startChar": 76,
+        "endLine": 334,
+        "endChar": 80
+      },
+      "revId": "05652f4f3231f98e3e5bde19e3fed1ab170bc96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
