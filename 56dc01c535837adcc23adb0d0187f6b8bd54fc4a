@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c09f0244_8121194d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-20T08:36:05Z",
+      "side": 1,
+      "message": "Fine but the conclusion of this exchange is that this value was not obvious,was it ?\nIn my opinion, this deserves a little comment to explain this hardcoded value that comes out of the hat.",
+      "parentUuid": "ed796539_7150c4ec",
+      "range": {
+        "startLine": 269,
+        "startChar": 27,
+        "endLine": 269,
+        "endChar": 36
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51e0fd84_8e25cd43",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
