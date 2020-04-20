@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aef7f25e_681a203e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-20T08:29:28Z",
+      "side": 1,
+      "message": "periods are useless in commit message titles",
+      "range": {
+        "startLine": 7,
+        "startChar": 43,
+        "endLine": 7,
+        "endChar": 45
+      },
+      "revId": "5d2090eebb5bbf6120807156c863214fc82ce22d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8494c540_2e40c8cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-20T08:29:28Z",
+      "side": 1,
+      "message": "just \"Fix\" is OK.\nPresent is the recommended tense in commit messages.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "5d2090eebb5bbf6120807156c863214fc82ce22d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bb14e41b_736b5ee2",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/PceComplianceCheckTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-20T08:29:28Z",
+      "side": 1,
+      "message": "really ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 2,
+        "endLine": 2,
+        "endChar": 24
+      },
+      "revId": "5d2090eebb5bbf6120807156c863214fc82ce22d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddff5c88_fdf21b0e",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-20T08:29:28Z",
+      "side": 1,
+      "message": "this should preferably be on the same line to ease migration with grep or regexp when a new revision is published.",
+      "range": {
+        "startLine": 167,
+        "startChar": 85,
+        "endLine": 168,
+        "endChar": 62
+      },
+      "revId": "5d2090eebb5bbf6120807156c863214fc82ce22d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eb46fdd_a1aec92a",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-20T08:29:28Z",
+      "side": 1,
+      "message": "idem, etc",
+      "range": {
+        "startLine": 178,
+        "startChar": 81,
+        "endLine": 179,
+        "endChar": 62
+      },
+      "revId": "5d2090eebb5bbf6120807156c863214fc82ce22d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
