@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "00149c7a_611637cd",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T07:03:13Z",
+      "side": 1,
+      "message": "Yes indeed. I didn\u0027t see it. Thanks. I will correct it.",
+      "parentUuid": "1f8b159f_465cdf2e",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 21
+      },
+      "revId": "05652f4f3231f98e3e5bde19e3fed1ab170bc96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aaf8426f_d8acea1d",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 3
