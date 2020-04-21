@@ -49,6 +49,29 @@
     },
     {
       "key": {
+        "uuid": "aaf8426f_d8acea1d",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-21T06:44:03Z",
+      "side": 1,
+      "message": "both treatments for 1G and 10G are very similar. A variable for ODU0 or ODU2E + a fallthrough would avoid duplicate code.",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 25
+      },
+      "revId": "05652f4f3231f98e3e5bde19e3fed1ab170bc96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92c6817b_62ea78a4",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 3
