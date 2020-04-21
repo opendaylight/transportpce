@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "76e2c352_d1684315",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/dto/TopologyShard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "[ERROR] COMPILATION ERROR : \n[INFO] -------------------------------------------------------------\n[ERROR] /transportpce/networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/dto/TopologyShard.java:[28,5] variable tps might not have been initialized\n\n...\nStrangely, pb disappeared...",
+      "parentUuid": "286747a1_75ba1113",
+      "range": {
+        "startLine": 28,
+        "startChar": 8,
+        "endLine": 28,
+        "endChar": 24
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81b7724f_18884a71",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 3
@@ -84,6 +108,30 @@
       "writtenOn": "2020-04-20T10:29:28Z",
       "side": 1,
       "message": "I don\u0027t know if this naming rule is used in another place in the code but perhaps it could be usefull to add an util class or something else to compute node name",
+      "range": {
+        "startLine": 260,
+        "startChar": 16,
+        "endLine": 260,
+        "endChar": 109
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19e40ea1_6949c727",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "It is used just twice: to create and delete links. Is it worth doing it?",
+      "parentUuid": "81b7724f_18884a71",
       "range": {
         "startLine": 260,
         "startChar": 16,
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "e6acfe4d_78400361",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "There are many reasons why an otn link could not be created, and most of them could come from a misconfiguration from people using renderer\u0027s rpc. I think it is preferable not create links and alert the user instead of create an errored link that after could be used by otn PCE to route other otn services. By not creating otn links, we somehow block future consecutive actions from PCE module.",
+      "parentUuid": "2a619b70_698ad29e",
+      "range": {
+        "startLine": 306,
+        "startChar": 12,
+        "endLine": 306,
+        "endChar": 67
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "784e0ca1_32fac2f3",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 3
@@ -130,6 +202,30 @@
       "writtenOn": "2020-04-20T10:29:28Z",
       "side": 1,
       "message": "call default constructor ?",
+      "range": {
+        "startLine": 328,
+        "startChar": 35,
+        "endLine": 328,
+        "endChar": 65
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa1ca0a6_f94d961a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "yes, I used this trick to avoid from line 351 to test if otnTopologyShard is not null and thus not increase the cyclomatic complexity of the method.",
+      "parentUuid": "784e0ca1_32fac2f3",
       "range": {
         "startLine": 328,
         "startChar": 35,
@@ -165,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "06b45fca_57222bbf",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "yes indeed. Code changed to not return null anymore.",
+      "parentUuid": "d7a803a1_e51f853f",
+      "range": {
+        "startLine": 522,
+        "startChar": 11,
+        "endLine": 522,
+        "endChar": 24
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e380faed_517641b7",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 3
@@ -176,6 +296,30 @@
       "writtenOn": "2020-04-20T10:29:28Z",
       "side": 1,
       "message": "why not returning empty list tps ?",
+      "range": {
+        "startLine": 554,
+        "startChar": 12,
+        "endLine": 554,
+        "endChar": 24
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b9ac4b9_b5ba4ea9",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "e380faed_517641b7",
       "range": {
         "startLine": 554,
         "startChar": 12,
@@ -208,6 +352,30 @@
       "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef8d7e45_f2fa4448",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "882a2740_e69514ac",
+      "range": {
+        "startLine": 602,
+        "startChar": 0,
+        "endLine": 603,
+        "endChar": 47
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -330,6 +498,30 @@
     },
     {
       "key": {
+        "uuid": "63c11a76_a0b331ae",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afd96802_c336a3bd",
+      "range": {
+        "startLine": 269,
+        "startChar": 27,
+        "endLine": 269,
+        "endChar": 36
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "51e0fd84_8e25cd43",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
@@ -401,6 +593,30 @@
     },
     {
       "key": {
+        "uuid": "e8378fcb_a91601fd",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1013ca3_d79477e8",
+      "range": {
+        "startLine": 300,
+        "startChar": 40,
+        "endLine": 300,
+        "endChar": 41
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4feeb9c6_45fd5afe",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
@@ -421,6 +637,30 @@
       "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e3e8e31_5768a3ef",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-21T13:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4feeb9c6_45fd5afe",
+      "range": {
+        "startLine": 304,
+        "startChar": 40,
+        "endLine": 304,
+        "endChar": 41
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
