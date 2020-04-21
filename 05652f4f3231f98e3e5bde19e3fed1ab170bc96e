@@ -240,6 +240,30 @@
     },
     {
       "key": {
+        "uuid": "cb85fb56_241904a2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-21T20:42:23Z",
+      "side": 1,
+      "message": "This proposal is against sonar rule \"Switch cases should end with an unconditional \"break\" statement\" https://rules.sonarsource.com/java/RSPEC-128 \nThis rule is not activated in Sonar ODL profile but I agree with Gilles about readability.\nIf code for 10G and 1G are the same except for oduType, extract the code in a private method and pass oduType as argument.\nExample\n    private String getConnectionNumber(OtnServicePathInput input, Nodes node, String networkTp, String oduType) {\n        if (node.getClientTp() !\u003d null) {\n            return node.getClientTp() + oduType + input.getServiceName() + \"-x-\"\n                + networkTp + oduType + input.getServiceName();\n        } else if (node.getNetwork2Tp() !\u003d null) {\n            return networkTp + oduType + input.getServiceName() + \"-x-\"\n                + node.getNetwork2Tp() + oduType + input.getServiceName();\n        } else {\n            return null;\n        }\n        \n    }\n\nSo the switch/case becomes\n\n                    case (\"1G\"):\n                        connectionNumber \u003d getConnectionNumber(input, node, networkTp, \"-ODU0-\");\n                    break;\n                    case (\"10G\"):\n                    connectionNumber \u003d getConnectionNumber(input, node, networkTp, \"-ODU2e-\");\n                        break;\n\n And add null check on connectionNumber before calling List\u003cString\u003e intToDelete \u003d this.crossConnect.deleteCrossConnect(nodeId, connectionNumber, true);\n                if(connectionNumber \u003d\u003d null) {\n                    return;\n                }",
+      "parentUuid": "8015e03c_bda625cb",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 25
+      },
+      "revId": "05652f4f3231f98e3e5bde19e3fed1ab170bc96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92c6817b_62ea78a4",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 3
