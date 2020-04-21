@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c84b5735_fdca727e",
+        "filename": "tox.ini",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-21T22:13:23Z",
+      "side": 1,
+      "message": "Alternative \n[testenv:pylint]\nbasepython \u003d python3\ndeps \u003d pylint\nwhitelist_externals \u003d find\nchangedir\u003d{toxinidir}/tests/transportpce_tests\ncommands \u003d find . -name *.py -exec pylint --exit-zero --max-line-length\u003d120 --disable\u003dmissing-docstring  --reports\u003dy --score\u003dy  --output-format\u003dcolorized  \\{\\} +",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 111
+      },
+      "revId": "29a014b5420e7c0ec203b4cb83124b6faaea990a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
