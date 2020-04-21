@@ -258,6 +258,30 @@
     },
     {
       "key": {
+        "uuid": "afd96802_c336a3bd",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-21T06:49:06Z",
+      "side": 1,
+      "message": "would be fair enough for me.",
+      "parentUuid": "64d8a547_11c24a02",
+      "range": {
+        "startLine": 269,
+        "startChar": 27,
+        "endLine": 269,
+        "endChar": 36
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51e0fd84_8e25cd43",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 3
@@ -302,6 +326,53 @@
       "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1013ca3_d79477e8",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-21T06:49:06Z",
+      "side": 1,
+      "message": "also here",
+      "parentUuid": "d9496a97_34c1de18",
+      "range": {
+        "startLine": 300,
+        "startChar": 40,
+        "endLine": 300,
+        "endChar": 41
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4feeb9c6_45fd5afe",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-21T06:49:06Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 304,
+        "startChar": 40,
+        "endLine": 304,
+        "endChar": 41
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
