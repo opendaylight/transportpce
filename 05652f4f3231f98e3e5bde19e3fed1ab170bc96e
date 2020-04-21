@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "58feff53_243e5ded",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-21T18:33:50Z",
+      "side": 1,
+      "message": "You declared at the beginning the constant ODU2E\nprivate static final String ODU2E \u003d \"-ODU2e-\";\n\u003d\u003e replace it with a non-constant generic string.\n\nprivate String odu_service\u003d \"-ODU2e-\";\n\n[..]\n\nswitch (input.getServiceRate()) {\n\n[..]\n\n case (\"1G\"):\n    odu_service\u003d \"-ODU0-\";\n //fallthrough\n case (\"10G\"):\n                        if (node.getClientTp() !\u003d null) {\n                            connectionNumber \u003d node.getClientTp() + odu_service + input.getServiceName() + \"-x-\" + networkTp\n                                + odu_service + input.getServiceName();\n                        } else if (node.getNetwork2Tp() !\u003d null) {\n                            connectionNumber \u003d networkTp + odu_service + input.getServiceName() + \"-x-\" + node.getNetwork2Tp()\n                                + odu_service + input.getServiceName();\n                        } else {\n                            return;\n                        }\n                        break;",
+      "parentUuid": "64d2535d_a88c86d7",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 25
+      },
+      "revId": "05652f4f3231f98e3e5bde19e3fed1ab170bc96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92c6817b_62ea78a4",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 3
