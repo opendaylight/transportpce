@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ebb3af0_89464f71",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-04-21T20:55:23Z",
+      "side": 1,
+      "message": "More something like if (nodeAndTp.length \u003e\u003d 2) or  if (nodeAndTp.length \u003d\u003d 2) because split will always return a non empty array so the condition nodeAndTp.length !\u003d 0 will always be true and will not protect you against arrayoutofbound exception",
+      "range": {
+        "startLine": 596,
+        "startChar": 16,
+        "endLine": 596,
+        "endChar": 43
+      },
+      "revId": "6f9f98953f68f1fb30021c9f62a084c486456578",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
