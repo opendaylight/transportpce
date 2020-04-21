@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "286747a1_75ba1113",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/dto/TopologyShard.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-21T08:08:48Z",
+      "side": 1,
+      "message": "is that LAZY_INIT something ?  Please can you report the SB error type ?",
+      "parentUuid": "9dd130f0_6beb19ae",
+      "range": {
+        "startLine": 28,
+        "startChar": 8,
+        "endLine": 28,
+        "endChar": 24
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81b7724f_18884a71",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 3
