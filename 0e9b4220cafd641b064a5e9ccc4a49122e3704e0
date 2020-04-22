@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b5a661b_3868fa20",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/util/OlmUtils.java ",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T21:35:11Z",
+      "side": 1,
+      "message": "NOK",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "0e9b4220cafd641b064a5e9ccc4a49122e3704e0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
