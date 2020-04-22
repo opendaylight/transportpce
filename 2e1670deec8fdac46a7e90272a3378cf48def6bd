@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a055ce27_b63525db",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T18:07:31Z",
+      "side": 1,
+      "message": "LF misplaced, revision should stick the main part of its namespace to ease migration with sed/grep/regexp/...",
+      "range": {
+        "startLine": 125,
+        "startChar": 97,
+        "endLine": 126,
+        "endChar": 47
+      },
+      "revId": "2e1670deec8fdac46a7e90272a3378cf48def6bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
