@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+
 import org.junit.Assert;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
@@ -48,6 +49,7 @@ public final class PceTestUtils {
     public static void writeTopologyIntoDataStore(DataBroker dataBroker,
                                                   DataStoreContext dataStoreContext, String topologyDataPath)
             throws ExecutionException, InterruptedException {
+
         DataObjectConverter dataObjectConverter = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContext);
         InputStream resourceAsStream = PceTestUtils.class.getClassLoader().getResourceAsStream(topologyDataPath);
         Optional<NormalizedNode<? extends YangInstanceIdentifier.PathArgument, ?>> normalizedNode
@@ -57,10 +59,22 @@ public final class PceTestUtils {
         MapEntryNode mapNode = ((MapNode) next).getValue().iterator().next();
         Optional<DataObject> dataObject = dataObjectConverter.getDataObject(mapNode, Network.QNAME);
         InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
-            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-            .build();
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
         dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, (Network) dataObject.get());
+        dataWriteTransaction.commit().get();
+    }
+
+    public static void writeNetworkIntoDataStore(DataBroker dataBroker,
+                                                 DataStoreContext dataStoreContext, Network network)
+            throws ExecutionException, InterruptedException {
+
+        InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .build();
+        WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
+        dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, network);
         dataWriteTransaction.commit().get();
     }
 
@@ -91,46 +105,46 @@ public final class PceTestUtils {
         Assert.assertEquals(atozSize, ztoaSize);
 
         Long actualAToZWavel = output.getResponseParameters().getPathDescription().getAToZDirection()
-            .getAToZWavelengthNumber().toJava();
+                .getAToZWavelengthNumber().toJava();
         Long expectedAToZWavel = expectedOutput.getResponseParameters().getPathDescription().getAToZDirection()
-            .getAToZWavelengthNumber().toJava();
+                .getAToZWavelengthNumber().toJava();
         Assert.assertEquals(actualAToZWavel, expectedAToZWavel);
 
         Long actualZtoAWavel = output.getResponseParameters().getPathDescription().getZToADirection()
-            .getZToAWavelengthNumber().toJava();
+                .getZToAWavelengthNumber().toJava();
         Long expectedZtoAWavel = expectedOutput.getResponseParameters().getPathDescription().getZToADirection()
-            .getZToAWavelengthNumber().toJava();
+                .getZToAWavelengthNumber().toJava();
         Assert.assertEquals(actualZtoAWavel, expectedZtoAWavel);
 
         Long actualAToZRate = output.getResponseParameters().getPathDescription().getAToZDirection().getRate().toJava();
         Long expectedAToZRate = expectedOutput.getResponseParameters().getPathDescription().getAToZDirection()
-            .getRate().toJava();
+                .getRate().toJava();
         Assert.assertEquals(expectedAToZRate, actualAToZRate);
 
         Long actualZToARate = output.getResponseParameters().getPathDescription().getZToADirection().getRate().toJava();
         Long expectedZToARate = expectedOutput.getResponseParameters().getPathDescription().getZToADirection()
-            .getRate().toJava();
+                .getRate().toJava();
         Assert.assertEquals(actualZToARate, expectedZToARate);
     }
 
     private static List<String> getNodesFromPath(PathComputationRequestOutput output) {
         List<AToZ> atozList = output.getResponseParameters().getPathDescription().getAToZDirection().getAToZ();
         return atozList.stream()
-            .filter(aToZ -> {
-                if ((aToZ.getResource() == null) || (aToZ.getResource().getResource() == null)) {
-                    LOG.debug("Diversity constraint: Resource of AToZ node {} is null! Skipping this node!",
-                            aToZ.getId());
-                    return false;
-                }
-                return aToZ.getResource().getResource() instanceof Node;
-            }).map(aToZ -> {
-                Node node = (Node) aToZ.getResource().getResource();
-                if (node.getNodeId() == null) {
-                    LOG.warn("Node in AToZ node {} contains null! Skipping this node!", aToZ.getId());
-                    return null;
-                }
-                return node.getNodeId().toString();
-            }).collect(Collectors.toList());
+                .filter(aToZ -> {
+                    if ((aToZ.getResource() == null) || (aToZ.getResource().getResource() == null)) {
+                        LOG.debug("Diversity constraint: Resource of AToZ node {} is null! Skipping this node!",
+                                aToZ.getId());
+                        return false;
+                    }
+                    return aToZ.getResource().getResource() instanceof Node;
+                }).map(aToZ -> {
+                    Node node = (Node) aToZ.getResource().getResource();
+                    if (node.getNodeId() == null) {
+                        LOG.warn("Node in AToZ node {} contains null! Skipping this node!", aToZ.getId());
+                        return null;
+                    }
+                    return node.getNodeId().toString();
+                }).collect(Collectors.toList());
     }
 
     public static boolean comparePath(PathComputationRequestOutput output1, PathComputationRequestOutput output2) {
