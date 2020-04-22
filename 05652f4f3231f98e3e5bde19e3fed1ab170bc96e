@@ -264,6 +264,30 @@
     },
     {
       "key": {
+        "uuid": "af4f4763_5003c33b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-22T07:22:40Z",
+      "side": 1,
+      "message": "Thank you very much. This solution pleases me more, all the more it is the solution to which I was thinking about seeing the difficulty in circumventing the fallthrough sonar rules, and regarding the readability aspect, it seems to me much better. Adopted.",
+      "parentUuid": "cb85fb56_241904a2",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 25
+      },
+      "revId": "05652f4f3231f98e3e5bde19e3fed1ab170bc96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92c6817b_62ea78a4",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 3
