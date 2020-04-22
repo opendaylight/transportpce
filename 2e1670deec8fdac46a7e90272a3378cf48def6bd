@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "1c054676_a8fad362",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/PcePathDescriptionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T18:26:32Z",
+      "side": 1,
+      "message": "not coherent with the style in previous assignment, LF probably not needed",
+      "range": {
+        "startLine": 89,
+        "startChar": 73,
+        "endLine": 90,
+        "endChar": 25
+      },
+      "revId": "2e1670deec8fdac46a7e90272a3378cf48def6bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd850284_3aec977f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
         "patchSetId": 1
