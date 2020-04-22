@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "46fc5b87_e596e554",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T18:23:38Z",
+      "side": 1,
+      "message": "JIRA: TRNSPRTPCE-209",
+      "revId": "2e1670deec8fdac46a7e90272a3378cf48def6bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd850284_3aec977f",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T18:23:38Z",
+      "side": 1,
+      "message": "LF would help readability here",
+      "range": {
+        "startLine": 125,
+        "startChar": 46,
+        "endLine": 125,
+        "endChar": 47
+      },
+      "revId": "2e1670deec8fdac46a7e90272a3378cf48def6bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a055ce27_b63525db",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
         "patchSetId": 1
@@ -18,6 +58,29 @@
         "startChar": 97,
         "endLine": 126,
         "endChar": 47
+      },
+      "revId": "2e1670deec8fdac46a7e90272a3378cf48def6bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb224fbe_15becc7f",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T18:23:38Z",
+      "side": 1,
+      "message": "LF would help readability here",
+      "range": {
+        "startLine": 127,
+        "startChar": 59,
+        "endLine": 127,
+        "endChar": 60
       },
       "revId": "2e1670deec8fdac46a7e90272a3378cf48def6bd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
