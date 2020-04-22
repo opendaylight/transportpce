@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c491d1e1_d7c714a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T21:23:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fa21810_cc85f902",
+      "revId": "9613b6d7f8fb715b4107e8500aba30cc9973a63d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "816efc3a_6d636f7e",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNodeTest.java",
         "patchSetId": 4
@@ -39,6 +57,30 @@
       "revId": "9613b6d7f8fb715b4107e8500aba30cc9973a63d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c9bc61f_6a6fe171",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNodeTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T21:23:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "816efc3a_6d636f7e",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 48
+      },
+      "revId": "9613b6d7f8fb715b4107e8500aba30cc9973a63d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
