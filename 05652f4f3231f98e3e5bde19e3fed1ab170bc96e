@@ -288,6 +288,30 @@
     },
     {
       "key": {
+        "uuid": "308c1863_108c5b2a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T07:38:33Z",
+      "side": 1,
+      "message": "It\u0027s OK and maybe more readable but I don\u0027t think it is that better.\n\nThis rule is not activated in ODL sonar because it is already better performed by checkstyle that does not lead to false positives contrary to Sonar and SB thanks to comments.\nFallthroughs are and old and quite useful practice but it is a 2-edged swords that can lead to bugs when a break is forgotten. That\u0027s why checkstyle/Sonar/SB report them.\nThe example was perfectly OK. Since it didn\u0027t use any condition before the fallthrough, there\u0027s no doubt it is the typical case where it is perfectly allowed.\n\nThe parameter \"-ODU0-\" (or \"-ODU2e\")  will probably gain to be replaced by simply \"ODU0\" (or  \"ODU2e\")",
+      "parentUuid": "cb85fb56_241904a2",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 25
+      },
+      "revId": "05652f4f3231f98e3e5bde19e3fed1ab170bc96e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92c6817b_62ea78a4",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/OtnDeviceRendererServiceImpl.java",
         "patchSetId": 3
