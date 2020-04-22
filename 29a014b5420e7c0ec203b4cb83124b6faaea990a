@@ -22,6 +22,30 @@
       "revId": "29a014b5420e7c0ec203b4cb83124b6faaea990a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb4ccc38_7e15b4e6",
+        "filename": "tox.ini",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T08:16:03Z",
+      "side": 1,
+      "message": "Thanks.  I tried something like that around PS2 without success.\nI need to upgrade my pylint3 local install cause I didn\u0027t have some options you used here in my man page.",
+      "parentUuid": "c84b5735_fdca727e",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 111
+      },
+      "revId": "29a014b5420e7c0ec203b4cb83124b6faaea990a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
