@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "f84d74ca_81a0f7af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T09:10:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8494c540_2e40c8cd",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "5d2090eebb5bbf6120807156c863214fc82ce22d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b1da39e4_1e4b980f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T09:10:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aef7f25e_681a203e",
+      "range": {
+        "startLine": 7,
+        "startChar": 43,
+        "endLine": 7,
+        "endChar": 45
+      },
+      "revId": "5d2090eebb5bbf6120807156c863214fc82ce22d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb14e41b_736b5ee2",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/PceComplianceCheckTest.java",
         "patchSetId": 8
@@ -68,6 +116,30 @@
       "revId": "5d2090eebb5bbf6120807156c863214fc82ce22d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24229e33_88374d63",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/PceComplianceCheckTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-22T09:10:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb14e41b_736b5ee2",
+      "range": {
+        "startLine": 2,
+        "startChar": 2,
+        "endLine": 2,
+        "endChar": 24
+      },
+      "revId": "5d2090eebb5bbf6120807156c863214fc82ce22d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
