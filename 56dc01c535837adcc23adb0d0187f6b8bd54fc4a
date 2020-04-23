@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "5e62fe98_30036d59",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-23T09:14:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "19e40ea1_6949c727",
+      "range": {
+        "startLine": 260,
+        "startChar": 16,
+        "endLine": 260,
+        "endChar": 109
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a619b70_698ad29e",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 3
@@ -188,6 +212,30 @@
       "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28f89bf6_d80575d7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-23T09:14:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e6acfe4d_78400361",
+      "range": {
+        "startLine": 306,
+        "startChar": 12,
+        "endLine": 306,
+        "endChar": 67
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -238,6 +286,30 @@
     },
     {
       "key": {
+        "uuid": "31d7b7cb_92d66525",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-23T09:14:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aa1ca0a6_f94d961a",
+      "range": {
+        "startLine": 328,
+        "startChar": 35,
+        "endLine": 328,
+        "endChar": 65
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d7a803a1_e51f853f",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 3
@@ -285,6 +357,30 @@
     },
     {
       "key": {
+        "uuid": "8aa0ac62_b0b0f500",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-23T09:14:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06b45fca_57222bbf",
+      "range": {
+        "startLine": 522,
+        "startChar": 11,
+        "endLine": 522,
+        "endChar": 24
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e380faed_517641b7",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
         "patchSetId": 3
@@ -329,6 +425,30 @@
       "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "941f187f_7a698333",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-23T09:14:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b9ac4b9_b5ba4ea9",
+      "range": {
+        "startLine": 554,
+        "startChar": 12,
+        "endLine": 554,
+        "endChar": 24
+      },
+      "revId": "56dc01c535837adcc23adb0d0187f6b8bd54fc4a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
