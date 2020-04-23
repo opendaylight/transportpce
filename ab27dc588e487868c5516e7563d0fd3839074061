@@ -16,6 +16,24 @@
       "revId": "ab27dc588e487868c5516e7563d0fd3839074061",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a0f1a68_f332969a",
+        "filename": "tox.ini",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T07:36:40Z",
+      "side": 1,
+      "message": "yes it is better in my opinion cause the error code returned shows clearly that improvements can be done.\nMaybe we could add a threshold on the score, but I didn\u0027t find an option for that.\n\nI was forced to do else-way previously as a workaround so that __init__.py files can be removed after pylint was run. (NB: inside tox  \"pylint --exit-zero\" \u003d \"- pylint\")\nOtherwise, tox stopped at the first failure and the next command with rm wasn\u0027t executed.\nBut as you pointed, those __init__.py files aren\u0027t needed anymore with recent pylint versions and new options.",
+      "parentUuid": "d34ef96b_eff12228",
+      "revId": "ab27dc588e487868c5516e7563d0fd3839074061",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
