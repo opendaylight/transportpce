@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "312b9683_4aaae30a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T09:12:10Z",
+      "side": 1,
+      "message": "needs more details about the abnormal OC parameters workaround\n+ A JIRA reference below",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 49
+      },
+      "revId": "35e7358f5bc0950a4e2a03c1c88edb90e17381e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a174a33e_97424f45",
+        "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T09:12:10Z",
+      "side": 1,
+      "message": "should have a comment to state this is abnormal and justified to workaround a bug",
+      "range": {
+        "startLine": 1301,
+        "startChar": 0,
+        "endLine": 1307,
+        "endChar": 21
+      },
+      "revId": "35e7358f5bc0950a4e2a03c1c88edb90e17381e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15a45640_f7064aed",
+        "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T09:12:10Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 1349,
+        "startChar": 0,
+        "endLine": 1354,
+        "endChar": 22
+      },
+      "revId": "35e7358f5bc0950a4e2a03c1c88edb90e17381e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c968a174_b7b1bd15",
+        "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T09:12:10Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 1502,
+        "startChar": 0,
+        "endLine": 1507,
+        "endChar": 22
+      },
+      "revId": "35e7358f5bc0950a4e2a03c1c88edb90e17381e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "645333c5_8b5f5023",
+        "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T09:12:10Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 1549,
+        "startChar": 0,
+        "endLine": 1554,
+        "endChar": 22
+      },
+      "revId": "35e7358f5bc0950a4e2a03c1c88edb90e17381e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5632a3b_21cb5cab",
+        "filename": "tests/transportpce_tests/2.2.1/test_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T09:12:10Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 1152,
+        "startChar": 1,
+        "endLine": 1157,
+        "endChar": 22
+      },
+      "revId": "35e7358f5bc0950a4e2a03c1c88edb90e17381e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ab76c68_8752b62a",
+        "filename": "tests/transportpce_tests/2.2.1/test_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T09:12:10Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 1195,
+        "startChar": 0,
+        "endLine": 1200,
+        "endChar": 22
+      },
+      "revId": "35e7358f5bc0950a4e2a03c1c88edb90e17381e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "742a4727_e8de8a10",
+        "filename": "tests/transportpce_tests/2.2.1/test_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T09:12:10Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 1332,
+        "startChar": 0,
+        "endLine": 1337,
+        "endChar": 22
+      },
+      "revId": "35e7358f5bc0950a4e2a03c1c88edb90e17381e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04fa4b8b_963caeb4",
+        "filename": "tests/transportpce_tests/2.2.1/test_end2end.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-23T09:12:10Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 1375,
+        "startChar": 0,
+        "endLine": 1380,
+        "endChar": 22
+      },
+      "revId": "35e7358f5bc0950a4e2a03c1c88edb90e17381e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
