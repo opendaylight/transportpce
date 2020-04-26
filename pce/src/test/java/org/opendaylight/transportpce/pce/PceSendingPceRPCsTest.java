@@ -10,35 +10,34 @@ package org.opendaylight.transportpce.pce;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
+import org.opendaylight.transportpce.pce.utils.PceTestUtils;
+import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 
 
-
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class PceSendingPceRPCsTest extends AbstractTest {
 
     private PceSendingPceRPCs pceSendingPceRPCs;
     private NetworkTransactionImpl networkTransaction;
     private DataStoreContext dataStoreContext = this.getDataStoreContextUtil();
-    private DataBroker dataBroker = dataStoreContext.getDataBroker();
+    private DataBroker dataBroker = this.getDataBroker();
 
 
     @Before
     public void setUp() throws Exception {
 //        PceTestUtils.writeTopologyIntoDataStore(
-//                dataBroker, dataStoreContext, "./topologyData/basePceTopology.json");
+//                dataBroker, dataStoreContext, "./topologyData/NW-simple-topology.xml");
+        PceTestUtils.writeNetworkIntoDataStore(dataBroker, dataStoreContext, TransactionUtils.getNetworkForSpanLoss());
         networkTransaction = new NetworkTransactionImpl(new RequestProcessor(dataBroker));
         pceSendingPceRPCs = new PceSendingPceRPCs();
         pceSendingPceRPCs =
-                new PceSendingPceRPCs(PceTestData.getPCERequest(), networkTransaction
-                );
+                new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(), networkTransaction);
     }
 
     @Test
@@ -72,6 +71,5 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     public void getGnpyZtoA() {
         Assert.assertNull(pceSendingPceRPCs.getGnpyZtoA());
     }
-
 
 }
