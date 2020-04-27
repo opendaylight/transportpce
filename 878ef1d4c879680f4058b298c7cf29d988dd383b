@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61f9ba4a_365b660d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-27T12:13:12Z",
+      "side": 1,
+      "message": "For next time you had trouble with rebasing and you need to restart from scratch, you can change manually the changeID here in the commit message rather than abandonning the previous change (in that case change 89264 and change-id I356c709d4f0430aa02537f1fd27bf2b7c80131cd ).\nThis will allow to keep trace of comments already posted.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "878ef1d4c879680f4058b298c7cf29d988dd383b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
