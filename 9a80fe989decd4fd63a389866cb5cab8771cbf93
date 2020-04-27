@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c74858b_211b3f9f",
+        "filename": "lighty/src/main/assembly/resources/clean-start-controller.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-27T09:54:27Z",
+      "side": 1,
+      "message": "sh would be more indicated for BSD compatibility",
+      "range": {
+        "startLine": 1,
+        "startChar": 7,
+        "endLine": 1,
+        "endChar": 11
+      },
+      "revId": "9a80fe989decd4fd63a389866cb5cab8771cbf93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ecceacf_9335ad2d",
+        "filename": "lighty/src/main/assembly/resources/start-controller.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-27T09:54:27Z",
+      "side": 1,
+      "message": "sh more indicated",
+      "range": {
+        "startLine": 1,
+        "startChar": 7,
+        "endLine": 1,
+        "endChar": 11
+      },
+      "revId": "9a80fe989decd4fd63a389866cb5cab8771cbf93",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
