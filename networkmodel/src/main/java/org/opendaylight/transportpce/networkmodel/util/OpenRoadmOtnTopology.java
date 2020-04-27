@@ -9,13 +9,11 @@
 package org.opendaylight.transportpce.networkmodel.util;
 
 import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.dto.OtnTopoNode;

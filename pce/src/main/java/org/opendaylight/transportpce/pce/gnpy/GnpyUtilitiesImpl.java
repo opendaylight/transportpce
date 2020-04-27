@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce.gnpy;
 
 import java.util.List;
-
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;

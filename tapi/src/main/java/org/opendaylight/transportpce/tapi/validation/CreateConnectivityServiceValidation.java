@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.tapi.validation;
 
 import java.util.List;
-
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.transportpce.tapi.validation.checks.ConnConstraintCheck;

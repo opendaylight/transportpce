@@ -8,9 +8,7 @@
 package org.opendaylight.transportpce.servicehandler.service;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.concurrent.ExecutionException;
-
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
