@@ -8,12 +8,10 @@
 package org.opendaylight.transportpce.tapi.impl;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperations;
 import org.opendaylight.transportpce.tapi.utils.GenericServiceEndpoint;

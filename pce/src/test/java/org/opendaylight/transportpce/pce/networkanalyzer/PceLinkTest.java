@@ -9,12 +9,10 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import com.google.common.collect.ImmutableList;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.servicehandler.service;
 
 import java.util.Optional;
-
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestOutput;

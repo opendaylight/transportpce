@@ -13,7 +13,6 @@ import static org.opendaylight.transportpce.inventory.utils.StringUtils.prepareD
 import static org.opendaylight.transportpce.inventory.utils.StringUtils.prepareEmptyString;
 
 import com.google.common.base.Preconditions;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +20,6 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import javax.sql.DataSource;
-
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;

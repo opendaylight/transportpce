@@ -12,7 +12,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.ChangeNo
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CreateTechInfoNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OrgOpenroadmDeviceListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.OtdrScanResult;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

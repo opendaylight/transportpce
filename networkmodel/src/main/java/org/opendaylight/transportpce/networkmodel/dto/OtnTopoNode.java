@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.networkmodel.dto;
 
 import java.util.Map;
-
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 
 public class OtnTopoNode {
