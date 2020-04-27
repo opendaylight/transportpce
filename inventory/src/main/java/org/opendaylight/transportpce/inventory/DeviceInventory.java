@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import javax.sql.DataSource;
-
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput;

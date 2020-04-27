@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.networkmodel;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.FluentFuture;
-
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
