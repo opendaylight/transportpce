@@ -22,10 +22,10 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev181130.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.SpanBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
@@ -66,6 +66,20 @@ public class PceLinkTest extends AbstractTest {
     @Test
     public void testBuildPceLinkRoadmToRoadm() {
         Link link = createRoadmToRoadm("srcNode",
+                "destNode",
+                "srcTp", "destTp").build();
+
+        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
+        Node node = node1Builder.build();
+
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+                OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
+        pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
+    }
+
+    @Test
+    public void testBuildPceLinkRoadmToRoadmWithoutLinkLatency() {
+        Link link = createRoadmToRoadmWithoutLinkLatency("srcNode",
                 "destNode",
                 "srcTp", "destTp").build();
 
@@ -129,6 +143,8 @@ public class PceLinkTest extends AbstractTest {
         Assert.assertNotNull(pceLink.getLinkId());
         Assert.assertNotNull(pceLink.getSourceId());
         Assert.assertNotNull(pceLink.getDestId());
+        pceLink.setClient("specific_client");
+        Assert.assertTrue(pceLink.getClient().equals("specific_client"));
         Assert.assertNotNull(pceLink.getClient());
         Assert.assertNotNull(pceLink.getLatency());
         Assert.assertNotNull(pceLink.getAvailableBandwidth());
@@ -136,23 +152,12 @@ public class PceLinkTest extends AbstractTest {
         Assert.assertNotNull(pceLink.getsourceNetworkSupNodeId());
         Assert.assertNotNull(pceLink.getdestNetworkSupNodeId());
         Assert.assertNotNull(pceLink.getosnr());
-        Assert.assertNull(pceLink.getsourceCLLI());
-        Assert.assertNull(pceLink.getdestCLLI());
-    }
+        Assert.assertNotNull(pceLink.getSourceTP());
+        Assert.assertNotNull(pceLink.getsourceCLLI());
+        Assert.assertNotNull(pceLink.getdestCLLI());
+        Assert.assertTrue(pceLink.toString().equals("PceLink type=" + pceLink.getlinkType()
+                + " ID=" + pceLink.getLinkId().getValue() + " latency=" + pceLink.getLatency().intValue()));
 
-    @Test
-    public void testPceOpticalNode() {
-        NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
-
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
-        pceOpticalNode.initSrgTps();
-        pceOpticalNode.initXndrTps();
-        pceOpticalNode.initWLlist();
-        Assert.assertFalse(pceOpticalNode.isValid());
-        Assert.assertFalse(pceOpticalNode.checkWL(12));
-        Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
     }
 
     @Test(expected = NullPointerException.class)
@@ -164,19 +169,6 @@ public class PceLinkTest extends AbstractTest {
 
         PceOtnNode pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.SRG, node.getNodeId(), "otn", "serviceType");
 
-        //pceOtnNode.validateXponder(anodeId, znodeId);
-        /*
-        PceOtnNode pceOtnNode =
-                new PceOtnNode(node, OpenroadmNodeType.DEGREE,
-                        new NodeId("optical"),
-                        ServiceFormat.OTM.getName(), "test");*/
-        // pceOtnNode.initXndrTps("mode");
-       /* pceOtnNode.initSrgTps();
-        pceOtnNode.initXndrTps();
-        pceOtnNode.initWLlist();
-        Assert.assertFalse(pceOtnNode.isValid());
-        Assert.assertFalse(pceOtnNode.checkWL(12));
-        Assert.assertTrue(pceOtnNode.checkTP("testTP"));*/
     }
 
     private static LinkBuilder createOTNLink(String srcNode, String destNode, String srcTp, String destTp) {
@@ -215,6 +207,7 @@ public class PceLinkTest extends AbstractTest {
                                 .setSpanlossCurrent(new RatioDB(new BigDecimal("55")))
                                 .setLinkConcatenation(Arrays.asList(
                                         new LinkConcatenationBuilder()
+                                                .setSRLGLength(20L)
                                                 .setFiberType(LinkConcatenation.FiberType.Dsf)
                                                 .build()
                                 )).build()).setOppositeLink(oppositeLinkId);
@@ -251,13 +244,21 @@ public class PceLinkTest extends AbstractTest {
 
     }
 
+    private static LinkBuilder createRoadmToRoadmWithoutLinkLatency(
+            String srcNode, String destNode, String srcTp, String destTp) {
+        Link1Builder link1Builder = new Link1Builder()
+                .setLinkType(OpenroadmLinkType.ROADMTOROADM);
+        return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
+
+    }
+
     private List<SupportingNode> geSupportingNodes() {
         List<SupportingNode> supportingNodes1 = new ArrayList<>();
-        /* supportingNodes1
+        supportingNodes1
                 .add(new SupportingNodeBuilder()
                         .setNodeRef(new NodeId("node 1"))
                         .setNetworkRef(new NetworkId(NetworkUtils.CLLI_NETWORK_ID))
-                        .build());*/
+                        .build());
 
         supportingNodes1
                 .add(new SupportingNodeBuilder()
@@ -275,7 +276,8 @@ public class PceLinkTest extends AbstractTest {
         TerminationPoint1Builder tp1Bldr = new TerminationPoint1Builder();
 
         tp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
-        xpdrTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
+        xpdrTpBldr.addAugmentation(
+                TerminationPoint1.class, tp1Bldr.build());
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1 =
                 new Node1Builder().setTerminationPoint(ImmutableList.of(xpdrTpBldr.build())).build();
 
