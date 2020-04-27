@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.pce.utils;
 
 import java.util.Arrays;
-
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInputBuilder;

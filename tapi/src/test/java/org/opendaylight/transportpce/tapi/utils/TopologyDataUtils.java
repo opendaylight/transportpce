@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.tapi.utils;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

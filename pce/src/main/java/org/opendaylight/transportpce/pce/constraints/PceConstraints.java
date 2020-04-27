@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.pce.constraints;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp;
 import org.slf4j.Logger;

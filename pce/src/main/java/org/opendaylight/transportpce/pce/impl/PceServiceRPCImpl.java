@@ -8,9 +8,7 @@
 package org.opendaylight.transportpce.pce.impl;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.concurrent.ExecutionException;
-
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveOutput;

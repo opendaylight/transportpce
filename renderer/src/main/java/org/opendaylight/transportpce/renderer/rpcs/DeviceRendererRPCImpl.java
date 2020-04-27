@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.renderer.rpcs;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.OtnDeviceRendererService;

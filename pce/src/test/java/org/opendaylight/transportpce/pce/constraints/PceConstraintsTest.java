@@ -10,11 +10,9 @@ package org.opendaylight.transportpce.pce.constraints;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.test.AbstractTest;
 
