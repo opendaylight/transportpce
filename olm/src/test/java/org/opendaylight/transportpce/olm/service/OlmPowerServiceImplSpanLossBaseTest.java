@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.olm.service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

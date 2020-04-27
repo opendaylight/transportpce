@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce.graph;
 
 import java.util.Map;
-
 import org.jgrapht.GraphPath;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;

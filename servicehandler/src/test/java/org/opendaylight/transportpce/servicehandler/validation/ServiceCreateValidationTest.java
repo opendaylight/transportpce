@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.servicehandler.validation;
 
 import java.util.Arrays;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.OperationResult;

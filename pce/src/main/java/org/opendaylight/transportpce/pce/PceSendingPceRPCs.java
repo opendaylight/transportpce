@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce;
 
 import java.util.List;
-
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;

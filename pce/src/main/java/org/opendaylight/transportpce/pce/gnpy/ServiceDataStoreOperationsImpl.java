@@ -11,7 +11,6 @@ package org.opendaylight.transportpce.pce.gnpy;
 import com.google.common.base.Function;
 //false positive in SpotBug -> cannot be used with FluentIterable...
 import com.google.common.collect.FluentIterable;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,9 +18,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.Optional;
-
 import javassist.ClassPool;
-
 import org.opendaylight.mdsal.binding.dom.codec.gen.impl.StreamWriterGenerator;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
 import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;

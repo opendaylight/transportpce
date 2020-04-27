@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import java.util.Comparator;
-
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.Port;
 
 

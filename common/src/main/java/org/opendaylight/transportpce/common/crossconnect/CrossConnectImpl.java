@@ -14,7 +14,6 @@ import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEV
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;

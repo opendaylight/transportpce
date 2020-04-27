@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce.gnpy;
 
 import com.google.common.io.CharStreams;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

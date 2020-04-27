@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.pce.graph;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.PathValidator;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;

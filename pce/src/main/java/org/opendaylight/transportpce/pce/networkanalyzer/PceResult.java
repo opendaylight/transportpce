@@ -11,7 +11,6 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

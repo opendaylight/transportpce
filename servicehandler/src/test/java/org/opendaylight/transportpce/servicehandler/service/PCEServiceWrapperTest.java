@@ -12,7 +12,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

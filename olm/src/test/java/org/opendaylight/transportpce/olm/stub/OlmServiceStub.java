@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.olm.stub;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
-
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.CalculateSpanlossBaseInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.CalculateSpanlossBaseOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.CalculateSpanlossCurrentInput;

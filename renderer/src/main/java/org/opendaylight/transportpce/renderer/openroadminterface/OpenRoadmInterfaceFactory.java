@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
 import java.util.List;
-
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;

@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.List;
-
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
