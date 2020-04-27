@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64a61cf6_f947f07c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-27T15:43:45Z",
+      "side": 1,
+      "message": "this was for Mg SR0\nfor Mg SR1 the right branch seems to be 12.1.x",
+      "range": {
+        "startLine": 9,
+        "startChar": 30,
+        "endLine": 9,
+        "endChar": 36
+      },
+      "revId": "caea25c4e9096c1b89d8b05f93d7174a9bede4ba",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93ba6629_2e1b6c72",
+        "filename": "lighty/build.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-27T15:43:45Z",
+      "side": 1,
+      "message": "This is for Mg SR0,  the right branch for Mg SR1 seems to be 12.1.x",
+      "range": {
+        "startLine": 8,
+        "startChar": 13,
+        "endLine": 8,
+        "endChar": 19
+      },
+      "revId": "caea25c4e9096c1b89d8b05f93d7174a9bede4ba",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
