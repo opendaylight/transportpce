@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.networkmodel.service;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

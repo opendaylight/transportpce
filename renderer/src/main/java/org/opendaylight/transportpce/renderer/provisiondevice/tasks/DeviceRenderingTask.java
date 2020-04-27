@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.List;
 import java.util.concurrent.Callable;
-
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRenderingResult;

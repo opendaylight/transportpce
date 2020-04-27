@@ -9,9 +9,7 @@
 package org.opendaylight.transportpce.renderer.stub;
 
 import java.util.Optional;
-
 import javax.annotation.Nonnull;
-
 import org.opendaylight.mdsal.binding.api.BindingService;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;

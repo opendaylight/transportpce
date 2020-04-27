@@ -8,12 +8,10 @@
 package org.opendaylight.transportpce.servicehandler.impl;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;

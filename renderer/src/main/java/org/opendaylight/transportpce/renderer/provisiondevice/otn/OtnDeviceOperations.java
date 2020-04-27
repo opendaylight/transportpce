@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.renderer.provisiondevice.otn;
 
 import java.util.List;
-
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;

@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

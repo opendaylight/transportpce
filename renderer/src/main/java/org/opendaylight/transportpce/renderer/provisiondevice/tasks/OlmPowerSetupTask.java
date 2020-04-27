@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.renderer.provisiondevice.OLMRenderingResult;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;

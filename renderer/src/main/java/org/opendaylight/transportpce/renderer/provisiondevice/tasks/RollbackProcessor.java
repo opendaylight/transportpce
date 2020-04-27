@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.Deque;
 import java.util.LinkedList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

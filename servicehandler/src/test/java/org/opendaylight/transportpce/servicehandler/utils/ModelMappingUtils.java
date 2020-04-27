@@ -8,7 +8,6 @@
 package org.opendaylight.transportpce.servicehandler.utils;
 
 import com.google.common.util.concurrent.ListenableFuture;
-
 import org.opendaylight.transportpce.servicehandler.MappingConstraints;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestOutput;
