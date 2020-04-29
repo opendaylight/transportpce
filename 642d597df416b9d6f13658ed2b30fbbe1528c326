@@ -88,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "bbb380bc_e608aa2f",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/openconfig/net/yang/types/inet/rev170824/HostBuilder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T18:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c25e656e_9ec413bd",
+      "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dee02264_4ee87aab",
         "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/openconfig/net/yang/types/inet/rev170824/IpAddressBuilder.java",
         "patchSetId": 2
@@ -102,6 +120,24 @@
       "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df44fa4a_e8d05d51",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/openconfig/net/yang/types/inet/rev170824/IpAddressBuilder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T18:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dee02264_4ee87aab",
+      "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +158,24 @@
     },
     {
       "key": {
+        "uuid": "7cccb4ba_0cf7cfde",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/openconfig/net/yang/types/inet/rev170824/IpPrefixBuilder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T18:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e86ecaeb_970c66a1",
+      "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "148eb2a2_27826c7f",
         "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/ospf/rev200327/AreaIdTypeBuilder.java",
         "patchSetId": 2
@@ -136,6 +190,24 @@
       "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "305d1463_ce7601f8",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/ospf/rev200327/AreaIdTypeBuilder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T18:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "148eb2a2_27826c7f",
+      "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -156,6 +228,24 @@
     },
     {
       "key": {
+        "uuid": "0b3df556_61711daf",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/ospf/rev200327/LsaKeyLsaIdBuilder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T18:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2b2e0f12_4170e26b",
+      "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e48950a_507e5dda",
         "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/ospf/rev200327/ospfv2/lsa/body/router/LinkLinkDataBuilder.java",
         "patchSetId": 2
@@ -170,6 +260,24 @@
       "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e341783c_3c6afbfa",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/ospf/rev200327/ospfv2/lsa/body/router/LinkLinkDataBuilder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T18:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7e48950a_507e5dda",
+      "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +298,24 @@
     },
     {
       "key": {
+        "uuid": "570ea4c2_ad082347",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/ospf/rev200327/ospfv2/lsa/body/router/LinkLinkIdBuilder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T18:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0e12b54d_b2e1d6cc",
+      "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c51a50e_ac416171",
         "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/syslog/rev191129/syslog/selector/log/selector/selector/facility/log/facility/LogFacilityFacilityBuilder.java",
         "patchSetId": 2
@@ -204,6 +330,24 @@
       "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01d2bd60_13155f1f",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/syslog/rev191129/syslog/selector/log/selector/selector/facility/log/facility/LogFacilityFacilityBuilder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T18:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6c51a50e_ac416171",
+      "revId": "642d597df416b9d6f13658ed2b30fbbe1528c326",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
