@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b8546dc0_06d1cd13",
+        "filename": "api/src/main/yang/transportpce-portmapping@2020-01-28.yang",
+        "patchSetId": 16
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-29T12:55:15Z",
+      "side": 1,
+      "message": "Modifying yang model should also require changing the yang model version (with all consequences on TransportPCE code)",
+      "range": {
+        "startLine": 179,
+        "startChar": 8,
+        "endLine": 179,
+        "endChar": 25
+      },
+      "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "945f3416_d4d4f0e7",
         "filename": "api/src/main/yang/transportpce-portmapping@2020-01-28.yang",
         "patchSetId": 16
@@ -18,6 +41,29 @@
         "startChar": 0,
         "endLine": 184,
         "endChar": 9
+      },
+      "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11ad9a59_79940256",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-04-29T12:55:15Z",
+      "side": 1,
+      "message": "Since this method is never used, it makes the build being failed. Maybe add a SuppressFBWarnings annotation with value \u003d UPM_UNCALLED_PRIVATE_METHOD?",
+      "range": {
+        "startLine": 532,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 5
       },
       "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
