@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b04851a2_0c9b0c97",
+        "filename": "api/src/main/yang/transportpce-portmapping@2020-01-28.yang",
+        "patchSetId": 16
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T14:07:50Z",
+      "side": 1,
+      "message": "Agreed. see previous comment. I marked it as resolved to avoid duplicate tracking.",
+      "parentUuid": "b8546dc0_06d1cd13",
+      "range": {
+        "startLine": 179,
+        "startChar": 8,
+        "endLine": 179,
+        "endChar": 25
+      },
+      "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "945f3416_d4d4f0e7",
         "filename": "api/src/main/yang/transportpce-portmapping@2020-01-28.yang",
         "patchSetId": 16
@@ -48,6 +72,29 @@
     },
     {
       "key": {
+        "uuid": "fba8ea85_08ea8e59",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T14:07:50Z",
+      "side": 1,
+      "message": "revision should stay sticked to ease migration",
+      "range": {
+        "startLine": 430,
+        "startChar": 70,
+        "endLine": 431,
+        "endChar": 26
+      },
+      "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "11ad9a59_79940256",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
         "patchSetId": 16
@@ -59,6 +106,30 @@
       "writtenOn": "2020-04-29T12:55:15Z",
       "side": 1,
       "message": "Since this method is never used, it makes the build being failed. Maybe add a SuppressFBWarnings annotation with value \u003d UPM_UNCALLED_PRIVATE_METHOD?",
+      "range": {
+        "startLine": 532,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 5
+      },
+      "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d2fd8b4_a3e4cefd",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-29T14:07:50Z",
+      "side": 1,
+      "message": "Correct but I don\u0027t think it is a good idea to suppress the warning if it is not used.\nIt\u0027d better to remove it completely or to adapt it, maybe somewhere else, for example to implement setLcpHashValue.",
+      "parentUuid": "11ad9a59_79940256",
       "range": {
         "startLine": 532,
         "startChar": 0,
