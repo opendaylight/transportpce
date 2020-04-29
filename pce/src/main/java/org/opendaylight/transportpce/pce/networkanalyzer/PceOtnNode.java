@@ -271,6 +271,7 @@ public class PceOtnNode implements PceNode {
         return false;
     }
 
+/*
     private Boolean findClientCompliantInterface(List<SupportedInterfaceCapability> sic) {
         boolean compliant = false;
         for (SupportedInterfaceCapability sit : sic) {
@@ -307,7 +308,9 @@ public class PceOtnNode implements PceNode {
         }
         return compliant;
     }
+*/
 
+/*
     private Boolean findNetworkCompliantInterface(List<SupportedInterfaceCapability> sic) {
         boolean compliant = false;
         for (SupportedInterfaceCapability sit : sic) {
@@ -331,6 +334,7 @@ public class PceOtnNode implements PceNode {
         }
         return compliant;
     }
+*/
 
     public void validateXponder(String anodeId, String znodeId) {
         if (!isValid()) {

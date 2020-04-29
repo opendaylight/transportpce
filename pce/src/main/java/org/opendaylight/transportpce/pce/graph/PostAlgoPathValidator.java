@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.graph;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,6 +37,9 @@ public class PostAlgoPathValidator {
     public static final Long CONST_OSNR = 1L;
     public static final double SYS_MARGIN = 0;
 
+    @SuppressFBWarnings(
+        value = "SF_SWITCH_FALLTHROUGH",
+        justification = "intentional fallthrough")
     public PceResult checkPath(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
         PceResult pceResult, PceConstraints pceHardConstraints, String serviceType) {
 
@@ -344,6 +348,7 @@ public class PostAlgoPathValidator {
         return tribSlotMap;
     }
 
+/*
     private List<List<Uint16>> chooseTribSlot3(GraphPath<String, PceGraphEdge> path,
         Map<NodeId, PceNode> allPceNodes) {
         List<List<Uint16>> tribSlot = new ArrayList<>();
@@ -398,6 +403,7 @@ public class PostAlgoPathValidator {
             return tribSlot;
         }
     }
+*/
 
     // Check the path OSNR
     private boolean checkOSNR(GraphPath<String, PceGraphEdge> path) {
