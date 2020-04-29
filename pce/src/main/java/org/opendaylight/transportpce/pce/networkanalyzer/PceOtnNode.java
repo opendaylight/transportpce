@@ -271,67 +271,6 @@ public class PceOtnNode implements PceNode {
         return false;
     }
 
-    private Boolean findClientCompliantInterface(List<SupportedInterfaceCapability> sic) {
-        boolean compliant = false;
-        for (SupportedInterfaceCapability sit : sic) {
-            String interfacetype = sit.getIfCapType().getName();
-            switch (interfacetype) {
-                case "If1GEODU0":
-                case "If1GE":
-                    if ("1GE".equals(this.otnServiceType)) {
-                        compliant = true;
-                    }
-                    break;
-                case "If10GEODU2e":
-                case "If10GE":
-                    if ("10GE".equals(this.otnServiceType)) {
-                        compliant = true;
-                    }
-                    break;
-                case "If100GEODU4":
-                case "If100GE":
-                    if ("100GE".equals(this.otnServiceType)) {
-                        compliant = true;
-                    }
-                    break;
-                case "IfOTU4ODU4":
-                case "IfOCHOTU4ODU4":
-                    if ("OTU4".equals(this.otnServiceType) || "ODU4".equals(this.otnServiceType)) {
-                        compliant = true;
-                    }
-                    break;
-                default:
-                    compliant = false;
-                    break;
-            }
-        }
-        return compliant;
-    }
-
-    private Boolean findNetworkCompliantInterface(List<SupportedInterfaceCapability> sic) {
-        boolean compliant = false;
-        for (SupportedInterfaceCapability sit : sic) {
-            String interfacetype = sit.getIfCapType().toString();
-            switch (interfacetype) {
-                case "IfOTU4ODU4":
-                case "IfOCHOTU4ODU4":
-                    compliant = true;
-                    break;
-                case "IfOTU2ODU2":
-                case "IfOCHOTU2ODU2":
-                    if (("1GE".equals(this.otnServiceType)) || ("10GE".equals(this.otnServiceType))) {
-                        compliant = true;
-                    }
-                    break;
-                // add all use case with higher rate interfaces when it shows up
-                default:
-                    compliant = false;
-                    break;
-            }
-        }
-        return compliant;
-    }
-
     public void validateXponder(String anodeId, String znodeId) {
         if (!isValid()) {
             return;
