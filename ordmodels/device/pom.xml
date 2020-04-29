@@ -73,7 +73,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
              <Include-Resource>{maven-resources},target/classes/LICENSE,META-INF/git.properties=-target/classes/META-INF/git.properties</Include-Resource>
              <_exportcontents>
                org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.link,
-               org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.links,
                org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.links,*
              </_exportcontents>
            </instructions>
