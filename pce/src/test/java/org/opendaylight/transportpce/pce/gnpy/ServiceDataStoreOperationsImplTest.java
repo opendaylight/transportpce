@@ -32,4 +32,9 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         serviceDataStoreOperations.createXMLFromDevice(this.getDataStoreContextUtil(),
                 orgOpenroadmDevice, "some-output");
     }
+
+    @Test
+    public void writeStringFile() throws GnpyException {
+        serviceDataStoreOperations.writeStringFile("filename","data");
+    }
 }
