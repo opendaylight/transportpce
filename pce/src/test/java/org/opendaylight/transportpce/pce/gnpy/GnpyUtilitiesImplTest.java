@@ -8,16 +8,15 @@
 package org.opendaylight.transportpce.pce.gnpy;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
+import org.opendaylight.transportpce.pce.utils.PceTestUtils;
+import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-
-@Ignore
 
 public class GnpyUtilitiesImplTest extends AbstractTest {
 
@@ -26,13 +25,16 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
 
     @Before
     public void setUp()throws Exception {
-        networkTransaction = new NetworkTransactionImpl(new RequestProcessor(this.getNewDataBroker()));
+        PceTestUtils.writeNetworkIntoDataStore(this.getDataBroker(), this.getDataStoreContextUtil(),
+                TransactionUtils.getNetworkForSpanLoss());
+        networkTransaction = new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
 
-        gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction, PceTestData.getPCE_test1_request_54());
+
     }
 
     @Test(expected = Exception.class)
     public void askNewPathFromGnpyTest() throws Exception {
+        gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction, PceTestData.getPCERequest());
         PceConstraintsCalc constraints =
                 new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(), networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
@@ -41,6 +43,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
 
     @Test(expected = Exception.class)
     public void gnpyResponseOneDirectionTest() throws Exception {
+        gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction, PceTestData.getPCERequest());
         gnpyUtilitiesImpl.gnpyResponseOneDirection(null);
     }
 

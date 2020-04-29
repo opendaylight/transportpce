@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
+import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
 
@@ -25,11 +26,13 @@ public class PceCalculationTest extends AbstractTest {
         PceResult pceResult = new PceResult();
         pceResult.setRC("200");
 
+        PceConstraintsCalc pceConstraintsCalc = new PceConstraintsCalc(PceTestData
+                .getPCERequest(), new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())));
         pceCalculation = new PceCalculation(
                 PceTestData.getPCERequest(),
                 new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())),
-                null,
-                null,
+                pceConstraintsCalc.getPceHardConstraints(),
+                pceConstraintsCalc.getPceSoftConstraints(),
                 pceResult);
 
 

@@ -46,6 +46,7 @@ public class PathComputationServiceImplTest extends AbstractTest {
 
     @Test
     public void pathComputationRequestTest() {
+        pathComputationServiceImpl.generateGnpyResponse(null,"path");
         Assert.assertNotNull(
                 pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_simpletopology_test1_request()));
 
