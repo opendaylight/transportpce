@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce.service;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -74,6 +75,9 @@ public class PathComputationServiceImpl implements PathComputationService {
         LOG.info("close.");
     }
 
+    @SuppressFBWarnings(
+        value = "UPM_UNCALLED_PRIVATE_METHOD",
+        justification = "false positive, this method is used by public method cancelResourceReserve")
     private void sendNotifications(ServicePathNotificationTypes servicePathNotificationTypes, String serviceName,
             RpcStatusEx rpcStatusEx, String message, PathDescription pathDescription) {
         ServicePathRpcResultBuilder servicePathRpcResultBuilder =

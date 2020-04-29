@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.graph;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,6 +37,9 @@ public class PostAlgoPathValidator {
     public static final Long CONST_OSNR = 1L;
     public static final double SYS_MARGIN = 0;
 
+    @SuppressFBWarnings(
+        value = "SF_SWITCH_FALLTHROUGH",
+        justification = "intentional fallthrough")
     public PceResult checkPath(GraphPath<String, PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes,
         PceResult pceResult, PceConstraints pceHardConstraints, String serviceType) {
 
@@ -342,61 +346,6 @@ public class PostAlgoPathValidator {
         }
         tribSlotMap.forEach((k,v) -> LOG.info("TribSlotMap : k = {}, v = {}", k, v));
         return tribSlotMap;
-    }
-
-    private List<List<Uint16>> chooseTribSlot3(GraphPath<String, PceGraphEdge> path,
-        Map<NodeId, PceNode> allPceNodes) {
-        List<List<Uint16>> tribSlot = new ArrayList<>();
-        boolean statusOK = true;
-        boolean check = false;
-        Object nodeClass = allPceNodes.getClass();
-        if (nodeClass.getClass().isInstance(PceNode.class)) {
-            LOG.debug("In choosetribSlot: AllPceNodes contains PceNode instance, no trib port search");
-            return tribSlot;
-        } else if (nodeClass.getClass().isInstance(PceNode.class)) {
-            LOG.debug("In choosetribPort: {} {}", path.getLength(), path);
-        }
-        for (PceGraphEdge edge : path.getEdgeList()) {
-            LOG.debug("In chooseTribSlot: source {} ", edge.link().getSourceId());
-            PceNode pceNode = allPceNodes.get(edge.link().getSourceId());
-            Object tps = allPceNodes.get(edge.link().getSourceTP());
-            Object tpd = allPceNodes.get(edge.link().getDestTP());
-            if ((pceNode.getAvailableTribSlots().containsKey(tps.toString()))
-                && (pceNode.getAvailableTribSlots().containsKey(tpd.toString()))) {
-                List<Uint16> tribSlotEdgeSourceN = pceNode.getAvailableTribSlots().get(tps.toString());
-                List<Uint16> tribSlotEdgeDestN = pceNode.getAvailableTribSlots().get(tps.toString());
-                check = false;
-                for (int i = 0; i <= 79; i++) {
-                    if (tribSlotEdgeSourceN.get(i) == null) {
-                        break;
-                    }
-                    // TODO This will need to be modified as soon as the trib-slots allocation per
-                    // trib-port
-                    // policy applied by the different manufacturer is known
-                    if (tribSlotEdgeSourceN.get(i).equals(tribSlotEdgeDestN.get(i))) {
-                        check = true;
-                    } else {
-                        check = false;
-                        LOG.debug("In chooseTribSlot: Misalignement of trib slots between source {} and dest {}",
-                            edge.link().getSourceId(), edge.link().getDestId());
-                        break;
-                    }
-                }
-                if (check) {
-                    tribSlot.add(tribSlotEdgeSourceN);
-                }
-            } else {
-                LOG.debug("In chooseTribSlot: source {} does not have provisonned hosting HO interface ",
-                    edge.link().getSourceId());
-                statusOK = false;
-            }
-        }
-        if (statusOK && check) {
-            return tribSlot;
-        } else {
-            tribSlot.clear();
-            return tribSlot;
-        }
     }
 
     // Check the path OSNR
