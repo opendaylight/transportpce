@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00f9b322_b1d56978",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-30T13:44:33Z",
+      "side": 1,
+      "message": "can be done with this command:\n$ for file in `grep -lR transportpce.portmapping.rev200128`;do sed \u0027s/transportpce.portmapping.rev200128/transportpce.portmapping.rev200429/g\u0027 $file \u003e/tmp/pivot;mv /tmp/pivot $file;done",
+      "revId": "db79dc6ee482092c81756e6207f87366bf7b4a9d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
