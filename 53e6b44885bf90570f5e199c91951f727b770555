@@ -46,6 +46,30 @@
       "revId": "53e6b44885bf90570f5e199c91951f727b770555",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c10e3ba_a58b9f8d",
+        "filename": "pce/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-30T08:30:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13b82489_5ec1a466",
+      "range": {
+        "startLine": 108,
+        "startChar": 2,
+        "endLine": 111,
+        "endChar": 18
+      },
+      "revId": "53e6b44885bf90570f5e199c91951f727b770555",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
