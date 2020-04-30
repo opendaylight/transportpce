@@ -29,6 +29,10 @@ module transportpce-portmapping {
      AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
      ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
 
+  revision 2020-04-29 {
+    description
+      "Add SAPI/DAPI lcp hash value";
+  }
   revision 2020-01-28 {
     description
       "Add necessary parameters to consolidate OTN
@@ -175,6 +179,12 @@ module transportpce-portmapping {
           description
             "For XPDR unidirectional NETWORK port, associate two logical-connection-points
              from device/partner port data";
+        }
+        leaf lcp-hash-val {
+          type string;
+          description
+            "Hash value generated from node-id and lcp. This value will be used to map-
+            back SAPI and DAPI resource";
         }
       }
       list cp-to-degree {
