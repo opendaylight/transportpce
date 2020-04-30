@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7ec36988_a4cae157",
+        "filename": "api/src/main/yang/transportpce-portmapping@2020-01-28.yang",
+        "patchSetId": 16
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-30T13:52:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "945f3416_d4d4f0e7",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 9
+      },
+      "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fba8ea85_08ea8e59",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
         "patchSetId": 16
@@ -159,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "f238349c_35bc42d0",
+        "filename": "tests/transportpce_tests/1.2.1/test_renderer_service_path_nominal.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-30T13:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eac0b9b2_f9b6310c",
+      "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6e1c351_73993b15",
         "filename": "tests/transportpce_tests/1.2.1/test_renderer_service_path_nominal.py",
         "patchSetId": 16
@@ -182,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "383d39dc_1b96cd28",
+        "filename": "tests/transportpce_tests/1.2.1/test_renderer_service_path_nominal.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-30T13:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6e1c351_73993b15",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 7
+      },
+      "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77870be5_5980fa3b",
         "filename": "tests/transportpce_tests/1.2.1/test_renderer_service_path_nominal.py",
         "patchSetId": 16
@@ -202,6 +268,30 @@
       "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af77c8bc_0e42b645",
+        "filename": "tests/transportpce_tests/1.2.1/test_renderer_service_path_nominal.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-04-30T13:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77870be5_5980fa3b",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 48
+      },
+      "revId": "502839e94ea1e07fab2f393a617fcc217632acbc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
