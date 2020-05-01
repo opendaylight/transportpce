@@ -1218,6 +1218,16 @@ module org-openroadm-device {
              node that was changed, or omit this object, if the
              exact node is not known.";
       }
+      leaf before {
+        type string;
+        description
+            "Information before the change of the specified target.";
+      }
+      leaf after {
+        type string;
+        description
+            "Information after the change of the specified target.";
+      }
       leaf operation {
         type ietf-nc:edit-operation-type;
         description

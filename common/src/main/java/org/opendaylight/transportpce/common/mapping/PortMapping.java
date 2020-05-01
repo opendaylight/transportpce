@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 
 public interface PortMapping {
 
@@ -80,7 +81,35 @@ public interface PortMapping {
      */
     Mapping getMapping(String nodeId, String logicalConnPoint);
 
+    /**
+     * This method updates logical to physical port mapping for a given device.
+     * Instead of parsing all the circuit packs/ports in the device this methods
+     * does a selective read operation on degree/srg subtree to get circuit
+     * packs/ports that map to :
+     *
+     * @param nodeId
+     *            node ID
+     * @param mapping
+     *            mapping to update
+     *
+     * @return true/false based on status of operation
+     */
     boolean updateMapping(String nodeId, Mapping mapping);
+
+    /**
+     * This method creates logical to physical port mapping for a given LOGICAL
+     * connection point.
+     *
+     * @param nodeId
+     *            node ID
+     * @param port
+     *            port to update
+     * @param cpackName
+     *            cpackName to update
+     *
+     * @return true/false based on status of operation
+     */
+    boolean createMapping(String nodeId, Ports port, String cpackName);
 
     /**
      * Returns all Mapping informations for a given ordm device.
@@ -95,4 +124,16 @@ public interface PortMapping {
      * @return node data if success otherwise null.
      */
     Nodes getNode(String nodeId);
+
+    /**
+     * This method deletes logical to physical port mapping for a given node.
+     *
+     * @param nodeId
+     *            node ID
+     * @param oldMapping
+     *            oldMapping to update
+
+     * @return true/false based on status of operation
+     */
+    boolean deleteMapping(String nodeId, Mapping oldMapping);
 }

@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.networkmodel.service;
 
 import java.util.List;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
 
@@ -16,9 +17,9 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev15
  */
 public interface NetworkModelService {
 
+
     /**
      * Create new OpenROADM node in all OpenROADM topologies.
-     *
      * @param nodeId
      *   unique node ID of new OpenROADM node
      * @param nodeVersion
@@ -27,10 +28,22 @@ public interface NetworkModelService {
     void createOpenRoadmNode(String nodeId, String nodeVersion);
 
     /**
+     * Update given OpenROADM node in all OpenROADM topologies.
+     * @param nodeId
+     *   unique node ID of OpenROADM node
+     * @param logicalConnectionPoint
+     *   Connection point that has changed with the notification
+     * @param port
+     *   Port changed
+     * @param cpackName
+     *   Circuit pack name
+     */
+    void updateOpenRoadmNode(String nodeId, String logicalConnectionPoint, Ports port, String cpackName);
+
+    /**
      * Delete OpenROADM node mapping and topologies.
      *
-     * @param nodeId
-     *   unique node ID of OpenROADM node.
+     * @param nodeId unique node ID of OpenROADM node.
      *
      */
     void deleteOpenRoadmnode(String nodeId);
@@ -44,6 +57,26 @@ public interface NetworkModelService {
      *   connection status of the node
      */
     void setOpenRoadmNodeStatus(String nodeId, NetconfNodeConnectionStatus.ConnectionStatus connectionStatus);
+
+    /**
+     * Set/update openroadm topology after port change.
+     *
+     * @param nodeId
+     *   unique node ID of new OpenROADM node
+     * @param lcp
+     *   logical connection point altered
+     */
+    void updateTopoFromIntoOut(String nodeId, String lcp);
+
+    /**
+     * Set/update openroadm topology after port change.
+     *
+     * @param nodeId
+     *   unique node ID of new OpenROADM node
+     * @param lcp
+     *   logical connection point altered
+     */
+    void updateTopoFromOuttoIn(String nodeId, String lcp);
 
     /**
      * create new otn link in otn-topology.
@@ -93,6 +126,6 @@ public interface NetworkModelService {
      *   True indicates if the low-order otn service must be deleted
      */
     void updateOtnLinks(List<String> nodeTps, String serviceRate, Short tribPortNb, Short tribSoltNb,
-        boolean isDeletion);
+                        boolean isDeletion);
 
 }

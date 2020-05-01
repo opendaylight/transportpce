@@ -31,6 +31,8 @@ import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.yangtools.yang.binding.Enumeration;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
@@ -43,6 +45,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.InterfacesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.AdminStates;
+
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.PathArgument;
@@ -87,18 +91,22 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                                         modified.getDataType(), modified.getIdentifier(),modified.getModificationType(),
                                         modified.getDataBefore(), modified.getDataAfter());
                                 switch (modified.getModificationType()) {
-                                  case SUBTREE_MODIFIED:
-                                  case WRITE :
-                                      processChange(rootPath.getRootIdentifier(), modified, dataAfter);
-                                      updateCircuitPackInterface(rootPath.getRootIdentifier(), modified, false);
-                                      break;
-                                  case DELETE:
-                                      updateCircuitPackInterface(rootPath.getRootIdentifier(), modified, true);
-                                      deleteContainer(rootPath, modified);
-                                      break;
-                                  default:
-                                      break;
-                               }
+                                    case SUBTREE_MODIFIED:
+                                    case WRITE :
+                                        // Applies the corresponding change to the device datastore
+                                        processChange(rootPath.getRootIdentifier(), modified, dataAfter);
+                                        // This function add a list of interfaces that are linked to a port
+                                        updateCircuitPackInterface(rootPath.getRootIdentifier(), modified, false);
+                                        // This function will change the operational state of a port accordingly to the admin state
+                                        updateCircuitPackPort(rootPath.getRootIdentifier(), modified);
+                                        break;
+                                    case DELETE:
+                                        updateCircuitPackInterface(rootPath.getRootIdentifier(), modified, true);
+                                        deleteContainer(rootPath, modified);
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
                         //processChange(rootPath.getRootIdentifier(), dataAfter);
@@ -125,7 +133,7 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
      * @param id container identifier
      */
     private void deleteContainer(DataTreeIdentifier<OrgOpenroadmDevice> rootPath,
-            DataObjectModification<? extends DataObject> modified) {
+                                 DataObjectModification<? extends DataObject> modified) {
         final String ROADM_CONNECTIONS = "interface org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206"
                 + ".org.openroadm.device.container.org.openroadm.device.RoadmConnections";
         final String INTERFACE_GRP = "interface org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206"
@@ -140,7 +148,7 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                 case ROADM_CONNECTIONS:
                     LOG.info("roadm-connections ...");
                     iid = rootPath.getRootIdentifier().child(RoadmConnections.class,
-                        new RoadmConnectionsKey(key));
+                            new RoadmConnectionsKey(key));
                     break;
                 case INTERFACE_GRP:
                     LOG.info("interface ....");
@@ -194,7 +202,7 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
      * @param dataAfter OrgOpenroadmDevice to be merged
      */
     private void processChange(final InstanceIdentifier<OrgOpenroadmDevice> id,
-            DataObjectModification<? extends DataObject> modified, final OrgOpenroadmDevice dataAfter) {
+                               DataObjectModification<? extends DataObject> modified, final OrgOpenroadmDevice dataAfter) {
         LOG.info("processing change ...");
         WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
         if (writeTx != null) {
@@ -227,17 +235,17 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
      * @param delete if yes delete interface from circuitpacks else adding interface
      */
     private void updateCircuitPackInterface(final InstanceIdentifier<OrgOpenroadmDevice> id,
-            DataObjectModification<? extends DataObject> modified, boolean delete) {
+                                            DataObjectModification<? extends DataObject> modified, boolean delete) {
         LOG.info("Updating circuit packs interface ...");
         final String INTERFACE_GRP = "interface org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206"
                 + ".interfaces.grp.Interface";
         InstanceIdentifier<CircuitPacks> iid = null;
         if (modified != null) {
             Class<? extends DataObject> type = modified.getDataType();
-            LOG.info("getting container type '{}' ...", type.toString());
+            LOG.info("getting container type '{}'...", type.toString());
             if (type != null) {
                 if (type.toString().compareTo(INTERFACE_GRP) == 0) {
-                    LOG.warn("interface update ! ");
+                    LOG.warn("interface update!");
                     Interface data = null;
                     if (delete) {
                         data = (Interface) modified.getDataBefore();
@@ -267,7 +275,7 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                                                 LOG.info("port found");
                                                 PortsBuilder newPorts = new PortsBuilder(ports);
                                                 List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-                                                .port.Interfaces> value = newPorts.getInterfaces();
+                                                        .port.Interfaces> value = newPorts.getInterfaces();
                                                 if (!delete) {
                                                     LOG.info("adding interface info to port '{}'", port);
                                                     if (value == null || value.isEmpty()) {
@@ -278,8 +286,8 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                                                                 .build());
                                                     } else { // value is not empty
                                                         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-                                                        .port.Interfaces tmp = getInterfaces(value, interfaceName);
-                                                        if( tmp != null) {
+                                                                .port.Interfaces tmp = getInterfaces(value, interfaceName);
+                                                        if(tmp != null) {
                                                             LOG.warn("Interfaces with name '{}' already exists !",interfaceName);
                                                             break;
                                                         } else { // no interface found
@@ -290,11 +298,11 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                                                 } else {
                                                     LOG.info("removing interface info from port '{}'", port);
                                                     org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
-                                                    .port.Interfaces tmp = getInterfaces(value, interfaceName);
-                                                    if( tmp != null) {
+                                                            .port.Interfaces tmp = getInterfaces(value, interfaceName);
+                                                    if(tmp != null) {
                                                         LOG.info("Interfaces with name '{}' gets",interfaceName);
                                                         value.remove(tmp);
-                                                    }else {
+                                                    } else {
                                                         LOG.error("Interfaces list is null");
                                                         value = new ArrayList<org.opendaylight.yang.gen.v1.http.org.openroadm
                                                                 .device.rev170206.port.Interfaces>();
@@ -320,7 +328,81 @@ final class DeviceChangeListener implements DataTreeChangeListener<OrgOpenroadmD
                         }
                     }
                 } else {
-                    LOG.warn("not an interface update ! ");
+                    LOG.warn("not an interface update!");
+                }
+            }
+        } else {
+            LOG.error("DataObjectModification is null");
+        }
+    }
+
+    /**
+     *Update Port info on
+     *Ports list in CircuitPacks.
+     *
+     * @param id device InstanceIdentifier
+     * @param modified DataObjectModification
+     */
+    private void updateCircuitPackPort(final InstanceIdentifier<OrgOpenroadmDevice> id,
+                                       DataObjectModification<? extends DataObject> modified) {
+        LOG.info("Updating circuit packs ports ...");
+        final String CIRCUITPACK_CLASS =
+                "interface org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks";
+
+        InstanceIdentifier<CircuitPacks> iid = null;
+        if (modified != null) {
+            Class<? extends DataObject> type = modified.getDataType();
+            LOG.info("New function, getting container type '{}'...", type.toString());
+            if (type != null) {
+                LOG.info("Comparition to circuit class {}", type.toString().compareTo(CIRCUITPACK_CLASS));
+                LOG.info("Comparition to circuit class {}", type.toString().equals(CIRCUITPACK_CLASS));
+                if (type.toString().compareTo(CIRCUITPACK_CLASS) == 0) {
+                    LOG.warn("circuit pack update!");
+                    CircuitPacks dataAft = (CircuitPacks) modified.getDataAfter();
+                    CircuitPacks dataBef = (CircuitPacks) modified.getDataBefore();
+                    LOG.info("CircuitPack data gets : {}", dataAft.toString());
+                    if (dataAft != null && dataBef != null) {
+                        String circuitPackName = dataAft.getCircuitPackName();
+                        boolean portChanged = false;
+                        // List<Ports> portsList1 = dataAft.getPorts();
+                        // List<Ports> portsList2 = dataBef.getPorts();
+                        if (circuitPackName != null && dataAft.getPorts() != null && dataBef.getPorts() != null) {
+                            iid = id.child(CircuitPacks.class, new CircuitPacksKey(circuitPackName));
+                            // OrgOpenroadmDevice operDevice = readDeviceOperData(id);
+                            for (int i = 0; i < dataAft.getPorts().size(); i++) {
+                                if (!dataAft.getPorts().get(i).getAdministrativeState().getName().equals(dataBef.getPorts().get(i).getAdministrativeState().getName())) {
+                                    String portState = dataAft.getPorts().get(i).getAdministrativeState().getName();
+                                    LOG.info("Update of admin state in port {}", dataAft.getPorts().get(i).getPortName());
+                                    PortsBuilder newPorts = new PortsBuilder(dataAft.getPorts().get(i));
+                                    LOG.info("New state {}", portState);
+                                    // This case isnt needed, but as we only want to handle in and out of service we use it.
+                                    switch (portState) {
+                                        case "inService":
+                                            newPorts.setOperationalState(State.forValue(1));
+                                            break;
+                                        case "outOfService":
+                                            newPorts.setOperationalState(State.forValue(2));
+                                            break;
+                                        default:
+                                            LOG.error("State {} not recognized", portState);
+                                    }
+                                    portChanged = true;
+                                    dataAft.getPorts().set(i, newPorts.build());
+                                } else {
+                                    LOG.info("Port {} hasnt changed", dataAft.getPorts().get(i).getPortName());
+                                }
+                            }
+                            if (portChanged) {
+                                update(dataAft, iid);
+                            } else {
+                                LOG.info("Any port in circuit pack {} has changed its state", circuitPackName);
+                            }
+                        } else {
+                            LOG.error("SupportingCircuitPackName / SupportingPort / Interface Name are/is null !");
+                        }
+                    }
+                } else {
+                    LOG.warn("not a circuit pack update!");
                 }
             }
         } else {
