@@ -91,8 +91,10 @@ public class PceSendingPceRPCs {
 
         PceCalculation nwAnalizer =
             new PceCalculation(input, networkTransaction, hardConstraints, softConstraints, rc);
+        LOG.info("Network analyzer result = {}", nwAnalizer.toString());
         nwAnalizer.retrievePceNetwork();
         rc = nwAnalizer.getReturnStructure();
+        LOG.info("Structure of network = {}", rc.toString());
         String serviceType = nwAnalizer.getServiceType();
         if (!rc.getStatus()) {
             LOG.error("In pathComputationWithConstraints, nwAnalizer: result = {}", rc);

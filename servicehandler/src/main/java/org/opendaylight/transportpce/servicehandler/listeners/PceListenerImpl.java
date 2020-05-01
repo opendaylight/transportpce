@@ -33,10 +33,10 @@ public class PceListenerImpl implements TransportpcePceListener {
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
 
     private ServicePathRpcResult servicePathRpcResult;
-    private RendererServiceOperations rendererServiceOperations;
-    private ServiceDataStoreOperations serviceDataStoreOperations;
+    public static RendererServiceOperations rendererServiceOperations;
+    public static ServiceDataStoreOperations serviceDataStoreOperations;
     private PCEServiceWrapper pceServiceWrapper;
-    private ServiceInput input;
+    public static ServiceInput input; // making it static so that it is shared among all instances of pceListeners? Nope
     private Boolean serviceReconfigure;
     private Boolean tempService;
     private Boolean serviceFeasiblity;
@@ -44,6 +44,7 @@ public class PceListenerImpl implements TransportpcePceListener {
     public PceListenerImpl(RendererServiceOperations rendererServiceOperations,
             PathComputationService pathComputationService, NotificationPublishService notificationPublishService,
             ServiceDataStoreOperations serviceDataStoreOperations) {
+        LOG.info("Creation of PCE listeners");
         this.rendererServiceOperations = rendererServiceOperations;
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         this.serviceDataStoreOperations = serviceDataStoreOperations;
@@ -66,25 +67,31 @@ public class PceListenerImpl implements TransportpcePceListener {
                     if (servicePathRpcResult.getStatus() == RpcStatusEx.Successful) {
                         LOG.info("PCE calculation done OK !");
                         if (servicePathRpcResult.getPathDescription() != null) {
+                            LOG.info("Checking input of service create = {}", this.input);
+                            ServiceInput serviceInput = this.input;
+                            LOG.info("Checking input of service create = {}", serviceInput.getServiceCreateInput());
+                            LOG.info("Checking input of service create = {}", serviceInput.getServiceAEnd());
+                            LOG.info("Checking input of service create = {}", serviceInput.getServiceZEnd());
                             pathDescription = new PathDescriptionBuilder()
                                     .setAToZDirection(servicePathRpcResult.getPathDescription().getAToZDirection())
                                 .setZToADirection(servicePathRpcResult.getPathDescription().getZToADirection()).build();
                             LOG.info("PathDescription gets : {}", pathDescription);
                             if (!serviceFeasiblity) {
-                                if (input == null) {
+                                if (serviceInput == null) {
                                     LOG.error("Input is null !");
                                     return;
                                 }
                                 OperationResult operationResult = null;
                                 if (tempService) {
                                     operationResult = this.serviceDataStoreOperations
-                                        .createTempService(input.getTempServiceCreateInput());
+                                        .createTempService(serviceInput.getTempServiceCreateInput(),
+                                                pathDescription);
                                     if (!operationResult.isSuccess()) {
                                         LOG.error("Temp Service not created in datastore !");
                                     }
                                 } else {
                                     operationResult = this.serviceDataStoreOperations
-                                        .createService(input.getServiceCreateInput());
+                                        .createService(serviceInput.getServiceCreateInput(), pathDescription);
                                     if (!operationResult.isSuccess()) {
                                         LOG.error("Service not created in datastore !");
                                     }
@@ -98,12 +105,13 @@ public class PceListenerImpl implements TransportpcePceListener {
                                 PathComputationRequestOutput pceResponse = new PathComputationRequestOutputBuilder()
                                         .setResponseParameters(responseParameters).build();
                                 OperationResult operationServicePathSaveResult =
-                                        this.serviceDataStoreOperations.createServicePath(input, pceResponse);
+                                        this.serviceDataStoreOperations.createServicePath(serviceInput, pceResponse);
                                 if (!operationServicePathSaveResult.isSuccess()) {
                                     LOG.error("Service Path not created in datastore !");
                                 }
                                 ServiceImplementationRequestInput serviceImplementationRequest =
-                                        ModelMappingUtils.createServiceImplementationRequest(input, pathDescription);
+                                        ModelMappingUtils.createServiceImplementationRequest(serviceInput,
+                                                pathDescription);
                                 LOG.info("Sending serviceImplementation request : {}", serviceImplementationRequest);
                                 this.rendererServiceOperations.serviceImplementation(serviceImplementationRequest);
                             } else {
@@ -123,20 +131,20 @@ public class PceListenerImpl implements TransportpcePceListener {
                     if (servicePathRpcResult.getStatus() == RpcStatusEx.Successful) {
                         LOG.info("PCE cancel resource done OK !");
                         OperationResult deleteServicePathOperationResult =
-                                this.serviceDataStoreOperations.deleteServicePath(input.getServiceName());
+                                this.serviceDataStoreOperations.deleteServicePath(this.getInput().getServiceName());
                         if (!deleteServicePathOperationResult.isSuccess()) {
                             LOG.warn("Service path was not removed from datastore!");
                         }
                         OperationResult deleteServiceOperationResult = null;
                         if (tempService) {
                             deleteServiceOperationResult =
-                                    this.serviceDataStoreOperations.deleteTempService(input.getServiceName());
+                                    this.serviceDataStoreOperations.deleteTempService(this.getInput().getServiceName());
                             if (!deleteServiceOperationResult.isSuccess()) {
                                 LOG.warn("Service was not removed from datastore!");
                             }
                         } else {
                             deleteServiceOperationResult =
-                                    this.serviceDataStoreOperations.deleteService(input.getServiceName());
+                                    this.serviceDataStoreOperations.deleteService(this.getInput().getServiceName());
                             if (!deleteServiceOperationResult.isSuccess()) {
                                 LOG.warn("Service was not removed from datastore!");
                             }
@@ -146,7 +154,7 @@ public class PceListenerImpl implements TransportpcePceListener {
                          */
                         if (this.serviceReconfigure) {
                             LOG.info("cancel resource reserve done, relaunching PCE path computation ...");
-                            this.pceServiceWrapper.performPCE(input.getServiceCreateInput(), true);
+                            this.pceServiceWrapper.performPCE(this.getInput().getServiceCreateInput(), true);
                             this.serviceReconfigure = false;
                         }
                     } else if (servicePathRpcResult.getStatus() == RpcStatusEx.Failed) {
@@ -184,6 +192,10 @@ public class PceListenerImpl implements TransportpcePceListener {
 
     public void setInput(ServiceInput serviceInput) {
         this.input = serviceInput;
+    }
+
+    public ServiceInput getInput() {
+        return input;
     }
 
     public void setServiceReconfigure(Boolean serv) {

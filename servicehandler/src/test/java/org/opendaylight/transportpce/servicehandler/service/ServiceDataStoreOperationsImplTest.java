@@ -90,7 +90,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
         PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
-        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput);
+        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput, pathDescription);
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 0);
         Assert.assertNull(result);
@@ -104,7 +104,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
         PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
-        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput);
+        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput, pathDescription);
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 1);
         Assert.assertNull(result);
@@ -118,7 +118,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
         PathComputationRequestOutput pathComputationRequestOutput = new PathComputationRequestOutputBuilder()
                 .setConfigurationResponseCommon(configurationResponseCommon).build();
-        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput);
+        OperationResult createOutput = this.serviceDataStoreOperations.createService(createInput, pathDescription);
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("service 1",
             createInput, pathComputationRequestOutput, 2);
         Assert.assertNull(result);
@@ -134,14 +134,14 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void createServiceShouldBeSuccessForValidInput() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        OperationResult result = this.serviceDataStoreOperations.createService(createInput);
+        OperationResult result = this.serviceDataStoreOperations.createService(createInput, pathDescription);
         Assert.assertTrue(result.isSuccess());
     }
 
     @Test
     public void getServiceShouldReturnTheCorrectServiceForTheCreatedService() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        this.serviceDataStoreOperations.createService(createInput);
+        this.serviceDataStoreOperations.createService(createInput, pathDescription);
 
         Optional<Services> optService = this.serviceDataStoreOperations.getService(createInput.getServiceName());
         Assert.assertTrue(optService.isPresent());
@@ -151,7 +151,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void deleteServiceShouldBeSuccessfulForDeletingService() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        this.serviceDataStoreOperations.createService(createInput);
+        this.serviceDataStoreOperations.createService(createInput, pathDescription);
         OperationResult result = this.serviceDataStoreOperations.deleteService(createInput.getServiceName());
         Assert.assertTrue(result.isSuccess());
     }
@@ -165,7 +165,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void modifyServiceIsSuccessfulForPresentService() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        this.serviceDataStoreOperations.createService(createInput);
+        this.serviceDataStoreOperations.createService(createInput, pathDescription);
         OperationResult result = this.serviceDataStoreOperations.modifyService(createInput.getServiceName(),
             State.InService, AdminStates.InService);
         Assert.assertTrue(result.isSuccess());
@@ -181,14 +181,14 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void createTempServiceShouldBeSuccessForValidInput() {
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        OperationResult result = this.serviceDataStoreOperations.createTempService(createInput);
+        OperationResult result = this.serviceDataStoreOperations.createTempService(createInput, pathDescription);
         Assert.assertTrue(result.isSuccess());
     }
 
     @Test
     public void getTempServiceShouldReturnTheCorrectTempServiceForTheCreatedService() {
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        this.serviceDataStoreOperations.createTempService(createInput);
+        this.serviceDataStoreOperations.createTempService(createInput, pathDescription);
 
         Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
                 .Services> optService = this.serviceDataStoreOperations.getTempService(createInput.getCommonId());
@@ -199,7 +199,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void deleteTempServiceShouldBeSuccessfulForDeletingTempService() {
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        this.serviceDataStoreOperations.createTempService(createInput);
+        this.serviceDataStoreOperations.createTempService(createInput, pathDescription);
         OperationResult result = this.serviceDataStoreOperations.deleteTempService(createInput.getCommonId());
         Assert.assertTrue(result.isSuccess());
     }
@@ -207,7 +207,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void modifyTempServiceIsSuccessfulForPresentTempService() {
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        this.serviceDataStoreOperations.createTempService(createInput);
+        this.serviceDataStoreOperations.createTempService(createInput, pathDescription);
         OperationResult result = this.serviceDataStoreOperations.modifyTempService(createInput.getCommonId(),
             State.InService, AdminStates.InService);
         Assert.assertTrue(result.isSuccess());
@@ -216,7 +216,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void createServicePathShouldBeSuccessfulForValidInput() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        this.serviceDataStoreOperations.createService(createInput);
+        this.serviceDataStoreOperations.createService(createInput, pathDescription);
         ServiceInput serviceInput = new ServiceInput(createInput);
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
@@ -237,7 +237,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void createServicePathShouldFailForInvalidInput() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        this.serviceDataStoreOperations.createService(createInput);
+        this.serviceDataStoreOperations.createService(createInput, pathDescription);
         ServiceInput serviceInput = new ServiceInput(createInput);
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
             .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
@@ -254,7 +254,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void deleteServicePathShouldBeSuccessForDeletingServicePath() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        this.serviceDataStoreOperations.createService(createInput);
+        this.serviceDataStoreOperations.createService(createInput, pathDescription);
         ServiceInput serviceInput = new ServiceInput(createInput);
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
             .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)

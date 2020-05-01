@@ -39,7 +39,7 @@ public class PortMappingImpl implements PortMapping {
     private final PortMappingVersion121 portMappingVersion121;
 
     public PortMappingImpl(DataBroker dataBroker, PortMappingVersion221 portMappingVersion22,
-        PortMappingVersion121 portMappingVersion121) {
+                           PortMappingVersion121 portMappingVersion121) {
 
         this.dataBroker = dataBroker;
         this.portMappingVersion22 = portMappingVersion22;
@@ -58,8 +58,6 @@ public class PortMappingImpl implements PortMapping {
         }
     }
 
-
-
     @Override
     public Mapping getMapping(String nodeId, String logicalConnPoint) {
 
@@ -67,7 +65,7 @@ public class PortMappingImpl implements PortMapping {
          * Getting physical mapping corresponding to logical connection point
          */
         InstanceIdentifier<Mapping> portMappingIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
-            new NodesKey(nodeId)).child(Mapping.class, new MappingKey(logicalConnPoint)).build();
+                new NodesKey(nodeId)).child(Mapping.class, new MappingKey(logicalConnPoint)).build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Mapping> mapObject = readTx.read(LogicalDatastoreType.CONFIGURATION, portMappingIID).get();
             if (mapObject.isPresent()) {
@@ -76,11 +74,11 @@ public class PortMappingImpl implements PortMapping {
                 return mapping;
             } else {
                 LOG.warn("Could not find mapping for logical connection point {} for nodeId {}", logicalConnPoint,
-                    nodeId);
+                        nodeId);
             }
         } catch (InterruptedException | ExecutionException ex) {
             LOG.error("Unable to read mapping for logical connection point : {} for nodeId {}", logicalConnPoint,
-                nodeId, ex);
+                    nodeId, ex);
         }
         return null;
     }
@@ -93,7 +91,7 @@ public class PortMappingImpl implements PortMapping {
         LOG.info("Deleting Mapping Data corresponding at node '{}'", nodeId);
         WriteTransaction rw = this.dataBroker.newWriteOnlyTransaction();
         InstanceIdentifier<Nodes> nodesIID = InstanceIdentifier.create(Network.class)
-            .child(Nodes.class, new NodesKey(nodeId));
+                .child(Nodes.class, new NodesKey(nodeId));
         rw.delete(LogicalDatastoreType.CONFIGURATION, nodesIID);
         try {
             rw.commit().get(1, TimeUnit.SECONDS);
@@ -101,7 +99,6 @@ public class PortMappingImpl implements PortMapping {
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOG.error("Error for removing port mapping infos for node '{}'", nodeId);
         }
-
     }
 
     @Override
@@ -112,8 +109,8 @@ public class PortMappingImpl implements PortMapping {
         }
         else if (openROADMversion.getIntValue() == 2) {
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes
-                .MappingBuilder oldMapping2Bldr = new MappingBuilder().setLogicalConnectionPoint(oldMapping
-                .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
+                    .MappingBuilder oldMapping2Bldr = new MappingBuilder().setLogicalConnectionPoint(oldMapping
+                    .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
             if (oldMapping.getConnectionMapLcp() != null) {
                 oldMapping2Bldr.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
             }
@@ -146,10 +143,10 @@ public class PortMappingImpl implements PortMapping {
     @Override
     public Nodes getNode(String nodeId) {
         InstanceIdentifier<Nodes> nodePortMappingIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
-            new NodesKey(nodeId)).build();
+                new NodesKey(nodeId)).build();
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodePortMapObject =
-                readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID).get();
+                    readTx.read(LogicalDatastoreType.CONFIGURATION, nodePortMappingIID).get();
             if (nodePortMapObject.isPresent()) {
                 Nodes node = nodePortMapObject.get();
                 LOG.info("Found node {} in portmapping.", nodeId);
@@ -163,5 +160,26 @@ public class PortMappingImpl implements PortMapping {
         return null;
     }
 
+    @Override
+    public boolean isPortMappingDone(String nodeId, String nodeVersion) {
+        if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+            return portMappingVersion121.isPortMappingDone(nodeId);
+        } else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+            return portMappingVersion22.isPortMappingDone(nodeId);
+        } else {
+            LOG.error("Unable to create mapping data for unmanaged openroadm device version");
+            return false;
+        }
+    }
 
+    @Override
+    public void setportMappingDone(boolean bool, String nodeVersion) {
+        if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
+            portMappingVersion121.setPortMappingDone(bool);
+        } else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
+            portMappingVersion22.setPortMappingDone(bool);
+        } else {
+            LOG.error("Unable to create mapping data for unmanaged openroadm device version");
+        }
+    }
 }

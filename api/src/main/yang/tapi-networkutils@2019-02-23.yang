@@ -1,0 +1,157 @@
+module tapi-networkutils {
+    yang-version 1;
+    namespace "http://org/opendaylight/tapi/networkutils";
+    prefix "org-opendaylight-tapi-networkutils";
+
+    revision "2019-02-23" {
+        description "Initial revision of networkutils model";
+    }
+
+    rpc init-roadm-roadm-link {
+        description "This rpc initiates roadm to roadm link";
+        input {
+            leaf rdm-a-node {
+                type string;
+            }
+            leaf deg-a-nep {
+                type string;
+            }
+            leaf rdm-z-node {
+                type string;
+            }
+            leaf deg-z-nep {
+                type string;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc init-internal-roadm-link {
+       description "This rpc initiates roadm to roadm link";
+       input {
+          leaf rdm-node {
+             type string;
+          }
+          leaf nep-a {
+             type string;
+          }
+          leaf nep-z {
+             type string;
+          }
+       }
+       output {
+          leaf result {
+             type string;
+
+          }
+       }
+    }
+
+    rpc init-internal-xpdr-link {
+       description "This rpc initiates roadm to roadm link";
+       input {
+          leaf xpdr-node {
+             type string;
+          }
+          leaf line-nep {
+             type string;
+          }
+          leaf client-nep {
+             type string;
+          }
+       }
+       output {
+          leaf result {
+             type string;
+
+          }
+       }
+    }
+
+    rpc init-xpdr-rdm-link {
+        description "This rpc initiates xponder to rdm link";
+        input {
+            leaf xpdr-node {
+                type string;
+            }
+            leaf line-nep {
+                type string;
+            }
+            leaf rdm-node {
+                type string;
+            }
+            leaf add-drop-nep {
+                type string;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc init-xpdr-xpdr-link {
+        description "This rpc initiates xponder to rdm link";
+        input {
+            leaf node-a {
+                type string;
+            }
+            leaf nep-a {
+                type string;
+            }
+            leaf node-z {
+                type string;
+            }
+            leaf nep-z {
+                type string;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc init-rdm-xpdr-link {
+        description "This rpc initiates rdm to xponder link";
+        input {
+            leaf rdm-node {
+                type string;
+            }
+            leaf add-drop-nep {
+                type string;
+            }
+            leaf xpdr-node {
+                type string;
+            }
+            leaf line-nep {
+                type string;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc delete-link {
+        description "This rpc deletes a given link in openroadm Topology layer";
+        input {
+            leaf link-id {
+                type string;
+            }
+        }
+        output {
+            leaf result {
+              type string;
+            }
+        }
+    }
+}

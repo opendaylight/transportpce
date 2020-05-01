@@ -190,19 +190,32 @@ public final class MapUtils {
 
     public static OpenroadmLinkType calcType(Link link) {
         Link1 link1 = null;
-        OpenroadmLinkType tmplType = null;
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1 link11 = null;
+
         // ID and type
         link1 = link.augmentation(Link1.class);
         if (link1 == null) {
             LOG.error("MapUtils: No Link augmentation available. {}", link.getLinkId().getValue());
             return null;
         }
-
+        link11 = link.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1.class);
+        OpenroadmLinkType tmplType = null;
         tmplType = link1.getLinkType();
 
         if (tmplType == null) {
-            LOG.error("MapUtils: No Link type available. {}", link.getLinkId().getValue());
-            return null;
+            if (link1 == null) {
+                LOG.error("MapUtils: No Link augmentation available. {}", link.getLinkId().getValue());
+                return null;
+            }
+            tmplType = link11.getLinkType();
+            if (tmplType == null) {
+                LOG.error("MapUtils: No Link type available. {}", link.getLinkId().getValue());
+                return null;
+            } else {
+                return tmplType;
+            }
+
         }
         return tmplType;
     }
@@ -233,8 +246,17 @@ public final class MapUtils {
         tmpoppositeLink = linkOpposite.getOppositeLink();
         LOG.debug("PceLink: reading oppositeLink.  {}", linkOpposite);
         if (tmpoppositeLink == null) {
-            LOG.error("PceLink: Error reading oppositeLink. Link is ignored {}", link.getLinkId().getValue());
-            return null;
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1 linOpposite1 = link
+                    .augmentation(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1.class);
+            tmpoppositeLink = linOpposite1.getOppositeLink();
+            if (tmpoppositeLink == null) {
+                LOG.error("PceLink: Error reading oppositeLink. Link is ignored {}", link.getLinkId().getValue());
+                return null;
+            } else {
+                return tmpoppositeLink;
+            }
+
         }
         return tmpoppositeLink;
     }

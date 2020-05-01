@@ -32,8 +32,8 @@ public class RendererListenerImpl implements TransportpceRendererListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(RendererListenerImpl.class);
     private ServiceRpcResultSp serviceRpcResultSp;
-    private ServiceDataStoreOperations serviceDataStoreOperations;
-    private ServiceInput input;
+    public static ServiceDataStoreOperations serviceDataStoreOperations;
+    public static ServiceInput input;
     private PCEServiceWrapper pceServiceWrapper;
     private Boolean tempService;
 
@@ -59,6 +59,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                         LOG.info("Service implemented !");
                         OperationResult operationResult = null;
                         if (tempService) {
+                            LOG.info("Path topology of service tem result = {}", serviceRpcResultSp.getPathTopology());
                             operationResult = this.serviceDataStoreOperations.modifyTempService(
                                     serviceRpcResultSp.getServiceName(),
                                     State.InService, AdminStates.InService);
@@ -66,6 +67,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                                 LOG.warn("Temp Service status not updated in datastore !");
                             }
                         } else {
+                            LOG.info("Path topology of service result = {}", serviceRpcResultSp.getPathTopology());
                             operationResult = this.serviceDataStoreOperations.modifyService(
                                     serviceRpcResultSp.getServiceName(),
                                     State.InService, AdminStates.InService);

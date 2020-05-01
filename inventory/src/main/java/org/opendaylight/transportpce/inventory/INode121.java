@@ -81,6 +81,7 @@ public class INode121 {
         Info deviceInfo;
         if (infoOpt.isPresent()) {
             deviceInfo = infoOpt.get();
+            LOG.info("Device info: {}", deviceInfo.toString());
         } else {
             LOG.warn("Could not get device info from DataBroker");
             return false;
@@ -90,7 +91,11 @@ public class INode121 {
         LOG.info("Running {} query ", query);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            LOG.info("Prepared metadata: {}", preparedStatement.getMetaData().toString());
+            LOG.info("Prepared parameter metadata: {}", preparedStatement.getParameterMetaData().toString());
+            LOG.info("Connection with database is open = {}", connection.isClosed());
             Object[] prepareParameters = prepareDeviceInfoParameters(deviceInfo);
+            LOG.info("Prepare parameters: {}", prepareParameters.toString());
             for (int i = 0; i < prepareParameters.length; i++) {
                 LOG.debug("Parameter {} has value {}", i + 1, prepareParameters[i]);
                 preparedStatement.setObject(i + 1, prepareParameters[i]);
@@ -337,35 +342,64 @@ public class INode121 {
      */
     private static Object[] prepareDeviceInfoParameters(Info deviceInfo) {
         String startTimetampStr = getCurrentTimestamp();
-
+        LOG.info("Going to prepare parameneters with device info: {} at time {}",
+                 deviceInfo.toString(), startTimetampStr);
         String nodeId = prepareDashString(deviceInfo.getNodeId());
+        LOG.info("This is the nodeID; {}", nodeId);
         Long nodeNumber = deviceInfo.getNodeNumber().toJava();
+        LOG.info("This is the nodeNumber; {}", nodeNumber);
         String nodeTypeEnu = deviceInfo.getNodeType().getName();
+        LOG.info("This is the nodeTypeEnu; {}", nodeTypeEnu);
         String clli = prepareDashString(deviceInfo.getClli());
+        LOG.info("This is the clli; {}", clli);
         String vendor = prepareDashString(deviceInfo.getVendor());
+        LOG.info("This is the vendor; {}", vendor);
         String model = prepareDashString(deviceInfo.getModel());
+        LOG.info("This is the model; {}", model);
         String serialId = prepareDashString(deviceInfo.getSerialId());
+        LOG.info("This is the serialId; {}", serialId);
         String ipAddress = prepareDashString(deviceInfo.getIpAddress().getIpv4Address().getValue());
+        LOG.info("This is the ipAddress; {}", ipAddress);
         String prefixLength = prepareDashString(deviceInfo.getPrefixLength());
+        LOG.info("This is the prefixLength; {}", prefixLength);
         String defaultGateway = prepareDashString(deviceInfo.getDefaultGateway().getIpv4Address().getValue());
+        LOG.info("This is the defaultGateway; {}", defaultGateway);
         String sourceEnum = deviceInfo.getSource().getName();
+        LOG.info("This is the sourceEnum; {}", sourceEnum);
         String currentIpAddress = prepareDashString(deviceInfo.getCurrentIpAddress().getIpv4Address().getValue());
+        LOG.info("This is the currentIpAddress; {}", currentIpAddress);
         String currentPrefixLength = prepareDashString(deviceInfo.getCurrentPrefixLength());
+        LOG.info("This is the currentPrefixLength; {}", currentPrefixLength);
         String currentDefaultGateway = prepareDashString(deviceInfo.getDefaultGateway().getIpv4Address().getValue());
+        LOG.info("This is the currentDefaultGateway; {}", currentDefaultGateway);
         String macAddress = prepareDashString(deviceInfo.getMacAddress().getValue());
+        LOG.info("This is the macAddress; {}", macAddress);
         String softwareVersion = prepareDashString(deviceInfo.getSoftwareVersion());
-        //String openroadmVersion = "1.2.1";
-        String template = prepareDashString(deviceInfo.getTemplate());
-        String currentDatetime = prepareDashString(deviceInfo.getCurrentDatetime().getValue());
+        LOG.info("This is the softwareVersion; {}", softwareVersion);
+        String openroadmVersion = prepareDashString("1.2.1");
+        LOG.info("This is the openroadmVersion; {}", openroadmVersion);
+        //String template = prepareDashString(deviceInfo.getTemplate());
+        String template = prepareDashString("oper-ROADMA.xml");
+        LOG.info("This is the template; {}", template);
+        //String currentDatetime = prepareDashString(deviceInfo.getCurrentDatetime().getValue());
+        String currentDatetime = prepareDashString("2020-04-08T13:13:00+01:00");
+        LOG.info("This is the currentDatetime; {}", currentDatetime);
         String geoLatitude = (deviceInfo.getGeoLocation() != null
-            ? prepareDashString(deviceInfo.getGeoLocation().getLatitude()) : "");
+            ? prepareDashString(deviceInfo.getGeoLocation().getLatitude()) : prepareDashString("1"));
+        LOG.info("This is the geoLatitude; {}", geoLatitude);
         String geoLongitude = (deviceInfo.getGeoLocation() != null
-            ? prepareDashString(deviceInfo.getGeoLocation().getLongitude()) : "");
+            ? prepareDashString(deviceInfo.getGeoLocation().getLongitude()) : prepareDashString("1"));
+        LOG.info("This is the geoLongitude; {}", geoLongitude);
         String maxDegrees = (deviceInfo.getMaxDegrees() == null ? "-1" : prepareDashString(deviceInfo.getMaxDegrees()));
+        LOG.info("This is the maxDegrees; {}", maxDegrees);
         String maxSrgs = (deviceInfo.getMaxSrgs() == null ? "-1" : prepareDashString(deviceInfo.getMaxSrgs()));
+        LOG.info("This is the maxSrgs; {}", maxSrgs);
         String swVersion = prepareDashString(deviceInfo.getSoftwareVersion()); //sw_version
-        String swValidationTimer = prepareDashString(""); //sw_validation_timer
-        String activationDateTime = prepareDashString(""); //activation_date_time
+        LOG.info("This is the swVersion; {}", swVersion);
+        String swValidationTimer = prepareDashString("1"); //sw_validation_timer
+        LOG.info("This is the swValidationTimer; {}", swValidationTimer);
+        String activationDateTime = prepareDashString("1"); //activation_date_time
+        LOG.info("This is the activationDateTime; {}", activationDateTime);
         //Integer maxNumBin15minHistoricalPm = null;
         //Integer maxNumBin24hourHistoricalPm = null;
         /*jsonDevInfo = JsonStringBuilder.getDevInfoJson().replace("$$NODE-ID$$",nodeId)
@@ -415,8 +449,7 @@ public class INode121 {
             currentDefaultGateway,
             macAddress,
             softwareVersion,
-            //openroadmVersion,
-            "1.2.1",
+            openroadmVersion,
             template,
             currentDatetime,
             geoLatitude,
@@ -569,7 +602,12 @@ public class INode121 {
 
 
     private static Object[] prepareCircuitPacksParameters(String nodeId, CircuitPacks cpack) {
+        LOG.info("Circuit pack to insert {}", cpack.toString());
         String startTimestamp = getCurrentTimestamp();
+        boolean cpackcat = true;
+        if (cpack.getCircuitPackCategory() == null) {
+            cpackcat = false;
+        }
         return new Object[]{nodeId,
             cpack.getCircuitPackName(),
             cpack.getCircuitPackType(),
@@ -584,8 +622,10 @@ public class INode121 {
             cpack.getClei(),
             cpack.getHardwareVersion(),
             (cpack.getOperationalState() == null ? -1 : cpack.getOperationalState().getIntValue()),
-            cpack.getCircuitPackCategory().getType().getIntValue(),
-            cpack.getCircuitPackCategory().getExtension(),
+            (cpackcat == false ? "1" :
+                    cpack.getCircuitPackCategory().getType().getIntValue()),
+            (cpackcat == false ? "1" :
+                    cpack.getCircuitPackCategory().getExtension()),
             (cpack.getEquipmentState() == null ? -1 : cpack.getEquipmentState().getIntValue()),
             cpack.getCircuitPackMode(),
             cpack.getShelf(),
@@ -626,39 +666,40 @@ public class INode121 {
 
     private Object[] prepareDevInterfaceParameters(String nodeId, Interface deviceInterface, Connection connection) {
 
-        String ethernetDuplexEnu = "";
-        String ethernetAutoNegotiationEnu = "";
-        String maintTestsignalTestpatternEnu = "";
-        String maintTestsignalTypeEnu = "";
-        String otuFecEnu = "";
-        String otuMaintTypeEnu = "";
-        String otsFiberTypeEnu = "";
-        String ethernetSpeed = "-1";
-        String ethernetFec = "";
-        String ethernetMtu = "-1";
-        String ethernetCurrSpeed = "";
-        String ethernetCurrDuplex = "-1";
+        //if -1 in database, it means that no change because the interface is not of that type
+        String ethernetDuplexEnu = "1";
+        String ethernetAutoNegotiationEnu = "1";
+        String maintTestsignalTestpatternEnu = "1";
+        String maintTestsignalTypeEnu = "1";
+        String otuFecEnu = "1";
+        String otuMaintTypeEnu = "1";
+        String otsFiberTypeEnu = "1";
+        String ethernetSpeed = "1";
+        String ethernetFec = "1";
+        String ethernetMtu = "1";
+        String ethernetCurrSpeed = "1";
+        String ethernetCurrDuplex = "1";
         //String mciMcttpMinFreq = "";
         //String mciMcttpMaxFreq = "";
         //String mciMcttpCenterFreq = "";
         //String mciMcttpSlotWidth = "";
         //String mciNmcCtpFrequency = "";
         //String mciNmcCtpWidth = "";
-        String ochRate = "";
+        String ochRate = "1";
         //String ochFrequency = "";
         //String ochWidth = "";
-        String ochWavelengthNumber = "";
-        String ochModulationFormat = "";
-        String ochTransmitPower = "";
-        String otsSpanLossReceive = "";
-        String otsSpanLossTransmit = "";
+        String ochWavelengthNumber = "1";
+        String ochModulationFormat = "1";
+        String ochTransmitPower = "1";
+        String otsSpanLossReceive = "1";
+        String otsSpanLossTransmit = "1";
         //String otsIngressSpanLossAgingMargin = "";
         //String otsEolMaxLoadPin = "";
-        String oduRate = "";
+        String oduRate = "1";
         //String oduFunction = "";
-        String oduMonitoringMode = "";
+        String oduMonitoringMode = "1";
         //String oduNoOamFunction = "";
-        String oduProactiveDelayMeasurementEnabled = "";
+        String oduProactiveDelayMeasurementEnabled = "1";
         //String oduPoaTribPortNumber = "-1";
         //String oduTxSapi = "";
         //String oduTxDapi = "";
@@ -672,16 +713,16 @@ public class INode121 {
         //String oduTimDetectMode = "";
         //String oduDegmIntervals = "-1";
         //String oduDegthrPercentage = "-1";
-        String opuPayloadType = "";
-        String opuRxPayloadType = "";
-        String opuExpPayloadType = "";
-        String opuPayloadInterface = "";
-        String maintTestsignalEnabled = "";
-        String maintTestsignalBiterrors = "-1";
-        String maintTestsignalBiterrorsterminal = "-1";
-        String maintTestsignalSyncseconds = "-1";
-        String maintTestsignalSyncsecondsterminal = "-1";
-        String otuRate = "";
+        String opuPayloadType = "1";
+        String opuRxPayloadType = "1";
+        String opuExpPayloadType = "1";
+        String opuPayloadInterface = "1";
+        String maintTestsignalEnabled = "1";
+        String maintTestsignalBiterrors = "1";
+        String maintTestsignalBiterrorsterminal = "1";
+        String maintTestsignalSyncseconds = "1";
+        String maintTestsignalSyncsecondsterminal = "1";
+        String otuRate = "1";
         //String otuTxSapi = "";
         //String otuTxDapi = "";
         //String otuTxOperator = "";
@@ -694,7 +735,7 @@ public class INode121 {
         //String otuTimDetectMode = "";
         //String otuDegmIntervals = "-1";
         //String otuDegthrPercentage = "-1";
-        String otuMaintLoopbackEnabled = "";
+        String otuMaintLoopbackEnabled = "1";
         //String mtOtuRate = "";
         //String mtOtuFec = "";
         //String mtOtuMaintLoopback = "";
@@ -702,29 +743,49 @@ public class INode121 {
         //String mtOtuType = "";
 
         String name = deviceInterface.getName();
-        String description = deviceInterface.getDescription();
-        String type = deviceInterface.getType().getTypeName();
+        LOG.info("Name of interface {}", name);
+        //String description = deviceInterface.getDescription();
+        String description = "deviceInterface.getDescription()";
+        LOG.info("description of interface {}", description);
+        //String type = deviceInterface.getType().getTypeName();
+        String type = deviceInterface.getType().getSimpleName();
+        LOG.info("type of interface {}", type);
+        //LOG.info("type of interface {}", deviceInterface.getType().getFields().toString());
+        //LOG.info("type of interface {}", deviceInterface.getType().getSimpleName());
+        //LOG.info("type of interface {}", deviceInterface.getType().getName());
+        //LOG.info("type of interface {}", deviceInterface.getType().toString());
         String administrativeStateEnu = deviceInterface.getAdministrativeState().getName();
+        LOG.info("administrativeStateEnu of interface {}", administrativeStateEnu);
         int operationalState = deviceInterface.getOperationalState().getIntValue();
-        String circuitId = deviceInterface.getCircuitId();
-        String supportingInterface = deviceInterface.getSupportingInterface();
+        //String operationalState = deviceInterface.getOperationalState().getName();
+        LOG.info("operationalState of interface {}", operationalState);
+        // String circuitId = deviceInterface.getCircuitId();
+        String circuitId = "-1";
+        LOG.info("circuitId of interface {}", circuitId);
+        //String supportingInterface = deviceInterface.getSupportingInterface();
+        String supportingInterface = "-1";
+        LOG.info("supportingInterface of interface {}", supportingInterface);
         String supportingCircuitPackName = deviceInterface.getSupportingCircuitPackName();
+        LOG.info("supportingCircuitPackName of interface {}", supportingCircuitPackName);
         String supportingPort = deviceInterface.getSupportingPort().toString();
+        LOG.info("supportingPort of interface {}", supportingPort);
 
-        switch (deviceInterface.getType().toString()) {
-
-            case "ethernet":
+        switch (type) {
+            //case "ethernet":
+            case "EthernetCsmacd":
                 //EthernetBuilder ethIfBuilder = new EthernetBuilder();
+                type = "ethernet";
                 EthernetBuilder ethIfBuilder = new EthernetBuilder(deviceInterface.augmentation(Interface1.class)
                     .getEthernet());
                 ethernetSpeed = (ethIfBuilder.getSpeed() == null ? "-1" :
                     Integer.valueOf(ethIfBuilder.getSpeed().intValue()).toString());
-                ethernetFec = ethIfBuilder.getFec().getName();
-                ethernetDuplexEnu = (ethIfBuilder.getDuplex() == null ? "" : ethIfBuilder.getDuplex().getName());
-                ethernetMtu = ethIfBuilder.getMtu().toString();
-                ethernetAutoNegotiationEnu = ethIfBuilder.getAutoNegotiation().getName();
-                ethernetCurrSpeed = ethIfBuilder.getCurrSpeed();
-                ethernetCurrDuplex = ethIfBuilder.getCurrDuplex();
+                ethernetFec = (ethIfBuilder.getFec() == null ? "-1" : ethIfBuilder.getFec().getName());
+                ethernetDuplexEnu = (ethIfBuilder.getDuplex() == null ? "-1" : ethIfBuilder.getDuplex().getName());
+                ethernetMtu = (ethIfBuilder.getMtu() == null ? "-1" : ethIfBuilder.getMtu().toString());
+                ethernetAutoNegotiationEnu = (ethIfBuilder.getAutoNegotiation()
+                        == null ? "-1" : ethIfBuilder.getAutoNegotiation().getName());
+                ethernetCurrSpeed = (ethIfBuilder.getCurrSpeed() == null ? "-1" : ethIfBuilder.getCurrSpeed());
+                ethernetCurrDuplex = (ethIfBuilder.getCurrDuplex() == null ? "-1" : ethIfBuilder.getCurrDuplex());
                 break;
 
             case "och":
@@ -738,7 +799,16 @@ public class INode121 {
                 ochTransmitPower = ochIfBuilder.getTransmitPower().toString();
                 break;
 
-            case "ots":
+            //case "oms":
+            case "OpenROADMOpticalMultiplex":
+                //To be done
+                type = "oms";
+                LOG.info("This interface {} is of the type oms", deviceInterface.getName());
+                break;
+
+            //case "ots":
+            case "OpticalTransport":
+                type = "ots";
                 OtsBuilder otsIfBuilder = new OtsBuilder(deviceInterface.augmentation(
                     org.opendaylight.yang.gen.v1
                         .http.org.openroadm.optical.transport.interfaces.rev161014.Interface1.class)
@@ -819,11 +889,11 @@ public class INode121 {
             //mciMcttpSlotWidth,
             //mciNmcCtpFrequency,
             //mciNmcCtpWidth,
-            "", "", "", "", "", "",
+            "1", "1", "1", "1", "1", "1",
             ochRate,
             //ochFrequency,
             //ochWidth,
-            "", "",
+            "1", "1",
             ochWavelengthNumber,
             ochModulationFormat,
             ochTransmitPower,
@@ -832,13 +902,13 @@ public class INode121 {
             otsSpanLossTransmit,
             //otsIngressSpanLossAgingMargin,
             //otsEolMaxLoadPin,
-            "", "",
+            "1", "1",
             oduRate,
             //oduFunction,
-            "",
+            "1",
             oduMonitoringMode,
             //oduNoOamFunction,
-            "",
+            "1",
             oduProactiveDelayMeasurementEnabled,
             //oduPoaTribPortNumber,
             //oduTxSapi,
@@ -853,7 +923,7 @@ public class INode121 {
             //oduTimDetectMode,
             //oduDegmIntervals,
             //oduDegthrPercentage,
-            "-1", "", "", "", "", "","", "", "", "", "", "-1", "-1",
+            "1", "1", "1", "1", "1", "1","1", "1", "1", "1", "1", "1", "1",
             opuPayloadType,
             opuRxPayloadType,
             opuExpPayloadType,
@@ -879,7 +949,7 @@ public class INode121 {
             //otuTimDetectMode,
             //otuDegmIntervals,
             //otuDegthrPercentage,
-            "", "", "", "", "", "","", "", "", "", "-1", "-1",
+            "1", "1", "1", "1", "1", "1","1", "1", "1", "1", "1", "1",
             otuMaintLoopbackEnabled,
             otuMaintTypeEnu,
             //mtOtuRate,
@@ -887,7 +957,7 @@ public class INode121 {
             //mtOtuMaintLoopback,
             //mtOtuEnabled,
             //mtOtuType,
-            "", "", "", "", "",
+            "1", "1", "1","1", "1", "1",
             startTimestamp,
             startTimestamp
         };
@@ -1012,35 +1082,52 @@ public class INode121 {
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
 
-        /*InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-           .child(Interface.class);
+        /*
+        InstanceIdentifier<Interface> interfaceIID =
+                InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Interface.class);
         Optional<Interface> interfaceOpt =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, interfaceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT); */
+                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        LOG.info("Interface object {}", interfaceOpt.get().toString());
 
-        for (int i = 0; i < deviceObject.get().getInterface().size(); i++) {
-            Interface deviceInterface;
-
-            deviceInterface = deviceObject.get().getInterface().get(i);
-        /*if (interfaceOpt.isPresent()) {
-            deviceInterface = interfaceOpt.get();
+        if (interfaceOpt.isPresent()) {
+           // deviceInterface = interfaceOpt.get();
+            LOG.info("Interface info {}", interfaceOpt.get().toString());
         } else {
             LOG.warn("Could not get interface info");
-            return false;
-        }*/
-            Object[] parameters = prepareDevInterfaceParameters(nodeId, deviceInterface, connection);
+        }
 
-            String query = Queries.getQuery().deviceInterfacesInsert().get();
-            LOG.info("Running {} query ", query);
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                for (int j = 0; j < parameters.length; j++) {
-                    stmt.setObject(j + 1, parameters[j]);
+        */
+        if (deviceObject.isPresent()) {
+            LOG.info("Device info {}", deviceObject.get().toString());
+            if (deviceObject.get().getInterface() != null) {
+                LOG.info("Going to iterate over interfaces; {}", deviceObject.get().getInterface().toString());
+                for (int i = 0; i < deviceObject.get().getInterface().size(); i++) {
+                    Interface deviceInterface;
+
+                    deviceInterface = deviceObject.get().getInterface().get(i);
+
+                    LOG.info("Interface {} with info {}", deviceInterface.getName(), deviceInterface.toString());
+                    Object[] parameters = prepareDevInterfaceParameters(nodeId, deviceInterface, connection);
+
+                    String query = Queries.getQuery().deviceInterfacesInsert().get();
+                    LOG.info("Running {} query ", query);
+                    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                        for (int j = 0; j < parameters.length; j++) {
+                            stmt.setObject(j + 1, parameters[j]);
+                        }
+                        stmt.execute();
+                        stmt.clearParameters();
+                    } catch (SQLException e) {
+                        LOG.error(e.getMessage(), e);
+                    }
                 }
-                stmt.execute();
-                stmt.clearParameters();
-            } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+            } else {
+                LOG.info("Device info doesnt have any interface");
             }
+
+        } else {
+            LOG.error("Could not obtain device interfaces");
         }
     }
 
@@ -1652,6 +1739,7 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        LOG.info("Going to add SRGs to database");
 
         if (deviceObject.get().getSharedRiskGroup() == null) {
             deviceObject =
@@ -1664,6 +1752,7 @@ public class INode121 {
             String startTimestamp = getCurrentTimestamp();
             for (int i = 0; i < deviceObject.get().getSharedRiskGroup().size(); i++) {
                 SharedRiskGroup sharedRiskGroup = deviceObject.get().getSharedRiskGroup().get(i);
+                LOG.info("SRG {} with info {}", sharedRiskGroup.key().toString(), sharedRiskGroup.toString());
                 //String currentProvisionedAddDropPorts = "-1";
                 //String mcCapSlotWidthGranularity = "";
                 //String mcCapCenterFreqGranularity = "";
@@ -1684,7 +1773,7 @@ public class INode121 {
                     //mcCapCenterFreqGranularity,
                     //mcCapMinSlots,
                     //mcCapMaxSlots,
-                    "", "", "", "",
+                    "-1", "-1", "-1", "-1",
                     startTimestamp,
                     startTimestamp
                 };

@@ -14,6 +14,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation.FiberType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
@@ -51,6 +53,8 @@ public class PceLink implements Serializable {
     private final String sourceCLLI;
     private final String destCLLI;
     private final LinkId oppositeLink;
+    private final AdminStates linkadminStates;
+    private final State linkstate;
     private final Long latency;
     private final Long availableBandwidth;
     private final Long usedBandwidth;
@@ -83,6 +87,8 @@ public class PceLink implements Serializable {
         this.linkType = MapUtils.calcType(link);
 
         this.oppositeLink = calcOpposite(link);
+        this.linkadminStates = link.augmentation(Link1.class).getAdministrativeState();
+        this.linkstate = link.augmentation(Link1.class).getOperationalState();
 
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
             this.omsAttributesSpan = MapUtils.getOmsAttributesSpan(link);
@@ -107,6 +113,7 @@ public class PceLink implements Serializable {
             this.usedBandwidth = 0L;
         }
         LOG.debug("PceLink: created PceLink  {}", linkId);
+
     }
 
     //Retrieve the opposite link
@@ -193,6 +200,14 @@ public class PceLink implements Serializable {
         return oppositeLink;
     }
 
+    public State getLinkstate() {
+        return linkstate;
+    }
+
+    public AdminStates getLinkadminStates() {
+        return linkadminStates;
+    }
+
     public Object getSourceTP() {
         return sourceTP;
     }
@@ -266,6 +281,10 @@ public class PceLink implements Serializable {
         if ((this.linkId == null) || (this.linkType == null) || (this.oppositeLink == null)) {
             isValid = false;
             LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
+        }
+        if ((this.linkstate == null) || (this.linkadminStates == null)) {
+            isValid = false;
+            LOG.error("PceLink: No Link state or admin state is available. Link is ignored {}", linkId);
         }
         if ((this.sourceId == null) || (this.destId == null) || (this.sourceTP == null) || (this.destTP == null)) {
             isValid = false;
@@ -349,6 +368,10 @@ public class PceLink implements Serializable {
         if ((this.linkId == null) || (this.linkType == null) || (this.oppositeLink == null)) {
             LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
             return false;
+        }
+        if ((this.linkstate == null) || (this.linkadminStates == null)) {
+            isValid = false;
+            LOG.error("PceLink: No Link state or admin state is available. Link is ignored {}", linkId);
         }
         if ((this.sourceId == null) || (this.destId == null) || (this.sourceTP == null) || (this.destTP == null)) {
             LOG.error("PceLink: No Link source or destination is available. Link is ignored {}", linkId);

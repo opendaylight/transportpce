@@ -36,6 +36,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <version>3.0.2</version>
       <optional>true</optional>
     </dependency>
+      <dependency>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+          <version>20131018</version>
+          <scope>compile</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+      </dependency>
   </dependencies>
 
 </project>

@@ -823,4 +823,15 @@ CREATE TABLE `inv_dev_xponder_port` (
   `update_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `inv_dev_change_notification` (
+  `node_id` varchar(100) DEFAULT NULL,
+  `notif_time` varchar(2000) DEFAULT NULL,
+  `datastore` varchar(100) DEFAULT NULL,
+  `target_res` varchar(2000) DEFAULT NULL,
+  `info_before` varchar(10000) DEFAULT NULL,
+  `info_after` varchar(10000) DEFAULT NULL,
+  `operation` varchar(2000) DEFAULT NULL,
+  `changed_by` varchar(2000) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 

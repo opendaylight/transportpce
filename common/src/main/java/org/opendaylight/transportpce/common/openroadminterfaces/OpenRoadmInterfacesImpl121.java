@@ -84,6 +84,7 @@ public class OpenRoadmInterfacesImpl121 {
     public Optional<Interface> getInterface(String nodeId, String interfaceName) throws OpenRoadmInterfaceException {
         InstanceIdentifier<Interface> interfacesIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
             .child(Interface.class, new InterfaceKey(interfaceName));
+        // TODO: error here when getInterface is called in Power Management implementation. It returns null
         return deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
             interfacesIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
     }

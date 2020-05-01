@@ -80,6 +80,19 @@ public interface PortMapping {
      */
     Mapping getMapping(String nodeId, String logicalConnPoint);
 
+    /**
+     * This method updates logical to physical port mapping for a given device.
+     * Instead of parsing all the circuit packs/ports in the device this methods
+     * does a selective read operation on degree/srg subtree to get circuit
+     * packs/ports that map to :
+     *
+     * @param nodeId
+     *            node ID
+     * @param mapping
+     *            mapping to update
+     *
+     * @return true/false based on status of operation
+     */
     boolean updateMapping(String nodeId, Mapping mapping);
 
     /**
@@ -95,4 +108,8 @@ public interface PortMapping {
      * @return node data if success otherwise null.
      */
     Nodes getNode(String nodeId);
+
+    boolean isPortMappingDone(String nodeId, String nodeVersion);
+
+    void setportMappingDone(boolean bool, String nodeVersion);
 }

@@ -33,14 +33,14 @@ public final class TopoConstraintCheck {
                     .getPreferredTransportLayer() == null) {
             LOG.info("tc is null");
             result = true;
-            message = "Topology constraints are not managet yet";
+            message = "Topology constraints are not managed yet";
         } else if (tc.getAvoidTopology().isEmpty() || tc.getExcludeLink().isEmpty() || tc.getExcludeNode().isEmpty()
             || tc
                 .getExcludePath().isEmpty() || tc.getIncludeLink().isEmpty() || tc.getIncludeNode().isEmpty() || tc
                     .getIncludePath().isEmpty() || tc.getIncludeTopology().isEmpty() || tc.getPreferredTransportLayer()
                         .isEmpty()) {
             result = false;
-            message = "Topology constraints are not managet yet";
+            message = "Topology constraints are not managed yet";
         }
 
         return new ComplianceCheckResult(result, message);

@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOpe
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImp;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
@@ -100,13 +101,16 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private RendererServiceWrapper rendererServiceWrapper;
     private PceListenerImpl pceListenerImpl;
     private RendererListenerImpl rendererListenerImpl;
+    private NetworkModelListenerImp networkModelListenerImp;
 
     //TODO: remove private request fields as they are in global scope
 
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelWavelengthService networkModelWavelengthService) {
+            NetworkModelWavelengthService networkModelWavelengthService,
+                              NetworkModelListenerImp networkModelListenerImp) {
+        LOG.info("Initialization of service handler implementation");
         this.db = databroker;
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
         this.serviceDataStoreOperations.initialize();
@@ -114,7 +118,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererServiceWrapper = new RendererServiceWrapper(rendererServiceOperations, notificationPublishService);
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
+        this.networkModelListenerImp = networkModelListenerImp;
     }
+
+    // TODO: will need to do a listenable future to do corresponding actions towards TAPI northbound interface.
+    // The service datastore operations can be used to retrieve and modify service based on the topology change
 
     @Override
     public ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreate(ServiceCreateInput input) {
@@ -128,9 +136,12 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
+        LOG.info("PCE list input before {}", this.pceListenerImpl.getInput());
         this.pceListenerImpl.setInput(new ServiceInput(input));
+        LOG.info("PCE list input after {}", this.pceListenerImpl.getInput());
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImp.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         LOG.info("Commencing PCE");

@@ -12,19 +12,29 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import javax.sql.DataSource;
+import org.opendaylight.mdsal.binding.api.MountPoint;
+import org.opendaylight.mdsal.binding.api.NotificationService;
+import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceListener;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.CreateSubscriptionInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.NotificationsService;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.netconf.notification._1._0.rev080714.StreamNameType;
+import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DeviceInventory {
     private static final String INSERT_ALARM_STRING =
-        "insert into inv_alarm_info(nodeid, probablecause, direction,extension,location,"
-        + "notificationid,type,raisetime,severity,circuitid,circuitpack,connection,degree,iface,"
-        + "internallink,physicallink,service,shelf,sharedriskgroup,port,portcircuitpack, create_date, update_date) "
-        + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "insert into inv_alarm_info(nodeid, probablecause, direction,extension,location,"
+                    + "notificationid,type,raisetime,severity,circuitid,circuitpack,connection,degree,iface,"
+                    + "internallink,physicallink,service,shelf,sharedriskgroup,port,portcircuitpack, "
+                    + "create_date, update_date) "
+                    + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceInventory.class);
 
@@ -44,12 +54,52 @@ public class DeviceInventory {
     }
 
     public void initializeDevice(String deviceId, String openRoadmVersion)
-        throws InterruptedException, ExecutionException {
+            throws InterruptedException, ExecutionException {
 
         LOG.info("Creating Device Inventory for device {} with version {}", deviceId, openRoadmVersion);
         if (!inode.dataExists("inv_dev_info", " node_id = '" + deviceId + "'")) {
             LOG.info("Adding node {} to inventory", deviceId);
             inode.addNode(deviceId, openRoadmVersion);
+            // Code for register device listener and subscribe to netconf stream
+            Optional<MountPoint> mountPointOpt = deviceTransactionManager.getDeviceMountPoint(deviceId);
+            MountPoint mountPoint;
+            if (mountPointOpt.isPresent()) {
+                mountPoint = mountPointOpt.get();
+                final Optional<NotificationService> notificationService =
+                        mountPoint.getService(NotificationService.class);
+                if (!notificationService.isPresent()) {
+                    LOG.error("Failed to get RpcService for node {}", deviceId);
+                }
+                final OrgOpenroadmDeviceListener notifListener =
+                        new NotifListener(dataSource, deviceId);
+                LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", deviceId);
+                final ListenerRegistration<OrgOpenroadmDeviceListener> accessDeviceNotificationListenerRegistration =
+                        notificationService.get().registerNotificationListener(notifListener);
+
+                String streamName = "NETCONF";
+
+                if (streamName == null) {
+                    streamName = "OPENROADM";
+                }
+
+                final Optional<RpcConsumerRegistry> service = mountPoint.getService(RpcConsumerRegistry.class);
+                if (service.isPresent()) {
+                    final NotificationsService rpcService = service.get().getRpcService(NotificationsService.class);
+                    if (rpcService == null) {
+                        LOG.error("Failed to get RpcService for node {}", deviceId);
+                    } else {
+                        final CreateSubscriptionInputBuilder createSubscriptionInputBuilder =
+                                new CreateSubscriptionInputBuilder();
+                        createSubscriptionInputBuilder.setStream(new StreamNameType(streamName));
+                        LOG.info("Triggering notification stream {} for node {}", streamName, deviceId);
+                        rpcService.createSubscription(createSubscriptionInputBuilder.build());
+                    }
+                } else {
+                    LOG.error("Failed to get RpcService for node {}", deviceId);
+                }
+            } else {
+                LOG.error("Failed to get mount point for node {}", deviceId);
+            }
         }
     }
 

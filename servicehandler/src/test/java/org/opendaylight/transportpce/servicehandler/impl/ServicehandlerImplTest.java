@@ -190,7 +190,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
                 notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        serviceDataStoreOperations.createService(createInput);
+        serviceDataStoreOperations.createService(createInput, pathDescription);
         ServiceDeleteInput input = ServiceDataUtils.buildServiceDeleteInput();
         ListenableFuture<RpcResult<ServiceDeleteOutput>> result = servicehandlerImpl.serviceDelete(input);
         result.addListener(new Runnable() {
@@ -318,7 +318,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        serviceDataStoreOperations.createService(createInput);
+        serviceDataStoreOperations.createService(createInput, pathDescription);
 
         //service reconfigure test action
         ServiceReconfigureInput input = ServiceDataUtils.buildServiceReconfigureInput();
@@ -401,7 +401,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        serviceDataStoreOperations.createService(createInput);
+        serviceDataStoreOperations.createService(createInput, pathDescription);
 
         //service Restoration test action
         ServiceRestorationInput input = ServiceDataUtils.buildServiceRestorationInput();
@@ -483,7 +483,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        serviceDataStoreOperations.createService(createInput);
+        serviceDataStoreOperations.createService(createInput, pathDescription);
 
         //service reroute test action
         ServiceRerouteInput input = ServiceDataUtils.buildServiceRerouteInput();
@@ -562,7 +562,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
                         notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        serviceDataStoreOperations.createTempService(createInput);
+        serviceDataStoreOperations.createTempService(createInput, pathDescription);
 
 
         TempServiceDeleteInput input = ServiceDataUtils.buildTempServiceDeleteInput(createInput.getCommonId());

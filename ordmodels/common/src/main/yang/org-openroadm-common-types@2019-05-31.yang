@@ -137,6 +137,22 @@ module org-openroadm-common-types {
       "status of RPC ";
   }
 
+  typedef state {
+    description
+      "State that indicates whether the resource is able to provide fullfill its role - carry traffic, etc.";
+    type enumeration {
+      enum "inService" {
+        value 1;
+      }
+      enum "outOfService" {
+        value 2;
+      }
+      enum "degraded" {
+        value 3;
+      }
+    }
+  }
+
   typedef openroadm-version-type {
     type enumeration {
       enum "1.0" {

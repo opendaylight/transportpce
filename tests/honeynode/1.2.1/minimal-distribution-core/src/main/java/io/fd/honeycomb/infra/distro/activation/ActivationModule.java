@@ -18,13 +18,17 @@ package io.fd.honeycomb.infra.distro.activation;
 
 import com.google.inject.AbstractModule;
 import net.jmob.guice.conf.core.ConfigurationModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Module that provides set of modules activated by distribution and binds this set to be available
  */
 public class ActivationModule extends AbstractModule {
+    private static final Logger LOG = LoggerFactory.getLogger(ActivationModule.class);
     @Override
     protected void configure() {
+        LOG.info("Configure of activation module");
         install(ConfigurationModule.create());
         requestInjection(ActivationConfig.class);
         bind(ActiveModules.class).toProvider(ActiveModuleProvider.class).asEagerSingleton();

@@ -176,6 +176,12 @@ module transportpce-portmapping {
             "For XPDR unidirectional NETWORK port, associate two logical-connection-points
              from device/partner port data";
         }
+        leaf lcp-hash-val {
+          type string;
+          description
+            "Hash value generated from node-id and lcp. This value will be used to map-
+            back SAPI and DAPI resource";
+        }
       }
       list cp-to-degree {
         key "circuit-pack-name";

@@ -206,16 +206,16 @@ public class PathComputationServiceImpl implements PathComputationService {
                 //debug prints
                 AToZDirection atoz = pathDescription.getAToZDirection();
                 if ((atoz != null) && (atoz.getAToZ() != null)) {
-                    LOG.debug("Impl AtoZ Notification: [{}] elements in description", atoz.getAToZ().size());
+                    LOG.info("Impl AtoZ Notification: [{}] elements in description", atoz.getAToZ().size());
                     for (int i = 0; i < atoz.getAToZ().size(); i++) {
-                        LOG.debug("Impl AtoZ Notification: [{}] {}", i, atoz.getAToZ().get(i));
+                        LOG.info("Impl AtoZ Notification: [{}] {}", i, atoz.getAToZ().get(i));
                     }
                 }
                 ZToADirection ztoa = pathDescription.getZToADirection();
                 if ((ztoa != null) && (ztoa.getZToA() != null)) {
-                    LOG.debug("Impl ZtoA Notification: [{}] elements in description", ztoa.getZToA().size());
+                    LOG.info("Impl ZtoA Notification: [{}] elements in description", ztoa.getZToA().size());
                     for (int i = 0; i < ztoa.getZToA().size(); i++) {
-                        LOG.debug("Impl ZtoA Notification: [{}] {}", i, ztoa.getZToA().get(i));
+                        LOG.info("Impl ZtoA Notification: [{}] {}", i, ztoa.getZToA().get(i));
                     }
                 }
                 return output.build();
