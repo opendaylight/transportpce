@@ -28,16 +28,16 @@
         </encoder>
     </appender>
 
-    <root level="WARN">
+    <root level="WARN" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="honeycomb.log" />
     </root>
 
-    <logger name="org.opendaylight" level="INFO">
+    <logger name="org.opendaylight" level="INFO" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="honeycomb.log" />
     </logger>
-    <logger name="io.fd" level="INFO">
+    <logger name="io.fd" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="honeycomb.log" />
     </logger>

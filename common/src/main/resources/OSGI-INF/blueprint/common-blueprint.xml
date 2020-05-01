@@ -83,7 +83,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bean id="FixedFlexImpl" class="org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl" >
     </bean>
 
+    <bean id="kafka" class="org.opendaylight.transportpce.common.kafka.KafkaImpl" >
+    </bean>
+
     <service ref="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
+
+    <service ref="kafka" interface="org.opendaylight.transportpce.common.kafka.Kafka" />
 
     <service ref="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
 

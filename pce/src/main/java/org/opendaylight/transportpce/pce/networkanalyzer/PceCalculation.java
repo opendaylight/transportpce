@@ -81,7 +81,7 @@ public class PceCalculation {
     }
 
     public PceCalculation(PathComputationRequestInput input, NetworkTransactionService networkTransactionService,
-            PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc) {
+                          PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc) {
         this.input = input;
         this.networkTransactionService = networkTransactionService;
         this.returnStructure = rc;
@@ -114,7 +114,7 @@ public class PceCalculation {
         anodeId = input.getServiceAEnd().getNodeId();
         znodeId = input.getServiceZEnd().getNodeId();
         if (input.getServiceAEnd().getServiceFormat() == null || input.getServiceZEnd().getServiceFormat() == null
-            || input.getServiceAEnd().getServiceRate() == null) {
+                || input.getServiceAEnd().getServiceRate() == null) {
             LOG.error("Service Format and Service Rate are required for a path calculation");
             return false;
         }
@@ -147,7 +147,7 @@ public class PceCalculation {
             //Passing by ENUM or String are possible alternatives.
             //Maybe HashMap and similar options should also be considered here.
         } else if ("Ethernet".equals(serviceFormatA)) {
-        //only rate 100L is currently supported except in Ethernet
+            //only rate 100L is currently supported except in Ethernet
             if (serviceRate == 10L) {
                 serviceType = "10GE";
             } else if (serviceRate == 1L) {
@@ -157,7 +157,7 @@ public class PceCalculation {
             }
         } else {
             LOG.debug("parseInput: unsupported service type: Format {} Rate {}",
-                serviceFormatA, serviceRate);
+                    serviceFormatA, serviceRate);
         }
 
         returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
@@ -169,16 +169,16 @@ public class PceCalculation {
         InstanceIdentifier<Network> nwInstanceIdentifier = null;
         Network nw = null;
         if (("OC".equals(serviceFormatA)) || ("OTU".equals(serviceFormatA)) || (("Ethernet".equals(serviceFormatA))
-            && (serviceRate == 100L))) {
+                && (serviceRate == 100L))) {
 
             LOG.info("readMdSal: network {}", NetworkUtils.OVERLAY_NETWORK_ID);
             nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).build();
         } else if ("ODU".equals(serviceFormatA) || ("Ethernet".equals(serviceFormatA) && serviceRate == 10L)
-            || ("Ethernet".equals(serviceFormatA) && serviceRate == 1L)) {
+                || ("Ethernet".equals(serviceFormatA) && serviceRate == 1L)) {
             LOG.info("readMdSal: network {}", NetworkUtils.OTN_NETWORK_ID);
             nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
-                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID))).build();
+                    .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID))).build();
         } else {
             LOG.info("readMdSal: service-rate {} / service-format not handled {}", serviceRate, serviceFormatA);
             return false;
@@ -186,7 +186,7 @@ public class PceCalculation {
 
         try {
             Optional<Network> nwOptional =
-                networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier).get();
+                    networkTransactionService.read(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier).get();
             if (nwOptional.isPresent()) {
                 nw = nwOptional.get();
                 LOG.debug("readMdSal: network nodes: nwOptional.isPresent = true {}", nw);
@@ -196,7 +196,7 @@ public class PceCalculation {
             networkTransactionService.close();
             returnStructure.setRC(ResponseCodes.RESPONSE_FAILED);
             throw new RuntimeException(
-                "readMdSal: Error reading from operational store, topology : " + nwInstanceIdentifier + " :" + e);
+                    "readMdSal: Error reading from operational store, topology : " + nwInstanceIdentifier + " :" + e);
         }
         networkTransactionService.close();
 
@@ -205,11 +205,11 @@ public class PceCalculation {
             return false;
         }
         allNodes = nw.getNode().stream().sorted((n1, n2) -> n1.getNodeId().getValue().compareTo(n2.getNodeId()
-            .getValue())).collect(Collectors.toList());
+                .getValue())).collect(Collectors.toList());
         Network1 nw1 = nw.augmentation(Network1.class);
         if (nw1 != null) {
             allLinks = nw1.getLink().stream().sorted((l1, l2) -> l1.getSource().getSourceTp().toString().compareTo(l2
-                .getSource().getSourceTp().toString())).collect(Collectors.toList());
+                    .getSource().getSourceTp().toString())).collect(Collectors.toList());
         } else {
             LOG.warn("no otn links in otn-topology");
         }
@@ -237,7 +237,7 @@ public class PceCalculation {
         if (("100GE".equals(serviceType)) || ("OTU4".equals(serviceType))) {
             // 100GE service and OTU4 service are handled at the openroadm-topology layer
             for (Node node : allNodes) {
-                validateNode(node);
+                validateNode(node); //check for state of nodes
             }
 
             LOG.debug("analyzeNw: allPceNodes size {}", allPceNodes.size());
@@ -247,7 +247,8 @@ public class PceCalculation {
                 return false;
             }
             for (Link link : allLinks) {
-                validateLink(link);
+                LOG.info("Link info {}", link.toString());
+                validateLink(link); //check the status of the link
             }
             // debug prints
             LOG.debug("analyzeNw: addLinks size {}, dropLinks size {}", addLinks.size(), dropLinks.size());
@@ -297,7 +298,7 @@ public class PceCalculation {
     private boolean filteraddLinks(PceLink pcelink) {
 
         NodeId nodeId = pcelink.getSourceId();
-
+        //TODO: should the state be considered here and not in validateLinks?
         if (azSrgs.contains(nodeId)) {
             allPceLinks.put(pcelink.getLinkId(), pcelink);
             allPceNodes.get(nodeId).addOutgoingLink(pcelink);
@@ -315,7 +316,7 @@ public class PceCalculation {
     private boolean filterdropLinks(PceLink pcelink) {
 
         NodeId nodeId = pcelink.getDestId();
-
+        //TODO: should the state be considered here and not in validateLinks?
         if (azSrgs.contains(nodeId)) {
             allPceLinks.put(pcelink.getLinkId(), pcelink);
             allPceNodes.get(nodeId).addOutgoingLink(pcelink);
@@ -332,7 +333,6 @@ public class PceCalculation {
 
     private boolean validateLink(Link link) {
         LOG.info("validateLink: link {} ", link);
-
         NodeId sourceId = link.getSource().getSourceNode();
         NodeId destId = link.getDestination().getDestNode();
         PceNode source = allPceNodes.get(sourceId);
@@ -340,12 +340,12 @@ public class PceCalculation {
 
         if (source == null) {
             LOG.debug("validateLink: Link is ignored due source node is rejected by node validation - {}",
-                link.getSource().getSourceNode().getValue());
+                    link.getSource().getSourceNode().getValue());
             return false;
         }
         if (dest == null) {
             LOG.debug("validateLink: Link is ignored due dest node is rejected by node validation - {}",
-                link.getDestination().getDestNode().getValue());
+                    link.getDestination().getDestNode().getValue());
             return false;
         }
 
@@ -365,21 +365,24 @@ public class PceCalculation {
             }
             switch (pcelink.getlinkType()) {
                 case ROADMTOROADM:
+                    //Nothing is done with ROADM-ROADM link??
                 case EXPRESSLINK:
                     allPceLinks.put(linkId, pcelink);
                     source.addOutgoingLink(pcelink);
-                    LOG.debug("validateLink: {}-LINK added to allPceLinks {}",
-                        pcelink.getlinkType(), pcelink);
+                    LOG.debug("validateLink: {}-LINK with inService state added to allPceLinks {}",
+                            pcelink.getlinkType(), pcelink);
                     break;
+                // TODO: addlink and drop link are not included in outgoing links of node as they are internal.
+                //  Should we check the state of these kind of links here?
                 case ADDLINK:
                     pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString()));
                     addLinks.add(pcelink);
-                    LOG.debug("validateLink: ADD-LINK saved  {}", pcelink);
+                    LOG.debug("validateLink: ADD-LINK with inService saved  {}", pcelink);
                     break;
                 case DROPLINK:
                     pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString()));
                     dropLinks.add(pcelink);
-                    LOG.debug("validateLink: DROP-LINK saved  {}", pcelink);
+                    LOG.debug("validateLink: DROP-LINK with inService saved  {}", pcelink);
                     break;
                 case XPONDERINPUT:
                     // store separately all SRG links directly
@@ -387,7 +390,7 @@ public class PceCalculation {
                     // connected to A/Z
                     if (!dest.checkTP(pcelink.getDestTP().toString())) {
                         LOG.debug(
-                            "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
+                                "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
                         return false;
                     }
                     if (dest.getXpdrClient(pcelink.getDestTP().toString()) != null) {
@@ -395,7 +398,7 @@ public class PceCalculation {
                     }
                     allPceLinks.put(linkId, pcelink);
                     source.addOutgoingLink(pcelink);
-                    LOG.debug("validateLink: XPONDER-INPUT link added to allPceLinks {}", pcelink);
+                    LOG.debug("validateLink: XPONDER-INPUT link with inService added to allPceLinks {}", pcelink);
                     break;
                 // does it mean XPONDER==>>SRG ?
                 case XPONDEROUTPUT:
@@ -404,7 +407,7 @@ public class PceCalculation {
                     // connected to A/Z
                     if (!source.checkTP(pcelink.getSourceTP().toString())) {
                         LOG.debug(
-                            "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
+                                "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
                         return false;
                     }
                     if (source.getXpdrClient(pcelink.getSourceTP().toString()) != null) {
@@ -412,7 +415,7 @@ public class PceCalculation {
                     }
                     allPceLinks.put(linkId, pcelink);
                     source.addOutgoingLink(pcelink);
-                    LOG.debug("validateLink: XPONDER-OUTPUT link added to allPceLinks {}", pcelink);
+                    LOG.debug("validateLink: XPONDER-OUTPUT link with inService added to allPceLinks {}", pcelink);
                     break;
                 default:
                     LOG.warn("validateLink: link type is not supported {}", pcelink);
@@ -455,11 +458,21 @@ public class PceCalculation {
             LOG.error(" validateLink: Unmanaged service type {}", serviceType);
             return false;
         }
+        /*
+        if (link.augmentation(Link1.class).getOperationalState().equals(State.InService)) {
 
+        } else {
+            LOG.error("State of link {} is {}", link.getLinkId().getValue(),
+                    link.augmentation(Link1.class).getOperationalState().getName());
+            return false;
+        }
+
+        */
     }
 
     private boolean validateNode(Node node) {
-        LOG.debug("validateNode: node {} ", node);
+        // TODO: should we check node state as well in order to include in the network structure?
+        LOG.info("validateNode: node {} ", node);
 
         // PceNode will be used in Graph algorithm
         Node1 node1 = node.augmentation(Node1.class);
@@ -470,7 +483,7 @@ public class PceCalculation {
         OpenroadmNodeType nodeType = node1.getNodeType();
 
         PceOpticalNode pceNode = new PceOpticalNode(node, nodeType, node.getNodeId(),
-            input.getServiceAEnd().getServiceFormat(), "optical");
+                input.getServiceAEnd().getServiceFormat(), "optical");
         pceNode.validateAZxponder(anodeId, znodeId);
         pceNode.initWLlist();
 
@@ -478,16 +491,15 @@ public class PceCalculation {
             LOG.warn(" validateNode: Node is ignored");
             return false;
         }
-
         if (validateNodeConstraints(pceNode).equals(ConstraintTypes.HARD_EXCLUDE)) {
             return false;
         }
         if ((pceNode.getSupNetworkNodeId().equals(anodeId) && (this.aendPceNode == null))
-            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
+                && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
             this.aendPceNode = pceNode;
         }
         if ((pceNode.getSupNetworkNodeId().equals(znodeId) && (this.zendPceNode == null))
-            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
+                && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
             this.zendPceNode = pceNode;
         }
 
@@ -497,7 +509,7 @@ public class PceCalculation {
     }
 
     private boolean validateOtnNode(Node node) {
-
+        //TODO: validate OTN node based on operational state
         LOG.info("validateOtnNode: {} ", node.getNodeId().getValue());
         // PceOtnNode will be used in Graph algorithm
         if (node.augmentation(Node1.class) != null) {

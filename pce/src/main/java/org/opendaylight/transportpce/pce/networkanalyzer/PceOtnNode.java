@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
@@ -52,6 +54,8 @@ public class PceOtnNode implements PceNode {
     private final OpenroadmNodeType nodeType;
     private final String pceNodeType;
     private final String otnServiceType;
+    private State otnnodestate;
+    private AdminStates otnnodeadminstate;
 
     private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<>();
     private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<>();
@@ -79,6 +83,13 @@ public class PceOtnNode implements PceNode {
         this.usedXpdrClientTps.clear();
         this.availableXpdrClientTps = new ArrayList<>();
         this.usableXpdrClientTps = new ArrayList<>();
+        // TODO: check if otn nodes should have this states
+        this.otnnodeadminstate = node.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+                .getAdministrativeState();
+        this.otnnodestate = node.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+                .getOperationalState();
         this.tpAvailableTribPort.clear();
         checkAvailableTribPort();
         this.tpAvailableTribSlot.clear();
@@ -91,6 +102,7 @@ public class PceOtnNode implements PceNode {
     }
 
     public void initXndrTps(String mode) {
+        // TODO: check for state when initializing
         LOG.info("PceOtnNode: initXndrTps for node {}", this.nodeId.getValue());
         this.availableXponderTp.clear();
 
@@ -395,6 +407,16 @@ public class PceOtnNode implements PceNode {
     @Override
     public List<PceLink> getOutgoingLinks() {
         return outgoingLinks;
+    }
+
+    @Override
+    public AdminStates getNodeAdminstate() {
+        return otnnodeadminstate;
+    }
+
+    @Override
+    public State getNodeState() {
+        return otnnodestate;
     }
 
     @Override

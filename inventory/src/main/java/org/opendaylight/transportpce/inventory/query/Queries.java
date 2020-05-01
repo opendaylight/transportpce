@@ -11,19 +11,23 @@ package org.opendaylight.transportpce.inventory.query;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
+
 @SuppressWarnings("checkstyle:LineLength")
 public final class Queries {
 
     private static final String DEVICE_INFO_INSERT =
             "INSERT INTO %sinv_dev_info (node_id, node_number, node_type, clli, vendor, model, serial_id, ipAddress, prefix_length, default_gateway, "
-            + "source, current_ipAddress, current_prefix_length, current_default_gateway, macAddress, software_version, openroadm_version, "
-            + "template, current_datetime, geo_latitude, geo_longitude, max_degrees, max_srgs, max_num_bin_15min_historical_pm, "
-            + "max_num_bin_24hour_historical_pm, sw_version, sw_validation_timer, activation_date_time, create_date, update_date) VALUES "
-            + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "source, current_ipAddress, current_prefix_length, current_default_gateway, macAddress, software_version, openroadm_version, "
+                    + "template, current_datetime, geo_latitude, geo_longitude, max_degrees, max_srgs, max_num_bin_15min_historical_pm, "
+                    + "max_num_bin_24hour_historical_pm, sw_version, sw_validation_timer, activation_date_time, create_date, update_date) VALUES "
+                    + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String DEVICE_SHELF_INSERT = "INSERT INTO %sinv_dev_shelf"
             + " (node_id, shelf_name, shelf_type, rack, shelf_position, administrative_state, vendor, model, serial_id, type, product_code, manufacture_date, clei, hardware_version, operational_state, equipment_state, due_date, "
             + "create_date, update_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    private static final String DEVICE_NOTIFICATION_INSERT = "INSERT INTO %sinv_dev_change_notification"
+            + " (node_id, notif_time, datastore, target_res, info_before, info_after, operation, changed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String DEVICE_SHELF_SLOT_INSERT = "INSERT INTO %sinv_dev_shelf_slot "
             + " (node_id, shelf_name, slot_name, label, provisioned_circuit_pack, slot_status, create_date, update_date)  "
@@ -86,18 +90,18 @@ public final class Queries {
 
     private static final String DEVICE_PROTOCOL_INSERT =
             "INSERT INTO %sinv_dev_proto_lldp"
-                + "(node_id,"
-                + "adminstatus,"
-                + "msgtxinterval,"
-                + "msgtxholdmultiplier,"
-                + "create_date,"
-                + "update_date )"
-                + "values ( ?,"
-                + "?,"
-                + "?,"
-                + "?,"
-                + "?,"
-                + "? )";
+                    + "(node_id,"
+                    + "adminstatus,"
+                    + "msgtxinterval,"
+                    + "msgtxholdmultiplier,"
+                    + "create_date,"
+                    + "update_date )"
+                    + "values ( ?,"
+                    + "?,"
+                    + "?,"
+                    + "?,"
+                    + "?,"
+                    + "? )";
 
     private static final String DEVICE_PROTOCOL_PORT_CONFIG_INSERT = "INSERT INTO %sinv_dev_proto_lldp_port_config "
             + " (node_id, ifname, adminstatus, create_date, update_date )  "
@@ -271,20 +275,20 @@ public final class Queries {
 
     private static final String SERVICE_EVENT_INSERT =
             "INSERT INTO %sinv_ser_events"
-            + "(event,"
-            + "event_key,"
-            + "event_value,"
-            + "change_key,"
-            + "change_orig_val,"
-            + "change_new_val,"
-            + "event_date )"
-            + "values ( ?"
-            + "?"
-            + "?"
-            + "?"
-            + "?"
-            + "?"
-            + "? )";
+                    + "(event,"
+                    + "event_key,"
+                    + "event_value,"
+                    + "change_key,"
+                    + "change_orig_val,"
+                    + "change_new_val,"
+                    + "event_date )"
+                    + "values ( ?"
+                    + "?"
+                    + "?"
+                    + "?"
+                    + "?"
+                    + "?"
+                    + "? )";
 
     private static final String SERVICE_INSERT =
             "INSERT INTO %sinv_ser_main "
@@ -681,6 +685,11 @@ public final class Queries {
             return this;
         }
 
+        public Query deviceNotificationInsert() {
+            this.sql = DEVICE_NOTIFICATION_INSERT;
+            return this;
+        }
+
         public Query deviceProtocolInsert() {
             this.sql = DEVICE_PROTOCOL_INSERT;
             return this;
@@ -861,5 +870,6 @@ public final class Queries {
             Preconditions.checkArgument(!Strings.isNullOrEmpty(this.sql), "No query selected");
             return String.format(this.sql, this.schema.concat("."));
         }
+
     }
 }

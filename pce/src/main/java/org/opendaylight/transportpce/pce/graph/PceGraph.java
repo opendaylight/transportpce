@@ -23,6 +23,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult.LocalCause;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,6 +90,7 @@ public class PceGraph {
         // validate found paths
         pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
         for (GraphPath<String, PceGraphEdge> path : allWPaths) {
+            LOG.info("Path {} check", path.toString());
             PostAlgoPathValidator papv = new PostAlgoPathValidator();
             pceResult = papv.checkPath(path, allPceNodes, pceResult, pceHardConstraints, serviceType);
             LOG.info("In calcPath after PostAlgoPathValidator {} {}",
@@ -106,6 +108,7 @@ public class PceGraph {
             }
 
             shortestPathAtoZ = new ArrayList<>(pathAtoZ);
+            LOG.info("Shortest path between source and dest = {}", shortestPathAtoZ.toString());
             if (("100GE".equals(serviceType)) || ("OTU4".equals(serviceType))) {
                 LOG.info("In calcPath Path FOUND path for wl [{}], hops {}, distance per metrics {}, path AtoZ {}",
                         pceResult.getResultWavelength(), pathAtoZ.size(), path.getWeight(), pathAtoZ);
@@ -132,6 +135,7 @@ public class PceGraph {
         if (weightedGraph.edgeSet().isEmpty() || weightedGraph.vertexSet().isEmpty()) {
             return false;
         }
+        LOG.info(" In runKgraphs : weighted graph = {}", weightedGraph.toString());
         PathValidator<String, PceGraphEdge> wpv = new InAlgoPathValidator();
 
         // KShortestPaths on weightedGraph
@@ -148,7 +152,7 @@ public class PceGraph {
 
         // debug print
         for (GraphPath<String, PceGraphEdge> path : allWPaths) {
-            LOG.debug("path Weight: {} : {}", path.getWeight(), path.getVertexList());
+            LOG.info("path Weight: {} : {}", path.getWeight(), path.getVertexList());
         }
 
         return true;
@@ -156,6 +160,7 @@ public class PceGraph {
 
     private boolean validateLinkforGraph(PceLink pcelink) {
 
+        LOG.info("State of PCE link is: {}", pcelink.getLinkstate().toString());
         PceNode source = allPceNodes.get(pcelink.getSourceId());
         PceNode dest = allPceNodes.get(pcelink.getDestId());
 
@@ -175,8 +180,12 @@ public class PceGraph {
         Iterator<Map.Entry<NodeId, PceNode>> nodes = allPceNodes.entrySet().iterator();
         while (nodes.hasNext()) {
             Map.Entry<NodeId, PceNode> node = nodes.next();
-            weightedGraph.addVertex(node.getValue().getNodeId().getValue());
-            LOG.debug("In populateWithNodes in node :  {}", node.getValue());
+            if (node.getValue().getNodeState().equals(State.InService)) {
+                weightedGraph.addVertex(node.getValue().getNodeId().getValue());
+                LOG.info("In populateWithNodes in node : {}", node.getValue());
+            } else {
+                LOG.error("In populateWithNodes node {} is OOS/degraded", node.getValue());
+            }
         }
     }
 
@@ -193,18 +202,21 @@ public class PceGraph {
             LOG.debug("In populateGraph: use node for graph {}", pcenode);
 
             for (PceLink link : links) {
-                LOG.debug("In populateGraph node {} : add edge to graph {}", pcenode, link);
-
                 if (!validateLinkforGraph(link)) {
                     continue;
                 }
+                if (link.getLinkstate().equals(State.InService)) {
+                    LOG.info("In populateGraph node {} : add edge to graph {}", pcenode, link);
+                    PceGraphEdge graphLink = new PceGraphEdge(link);
+                    weightedGraph.addEdge(link.getSourceId().getValue(), link.getDestId().getValue(), graphLink);
+                    weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
+                } else {
+                    LOG.error("In populateGraph node {} : edge {} is OOS/degraded", pcenode, link);
+                }
 
-                PceGraphEdge graphLink = new PceGraphEdge(link);
-                weightedGraph.addEdge(link.getSourceId().getValue(), link.getDestId().getValue(), graphLink);
-
-                weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
             }
         }
+        LOG.info("Weighted graph to be used later: {}", weightedGraph.toString());
         return true;
     }
 

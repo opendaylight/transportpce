@@ -37,37 +37,41 @@ public final class CreateConnectivityServiceValidation {
             List<EndPoint> endPointList = input.getEndPoint();
             ComplianceCheckResult endPointCheckResult = EndPointCheck.check(endPointList);
             if (endPointCheckResult.hasPassed()) {
-                LOG.info("create-connectivity-service end-points compliant !");
+                LOG.info("create-connectivity-service end-points compliant!");
             } else {
                 return OperationResult.failed(endPointCheckResult.getMessage());
             }
 
             LOG.info("checking ConnConstraint...");
             ConnectivityConstraint connectivityConstraint = input.getConnectivityConstraint();
+            LOG.info("Coon constraints: {}", connectivityConstraint);
             ComplianceCheckResult conConstraintCheckResult = ConnConstraintCheck.check(connectivityConstraint);
             if (conConstraintCheckResult.hasPassed()) {
-                LOG.info("create-connectivity-service connectivity constraints compliant !");
+                LOG.info("create-connectivity-service connectivity constraints compliant!");
             } else {
                 return OperationResult.failed(conConstraintCheckResult.getMessage());
             }
 
             LOG.info("checking ResilienceConstraint...");
             ResilienceConstraint resilienceConstraintList = input.getResilienceConstraint();
+            LOG.info("Resilience constraints: {}", resilienceConstraintList);
             ComplianceCheckResult resilienceConstraintCheckResult = ResilienceConstraintCheck.check(
                 resilienceConstraintList);
             if (resilienceConstraintCheckResult.hasPassed()) {
-                LOG.info("create-connectivity-service resilience constraints compliant !");
+                LOG.info("create-connectivity-service resilience constraints compliant!");
             } else {
+                LOG.info("Resiliance contraint failed");
                 return OperationResult.failed(resilienceConstraintCheckResult.getMessage());
             }
 
-            String state = input.getState();
+            // String state = input.getState();
 
             LOG.info("checking TopoConstraint...");
             TopologyConstraint topoConstraint = input.getTopologyConstraint();
+            LOG.info("Topology constraints: {}", topoConstraint);
             ComplianceCheckResult topoConstraintCheckResult = TopoConstraintCheck.check(topoConstraint);
             if (topoConstraintCheckResult.hasPassed()) {
-                LOG.info("create-connectivity-service topo constraints compliant !");
+                LOG.info("create-connectivity-service topo constraints compliant!");
             } else {
                 return OperationResult.failed(topoConstraintCheckResult.getMessage());
             }
@@ -78,5 +82,4 @@ public final class CreateConnectivityServiceValidation {
         }
         return OperationResult.ok("Validation successful.");
     }
-
 }

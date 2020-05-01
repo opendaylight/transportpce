@@ -7,13 +7,18 @@
  */
 package org.opendaylight.transportpce.servicehandler.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.PcePathDescriptionElementsAToZ;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.PcePathDescriptionElementsZToA;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 
@@ -35,6 +40,13 @@ public interface ServiceDataStoreOperations {
      * @return Optional of Services
      */
     Optional<Services> getService(String serviceName);
+
+    /**
+     * get service.
+     *
+     * @return Optional of List of Services
+     */
+    Optional<ServiceList> getServices();
 
     /**
      * get temp service by common-id.
@@ -73,6 +85,37 @@ public interface ServiceDataStoreOperations {
      *   operational state of service
      * @param administrativeState
      *   administrative state of service
+     * @param atozList list of a to z elements
+     * @param ztoaList list of z to a elements
+     * @return result of modifyService operation
+     */
+    OperationResult modifyServiceNM(String serviceName, State operationalState, AdminStates administrativeState,
+                                  List<PcePathDescriptionElementsAToZ> atozList,
+                                  List<PcePathDescriptionElementsZToA> ztoaList);
+
+    /**
+     * modify Temp Service.
+     *
+     * @param commonId unique common-id of the service
+     * @param operationalState operational state of service
+     * @param administrativeState administrative state of service
+     * @param atozList list of a to z elements
+     * @param ztoaList list of z to a elements
+     * @return result of modifyTempService operation
+     */
+    OperationResult modifyTempServiceNM(String commonId, State operationalState, AdminStates administrativeState,
+                                      List<PcePathDescriptionElementsAToZ> atozList,
+                                      List<PcePathDescriptionElementsZToA> ztoaList);
+
+    /**
+     * modifyService service attributes.
+     *
+     * @param serviceName
+     *   unique name of the service
+     * @param operationalState
+     *   operational state of service
+     * @param administrativeState
+     *   administrative state of service
      * @return result of modifyService operation
      */
     OperationResult modifyService(String serviceName, State operationalState, AdminStates administrativeState);
@@ -91,9 +134,10 @@ public interface ServiceDataStoreOperations {
      * create new service entry.
      *
      * @param serviceCreateInput serviceCreateInput data for creation of service
+     * @param pathDescription pce calculated path description
      * @return result of createService operation
      */
-    OperationResult createService(ServiceCreateInput serviceCreateInput);
+    OperationResult createService(ServiceCreateInput serviceCreateInput, PathDescription pathDescription);
 
     /**
      * create new servicePath entry.
@@ -111,9 +155,10 @@ public interface ServiceDataStoreOperations {
      *
      * @param tempServiceCreateInput tempServiceCreateInput data for creation of
      *                               service
+     * @param pathDescription pce calculated path description
      * @return result of createTempService operation
      */
-    OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput);
+    OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput, PathDescription pathDescription);
 
     /**
      * deleteServicePath by name.

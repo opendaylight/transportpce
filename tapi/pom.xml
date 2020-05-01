@@ -106,7 +106,11 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongo-java-driver</artifactId>
+      <version>3.9.1</version>
+    </dependency>
   </dependencies>
 
 <!-- checkstyle and spotbugds enforced by odlparent since Magnesium -->

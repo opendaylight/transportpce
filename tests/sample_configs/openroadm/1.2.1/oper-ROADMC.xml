@@ -554,6 +554,10 @@
       <circuit-pack-name>4/0</circuit-pack-name>
       <circuit-pack-type>ADDDROP</circuit-pack-type>
       <administrative-state>inService</administrative-state>
+      <circuit-pack-category>
+        <type>circuitPack</type>
+      </circuit-pack-category>
+      <serial-id>nodeid-1234</serial-id>
       <vendor>vendorA</vendor>
       <model>16CX4D</model>
       <clei>cccccccc</clei>

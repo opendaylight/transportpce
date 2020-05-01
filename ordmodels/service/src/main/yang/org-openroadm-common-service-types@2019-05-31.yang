@@ -1062,6 +1062,14 @@ module org-openroadm-common-service-types {
         "defines the current active path : '0' if active path is the working path
          id of the active backup path if protection or restoration has been triggered";
     }
+    list pce-path-description-elements-A-to-Z {
+      description "List of elements that are part of the pce path description A-Z direction";
+      uses topo-element;
+    }
+    list pce-path-description-elements-Z-to-A {
+      description "List of elements that are part of the pce path description Z-A direction";
+      uses topo-element;
+    }
     container topology {
       description
         "topology corresponds to working-path which is the default path. It defines the initial path
@@ -1140,6 +1148,16 @@ module org-openroadm-common-service-types {
       type yang:date-and-time;
       description
         "Actual date and time (if successful)";
+    }
+  }
+
+  grouping topo-element {
+    leaf element-identifier {
+      type string;
+      description "id of the topology element that is part of the computed path";
+    }
+    leaf operational-state {
+      type org-openroadm-common-types:state;
     }
   }
 

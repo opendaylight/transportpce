@@ -41,16 +41,21 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="dataBroker"/>
       </bean>
 
-     <bean id="pceListerner" class="org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl">
+    <bean id="pceListerner" class="org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl">
         <argument ref="rendererServiceOperations" />
         <argument ref="pathComputationService" />
         <argument ref="notificationPublishService" />
         <argument ref="serviceDatastoreOperation" />
     </bean>
 
-     <bean id="rendererListerner" class="org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl">
+    <bean id="rendererListerner" class="org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl">
         <argument ref="pathComputationService" />
         <argument ref="notificationPublishService" />
+    </bean>
+
+    <bean id="networkModelListener" class="org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImp">
+        <argument ref="notificationPublishService" />
+        <argument ref="serviceDatastoreOperation" />
     </bean>
 
     <bean id="serviceHandlerImpl" class="org.opendaylight.transportpce.servicehandler.service.ServiceHandlerOperationsImpl">
@@ -61,6 +66,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="networkModelWavelengthService" />
         <argument ref="pceListerner" />
         <argument ref="rendererListerner" />
+        <argument ref="networkModelListener" />
     </bean>
 
     <bean id="provider"

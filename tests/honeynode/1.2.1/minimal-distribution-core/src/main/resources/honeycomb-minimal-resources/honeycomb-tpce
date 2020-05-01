@@ -31,6 +31,7 @@ then
         cp $CONFIG $(dirname $0)/config/device/
         filename=$(basename -- "$CONFIG")
         device=$(basename "$CONFIG" .xml)
+        echo "File name = $filename and device = $device"
         echo "changing netconf port with $PORT in netconf.json file ..."
         sed  -i' ' "s/\"netconf-ssh-binding-port\".*,/\"netconf-ssh-binding-port\" : "$PORT",/g" $(dirname $0)/config/netconf.json
         echo "changing restconf http port with $REST_HTTP in restconf.json file ..."
@@ -48,6 +49,7 @@ then
          do
            . $(dirname $0)/../../../../../../reflectwarn.sh
            # needed to remove JDK11 reflective access warning
+           echo "Directory name = $(dirname $0)"
            "$JAVA_CMD" -DDEVICE=${device} -Dlogback.logs.directory=$(dirname $0)/logs -Xms512m -Xmn512m -Xmx1024m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -jar $(dirname $0)/honeynode-distribution-1.19.04.jar
            STATUS=$?
            echo "Honeycomb exited with status: $STATUS"

@@ -984,4 +984,11 @@ public class PortMappingVersion221 {
         return nodeInfoBldr.build();
     }
 
+    public boolean isPortMappingDone(String nodeId) {
+        return true;
+    }
+
+    public void setPortMappingDone(boolean bool) {
+
+    }
 }
