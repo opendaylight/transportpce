@@ -139,14 +139,6 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
     }
 
     /**
-     * In the filtered collection checks if the modification is update.
-     *
-     */
-    private static boolean isUpdate(DataTreeModification<Node> change) {
-        return ModificationType.SUBTREE_MODIFIED.equals(change.getRootNode().getModificationType());
-    }
-
-    /**
      * In the filtered collection checks if the node was deleted.
      *
      */
