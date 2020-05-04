@@ -87,7 +87,7 @@ public class INode221 {
         String query = Queries.getQuery().deviceInfoInsert().get();
         LOG.info("Running {} query ", query);
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             Object[] prepareParameters = prepareDeviceInfoParameters(deviceInfo);
             for (int i = 0; i < prepareParameters.length; i++) {
                 LOG.debug("Parameter {} has value {}", i + 1, prepareParameters[i]);
@@ -148,12 +148,8 @@ public class INode221 {
             persistDevConnectionMap(deviceId, connection);
             LOG.debug("iNode persist Connection Map call complete");
 
-        } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            LOG.error(e.getMessage(), e);
-        } catch (ExecutionException e) {
-            LOG.error(e.getMessage(), e);
+        } catch (SQLException | InterruptedException | ExecutionException e) {
+            LOG.error("Something wrong when storing node into DB", e);
         }
         return sqlResult;
     }
@@ -172,7 +168,7 @@ public class INode221 {
                 }
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Something wrong when fetching node in DB", e);
         }
         return nodeExists == 0 ? false : true;
     }
@@ -201,7 +197,7 @@ public class INode221 {
                 persistShelves(nodeId, connection, shelve);
             }
         } catch (SQLException e1) {
-            LOG.error(e1.getMessage(), e1);
+            LOG.error("Something wrong when fetching ROADM shelves in DB", e1);
         }
     }
 
@@ -231,7 +227,7 @@ public class INode221 {
                 persistCircuitPacks(nodeId, connection, cp);
             }
         } catch (SQLException e1) {
-            LOG.error(e1.getMessage(), e1);
+            LOG.error("Something wrong when fetching Circuit Packs in DB", e1);
         }
     }
 
@@ -246,7 +242,7 @@ public class INode221 {
             stmt.execute();
             stmt.clearParameters();
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Something wrong when storing Circuit Packs in DB", e);
         }
     }
 
@@ -261,7 +257,7 @@ public class INode221 {
             preparedStmt.execute();
             preparedStmt.clearParameters();
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Something wrong when storing shelves in DB", e);
         }
     }
 
@@ -287,7 +283,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing shelves slots in DB", e);
             }
         }
     }
@@ -315,7 +311,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing Cirtcuits Packs slots in DB", e);
             }
         }
     }
@@ -593,7 +589,7 @@ public class INode221 {
                 preparedStmt.execute();
                 preparedStmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing Cirtcuits Packs Ports in DB", e);
             }
         }
     }
@@ -1015,7 +1011,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices interfaces in DB", e);
             }
         }
     }
@@ -1061,7 +1057,7 @@ public class INode221 {
             stmt.execute();
             stmt.clearParameters();
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Something wrong when storing devices protocols in DB", e);
         }
 
     }
@@ -1102,7 +1098,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices protocols LLDP Port config in DB", e);
             }
 
         }
@@ -1157,7 +1153,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices protocols LLDP list number in DB", e);
             }
 
         }
@@ -1243,7 +1239,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices protocols LLDP RSTP", e);
             }
 
         }
@@ -1279,7 +1275,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices protocols LLDP RSTP bridge port", e);
             }
 
         }
@@ -1326,7 +1322,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices protocols LLDP RSTP bridge port attributes", e);
             }
 
         }
@@ -1368,7 +1364,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices internal links", e);
             }
 
         }
@@ -1414,7 +1410,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices external links", e);
             }
 
         }
@@ -1455,7 +1451,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices physical links", e);
             }
 
         }
@@ -1505,7 +1501,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices degrees", e);
             }
 
         }
@@ -1537,7 +1533,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices degrees circuit packs", e);
             }
 
         }
@@ -1571,7 +1567,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices degrees connection ports", e);
             }
 
         }
@@ -1621,7 +1617,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices SRG", e);
             }
 
         }
@@ -1653,7 +1649,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices SRG circuit packs", e);
             }
 
         }
@@ -1690,6 +1686,7 @@ public class INode221 {
                 startTimestamp
             };
 
+
             String query = Queries.getQuery().deviceRoadmConnectionsInsert().get();
             LOG.info("Running {} query ", query);
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -1699,7 +1696,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices ROADM connection ", e);
             }
 
         }
@@ -1738,7 +1735,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices connection map", e);
             }
 
         }
@@ -1780,7 +1777,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices wavelength map", e);
             }
 
         }
@@ -1807,7 +1804,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices interface tcm", e);
             }
         }
     }
@@ -1831,7 +1828,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices interface OTN ODU Tx MSI", e);
             }
         }
     }
@@ -1856,7 +1853,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices interface OTN ODU Rx MSI", e);
             }
         }
     }
@@ -1881,7 +1878,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("Something wrong when storing devices interface OTN ODU Exp MSI", e);
             }
         }
     }

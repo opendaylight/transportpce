@@ -46,14 +46,14 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
     @Override
     public void onDataTreeChanged(Collection<DataTreeModification<Node>> changes) {
 
-        //LOG.info("################testing np1:"+changes.toString());
+        //LOG.debug("testing np1: {}", changes.toString());
         String openROADMversion = "";
         List<DataTreeModification<Node>> changesWithoutDefaultNetconfNode = getRealDevicesOnly(changes);
         for (DataTreeModification<Node> device : changesWithoutDefaultNetconfNode) {
             DataObjectModification<Node> rootNode = device.getRootNode();
             String nodeId = rootNode.getDataAfter().key().getNodeId().getValue();
 
-            LOG.info("################nodeId {}", nodeId);
+            LOG.debug("nodeId {}", nodeId);
 
             NetconfNode netconfNode = rootNode.getDataAfter().augmentation(NetconfNode.class);
             NetconfNodeConnectionStatus.ConnectionStatus connectionStatus =
@@ -61,18 +61,16 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
             long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
                     .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
                     .count();
-            LOG.info("################## DCL Modification Type {}",
-                device.getRootNode().getModificationType().toString());
-            LOG.info("################## DCL Capability Count {}", count);
-            LOG.info("################## DCL Connection Status {}", connectionStatus);
+            LOG.debug("DCL Modification Type {}", device.getRootNode().getModificationType().toString());
+            LOG.debug("DCL Capability Count {}", count);
+            LOG.debug("DCL Connection Status {}", connectionStatus);
             if (isCreate(device) || isUpdate(device)) {
                 LOG.info("Node {} was modified", nodeId);
                 try {
                     processModifiedSubtree(nodeId, netconfNode, openROADMversion);
                 } catch (InterruptedException | ExecutionException e) {
-                    LOG.error(e.getMessage(), e);
+                    LOG.error("something wrong when modifying node {}", nodeId, e);
                 }
-
             } else if (isDelete(device)) {
                 LOG.info("Node {} was deleted", nodeId);
             }

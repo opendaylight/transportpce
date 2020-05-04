@@ -44,7 +44,7 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
 
     @Override
     public void onDataTreeChanged(Collection<DataTreeModification<Node>> changes) {
-        //LOG.debug("testing np1:"+changes.toString());
+        //LOG.debug("testing np1: {}", changes.toString());
         String openROADMversion = "";
         List<DataTreeModification<Node>> changesWithoutDefaultNetconfNode = getRealDevicesOnly(changes);
         for (DataTreeModification<Node> device : changesWithoutDefaultNetconfNode) {
@@ -55,22 +55,18 @@ public class DeviceListener implements DataTreeChangeListener<Node> {
             long count = netconfNode.getAvailableCapabilities().getAvailableCapability().stream()
                     .filter(cp -> cp.getCapability().contains(StringConstants.OPENROADM_DEVICE_MODEL_NAME))
                     .count();
-            LOG.info("DL ################## Modification Type {}",
-                device.getRootNode().getModificationType().toString());
-            LOG.info("DL ################## Capability Count {}", count);
-            LOG.info("DL ################## Connection Status {}", connectionStatus);
-            LOG.info("DL ################## device.getRootNode().getDataBefore() {}",
-                device.getRootNode().getDataBefore());
-            LOG.info("DL ################## device.getRootNode().getDataAfter() {}",
-                device.getRootNode().getDataAfter());
-
+            LOG.debug("DL Modification Type {}", device.getRootNode().getModificationType().toString());
+            LOG.debug("DL Capability Count {}", count);
+            LOG.debug("DL Connection Status {}", connectionStatus);
+            LOG.debug("DL device.getRootNode().getDataBefore() {}", device.getRootNode().getDataBefore());
+            LOG.debug("DL device.getRootNode().getDataAfter() {}", device.getRootNode().getDataAfter());
 
             if (isCreate(device)) {
                 LOG.info("Node {} was created", nodeId);
                 try {
                     processModifiedSubtree(nodeId, netconfNode, openROADMversion);
                 } catch (InterruptedException | ExecutionException e) {
-                    LOG.error(e.getMessage(), e);
+                    LOG.error("something wrong when creating node {}", nodeId, e);
                 }
             } else if (isDelete(device)) {
                 LOG.info("Node {} was deleted", nodeId);
