@@ -53,8 +53,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.RxMsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.TxMsi;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.otu.container.OtuBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.rstp.rev161014.rstp.bridge.port.attr.RstpBridgePortTable;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.rstp.rev161014.rstp.container.rstp.RstpBridgeInstance;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.wavelength.map.rev161014.wavelength.map.g.Wavelengths;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -323,11 +321,6 @@ public class INode121 {
             }
         }
     }
-
-    private void persistPorts(CircuitPacks circuitPacks, Connection connection) {
-        LOG.warn("Ports are not persisted yet");
-    }
-
 
     /**
      * Prepares parameters for device insert query.
@@ -1187,175 +1180,6 @@ public class INode121 {
                 }
 
             }
-        }
-    }
-
-    private void persistDevProtocolRstp(String nodeId, Connection connection) {
-
-        InstanceIdentifier<Protocols> protocolsIID =
-                InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Protocols.class);
-        Optional<Protocols> protocolObject =
-                deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class) == null) {
-            LOG.error("LLDP subtree is missing");
-
-        }
-        String startTimestamp = getCurrentTimestamp();
-        for (int i = 0; i < protocolObject.get()
-            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.rstp.rev161014.Protocols1.class)
-            .getRstp().getRstpBridgeInstance().size(); i++) {
-
-            RstpBridgeInstance rstpBridgeInstance = protocolObject.get()
-                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.rstp.rev161014.Protocols1.class)
-                .getRstp().getRstpBridgeInstance().get(i);
-            String bridgeName = rstpBridgeInstance.getBridgeName();
-            String bridgePriority = rstpBridgeInstance.getRstpConfig().getBridgePriority().toString();
-            String shutdown = rstpBridgeInstance.getRstpConfig().getShutdown().toString();
-            String holdTime = rstpBridgeInstance.getRstpConfig().getHoldTime().toString();
-            String helloTime = rstpBridgeInstance.getRstpConfig().getHelloTime().toString();
-            String maxAge = rstpBridgeInstance.getRstpConfig().getMaxAge().toString();
-            String forwardDelay = rstpBridgeInstance.getRstpConfig().getForwardDelay().toString();
-            String transmitHoldCount = rstpBridgeInstance.getRstpConfig().getTransmitHoldCount().toString();
-            String rootBridgePort =
-                rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getRootBridgePort().toString();
-            String rootPathCost = rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getRootPathCost().toString();
-            String rootBridgePriority =
-                rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getRootBridgePriority().toString();
-            String rootBridgeId = rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getRootBridgeId().toString();
-            String rootHoldTime = rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getRootHoldTime().toString();
-            String rootHelloTime = rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getRootHelloTime().toString();
-            String rootMaxAge = rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getRootMaxAge().toString();
-            String rootForwardDelay =
-                rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getRootForwardDelay().toString();
-            String bridgeId = rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getBridgeId().toString();
-            String topoChangeCount =
-                rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getTopoChangeCount().toString();
-            String timeSinceTopoChange =
-                rstpBridgeInstance.getRstpState().getRstpBridgeAttr().getTimeSinceTopoChange().toString();
-
-            persistDevProtocolRstpBridgePort(nodeId, bridgeName, rstpBridgeInstance, connection);
-            persistDevProtocolRstpBridgePortAttr(nodeId, bridgeName, rstpBridgeInstance, connection);
-
-            Object[] parameters = {nodeId,
-                bridgeName,
-                bridgePriority,
-                shutdown,
-                holdTime,
-                helloTime,
-                maxAge,
-                forwardDelay,
-                transmitHoldCount,
-                rootBridgePort,
-                rootPathCost,
-                rootBridgePriority,
-                rootBridgeId,
-                rootHoldTime,
-                rootHelloTime,
-                rootMaxAge,
-                rootForwardDelay,
-                bridgeId,
-                topoChangeCount,
-                timeSinceTopoChange,
-                startTimestamp,
-                startTimestamp
-            };
-
-            String query = Queries.getQuery().deviceProtocolRstpInsert().get();
-            LOG.info("Running {} query ", query);
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                for (int j = 0; j < parameters.length; j++) {
-                    stmt.setObject(j + 1, parameters[j]);
-                }
-                stmt.execute();
-                stmt.clearParameters();
-            } catch (SQLException e) {
-                LOG.error("SQL exception ", e);
-            }
-
-        }
-    }
-
-    private void persistDevProtocolRstpBridgePort(String nodeId, String bridgeName,
-        RstpBridgeInstance rstpBridgeInstance, Connection connection) {
-
-        String startTimestamp = getCurrentTimestamp();
-        for (int i = 0; i < rstpBridgeInstance.getRstpConfig().getRstpBridgePortTable().size(); i++) {
-            RstpBridgePortTable rstpBridgePortTable =
-                rstpBridgeInstance.getRstpConfig().getRstpBridgePortTable().get(i);
-
-            String ifName = rstpBridgePortTable.getIfname();
-            String cost = rstpBridgePortTable.getCost().toString();
-            String priority = rstpBridgePortTable.getPriority().toString();
-
-            Object[] parameters = {nodeId,
-                bridgeName,
-                ifName,
-                cost,
-                priority,
-                startTimestamp,
-                startTimestamp
-            };
-
-            String query = Queries.getQuery().deviceProtocolRstpBridgePortInsert().get();
-            LOG.info("Running {} query ", query);
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                for (int j = 0; j < parameters.length; j++) {
-                    stmt.setObject(j + 1, parameters[j]);
-                }
-                stmt.execute();
-                stmt.clearParameters();
-            } catch (SQLException e) {
-                LOG.error("SQL exception ", e);
-            }
-
-        }
-    }
-
-    private void persistDevProtocolRstpBridgePortAttr(String nodeId, String bridgeName,
-        RstpBridgeInstance rstpBridgeInstance, Connection connection) {
-
-        String startTimestamp = getCurrentTimestamp();
-        for (int i = 0; i < rstpBridgeInstance.getRstpState().getRstpBridgePortAttr().getRstpBridgePortTable().size();
-            i++) {
-
-            org.opendaylight.yang.gen.v1.http.org.openroadm.rstp.rev161014.rstp.bridge.port.state.attr
-                .RstpBridgePortTable rstpBridgePortTableAttr =
-                    rstpBridgeInstance.getRstpState().getRstpBridgePortAttr().getRstpBridgePortTable().get(i);
-
-            String ifName = rstpBridgePortTableAttr.getIfname();
-            String bridgePortState = rstpBridgePortTableAttr.getBridgePortState().getName();
-            String bridgePortRole = rstpBridgePortTableAttr.getBridgePortRole().getName();
-            String bridgePortId = rstpBridgePortTableAttr.getBridgePortId().toString();
-            String openEdgeBridgePort = rstpBridgePortTableAttr.getOperEdgeBridgePort().toString();
-            String designatedBridgePort = rstpBridgePortTableAttr.getDesignatedBridgePort().toString();
-            String designatedBridgeId = rstpBridgePortTableAttr.getDesignatedBridgeid().toString();
-
-            Object[] parameters = {nodeId,
-                bridgeName,
-                ifName,
-                bridgePortState,
-                bridgePortRole,
-                bridgePortId,
-                openEdgeBridgePort,
-                designatedBridgePort,
-                designatedBridgeId,
-                startTimestamp,
-                startTimestamp
-            };
-
-            String query = Queries.getQuery().deviceProtocolRstpBridgePortAttrInsert().get();
-            LOG.info("Running {} query ", query);
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                for (int j = 0; j < parameters.length; j++) {
-                    stmt.setObject(j + 1, parameters[j]);
-                }
-                stmt.execute();
-                stmt.clearParameters();
-            } catch (SQLException e) {
-                LOG.error("SQL exception ", e);
-            }
-
         }
     }
 
