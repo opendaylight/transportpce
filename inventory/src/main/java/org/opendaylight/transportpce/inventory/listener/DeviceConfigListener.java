@@ -70,7 +70,7 @@ public class DeviceConfigListener implements DataTreeChangeListener<Node> {
                 try {
                     processModifiedSubtree(nodeId, netconfNode, openROADMversion);
                 } catch (InterruptedException | ExecutionException e) {
-                    LOG.error(e.getMessage(), e);
+                    LOG.error("Interrupted or execution exception ", e);
                 }
 
             } else if (isDelete(device)) {
