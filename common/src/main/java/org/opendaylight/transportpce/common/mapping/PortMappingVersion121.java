@@ -669,7 +669,6 @@ public class PortMappingVersion121 {
         mpBldr.withKey(new MappingKey(logicalConnectionPoint)).setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName());
-        // Aqui se puede hacer el checkeo de si el admin state es in service o no
         // Get OMS and OTS interface provisioned on the TTP's
         if (logicalConnectionPoint.contains(StringConstants.TTP_TOKEN) && (port.getInterfaces() != null)) {
             for (Interfaces interfaces : port.getInterfaces()) {
@@ -681,9 +680,11 @@ public class PortMappingVersion121 {
                                 = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
                         // Check if interface type is OMS or OTS
                         if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
+                            LOG.info("Setting OMS in node {}, interface {}", nodeId, interfaces.getInterfaceName());
                             mpBldr.setSupportingOms(interfaces.getInterfaceName());
                         }
                         if (interfaceType.equals(OpticalTransport.class)) {
+                            LOG.info("Setting OTS in node {}, interface {}", nodeId, interfaces.getInterfaceName());
                             mpBldr.setSupportingOts(interfaces.getInterfaceName());
                         }
                     } else {

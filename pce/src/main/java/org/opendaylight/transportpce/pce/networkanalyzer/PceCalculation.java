@@ -24,9 +24,7 @@ import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -300,7 +298,7 @@ public class PceCalculation {
     private boolean filteraddLinks(PceLink pcelink) {
 
         NodeId nodeId = pcelink.getSourceId();
-
+        //TODO: should the state be considered here and not in validateLinks?
         if (azSrgs.contains(nodeId)) {
             allPceLinks.put(pcelink.getLinkId(), pcelink);
             allPceNodes.get(nodeId).addOutgoingLink(pcelink);
@@ -318,7 +316,7 @@ public class PceCalculation {
     private boolean filterdropLinks(PceLink pcelink) {
 
         NodeId nodeId = pcelink.getDestId();
-
+        //TODO: should the state be considered here and not in validateLinks?
         if (azSrgs.contains(nodeId)) {
             allPceLinks.put(pcelink.getLinkId(), pcelink);
             allPceNodes.get(nodeId).addOutgoingLink(pcelink);
@@ -335,139 +333,146 @@ public class PceCalculation {
 
     private boolean validateLink(Link link) {
         LOG.info("validateLink: link {} ", link);
+        NodeId sourceId = link.getSource().getSourceNode();
+        NodeId destId = link.getDestination().getDestNode();
+        PceNode source = allPceNodes.get(sourceId);
+        PceNode dest = allPceNodes.get(destId);
 
+        if (source == null) {
+            LOG.debug("validateLink: Link is ignored due source node is rejected by node validation - {}",
+                    link.getSource().getSourceNode().getValue());
+            return false;
+        }
+        if (dest == null) {
+            LOG.debug("validateLink: Link is ignored due dest node is rejected by node validation - {}",
+                    link.getDestination().getDestNode().getValue());
+            return false;
+        }
+
+        if (("100GE".equals(serviceType)) || ("OTU4".equals(serviceType))) {
+            // 100GE or OTU4 services are handled at WDM Layer
+            PceLink pcelink = new PceLink(link, source, dest);
+            if (!pcelink.isValid()) {
+                dropOppositeLink(link);
+                LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
+                return false;
+            }
+            LinkId linkId = pcelink.getLinkId();
+            if (validateLinkConstraints(pcelink).equals(ConstraintTypes.HARD_EXCLUDE)) {
+                dropOppositeLink(link);
+                LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
+                return false;
+            }
+            switch (pcelink.getlinkType()) {
+                case ROADMTOROADM:
+                    //Nothing is done with ROADM-ROADM link??
+                case EXPRESSLINK:
+                    allPceLinks.put(linkId, pcelink);
+                    source.addOutgoingLink(pcelink);
+                    LOG.debug("validateLink: {}-LINK with inService state added to allPceLinks {}",
+                            pcelink.getlinkType(), pcelink);
+                    break;
+                // TODO: addlink and drop link are not included in outgoing links of node as they are internal.
+                //  Should we check the state of these kind of links here?
+                case ADDLINK:
+                    pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString()));
+                    addLinks.add(pcelink);
+                    LOG.debug("validateLink: ADD-LINK with inService saved  {}", pcelink);
+                    break;
+                case DROPLINK:
+                    pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString()));
+                    dropLinks.add(pcelink);
+                    LOG.debug("validateLink: DROP-LINK with inService saved  {}", pcelink);
+                    break;
+                case XPONDERINPUT:
+                    // store separately all SRG links directly
+                    azSrgs.add(sourceId);
+                    // connected to A/Z
+                    if (!dest.checkTP(pcelink.getDestTP().toString())) {
+                        LOG.debug(
+                                "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
+                        return false;
+                    }
+                    if (dest.getXpdrClient(pcelink.getDestTP().toString()) != null) {
+                        pcelink.setClient(dest.getXpdrClient(pcelink.getDestTP().toString()));
+                    }
+                    allPceLinks.put(linkId, pcelink);
+                    source.addOutgoingLink(pcelink);
+                    LOG.debug("validateLink: XPONDER-INPUT link with inService added to allPceLinks {}", pcelink);
+                    break;
+                // does it mean XPONDER==>>SRG ?
+                case XPONDEROUTPUT:
+                    // store separately all SRG links directly
+                    azSrgs.add(destId);
+                    // connected to A/Z
+                    if (!source.checkTP(pcelink.getSourceTP().toString())) {
+                        LOG.debug(
+                                "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
+                        return false;
+                    }
+                    if (source.getXpdrClient(pcelink.getSourceTP().toString()) != null) {
+                        pcelink.setClient(source.getXpdrClient(pcelink.getSourceTP().toString()));
+                    }
+                    allPceLinks.put(linkId, pcelink);
+                    source.addOutgoingLink(pcelink);
+                    LOG.debug("validateLink: XPONDER-OUTPUT link with inService added to allPceLinks {}", pcelink);
+                    break;
+                default:
+                    LOG.warn("validateLink: link type is not supported {}", pcelink);
+            }
+            return true;
+
+        } else if (("ODU4".equals(serviceType)) || ("10GE".equals(serviceType)) || ("1GE".equals(serviceType))) {
+            // ODU4, 1GE and 10GE services relying on ODU2, ODU2e or ODU0 services are handled at OTN layer
+            PceLink pceOtnLink = new PceLink(link, source, dest);
+
+            if (!pceOtnLink.isOtnValid(link, serviceType)) {
+                dropOppositeLink(link);
+                LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
+                return false;
+            }
+
+            LinkId linkId = pceOtnLink.getLinkId();
+            if (validateLinkConstraints(pceOtnLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
+                dropOppositeLink(link);
+                LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
+                return false;
+            }
+
+            switch (pceOtnLink.getlinkType()) {
+                case OTNLINK:
+                    if (dest.getXpdrClient(pceOtnLink.getDestTP().toString()) != null) {
+                        pceOtnLink.setClient(dest.getXpdrClient(pceOtnLink.getDestTP().toString()));
+                    }
+
+                    allPceLinks.put(linkId, pceOtnLink);
+                    source.addOutgoingLink(pceOtnLink);
+                    LOG.info("validateLink: OTN-LINK added to allPceLinks {}", pceOtnLink);
+                    break;
+                default:
+                    LOG.warn("validateLink: link type is not supported {}", pceOtnLink);
+            }
+            return true;
+
+        } else {
+            LOG.error(" validateLink: Unmanaged service type {}", serviceType);
+            return false;
+        }
+        /*
         if (link.augmentation(Link1.class).getOperationalState().equals(State.InService)) {
-            NodeId sourceId = link.getSource().getSourceNode();
-            NodeId destId = link.getDestination().getDestNode();
-            PceNode source = allPceNodes.get(sourceId);
-            PceNode dest = allPceNodes.get(destId);
 
-            if (source == null) {
-                LOG.debug("validateLink: Link is ignored due source node is rejected by node validation - {}",
-                        link.getSource().getSourceNode().getValue());
-                return false;
-            }
-            if (dest == null) {
-                LOG.debug("validateLink: Link is ignored due dest node is rejected by node validation - {}",
-                        link.getDestination().getDestNode().getValue());
-                return false;
-            }
-
-            if (("100GE".equals(serviceType)) || ("OTU4".equals(serviceType))) {
-                // 100GE or OTU4 services are handled at WDM Layer
-                PceLink pcelink = new PceLink(link, source, dest);
-                if (!pcelink.isValid()) {
-                    dropOppositeLink(link);
-                    LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
-                    return false;
-                }
-                LinkId linkId = pcelink.getLinkId();
-                if (validateLinkConstraints(pcelink).equals(ConstraintTypes.HARD_EXCLUDE)) {
-                    dropOppositeLink(link);
-                    LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
-                    return false;
-                }
-                switch (pcelink.getlinkType()) {
-                    case ROADMTOROADM:
-                    case EXPRESSLINK:
-                        allPceLinks.put(linkId, pcelink);
-                        source.addOutgoingLink(pcelink);
-                        LOG.debug("validateLink: {}-LINK added to allPceLinks {}",
-                                pcelink.getlinkType(), pcelink);
-                        break;
-                    case ADDLINK:
-                        pcelink.setClient(source.getRdmSrgClient(pcelink.getSourceTP().toString()));
-                        addLinks.add(pcelink);
-                        LOG.debug("validateLink: ADD-LINK saved  {}", pcelink);
-                        break;
-                    case DROPLINK:
-                        pcelink.setClient(dest.getRdmSrgClient(pcelink.getDestTP().toString()));
-                        dropLinks.add(pcelink);
-                        LOG.debug("validateLink: DROP-LINK saved  {}", pcelink);
-                        break;
-                    case XPONDERINPUT:
-                        // store separately all SRG links directly
-                        azSrgs.add(sourceId);
-                        // connected to A/Z
-                        if (!dest.checkTP(pcelink.getDestTP().toString())) {
-                            LOG.debug(
-                                    "validateLink: XPONDER-INPUT is rejected as NW port is busy - {} ", pcelink);
-                            return false;
-                        }
-                        if (dest.getXpdrClient(pcelink.getDestTP().toString()) != null) {
-                            pcelink.setClient(dest.getXpdrClient(pcelink.getDestTP().toString()));
-                        }
-                        allPceLinks.put(linkId, pcelink);
-                        source.addOutgoingLink(pcelink);
-                        LOG.debug("validateLink: XPONDER-INPUT link added to allPceLinks {}", pcelink);
-                        break;
-                    // does it mean XPONDER==>>SRG ?
-                    case XPONDEROUTPUT:
-                        // store separately all SRG links directly
-                        azSrgs.add(destId);
-                        // connected to A/Z
-                        if (!source.checkTP(pcelink.getSourceTP().toString())) {
-                            LOG.debug(
-                                    "validateLink: XPONDER-OUTPUT is rejected as NW port is busy - {} ", pcelink);
-                            return false;
-                        }
-                        if (source.getXpdrClient(pcelink.getSourceTP().toString()) != null) {
-                            pcelink.setClient(source.getXpdrClient(pcelink.getSourceTP().toString()));
-                        }
-                        allPceLinks.put(linkId, pcelink);
-                        source.addOutgoingLink(pcelink);
-                        LOG.debug("validateLink: XPONDER-OUTPUT link added to allPceLinks {}", pcelink);
-                        break;
-                    default:
-                        LOG.warn("validateLink: link type is not supported {}", pcelink);
-                }
-                return true;
-
-            } else if (("ODU4".equals(serviceType)) || ("10GE".equals(serviceType)) || ("1GE".equals(serviceType))) {
-                // ODU4, 1GE and 10GE services relying on ODU2, ODU2e or ODU0 services are handled at OTN layer
-                PceLink pceOtnLink = new PceLink(link, source, dest);
-
-                if (!pceOtnLink.isOtnValid(link, serviceType)) {
-                    dropOppositeLink(link);
-                    LOG.error(" validateLink: Link is ignored due errors in network data or in opposite link");
-                    return false;
-                }
-
-                LinkId linkId = pceOtnLink.getLinkId();
-                if (validateLinkConstraints(pceOtnLink).equals(ConstraintTypes.HARD_EXCLUDE)) {
-                    dropOppositeLink(link);
-                    LOG.debug("validateLink: constraints : link is ignored == {}", linkId.getValue());
-                    return false;
-                }
-
-                switch (pceOtnLink.getlinkType()) {
-                    case OTNLINK:
-                        if (dest.getXpdrClient(pceOtnLink.getDestTP().toString()) != null) {
-                            pceOtnLink.setClient(dest.getXpdrClient(pceOtnLink.getDestTP().toString()));
-                        }
-
-                        allPceLinks.put(linkId, pceOtnLink);
-                        source.addOutgoingLink(pceOtnLink);
-                        LOG.info("validateLink: OTN-LINK added to allPceLinks {}", pceOtnLink);
-                        break;
-                    default:
-                        LOG.warn("validateLink: link type is not supported {}", pceOtnLink);
-                }
-                return true;
-
-            } else {
-                LOG.error(" validateLink: Unmanaged service type {}", serviceType);
-                return false;
-            }
         } else {
             LOG.error("State of link {} is {}", link.getLinkId().getValue(),
                     link.augmentation(Link1.class).getOperationalState().getName());
             return false;
         }
+
+        */
     }
 
     private boolean validateNode(Node node) {
-        LOG.debug("validateNode: node {} ", node);
+        // TODO: should we check node state as well in order to include in the network structure?
+        LOG.info("validateNode: node {} ", node);
 
         // PceNode will be used in Graph algorithm
         Node1 node1 = node.augmentation(Node1.class);
@@ -486,7 +491,6 @@ public class PceCalculation {
             LOG.warn(" validateNode: Node is ignored");
             return false;
         }
-
         if (validateNodeConstraints(pceNode).equals(ConstraintTypes.HARD_EXCLUDE)) {
             return false;
         }
@@ -505,7 +509,7 @@ public class PceCalculation {
     }
 
     private boolean validateOtnNode(Node node) {
-
+        //TODO: validate OTN node based on operational state
         LOG.info("validateOtnNode: {} ", node.getNodeId().getValue());
         // PceOtnNode will be used in Graph algorithm
         if (node.augmentation(Node1.class) != null) {

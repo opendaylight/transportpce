@@ -246,7 +246,8 @@ public class DeviceListener implements OrgOpenroadmDeviceListener {
                 .setCircuitId(jsonObject.getString("CircuitId"))
                 .setName(jsonObject.getString("Name"))
                 .setSupportingCircuitPackName(jsonObject.getString("SupportingCircuitPackName"))
-                .setSupportingInterface(jsonObject.getString("SupportingInterface"))
+                .setSupportingInterface(!jsonObject.has("SupportingInterface") ? null : jsonObject
+                        .getString("SupportingInterface"))
                 .setSupportingPort(jsonObject.get("SupportingPort"))
                 .setType(getInterfaceType(jsonObject.getString("Type")))
                 .build();

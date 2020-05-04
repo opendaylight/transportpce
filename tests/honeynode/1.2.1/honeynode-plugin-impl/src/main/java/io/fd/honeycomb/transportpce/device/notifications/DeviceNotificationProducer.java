@@ -207,7 +207,7 @@ public class DeviceNotificationProducer implements ManagedNotificationProducer {
                                                 default:
                                                     break;
                                             }
-                                            if (cpck_aft != null) {
+                                            if (cpck_aft != null && cpck_bef != null) {
                                                 LOG.info("CircuitPacks data = {}", cpck_aft);
                                                 JSONObject cpack_aft_obj = CircuitPackToList(cpck_aft);
                                                 LOG.info("DevNotProd circuit pack json data = {}", cpack_aft_obj.toString());
@@ -226,7 +226,7 @@ public class DeviceNotificationProducer implements ManagedNotificationProducer {
                                                     editList.add(edit);
                                                 }
                                             } else {
-                                                LOG.warn("Circuit Pack data is null !");
+                                                LOG.warn("Circuit Pack data after/before is null !");
                                             }
                                             break;
                                         default:
