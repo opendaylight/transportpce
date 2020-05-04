@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78a16756_71fd3054",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-04T07:13:27Z",
+      "side": 1,
+      "message": "previous indentation (+4) was there to separate clearly the method declaration from its body.",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 42
+      },
+      "revId": "c75628d21c414b6a812c4906455a12da9c10039e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e96ea5bd_6f8e7d60",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-04T07:13:27Z",
+      "side": 1,
+      "message": "indent +4",
+      "range": {
+        "startLine": 143,
+        "startChar": 7,
+        "endLine": 143,
+        "endChar": 42
+      },
+      "revId": "c75628d21c414b6a812c4906455a12da9c10039e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "690ee2ef_f98c00ce",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-04T07:13:27Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 201,
+        "startChar": 7,
+        "endLine": 201,
+        "endChar": 28
+      },
+      "revId": "c75628d21c414b6a812c4906455a12da9c10039e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7452aed9_f320c8fc",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-04T07:13:27Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 210,
+        "startChar": 3,
+        "endLine": 210,
+        "endChar": 79
+      },
+      "revId": "c75628d21c414b6a812c4906455a12da9c10039e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12b68471_bac3182e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-04T07:13:27Z",
+      "side": 1,
+      "message": "can be on the same line",
+      "range": {
+        "startLine": 587,
+        "startChar": 24,
+        "endLine": 588,
+        "endChar": 37
+      },
+      "revId": "c75628d21c414b6a812c4906455a12da9c10039e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a38833_0e376ad2",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-04T07:13:27Z",
+      "side": 1,
+      "message": "break; ?\nor\n//fallthrough ?",
+      "range": {
+        "startLine": 147,
+        "startChar": 1,
+        "endLine": 148,
+        "endChar": 56
+      },
+      "revId": "c75628d21c414b6a812c4906455a12da9c10039e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02a7b897_dbaf703c",
+        "filename": "servicehandler/src/main/resources/OSGI-INF/blueprint/servicehandler-blueprint.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-04T07:13:27Z",
+      "side": 1,
+      "message": "must also be added in lighty.io main class",
+      "range": {
+        "startLine": 37,
+        "startChar": 19,
+        "endLine": 38,
+        "endChar": 103
+      },
+      "revId": "c75628d21c414b6a812c4906455a12da9c10039e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
