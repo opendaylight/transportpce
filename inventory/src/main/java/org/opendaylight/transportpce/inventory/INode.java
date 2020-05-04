@@ -55,7 +55,7 @@ public class INode {
                 }
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("SQL exception", e);
         }
         return nodeExists == 0 ? false : true;
     }
@@ -74,7 +74,7 @@ public class INode {
                 }
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("SQL exception", e);
         }
         return dataExists == 0 ? false : true;
     }

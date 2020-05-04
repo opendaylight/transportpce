@@ -149,11 +149,11 @@ public class INode221 {
             LOG.debug("iNode persist Connection Map call complete");
 
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("SQL exception ", e);
         } catch (InterruptedException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Interrupted exception ", e);
         } catch (ExecutionException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("Execution exception ", e);
         }
         return sqlResult;
     }
@@ -172,7 +172,7 @@ public class INode221 {
                 }
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("SQL exception ", e);
         }
         return nodeExists == 0 ? false : true;
     }
@@ -202,7 +202,7 @@ public class INode221 {
                 persistShelves(nodeId, connection, shelve);
             }
         } catch (SQLException e1) {
-            LOG.error(e1.getMessage(), e1);
+            LOG.error("SQL exception ", e1);
         }
     }
 
@@ -233,7 +233,7 @@ public class INode221 {
                 persistCircuitPacks(nodeId, connection, cp);
             }
         } catch (SQLException e1) {
-            LOG.error(e1.getMessage(), e1);
+            LOG.error("SQL exception ", e1);
         }
     }
 
@@ -248,7 +248,7 @@ public class INode221 {
             stmt.execute();
             stmt.clearParameters();
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("SQL exception ", e);
         }
     }
 
@@ -263,7 +263,7 @@ public class INode221 {
             preparedStmt.execute();
             preparedStmt.clearParameters();
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("SQL exception ", e);
         }
     }
 
@@ -289,7 +289,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
         }
     }
@@ -317,7 +317,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
         }
     }
@@ -595,7 +595,7 @@ public class INode221 {
                 preparedStmt.execute();
                 preparedStmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
         }
     }
@@ -1017,7 +1017,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
         }
     }
@@ -1063,7 +1063,7 @@ public class INode221 {
             stmt.execute();
             stmt.clearParameters();
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("SQL exception ", e);
         }
 
     }
@@ -1104,7 +1104,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1159,7 +1159,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1245,7 +1245,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1281,7 +1281,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1328,7 +1328,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1370,7 +1370,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1416,7 +1416,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1457,7 +1457,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1507,7 +1507,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1539,7 +1539,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1573,7 +1573,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1623,7 +1623,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1655,7 +1655,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1701,7 +1701,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1740,7 +1740,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1782,7 +1782,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
 
         }
@@ -1809,7 +1809,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
         }
     }
@@ -1833,7 +1833,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
         }
     }
@@ -1858,7 +1858,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
         }
     }
@@ -1883,7 +1883,7 @@ public class INode221 {
                 stmt.execute();
                 stmt.clearParameters();
             } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error("SQL exception ", e);
             }
         }
     }

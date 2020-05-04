@@ -82,7 +82,7 @@ public class DeviceInventory {
             LOG.debug("Statment {}, returned {}", INSERT_ALARM_STRING, count);
             statement.clearParameters();
         } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error("SQL exception ", e);
         }
         return count;
     }
