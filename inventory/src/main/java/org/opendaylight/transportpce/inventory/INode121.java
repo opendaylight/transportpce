@@ -515,7 +515,7 @@ public class INode121 {
                 cpPort.getOtdrPort().getLaunchCableLength().toString()));
         String otdrPortPortDirection = (cpPort.getOtdrPort() == null ? "-1" :
             (cpPort.getOtdrPort().getPortDirection() == null ? "-1" :
-                Integer.valueOf(cpPort.getOtdrPort().getPortDirection().getIntValue()).toString()));
+                Integer.toString(cpPort.getOtdrPort().getPortDirection().getIntValue())));
         //String ilaPortPortPowerCapabilityMixRx = "";
         //String ilaPortPortPowerCapabilityMixTx = "";
         //String ilaPortPortPowerCapabilityMaxRx = "";
@@ -716,7 +716,7 @@ public class INode121 {
                 EthernetBuilder ethIfBuilder = new EthernetBuilder(deviceInterface.augmentation(Interface1.class)
                     .getEthernet());
                 ethernetSpeed = (ethIfBuilder.getSpeed() == null ? "-1" :
-                    Integer.valueOf(ethIfBuilder.getSpeed().intValue()).toString());
+                    Integer.toString(ethIfBuilder.getSpeed().intValue()));
                 ethernetFec = ethIfBuilder.getFec().getName();
                 ethernetDuplexEnu = (ethIfBuilder.getDuplex() == null ? "" : ethIfBuilder.getDuplex().getName());
                 ethernetMtu = ethIfBuilder.getMtu().toString();
@@ -769,8 +769,8 @@ public class INode121 {
                 maintTestsignalEnabled = oduIfBuilder.getMaintTestsignal().isEnabled().toString();
                 maintTestsignalTestpatternEnu = oduIfBuilder.getMaintTestsignal().getTestPattern().getName();
                 maintTestsignalTypeEnu = oduIfBuilder.getMaintTestsignal().getType().getName();
-                maintTestsignalBiterrors = Integer.valueOf(oduIfBuilder.getMaintTestsignal().getBitErrors().intValue())
-                    .toString();
+                maintTestsignalBiterrors = Integer.toString(
+                        oduIfBuilder.getMaintTestsignal().getBitErrors().intValue());
                 maintTestsignalBiterrorsterminal = oduIfBuilder.getMaintTestsignal().getBitErrorsTerminal().toString();
                 maintTestsignalSyncseconds = oduIfBuilder.getMaintTestsignal().getSyncSeconds();
                 maintTestsignalSyncsecondsterminal = oduIfBuilder.getMaintTestsignal().getSyncSecondsTerminal();
@@ -1431,10 +1431,10 @@ public class INode121 {
                 String externalLinkName = externalLink.getExternalLinkName();
                 String sourceNodeId = externalLink.getSource().getNodeId();
                 String sourceCircuitPackName = externalLink.getSource().getCircuitPackName();
-                String sourcePortName = externalLink.getSource().getPortName().toString();
+                String sourcePortName = externalLink.getSource().getPortName();
                 String destinationNodeId = externalLink.getDestination().getNodeId();
                 String destinationCircuitPackName = externalLink.getDestination().getCircuitPackName();
-                String destinationPortName = externalLink.getDestination().getPortName().toString();
+                String destinationPortName = externalLink.getDestination().getPortName();
 
                 Object[] parameters = {nodeId,
                     externalLinkName,
