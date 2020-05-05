@@ -8,11 +8,11 @@
 
 package org.opendaylight.transportpce.inventory;
 
+import static java.util.Objects.requireNonNull;
 import static org.opendaylight.transportpce.inventory.utils.StringUtils.getCurrentTimestamp;
 import static org.opendaylight.transportpce.inventory.utils.StringUtils.prepareDashString;
 import static org.opendaylight.transportpce.inventory.utils.StringUtils.prepareEmptyString;
 
-import com.google.common.base.Preconditions;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -184,8 +184,7 @@ public class INode121 {
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
 
         LOG.info("Shelves size {}", deviceObject.get().getShelves().size());
-        try (Connection connection = dataSource.getConnection()) {
-            Preconditions.checkNotNull(connection);
+        try (Connection connection = requireNonNull(dataSource.getConnection())) {
             for (int i = 0; i < deviceObject.get().getShelves().size(); i++) {
                 Shelves shelve = deviceObject.get().getShelves().get(i);
                 String shelfName = shelve.getShelfName();
@@ -216,8 +215,7 @@ public class INode121 {
         }
         LOG.info("Circuit pack size {}", deviceObject.get().getCircuitPacks().size());
 
-        try (Connection connection = dataSource.getConnection()) {
-            Preconditions.checkNotNull(connection);
+        try (Connection connection = requireNonNull(dataSource.getConnection())) {
             for (int i = 0; i < deviceObject.get().getCircuitPacks().size(); i++) {
                 CircuitPacks cp = deviceObject.get().getCircuitPacks().get(i);
 
