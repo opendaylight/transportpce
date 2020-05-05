@@ -55,7 +55,9 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    value = "SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING",
+    justification = "TODO review the SQL statement generation process")
 public class INode221 {
     private static final Logger LOG = LoggerFactory.getLogger(INode221.class);
 
