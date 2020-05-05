@@ -605,7 +605,7 @@ public class INode221 {
                     org.opendaylight.yang.gen.v1
                         .http.org.openroadm.optical.transport.interfaces.rev161014.Interface1.class)
                     .getOts());
-                int otsFiberTypeEnu = otsIfBuilder.getFiberType().getIntValue();
+                //otsFiberTypeEnu = otsIfBuilder.getFiberType().getIntValue();
                 otsSpanLossReceive = otsIfBuilder.getSpanLossReceive().toString();
                 otsSpanLossTransmit = otsIfBuilder.getSpanLossTransmit().toString();
                 break;
@@ -1310,7 +1310,7 @@ public class INode221 {
             SharedRiskGroup sharedRiskGroup = deviceObject.get().getSharedRiskGroup().get(i);
             String maxAddDropPorts = sharedRiskGroup.getMaxAddDropPorts().toString();
             String srgNumber = sharedRiskGroup.getSrgNumber().toString();
-            int wavelengthDuplicationEnu = sharedRiskGroup.getWavelengthDuplication().getIntValue();
+            //int wavelengthDuplicationEnu = sharedRiskGroup.getWavelengthDuplication().getIntValue();
             persistDevSrgCircuitPacks(nodeId, sharedRiskGroup, srgNumber, connection);
             //String currentProvisionedAddDropPorts = "";
             //String mcCapSlotWidthGranularity = "";
