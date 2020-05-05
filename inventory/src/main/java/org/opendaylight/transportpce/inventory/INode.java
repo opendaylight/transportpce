@@ -17,6 +17,9 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    value = "SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING",
+    justification = "TODO review the SQL statement generation process")
 public class INode {
     private static final Logger LOG = LoggerFactory.getLogger(INode.class);
 
