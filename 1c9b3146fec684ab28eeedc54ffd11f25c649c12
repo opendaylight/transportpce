@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "923d3356_42597cb9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-05T14:05:04Z",
+      "side": 1,
+      "message": "JIRA?",
+      "revId": "1c9b3146fec684ab28eeedc54ffd11f25c649c12",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caa8cdb2_342fa076",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphEdgeTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-05T14:05:04Z",
+      "side": 1,
+      "message": "possible factorization I think",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 36
+      },
+      "revId": "1c9b3146fec684ab28eeedc54ffd11f25c649c12",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40958904_e1dcd7de",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphEdgeTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-05T14:05:04Z",
+      "side": 1,
+      "message": "duplication error ?",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 69
+      },
+      "revId": "1c9b3146fec684ab28eeedc54ffd11f25c649c12",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bf1c852_9d802fc6",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-05T14:05:04Z",
+      "side": 1,
+      "message": "factorization possible I think",
+      "range": {
+        "startLine": 51,
+        "startChar": 1,
+        "endLine": 52,
+        "endChar": 36
+      },
+      "revId": "1c9b3146fec684ab28eeedc54ffd11f25c649c12",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edb2825e_37ed6beb",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-05T14:05:04Z",
+      "side": 1,
+      "message": "LF not coherent with previous line style in ietfSrcLinkBldr",
+      "range": {
+        "startLine": 60,
+        "startChar": 73,
+        "endLine": 61,
+        "endChar": 25
+      },
+      "revId": "1c9b3146fec684ab28eeedc54ffd11f25c649c12",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26e1950e_8f13fee7",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/NodeUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-05T14:05:04Z",
+      "side": 1,
+      "message": "maybe use a LF to keep the same style as the line below",
+      "range": {
+        "startLine": 225,
+        "startChar": 27,
+        "endLine": 225,
+        "endChar": 28
+      },
+      "revId": "1c9b3146fec684ab28eeedc54ffd11f25c649c12",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
