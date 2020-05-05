@@ -625,9 +625,9 @@ public class INode221 {
                 persistDevInterfaceOtnOduRxMsi(nodeId, name, oduIfBuilder, connection);
                 persistDevInterfaceOtnOduExpMsi(nodeId, name, oduIfBuilder, connection);
 
-                opuPayloadType = oduIfBuilder.getOpu().getPayloadType().toString();
-                opuRxPayloadType = oduIfBuilder.getOpu().getRxPayloadType().toString();
-                opuExpPayloadType = oduIfBuilder.getOpu().getExpPayloadType().toString();
+                opuPayloadType = oduIfBuilder.getOpu().getPayloadType();
+                opuRxPayloadType = oduIfBuilder.getOpu().getRxPayloadType();
+                opuExpPayloadType = oduIfBuilder.getOpu().getExpPayloadType();
                 opuPayloadInterface = oduIfBuilder.getOpu().getPayloadInterface();
                         /*persistDevInterfaceOtnOduTxMsi(nodeId,name,oduIfBuilder,connection);
                         persistDevInterfaceOtnOduRxMsi(nodeId,name,oduIfBuilder,connection);
@@ -1108,12 +1108,12 @@ public class INode221 {
         for (int i = 0; i < deviceObject.get().getExternalLink().size(); i++) {
             ExternalLink externalLink = deviceObject.get().getExternalLink().get(i);
             String externalLinkName = externalLink.getExternalLinkName();
-            String sourceNodeId = externalLink.getSource().getNodeId().toString();
+            String sourceNodeId = externalLink.getSource().getNodeId();
             String sourceCircuitPackName = externalLink.getSource().getCircuitPackName();
-            String sourcePortName = externalLink.getSource().getPortName().toString();
-            String destinationNodeId = externalLink.getDestination().getNodeId().toString();
+            String sourcePortName = externalLink.getSource().getPortName();
+            String destinationNodeId = externalLink.getDestination().getNodeId();
             String destinationCircuitPackName = externalLink.getDestination().getCircuitPackName();
-            String destinationPortName = externalLink.getDestination().getPortName().toString();
+            String destinationPortName = externalLink.getDestination().getPortName();
 
             Object[] parameters = {nodeId,
                 externalLinkName,
