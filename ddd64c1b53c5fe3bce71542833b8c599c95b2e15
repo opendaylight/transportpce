@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef7b84b7_148a8a33",
+        "filename": "inventory/src/main/java/org/opendaylight/transportpce/inventory/query/Queries.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-05T14:28:55Z",
+      "side": 1,
+      "message": "should  probably be done for the whole class constants",
+      "range": {
+        "startLine": 54,
+        "startChar": 3,
+        "endLine": 56,
+        "endChar": 12
+      },
+      "revId": "ddd64c1b53c5fe3bce71542833b8c599c95b2e15",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
