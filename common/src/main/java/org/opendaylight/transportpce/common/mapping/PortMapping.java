@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.common.mapping;
 
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 
 public interface PortMapping {
 
@@ -97,21 +96,6 @@ public interface PortMapping {
     boolean updateMapping(String nodeId, Mapping mapping);
 
     /**
-     * This method creates logical to physical port mapping for a given LOGICAL
-     * connection point.
-     *
-     * @param nodeId
-     *            node ID
-     * @param port
-     *            port to update
-     * @param cpackName
-     *            cpackName to update
-     *
-     * @return true/false based on status of operation
-     */
-    boolean createMapping(String nodeId, Ports port, String cpackName);
-
-    /**
      * Returns all Mapping informations for a given ordm device.
      * This method returns all Mapping informations already stored in the MD-SAL
      * data store for a given openroadm device. Beyound the list of mappings, it
@@ -124,16 +108,4 @@ public interface PortMapping {
      * @return node data if success otherwise null.
      */
     Nodes getNode(String nodeId);
-
-    /**
-     * This method deletes logical to physical port mapping for a given node.
-     *
-     * @param nodeId
-     *            node ID
-     * @param oldMapping
-     *            oldMapping to update
-
-     * @return true/false based on status of operation
-     */
-    boolean deleteMapping(String nodeId, Mapping oldMapping);
 }

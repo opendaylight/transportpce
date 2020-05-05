@@ -155,6 +155,7 @@ public class PortMappingVersion121 {
                         Timeouts.DEVICE_READ_TIMEOUT_UNIT);
                 if (portObject.isPresent()) {
                     Ports port = portObject.get();
+                    LOG.info("Port {} info: {}", port.getPortName(), port.toString());
                     // check port operational state. If OOS delete mapping else create mapping. Maybe this is wrong
                     if (port.getOperationalState().getName().equals("inService")) {
                         LOG.info("Port new operational state to in service");
@@ -412,6 +413,7 @@ public class PortMappingVersion121 {
                 Collections.sort(portList, new SortPort121ByName());
                 int portIndex = 1;
                 for (Ports port : portList) {
+                    LOG.info("Port {} info: {}", port.getPortName(), port.toString());
                     String currentKey = circuitPackName + "-" + port.getPortName();
                     if (port.getPortQual() == null) {
                         continue;
@@ -445,6 +447,7 @@ public class PortMappingVersion121 {
                                 && port2Object.get().getPortQual().getIntValue()
                                 == Port.PortQual.RoadmExternal.getIntValue()) {
                             Ports port2 = port2Object.get();
+                            LOG.info("Port2 {} info: {}", port2.getPortName(), port2.toString());
                             if ((port.getPortDirection().getIntValue() == Direction.Rx.getIntValue()
                                     && port2.getPortDirection().getIntValue() == Direction.Tx.getIntValue()
                                     && port2.getPartnerPort() != null
@@ -664,7 +667,7 @@ public class PortMappingVersion121 {
 
     private Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
                                         String logicalConnectionPoint) {
-
+        LOG.info("Creating mapping object for node {}", nodeId);
         MappingBuilder mpBldr = new MappingBuilder();
         mpBldr.withKey(new MappingKey(logicalConnectionPoint)).setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName())
@@ -754,6 +757,7 @@ public class PortMappingVersion121 {
                             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
                     if (portObject.isPresent()) {
                         Ports port = portObject.get();
+                        LOG.info("Port {} info: {}", port.getPortName(), port.toString());
                         if (port.getPortQual() == null) {
                             continue;
                         } else if (Port.PortQual.RoadmExternal.getIntValue() == port.getPortQual().getIntValue()
@@ -809,6 +813,8 @@ public class PortMappingVersion121 {
                     if (port1Object.isPresent() && port2Object.isPresent()) {
                         Ports port1 = port1Object.get();
                         Ports port2 = port2Object.get();
+                        LOG.info("Port1 {} info: {}", port1.getPortName(), port1.toString());
+                        LOG.info("Port2 {} info: {}", port2.getPortName(), port2.toString());
                         if (port1.getPortQual() == null || port2.getPortQual() == null) {
                             continue;
                         } else if ((Port.PortQual.RoadmExternal.getIntValue() == port1.getPortQual().getIntValue()
@@ -903,145 +909,5 @@ public class PortMappingVersion121 {
             return null;
         }
         return nodeInfoBldr.build();
-    }
-
-    public boolean createMapping(String nodeId, Ports port, String cpackName) {
-        if ((port != null) && (cpackName != null)) {
-            try {
-                LOG.info("Port new operational state to in service");
-
-                Mapping newMapping = createMappingObject(nodeId, port,
-                        cpackName,
-                        port.getLogicalConnectionPoint());
-                LOG.info("Updating mapping Data for {} of {} by new mapping data {}",
-                        port.getLogicalConnectionPoint(), nodeId, newMapping);
-                final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
-                InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
-                        .child(Nodes.class, new NodesKey(nodeId))
-                        .child(Mapping.class, new MappingKey(port.getLogicalConnectionPoint()));
-                writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, mapIID, newMapping);
-                FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
-                commit.get();
-                return true;
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Error updating Mapping {} for node {}", port.getLogicalConnectionPoint(), nodeId, e);
-                return false;
-            }
-        } else {
-            LOG.error("Impossible to create mapping");
-            return false;
-        }
-    }
-
-    public boolean deleteMapping(String nodeId, Mapping oldMapping) {
-        if ((nodeId != null) && (oldMapping != null)) {
-            try {
-                LOG.info("Port new operational state to out service");
-                LOG.info("Deleting mapping Data for {} of {}",
-                        oldMapping.getLogicalConnectionPoint(), nodeId);
-                final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
-                InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
-                        .child(Nodes.class, new NodesKey(nodeId))
-                        .child(Mapping.class, new MappingKey(oldMapping.getLogicalConnectionPoint()));
-                writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, mapIID);
-                FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
-                commit.get();
-                return true;
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Error deleting Mapping {} for node {}", oldMapping.getLogicalConnectionPoint(), nodeId, e);
-                return false;
-            }
-        } else {
-            LOG.error("Impossible to delete mapping");
-            return false;
-        }
-    }
-
-    public boolean createXpdrMapping(String nodeId, Ports port, String cpackName) {
-        if ((port != null) && (cpackName != null)) {
-            try {
-                LOG.info("Port new operational state to in service");
-                LOG.info("Port info = {}", port.toString());
-                // we are missing the assoLcp, to associate client with network port??
-                // Esto tendra que crearse con un <edit-config> al dispositivo
-                Mapping newMapping =
-                        createXpdrMappingObject(nodeId, port, cpackName,
-                                port.getLogicalConnectionPoint(),
-                                null, null, null);
-                LOG.info("Updating mapping Data for {} of {} by new mapping data {}",
-                        port.getLogicalConnectionPoint(), nodeId, newMapping);
-                final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
-                InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
-                        .child(Nodes.class, new NodesKey(nodeId))
-                        .child(Mapping.class, new MappingKey(port.getLogicalConnectionPoint()));
-                writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, mapIID, newMapping);
-                FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
-                commit.get();
-                return true;
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Error updating Mapping {} for node {}", port.getLogicalConnectionPoint(), nodeId, e);
-                return false;
-            }
-        } else {
-            LOG.error("Impossible to create mapping");
-            return false;
-        }
-    }
-
-    public boolean deleteXpdrMapping(String nodeId, Mapping oldMapping, List<Mapping> mapping) {
-        if ((nodeId != null) && (oldMapping != null) && (mapping != null)) {
-            for (Mapping map : mapping) {
-                if (map.getConnectionMapLcp() != null) {
-                    if (map.getConnectionMapLcp().equals(oldMapping.getLogicalConnectionPoint())) {
-                        LOG.info("Mapping {} has connection map with {}",
-                                map.getLogicalConnectionPoint(),
-                                oldMapping.getLogicalConnectionPoint());
-                        MappingBuilder updateMapBuilder = new MappingBuilder()
-                                .setLogicalConnectionPoint(map.getLogicalConnectionPoint())
-                                .setPortDirection(map.getPortDirection())
-                                .setSupportingPort(map.getSupportingPort())
-                                .setPortQual(map.getPortQual())
-                                .setSupportingCircuitPackName(map.getSupportingCircuitPackName());
-                        if (map.getPartnerLcp() != null) {
-                            updateMapBuilder.setPartnerLcp(map.getPartnerLcp());
-                        }
-                        // Maybe we would need to check for more things here...
-                        Mapping updateMap = updateMapBuilder.build();
-                        try {
-                            LOG.info("Mapping needs to be updated");
-                            final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
-                            InstanceIdentifier<Mapping> mapIID1 = InstanceIdentifier.create(Network.class)
-                                    .child(Nodes.class, new NodesKey(nodeId))
-                                    .child(Mapping.class, new MappingKey(updateMap.getLogicalConnectionPoint()));
-                            writeTransaction.put(LogicalDatastoreType.CONFIGURATION, mapIID1, updateMap);
-                            FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
-                            commit.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            LOG.error("Error updating Mapping {} for node {}",
-                                    updateMap.getLogicalConnectionPoint(), nodeId, e);
-                        }
-                    }
-                }
-            }
-            try {
-                LOG.info("Port new operational state to out service");
-                LOG.info("Deleting mapping Data for {} of {}",
-                        oldMapping.getLogicalConnectionPoint(), nodeId);
-                final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
-                InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
-                        .child(Nodes.class, new NodesKey(nodeId))
-                        .child(Mapping.class, new MappingKey(oldMapping.getLogicalConnectionPoint()));
-                writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, mapIID);
-                FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
-                commit.get();
-                return true;
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Error deleting Mapping {} for node {}", oldMapping.getLogicalConnectionPoint(), nodeId, e);
-                return false;
-            }
-        } else {
-            LOG.error("Impossible to delete mapping");
-            return false;
-        }
     }
 }

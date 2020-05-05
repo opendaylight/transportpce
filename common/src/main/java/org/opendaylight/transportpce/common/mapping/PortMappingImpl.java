@@ -25,7 +25,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes.NodeInfo.OpenroadmVersion;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +57,6 @@ public class PortMappingImpl implements PortMapping {
             return false;
         }
     }
-
-
 
     @Override
     public Mapping getMapping(String nodeId, String logicalConnPoint) {
@@ -145,61 +142,6 @@ public class PortMappingImpl implements PortMapping {
     }
 
     @Override
-    public boolean createMapping(String nodeId, Ports port, String cpackName) {
-        OpenroadmVersion openROADMversion = this.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
-        Nodes node = getNode(nodeId);
-        String nodeType = node.getNodeInfo().getNodeType().getName();
-        if (openROADMversion.getIntValue() == 1) {
-            if (nodeType.equals("rdm")) {
-                return portMappingVersion121.createMapping(nodeId, port, cpackName);
-            } else if (nodeType.equals("xpdr")) {
-                // Aqui hay que hacer que se llame a una funcion que llame a xpdrmapping object
-                return portMappingVersion121.createXpdrMapping(nodeId, port, cpackName);
-            } else {
-                return false;
-            }
-
-        }
-        else if (openROADMversion.getIntValue() == 2) {
-            LOG.error("not yet supported");
-            return false;
-            /*
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes
-                    .MappingBuilder oldMapping2Bldr =
-                     new MappingBuilder().setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
-                     .setPortDirection(oldMapping.getPortDirection());
-            if (oldMapping.getConnectionMapLcp() != null) {
-                oldMapping2Bldr.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
-            }
-            if (oldMapping.getPartnerLcp() != null) {
-                oldMapping2Bldr.setPartnerLcp(oldMapping.getPartnerLcp());
-            }
-            if (oldMapping.getPortQual() != null) {
-                oldMapping2Bldr.setPortQual(oldMapping.getPortQual());
-            }
-            if (oldMapping.getSupportingCircuitPackName() != null) {
-                oldMapping2Bldr.setSupportingCircuitPackName(oldMapping.getSupportingCircuitPackName());
-            }
-            if (oldMapping.getSupportingOms() != null) {
-                oldMapping2Bldr.setSupportingOms(oldMapping.getSupportingOms());
-            }
-            if (oldMapping.getSupportingOts() != null) {
-                oldMapping2Bldr.setSupportingOts(oldMapping.getSupportingOts());
-            }
-            if (oldMapping.getSupportingPort() != null) {
-                oldMapping2Bldr.setSupportingPort(oldMapping.getSupportingPort());
-            }
-            return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr.build());
-
-            */
-        }
-
-        else {
-            return false;
-        }
-    }
-
-    @Override
     public Nodes getNode(String nodeId) {
         InstanceIdentifier<Nodes> nodePortMappingIID = InstanceIdentifier.builder(Network.class).child(Nodes.class,
                 new NodesKey(nodeId)).build();
@@ -217,60 +159,5 @@ public class PortMappingImpl implements PortMapping {
             LOG.error("Unable to get node {} in portmapping", nodeId);
         }
         return null;
-    }
-
-    @Override
-    public boolean deleteMapping(String nodeId, Mapping oldMapping) {
-        OpenroadmVersion openROADMversion = this.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
-        if (openROADMversion.getIntValue() == 1) {
-            if (getNode(nodeId).getNodeInfo().getNodeType().getName().equals("rdm")) {
-                return portMappingVersion121.deleteMapping(nodeId, oldMapping);
-            } else if (getNode(nodeId).getNodeInfo().getNodeType().getName().equals("xpdr")) {
-                // but also we need to update the map of lcp
-                return portMappingVersion121.deleteXpdrMapping(nodeId, oldMapping,
-                        getNode(nodeId).getMapping());
-            } else {
-                LOG.error("Device type not supported");
-                return false;
-            }
-
-        }
-        else if (openROADMversion.getIntValue() == 2) {
-            LOG.error("not yet supported");
-            return false;
-            /*
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200128.network.nodes
-                    .MappingBuilder oldMapping2Bldr =
-                    new MappingBuilder().setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
-                    .setPortDirection(oldMapping.getPortDirection());
-            if (oldMapping.getConnectionMapLcp() != null) {
-                oldMapping2Bldr.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
-            }
-            if (oldMapping.getPartnerLcp() != null) {
-                oldMapping2Bldr.setPartnerLcp(oldMapping.getPartnerLcp());
-            }
-            if (oldMapping.getPortQual() != null) {
-                oldMapping2Bldr.setPortQual(oldMapping.getPortQual());
-            }
-            if (oldMapping.getSupportingCircuitPackName() != null) {
-                oldMapping2Bldr.setSupportingCircuitPackName(oldMapping.getSupportingCircuitPackName());
-            }
-            if (oldMapping.getSupportingOms() != null) {
-                oldMapping2Bldr.setSupportingOms(oldMapping.getSupportingOms());
-            }
-            if (oldMapping.getSupportingOts() != null) {
-                oldMapping2Bldr.setSupportingOts(oldMapping.getSupportingOts());
-            }
-            if (oldMapping.getSupportingPort() != null) {
-                oldMapping2Bldr.setSupportingPort(oldMapping.getSupportingPort());
-            }
-            return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr.build());
-
-            */
-        }
-
-        else {
-            return false;
-        }
     }
 }

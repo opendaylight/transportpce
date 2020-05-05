@@ -10,55 +10,51 @@ package org.opendaylight.transportpce.networkmodel.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.Optional;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import org.json.JSONArray;
-import org.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-//import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Direction;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.EquipmentTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Direction;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.EquipmentTypeEnum;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.ChangeNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OtdrScanResult;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.change.notification.Edit;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CircuitPackCategory;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CircuitPackCategoryBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CpSlots;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CpSlotsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.ParentCircuitPack;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.ParentCircuitPackBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container
-// .OrgOpenroadmDevice;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container
-// .org.openroadm.device.Info;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.States;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.EthernetCsmacd;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.InterfaceType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.Ip;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpenROADMOpticalMultiplex;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpticalChannel;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpticalTransport;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOdu;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOtu;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev170929.PortWavelengthTypes;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
-//import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CircuitPackCategory;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CircuitPackCategoryBuilder;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CpSlots;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CpSlotsBuilder;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.ParentCircuitPack;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.ParentCircuitPackBuilder;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsBuilder;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksBuilder;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.AdminStates;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev161014.States;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.EthernetCsmacd;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.InterfaceType;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.Ip;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpenROADMOpticalMultiplex;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpticalChannel;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpticalTransport;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOdu;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OtnOtu;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev170929.PortWavelengthTypes;
+//import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 
 public class DeviceListener implements OrgOpenroadmDeviceListener {
 
@@ -88,6 +84,7 @@ public class DeviceListener implements OrgOpenroadmDeviceListener {
     public void onChangeNotification(ChangeNotification notification) {
 
         LOG.info("Notification {} received {}", ChangeNotification.QNAME, notification);
+        /*
         String infoaft = null;
         String inforbef = null;
         String type = null;
@@ -134,7 +131,9 @@ public class DeviceListener implements OrgOpenroadmDeviceListener {
                 LOG.info("Type {} change not recognized", type);
         }
 
-        /*
+
+        */
+
         List<Edit> notificationEdit = notification.getEdit();
         List<String> keyNames = new ArrayList<String>();
         for (Edit edit : notificationEdit) {
@@ -145,23 +144,31 @@ public class DeviceListener implements OrgOpenroadmDeviceListener {
         LOG.info("Keys stored: {}", keyNames.toString());
         if (this.deviceTransactionManager.isDeviceMounted(deviceId)) {
             InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
-            Optional<Info> infoOpt =
-                    deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL, infoIID,
-                                                               GET_DATA_SUBMIT_TIMEOUT,
-                                                               MAX_DURATION_TO_SUBMIT_TIMEUNIT);
-            if (infoOpt.isPresent()) {
-                LOG.info("Info of device {} from datastore: {}", deviceId, infoOpt.get().toString());
-            } else {
-                LOG.warn("Could not get info from device");
-            }
+            Thread test = new Thread() {
+                public void run() {
+                    Optional<Info> infoOpt =
+                            deviceTransactionManager.getDataFromDevice(deviceId, LogicalDatastoreType.OPERATIONAL,
+                                    infoIID,
+                                    GET_DATA_SUBMIT_TIMEOUT,
+                                    MAX_DURATION_TO_SUBMIT_TIMEUNIT);
+                    if (infoOpt.isPresent()) {
+                        LOG.info("Info of device {} from datastore: {}", deviceId, infoOpt.get().toString());
+                    } else {
+                        LOG.warn("Could not get info from device");
+                    }
+                }
+            };
+
+            test.start();
+
         } else {
             LOG.warn("Device {} not mounted", deviceId);
         }
 
-        */
+
     }
 
-
+    /*
     private CircuitPacks convertStringtoCircuitPack(String infoaft) {
         CircuitPacksBuilder circuitPacksBuilder = new CircuitPacksBuilder();
         JSONObject jsonObject = new JSONObject(infoaft);
@@ -284,6 +291,8 @@ public class DeviceListener implements OrgOpenroadmDeviceListener {
             }
         }
     }
+
+     */
 
     /**
      * Callback for otdr-scan-result.

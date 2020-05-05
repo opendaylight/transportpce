@@ -187,30 +187,6 @@ final class OrdLink {
             LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
                     NetworkUtils.OVERLAY_NETWORK_ID, e);
         }
-        /*
-        @NonNull
-        ReadTransaction readTransaction = dataBroker.newReadOnlyTransaction();
-        LOG.info("Read transaction created");
-        @NonNull
-        FluentFuture<Optional<TerminationPoint>> tpFf = readTransaction.read(LogicalDatastoreType.CONFIGURATION, iiTp);
-        if (tpFf.isDone()) {
-            LOG.info("Read transaction performed");
-            try {
-                Optional<TerminationPoint> tpOpt;
-                tpOpt = tpFf.get();
-                LOG.info("tp obtained: {}", tpOpt.toString());
-                if (tpOpt.isPresent()) {
-                    LOG.info("What is going to be returned: {}", tpOpt.get().toString());
-                    return tpOpt.get();
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
-                          NetworkUtils.OVERLAY_NETWORK_ID, e);
-            }
-        }
-        return null;
-
-         */
         return null;
     }
 

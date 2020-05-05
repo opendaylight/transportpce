@@ -150,35 +150,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
 
             // nodes/links creation in otn-topology. When xponder is 2.2.1.
-            // hasta ahora estamos haciendo todo para 1.2.1
             if (nodeInfo.getNodeType().getIntValue() == 2 && (nodeInfo.getOpenroadmVersion().getIntValue() != 1)) {
-                TopologyShard otnTopologyShard = OpenRoadmOtnTopology.createTopologyShard(portMapping.getNode(nodeId));
-                if (otnTopologyShard != null) {
-                    this.otnTopologyShardMountedDevice.put(nodeId, otnTopologyShard);
-                    for (Node otnTopologyNode: otnTopologyShard.getNodes()) {
-                        LOG.info("creating otn node {} in {}", otnTopologyNode.getNodeId().getValue(),
-                                NetworkUtils.OTN_NETWORK_ID);
-                        InstanceIdentifier<Node> iiOtnTopologyNode = InstanceIdentifier.builder(Networks.class)
-                                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                                .child(Node.class, otnTopologyNode.key())
-                                .build();
-                        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyNode,
-                                otnTopologyNode);
-                    }
-                    for (Link otnTopologyLink: otnTopologyShard.getLinks()) {
-                        LOG.info("creating otn link {} in {}", otnTopologyLink.getLinkId().getValue(),
-                                NetworkUtils.OVERLAY_NETWORK_ID);
-                        InstanceIdentifier<Link> iiOtnTopologyLink = InstanceIdentifier.builder(Networks.class)
-                                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                                .augmentation(Network1.class)
-                                .child(Link.class, otnTopologyLink.key())
-                                .build();
-                        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink,
-                                otnTopologyLink, CREATE_MISSING_PARENTS);
-                    }
-                } else {
-                    LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
-                }
+                createOpenRoadmOtnNode(nodeId);
             }
             networkTransactionService.commit().get();
             LOG.info("all nodes and links created");
@@ -199,32 +172,15 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         String state = port.getOperationalState().getName();
         switch (state) {
             case "inService":
-                // Estaba OOS no hay port mapping asi que hay que crearlo
-                /*
-                if (!portMapping.createMapping(nodeId, port, cpackName)) {
-                    LOG.warn("Could not generate port mapping for {} skipping network model creation", nodeId);
-                    return;
-                }
-
-                 */
                 updateTopoFromOuttoIn(nodeId, logicalConnectionPoint);
                 break;
             case "outOfService":
-                // Estaba IS hay old mapping y hay que borrarlo
-                /*
-                Mapping oldMapping = portMapping.getMapping(nodeId, logicalConnectionPoint);
-                // Si es un xpdr habra que revisar las connection-map-lcp que contengan el puerto caido
-                if (!portMapping.deleteMapping(nodeId, oldMapping)) {
-                    LOG.warn("Could not delete port mapping for {} skipping network model creation", nodeId);
-                    return;
-                }
-
-                 */
                 updateTopoFromIntoOut(nodeId, logicalConnectionPoint);
                 break;
             default:
                 LOG.info("State {} not recognized", state);
         }
+        // TODO: send Topology update notification to service handler
     }
 
     @Override
@@ -327,331 +283,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             } else {
                 LOG.error("Could get network from datastore");
             }
-            /*
-            if (nodeInfo.getNodeType().getIntValue() == 1) {
-                InstanceIdentifier.InstanceIdentifierBuilder<Network1> network1IID =
-                        InstanceIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                        .augmentation(Network1.class);
-                Optional<Network1> network1Optional =
-                        this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
-                                                            network1IID.build()).get();
-                if (network1Optional.isPresent()) {
-                    List<Link> linkList = network1Optional.get().getLink();
-                    for (Link link : linkList) {
-                        // Actualizamos su state
-                        if (((link.augmentation(Link1.class).getLinkType().getName().equals("ROADM-TO-ROADM"))
-                                || (link.augmentation(Link1.class).getLinkType().getName().equals("XPONDER-OUTPUT"))
-                                || (link.augmentation(Link1.class).getLinkType().getName().equals("XPONDER-INPUT")))
-                                && (link.getLinkId().getValue().contains(lcp)
-                                && link.getLinkId().getValue().contains(nodeId))) {
-                            Link1 augLink = new Link1Builder().setOperationalState(
-                                    State.OutOfService).setAdministrativeState(
-                                            AdminStates.OutOfService).build();
-                            Link aux = new LinkBuilder().setLinkId(link.getLinkId()).addAugmentation(
-                                    Link1.class, augLink).build();
-                            InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID =
-                                    InstanceIdentifier.builder(Networks.class)
-                                    .child(Network.class, new NetworkKey(new NetworkId(
-                                            NetworkUtils.OVERLAY_NETWORK_ID)))
-                                    .augmentation(Network1.class).child(Link.class,
-                                                                        new LinkKey(aux.getLinkId()));
-                            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION,
-                                                             linkIID.build(), aux);
-                            networkTransactionService.commit().get();
-                        }
-                    }
-                }
-            } else if (nodeInfo.getNodeType().getIntValue() == 2) {
-                InstanceIdentifier.InstanceIdentifierBuilder<Network1> network1IID =
-                        InstanceIdentifier.builder(Networks.class)
-                                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                                .augmentation(Network1.class);
-                Optional<Network1> network1Optional =
-                        this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
-                                                            network1IID.build()).get();
-                if (network1Optional.isPresent()) {
-                    List<Link> linkList = network1Optional.get().getLink();
-                    for (Link link : linkList) {
-                        LOG.info("Link = {}", link.toString());
-                        // Actualizamos el state
-                        if (((link.augmentation(Link1.class).getLinkType().getName().equals("XPONDER-OUTPUT"))
-                                || (link.augmentation(Link1.class).getLinkType().getName().equals("XPONDER-INPUT")))
-                                && link.getLinkId().getValue().contains(lcp)) {
-                            Link1 augLink = new Link1Builder().setOperationalState(
-                                    State.OutOfService).setAdministrativeState(
-                                    AdminStates.OutOfService).build();
-                            Link aux = new LinkBuilder().setLinkId(link.getLinkId()).addAugmentation(
-                                    Link1.class, augLink).build();
-                            InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID =
-                                    InstanceIdentifier.builder(Networks.class)
-                                            .child(Network.class, new NetworkKey(new NetworkId(
-                                                    NetworkUtils.OVERLAY_NETWORK_ID)))
-                                            .augmentation(Network1.class).child(Link.class,
-                                                                                new LinkKey(aux.getLinkId()));
-                            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION,
-                                                            linkIID.build(), aux);
-                            networkTransactionService.commit().get();
-                        }
-                    }
-                }
-            }
-            // roadm internal nodes/links creation in openroadm-topology
-            // update topology shard
-            TopologyShard oldTopologyShard = this.topologyShardMountedDevice.get(nodeId);
-
-            TopologyShard topologyShard = OpenRoadmTopology.updateTopologyShard(portMapping.getNode(nodeId),
-                                                                                oldTopologyShard);
-            if (topologyShard != null && oldTopologyShard != null && !oldTopologyShard.equals(topologyShard)) {
-                // Quizas esto sea muy fuerte, porque reemplazamos todo. Afectara al resto de cosas??
-                // Podriamos reemplazar solo en los cambios?? Como obtener el topology shard del node
-                this.topologyShardMountedDevice.replace(nodeId, topologyShard);
-                //Hace falta crear nodos?? En todo caso actualizar
-                if (NodeTypes.Rdm.getIntValue() == portMapping.getNode(nodeId).getNodeInfo()
-                        .getNodeType().getIntValue()) {
-                    LOG.info("Updating topology nodes of ROADM");
-                    for (Node oldopenRoadmTopologyNode : oldTopologyShard.getNodes()) {
-                        boolean nodeExists = false;
-                        for (Node openRoadmTopologyNode: topologyShard.getNodes()) {
-                            if (oldopenRoadmTopologyNode.getNodeId().getValue()
-                                    .equals(openRoadmTopologyNode.getNodeId().getValue())) {
-                                nodeExists = true;
-                                LOG.info("Node exists in both topologies, no need to delete");
-                                if (!oldopenRoadmTopologyNode.equals(openRoadmTopologyNode)) {
-                                    LOG.info("updating node change {} in {}",
-                                             openRoadmTopologyNode.getNodeId().getValue(),
-                                             NetworkUtils.OVERLAY_NETWORK_ID);
-
-                                    InstanceIdentifier<Node> iiOpenRoadmTopologyNode
-                                            = InstanceIdentifier.builder(Networks.class)
-                                            .child(Network.class,
-                                                   new NetworkKey(new NetworkId(
-                                                           NetworkUtils.OVERLAY_NETWORK_ID)))
-                                            .child(Node.class, openRoadmTopologyNode.key())
-                                            .build();
-                                    networkTransactionService.put(
-                                            LogicalDatastoreType.CONFIGURATION,
-                                            iiOpenRoadmTopologyNode,
-                                            openRoadmTopologyNode, CREATE_MISSING_PARENTS);
-                                }
-                                // Actualizar networkTransactionService
-                                //Aqui es donde empezamos a ver los nuevos nodes despues del update
-                                //Hace falta actualizar en este caso??
-                                break;
-                            }
-                        }
-                        if (!nodeExists) {
-                            LOG.info("Node information {}", oldopenRoadmTopologyNode.toString());
-                            LOG.info("Node {} doesnt exist in new topology shard. Proceedin to delete...",
-                                     oldopenRoadmTopologyNode.getNodeId().getValue());
-                            // Aqui es donde borramos este node del network transaction service
-                            InstanceIdentifier<Node> iiOpenRoadmTopologyNode =
-                                    InstanceIdentifier.builder(Networks.class)
-                                    .child(Network.class, new NetworkKey(new NetworkId(
-                                            NetworkUtils.OVERLAY_NETWORK_ID)))
-                                    .child(Node.class, oldopenRoadmTopologyNode.key())
-                                    .build();
-                            networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION,
-                                                             iiOpenRoadmTopologyNode);
-                        }
-                    }
-
-                    //Hace falta crear links?? En todo caso actualizar (crear o borrar).
-                    for (Link oldopenRoadmTopologyLink : oldTopologyShard.getLinks()) {
-                        boolean linkExists = false;
-                        for (Link openRoadmTopologyLink: topologyShard.getLinks()) {
-                            if (oldopenRoadmTopologyLink.getLinkId().getValue()
-                                    .equals(openRoadmTopologyLink.getLinkId().getValue())) {
-                                linkExists = true;
-                                LOG.info("Link exists in both topologies");
-                                //Hace falta actualizar?? Se ha podido cambiar??
-
-                                LOG.info("updating link {} in {}", openRoadmTopologyLink.
-                                                 getLinkId().getValue(),
-                                         NetworkUtils.OVERLAY_NETWORK_ID);
-
-                                InstanceIdentifier<Link> iiOpenRoadmTopologyLink
-                                        = InstanceIdentifier.builder(Networks.class)
-                                        .child(Network.class,
-                                               new NetworkKey(new NetworkId(
-                                                       NetworkUtils.OVERLAY_NETWORK_ID)))
-                                        .augmentation(Network1.class)
-                                        .child(Link.class, openRoadmTopologyLink.key())
-                                        .build();
-                                networkTransactionService.put(LogicalDatastoreType.CONFIGURATION,
-                                                              iiOpenRoadmTopologyLink,
-                                                              openRoadmTopologyLink,
-                                                              CREATE_MISSING_PARENTS);
-                                break;
-                            }
-                        }
-                        if (!linkExists) {
-                            LOG.info("Link {} doesnt exist in new topology shard. Proceedin to delete...",
-                                     oldopenRoadmTopologyLink.getLinkId().getValue());
-                            // Aqui es donde borramos este link del network transaction service
-                            InstanceIdentifier<Link> iiOpenRoadmTopologyLink =
-                                    InstanceIdentifier.builder(Networks.class)
-                                    .child(Network.class, new NetworkKey(new NetworkId(
-                                            NetworkUtils.OVERLAY_NETWORK_ID)))
-                                    .augmentation(Network1.class)
-                                    .child(Link.class, oldopenRoadmTopologyLink.key())
-                                    .build();
-                            networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION,
-                                                             iiOpenRoadmTopologyLink);
-                        }
-                    }
-                } else if (NodeTypes.Xpdr.getIntValue() == portMapping.getNode(nodeId)
-                        .getNodeInfo().getNodeType().getIntValue()) {
-                    LOG.info("Updating topology nodes of xponder");
-                    LOG.info("New topology shard = {}", topologyShard.toString());
-                    for (Node oldopenRoadmTopologyNode : oldTopologyShard.getNodes()) {
-                        boolean nodeExists = false;
-                        for (Node openRoadmTopologyNode: topologyShard.getNodes()) {
-                            if (oldopenRoadmTopologyNode.getNodeId().getValue()
-                                    .equals(openRoadmTopologyNode.getNodeId().getValue())) {
-                                nodeExists = true;
-                                LOG.info("Node exists in both topologies, no need to delete");
-                                // Actualizar networkTransactionService
-                                //Aqui es donde empezamos a ver los nuevos nodes despues del update
-                                //Hace falta actualizar en este caso??
-                                if (!oldopenRoadmTopologyNode.equals(openRoadmTopologyNode)) {
-                                    LOG.info("updating node change {} in {}",
-                                             openRoadmTopologyNode.getNodeId().getValue(),
-                                             NetworkUtils.OVERLAY_NETWORK_ID);
-
-                                    InstanceIdentifier<Node> iiOpenRoadmTopologyNode
-                                            = InstanceIdentifier.builder(Networks.class)
-                                            .child(Network.class,
-                                                   new NetworkKey(new NetworkId(
-                                                           NetworkUtils.OVERLAY_NETWORK_ID)))
-                                            .child(Node.class, openRoadmTopologyNode.key())
-                                            .build();
-                                    networkTransactionService.put(
-                                            LogicalDatastoreType.CONFIGURATION,
-                                            iiOpenRoadmTopologyNode,
-                                            openRoadmTopologyNode, CREATE_MISSING_PARENTS);
-                                }
-                                break;
-                            }
-                        }
-                        if (!nodeExists) {
-                            LOG.info("Node information {}", oldopenRoadmTopologyNode.toString());
-                            LOG.info("Node {} doesnt exist in new topology shard. Proceedin to delete...",
-                                     oldopenRoadmTopologyNode.getNodeId().getValue());
-                            // Aqui es donde borramos este node del network transaction service
-                            InstanceIdentifier<Node> iiOpenRoadmTopologyNode =
-                                    InstanceIdentifier.builder(Networks.class)
-                                    .child(Network.class, new NetworkKey(new NetworkId(
-                                            NetworkUtils.OVERLAY_NETWORK_ID)))
-                                    .child(Node.class, oldopenRoadmTopologyNode.key())
-                                    .build();
-                            networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION,
-                                                             iiOpenRoadmTopologyNode);
-                        }
-                    }
-                    //Aqui habra que ver que pasa con los links cuando se creen
-                    //Hace falta crear links?? En todo caso actualizar (crear o borrar).
-                    for (Link oldopenRoadmTopologyLink : oldTopologyShard.getLinks()) {
-                        boolean linkExists = false;
-                        for (Link openRoadmTopologyLink: topologyShard.getLinks()) {
-                            if (oldopenRoadmTopologyLink.getLinkId().getValue()
-                                    .equals(openRoadmTopologyLink.getLinkId().getValue())) {
-                                linkExists = true;
-                                LOG.info("Link exists in both topologies");
-                                //Hace falta actualizar?? Se ha podido cambiar??
-
-                                LOG.info("updating link {} in {}",
-                                         openRoadmTopologyLink.getLinkId().getValue(),
-                                         NetworkUtils.OVERLAY_NETWORK_ID);
-
-                                InstanceIdentifier<Link> iiOpenRoadmTopologyLink
-                                        = InstanceIdentifier.builder(Networks.class)
-                                        .child(Network.class,
-                                               new NetworkKey(new NetworkId(
-                                                       NetworkUtils.OVERLAY_NETWORK_ID)))
-                                        .augmentation(Network1.class)
-                                        .child(Link.class, openRoadmTopologyLink.key())
-                                        .build();
-                                networkTransactionService.put(LogicalDatastoreType.CONFIGURATION,
-                                                              iiOpenRoadmTopologyLink,
-                                                              openRoadmTopologyLink,
-                                                              CREATE_MISSING_PARENTS);
-
-                                break;
-                            }
-                        }
-                        if (!linkExists) {
-                            LOG.info("Link {} doesnt exist in new topology shard. Proceedin to delete...",
-                                     oldopenRoadmTopologyLink.getLinkId().getValue());
-                            // Aqui es donde borramos este link del network transaction service
-                            InstanceIdentifier<Link> iiOpenRoadmTopologyLink =
-                                    InstanceIdentifier.builder(Networks.class)
-                                    .child(Network.class, new NetworkKey(new NetworkId(
-                                            NetworkUtils.OVERLAY_NETWORK_ID)))
-                                    .augmentation(Network1.class)
-                                    .child(Link.class, oldopenRoadmTopologyLink.key())
-                                    .build();
-                            networkTransactionService.delete(LogicalDatastoreType.CONFIGURATION,
-                                                             iiOpenRoadmTopologyLink);
-                        }
-                    }
-                } else {
-                    LOG.error("Node type not recognized");
-                }
-            } else {
-                LOG.error("Unable to update openroadm-topology shard for node {}!", nodeId);
-            }
-
-            */
             // networkTransactionService.commit().get();
             LOG.info("all links updated");
-            /*
-            // Aqui habra quie hacer algo en caso de que sea un xponder el change type
-            // nodes/links creation in otn-topology
-            if (nodeInfo.getNodeType().getIntValue() == 2 && (
-                    nodeInfo.getOpenroadmVersion().getIntValue() != 1)) {
-                TopologyShard otnTopologyShard =
-                        OpenRoadmOtnTopology.createTopologyShard(portMapping.getNode(nodeId));
-                if (otnTopologyShard != null) {
-                    this.otnTopologyShardMountedDevice.put(nodeId, otnTopologyShard);
-                    for (Node otnTopologyNode: otnTopologyShard.getNodes()) {
-                        LOG.info("creating otn node {} in {}",
-                                 otnTopologyNode.getNodeId().getValue(),
-                                 NetworkUtils.OTN_NETWORK_ID);
-                        InstanceIdentifier<Node> iiOtnTopologyNode =
-                                InstanceIdentifier.builder(Networks.class)
-                                .child(Network.class, new NetworkKey(new NetworkId(
-                                        NetworkUtils.OTN_NETWORK_ID)))
-                                .child(Node.class, otnTopologyNode.key())
-                                .build();
-                        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION,
-                                                        iiOtnTopologyNode,
-                                                        otnTopologyNode);
-                    }
-                    for (Link otnTopologyLink: otnTopologyShard.getLinks()) {
-                        LOG.info("creating otn link {} in {}",
-                                 otnTopologyLink.getLinkId().getValue(),
-                                 NetworkUtils.OVERLAY_NETWORK_ID);
-                        InstanceIdentifier<Link> iiOtnTopologyLink =
-                                InstanceIdentifier.builder(Networks.class)
-                                .child(Network.class, new NetworkKey(new NetworkId(
-                                        NetworkUtils.OTN_NETWORK_ID)))
-                                .augmentation(Network1.class)
-                                .child(Link.class, otnTopologyLink.key())
-                                .build();
-                        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION,
-                                                        iiOtnTopologyLink,
-                                                        otnTopologyLink,
-                                                        CREATE_MISSING_PARENTS);
-                    }
-                } else {
-                    LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
-                }
-            }
-            networkTransactionService.commit().get();
-            LOG.info("all nodes and links created");
-
-            */
+            // TODO: nodes/links update in otn-topology
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("ERROR: ", e);
         }
@@ -747,306 +381,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 LOG.error("Couldnt get network from datastore");
             }
             LOG.info("all links updated");
-            /*
-            TopologyShard oldTopologyShard = this.topologyShardMountedDevice.get(nodeId);
-            TopologyShard topologyShard = OpenRoadmTopology.updateTopologyShard(portMapping.getNode(nodeId),
-                                                                                oldTopologyShard);
-            if (topologyShard != null && oldTopologyShard != null && !oldTopologyShard.equals(topologyShard)) {
-                // Quizas esto sea muy fuerte, porque reemplazamos todo. Afectara al resto de cosas??
-                // Podriamos reemplazar solo en los cambios?? Como obtener el topology shard del node
-                this.topologyShardMountedDevice.replace(nodeId, topologyShard);
-                if (NodeTypes.Rdm.getIntValue()
-                        == portMapping.getNode(nodeId).getNodeInfo().getNodeType().getIntValue()) {
-                    for (Node openRoadmTopologyNode: topologyShard.getNodes()) {
-                        boolean nodeExists = true;
-                        for (Node oldopenRoadmTopologyNode : oldTopologyShard.getNodes()) {
-                            if (oldopenRoadmTopologyNode.getNodeId().getValue()
-                                    .equals(openRoadmTopologyNode.getNodeId().getValue())) {
-                                nodeExists = true;
-                                LOG.info("Node exists in both topologies");
-                                if (!oldopenRoadmTopologyNode.equals(openRoadmTopologyNode)) {
-                                    LOG.info("updating node change {} in {}",
-                                             openRoadmTopologyNode.getNodeId().getValue(),
-                                             NetworkUtils.OVERLAY_NETWORK_ID);
-
-                                    InstanceIdentifier<Node> iiOpenRoadmTopologyNode
-                                            = InstanceIdentifier.builder(Networks.class)
-                                            .child(Network.class,
-                                                   new NetworkKey(new NetworkId(
-                                                           NetworkUtils.OVERLAY_NETWORK_ID)))
-                                            .child(Node.class, openRoadmTopologyNode.key())
-                                            .build();
-                                    networkTransactionService.put(LogicalDatastoreType.CONFIGURATION,
-                                                                  iiOpenRoadmTopologyNode,
-                                                                  openRoadmTopologyNode,
-                                                                  CREATE_MISSING_PARENTS);
-                                }
-                                break;
-                            } else {
-                                nodeExists = false;
-                            }
-                        }
-                        if (!nodeExists) {
-                            LOG.info("Node information {}", openRoadmTopologyNode.toString());
-                            LOG.info("Node {} doesnt exist in old topology shard. Proceeding to create...",
-                                     openRoadmTopologyNode.getNodeId().getValue());
-                            // Aqui es donde creamo este node del network transaction service
-                            InstanceIdentifier<Node> iiOpenRoadmTopologyNode =
-                                    InstanceIdentifier.builder(Networks.class)
-                                    .child(Network.class, new NetworkKey(new NetworkId(
-                                            NetworkUtils.OVERLAY_NETWORK_ID)))
-                                    .child(Node.class, openRoadmTopologyNode.key())
-                                    .build();
-                            networkTransactionService.put(LogicalDatastoreType.CONFIGURATION,
-                                                          iiOpenRoadmTopologyNode,
-                                                          openRoadmTopologyNode,
-                                                          CREATE_MISSING_PARENTS);
-                        }
-                    }
-
-                    //Hace falta crear links?? En todo caso actualizar (crear o borrar).
-                    for (Link openRoadmTopologyLink: topologyShard.getLinks()) {
-                        boolean linkExists = true;
-                        for (Link oldopenRoadmTopologyLink : oldTopologyShard.getLinks()) {
-                            if (oldopenRoadmTopologyLink.getLinkId().getValue()
-                                    .equals(openRoadmTopologyLink.getLinkId().getValue())) {
-                                linkExists = true;
-                                LOG.info("Link exists in both topologies");
-                                break;
-                            } else {
-                                linkExists = false;
-                            }
-                        }
-                        if (!linkExists) {
-                            LOG.info("Link {} doesnt exist in old topology shard. Proceeding to create...",
-                                     openRoadmTopologyLink.getLinkId().getValue());
-                            // Aqui es donde creamos este link del network transaction service
-                            InstanceIdentifier<Link> iiOpenRoadmTopologyLink
-                                    = InstanceIdentifier.builder(Networks.class)
-                                    .child(Network.class,
-                                           new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                                    .augmentation(Network1.class)
-                                    .child(Link.class, openRoadmTopologyLink.key())
-                                    .build();
-                            networkTransactionService.put(LogicalDatastoreType.CONFIGURATION,
-                                                          iiOpenRoadmTopologyLink,
-                                                          openRoadmTopologyLink,
-                                                          CREATE_MISSING_PARENTS);
-                        }
-                    }
-                } else if (NodeTypes.Xpdr.getIntValue()
-                        == portMapping.getNode(nodeId).getNodeInfo().getNodeType().getIntValue()) {
-                    for (Node openRoadmTopologyNode: topologyShard.getNodes()) {
-                        boolean nodeExists = true;
-                        for (Node oldopenRoadmTopologyNode : oldTopologyShard.getNodes()) {
-                            if (oldopenRoadmTopologyNode.getNodeId().getValue()
-                                    .equals(openRoadmTopologyNode.getNodeId().getValue())) {
-                                nodeExists = true;
-                                LOG.info("Node exists in both topologies");
-                                if (!oldopenRoadmTopologyNode.equals(openRoadmTopologyNode)) {
-                                    LOG.info("updating node change {} in {}",
-                                             openRoadmTopologyNode.getNodeId().getValue(),
-                                             NetworkUtils.OVERLAY_NETWORK_ID);
-
-                                    InstanceIdentifier<Node> iiOpenRoadmTopologyNode
-                                            = InstanceIdentifier.builder(Networks.class)
-                                            .child(Network.class,
-                                                   new NetworkKey(new NetworkId(
-                                                           NetworkUtils.OVERLAY_NETWORK_ID)))
-                                            .child(Node.class, openRoadmTopologyNode.key())
-                                            .build();
-                                    networkTransactionService.put(LogicalDatastoreType.CONFIGURATION,
-                                                                  iiOpenRoadmTopologyNode,
-                                                                  openRoadmTopologyNode,
-                                                                  CREATE_MISSING_PARENTS);
-                                }
-                                break;
-                            } else {
-                                nodeExists = false;
-                            }
-                        }
-                        if (!nodeExists) {
-                            LOG.info("Node information {}", openRoadmTopologyNode.toString());
-                            LOG.info("Node {} doesnt exist in old topology shard. Proceeding to create...",
-                                     openRoadmTopologyNode.getNodeId().getValue());
-                            // Aqui es donde creamo este node del network transaction service
-                            InstanceIdentifier<Node> iiOpenRoadmTopologyNode =
-                                    InstanceIdentifier.builder(Networks.class)
-                                    .child(Network.class, new NetworkKey(new NetworkId(
-                                            NetworkUtils.OVERLAY_NETWORK_ID)))
-                                    .child(Node.class, openRoadmTopologyNode.key())
-                                    .build();
-                            networkTransactionService.put(LogicalDatastoreType.CONFIGURATION,
-                                                          iiOpenRoadmTopologyNode,
-                                                          openRoadmTopologyNode,
-                                                          CREATE_MISSING_PARENTS);
-                        }
-                    }
-                    // Habra que ver como se actualliza esto cuando se creen los links
-                    //Hace falta crear links?? En todo caso actualizar (crear o borrar).
-                    for (Link openRoadmTopologyLink: topologyShard.getLinks()) {
-                        boolean linkExists = true;
-                        for (Link oldopenRoadmTopologyLink : oldTopologyShard.getLinks()) {
-                            if (oldopenRoadmTopologyLink.getLinkId().getValue()
-                                    .equals(openRoadmTopologyLink.getLinkId().getValue())) {
-                                linkExists = true;
-                                LOG.info("Link exists in both topologies");
-                                break;
-                            } else {
-                                linkExists = false;
-                            }
-                        }
-                        if (!linkExists) {
-                            LOG.info("Link {} doesnt exist in old topology shard. Proceeding to create...",
-                                     openRoadmTopologyLink.getLinkId().getValue());
-                            // Aqui es donde creamos este link del network transaction service
-                            InstanceIdentifier<Link> iiOpenRoadmTopologyLink
-                                    = InstanceIdentifier.builder(Networks.class)
-                                    .child(Network.class,
-                                           new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                                    .augmentation(Network1.class)
-                                    .child(Link.class, openRoadmTopologyLink.key())
-                                    .build();
-                            networkTransactionService.put(LogicalDatastoreType.CONFIGURATION,
-                                                          iiOpenRoadmTopologyLink,
-                                                          openRoadmTopologyLink,
-                                                          CREATE_MISSING_PARENTS);
-                        }
-                    }
-                } else {
-                    LOG.error("Node type not recognized");
-                }
-            } else {
-                LOG.error("Unable to update openroadm-topology shard for node {}!", nodeId);
-            }
-
-            networkTransactionService.commit().get();
-            LOG.info("all nodes and links created");
-            if (nodeInfo.getNodeType().getIntValue() == 1) {
-                InstanceIdentifier.InstanceIdentifierBuilder<Network1> network1IID =
-                        InstanceIdentifier.builder(Networks.class)
-                                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                                .augmentation(Network1.class);
-                Optional<Network1> network1Optional =
-                        this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
-                                                            network1IID.build()).get();
-                if (network1Optional.isPresent()) {
-                    List<Link> linkList = network1Optional.get().getLink();
-                    for (Link link : linkList) {
-                        LOG.info("Link = {}", link.toString());
-                        // Si es roadm to roadm lo borramos del datastore
-                        if (((link.augmentation(Link1.class).getLinkType().getName().equals("ROADM-TO-ROADM"))
-                                || (link.augmentation(Link1.class).getLinkType().getName().equals("XPONDER-OUTPUT"))
-                                || (link.augmentation(Link1.class).getLinkType().getName().equals("XPONDER-INPUT")))
-                                && (link.getLinkId().getValue().contains(lcp)
-                                && link.getLinkId().getValue().contains(nodeId))) {
-                            LOG.info("Roadm-to-Roadm/Xponder-roadm link with LCP {}, needs to be deleted", lcp);
-                            LOG.info("Roadm-to-Roadm/Xponder-roadm link info {}", link.toString());
-                            //Delete roadm to roadm link
-                            Link1 augLink = new Link1Builder().setOperationalState(
-                                    State.InService).setAdministrativeState(
-                                    AdminStates.InService).build();
-                            Link aux = new LinkBuilder().setLinkId(link.getLinkId()).addAugmentation(
-                                    Link1.class, augLink).build();
-                            LOG.info("Merging this new info to link {}", aux.toString());
-                            InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID =
-                                    InstanceIdentifier.builder(Networks.class)
-                                            .child(Network.class, new NetworkKey(new NetworkId(
-                                                    NetworkUtils.OVERLAY_NETWORK_ID)))
-                                            .augmentation(Network1.class).child(Link.class,
-                                                                                new LinkKey(aux.getLinkId()));
-                            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION,
-                                                            linkIID.build(), aux);
-                            networkTransactionService.commit().get();
-                        }
-                    }
-                }
-            } else if (nodeInfo.getNodeType().getIntValue() == 2) {
-                InstanceIdentifier.InstanceIdentifierBuilder<Network1> network1IID =
-                        InstanceIdentifier.builder(Networks.class)
-                                .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
-                                .augmentation(Network1.class);
-                Optional<Network1> network1Optional =
-                        this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
-                                                            network1IID.build()).get();
-                if (network1Optional.isPresent()) {
-                    List<Link> linkList = network1Optional.get().getLink();
-                    for (Link link : linkList) {
-                        LOG.info("Link = {}", link.toString());
-                        // Si es roadm to roadm lo borramos del datastore
-                        if (((link.augmentation(Link1.class).getLinkType().getName().equals("XPONDER-OUTPUT"))
-                                || (link.augmentation(Link1.class).getLinkType().getName().equals("XPONDER-INPUT")))
-                                && link.getLinkId().getValue().contains(lcp)) {
-                            LOG.info("Xponder-roadm link with LCP {}, needs to be deleted", lcp);
-                            LOG.info("Xponder-roadm link info {}", link.toString());
-                            //Delete roadm to roadm link
-                            Link1 augLink = new Link1Builder().setOperationalState(
-                                    State.InService).setAdministrativeState(
-                                    AdminStates.InService).build();
-                            Link aux = new LinkBuilder().setLinkId(link.getLinkId()).addAugmentation(
-                                    Link1.class, augLink).build();
-                            LOG.info("Merging this new info to link {}", aux.toString());
-                            InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID =
-                                    InstanceIdentifier.builder(Networks.class)
-                                            .child(Network.class, new NetworkKey(new NetworkId(
-                                                    NetworkUtils.OVERLAY_NETWORK_ID)))
-                                            .augmentation(Network1.class).child(Link.class,
-                                                                                new LinkKey(aux.getLinkId()));
-                            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION,
-                                                            linkIID.build(), aux);
-                            networkTransactionService.commit().get();
-                        }
-                    }
-                }
-            }
-            */
-            /*
-            // Aqui habra quie hacer algo en caso de que sea un xponder el change type
-            // nodes/links creation in otn-topology
-            if (nodeInfo.getNodeType().getIntValue()
-                    == 2 && (nodeInfo.getOpenroadmVersion().getIntValue() != 1)) {
-                TopologyShard otnTopologyShard =
-                        OpenRoadmOtnTopology.createTopologyShard(portMapping.getNode(nodeId));
-                if (otnTopologyShard != null) {
-                    this.otnTopologyShardMountedDevice.put(nodeId, otnTopologyShard);
-                    for (Node otnTopologyNode: otnTopologyShard.getNodes()) {
-                        LOG.info("creating otn node {} in {}",
-                                 otnTopologyNode.getNodeId().getValue(),
-                                 NetworkUtils.OTN_NETWORK_ID);
-                        InstanceIdentifier<Node> iiOtnTopologyNode =
-                                InstanceIdentifier.builder(Networks.class)
-                                .child(Network.class, new NetworkKey(new NetworkId(
-                                        NetworkUtils.OTN_NETWORK_ID)))
-                                .child(Node.class, otnTopologyNode.key())
-                                .build();
-                        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION,
-                                                        iiOtnTopologyNode,
-                                                        otnTopologyNode);
-                    }
-                    for (Link otnTopologyLink: otnTopologyShard.getLinks()) {
-                        LOG.info("creating otn link {} in {}",
-                                 otnTopologyLink.getLinkId().getValue(),
-                                 NetworkUtils.OVERLAY_NETWORK_ID);
-                        InstanceIdentifier<Link> iiOtnTopologyLink =
-                                InstanceIdentifier.builder(Networks.class)
-                                .child(Network.class, new NetworkKey(new NetworkId(
-                                        NetworkUtils.OTN_NETWORK_ID)))
-                                .augmentation(Network1.class)
-                                .child(Link.class, otnTopologyLink.key())
-                                .build();
-                        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION,
-                                                        iiOtnTopologyLink,
-                                                        otnTopologyLink,
-                                                        CREATE_MISSING_PARENTS);
-                    }
-                } else {
-                    LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
-                }
-            }
-            networkTransactionService.commit().get();
-            LOG.info("all nodes and links created");
-
-            */
+            // TODO: nodes/links creation in otn-topology
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("ERROR: ", e);
         }
@@ -1465,6 +800,36 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
     }
 
+    private void createOpenRoadmOtnNode(String nodeId) {
+        TopologyShard otnTopologyShard = OpenRoadmOtnTopology.createTopologyShard(portMapping.getNode(nodeId));
+        if (otnTopologyShard != null) {
+            this.otnTopologyShardMountedDevice.put(nodeId, otnTopologyShard);
+            for (Node otnTopologyNode : otnTopologyShard.getNodes()) {
+                LOG.info("creating otn node {} in {}", otnTopologyNode.getNodeId().getValue(),
+                        NetworkUtils.OTN_NETWORK_ID);
+                InstanceIdentifier<Node> iiOtnTopologyNode = InstanceIdentifier.builder(Networks.class)
+                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                        .child(Node.class, otnTopologyNode.key())
+                        .build();
+                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyNode,
+                        otnTopologyNode);
+            }
+            for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
+                LOG.info("creating otn link {} in {}", otnTopologyLink.getLinkId().getValue(),
+                        NetworkUtils.OVERLAY_NETWORK_ID);
+                InstanceIdentifier<Link> iiOtnTopologyLink = InstanceIdentifier.builder(Networks.class)
+                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
+                        .augmentation(Network1.class)
+                        .child(Link.class, otnTopologyLink.key())
+                        .build();
+                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink,
+                        otnTopologyLink, CREATE_MISSING_PARENTS);
+            }
+        } else {
+            LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
+        }
+    }
+
     private List<Link> getSupportingOdu4Links(List<String> nodesTopoTps) {
         InstanceIdentifier<Network1> iiOtnTopologyLinks = InstanceIdentifier.builder(Networks.class)
                 .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
@@ -1512,37 +877,4 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             return null;
         }
     }
-    /*
-    private void createOpenRoadmOtnNode(String nodeId) {
-        TopologyShard otnTopologyShard = OpenRoadmOtnTopology.createTopologyShard(portMapping.getNode(nodeId));
-        if (otnTopologyShard != null) {
-            this.otnTopologyShardMountedDevice.put(nodeId, otnTopologyShard);
-            for (Node otnTopologyNode : otnTopologyShard.getNodes()) {
-                LOG.info("creating otn node {} in {}", otnTopologyNode.getNodeId().getValue(),
-                        NetworkUtils.OTN_NETWORK_ID);
-                InstanceIdentifier<Node> iiOtnTopologyNode = InstanceIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                        .child(Node.class, otnTopologyNode.key())
-                        .build();
-                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyNode,
-                        otnTopologyNode);
-            }
-            for (Link otnTopologyLink : otnTopologyShard.getLinks()) {
-                LOG.info("creating otn link {} in {}", otnTopologyLink.getLinkId().getValue(),
-                        NetworkUtils.OVERLAY_NETWORK_ID);
-                InstanceIdentifier<Link> iiOtnTopologyLink = InstanceIdentifier.builder(Networks.class)
-                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                        .augmentation(Network1.class)
-                        .child(Link.class, otnTopologyLink.key())
-                        .build();
-                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink,
-                        otnTopologyLink, CREATE_MISSING_PARENTS);
-            }
-        } else {
-            LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
-        }
-
-    }
-
-    */
 }
