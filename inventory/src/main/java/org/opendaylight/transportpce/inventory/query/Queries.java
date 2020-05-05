@@ -51,7 +51,10 @@ public final class Queries {
             + " (node_id, circuit_pack_name, slot_name, label, provisioned_circuit_pack, slot_status, slot_type, create_date, update_date)  "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    private static final String DEVICE_INTERFACES_INSERT = "INSERT INTO %sinv_dev_interfaces "
+    private static final String DEVICE_INTERFACES_INSERT;
+
+    static {
+        DEVICE_INTERFACES_INSERT = "INSERT INTO %sinv_dev_interfaces "
             + " (node_id, name, description, type, administrative_state, operational_state, circuit_id, supporting_interface, supporting_circuit_pack_name, "
             + "supporting_port, ethernet_speed, ethernet_fec, ethernet_duplex, ethernet_mtu, ethernet_auto_negotiation, ethernet_curr_speed, "
             + "ethernet_curr_duplex, mci_mcttp_min_freq, mci_mcttp_max_freq, mci_mcttp_center_freq, mci_mcttp_slot_width, mci_nmc_ctp_frequency, mci_nmc_ctp_width, "
@@ -66,6 +69,7 @@ public final class Queries {
             + "otu_maint_loopback_enabled, otu_maint_type, mt_otu_rate, mt_otu_fec, mt_otu_maint_loopback, mt_otu_enabled, mt_otu_type, create_date, update_date)  "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
             + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    }
 
     private static final String DEVICE_INTERFACE_ODU_OPU_MIS_TX_INSERT = "INSERT INTO %sinv_dev_interface_odu_opu_tx_msi "
             + " (node_id, interface_name, trib_slot, odtu_type, trib_port, trib_port_payload, create_date, update_date )  "
@@ -161,7 +165,10 @@ public final class Queries {
     private static final String SERVICE_PATH_LIST =
             "INSERT INTO %sinv_ser_pathlist ( path_name ) values (?)";
 
-    private static final String SERVICE_UPDATE = "UPDATE %sinv_ser_main "
+    private static final String SERVICE_UPDATE;
+
+    static {
+        SERVICE_UPDATE = "UPDATE %sinv_ser_main "
             + "set "
             + "common_id = ? "
             + "sdnc_req_header_request_id = ? "
@@ -268,6 +275,7 @@ public final class Queries {
             + "supp_serv_name = ? "
             + "update_date"
             + " where service_name = ? ";
+    }
 
     private static final String SERVICE_EVENT_INSERT =
             "INSERT INTO %sinv_ser_events"
@@ -286,7 +294,10 @@ public final class Queries {
             + "?"
             + "? )";
 
-    private static final String SERVICE_INSERT =
+    private static final String SERVICE_INSERT;
+
+    static {
+        SERVICE_INSERT =
             "INSERT INTO %sinv_ser_main "
                     + "( service_name, "
                     + "common_id, "
@@ -561,7 +572,7 @@ public final class Queries {
                     + "?, "
                     + "?, "
                     + "?) ";
-
+    }
 
     private static final String SERVICE_HCON_CREATE = "insert into @inv_ser_hcon (service_name, customer_code, create_date, update_date)"
             + "values (?, ?, ?, ?) ";

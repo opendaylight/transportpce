@@ -623,7 +623,7 @@ public class INode121 {
         String maintTestsignalTypeEnu = "";
         String otuFecEnu = "";
         String otuMaintTypeEnu = "";
-        String otsFiberTypeEnu = "";
+        //String otsFiberTypeEnu = "";
         String ethernetSpeed = "-1";
         String ethernetFec = "";
         String ethernetMtu = "-1";
@@ -734,7 +734,7 @@ public class INode121 {
                     org.opendaylight.yang.gen.v1
                         .http.org.openroadm.optical.transport.interfaces.rev161014.Interface1.class)
                     .getOts());
-                otsFiberTypeEnu = String.valueOf(otsIfBuilder.getFiberType().getIntValue());
+                //otsFiberTypeEnu = String.valueOf(otsIfBuilder.getFiberType().getIntValue());
                 otsSpanLossReceive = otsIfBuilder.getSpanLossReceive().toString();
                 otsSpanLossTransmit = otsIfBuilder.getSpanLossTransmit().toString();
                 break;
