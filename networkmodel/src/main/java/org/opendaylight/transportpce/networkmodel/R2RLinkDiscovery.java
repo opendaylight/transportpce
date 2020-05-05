@@ -72,6 +72,7 @@ public class R2RLinkDiscovery {
             }
             NbrList nbrList = protocolObject.get().augmentation(Protocols1.class).getLldp().getNbrList();
             LOG.info("LLDP subtree is present. Device has {} neighbours", nbrList.getIfName().size());
+            boolean success = true;
             for (IfName ifName : nbrList.getIfName()) {
                 if (ifName.getRemoteSysName() == null) {
                     LOG.warn("LLDP subtree neighbour is empty for nodeId: {}, ifName: {}",
@@ -89,12 +90,12 @@ public class R2RLinkDiscovery {
                             ifName.getRemotePortId())) {
                             LOG.error("Link Creation failed between {} and {} nodes.", nodeId.getValue(),
                                 ifName.getRemoteSysName());
-                            return false;
+                            success = false;
                         }
                     }
                 }
             }
-            return true;
+            return success;
         }
         else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device
@@ -115,6 +116,7 @@ public class R2RLinkDiscovery {
                 = protocolObject.get().augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019
                 .Protocols1.class).getLldp().getNbrList();
             LOG.info("LLDP subtree is present. Device has {} neighbours", nbrList.getIfName().size());
+            boolean success = true;
             for (org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.nbr.list.IfName
                 ifName : nbrList.getIfName()) {
                 if (ifName.getRemoteSysName() == null) {
@@ -133,12 +135,12 @@ public class R2RLinkDiscovery {
                             ifName.getRemotePortId())) {
                             LOG.error("Link Creation failed between {} and {} nodes.", nodeId, ifName
                                 .getRemoteSysName());
-                            return false;
+                            success = false;
                         }
                     }
                 }
             }
-            return true;
+            return success;
         }
         else {
             LOG.error("Unable to read LLDP data for unmanaged openroadm device version");
