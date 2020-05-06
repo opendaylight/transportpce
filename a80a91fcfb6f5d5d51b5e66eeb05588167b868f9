@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5881631d_3fd9b206",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-06T09:24:10Z",
+      "side": 1,
+      "message": "I am not sure it brings anything more than the previous log error.\nAlso use {}-syntax rather than + concatenations in LOG methods",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 83
+      },
+      "revId": "a80a91fcfb6f5d5d51b5e66eeb05588167b868f9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a77e648c_ec631f86",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-06T09:24:10Z",
+      "side": 1,
+      "message": "use {}-syntax",
+      "range": {
+        "startLine": 476,
+        "startChar": 16,
+        "endLine": 476,
+        "endChar": 84
+      },
+      "revId": "a80a91fcfb6f5d5d51b5e66eeb05588167b868f9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
