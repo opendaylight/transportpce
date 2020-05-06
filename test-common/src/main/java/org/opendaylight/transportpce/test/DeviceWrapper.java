@@ -7,6 +7,8 @@
  */
 package org.opendaylight.transportpce.test;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -71,7 +73,7 @@ public final class DeviceWrapper {
      *
      * @return the domDataBroker
      */
-    public DOMDataBroker getDomDataBroker() {
+    public DOMDataBroker getDeviceDomDataBroker() {
         return domDataBroker;
     }
 
@@ -95,8 +97,8 @@ public final class DeviceWrapper {
      */
     public static DeviceWrapper createDeviceWrapper(@Nonnull String key, @Nonnull InputStream initialDataXmlInputStream,
             @Nonnull QName intialDataQName) {
-        Preconditions.checkNotNull(initialDataXmlInputStream, "Input stream cannot be null");
-        Preconditions.checkNotNull(intialDataQName, "QName cannot be null");
+        requireNonNull(initialDataXmlInputStream, "Input stream cannot be null");
+        requireNonNull(intialDataQName, "QName cannot be null");
         return createDeviceWrapper(key, Lists.newArrayList(
                 new AbstractMap.SimpleEntry<QName, InputStream>(intialDataQName, initialDataXmlInputStream)));
     }
@@ -143,7 +145,7 @@ public final class DeviceWrapper {
         try {
             writeOnlyTransaction.commit().get();
         } catch (InterruptedException | ExecutionException e) {
-            LOG.error("This should be not reached {}", e.getMessage(), e);
+            LOG.error("This should be not reached ", e);
             throw new IllegalStateException(e);
         }
     }

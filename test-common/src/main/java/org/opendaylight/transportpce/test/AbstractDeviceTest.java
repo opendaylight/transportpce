@@ -9,9 +9,9 @@ package org.opendaylight.transportpce.test;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import org.opendaylight.yangtools.yang.common.QName;
@@ -33,7 +33,7 @@ public abstract class AbstractDeviceTest {
      * {@link AbstractDeviceTest#internalStorage} as asynchronized {@link Map}.
      */
     public AbstractDeviceTest() {
-        this.internalStorage = Collections.synchronizedMap(Maps.newHashMap());
+        this.internalStorage = Collections.synchronizedMap(new HashMap<>());
     }
 
     /**
