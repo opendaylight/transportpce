@@ -131,7 +131,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to delete service " + serviceName + " from Service List";
-            LOG.warn(message, e);
+            LOG.warn("deleteService : {}", message, e);
             return OperationResult.failed(message);
         }
     }
@@ -151,7 +151,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to delete service " + commonId + " from Service List";
-            LOG.warn(message, e);
+            LOG.warn("deleteTempService : {}", message, e);
             return OperationResult.failed(message);
         }
     }
@@ -173,12 +173,12 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 return OperationResult.ok(SUCCESSFUL_MESSAGE);
             } catch (TimeoutException | InterruptedException | ExecutionException e) {
                 String message = "Failed to modify service " + serviceName + " from Service List";
-                LOG.warn(message, e);
+                LOG.warn("modifyService : {}", message, e);
                 return OperationResult.failed(message);
             }
         } else {
             String message = "Service " + serviceName + " is not present!";
-            LOG.warn(message);
+            LOG.warn("modifyService : {}", message);
             return OperationResult.failed(message);
         }
     }
@@ -207,12 +207,12 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 return OperationResult.ok(SUCCESSFUL_MESSAGE);
             } catch (TimeoutException | InterruptedException | ExecutionException e) {
                 String message = "Failed to modify temp service " + serviceName + " from Temp Service List";
-                LOG.warn(message, e);
+                LOG.warn("modifyTempService : {}", message, e);
                 return OperationResult.failed(message);
             }
         } else {
             String message = "Temp Service " + serviceName + " is not present!";
-            LOG.warn(message);
+            LOG.warn("modifyTempService : {}", message);
             return OperationResult.failed(message);
         }
     }
@@ -230,7 +230,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to create service " + serviceCreateInput.getServiceName() + " to Service List";
-            LOG.warn(message, e);
+            LOG.warn("createService : {}", message, e);
             return OperationResult.failed(message);
         }
     }
@@ -253,7 +253,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to create Temp service " + tempServiceCreateInput.getCommonId()
                 + " to TempService List";
-            LOG.warn(message, e);
+            LOG.warn("createTempService : {}", message, e);
             return OperationResult.failed(message);
         }
     }
@@ -271,7 +271,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
             String message = "Failed to create servicePath " + serviceInput.getCommonId() + " to ServicePath List";
-            LOG.warn(message, e);
+            LOG.warn("createServicePath : {}", message, e);
             return OperationResult.failed(message);
         }
     }
@@ -288,7 +288,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             return OperationResult.ok(SUCCESSFUL_MESSAGE);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             String message = "Unable to delete service path " + serviceName;
-            LOG.error(message, e);
+            LOG.error("deleteServicePath : {}", message, e);
             return OperationResult.failed(message);
         }
     }

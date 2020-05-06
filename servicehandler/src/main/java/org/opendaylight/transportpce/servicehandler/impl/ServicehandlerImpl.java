@@ -30,7 +30,7 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateValidation;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
-import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck;
+import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerComplianceCheck;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
@@ -116,16 +116,51 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl = rendererListenerImpl;
     }
 
+
+    // This is class is public so that these messages can be accessed from Junit (avoid duplications).
+    public static final class LogMessages {
+
+        public static final String PCE_CALLING;
+        public static final String ABORT_PCE_FAILED;
+        public static final String PCE_FAILED;
+        public static final String ABORT_SERVICE_NON_COMPLIANT;
+        public static final String SERVICE_NON_COMPLIANT;
+        public static final String RENDERER_DELETE_FAILED;
+        public static final String ABORT_VALID_FAILED;
+
+        // Static blocks are generated once and spare memory.
+        static {
+            PCE_CALLING = "Calling PCE";
+            ABORT_PCE_FAILED = "Aborting: PCE calculation failed ";
+            PCE_FAILED = "PCE calculation failed";
+            ABORT_SERVICE_NON_COMPLIANT = "Aborting: non-compliant service ";
+            SERVICE_NON_COMPLIANT = "non-compliant service";
+            RENDERER_DELETE_FAILED = "Renderer service delete failed";
+            ABORT_VALID_FAILED = "Aborting: validation of service create request failed";
+        }
+
+        public static String serviceNotInDS(String serviceName) {
+            return "Service '" + serviceName + "' does not exist in datastore";
+        }
+
+        public static String serviceInService(String serviceName) {
+            return "Service '" + serviceName + "' is in 'inService' state";
+        }
+
+        private LogMessages() {
+        }
+    }
+
     @Override
     public ListenableFuture<RpcResult<ServiceCreateOutput>> serviceCreate(ServiceCreateInput input) {
-        LOG.info("RPC service creation received");
+        LOG.info("RPC serviceCreate received");
         // Validation
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
                 new ServiceInput(input), RpcActions.ServiceCreate);
         if (! validationResult.isSuccess()) {
-            LOG.warn("Aborting service create because validation of service create request failed: {}",
-                    validationResult.getResultMessage());
-            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+            LOG.warn(LogMessages.ABORT_VALID_FAILED);
+            return ModelMappingUtils.createCreateServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
         this.pceListenerImpl.setInput(new ServiceInput(input));
@@ -133,95 +168,95 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
-        LOG.info("Commencing PCE");
+        LOG.debug(LogMessages.PCE_CALLING);
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
-        if (output != null) {
-            LOG.info("Service compliant, serviceCreate in progress...");
-            ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
-            return ModelMappingUtils.createCreateServiceReply(input, common.getAckFinalIndicator(),
-                    common.getResponseMessage(), common.getResponseCode());
-        } else {
+        if (output == null) {
+            LOG.warn(LogMessages.ABORT_PCE_FAILED);
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                    "PCE calculation failed", ResponseCodes.RESPONSE_FAILED);
+                    LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
+        LOG.info("RPC serviceCreate in progress...");
+        ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+        return ModelMappingUtils.createCreateServiceReply(
+                input, common.getAckFinalIndicator(),
+                common.getResponseMessage(), common.getResponseCode());
     }
 
     @Override
     public ListenableFuture<RpcResult<ServiceDeleteOutput>> serviceDelete(ServiceDeleteInput input) {
-        LOG.info("RPC serviceDelete request received for {}", input.getServiceDeleteReqInfo().getServiceName());
-        String message = "";
+        String serviceName = input.getServiceDeleteReqInfo().getServiceName();
+        LOG.info("RPC serviceDelete request received for {}", serviceName);
 
         /*
          * Upon receipt of service-deleteService RPC, service header and sdnc-request
-         * header compliancy are verified.
+         * header compliance are verified.
          */
-        LOG.info("checking Service Compliancy ...");
         ComplianceCheckResult serviceHandlerCheckResult =
-            ServicehandlerCompliancyCheck.check(
+            ServicehandlerComplianceCheck.check(
                 input.getServiceDeleteReqInfo().getServiceName(),
                 input.getSdncRequestHeader(), null, RpcActions.ServiceDelete, false, true);
-        if (serviceHandlerCheckResult.hasPassed()) {
-            LOG.info("Service compliant !");
-        } else {
-            LOG.info("Service is not compliant !");
-            return ModelMappingUtils
-                    .createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                            "Service not compliant !", ResponseCodes.RESPONSE_FAILED);
+        if (!serviceHandlerCheckResult.hasPassed()) {
+            LOG.warn(LogMessages.ABORT_SERVICE_NON_COMPLIANT);
+            return ModelMappingUtils.createDeleteServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.SERVICE_NON_COMPLIANT, ResponseCodes.RESPONSE_FAILED);
         }
 
         //Check presence of service to be deleted
-        String serviceName = input.getServiceDeleteReqInfo().getServiceName();
-        LOG.info("serviceName : {}", serviceName);
-        try {
-            Optional<Services> service = this.serviceDataStoreOperations.getService(serviceName);
-            if (!service.isPresent()) {
-                message = "Service '" + serviceName + "' does not exist in datastore";
-                LOG.error(message);
-                return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                        message, ResponseCodes.RESPONSE_FAILED);
-            }
-        } catch (NullPointerException e) {
-            LOG.error("failed to get service '{}' from datastore : ", serviceName, e);
-            message = "Service '" + serviceName + "' does not exist in datastore";
-            LOG.error(message);
-            return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES, message,
-                    ResponseCodes.RESPONSE_FAILED);
+//TODO check if an expected bug was justifying this NPE handling
+//        try {
+        Optional<Services> service = this.serviceDataStoreOperations.getService(serviceName);
+//        } catch (NullPointerException e) {
+//            LOG.error("Something wrong when retrieving service '{}' from datastore : ", serviceName, e);
+//            return ModelMappingUtils.createDeleteServiceReply(
+//                    input, ResponseCodes.FINAL_ACK_YES,
+//                    LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
+//        }
+        if (!service.isPresent()) {
+            LOG.warn("serviceDelete: {}", LogMessages.serviceNotInDS(serviceName));
+            return ModelMappingUtils.createDeleteServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
         }
-        LOG.info("Service '{}' present in datastore !", serviceName);
+        LOG.debug("serviceDelete: Service '{}' found in datastore", serviceName);
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-            .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
-                    new ServiceInput(input));
+                .ServiceDeleteInput serviceDeleteInput =
+            ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput output =
-                this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
-                ServiceNotificationTypes.ServiceDeleteResult);
-        if (output != null) {
-            LOG.info("Service present in datastore, service-delete in progress...");
-            ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
-            return ModelMappingUtils.createDeleteServiceReply(input, common.getAckFinalIndicator(),
-                    common.getResponseMessage(), common.getResponseCode());
-        } else {
-            return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                    "Renderer service delete failed !", ResponseCodes.RESPONSE_FAILED);
+            this.rendererServiceWrapper.performRenderer(
+                serviceDeleteInput, ServiceNotificationTypes.ServiceDeleteResult);
+
+        if (output == null) {
+            LOG.error("serviceDelete: {}", LogMessages.RENDERER_DELETE_FAILED);
+            return ModelMappingUtils.createDeleteServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.RENDERER_DELETE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
+
+        LOG.debug("RPC serviceDelete in progress...");
+        ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+        return ModelMappingUtils.createDeleteServiceReply(
+                input, common.getAckFinalIndicator(),
+                common.getResponseMessage(), common.getResponseCode());
     }
 
     @Override
     public ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> serviceFeasibilityCheck(
             ServiceFeasibilityCheckInput input) {
-        LOG.info("RPC service feasibility check received");
+        LOG.info("RPC serviceFeasibilityCheck received");
         // Validation
         ServiceInput serviceInput = new ServiceInput(input);
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(serviceInput,
                 RpcActions.ServiceFeasibilityCheck);
         if (! validationResult.isSuccess()) {
-            LOG.warn("Aborting service feasibility check because validation of service create request failed: {}",
-                    validationResult.getResultMessage());
-            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+            LOG.warn(LogMessages.ABORT_VALID_FAILED);
+            return ModelMappingUtils.createCreateServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
         this.pceListenerImpl.setInput(new ServiceInput(input));
@@ -230,134 +265,141 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
-        LOG.info("Commencing PCE");
+        LOG.debug(LogMessages.PCE_CALLING);
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
-        if (output != null) {
-            LOG.info("Service compliant, serviceFeasibilityCheck in progress...");
-            ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
-            return ModelMappingUtils.createCreateServiceReply(input, common.getAckFinalIndicator(),
-                    common.getResponseMessage(), common.getResponseCode());
-        } else {
+        if (output == null) {
+            LOG.warn(LogMessages.ABORT_PCE_FAILED);
             return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                    "PCE calculation failed", ResponseCodes.RESPONSE_FAILED);
+                    LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
+        LOG.info("RPC serviceFeasibilityCheck in progress...");
+        ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+        return ModelMappingUtils.createCreateServiceReply(
+                input, common.getAckFinalIndicator(),
+                common.getResponseMessage(), common.getResponseCode());
     }
 
     @Override
     public ListenableFuture<RpcResult<ServiceReconfigureOutput>> serviceReconfigure(ServiceReconfigureInput input) {
-        LOG.info("RPC service reconfigure received");
-        String message = "";
-        Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(input.getServiceName());
-        if (servicesObject.isPresent()) {
-            LOG.info("Service '{}' is present", input.getServiceName());
-            OperationResult validationResult = ServiceCreateValidation
-                    .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceReconfigure);
-            if (!validationResult.isSuccess()) {
-                LOG.warn("Aborting service reconfigure because validation of service create request failed: {}",
-                        validationResult.getResultMessage());
-                return ModelMappingUtils.createCreateServiceReply(input, validationResult.getResultMessage(),
-                        RpcStatus.Failed);
-            }
-            this.pceListenerImpl.setInput(new ServiceInput(input));
-            this.pceListenerImpl.setServiceReconfigure(true);
-            this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-            this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
-            this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-                    .ServiceDeleteInput serviceDeleteInput =
-                            ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-                    .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
-                            ServiceNotificationTypes.ServiceDeleteResult);
-            if (output != null) {
-                LOG.info("Service compliant, service reconfigure in progress...");
-                ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
-                return ModelMappingUtils.createCreateServiceReply(input, common.getResponseMessage(),
-                        RpcStatus.Successful);
-            } else {
-                return ModelMappingUtils.createCreateServiceReply(input, "Renderer service delete failed !",
-                        RpcStatus.Successful);
-            }
-        } else {
-            LOG.error("Service '{}' is not present", input.getServiceName());
-            message = "Service '" + input.getServiceName() + "' is not present";
-            return ModelMappingUtils.createCreateServiceReply(input, message, RpcStatus.Failed);
+        String serviceName = input.getServiceName();
+        LOG.info("RPC serviceReconfigure received for {}", serviceName);
+        Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
+        if (!servicesObject.isPresent()) {
+            LOG.warn("serviceReconfigure: {}", LogMessages.serviceNotInDS(serviceName));
+            return ModelMappingUtils.createCreateServiceReply(
+                input,
+                LogMessages.serviceNotInDS(serviceName), RpcStatus.Failed);
         }
+        LOG.debug("Service '{}' found in datastore", serviceName);
+        OperationResult validationResult = ServiceCreateValidation
+                .validateServiceCreateRequest(new ServiceInput(input), RpcActions.ServiceReconfigure);
+        if (!validationResult.isSuccess()) {
+            LOG.warn(LogMessages.ABORT_VALID_FAILED);
+            return ModelMappingUtils.createCreateServiceReply(
+                    input,
+                    validationResult.getResultMessage(), RpcStatus.Failed);
+        }
+        this.pceListenerImpl.setInput(new ServiceInput(input));
+        this.pceListenerImpl.setServiceReconfigure(true);
+        this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
+        this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+                .ServiceDeleteInput serviceDeleteInput =
+                        ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+                .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
+                        ServiceNotificationTypes.ServiceDeleteResult);
+        if (output == null) {
+            LOG.error(LogMessages.RENDERER_DELETE_FAILED);
+            return ModelMappingUtils.createCreateServiceReply(
+                    input,
+                    LogMessages.RENDERER_DELETE_FAILED, RpcStatus.Successful);
+                    //TODO check if RpcStatus.Successful is really expected here
+        }
+        LOG.info("RPC serviceReconfigure in progress...");
+        ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+        return ModelMappingUtils.createCreateServiceReply(
+                input,
+                common.getResponseMessage(), RpcStatus.Successful);
     }
 
     @Override
     public ListenableFuture<RpcResult<ServiceRestorationOutput>> serviceRestoration(ServiceRestorationInput input) {
-        LOG.info("RPC service restoration received");
-        String message = "";
         String serviceName = input.getServiceName();
+        LOG.info("RPC serviceRestoration received for {}", serviceName);
         Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
-        if (servicesObject.isPresent()) {
-            Services service = servicesObject.get();
-            State state = service.getOperationalState();
-            if (state != State.InService) {
-                ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder();
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
-                OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
-                DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
-                deleteInputBldr.setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
-                    .setServiceName(serviceName).setDueDate(datetime)
-                    .setTailRetention(TailRetention.No).build());
-                SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder()
-                    .setNotificationUrl(service.getSdncRequestHeader().getNotificationUrl())
-                    .setRequestId(service.getSdncRequestHeader().getRequestId())
-                    .setRequestSystemId(service.getSdncRequestHeader().getRequestSystemId())
-                    .setRpcAction(RpcActions.ServiceDelete);
-                deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
-                ServiceInput serviceInput = new ServiceInput(deleteInputBldr.build());
-                serviceInput.setServiceAEnd(service.getServiceAEnd());
-                serviceInput.setServiceZEnd(service.getServiceZEnd());
-                serviceInput.setConnectionType(service.getConnectionType());
-                HardConstraints hardConstraints = service.getHardConstraints();
-                if (hardConstraints != null) {
-                    SoftConstraints softConstraints = service.getSoftConstraints();
-                    if (softConstraints != null) {
-                        LOG.info("converting hard constraints to soft constraints ...");
-                        serviceInput.setSoftConstraints(
-                                DowngradeConstraints.updateSoftConstraints(hardConstraints, softConstraints));
-                        serviceInput.setHardConstraints(DowngradeConstraints.downgradeHardConstraints(hardConstraints));
-                    } else {
-                        LOG.warn("service '{}' SoftConstraints is not set !", serviceName);
-                        serviceInput.setSoftConstraints(DowngradeConstraints.convertToSoftConstraints(hardConstraints));
-                        serviceInput.setHardConstraints(DowngradeConstraints.downgradeHardConstraints(hardConstraints));
-                    }
-                } else {
-                    LOG.warn("service '{}' HardConstraints is not set !", serviceName);
-                }
-                this.pceListenerImpl.setInput(serviceInput);
-                this.pceListenerImpl.setServiceReconfigure(true);
-                this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-                this.rendererListenerImpl.setServiceInput(serviceInput);
-                this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-                    .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
-                            new ServiceInput(deleteInputBldr.build()));
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-                    .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
-                        ServiceNotificationTypes.ServiceDeleteResult);
-                if (output != null) {
-                    LOG.info("Service present in datastore, service-restore in progress...");
-                    ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
-                    return ModelMappingUtils.createRestoreServiceReply(common.getResponseMessage(),
-                            RpcStatus.Successful);
-                } else {
-                    return ModelMappingUtils.createRestoreServiceReply("Renderer service delete failed !",
-                            RpcStatus.Failed);
-                }
-            } else {
-                LOG.error("Service '{}' is in 'inService' state", input.getServiceName());
-                message = "Service '" + input.getServiceName() + "' is in 'inService' state";
-                return ModelMappingUtils.createRestoreServiceReply(message, RpcStatus.Failed);
-            }
-        } else {
-            LOG.error("Service '{}' is not present", input.getServiceName());
-            message = "Service '" + input.getServiceName() + "' is not present";
-            return ModelMappingUtils.createRestoreServiceReply(message, RpcStatus.Failed);
+
+        if (!servicesObject.isPresent()) {
+            LOG.warn("serviceRestoration: {}", LogMessages.serviceNotInDS(serviceName));
+            return ModelMappingUtils.createRestoreServiceReply(
+                    LogMessages.serviceNotInDS(serviceName), RpcStatus.Failed);
         }
+
+        Services service = servicesObject.get();
+        State state = service.getOperationalState();
+
+        if (state == State.InService) {
+            LOG.error("serviceRestoration: {}", LogMessages.serviceInService(serviceName));
+            return ModelMappingUtils.createRestoreServiceReply(
+                    LogMessages.serviceInService(serviceName), RpcStatus.Failed);
+        }
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
+        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
+        DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
+        SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder()
+                .setNotificationUrl(service.getSdncRequestHeader().getNotificationUrl())
+                .setRequestId(service.getSdncRequestHeader().getRequestId())
+                .setRequestSystemId(service.getSdncRequestHeader().getRequestSystemId())
+                .setRpcAction(RpcActions.ServiceDelete);
+        ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder()
+                .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
+                    .setServiceName(serviceName)
+                    .setDueDate(datetime)
+                    .setTailRetention(TailRetention.No).build())
+                .setSdncRequestHeader(sdncBuilder.build());
+        ServiceInput serviceInput = new ServiceInput(deleteInputBldr.build());
+        serviceInput.setServiceAEnd(service.getServiceAEnd());
+        serviceInput.setServiceZEnd(service.getServiceZEnd());
+        serviceInput.setConnectionType(service.getConnectionType());
+        HardConstraints hardConstraints = service.getHardConstraints();
+        if (hardConstraints == null) {
+            LOG.warn("service '{}' HardConstraints is not set !", serviceName);
+        } else {
+            SoftConstraints softConstraints = service.getSoftConstraints();
+            if (softConstraints == null) {
+                LOG.warn("service '{}' SoftConstraints is not set !", serviceName);
+                serviceInput.setSoftConstraints(DowngradeConstraints.convertToSoftConstraints(hardConstraints));
+                serviceInput.setHardConstraints(DowngradeConstraints.downgradeHardConstraints(hardConstraints));
+            } else {
+                LOG.info("converting hard constraints to soft constraints ...");
+                serviceInput.setSoftConstraints(
+                        DowngradeConstraints.updateSoftConstraints(hardConstraints, softConstraints));
+                serviceInput.setHardConstraints(DowngradeConstraints.downgradeHardConstraints(hardConstraints));
+            }
+        }
+        this.pceListenerImpl.setInput(serviceInput);
+        this.pceListenerImpl.setServiceReconfigure(true);
+        this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.rendererListenerImpl.setServiceInput(serviceInput);
+        this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
+                    new ServiceInput(deleteInputBldr.build()));
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
+                ServiceNotificationTypes.ServiceDeleteResult);
+        if (output == null) {
+            LOG.error(LogMessages.RENDERER_DELETE_FAILED);
+            return ModelMappingUtils.createRestoreServiceReply(
+                     LogMessages.RENDERER_DELETE_FAILED, RpcStatus.Failed);
+        }
+        LOG.info("RPC serviceRestore in progress...");
+        ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+        return ModelMappingUtils.createRestoreServiceReply(
+                common.getResponseMessage(), RpcStatus.Successful);
+
     }
 
     @Override
@@ -376,54 +418,55 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
     @Override
     public ListenableFuture<RpcResult<ServiceRerouteOutput>> serviceReroute(ServiceRerouteInput input) {
-        LOG.info("RPC service reroute received");
-        String message = "";
-        Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(input.getServiceName());
-        if (servicesObject.isPresent()) {
-            Services service = servicesObject.get();
-            ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder();
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
-            OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
-            DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
-            deleteInputBldr.setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
-                .setServiceName(input.getServiceName()).setDueDate(datetime)
-                .setTailRetention(TailRetention.No).build());
-            SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder()
+        String serviceName = input.getServiceName();
+        LOG.info("RPC serviceReroute received for {}", serviceName);
+        Optional<Services> servicesObject = this.serviceDataStoreOperations.getService(serviceName);
+        if (!servicesObject.isPresent()) {
+            LOG.warn("serviceReroute: {}", LogMessages.serviceNotInDS(serviceName));
+            return ModelMappingUtils.createRerouteServiceReply(
+                    input, ResponseCodes.FINAL_ACK_NO,
+                    LogMessages.serviceNotInDS(serviceName), RpcStatus.Failed);
+        }
+        Services service = servicesObject.get();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx");
+        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
+        DateAndTime datetime = new DateAndTime(dtf.format(offsetDateTime));
+        SdncRequestHeaderBuilder sdncBuilder = new SdncRequestHeaderBuilder()
                 .setNotificationUrl(service.getSdncRequestHeader().getNotificationUrl())
                 .setRequestId(service.getSdncRequestHeader().getRequestId())
                 .setRequestSystemId(service.getSdncRequestHeader().getRequestSystemId())
                 .setRpcAction(RpcActions.ServiceDelete);
-            deleteInputBldr.setSdncRequestHeader(sdncBuilder.build());
-            ServiceInput serviceInput = new ServiceInput(deleteInputBldr.build());
-            serviceInput.setServiceAEnd(service.getServiceAEnd());
-            serviceInput.setServiceZEnd(service.getServiceZEnd());
-            serviceInput.setConnectionType(service.getConnectionType());
-            this.pceListenerImpl.setInput(serviceInput);
-            this.pceListenerImpl.setServiceReconfigure(true);
-            this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-            this.rendererListenerImpl.setServiceInput(serviceInput);
-            this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-                .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
-                        new ServiceInput(deleteInputBldr.build()));
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
-                .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
-                    ServiceNotificationTypes.ServiceDeleteResult);
-            if (output != null) {
-                LOG.info("Service present in datastore, service-reroute in progress...");
-                ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
-                return ModelMappingUtils.createRerouteServiceReply(input, common.getAckFinalIndicator(),
-                        common.getResponseMessage(), RpcStatus.Successful);
-            } else {
-                return ModelMappingUtils.createRerouteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                        "Renderer service delete failed !", RpcStatus.Failed);
-            }
-        } else {
-            LOG.error("Service '{}' is not present", input.getServiceName());
-            message = "Service '" + input.getServiceName() + "' is not present";
-            return ModelMappingUtils.createRerouteServiceReply(input, ResponseCodes.FINAL_ACK_NO, message,
-                    RpcStatus.Failed);
+        ServiceDeleteInputBuilder deleteInputBldr = new ServiceDeleteInputBuilder()
+                .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder()
+                    .setServiceName(serviceName).setDueDate(datetime)
+                    .setTailRetention(TailRetention.No).build())
+                .setSdncRequestHeader(sdncBuilder.build());
+        ServiceInput serviceInput = new ServiceInput(deleteInputBldr.build());
+        serviceInput.setServiceAEnd(service.getServiceAEnd());
+        serviceInput.setServiceZEnd(service.getServiceZEnd());
+        serviceInput.setConnectionType(service.getConnectionType());
+        this.pceListenerImpl.setInput(serviceInput);
+        this.pceListenerImpl.setServiceReconfigure(true);
+        this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.rendererListenerImpl.setServiceInput(serviceInput);
+        this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
+                    new ServiceInput(deleteInputBldr.build()));
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+            .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
+                ServiceNotificationTypes.ServiceDeleteResult);
+        if (output == null) {
+            LOG.error(LogMessages.RENDERER_DELETE_FAILED);
+            return ModelMappingUtils.createRerouteServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.RENDERER_DELETE_FAILED, RpcStatus.Failed);
         }
+        LOG.info("RPC ServiceReroute in progress...");
+        ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+        return ModelMappingUtils.createRerouteServiceReply(
+                input, common.getAckFinalIndicator(),
+                common.getResponseMessage(), RpcStatus.Successful);
     }
 
     @Override
@@ -447,38 +490,42 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
     @Override
     public ListenableFuture<RpcResult<TempServiceDeleteOutput>> tempServiceDelete(TempServiceDeleteInput input) {
-        LOG.info("RPC temp serviceDelete request received for {}", input.getCommonId());
-        String message = "";
+        String commonId = input.getCommonId();
+        LOG.info("RPC temp serviceDelete request received for {}", commonId);
 
         /*
          * Upon receipt of service-deleteService RPC, service header and sdnc-request
          * header compliancy are verified.
          */
-        LOG.info("checking Service Compliancy ...");
-        ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerCompliancyCheck.check(input.getCommonId(),
-                null, null, RpcActions.ServiceDelete, false, false);
-        if (serviceHandlerCheckResult.hasPassed()) {
-            LOG.info("Service compliant !");
-        } else {
-            LOG.info("Service is not compliant !");
-            return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                    "Service not compliant !", ResponseCodes.RESPONSE_FAILED);
+        LOG.debug("checking Service Compliance ...");
+        ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerComplianceCheck.check(
+                commonId, null, null, RpcActions.ServiceDelete, false, false
+            );
+        if (!serviceHandlerCheckResult.hasPassed()) {
+            LOG.warn(LogMessages.ABORT_SERVICE_NON_COMPLIANT);
+            return ModelMappingUtils.createDeleteServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.SERVICE_NON_COMPLIANT, ResponseCodes.RESPONSE_FAILED);
         }
 
         //Check presence of service to be deleted
-        String commonId = input.getCommonId();
-        LOG.info("service common-id : {}", commonId);
-        try {
-            Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-                .Services> service = this.serviceDataStoreOperations.getTempService(commonId);
-            if (!service.isPresent()) {
-                message = "Service '" + commonId + "' does not exist in datastore";
-                LOG.error(message);
-                return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                        message, ResponseCodes.RESPONSE_FAILED);
-            }
-        } catch (NullPointerException e) {
-            LOG.info("failed to get service '{}' from datastore : ", commonId, e);
+        LOG.debug("service common-id '{}' is compliant", commonId);
+//TODO check if an expected bug was justifying this NPE handling
+//        try {
+        Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.Services>
+                service =
+            this.serviceDataStoreOperations.getTempService(commonId);
+//        } catch (NullPointerException e) {
+//            LOG.info("failed to get service '{}' from datastore : ", commonId, e);
+//            return ModelMappingUtils.createDeleteServiceReply(
+//                    input, ResponseCodes.FINAL_ACK_YES,
+//                    LogMessages.serviceNotInDS(CommonId), ResponseCodes.RESPONSE_FAILED);
+//        }
+        if (!service.isPresent()) {
+            LOG.error("tempServiceDelete: {}", LogMessages.serviceNotInDS(commonId));
+            return ModelMappingUtils.createDeleteServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.serviceNotInDS(commonId), ResponseCodes.RESPONSE_FAILED);
         }
 
         LOG.info("Service '{}' present in datastore !", commonId);
@@ -490,32 +537,34 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl.setTempService(true);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput output =
                 this.rendererServiceWrapper.performRenderer(input, ServiceNotificationTypes.ServiceDeleteResult);
-        if (output != null) {
-            LOG.info("Temp Service present in datastore, service-delete in progress...");
-            ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
-            return ModelMappingUtils.createDeleteServiceReply(input, common.getAckFinalIndicator(),
-                    common.getResponseMessage(), common.getResponseCode());
-        } else {
-            return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                    "Renderer service delete failed !", ResponseCodes.RESPONSE_FAILED);
+        if (output == null) {
+            LOG.error(LogMessages.RENDERER_DELETE_FAILED);
+            return ModelMappingUtils.createDeleteServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.RENDERER_DELETE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
+        LOG.info("RPC tempServiceDelete in progress...");
+        ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+        return ModelMappingUtils.createDeleteServiceReply(
+                input, common.getAckFinalIndicator(),
+                common.getResponseMessage(), common.getResponseCode());
     }
 
     @Override
     public ListenableFuture<RpcResult<TempServiceCreateOutput>> tempServiceCreate(TempServiceCreateInput input) {
-        LOG.info("RPC temp service creation received");
+        LOG.info("RPC tempServiceCreate received");
         // Validation
         OperationResult validationResult = ServiceCreateValidation.validateServiceCreateRequest(
                 new ServiceInput(input), RpcActions.TempServiceCreate);
         if (! validationResult.isSuccess()) {
-            LOG.warn("Aborting service create because validation of service create request failed: {}",
-                    validationResult.getResultMessage());
-            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
+            LOG.warn(LogMessages.ABORT_VALID_FAILED);
+            return ModelMappingUtils.createCreateServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
                     validationResult.getResultMessage(), ResponseCodes.RESPONSE_FAILED);
         }
 
         // Starting service create operation
-        LOG.info("Commencing PCE");
+        LOG.debug(LogMessages.PCE_CALLING);
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
@@ -524,15 +573,17 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         this.rendererListenerImpl.setTempService(true);
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
-        if (output != null) {
-            LOG.info("Service compliant, temp serviceCreate in progress...");
-            ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
-            return ModelMappingUtils.createCreateServiceReply(input, common.getAckFinalIndicator(),
-                    common.getResponseMessage(), common.getResponseCode());
-        } else {
-            return ModelMappingUtils.createCreateServiceReply(input, ResponseCodes.FINAL_ACK_YES,
-                    "PCE calculation failed", ResponseCodes.RESPONSE_FAILED);
+        if (output == null) {
+            LOG.warn(LogMessages.ABORT_PCE_FAILED);
+            return ModelMappingUtils.createCreateServiceReply(
+                    input, ResponseCodes.FINAL_ACK_YES,
+                    LogMessages.PCE_FAILED, ResponseCodes.RESPONSE_FAILED);
         }
+        LOG.info("RPC tempServiceCreate in progress...");
+        ConfigurationResponseCommon common = output.getConfigurationResponseCommon();
+        return ModelMappingUtils.createCreateServiceReply(
+                input, common.getAckFinalIndicator(),
+                common.getResponseMessage(), common.getResponseCode());
     }
 
     @Override
