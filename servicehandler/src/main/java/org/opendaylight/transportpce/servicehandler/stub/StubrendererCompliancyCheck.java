@@ -66,7 +66,7 @@ public class StubrendererCompliancyCheck {
         if (!checkString(serviceName)) {
             result = false;
             message = "Service Name is not set";
-            LOG.info(message);
+            LOG.info("Service request compliancy check: {}", message);
         }
         if (servicehandler) {
             if (serviceHandlerHeader != null) {
@@ -74,12 +74,12 @@ public class StubrendererCompliancyCheck {
                 if (!checkString(requestId)) {
                     result = false;
                     message = "Service serviceHandlerHeader 'request-id' is not set";
-                    LOG.info(message);
+                    LOG.info("Service request compliancy check: {}", message);
                 }
             } else {
                 result = false;
                 message = "Service serviceHandlerHeader is not set ";
-                LOG.info(message);
+                LOG.info("Service request compliancy check: {}", message);
             }
         }
         return result;
