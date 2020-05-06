@@ -7,6 +7,8 @@
  */
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
+import static org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck.LogMessages;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
@@ -34,7 +36,7 @@ public class ServicehandlerCompliancyCheckTest {
         ComplianceCheckResult result = ServicehandlerCompliancyCheck.check(null, null,
                 ConnectionType.Service,null, false, false);
 
-        Assert.assertEquals("Service Name (common-id for Temp service) is not set", result.getMessage());
+        Assert.assertEquals(LogMessages.SERVICENAME_NOT_SET, result.getMessage());
         Assert.assertFalse(result.hasPassed());
     }
 
@@ -42,7 +44,7 @@ public class ServicehandlerCompliancyCheckTest {
     public void checkConTypeFalseAndNull() {
         ComplianceCheckResult result = ServicehandlerCompliancyCheck.check("service 1", null,
                 null,null, true, false);
-        Assert.assertEquals("Service ConnectionType is not set", result.getMessage());
+        Assert.assertEquals(LogMessages.CONNECTIONTYPE_NOT_SET, result.getMessage());
         Assert.assertFalse(result.hasPassed());
     }
 
@@ -51,7 +53,7 @@ public class ServicehandlerCompliancyCheckTest {
         ComplianceCheckResult result = ServicehandlerCompliancyCheck.check("service 1", null,
                 ConnectionType.Service,null, true, true);
 
-        Assert.assertEquals("Service sndc-request-header is not set ", result.getMessage());
+        Assert.assertEquals(LogMessages.HEADER_NOT_SET, result.getMessage());
         Assert.assertFalse(result.hasPassed());
     }
 
@@ -62,7 +64,7 @@ public class ServicehandlerCompliancyCheckTest {
                         .setRpcAction(RpcActions.ServiceCreate).build(),
                 ConnectionType.Service, RpcActions.ServiceCreate, true, true);
 
-        Assert.assertEquals("Service sdncRequestHeader 'request-id' is not set", result.getMessage());
+        Assert.assertEquals(LogMessages.REQUESTID_NOT_SET, result.getMessage());
         Assert.assertFalse(result.hasPassed());
     }
 
@@ -85,7 +87,7 @@ public class ServicehandlerCompliancyCheckTest {
                 new SdncRequestHeaderBuilder().setRequestId("1").build(),
                 ConnectionType.Service, RpcActions.NetworkReOptimization, true, true);
 
-        Assert.assertEquals("Service sndc-request-header 'rpc-action' is not set ", result.getMessage());
+        Assert.assertEquals(LogMessages.RPCACTION_NOT_SET, result.getMessage());
         Assert.assertFalse(result.hasPassed());
     }
 }
