@@ -69,12 +69,11 @@ public final class ServicehandlerCompliancyCheck {
                 if (!checkString(requestId)) {
                     result = false;
                     message = "Service sdncRequestHeader 'request-id' is not set";
-                    LOG.debug(message);
                 } else if (serviceAction != null) {
                     if (serviceAction.compareTo(action) != 0) {
                         result = false;
-                        message = "Service sdncRequestHeader rpc-action '" + serviceAction + "' not equal to '"
-                                + action.name() + "'";
+                        message = "Service sdncRequestHeader rpc-action '" + serviceAction
+                            + "' not equal to '" + action.name() + "'";
                     }
                 } else {
                     result = false;
@@ -86,7 +85,7 @@ public final class ServicehandlerCompliancyCheck {
                 message = "Service sndc-request-header is not set ";
             }
         }
-        LOG.debug(message);
+        LOG.debug("Service request compliancy check: {}", message);
         return new ComplianceCheckResult(result, message);
     }
 

@@ -28,6 +28,15 @@ public class StubrendererCompliancyCheck {
     /** Response message from procedure. */
     private String message;
 
+    private static final String SERVICENAME_NOT_SET;
+    private static final String REQUESTID_NOT_SET;
+    private static final String HEADER_NOT_SET;
+
+    static {
+        SERVICENAME_NOT_SET = "Service Name is not set";
+        REQUESTID_NOT_SET = "Service serviceHandlerHeader 'request-id' is not set";
+        HEADER_NOT_SET = "Service serviceHandlerHeader is not set";
+    }
 
     public StubrendererCompliancyCheck(String serviceName,ServiceHandlerHeader serviceHandlerHeader) {
         this.serviceName = serviceName;
@@ -62,27 +71,25 @@ public class StubrendererCompliancyCheck {
      * @return true if String ok false if not
      */
     public Boolean check(Boolean contype, Boolean servicehandler) {
-        Boolean result = true;
         if (!checkString(serviceName)) {
-            result = false;
-            message = "Service Name is not set";
-            LOG.info(message);
+            message = SERVICENAME_NOT_SET;
+            LOG.info(SERVICENAME_NOT_SET);
+            return false;
         }
         if (servicehandler) {
-            if (serviceHandlerHeader != null) {
-                String requestId = serviceHandlerHeader.getRequestId();
-                if (!checkString(requestId)) {
-                    result = false;
-                    message = "Service serviceHandlerHeader 'request-id' is not set";
-                    LOG.info(message);
-                }
-            } else {
-                result = false;
-                message = "Service serviceHandlerHeader is not set ";
-                LOG.info(message);
+            if (serviceHandlerHeader == null) {
+                message = HEADER_NOT_SET;
+                LOG.info(HEADER_NOT_SET);
+                return false;
+            }
+            String requestId = serviceHandlerHeader.getRequestId();
+            if (!checkString(requestId)) {
+                message = REQUESTID_NOT_SET;
+                LOG.info(REQUESTID_NOT_SET);
+                return false;
             }
         }
-        return result;
+        return true;
     }
 
     public String getMessage() {
