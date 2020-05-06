@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.servicehandler.stub;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -50,6 +51,9 @@ public class StubPceServiceOperations implements PathComputationService {
         this.pceFailed = false;
     }
 
+    @SuppressFBWarnings(
+        value = "UPM_UNCALLED_PRIVATE_METHOD",
+        justification = "false positive, this method is used by public method cancelResourceReserve")
     private void sendNotifications(Notification notif) {
         try {
             LOG.info("putting notification : {}", notif);
@@ -191,6 +195,9 @@ public class StubPceServiceOperations implements PathComputationService {
         });
     }
 
+    @SuppressFBWarnings(
+        value = "UPM_UNCALLED_PRIVATE_METHOD",
+        justification = "false positive, this method is used by public method pathComputationRequest")
     private static PathDescription createPathDescription(long azRate, long azWaveLength, long zaRate,
             long zaWaveLength) {
         AToZDirection atozDirection =
