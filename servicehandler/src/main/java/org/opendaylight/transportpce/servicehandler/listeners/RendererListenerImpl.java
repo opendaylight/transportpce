@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.servicehandler.listeners;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
@@ -119,6 +120,9 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         }
     }
 
+    @SuppressFBWarnings(
+        value = "ES_COMPARING_STRINGS_WITH_EQ",
+        justification = "false positives, not strings but real object comparisons")
     private Boolean compareServiceRpcResultSp(ServiceRpcResultSp notification) {
         Boolean result = true;
         if (serviceRpcResultSp == null) {
