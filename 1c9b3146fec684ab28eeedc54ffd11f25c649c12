@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "516baa18_b1df0711",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-06T12:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "923d3356_42597cb9",
+      "revId": "1c9b3146fec684ab28eeedc54ffd11f25c649c12",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "caa8cdb2_342fa076",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphEdgeTest.java",
         "patchSetId": 1
