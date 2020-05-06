@@ -7,6 +7,8 @@
  */
 package org.opendaylight.transportpce.servicehandler.service;
 
+import static org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl.LogMessages;
+
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,7 +51,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         OperationResult result =
                 this.serviceDataStoreOperations.modifyService("service 1", State.InService, AdminStates.InService);
         Assert.assertFalse(result.isSuccess());
-        Assert.assertEquals("Service service 1 is not present!", result.getResultMessage());
+        Assert.assertEquals(LogMessages.SERVICE_NOT_FOUND, result.getResultMessage());
     }
 
     @Test
@@ -64,7 +66,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
         String result = serviceDataStoreOperations.writeOrModifyOrDeleteServiceList("serviceCreateInput",
             createInput, pathComputationRequestOutput, 3);
 
-        Assert.assertEquals("Service is not present ! ", result);
+        Assert.assertEquals(LogMessages.SERVICE_NOT_FOUND, result);
     }
 
     @Test
@@ -99,6 +101,7 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     @Test
     public void writeOrModifyOrDeleteServiceListPresentWithDeleteChoice() {
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
+
         ConfigurationResponseCommon configurationResponseCommon = new ConfigurationResponseCommonBuilder()
                 .setRequestId("request 1").setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
                 .setResponseCode(ResponseCodes.RESPONSE_OK).setResponseMessage("PCE calculation in progress").build();
@@ -208,8 +211,8 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     public void modifyTempServiceIsSuccessfulForPresentTempService() {
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
         this.serviceDataStoreOperations.createTempService(createInput);
-        OperationResult result = this.serviceDataStoreOperations.modifyTempService(createInput.getCommonId(),
-            State.InService, AdminStates.InService);
+        OperationResult result = this.serviceDataStoreOperations.modifyTempService(
+            createInput.getCommonId(), State.InService, AdminStates.InService);
         Assert.assertTrue(result.isSuccess());
     }
 
