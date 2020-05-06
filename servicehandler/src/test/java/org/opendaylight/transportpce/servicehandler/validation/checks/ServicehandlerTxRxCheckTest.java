@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
+import static org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerTxRxCheck.LogMessages;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,72 +35,103 @@ public class ServicehandlerTxRxCheckTest {
 
     @Test
     public void checkTxOrRxInfoForNullTx() {
-        ComplianceCheckResult result = ServicehandlerTxRxCheck.checkTxOrRxInfo(null, null);
+        ComplianceCheckResult result = ServicehandlerTxRxCheck.checkTxOrRxInfo(
+                null,
+                new RxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("q")
+                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("l")
+                            .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .build());
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service TxDirection is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.TXDIR_NOT_SET, result.getMessage());
     }
 
     @Test
     public void checkTxOrRxInfoForNullTxPort() {
-        ComplianceCheckResult result = ServicehandlerTxRxCheck
-                .checkTxOrRxInfo(new TxDirectionBuilder().build(), null);
+        ComplianceCheckResult result = ServicehandlerTxRxCheck.checkTxOrRxInfo(
+                new TxDirectionBuilder()
+                    .setLgx(new LgxBuilder().setLgxDeviceName("l")
+                            .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .build(),
+                new RxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("q")
+                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("l")
+                            .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .build());
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service TxDirection Port is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.TXDIR_PORT_NOT_SET, result.getMessage());
     }
 
     @Test
     public void checkTxOrRxInfoForNullTxLgx() {
-        ComplianceCheckResult result = ServicehandlerTxRxCheck
-            .checkTxOrRxInfo(new TxDirectionBuilder()
-                .setPort(new PortBuilder().setPortDeviceName("q")
-                    .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build()).build(), null);
+        ComplianceCheckResult result = ServicehandlerTxRxCheck.checkTxOrRxInfo(
+                new TxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("q")
+                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build()).build(),
+                new RxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("q")
+                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("l")
+                            .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .build());
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service TxDirection Lgx is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.TXDIR_LGX_NOT_SET, result.getMessage());
     }
 
     @Test
     public void checkTxOrRxInfoForNullRx() {
-        ComplianceCheckResult result = ServicehandlerTxRxCheck
-                .checkTxOrRxInfo(new TxDirectionBuilder()
-                        .setPort(new PortBuilder().setPortDeviceName("q")
-                                .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
-                        .setLgx(new LgxBuilder().setLgxDeviceName("l")
-                                .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build()).build(), null);
+        ComplianceCheckResult result = ServicehandlerTxRxCheck.checkTxOrRxInfo(
+                new TxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("q")
+                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("l")
+                            .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .build(),
+                null);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service RxDirection is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.RXDIR_NOT_SET, result.getMessage());
     }
 
     @Test
     public void checkTxOrRxInfoForNullRxPort() {
-        ComplianceCheckResult result = ServicehandlerTxRxCheck
-            .checkTxOrRxInfo(new TxDirectionBuilder()
-                .setPort(new PortBuilder().setPortDeviceName("q")
-                .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
-                .setLgx(new LgxBuilder().setLgxDeviceName("l")
-                .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build()).build(),
-            new RxDirectionBuilder().build());
+        ComplianceCheckResult result = ServicehandlerTxRxCheck.checkTxOrRxInfo(
+                new TxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("q")
+                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("l")
+                            .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .build(),
+                new RxDirectionBuilder()
+                    .setLgx(new LgxBuilder().setLgxDeviceName("l")
+                            .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .build());
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service RxDirection Port is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.RXDIR_PORT_NOT_SET, result.getMessage());
     }
 
     @Test
     public void checkTxOrRxInfoForNullRxLgx() {
-        ComplianceCheckResult result = ServicehandlerTxRxCheck
-                .checkTxOrRxInfo(new TxDirectionBuilder()
-                        .setPort(new PortBuilder().setPortDeviceName("q")
-                                .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
-                        .setLgx(new LgxBuilder().setLgxDeviceName("l")
-                                .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build()).build(),
-                        new RxDirectionBuilder().setPort(new PortBuilder().setPortDeviceName("q")
-                                .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build()).build());
+        ComplianceCheckResult result = ServicehandlerTxRxCheck.checkTxOrRxInfo(
+                new TxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("q")
+                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
+                    .setLgx(new LgxBuilder().setLgxDeviceName("l")
+                            .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build())
+                    .build(),
+                new RxDirectionBuilder()
+                    .setPort(new PortBuilder().setPortDeviceName("q")
+                            .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build())
+                    .build());
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service RxDirection Lgx is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.RXDIR_LGX_NOT_SET, result.getMessage());
     }
 
     @Test
@@ -106,7 +139,7 @@ public class ServicehandlerTxRxCheckTest {
         ComplianceCheckResult result = ServicehandlerTxRxCheck.check(null, ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(ServiceEndpointType.SERVICEAEND + " is not set", result.getMessage());
+        Assert.assertEquals(LogMessages.endpointTypeNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 
     @Ignore
@@ -116,7 +149,7 @@ public class ServicehandlerTxRxCheckTest {
             ServicehandlerTxRxCheck.check(new ServiceAEndBuilder().build(), ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service " + ServiceEndpointType.SERVICEAEND + " rate is not set", result.getMessage());
+        Assert.assertEquals(LogMessages.rateNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 
     @Test
@@ -125,7 +158,7 @@ public class ServicehandlerTxRxCheckTest {
             new ServiceAEndBuilder().setServiceRate(0L).build(), ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service " + ServiceEndpointType.SERVICEAEND + " rate is not set", result.getMessage());
+        Assert.assertEquals(LogMessages.rateNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 
     @Test
@@ -134,7 +167,7 @@ public class ServicehandlerTxRxCheckTest {
             new ServiceAEndBuilder().setServiceRate(3L).build(), ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service " + ServiceEndpointType.SERVICEAEND + " format is not set", result.getMessage());
+        Assert.assertEquals(LogMessages.formatNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 
     @Test
@@ -144,8 +177,7 @@ public class ServicehandlerTxRxCheckTest {
             ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals(
-            "Service" + ServiceEndpointType.SERVICEAEND + " clli format is not set", result.getMessage());
+        Assert.assertEquals(LogMessages.clliNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
     }
 
     @Test
@@ -155,6 +187,6 @@ public class ServicehandlerTxRxCheckTest {
             ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service TxDirection is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.TXDIR_NOT_SET, result.getMessage());
     }
 }
