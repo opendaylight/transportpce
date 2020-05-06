@@ -30,7 +30,7 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.servicehandler.validation.ServiceCreateValidation;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
-import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerCompliancyCheck;
+import org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerComplianceCheck;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
@@ -153,11 +153,11 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
         /*
          * Upon receipt of service-deleteService RPC, service header and sdnc-request
-         * header compliancy are verified.
+         * header compliance are verified.
          */
-        LOG.info("checking Service Compliancy ...");
+        LOG.info("checking Service Compliance ...");
         ComplianceCheckResult serviceHandlerCheckResult =
-            ServicehandlerCompliancyCheck.check(
+            ServicehandlerComplianceCheck.check(
                 input.getServiceDeleteReqInfo().getServiceName(),
                 input.getSdncRequestHeader(), null, RpcActions.ServiceDelete, false, true);
         if (serviceHandlerCheckResult.hasPassed()) {
@@ -176,14 +176,14 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             Optional<Services> service = this.serviceDataStoreOperations.getService(serviceName);
             if (!service.isPresent()) {
                 message = "Service '" + serviceName + "' does not exist in datastore";
-                LOG.error(message);
+                LOG.error("serviceDelete: {}", message);
                 return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                         message, ResponseCodes.RESPONSE_FAILED);
             }
         } catch (NullPointerException e) {
             LOG.error("failed to get service '{}' from datastore : ", serviceName, e);
             message = "Service '" + serviceName + "' does not exist in datastore";
-            LOG.error(message);
+            LOG.error("serviceDelete: {}", message);
             return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES, message,
                     ResponseCodes.RESPONSE_FAILED);
         }
@@ -454,8 +454,8 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
          * Upon receipt of service-deleteService RPC, service header and sdnc-request
          * header compliancy are verified.
          */
-        LOG.info("checking Service Compliancy ...");
-        ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerCompliancyCheck.check(input.getCommonId(),
+        LOG.info("checking Service Compliance ...");
+        ComplianceCheckResult serviceHandlerCheckResult = ServicehandlerComplianceCheck.check(input.getCommonId(),
                 null, null, RpcActions.ServiceDelete, false, false);
         if (serviceHandlerCheckResult.hasPassed()) {
             LOG.info("Service compliant !");
@@ -473,7 +473,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                 .Services> service = this.serviceDataStoreOperations.getTempService(commonId);
             if (!service.isPresent()) {
                 message = "Service '" + commonId + "' does not exist in datastore";
-                LOG.error(message);
+                LOG.error("tempServiceDelete: {}", message);
                 return ModelMappingUtils.createDeleteServiceReply(input, ResponseCodes.FINAL_ACK_YES,
                         message, ResponseCodes.RESPONSE_FAILED);
             }

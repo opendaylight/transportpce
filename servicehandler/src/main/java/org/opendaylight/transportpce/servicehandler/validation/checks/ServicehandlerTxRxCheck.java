@@ -26,6 +26,31 @@ public final class ServicehandlerTxRxCheck {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerTxRxCheck.class);
 
+    // This is class is public so that these messages can be accessed from Junit (avoid duplications).
+    public static final class LogMessages {
+
+        public static final String TXDIR_NOT_SET;
+        public static final String TXDIR_PORT_NOT_SET;
+        public static final String TXDIR_LGX_NOT_SET;
+        public static final String RXDIR_NOT_SET;
+        public static final String RXDIR_PORT_NOT_SET;
+        public static final String RXDIR_LGX_NOT_SET;
+
+        // Static blocks are generated once and spare memory.
+        static {
+            TXDIR_NOT_SET = "Service TxDirection is not correctly set";
+            RXDIR_NOT_SET = "Service RxDirection is not correctly set";
+            TXDIR_PORT_NOT_SET = "Service TxDirection Port is not correctly set";
+            TXDIR_LGX_NOT_SET = "Service TxDirection Lgx is not correctly set";
+            RXDIR_PORT_NOT_SET = "Service RxDirection Port is not correctly set";
+            RXDIR_LGX_NOT_SET = "Service RxDirection Lgx is not correctly set";
+        }
+
+        private LogMessages() {
+        }
+    }
+
+
     /**
      * Check if a String is not null and not equal to ''.
      *
@@ -94,36 +119,29 @@ public final class ServicehandlerTxRxCheck {
      * @return <code>true</code> if check is ok <code>false</code> else
      */
     public static ComplianceCheckResult checkTxOrRxInfo(TxDirection txDirection, RxDirection rxDirection) {
-        boolean result = true;
-        String message = "";
-        if (txDirection != null) {
-            if (!checkPort(txDirection.getPort())) {
-                result = false;
-                message = "Service TxDirection Port is not correctly set";
-            } else if (!checkLgx(txDirection.getLgx())) {
-                result = false;
-                message = "Service TxDirection Lgx is not correctly set";
-            } else if (rxDirection != null) {
-                if (!checkPort(rxDirection.getPort())) {
-                    result = false;
-                    message = "Service RxDirection Port is not correctly set";
-                } else if (!checkLgx(rxDirection.getLgx())) {
-                    result = false;
-                    message = "Service RxDirection Lgx is not correctly set";
-                }
-            } else {
-                result = false;
-                message = "Service RxDirection is not correctly set";
-            }
-        } else {
-            result = false;
-            message = "Service TxDirection is not correctly set";
+        if (txDirection == null) {
+            return new ComplianceCheckResult(false, LogMessages.TXDIR_NOT_SET);
         }
-        return new ComplianceCheckResult(result, message);
+        if (!checkPort(txDirection.getPort())) {
+            return new ComplianceCheckResult(false, LogMessages.TXDIR_PORT_NOT_SET);
+        }
+        if (!checkLgx(txDirection.getLgx())) {
+            return new ComplianceCheckResult(false, LogMessages.TXDIR_LGX_NOT_SET);
+        }
+        if (rxDirection == null) {
+            return new ComplianceCheckResult(false, LogMessages.RXDIR_NOT_SET);
+        }
+        if (!checkPort(rxDirection.getPort())) {
+            return new ComplianceCheckResult(false, LogMessages.RXDIR_PORT_NOT_SET);
+        }
+        if (!checkLgx(rxDirection.getLgx())) {
+            return new ComplianceCheckResult(false, LogMessages.RXDIR_LGX_NOT_SET);
+        }
+        return new ComplianceCheckResult(true, "");
     }
 
     /**
-     * Check Compliancy of Service TxRx info.
+     * Check Compliance of Service TxRx info.
      * @param serviceEnd Service Endpoint
      * @param endpointType Endpoint type
      *
@@ -140,15 +158,15 @@ public final class ServicehandlerTxRxCheck {
                 if ((serviceRate == null) || (serviceRate <= 0)) {
                     result = false;
                     message = "Service " + endpointType + " rate is not set";
-                    LOG.debug(message);
+                    LOG.debug("Service TxRx info check: {}",message);
                 } else if (serviceformat == null) {
                     result = false;
                     message = "Service " + endpointType + " format is not set";
-                    LOG.debug(message);
+                    LOG.debug("Service TxRx info check: {}",message);
                 } else if (!checkString(clli)) {
                     result = false;
                     message = "Service" + endpointType + " clli format is not set";
-                    LOG.debug(message);
+                    LOG.debug("Service TxRx info check: {}",message);
                 } else {
                     ComplianceCheckResult complianceCheckResult
                             = checkTxOrRxInfo(serviceEnd.getTxDirection(), serviceEnd.getRxDirection());
@@ -159,13 +177,13 @@ public final class ServicehandlerTxRxCheck {
                 }
             } catch (NullPointerException e) {
                 message = "Service " + endpointType + " rate, format or clli is not set";
-                LOG.error(message, e);
+                LOG.error("Service TxRx info check: {}",message, e);
                 return new ComplianceCheckResult(false, message);
             }
         } else {
             result = false;
             message = endpointType + " is not set";
-            LOG.debug(message);
+            LOG.debug("Service TxRx info check: {}", message);
         }
         return new ComplianceCheckResult(result, message);
     }

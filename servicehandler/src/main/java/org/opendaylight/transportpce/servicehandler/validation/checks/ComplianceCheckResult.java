@@ -6,8 +6,12 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 package org.opendaylight.transportpce.servicehandler.validation.checks;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ComplianceCheckResult {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ComplianceCheckResult.class);
 
     private boolean passed;
     private String message;
@@ -18,6 +22,11 @@ public class ComplianceCheckResult {
     }
 
     public ComplianceCheckResult(boolean passed, String message) {
+        if (passed) {
+            LOG.debug("Compliancy check passed");
+        } else {
+            LOG.debug("Compliancy check: {}", message);
+        }
         this.passed = passed;
         this.message = message;
     }

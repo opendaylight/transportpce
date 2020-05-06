@@ -8,6 +8,8 @@
 
 package org.opendaylight.transportpce.servicehandler.validation.checks;
 
+import static org.opendaylight.transportpce.servicehandler.validation.checks.ServicehandlerTxRxCheck.LogMessages;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,7 +38,7 @@ public class ServicehandlerTxRxCheckTest {
         ComplianceCheckResult result = ServicehandlerTxRxCheck.checkTxOrRxInfo(null, null);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service TxDirection is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.TXDIR_NOT_SET, result.getMessage());
     }
 
     @Test
@@ -45,7 +47,7 @@ public class ServicehandlerTxRxCheckTest {
                 .checkTxOrRxInfo(new TxDirectionBuilder().build(), null);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service TxDirection Port is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.TXDIR_PORT_NOT_SET, result.getMessage());
     }
 
     @Test
@@ -56,7 +58,7 @@ public class ServicehandlerTxRxCheckTest {
                     .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build()).build(), null);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service TxDirection Lgx is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.TXDIR_LGX_NOT_SET, result.getMessage());
     }
 
     @Test
@@ -69,7 +71,7 @@ public class ServicehandlerTxRxCheckTest {
                                 .setLgxPortName("p").setLgxPortRack("r").setLgxPortShelf("s").build()).build(), null);
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service RxDirection is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.RXDIR_NOT_SET, result.getMessage());
     }
 
     @Test
@@ -83,7 +85,7 @@ public class ServicehandlerTxRxCheckTest {
             new RxDirectionBuilder().build());
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service RxDirection Port is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.RXDIR_PORT_NOT_SET, result.getMessage());
     }
 
     @Test
@@ -98,7 +100,7 @@ public class ServicehandlerTxRxCheckTest {
                                 .setPortName("n").setPortRack("r").setPortShelf("s").setPortType("t").build()).build());
 
         Assert.assertFalse(result.hasPassed());
-        Assert.assertEquals("Service RxDirection Lgx is not correctly set", result.getMessage());
+        Assert.assertEquals(LogMessages.RXDIR_LGX_NOT_SET, result.getMessage());
     }
 
     @Test
