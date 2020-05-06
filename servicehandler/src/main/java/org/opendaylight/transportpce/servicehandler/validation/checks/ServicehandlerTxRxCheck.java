@@ -140,15 +140,15 @@ public final class ServicehandlerTxRxCheck {
                 if ((serviceRate == null) || (serviceRate <= 0)) {
                     result = false;
                     message = "Service " + endpointType + " rate is not set";
-                    LOG.debug(message);
+                    LOG.debug("Service TxRx info check: {}",message);
                 } else if (serviceformat == null) {
                     result = false;
                     message = "Service " + endpointType + " format is not set";
-                    LOG.debug(message);
+                    LOG.debug("Service TxRx info check: {}",message);
                 } else if (!checkString(clli)) {
                     result = false;
                     message = "Service" + endpointType + " clli format is not set";
-                    LOG.debug(message);
+                    LOG.debug("Service TxRx info check: {}",message);
                 } else {
                     ComplianceCheckResult complianceCheckResult
                             = checkTxOrRxInfo(serviceEnd.getTxDirection(), serviceEnd.getRxDirection());
@@ -159,13 +159,13 @@ public final class ServicehandlerTxRxCheck {
                 }
             } catch (NullPointerException e) {
                 message = "Service " + endpointType + " rate, format or clli is not set";
-                LOG.error(message, e);
+                LOG.error("Service TxRx info check: {}",message, e);
                 return new ComplianceCheckResult(false, message);
             }
         } else {
             result = false;
             message = endpointType + " is not set";
-            LOG.debug(message);
+            LOG.debug("Service TxRx info check: {}", message);
         }
         return new ComplianceCheckResult(result, message);
     }
