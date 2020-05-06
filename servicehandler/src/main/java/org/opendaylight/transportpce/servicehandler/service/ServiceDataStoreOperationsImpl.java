@@ -44,8 +44,28 @@ import org.slf4j.LoggerFactory;
 
 public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperations {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceDataStoreOperationsImpl.class);
-    private static final String SUCCESSFUL_MESSAGE = "Successful";
     private DataBroker dataBroker;
+
+    // This is class is public so that these messages can be accessed from Junit (avoid duplications).
+    public static final class LogMessages {
+
+        public static final String SUCCESSFUL_MESSAGE;
+        public static final String SERVICE_NOT_FOUND;
+
+        // Static blocks are generated once and spare memory.
+        static {
+            SUCCESSFUL_MESSAGE = "Successful";
+            SERVICE_NOT_FOUND = "Service not found";
+        }
+
+        public static String failedTo(String action, String serviceName) {
+            return  "Failed to " + action + " service " + serviceName;
+        }
+
+        private LogMessages() {
+        }
+    }
+
 
     public ServiceDataStoreOperationsImpl(DataBroker dataBroker) {
         this.dataBroker = dataBroker;
@@ -67,7 +87,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("init failed: {}", e.getMessage());
+            LOG.error("init failed: ", e);
         }
     }
 
@@ -81,7 +101,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             FluentFuture<? extends @NonNull CommitInfo> future = transaction.commit();
             future.get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.warn("init failed: {}", e.getMessage());
+            LOG.error("init failed: ", e);
         }
     }
 
@@ -128,11 +148,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                     InstanceIdentifier.create(ServiceList.class).child(Services.class, new ServicesKey(serviceName));
             writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
             writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
-            return OperationResult.ok(SUCCESSFUL_MESSAGE);
+            return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            String message = "Failed to delete service " + serviceName + " from Service List";
-            LOG.warn(message, e);
-            return OperationResult.failed(message);
+            LOG.warn("deleteService : {}", LogMessages.failedTo("delete", serviceName), e);
+            return OperationResult.failed(LogMessages.failedTo("delete", serviceName));
         }
     }
 
@@ -148,11 +167,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                             .ServicesKey(commonId));
             writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
             writeTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
-            return OperationResult.ok(SUCCESSFUL_MESSAGE);
+            return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            String message = "Failed to delete service " + commonId + " from Service List";
-            LOG.warn(message, e);
-            return OperationResult.failed(message);
+            LOG.warn("deleteTempService : {}", LogMessages.failedTo("delete Temp", commonId), e);
+            return OperationResult.failed(LogMessages.failedTo("delete Temp", commonId));
         }
     }
 
@@ -160,26 +178,23 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     public OperationResult modifyService(String serviceName, State operationalState, AdminStates administrativeState) {
         LOG.debug("Modifying '{}' Service", serviceName);
         Optional<Services> readService = getService(serviceName);
-        if (readService.isPresent()) {
-            try {
-                WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
-                InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
-                        .child(Services.class, new ServicesKey(serviceName));
-                Services services = new ServicesBuilder(readService.get()).setOperationalState(operationalState)
-                        .setAdministrativeState(administrativeState)
-                        .build();
-                writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
-                writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-                return OperationResult.ok(SUCCESSFUL_MESSAGE);
-            } catch (TimeoutException | InterruptedException | ExecutionException e) {
-                String message = "Failed to modify service " + serviceName + " from Service List";
-                LOG.warn(message, e);
-                return OperationResult.failed(message);
-            }
-        } else {
-            String message = "Service " + serviceName + " is not present!";
-            LOG.warn(message);
-            return OperationResult.failed(message);
+        if (!readService.isPresent()) {
+            LOG.warn(LogMessages.SERVICE_NOT_FOUND);
+            return OperationResult.failed(LogMessages.SERVICE_NOT_FOUND);
+        }
+        try {
+            WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
+            InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
+                    .child(Services.class, new ServicesKey(serviceName));
+            Services services = new ServicesBuilder(readService.get()).setOperationalState(operationalState)
+                    .setAdministrativeState(administrativeState)
+                    .build();
+            writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
+            writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
+        } catch (TimeoutException | InterruptedException | ExecutionException e) {
+            LOG.warn("modifyService : {}", LogMessages.failedTo("modify", serviceName), e);
+            return OperationResult.failed(LogMessages.failedTo("modify", serviceName));
         }
     }
 
@@ -189,31 +204,28 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         LOG.debug("Modifying '{}' Temp Service", serviceName);
         Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
             .Services> readService = getTempService(serviceName);
-        if (readService.isPresent()) {
-            try {
-                WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
-                InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-                    .Services> iid = InstanceIdentifier.create(TempServiceList.class)
-                        .child(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-                                .Services.class, new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
-                                    .temp.service.list.ServicesKey(serviceName));
-                org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
-                    .Services services = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp
-                        .service.list.ServicesBuilder(readService.get()).setOperationalState(operationalState)
-                            .setAdministrativeState(administrativeState)
-                            .build();
-                writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
-                writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-                return OperationResult.ok(SUCCESSFUL_MESSAGE);
-            } catch (TimeoutException | InterruptedException | ExecutionException e) {
-                String message = "Failed to modify temp service " + serviceName + " from Temp Service List";
-                LOG.warn(message, e);
-                return OperationResult.failed(message);
-            }
-        } else {
-            String message = "Temp Service " + serviceName + " is not present!";
-            LOG.warn(message);
-            return OperationResult.failed(message);
+        if (!readService.isPresent()) {
+            LOG.warn(LogMessages.SERVICE_NOT_FOUND);
+            return OperationResult.failed(LogMessages.SERVICE_NOT_FOUND);
+        }
+        try {
+            WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
+            InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+                .Services> iid = InstanceIdentifier.create(TempServiceList.class)
+                    .child(org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+                            .Services.class, new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531
+                                .temp.service.list.ServicesKey(serviceName));
+            org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
+                .Services services = new org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp
+                    .service.list.ServicesBuilder(readService.get()).setOperationalState(operationalState)
+                        .setAdministrativeState(administrativeState)
+                        .build();
+            writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, services);
+            writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
+        } catch (TimeoutException | InterruptedException | ExecutionException e) {
+            LOG.warn("modifyTempService : {}", LogMessages.failedTo("modify Temp", serviceName), e);
+            return OperationResult.failed(LogMessages.failedTo("modify Temp", serviceName));
         }
     }
 
@@ -227,11 +239,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-            return OperationResult.ok(SUCCESSFUL_MESSAGE);
+            return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            String message = "Failed to create service " + serviceCreateInput.getServiceName() + " to Service List";
-            LOG.warn(message, e);
-            return OperationResult.failed(message);
+            LOG.warn("createService : {}", LogMessages.failedTo("create", serviceCreateInput.getServiceName()), e);
+            return OperationResult.failed(LogMessages.failedTo("create", serviceCreateInput.getServiceName()));
         }
     }
 
@@ -249,12 +260,11 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-            return OperationResult.ok(SUCCESSFUL_MESSAGE);
+            return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            String message = "Failed to create Temp service " + tempServiceCreateInput.getCommonId()
-                + " to TempService List";
-            LOG.warn(message, e);
-            return OperationResult.failed(message);
+            LOG.warn("createTempService : {}",
+                    LogMessages.failedTo("create Temp", tempServiceCreateInput.getCommonId()), e);
+            return OperationResult.failed(LogMessages.failedTo("create Temp", tempServiceCreateInput.getCommonId()));
         }
     }
 
@@ -268,11 +278,11 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
             writeTx.put(LogicalDatastoreType.OPERATIONAL, servicePathsIID, servicePath);
             writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-            return OperationResult.ok(SUCCESSFUL_MESSAGE);
+            return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            String message = "Failed to create servicePath " + serviceInput.getCommonId() + " to ServicePath List";
-            LOG.warn(message, e);
-            return OperationResult.failed(message);
+            LOG.warn("createServicePath : {}",
+                    LogMessages.failedTo("create servicePath", serviceInput.getCommonId()), e);
+            return OperationResult.failed(LogMessages.failedTo("create servicePath", serviceInput.getCommonId()));
         }
     }
 
@@ -285,11 +295,10 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
         servicePathsWriteTx.delete(LogicalDatastoreType.OPERATIONAL, servicePathsIID);
         try {
             servicePathsWriteTx.commit().get(Timeouts.DATASTORE_DELETE, TimeUnit.MILLISECONDS);
-            return OperationResult.ok(SUCCESSFUL_MESSAGE);
+            return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            String message = "Unable to delete service path " + serviceName;
-            LOG.error(message, e);
-            return OperationResult.failed(message);
+            LOG.error("deleteServicePath : {}", LogMessages.failedTo("delete servicePath", serviceName), e);
+            return OperationResult.failed(LogMessages.failedTo("delete servicePath", serviceName));
         }
     }
 
@@ -312,60 +321,61 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             PathComputationRequestOutput output, int choice) {
         LOG.debug("WriteOrModifyOrDeleting '{}' Service", serviceName);
         WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
-        String result = null;
         Optional<Services> readService = getService(serviceName);
-        if (readService.isPresent()) {
-            /*
-             * Modify / Delete Service.
-             */
-            InstanceIdentifier<Services> iid =
-                    InstanceIdentifier.create(ServiceList.class).child(Services.class, new ServicesKey(serviceName));
-            ServicesBuilder service = new ServicesBuilder(readService.get());
-            String action = null;
-            switch (choice) {
-                case 0 : /* Modify. */
-                    LOG.debug("Modifying '{}' Service", serviceName);
-                    service.setOperationalState(State.InService).setAdministrativeState(AdminStates.InService);
-                    writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, service.build());
-                    action = "modifyService";
-                    break;
-                case 1 : /* Delete */
-                    LOG.debug("Deleting '{}' Service", serviceName);
-                    writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
-                    action = "deleteService";
-                    break;
-                default:
-                    LOG.debug("No choice found");
-                    break;
+
+        /*
+         * Write Service.
+         */
+        if (!readService.isPresent()) {
+            if (choice != 2) {
+                LOG.warn(LogMessages.SERVICE_NOT_FOUND);
+                return LogMessages.SERVICE_NOT_FOUND;
             }
+
+            LOG.debug("Writing '{}' Service", serviceName);
+            InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
+                    .child(Services.class, new ServicesKey(serviceName));
+            Services service = ModelMappingUtils.mappingServices(input, null);
+            writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
             try {
                 writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                LOG.error("Failed to {} service from Service List", action, e);
-                result = "Failed to " + action + " service from Service List";
-            }
-        } else {
-            /*
-             * Write Service.
-             */
-            if (choice == 2) {
-                LOG.debug("Writing '{}' Service", serviceName);
-                InstanceIdentifier<Services> iid = InstanceIdentifier.create(ServiceList.class)
-                        .child(Services.class, new ServicesKey(serviceName));
-                Services service = ModelMappingUtils.mappingServices(input, null);
-                writeTx.put(LogicalDatastoreType.OPERATIONAL, iid, service);
-                try {
-                    writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
-                    result = null;
-                } catch (InterruptedException | TimeoutException | ExecutionException e) {
-                    LOG.error("Failed to createService service to Service List", e);
-                    result = "Failed to createService service to Service List";
-                }
-            } else {
-                LOG.info("Service is not present ! ");
-                result = "Service is not present ! ";
+                return null;
+            } catch (InterruptedException | TimeoutException | ExecutionException e) {
+                LOG.error("writeOrModifyOrDeleteServiceList : {}", LogMessages.failedTo("create", serviceName), e);
+                return LogMessages.failedTo("create", serviceName);
             }
         }
-        return result;
+
+        /*
+         * Modify / Delete Service.
+         */
+        InstanceIdentifier<Services> iid =
+                InstanceIdentifier.create(ServiceList.class).child(Services.class, new ServicesKey(serviceName));
+        ServicesBuilder service = new ServicesBuilder(readService.get());
+        String action = null;
+        switch (choice) {
+            case 0 : /* Modify. */
+                LOG.debug("Modifying '{}' Service", serviceName);
+                service.setOperationalState(State.InService).setAdministrativeState(AdminStates.InService);
+                writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, service.build());
+                action = "modifyService";
+                break;
+            case 1 : /* Delete */
+                LOG.debug("Deleting '{}' Service", serviceName);
+                writeTx.delete(LogicalDatastoreType.OPERATIONAL, iid);
+                action = "deleteService";
+                break;
+            default:
+                LOG.debug("No choice found");
+                break;
+        }
+        try {
+            writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.error("writeOrModifyOrDeleteServiceList : {}", LogMessages.failedTo(action, serviceName), e);
+            return LogMessages.failedTo(action, serviceName);
+        }
+
+        return null;
     }
 }

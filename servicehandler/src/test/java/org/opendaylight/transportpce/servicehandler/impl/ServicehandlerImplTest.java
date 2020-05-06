@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.servicehandler.impl;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl.LogMessages;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -526,7 +527,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
         Assert.assertEquals(
             ResponseCodes.RESPONSE_FAILED, rpcResult.getResult().getConfigurationResponseCommon().getResponseCode());
         Assert.assertEquals(
-            "Service not compliant !", rpcResult.getResult().getConfigurationResponseCommon().getResponseMessage());
+            LogMessages.SERVICE_NON_COMPLIANT,
+            rpcResult.getResult().getConfigurationResponseCommon().getResponseMessage());
     }
 
     @Test
