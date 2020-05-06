@@ -97,6 +97,7 @@ public class StubPceServiceOperations implements PathComputationService {
                                     .setResponseCode(responseCode).setResponseMessage(message).build();
                     output = new CancelResourceReserveOutputBuilder()
                             .setConfigurationResponseCommon(configurationResponseCommon).build();
+                    return output;
                 }
                 if (pceFailed) {
                     LOG.info("forcing pce to fail");
@@ -112,7 +113,7 @@ public class StubPceServiceOperations implements PathComputationService {
                 }
                 notification = new ServicePathRpcResultBuilder()
                         .setNotificationType(ServicePathNotificationTypes.CancelResourceReserve)
-                        .setStatus(RpcStatusEx.Successful).setStatusMessage(message)
+                        .setStatus(rpcStatusEx).setStatusMessage(message)
                         .setServiceName(serviceName).build();
                 sendNotifications(notification);
                 configurationResponseCommon =
@@ -161,6 +162,7 @@ public class StubPceServiceOperations implements PathComputationService {
                                     .setResponseCode(responseCode).setResponseMessage(message).build();
                     output = new PathComputationRequestOutputBuilder()
                             .setConfigurationResponseCommon(configurationResponseCommon).build();
+                    return output;
                 }
                 PathDescription value;
                 if (pceFailed) {

@@ -189,6 +189,7 @@ public class StubRendererServiceOperations implements RendererServiceOperations 
                                     .setResponseCode(responseCode).setResponseMessage(message);
                     output = new ServiceDeleteOutputBuilder()
                             .setConfigurationResponseCommon(configurationResponseCommon.build()).build();
+                    return output;
                 }
                 if (rendererFailed) {
                     LOG.info("forcing renderer to fail");
