@@ -10,8 +10,6 @@ package org.opendaylight.transportpce.servicehandler.validation.checks;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.sdnc.request.header.SdncRequestHeader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class for checking service sdnc-request-header compliancy.
@@ -19,7 +17,19 @@ import org.slf4j.LoggerFactory;
  */
 public final class ServicehandlerCompliancyCheck {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServicehandlerCompliancyCheck.class);
+    private static final String SERVICENAME_NOT_SET;
+    private static final String CONNECTIONTYPE_NOT_SET;
+    private static final String REQUESTID_NOT_SET;
+    private static final String RPCACTION_NOT_SET;
+    private static final String HEADER_NOT_SET;
+
+    static {
+        SERVICENAME_NOT_SET = "Service Name (common-id for Temp service) is not set";
+        CONNECTIONTYPE_NOT_SET = "Service ConnectionType is not set";
+        REQUESTID_NOT_SET = "Service sdncRequestHeader 'request-id' is not set";
+        RPCACTION_NOT_SET = "Service sdncRequestHeader 'rpc-action' is not set";
+        HEADER_NOT_SET = "Service sdncRequestHeader is not set";
+    }
 
     /**
      * Check if a String is not null and not equal to void.
@@ -48,46 +58,36 @@ public final class ServicehandlerCompliancyCheck {
      * @param sdncRequest
      *            Boolean to check sdncRequestHeader
      *
-     * @return true if String ok false if not
+     * @return true if Service Request OK and false if not
      */
     public static ComplianceCheckResult check(String serviceName, SdncRequestHeader sdncRequestHeader,
                                        ConnectionType conType, RpcActions action,
                                        Boolean contype, Boolean sdncRequest) {
-        boolean result = true;
-        String message = "";
         if (!checkString(serviceName)) {
-            result = false;
-            message = "Service Name (common-id for Temp service) is not set";
-        } else if (contype && (conType == null)) {
-            result = false;
-            message = "Service ConnectionType is not set";
+            return new ComplianceCheckResult(false, SERVICENAME_NOT_SET);
+        }
+        if (contype && (conType == null)) {
+            return new ComplianceCheckResult(false, CONNECTIONTYPE_NOT_SET);
         }
         if (sdncRequest) {
-            if (sdncRequestHeader != null) {
-                RpcActions serviceAction = sdncRequestHeader.getRpcAction();
-                String requestId = sdncRequestHeader.getRequestId();
-                if (!checkString(requestId)) {
-                    result = false;
-                    message = "Service sdncRequestHeader 'request-id' is not set";
-                    LOG.debug(message);
-                } else if (serviceAction != null) {
-                    if (serviceAction.compareTo(action) != 0) {
-                        result = false;
-                        message = "Service sdncRequestHeader rpc-action '" + serviceAction + "' not equal to '"
-                                + action.name() + "'";
-                    }
-                } else {
-                    result = false;
-                    message = "Service sndc-request-header 'rpc-action' is not set ";
-                }
-
-            } else {
-                result = false;
-                message = "Service sndc-request-header is not set ";
+            if (sdncRequestHeader == null) {
+                return new ComplianceCheckResult(false, HEADER_NOT_SET);
+            }
+            RpcActions serviceAction = sdncRequestHeader.getRpcAction();
+            String requestId = sdncRequestHeader.getRequestId();
+            if (!checkString(requestId)) {
+                return new ComplianceCheckResult(false, REQUESTID_NOT_SET);
+            }
+            if (serviceAction == null) {
+                return new ComplianceCheckResult(false, RPCACTION_NOT_SET);
+            }
+            if (serviceAction.compareTo(action) != 0) {
+                return new ComplianceCheckResult(false,
+                    "Service sdncRequestHeader rpc-action '" + serviceAction
+                        + "' not equal to '" + action.name() + "'");
             }
         }
-        LOG.debug(message);
-        return new ComplianceCheckResult(result, message);
+        return new ComplianceCheckResult(true, "");
     }
 
     private ServicehandlerCompliancyCheck() {

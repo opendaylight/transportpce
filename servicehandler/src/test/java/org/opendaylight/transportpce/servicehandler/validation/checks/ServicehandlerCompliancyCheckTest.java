@@ -51,7 +51,7 @@ public class ServicehandlerCompliancyCheckTest {
         ComplianceCheckResult result = ServicehandlerCompliancyCheck.check("service 1", null,
                 ConnectionType.Service,null, true, true);
 
-        Assert.assertEquals("Service sndc-request-header is not set ", result.getMessage());
+        Assert.assertEquals("Service sdncRequestHeader is not set", result.getMessage());
         Assert.assertFalse(result.hasPassed());
     }
 
@@ -85,7 +85,7 @@ public class ServicehandlerCompliancyCheckTest {
                 new SdncRequestHeaderBuilder().setRequestId("1").build(),
                 ConnectionType.Service, RpcActions.NetworkReOptimization, true, true);
 
-        Assert.assertEquals("Service sndc-request-header 'rpc-action' is not set ", result.getMessage());
+        Assert.assertEquals("Service sdncRequestHeader 'rpc-action' is not set", result.getMessage());
         Assert.assertFalse(result.hasPassed());
     }
 }
