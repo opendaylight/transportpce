@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.servicehandler.stub;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -66,6 +67,9 @@ public class StubRendererServiceOperations implements RendererServiceOperations 
         executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(2));
     }
 
+    @SuppressFBWarnings(
+        value = "UPM_UNCALLED_PRIVATE_METHOD",
+        justification = "false positive, this method is used by public method serviceImplementation")
     private void sendNotifications(Notification notif) {
         try {
             LOG.info("putting notification : {}", notif);
@@ -230,6 +234,9 @@ public class StubRendererServiceOperations implements RendererServiceOperations 
         });
     }
 
+    @SuppressFBWarnings(
+        value = "UPM_UNCALLED_PRIVATE_METHOD",
+        justification = "false positive, this method is used by public method serviceDelete")
     private Optional<PathDescription> getPathDescriptionFromDatastore(String serviceName) {
         InstanceIdentifier<PathDescription> pathDescriptionIID = InstanceIdentifier.create(ServicePathList.class)
                 .child(ServicePaths.class, new ServicePathsKey(serviceName)).child(PathDescription.class);
