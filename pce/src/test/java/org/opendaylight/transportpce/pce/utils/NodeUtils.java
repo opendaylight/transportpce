@@ -57,8 +57,7 @@ public class NodeUtils {
                 new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(srcTp);
         //create destination link
         DestinationBuilder ietfDestLinkBldr =
-                new DestinationBuilder().setDestNode(new NodeId(destNode))
-                        .setDestTp(destTp);
+                new DestinationBuilder().setDestNode(new NodeId(destNode)).setDestTp(destTp);
         LinkId linkId = new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
 
         LinkId oppositeLinkId = new LinkId("OpenROADM-3-2-DEG1-to-OpenROADM-3-1-DEG1");
@@ -222,8 +221,9 @@ public class NodeUtils {
 
         TransactionUtils.getNetworkForSpanLoss();
         return new LinkBuilder().setLinkId(new LinkId("OpenROADM-3-1-DEG1-to-OpenROADM-3-2-DEG1"))
-                .setSource(new SourceBuilder().setSourceNode(new NodeId("OpenROADM-3-2-DEG1"))
-                        .setSourceTp("DEG1-TTP-TX").build())
+                .setSource(
+                        new SourceBuilder().setSourceNode(new NodeId("OpenROADM-3-2-DEG1"))
+                                .setSourceTp("DEG1-TTP-TX").build())
                 .setDestination(
                         new DestinationBuilder().setDestNode(new NodeId("OpenROADM-3-1-DEG1"))
                                 .setDestTp("DEG1-TTP-RX").build())
