@@ -126,6 +126,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 openroadmTopo = openroadmTopoOpt.get().get();
             } catch (InterruptedException | ExecutionException | NoSuchElementException e) {
                 LOG.error("Impossible to retreive openroadm-topology from mdsal");
+                return null;
             }
             List<Node> nodeList = openroadmTopo.getNode();
             @Nullable

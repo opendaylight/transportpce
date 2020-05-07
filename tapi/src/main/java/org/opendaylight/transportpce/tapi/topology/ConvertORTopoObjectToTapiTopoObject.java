@@ -67,7 +67,7 @@ import org.slf4j.LoggerFactory;
 
 public class ConvertORTopoObjectToTapiTopoObject {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TapiTopologyImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConvertORTopoObjectToTapiTopoObject.class);
     private String ietfNodeId;
     private List<TerminationPoint> oorClientPortList;
     private List<TerminationPoint> oorNetworkPortList;

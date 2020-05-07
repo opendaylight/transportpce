@@ -61,8 +61,6 @@ public final class CreateConnectivityServiceValidation {
                 return OperationResult.failed(resilienceConstraintCheckResult.getMessage());
             }
 
-            String state = input.getState();
-
             LOG.info("checking TopoConstraint...");
             TopologyConstraint topoConstraint = input.getTopologyConstraint();
             ComplianceCheckResult topoConstraintCheckResult = TopoConstraintCheck.check(topoConstraint);
