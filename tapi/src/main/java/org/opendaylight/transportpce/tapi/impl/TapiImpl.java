@@ -19,8 +19,8 @@ import org.opendaylight.transportpce.tapi.utils.MappingUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiUtils;
 import org.opendaylight.transportpce.tapi.validation.CreateConnectivityServiceValidation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
@@ -70,8 +70,7 @@ public class TapiImpl implements TapiConnectivityService {
     @Override
     public ListenableFuture<RpcResult<CreateConnectivityServiceOutput>> createConnectivityService(
         CreateConnectivityServiceInput input) {
-        LOG.info("RPC create-connectivity received");
-        LOG.info(input.getEndPoint().toString());
+        LOG.info("RPC create-connectivity received: {}", input.getEndPoint().toString());
         OperationResult validationResult = CreateConnectivityServiceValidation.validateCreateConnectivityServiceRequest(
             input);
         if (validationResult.isSuccess()) {
@@ -86,7 +85,7 @@ public class TapiImpl implements TapiConnectivityService {
                     .getServiceInterfacePoint()
                     .getServiceInterfacePointUuid()), map.get(input.getEndPoint().get(1).getServiceInterfacePoint()
                         .getServiceInterfacePointUuid()));
-                ServiceCreateOutput output = this.serviceHandler.serviceCreate(sci);
+                this.serviceHandler.serviceCreate(sci);
             } else {
                 LOG.error("Unknown UUID");
             }
@@ -152,8 +151,9 @@ public class TapiImpl implements TapiConnectivityService {
     public ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> deleteConnectivityService(
         DeleteConnectivityServiceInput input) {
         LOG.info("RPC delete-connectivity received");
-        ServiceDeleteInput inputSh = null;
-        this.serviceHandler.serviceDelete(inputSh);
+        //ServiceDeleteInput inputSh = null;
+        //this.serviceHandler.serviceDelete(inputSh);
+        this.serviceHandler.serviceDelete(null);
         //TODO to continue...
         return null;
     }
