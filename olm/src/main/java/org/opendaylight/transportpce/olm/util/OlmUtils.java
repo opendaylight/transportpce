@@ -75,7 +75,7 @@ public final class OlmUtils {
                                              OpenroadmVersion openRoadmVersion) {
         LOG.info("Getting PM Data for NodeId: {} ResourceType: {} ResourceName: {}", input.getNodeId(),
             input.getResourceType(), input.getResourceIdentifier());
-        GetPmOutputBuilder pmOutputBuilder = new GetPmOutputBuilder();
+        GetPmOutputBuilder pmOutputBuilder;
         if (openRoadmVersion.getIntValue() == 1) {
             pmOutputBuilder = OlmUtils121.pmFetch(input, deviceTransactionManager);
         } else {

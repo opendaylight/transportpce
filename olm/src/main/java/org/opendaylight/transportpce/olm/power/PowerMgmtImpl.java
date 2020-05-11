@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.olm.power;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfa
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressFBWarnings("DM_CONVERT_CASE")
 public class PowerMgmtImpl implements PowerMgmt {
     private static final Logger LOG = LoggerFactory.getLogger(PowerMgmtImpl.class);
     private final DataBroker db;
@@ -253,22 +255,15 @@ public class PowerMgmtImpl implements PowerMgmt {
                             }
                         }
 
-                        BigDecimal powerValue =  null;
-                        if (spanLossTx != null &&  spanLossTx.intValue() <= 28 && spanLossTx.intValue() > 0) {
-                            powerValue = BigDecimal.valueOf(Math.min(spanLossTx.doubleValue() - 9, 2));
-                            LOG.info("Power Value is {}", powerValue);
-                        } else if (spanLossTx.intValue() > 28) {
+                        if ((spanLossTx == null) || (spanLossTx.intValue() <= 0) || (spanLossTx.intValue() > 28)) {
                             LOG.error(
-                                "Power Value is null - spanLossTx > 28dB not compliant with openROADM specifications");
-                            return false;
-                        } else if (spanLossTx.intValue() <= 0) {
-                            LOG.error(
-                                "Power Value is null - spanLossTx <= 0 dB not compliant with openROADM specifications");
-                            return false;
-                        } else {
-                            LOG.error("Power Value is null - spanLossTx is null");
+                                "Power Value is null: spanLossTx null or out-of-range ]0,28] specified by openROADM ",
+                                spanLossTx);
                             return false;
                         }
+                        BigDecimal powerValue = BigDecimal.valueOf(Math.min(spanLossTx.doubleValue() - 9, 2));
+                        LOG.info("Power Value is {}", powerValue);
+
                         try {
                             Boolean setXconnPowerSuccessVal = crossConnect.setPowerLevel(nodeId,
                                 OpticalControlMode.Power.getName(), powerValue, connectionNumber);
