@@ -83,14 +83,18 @@ final class OlmUtils121 {
             if (input.getDirection() != null) {
                 direction = input.getDirection();
             }
-            PmNamesEnum pmName = null;
-            List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm
-                .rev170418.get.pm.output.Measurements>
-                measurements = extractWantedMeasurements(currentPmList.get(),
-                ResourceTypeEnum.forValue(input.getResourceType().getIntValue()),
-                input.getResourceIdentifier(),
-                PmGranularity.forValue(input.getGranularity().getIntValue()),
-                pmName, pmExtension, location, direction);
+            //PmNamesEnum pmName = null;
+            List<org.opendaylight.yang.gen.v1.http
+                    .org.opendaylight.transportpce.olm.rev170418.get.pm.output.Measurements> measurements =
+                extractWantedMeasurements(currentPmList.get(),
+                    ResourceTypeEnum.forValue(input.getResourceType().getIntValue()),
+                    input.getResourceIdentifier(),
+                    PmGranularity.forValue(input.getGranularity().getIntValue()),
+                    //pmName
+                    null,
+                    pmExtension,
+                    location,
+                    direction);
             if (measurements.isEmpty()) {
                 LOG.error("No Matching PM data found for node: {}, resource type: {}, resource name: {}",
                         input.getNodeId(), input.getResourceType(),
@@ -162,7 +166,7 @@ final class OlmUtils121 {
         if (extension != null) {
             LOG.info("extension is not null {}",extension);
             measurementStream = measurementStream.filter(measure -> measure.getMeasurement()
-                    .getPmParameterName().getType().equals("vendorExtension")
+                    .getPmParameterName().getType().toString().equals("vendorExtension")
                     && measure.getMeasurement().getPmParameterName().getExtension().equals(extension));
         }
         if (location != null) {

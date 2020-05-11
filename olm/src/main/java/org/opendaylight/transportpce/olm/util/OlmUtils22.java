@@ -114,11 +114,11 @@ final class OlmUtils22 {
                             .equals(input.getPmExtension()));
                     }
                     if (input.getLocation() != null) {
-                        currentPMStream = currentPMStream.filter(pm -> pm.getLocation()
+                        currentPMStream = currentPMStream.filter(pm -> Location.forValue(pm.getLocation().getIntValue())
                             .equals(Location.forValue(input.getLocation().getIntValue())));
                     }
                     if (input.getDirection() != null) {
-                        currentPMStream = currentPMStream.filter(pm -> pm.getDirection()
+                        currentPMStream = currentPMStream.filter(pm -> Direction.forValue(pm.getDirection().getIntValue())
                             .equals(Direction.forValue((input.getDirection().getIntValue()))));
                     }
                     List<CurrentPm> filteredPMs = currentPMStream.collect(Collectors.toList());
