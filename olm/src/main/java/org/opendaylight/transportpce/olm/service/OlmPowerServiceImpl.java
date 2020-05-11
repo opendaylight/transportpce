@@ -515,7 +515,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
     private Map<LinkId, BigDecimal> getLinkSpanloss(List<RoadmLinks> roadmLinks) {
         Map<LinkId, BigDecimal> map = new HashMap<LinkId, BigDecimal>();
         LOG.info("Executing GetLinkSpanLoss");
-        BigDecimal spanLoss = new BigDecimal(0);
+        BigDecimal spanLoss;
         for (RoadmLinks link : roadmLinks) {
             String sourceNodeId = link.getSrcNodeId();
             String sourceTpId = link.getSrcTpId();
