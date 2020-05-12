@@ -26,7 +26,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <connection>scm:git:ssh://git.opendaylight.org:29418/transportpce.git</connection>
         <developerConnection>scm:git:ssh://git.opendaylight.org:29418/transportpce.git</developerConnection>
         <tag>HEAD</tag>
-        <url>https://wiki.opendaylight.org/view/transportpce:Main</url>
+        <url>https://wiki.lfnetworking.org/display/ODL/TransportPCE</url>
     </scm>
 
     <modules>
