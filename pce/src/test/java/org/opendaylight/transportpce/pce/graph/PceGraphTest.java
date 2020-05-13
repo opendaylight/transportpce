@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.graph;
 
 import java.util.Map;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,7 @@ import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
@@ -47,16 +49,19 @@ public class PceGraphTest {
                 "OpenROADM-3-1-DEG1",
                 "DEG1-TTP-TX", "DEG1-TTP-RX").build();
 
-        node =  NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes()).build();
+        node = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes()).build();
 
         pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.SRG, new NodeId("OpenROADM-3-2-DEG1"), ServiceFormat.Ethernet,
                 "DEGREE");
+        pceOpticalNode.checkWL(1);
+        pceOpticalNode.checkWL(2);
 
         pceOpticalNode2 = new PceOpticalNode(node,
                 OpenroadmNodeType.SRG, new NodeId("OpenROADM-3-1-DEG1"), ServiceFormat.Ethernet,
                 "DEGREE");
-
+        pceOpticalNode2.checkWL(1);
+        pceOpticalNode2.checkWL(2);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
         pceLink.setClient("XPONDER-CLIENT");
 
@@ -82,7 +87,19 @@ public class PceGraphTest {
     }
 
     @Test
-    public void clacPathFalse() {
+    public void clacPathPropagationDelay() {
+        pceHardConstraints.setPceMetrics(RoutingConstraintsSp.PceMetric.PropagationDelay);
+        pceGraph.setConstrains(pceHardConstraints, null);
+
+        Assert.assertEquals(pceGraph.calcPath(), true);
+        Assert.assertEquals(Optional.ofNullable(pceGraph.getPathAtoZ().get(0).getLatency()),
+                Optional.ofNullable(30.0));
+        Assert.assertEquals(pceGraph.getReturnStructure().getRate(), -1);
+    }
+
+    @Test
+    public void clacPath100GE() {
+        pceOpticalNode.checkWL(1);
         pceGraph = new PceGraph(pceOpticalNode, pceOpticalNode2, allPceNodes,
                 pceHardConstraints,
                 null, rc,
@@ -92,7 +109,7 @@ public class PceGraphTest {
     }
 
     @Test(expected = Exception.class)
-    public void clacPath1GE() {
+    public void clacPath10GE() {
         pceGraph = new PceGraph(pceOpticalNode, pceOpticalNode2, allPceNodes,
                 pceHardConstraints,
                 null, rc,
