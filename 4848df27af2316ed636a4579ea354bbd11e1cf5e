@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85d396b9_f6f6b620",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-13T20:42:42Z",
+      "side": 1,
+      "message": "in Java object comparison is done through equals method",
+      "range": {
+        "startLine": 167,
+        "startChar": 25,
+        "endLine": 167,
+        "endChar": 83
+      },
+      "revId": "4848df27af2316ed636a4579ea354bbd11e1cf5e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38b30880_4be5ee8f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-13T20:42:42Z",
+      "side": 1,
+      "message": "in Java object comparison is done through equals method",
+      "range": {
+        "startLine": 125,
+        "startChar": 25,
+        "endLine": 125,
+        "endChar": 81
+      },
+      "revId": "4848df27af2316ed636a4579ea354bbd11e1cf5e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
