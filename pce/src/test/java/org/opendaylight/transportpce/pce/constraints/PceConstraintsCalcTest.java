@@ -29,27 +29,54 @@ public class PceConstraintsCalcTest extends AbstractTest {
     @Before
     public void setup() throws Exception {
         // networkTransactionService = Mockito.mock(NetworkTransactionService.class);
+        PceTestUtils.writeNetworkIntoDataStore(dataBroker, this.getDataStoreContextUtil(),
+                TransactionUtils.getNetworkForSpanLoss());
         networkTransactionService = new NetworkTransactionImpl(new RequestProcessor(dataBroker));
-        PceTestUtils.writeNetworkIntoDataStore(dataBroker, dataStoreContext, TransactionUtils.getNetworkForSpanLoss());
+
 
     }
 
     @Test
     public void testNoHardOrSoftConstrainsExists() {
+        PceTestData.getPCE_test2_request_54().getSoftConstraints();
         pceConstraintsCalc = new PceConstraintsCalc(PceTestData
                 .getEmptyPCERequest(), networkTransactionService);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test()
     public void testHardConstrainsExists() {
         pceConstraintsCalc = new PceConstraintsCalc(PceTestData
-                .getPCE_test2_request_54(), networkTransactionService);
+                .getPCE_simpletopology_test1_requestSetHardAndSoftConstrains(), networkTransactionService);
+    }
+
+    @Test()
+    public void testHardConstrainsExists1() {
+        pceConstraintsCalc = new PceConstraintsCalc(PceTestData
+                .getPathComputationRequestInputWithCoRoutingOrGeneral(), networkTransactionService);
     }
 
     @Test
     public void testSoftConstrainsExists() {
         pceConstraintsCalc = new PceConstraintsCalc(PceTestData
                 .getPCERequest(), networkTransactionService);
+    }
+
+    @Test(expected = Exception.class)
+    public void testHardConstrainsExists2() {
+        pceConstraintsCalc = new PceConstraintsCalc(PceTestData
+                .build_diversity_from_request(PceTestData.getPCERequest()), networkTransactionService);
+    }
+
+    @Test()
+    public void testHardConstrainsExists3() {
+        pceConstraintsCalc = new PceConstraintsCalc(PceTestData
+                .getEmptyPCERequestServiceNameWithRequestId(), networkTransactionService);
+    }
+
+    @Test(expected = Exception.class)
+    public void testHardConstrainsExists4() {
+        pceConstraintsCalc = new PceConstraintsCalc(PceTestData
+                .getPCE_test2_request_54(), networkTransactionService);
     }
 
 }

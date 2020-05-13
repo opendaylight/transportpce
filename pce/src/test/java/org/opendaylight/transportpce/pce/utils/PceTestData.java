@@ -40,6 +40,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.include_.OrderedHopsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.diversity.existing.service.contraints.sp.ExistingServiceApplicability;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.diversity.existing.service.contraints.sp.ExistingServiceApplicabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ordered.constraints.sp.HopTypeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraints;
@@ -418,8 +419,8 @@ public final class PceTestData {
                                         .setOrderedHops(
                                                 Arrays.asList(new OrderedHopsBuilder()
                                                         .setHopNumber(22)
-                                                        // .setHopType(new HopTypeBuilder()
-                                                        // .setHopType(new ClliBuilder().getClli())
+                                                         .setHopType(new HopTypeBuilder()
+                                                         .setHopType(new HopTypeBuilder().getHopType()).build())
                                                         .build()))
                                         .build())
                                 .build())
@@ -656,6 +657,8 @@ public final class PceTestData {
                 .setServiceZEnd(serviceZEnd)
                 .setHardConstraints(new HardConstraintsBuilder()
                         .setCoRoutingOrGeneral(new GeneralBuilder()
+                                .setLatency(new LatencyBuilder()
+                                        .setMaxLatency(3223L).build())
                                 .setDiversity(new DiversityBuilder()
                                         .setExistingService(Arrays.asList(base.getServiceName()))
                                         .setExistingServiceApplicability(nodeTrue)
