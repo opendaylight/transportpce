@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cfb8007c_94089b51",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubPceServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:20:13Z",
+      "side": 1,
+      "message": "Agreed but not really an issue pointed by SB.\nThis is worth another change or modifying the commit message.\n\nAlso this is present in many other places.\nWe should check the other files in SH also.",
+      "parentUuid": "4d98cf90_22abba7a",
+      "range": {
+        "startLine": 98,
+        "startChar": 19,
+        "endLine": 100,
+        "endChar": 34
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "13a63265_a56132c1",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubPceServiceOperations.java",
         "patchSetId": 2
@@ -40,6 +64,98 @@
         "startLine": 123,
         "startChar": 0,
         "endLine": 125,
+        "endChar": 30
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5702c5f_c9355aba",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubPceServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:20:13Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 34
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8da2cac7_e4ef4ffa",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubPceServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:20:13Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 30
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d1943be_a7b7b717",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:20:13Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 34
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd55baa3_16e82820",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:20:13Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 152,
         "endChar": 30
       },
       "revId": "343e09b6315d784289cef171d6cb374837b531b4",
@@ -64,6 +180,53 @@
         "startChar": 19,
         "endLine": 192,
         "endChar": 34
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "859480fd_c78b793b",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:20:13Z",
+      "side": 1,
+      "message": "Correct\n+ below",
+      "parentUuid": "b0f4c4f9_8cdcb912",
+      "range": {
+        "startLine": 190,
+        "startChar": 19,
+        "endLine": 192,
+        "endChar": 34
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73d261a9_5d36d82f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:20:13Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 30
       },
       "revId": "343e09b6315d784289cef171d6cb374837b531b4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
