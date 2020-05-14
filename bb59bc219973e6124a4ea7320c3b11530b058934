@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ca0da1fc_b9720b9e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T16:08:17Z",
+      "side": 1,
+      "message": "Since this does not allow to remove the String message allocation, I am not sure it is more efficient this way.\nAlso if we decice to change the message sentence, this means reporting the modification twice.",
+      "parentUuid": "90877eec_69b898d3",
+      "range": {
+        "startLine": 178,
+        "startChar": 16,
+        "endLine": 179,
+        "endChar": 56
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "983c4fde_9dff8e0d",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
         "patchSetId": 2
@@ -94,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "b03cc3cd_012facbd",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T16:08:17Z",
+      "side": 1,
+      "message": "Since this does not allow to remove the String message allocation, I am not sure it is more efficient this way.\nAlso if we decice to change the message structure, this means reporting the modification twice.",
+      "parentUuid": "2f141420_7c1b84cd",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 59
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "995fb2b6_6301c040",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
         "patchSetId": 2
@@ -140,6 +188,30 @@
     },
     {
       "key": {
+        "uuid": "101ffd9d_13e7b2f2",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T16:08:17Z",
+      "side": 1,
+      "message": "agreed",
+      "parentUuid": "8da2a663_edd2f66c",
+      "range": {
+        "startLine": 68,
+        "startChar": 1,
+        "endLine": 69,
+        "endChar": 70
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5303a0ff_f3621ebd",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
         "patchSetId": 2
@@ -151,6 +223,30 @@
       "writtenOn": "2020-05-14T14:30:03Z",
       "side": 1,
       "message": "LOG.info(\"Service request compliancy check: Service serviceHandlerHeader \u0027request-id\u0027 is not set\");",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 77
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d73bae7_b1cfb60d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T16:08:17Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "5303a0ff_f3621ebd",
       "range": {
         "startLine": 76,
         "startChar": 0,
@@ -186,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "14d00e45_90ca85d7",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T16:08:17Z",
+      "side": 1,
+      "message": "agreed",
+      "parentUuid": "7973aba2_41aba63d",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 74
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a9446a4_b0c2802d",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerCompliancyCheck.java",
         "patchSetId": 2
@@ -197,6 +317,30 @@
       "writtenOn": "2020-05-14T14:30:03Z",
       "side": 1,
       "message": "not needed as LOG is done at the end of the method",
+      "range": {
+        "startLine": 72,
+        "startChar": 18,
+        "endLine": 72,
+        "endChar": 79
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2385817e_7cbf8b54",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T16:08:17Z",
+      "side": 1,
+      "message": "correct",
+      "parentUuid": "8a9446a4_b0c2802d",
       "range": {
         "startLine": 72,
         "startChar": 18,
@@ -313,6 +457,30 @@
       "writtenOn": "2020-05-14T14:30:03Z",
       "side": 1,
       "message": "LOG.debug(\"Service TxRx info check: Service {} rate, format or clli is not set \",endpointType, message);\nFYI: Nullpointer is as bad practice",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 68
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d21e5c1a_0fd96d59",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T16:08:17Z",
+      "side": 1,
+      "message": "Usually yes.\nI don\u0027t remember if this was added to catch an expected bug. We have many unsupported values...\nMaybe a TODO comment can be added here.",
+      "parentUuid": "ab56348a_90330665",
       "range": {
         "startLine": 161,
         "startChar": 0,
