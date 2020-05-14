@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d98cf90_22abba7a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubPceServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:19:05Z",
+      "side": 1,
+      "message": "return new CancelResourceReserveOutputBuilder()\n                            .setConfigurationResponseCommon(configurationResponseCommon).build();",
+      "range": {
+        "startLine": 98,
+        "startChar": 19,
+        "endLine": 100,
+        "endChar": 34
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13a63265_a56132c1",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubPceServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:19:05Z",
+      "side": 1,
+      "message": "return new CancelResourceReserveOutputBuilder()\n                        .setConfigurationResponseCommon(configurationResponseCommon).build();",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 30
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0f4c4f9_8cdcb912",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubRendererServiceOperations.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:19:05Z",
+      "side": 1,
+      "message": "return new ServiceDeleteOutputBuilder()                           .setConfigurationResponseCommon(configurationResponseCommon.build()).build();",
+      "range": {
+        "startLine": 190,
+        "startChar": 19,
+        "endLine": 192,
+        "endChar": 34
+      },
+      "revId": "343e09b6315d784289cef171d6cb374837b531b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
