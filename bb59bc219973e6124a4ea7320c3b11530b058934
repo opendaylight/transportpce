@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90877eec_69b898d3",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "should be \nLOG.error(\"Service {} does not exist in datastore\", serviceName);",
+      "range": {
+        "startLine": 178,
+        "startChar": 16,
+        "endLine": 179,
+        "endChar": 56
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "983c4fde_9dff8e0d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.error(\"Service {} does not exist in datastore\", serviceName);",
+      "range": {
+        "startLine": 185,
+        "startChar": 8,
+        "endLine": 186,
+        "endChar": 52
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5a731bb_a0e169c8",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.error(\"Service {} does not exist in datastore\", serviceName);",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 60
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f141420_7c1b84cd",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.error(\"Failed to create servicePath {} to ServicePath List\", serviceInput.getCommonId());",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 59
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "995fb2b6_6301c040",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.error(\"Unable to delete service path : {}\", serviceName, e);",
+      "range": {
+        "startLine": 290,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 60
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8da2a663_edd2f66c",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.info(\"Service request compliancy check: Service Name is not set\");",
+      "range": {
+        "startLine": 68,
+        "startChar": 1,
+        "endLine": 69,
+        "endChar": 70
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5303a0ff_f3621ebd",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.info(\"Service request compliancy check: Service serviceHandlerHeader \u0027request-id\u0027 is not set\");",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 77
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7973aba2_41aba63d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.info(\"Service request compliancy check: Service serviceHandlerHeader is not set\");",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 74
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a9446a4_b0c2802d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "not needed as LOG is done at the end of the method",
+      "range": {
+        "startLine": 72,
+        "startChar": 18,
+        "endLine": 72,
+        "endChar": 79
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9f5016e_10930ade",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.debug(\"Service TxRx info check: Service {} rate is not set \",endpointType);",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 68
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "687e65bb_4f7b9c1e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.debug(\"Service TxRx info check: Service {} format is not set \",endpointType);",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 69
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d1e04c5_8866ecd2",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.debug(\"Service TxRx info check: Service {} clli format is not set \",endpointType);",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 69
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab56348a_90330665",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.debug(\"Service TxRx info check: Service {} rate, format or clli is not set \",endpointType, message);\nFYI: Nullpointer is as bad practice",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 68
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd386880_7c5157b8",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:30:03Z",
+      "side": 1,
+      "message": "LOG.debug(\"Service TxRx info check:  {} is not set \",endpointType);",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 62
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
