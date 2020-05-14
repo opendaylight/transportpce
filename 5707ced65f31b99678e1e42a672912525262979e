@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "946679fe_890bbd03",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-14T14:12:30Z",
+      "side": 1,
+      "message": "Why not?\nif(spanLossTx \u003d\u003d null || spanLossTx.intValue() \u003e 28 || spanLossTx.intValue() \u003c\u003d 0){\n   LOG.error(\"Wrong parameters. Span Loss Tx cannot be null and must be between 0 and 28\", spanLossTx);\n   return false;\n}",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 66
+      },
+      "revId": "5707ced65f31b99678e1e42a672912525262979e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
