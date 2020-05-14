@@ -169,9 +169,9 @@ public class PceOtnNode implements PceNode {
 
         if ((this.otnServiceType.equals("ODU4") && mode.equals("AZ"))
             || ((this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))
-                && mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1))
-            || ((this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))
-                && mode.equals("intermediate") && checkSwPool(null, availableXpdrNWTps, 0, 2))) {
+                && ((mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1))
+                     || (mode.equals("intermediate") && checkSwPool(null, availableXpdrNWTps, 0, 2)))
+               )) {
             this.valid = true;
         } else {
             this.valid = false;
