@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff9c7582_c6516455",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/graph/PceGraphTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T07:48:22Z",
+      "side": 1,
+      "message": "right!",
+      "range": {
+        "startLine": 112,
+        "startChar": 25,
+        "endLine": 112,
+        "endChar": 26
+      },
+      "revId": "fdf7ef10b6f56aa63132ada418c09d51694effea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f45a762_fb6ab29f",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T07:48:22Z",
+      "side": 1,
+      "message": "indentation\n\nUsing tab\u003d4 instead of 8 previously would free some precious room here",
+      "range": {
+        "startLine": 421,
+        "startChar": 0,
+        "endLine": 423,
+        "endChar": 112
+      },
+      "revId": "fdf7ef10b6f56aa63132ada418c09d51694effea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
