@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "973f51f6_6cc407b8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:48:07Z",
+      "side": 1,
+      "message": "see below",
+      "parentUuid": "70560b71_5bf520af",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 94
+      },
+      "revId": "7d08ace1903faf172752c9d79693dc22aae4ab55",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da0a333e_7a364077",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiImpl.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-05-14T14:38:09Z",
       "side": 1,
       "message": "why not removing instead of commenting ?",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 53
+      },
+      "revId": "7d08ace1903faf172752c9d79693dc22aae4ab55",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c677785_b2fb67f0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/impl/TapiImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:48:07Z",
+      "side": 1,
+      "message": "because of TODO comment below.\nwe will need to import ServiceDeleteInput to finish this work.",
+      "parentUuid": "da0a333e_7a364077",
       "range": {
         "startLine": 154,
         "startChar": 0,
