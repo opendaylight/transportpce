@@ -232,6 +232,30 @@
     },
     {
       "key": {
+        "uuid": "0c9e5c9d_9ebae455",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-14T15:54:52Z",
+      "side": 1,
+      "message": "Since this does not allow to remove the String message allocation, I am not sure it is more efficient this way.\nAlso if we decice to change the message structure, this means reporting the modification twice.",
+      "parentUuid": "e9f5016e_10930ade",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 68
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "687e65bb_4f7b9c1e",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
         "patchSetId": 2
