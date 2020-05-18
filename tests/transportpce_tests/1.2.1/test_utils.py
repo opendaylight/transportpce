@@ -3,8 +3,7 @@ import subprocess
 
 honeynode_executable = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
-    "..", "..", "honeynode", "1.2.1", "honeynode-distribution", "target", "honeynode-distribution-1.19.04-hc",
-    "honeynode-distribution-1.19.04", "honeycomb-tpce")
+    "..", "..", "honeynode", "1.2.1", "honeynode-simulator", "honeycomb-tpce")
 samples_directory = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "sample_configs", "openroadm", "1.2.1")
