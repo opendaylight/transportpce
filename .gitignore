@@ -37,3 +37,4 @@ api/src/main/java/org/opendaylight/yang/gen/v1/gnpy/path/rev190502/AccumulatedMe
 # Sphinx documentation
 .tox/
 docs/_build/
+honeynode-simulator/
