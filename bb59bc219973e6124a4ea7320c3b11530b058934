@@ -212,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "be64d609_c4e7e992",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "101ffd9d_13e7b2f2",
+      "range": {
+        "startLine": 68,
+        "startChar": 1,
+        "endLine": 69,
+        "endChar": 70
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5303a0ff_f3621ebd",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
         "patchSetId": 2
@@ -256,6 +280,30 @@
       "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcffa7c2_c73e8729",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8d73bae7_b1cfb60d",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 77
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -306,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "f4bebba9_2dcdd17a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/stub/StubrendererCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "14d00e45_90ca85d7",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 74
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a9446a4_b0c2802d",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerCompliancyCheck.java",
         "patchSetId": 2
@@ -350,6 +422,30 @@
       "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f90487b7_481b4a83",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerCompliancyCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2385817e_7cbf8b54",
+      "range": {
+        "startLine": 72,
+        "startChar": 18,
+        "endLine": 72,
+        "endChar": 79
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -400,6 +496,30 @@
     },
     {
       "key": {
+        "uuid": "f40255dd_f708b370",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "I move the LOG.debug messages directly in the class ComplianceCheck since it is used by most of the classes here. This way, importing an setting a logger in this class is not needed anymore.",
+      "parentUuid": "0c9e5c9d_9ebae455",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 68
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "687e65bb_4f7b9c1e",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
         "patchSetId": 2
@@ -423,6 +543,30 @@
     },
     {
       "key": {
+        "uuid": "1d30e1a7_4fb8e7cd",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "687e65bb_4f7b9c1e",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 69
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d1e04c5_8866ecd2",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
         "patchSetId": 2
@@ -443,6 +587,30 @@
       "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68c79d67_06ddf0eb",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2d1e04c5_8866ecd2",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 69
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -513,6 +681,30 @@
       "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70f0db8b_13969859",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cd386880_7c5157b8",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 62
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }

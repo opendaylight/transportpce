@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03295e87_a3d124b5",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ComplianceCheckResult.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "Compliance",
+      "range": {
+        "startLine": 26,
+        "startChar": 23,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "c23e7d1a1c9f3e15e3328065651048406d98ba0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e1d89e2_8c95f536",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ComplianceCheckResult.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-18T23:12:56Z",
+      "side": 1,
+      "message": "Compliance",
+      "range": {
+        "startLine": 28,
+        "startChar": 23,
+        "endLine": 28,
+        "endChar": 33
+      },
+      "revId": "c23e7d1a1c9f3e15e3328065651048406d98ba0f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
