@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d2cdeb63_410ba630",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-19T10:18:52Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "8de2e918_9c1d83c3",
+      "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e3b9141_349c2fa0",
         "filename": "tests/buildHoneynode.sh",
         "patchSetId": 4
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "18c46f26_00226f1e",
+        "filename": "tests/buildHoneynode.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-19T10:18:52Z",
+      "side": 1,
+      "message": "Honeynode can be built automatically through gitlab.com at each push. There is no need to keep the possibility to build honeynode from tpce. Honeyde and tpce will have now their proper lifecycle",
+      "parentUuid": "ff7d5a54_72c185f2",
+      "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0081c47a_119a5cc7",
         "filename": "tests/install_honeynode.sh",
         "patchSetId": 4
@@ -89,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "a0ca3d4b_80d4313c",
+        "filename": "tests/install_honeynode.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-19T10:18:52Z",
+      "side": 1,
+      "message": "For me download is a part of installing. At the end we install the simulator so I prefer to keep install_honeynode.sh",
+      "parentUuid": "0081c47a_119a5cc7",
+      "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0485eb54_71919f94",
         "filename": "tests/install_honeynode.sh",
         "patchSetId": 4
@@ -100,6 +154,30 @@
       "writtenOn": "2020-05-19T06:58:26Z",
       "side": 1,
       "message": "regular bourne shell sh more indicated for OSX and BSD compatibility purposes here",
+      "range": {
+        "startLine": 1,
+        "startChar": 6,
+        "endLine": 1,
+        "endChar": 10
+      },
+      "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25ade8d3_3911622f",
+        "filename": "tests/install_honeynode.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-19T10:18:52Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "0485eb54_71919f94",
       "range": {
         "startLine": 1,
         "startChar": 6,
@@ -132,6 +210,30 @@
       "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8e113cc1_ecdef76c",
+        "filename": "tox.ini",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-19T10:18:52Z",
+      "side": 1,
+      "message": "as discussed this morning, As simulator is build automatically on git push and available on download, we don\u0027t need to build honeynode from tpce\nHoneynode is an independant project and will have its proper lifecycle",
+      "parentUuid": "e16b8da8_fe6c4bc0",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 20
+      },
+      "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
