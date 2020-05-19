@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ff7d5a54_72c185f2",
+        "filename": "tests/buildHoneynode.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-19T09:32:59Z",
+      "side": 1,
+      "message": "This is not intended for the gate, nor for regular use.\nThe purpose is to allow easily testing the latest honeynode codebase from source locally.",
+      "parentUuid": "0588f5b8_1544b342",
+      "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0081c47a_119a5cc7",
         "filename": "tests/install_honeynode.sh",
         "patchSetId": 4
