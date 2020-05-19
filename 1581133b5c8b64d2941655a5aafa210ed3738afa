@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "53afda0e_a492e1a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-19T11:30:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2cdeb63_410ba630",
+      "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e3b9141_349c2fa0",
         "filename": "tests/buildHoneynode.sh",
         "patchSetId": 4
@@ -143,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "5eb666ff_2d2703f5",
+        "filename": "tests/install_honeynode.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-19T11:30:43Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "a0ca3d4b_80d4313c",
+      "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0485eb54_71919f94",
         "filename": "tests/install_honeynode.sh",
         "patchSetId": 4
@@ -234,6 +270,30 @@
       "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "806d9f62_85384972",
+        "filename": "tox.ini",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-19T11:30:43Z",
+      "side": 1,
+      "message": "Ack\nI agree it is not needed nor a priority at this stage",
+      "parentUuid": "8e113cc1_ecdef76c",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 20
+      },
+      "revId": "1581133b5c8b64d2941655a5aafa210ed3738afa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
