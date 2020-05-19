@@ -22,6 +22,30 @@
       "revId": "cf8edb763b5b327312369262fa621309b811ae76",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8327749_49bf2776",
+        "filename": "tests/install_honeynode.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-19T11:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6583a6f8_dca445c7",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 52
+      },
+      "revId": "cf8edb763b5b327312369262fa621309b811ae76",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
