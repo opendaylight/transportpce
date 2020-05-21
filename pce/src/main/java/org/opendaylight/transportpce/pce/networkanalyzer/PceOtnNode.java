@@ -52,6 +52,7 @@ public class PceOtnNode implements PceNode {
     private final OpenroadmNodeType nodeType;
     private final String pceNodeType;
     private final String otnServiceType;
+    private String modeType;
 
     private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<>();
     private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<>();
@@ -93,6 +94,8 @@ public class PceOtnNode implements PceNode {
     public void initXndrTps(String mode) {
         LOG.info("PceOtnNode: initXndrTps for node {}", this.nodeId.getValue());
         this.availableXponderTp.clear();
+
+        this.modeType = mode;
 
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 nodeTp
             = this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
@@ -385,6 +388,57 @@ public class PceOtnNode implements PceNode {
             valid = false;
         }
         return valid;
+    }
+
+    public boolean isPceOtnNodeValid(final PceOtnNode pceOtnNode) {
+        if (pceOtnNode == null || pceOtnNode.node == null
+            || pceOtnNode.getNodeId() == null || pceOtnNode.nodeType == null || pceOtnNode.getSupNetworkNodeId() == null
+            || pceOtnNode.getSupClliNodeId() == null || pceOtnNode.otnServiceType == null) {
+            LOG.error("PceOtnNode: one of parameters is not populated : nodeId, node type, "
+                    + "supporting nodeId ,otnServiceType");
+            return false;
+        }
+
+        if (!isNodeTypeValid(pceOtnNode)) {
+            LOG.error("PceOtnNode node type: node type isn't one of MUXPDR or SWITCH or TPDR");
+            return false;
+        }
+
+        return isOtnServiceTypeValid(pceOtnNode);
+    }
+
+    private boolean isOtnServiceTypeValid(PceOtnNode pceOtnNode) {
+        if (pceOtnNode.modeType == null) {
+            return false;
+        }
+
+        //Todo refactor Strings (mode and otnServiceType ) to enums
+        if ((pceOtnNode.otnServiceType.equals("ODU4") && pceOtnNode.modeType.equals("AZ"))) {
+            return true;
+        }
+
+        if ((pceOtnNode.otnServiceType.equals("10GE") || pceOtnNode.otnServiceType.equals("1GE"))
+                && (isAz(pceOtnNode) || isIntermediate(pceOtnNode))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isIntermediate(PceOtnNode pceOtnNode) {
+        return pceOtnNode.modeType.equals("intermediate")
+                && checkSwPool(null, pceOtnNode.availableXpdrNWTps, 0, 2);
+    }
+
+    private boolean isAz(PceOtnNode pceOtnNode) {
+        return pceOtnNode.modeType.equals("AZ")
+                && checkSwPool(pceOtnNode.availableXpdrClientTps, pceOtnNode.availableXpdrNWTps, 1, 1);
+    }
+
+    private boolean isNodeTypeValid(final PceOtnNode pceOtnNode) {
+        return (pceOtnNode.nodeType == OpenroadmNodeType.MUXPDR)
+                || (pceOtnNode.nodeType  == OpenroadmNodeType.SWITCH)
+                || (pceOtnNode.nodeType  == OpenroadmNodeType.TPDR);
     }
 
     @Override
