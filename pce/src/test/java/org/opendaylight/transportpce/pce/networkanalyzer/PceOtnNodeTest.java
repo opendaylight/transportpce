@@ -127,6 +127,47 @@ public class PceOtnNodeTest extends AbstractTest {
 
     }
 
+    @Test
+    public void testIsPceOtnNodeValid() {
+        pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
+                new NodeId("optical"), ServiceFormat.OMS.getName(), "10GE");
+        pceOtnNode.initXndrTps("AZ");
+        Assert.assertFalse(pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+    }
+
+    @Test
+    public void testIsPceOtnNodeValidNodeTypeNull() {
+        pceOtnNode = new PceOtnNode(node, null,
+                new NodeId("optical"), ServiceFormat.OMS.getName(), "100GE");
+        pceOtnNode.initXndrTps("AZ");
+        Assert.assertFalse(pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+    }
+
+    @Test
+    public void testIsPceOtnNodeValidNodeTypeDeg() {
+        pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.DEGREE,
+                new NodeId("optical"), ServiceFormat.OMS.getName(), "100GE");
+        pceOtnNode.initXndrTps("AZ");
+        Assert.assertFalse(pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+    }
+
+    @Test
+    public void testIsPceOtnNodeValidTrue() {
+        pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
+                new NodeId("optical"), ServiceFormat.OMS.getName(), "ODU4");
+        pceOtnNode.initXndrTps("AZ");
+        Assert.assertTrue(pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+    }
+
+    @Test
+    public void testIsPceOtnNodeValidChecksw() {
+        node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).build();
+        pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
+                new NodeId("optical"), ServiceFormat.OMS.getName(), "1GE");
+        pceOtnNode.initXndrTps("mode");
+        pceOtnNode.isPceOtnNodeValid(pceOtnNode);
+    }
+
     private List<SupportingNode> geSupportingNodes() {
         List<SupportingNode> supportingNodes1 = new ArrayList<>();
         supportingNodes1
