@@ -22,6 +22,30 @@
       "revId": "99821b428f8b63ee704ffcf92d2343d4f59f314e",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51ce3d99_c429a179",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-25T15:01:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3bd97e72_cb0ae329",
+      "range": {
+        "startLine": 299,
+        "startChar": 18,
+        "endLine": 299,
+        "endChar": 20
+      },
+      "revId": "99821b428f8b63ee704ffcf92d2343d4f59f314e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
