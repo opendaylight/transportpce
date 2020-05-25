@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66e0cf9b_1315118c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-25T07:30:59Z",
+      "side": 1,
+      "message": "LOG.error(\n                PceOtnNode: one of parameters is not populated : nodeId, node type, supporting nodeId ,otnServiceType\"\n                );\nwould avoid concatenation",
+      "range": {
+        "startLine": 397,
+        "startChar": 0,
+        "endLine": 398,
+        "endChar": 59
+      },
+      "revId": "1fb5e260274cee9eb25886fc9655d9d6f7329036",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
