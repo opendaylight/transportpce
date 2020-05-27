@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "eb2e6d86_d2e418f3",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-27T08:38:44Z",
+      "side": 1,
+      "message": "I\u0027ve centralized messages in an inner static class \"LogMessages\" to avoid the recurrent problem of reporting messages contents modifications twice or three and even more times. (I\u0027ve ACKed your similar comments to only answer here)\nThose messages are used by Junit so I\u0027ve made this inner class public and I\u0027ve used in Junit tests a static import to access messages contents (they are used in assert comparisons).\nI\u0027ve also rationalized the messages contents themselves and tried to reuse them as much as possible.\n\nThe unexpected and unwanted side-effect of this approach is that\n\"LOG.info(LogMessages.SUCCESSFUL_MESSAGE);\" was reported by SB as a violation of constant string in SLF4J  ( contrary to \"LOG.info(SUCCESSFUL_MESSAGE);\" )\nEven if it can be considered as a false positive, I slightly modified the structure of the logs to avoid using @SuppressFBWarning decorators.",
+      "parentUuid": "b03cc3cd_012facbd",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 59
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "995fb2b6_6301c040",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
         "patchSetId": 2
@@ -234,6 +258,30 @@
       "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "866340f0_064f15c2",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/service/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-27T08:38:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "995fb2b6_6301c040",
+      "range": {
+        "startLine": 290,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 60
+      },
+      "revId": "bb59bc219973e6124a4ea7320c3b11530b058934",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
