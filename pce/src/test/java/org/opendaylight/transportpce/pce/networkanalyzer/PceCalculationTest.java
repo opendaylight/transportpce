@@ -18,6 +18,7 @@ import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
 
 
 public class PceCalculationTest extends AbstractTest {
@@ -32,6 +33,7 @@ public class PceCalculationTest extends AbstractTest {
         pceResult.setRC("200");
         PceTestUtils.writeNetworkIntoDataStore(this.getDataBroker(), this.getDataStoreContextUtil(),
                 TransactionUtils.getNetworkForSpanLoss());
+
         pceConstraintsCalc = new PceConstraintsCalc(PceTestData.getPCERequest(),
                 new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())));
 
@@ -54,7 +56,6 @@ public class PceCalculationTest extends AbstractTest {
         Assert.assertNull(pceCalculation.getzendPceNode());
     }
 
-
     @Test
     public void testPceCalculationValues2() {
 
@@ -66,6 +67,28 @@ public class PceCalculationTest extends AbstractTest {
                 pceResult);
         pceCalculation.retrievePceNetwork();
         Assert.assertEquals("100GE", pceCalculation.getServiceType());
+        Assert.assertNotNull(pceCalculation.getReturnStructure());
+
+        Assert.assertNull(pceCalculation.getaendPceNode());
+        Assert.assertNull(pceCalculation.getzendPceNode());
+    }
+
+    @Test
+    public void testPceCalculationValues42() {
+
+        PathComputationRequestInput input = PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral2();
+        pceConstraintsCalc = new PceConstraintsCalc(input,
+                new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())));
+
+        pceCalculation = new PceCalculation(
+                PceTestData.getPCE_test3_request_54(),
+                new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker())),
+                pceConstraintsCalc.getPceHardConstraints(),
+                pceConstraintsCalc.getPceSoftConstraints(),
+                pceResult);
+
+        pceCalculation.retrievePceNetwork();
+//        Assert.assertEquals("100GE", pceCalculation.getServiceType());
         Assert.assertNotNull(pceCalculation.getReturnStructure());
 
         Assert.assertNull(pceCalculation.getaendPceNode());
