@@ -14,6 +14,8 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
+import org.opendaylight.transportpce.pce.gnpy.ConnectToGnpyServer;
+import org.opendaylight.transportpce.pce.gnpy.JerseyServer;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
@@ -27,6 +29,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     private NetworkTransactionImpl networkTransaction;
     private DataStoreContext dataStoreContext = this.getDataStoreContextUtil();
     private DataBroker dataBroker = this.getDataBroker();
+    private JerseyServer  jerseyServer = new JerseyServer();
 
 
     @Before
@@ -48,7 +51,13 @@ public class PceSendingPceRPCsTest extends AbstractTest {
 
     @Test
     public void pathComputationTest() throws Exception {
+        jerseyServer.setUp();
+        pceSendingPceRPCs =
+                new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("nodeA","nodeZ"), networkTransaction);
         pceSendingPceRPCs.pathComputation();
+        ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
+        Assert.assertTrue(connectToGnpy.isGnpyURLExist());
+        jerseyServer.tearDown();
 
     }
 

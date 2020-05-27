@@ -806,4 +806,96 @@ public final class PceTestData {
 
         return builtInput.build();
     }
+
+    public static PathComputationRequestInput getGnpyPCERequest(String nodeA, String nodeZ) {
+        ServiceHandlerHeader serviceHandlerHeader = new ServiceHandlerHeaderBuilder()
+                .setRequestId("request1")
+                .build();
+        ServiceAEnd serviceAEnd = new ServiceAEndBuilder()
+                .setServiceFormat(ServiceFormat.Ethernet)
+                .setServiceRate(100L)
+                .setClli("clli11")
+                .setNodeId(nodeA)
+                .setTxDirection(new TxDirectionBuilder().setPort(
+                        new PortBuilder()
+                                .setPortDeviceName("Some port-device-name")
+                                .setPortType("Some port-type")
+                                .setPortName("Some port-name")
+                                .setPortRack("Some port-rack")
+                                .setPortShelf("Some port-shelf")
+                                .setPortSlot("Some port-slot")
+                                .setPortSubSlot("Some port-sub-slot")
+                                .build()
+                ).build())
+                .setRxDirection(new RxDirectionBuilder().setPort(
+                        new PortBuilder()
+                                .setPortDeviceName("Some port-device-name")
+                                .setPortType("Some port-type")
+                                .setPortName("Some port-name")
+                                .setPortRack("Some port-rack")
+                                .setPortShelf("Some port-shelf")
+                                .setPortSlot("Some port-slot")
+                                .setPortSubSlot("Some port-sub-slot")
+                                .build()
+                ).build())
+                .build();
+        ServiceZEnd serviceZEnd = new ServiceZEndBuilder()
+                .setServiceFormat(ServiceFormat.Ethernet)
+                .setServiceRate(0L)
+                .setClli("Some clli11")
+                .setNodeId(nodeZ)
+                .setTxDirection(new TxDirectionBuilder().setPort(
+                        new PortBuilder()
+                                .setPortDeviceName("Some port-device-name")
+                                .setPortType("Some port-type")
+                                .setPortName("Some port-name")
+                                .setPortRack("Some port-rack")
+                                .setPortShelf("Some port-shelf")
+                                .setPortSlot("Some port-slot")
+                                .setPortSubSlot("Some port-sub-slot")
+                                .build()
+                ).build())
+                .setRxDirection(new RxDirectionBuilder().setPort(
+                        new PortBuilder()
+                                .setPortDeviceName("Some port-device-name")
+                                .setPortType("Some port-type")
+                                .setPortName("Some port-name")
+                                .setPortRack("Some port-rack")
+                                .setPortShelf("Some port-shelf")
+                                .setPortSlot("Some port-slot")
+                                .setPortSubSlot("Some port-sub-slot")
+                                .build()
+                ).build())
+                .build();
+        PathComputationRequestInput input = new PathComputationRequestInputBuilder()
+                .setServiceName("service1")
+                .setResourceReserve(true)
+                .setPceMetric(PceMetric.HopCount)
+                .setLocallyProtectedLinks(true)
+                .setServiceHandlerHeader(serviceHandlerHeader)
+                .setServiceAEnd(serviceAEnd)
+                .setServiceZEnd(serviceZEnd)
+                .setHardConstraints(new HardConstraintsBuilder()
+                        .setCustomerCode(Arrays.asList("Some customer-code"))
+                        .setCoRoutingOrGeneral(new CoRoutingBuilder()
+                                .setCoRouting(new org.opendaylight.yang.gen.v1.http.org
+                                        .transportpce.b.c._interface.routing.constraints.rev171017
+                                        .constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
+                                        .setExistingService(Arrays.asList("Some existing-service"))
+                                        .build())
+                                .build())
+                        .build())
+                .setSoftConstraints(new SoftConstraintsBuilder()
+                        .setCustomerCode(Arrays.asList("Some customer-code"))
+                        .setCoRoutingOrGeneral(new CoRoutingBuilder()
+                                .setCoRouting(new org.opendaylight.yang.gen.v1.http.org
+                                        .transportpce.b.c._interface.routing.constraints.rev171017
+                                        .constraints.sp.co.routing.or.general.co.routing.CoRoutingBuilder()
+                                        .setExistingService(Arrays.asList("Some existing-service"))
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+        return input;
+    }
 }

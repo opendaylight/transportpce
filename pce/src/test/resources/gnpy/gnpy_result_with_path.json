@@ -1,0 +1,399 @@
+{
+    "result": {
+        "response": [
+            {
+                "response-id": 2,
+                "path-properties": {
+                    "path-metric": [
+                        {
+                            "metric-type": "SNR-bandwidth",
+                            "accumulative-value": 15.52
+                        },
+                        {
+                            "metric-type": "SNR-0.1nm",
+                            "accumulative-value": 19.02
+                        },
+                        {
+                            "metric-type": "OSNR-bandwidth",
+                            "accumulative-value": 16.51
+                        },
+                        {
+                            "metric-type": "OSNR-0.1nm",
+                            "accumulative-value": 20.01
+                        },
+                        {
+                            "metric-type": "reference_power",
+                            "accumulative-value": 0.0015848931924611136
+                        },
+                        {
+                            "metric-type": "path_bandwidth",
+                            "accumulative-value": 100
+                        }
+                    ],
+                    "path-route-objects": [
+                        {
+                            "path-route-object": {
+                                "index": 0,
+                                "num-unnum-hop": {
+                                    "node-id": "127.0.0.11",
+                                    "link-tp-id": "127.0.0.11"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 1,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 2,
+                                "transponder": {
+                                    "transponder-type": "openroadm-beta1",
+                                    "transponder-mode": "W100G"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 3,
+                                "num-unnum-hop": {
+                                    "node-id": "127.0.0.10",
+                                    "link-tp-id": "127.0.0.10"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 4,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 5,
+                                "num-unnum-hop": {
+                                    "node-id": "Edfa1_127.0.0.10",
+                                    "link-tp-id": "Edfa1_127.0.0.10"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 6,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 7,
+                                "num-unnum-hop": {
+                                    "node-id": "243.0.0.14",
+                                    "link-tp-id": "243.0.0.14"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 8,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 9,
+                                "num-unnum-hop": {
+                                    "node-id": "Edfa0_243.0.0.14",
+                                    "link-tp-id": "Edfa0_243.0.0.14"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 10,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 11,
+                                "num-unnum-hop": {
+                                    "node-id": "127.0.0.20",
+                                    "link-tp-id": "127.0.0.20"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 12,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 13,
+                                "num-unnum-hop": {
+                                    "node-id": "Edfa1_127.0.0.20",
+                                    "link-tp-id": "Edfa1_127.0.0.20"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 14,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 15,
+                                "num-unnum-hop": {
+                                    "node-id": "243.0.0.3",
+                                    "link-tp-id": "243.0.0.3"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 16,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 17,
+                                "num-unnum-hop": {
+                                    "node-id": "Edfa0_243.0.0.3",
+                                    "link-tp-id": "Edfa0_243.0.0.3"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 18,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 19,
+                                "num-unnum-hop": {
+                                    "node-id": "127.0.0.50",
+                                    "link-tp-id": "127.0.0.50"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 20,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 21,
+                                "num-unnum-hop": {
+                                    "node-id": "Edfa0_127.0.0.50",
+                                    "link-tp-id": "Edfa0_127.0.0.50"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 22,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 23,
+                                "num-unnum-hop": {
+                                    "node-id": "243.0.0.5",
+                                    "link-tp-id": "243.0.0.5"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 24,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 25,
+                                "num-unnum-hop": {
+                                    "node-id": "Edfa0_243.0.0.5",
+                                    "link-tp-id": "Edfa0_243.0.0.5"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 26,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 27,
+                                "num-unnum-hop": {
+                                    "node-id": "127.0.0.30",
+                                    "link-tp-id": "127.0.0.30"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 28,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 29,
+                                "num-unnum-hop": {
+                                    "node-id": "Edfa0_127.0.0.30",
+                                    "link-tp-id": "Edfa0_127.0.0.30"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 30,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 31,
+                                "num-unnum-hop": {
+                                    "node-id": "243.0.0.7",
+                                    "link-tp-id": "243.0.0.7"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 32,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 33,
+                                "num-unnum-hop": {
+                                    "node-id": "Edfa0_243.0.0.7",
+                                    "link-tp-id": "Edfa0_243.0.0.7"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 34,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 35,
+                                "num-unnum-hop": {
+                                    "node-id": "127.0.0.40",
+                                    "link-tp-id": "127.0.0.40"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 36,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 37,
+                                "num-unnum-hop": {
+                                    "node-id": "127.0.0.41",
+                                    "link-tp-id": "127.0.0.41"
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 38,
+                                "label-hop": {
+                                    "N": -284,
+                                    "M": 4
+                                }
+                            }
+                        },
+                        {
+                            "path-route-object": {
+                                "index": 39,
+                                "transponder": {
+                                    "transponder-type": "openroadm-beta1",
+                                    "transponder-mode": "W100G"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
