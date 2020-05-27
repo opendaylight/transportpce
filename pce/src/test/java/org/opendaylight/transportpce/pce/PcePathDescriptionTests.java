@@ -53,7 +53,6 @@ public class PcePathDescriptionTests extends AbstractTest {
 
         NodeBuilder node1Builder = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes());
         node = node1Builder.build();
-
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.SRG, new NodeId("OpenROADM-3-2-DEG1"), ServiceFormat.Ethernet,
                 "DEGREE");
@@ -67,6 +66,7 @@ public class PcePathDescriptionTests extends AbstractTest {
         pceResult = new PceResult();
         pceResult.setRC("200");
         pceResult.setRate(Long.valueOf(1));
+        pceResult.setServiceType("100GE");
         Map<LinkId, PceLink> map = Map.of(new LinkId("OpenROADM-3-1-DEG1-to-OpenROADM-3-2-DEG1"), pceLink);
         pcePathDescription = new PcePathDescription(List.of(pceLink),
                 map, pceResult);
