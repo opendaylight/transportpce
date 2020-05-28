@@ -318,6 +318,30 @@
       "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9405cede_0bf13f27",
+        "filename": "pce/src/test/resources/simplelogger.properties",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-28T11:13:01Z",
+      "side": 1,
+      "message": "because I wanted to have debug level only for opendaylight.transportpce.pce.gnpy. The other have info level by default.",
+      "parentUuid": "c9f11c6f_d89c9261",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
