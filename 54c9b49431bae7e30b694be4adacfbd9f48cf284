@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "253cee83_c2dfa9bc",
+        "filename": "pce/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-28T09:10:20Z",
+      "side": 1,
+      "message": "org.glassfish.jersey.* are defined in dependencyManagment of pom parent (org.opendaylight.mdsal/binding-parent) so they are dependencies avaible from opendayligth project (that\u0027s the reason why we don\u0027t have to put version in our pom)\nAbout the scope \"test\", it\u0027s because thoses libraries are useful only for tests and we dont\u0027 want them to be included in dependencies of our final jar.\nAbout javax.activation, it is needed by gryzzly and not provided anymore by Java 11. \nSo the way the test dependencies are declared is right.",
+      "parentUuid": "f96d2f25_bbd57e76",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 21
+      },
+      "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "126d6ab2_9c77091c",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/ConnectToGnpyServerTest.java",
         "patchSetId": 2
