@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "f96d2f25_bbd57e76",
+        "filename": "pce/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-28T08:56:54Z",
+      "side": 1,
+      "message": "I am not sure about this for test scope.\nBut as a general matter, we should be careful with external new dependencies introduced.\nTo be able to stage release , the packages and the versions used must be listed in\nhttps://nexus.opendaylight.org/content/repositories/public/",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 21
+      },
+      "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "126d6ab2_9c77091c",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/ConnectToGnpyServerTest.java",
         "patchSetId": 2
