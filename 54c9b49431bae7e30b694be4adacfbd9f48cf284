@@ -366,6 +366,30 @@
       "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f2b4763_77ccdd85",
+        "filename": "pce/src/test/resources/simplelogger.properties",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-28T14:50:30Z",
+      "side": 1,
+      "message": "the scope of this file is only testing. It does not have effect on running application.",
+      "parentUuid": "28fb2a13_ae6220f7",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
