@@ -342,6 +342,30 @@
       "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28fb2a13_ae6220f7",
+        "filename": "pce/src/test/resources/simplelogger.properties",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-28T13:17:18Z",
+      "side": 1,
+      "message": "If you keep the defaults on the others options, may I suggest we comment them out so they do not overrride odlparent ones in the case they change?\nThis way, you still don\u0027t have to search them on the Internet and we decrease the risk of unexpected  side-effects.",
+      "parentUuid": "9405cede_0bf13f27",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
