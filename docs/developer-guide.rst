@@ -1149,7 +1149,4 @@ Checking 10GE/ODU2e service connectivity
 Help
 ----
 
--  `TransportPCE Wiki archive <https://wiki-archive.opendaylight.org/view/TransportPCE:Main>`__
-
--  TransportPCE Mailing List
-   (`developer <https://lists.opendaylight.org/mailman/listinfo/transportpce-dev>`__)
+-  `TransportPCE Wiki <https://wiki.opendaylight.org/display/ODL/TransportPCE>`__
