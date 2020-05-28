@@ -390,6 +390,30 @@
       "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0274f1d_3a3e14de",
+        "filename": "pce/src/test/resources/simplelogger.properties",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-05-28T15:05:15Z",
+      "side": 1,
+      "message": "Correct but I think it impacts the gate.\nCan it affect releng logs / surefire reports ?\nsee https://logs.opendaylight.org/releng/vex-yul-odl-jenkins-1/transportpce-maven-verify-aluminium-mvn35-openjdk11/438/pce/target/surefire-reports/",
+      "parentUuid": "9f2b4763_77ccdd85",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
