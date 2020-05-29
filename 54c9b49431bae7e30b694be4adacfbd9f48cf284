@@ -414,6 +414,30 @@
       "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffec94ed_e30499be",
+        "filename": "pce/src/test/resources/simplelogger.properties",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-05-29T11:20:29Z",
+      "side": 1,
+      "message": "You will have more log in\norg.opendaylight.transportpce.pce.gnpy.ConnectToGnpyServerTest-output.txt.gz\torg.opendaylight.transportpce.pce.gnpy.GnpyUtilitiesImplTest-output.txt.gz\n\nBut it will be exactly the same if you add new unit tests. So it has no impact on surefire reports computation or other things",
+      "parentUuid": "b0274f1d_3a3e14de",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "54c9b49431bae7e30b694be4adacfbd9f48cf284",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
