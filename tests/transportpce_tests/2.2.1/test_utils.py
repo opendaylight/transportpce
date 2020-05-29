@@ -1,5 +1,10 @@
+import json
 import os
 import subprocess
+
+import requests
+
+TYPE_APPLICATION_JSON = {'content-type': 'application/json'}
 
 honeynode_executable = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
@@ -77,3 +82,60 @@ def start_tpce():
             return subprocess.Popen(
                 ["sh", executable, "server"], stdout=outfile, stderr=outfile,
                 stdin=open(os.devnull))
+
+
+def install_karaf_feature(feature_name: str):
+    print("installing feature " + feature_name)
+    executable = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "..", "..", "..", "karaf", "target", "assembly", "bin", "client")
+    with open('client.log', 'w') as outfile:
+        return subprocess.run(['sh', executable, 'feature:install ' + feature_name],
+                              stdout=outfile, stderr=outfile)
+
+
+def post_request(url, data, username, password):
+    return requests.request(
+        "POST", url, data=json.dumps(data),
+        headers=TYPE_APPLICATION_JSON, auth=(username, password))
+
+
+def put_request(url, data, username, password):
+    return requests.request(
+        "PUT", url, data=json.dumps(data), headers=TYPE_APPLICATION_JSON,
+        auth=(username, password))
+
+
+def delete_request(url, username, password):
+    return requests.request(
+        "DELETE", url, headers=TYPE_APPLICATION_JSON,
+        auth=(username, password))
+
+
+def generate_connect_data(node_id: str, node_port: str):
+    data = {"node": [{
+        "node-id": node_id,
+        "netconf-node-topology:username": "admin",
+        "netconf-node-topology:password": "admin",
+        "netconf-node-topology:host": "127.0.0.1",
+        "netconf-node-topology:port": node_port,
+        "netconf-node-topology:tcp-only": "false",
+        "netconf-node-topology:pass-through": {}}]}
+    return data
+
+
+def generate_link_data(xpdr_node: str, xpdr_num: str, network_num: str, rdm_node: str, srg_num: str,
+                       termination_num: str):
+    data = {
+        "networkutils:input": {
+            "networkutils:links-input": {
+                "networkutils:xpdr-node": xpdr_node,
+                "networkutils:xpdr-num": xpdr_num,
+                "networkutils:network-num": network_num,
+                "networkutils:rdm-node": rdm_node,
+                "networkutils:srg-num": srg_num,
+                "networkutils:termination-point-num": termination_num
+            }
+        }
+    }
+    return data
