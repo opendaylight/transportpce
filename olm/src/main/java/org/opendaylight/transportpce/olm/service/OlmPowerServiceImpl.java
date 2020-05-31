@@ -528,7 +528,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 continue;
             }
             spanLoss = new BigDecimal(srcOtsPmHoler.getOtsParameterVal() - destOtsPmHoler.getOtsParameterVal())
-                .setScale(0, RoundingMode.HALF_UP);
+                .setScale(1, RoundingMode.HALF_UP);
             LOG.info("Spanloss Calculated as :{}={}-{}",
                 spanLoss, srcOtsPmHoler.getOtsParameterVal(), destOtsPmHoler.getOtsParameterVal());
             if (spanLoss.doubleValue() > 28) {

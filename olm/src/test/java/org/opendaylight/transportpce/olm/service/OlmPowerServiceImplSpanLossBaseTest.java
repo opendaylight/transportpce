@@ -153,7 +153,7 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
 
         Assert.assertEquals("Success", output.getResult());
         Assert.assertEquals("ROADM-A1-to-ROADM-C1", output.getSpans().get(0).getLinkId().getValue());
-        Assert.assertEquals("15", output.getSpans().get(0).getSpanloss());
+        Assert.assertEquals("14.6", output.getSpans().get(0).getSpanloss());
     }
 
     @Test
@@ -176,6 +176,6 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
 
         Assert.assertEquals("Success", output.getResult());
         Assert.assertEquals("ROADM-A1-to-ROADM-C1", output.getSpans().get(0).getLinkId().getValue());
-        Assert.assertEquals("15", output.getSpans().get(0).getSpanloss());
+        Assert.assertEquals("14.6", output.getSpans().get(0).getSpanloss());
     }
 }
