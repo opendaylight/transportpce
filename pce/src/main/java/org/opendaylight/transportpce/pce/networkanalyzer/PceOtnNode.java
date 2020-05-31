@@ -52,6 +52,7 @@ public class PceOtnNode implements PceNode {
     private final OpenroadmNodeType nodeType;
     private final String pceNodeType;
     private final String otnServiceType;
+    private final String azModeType = "AZ";
     private String modeType;
 
     private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<>();
@@ -84,11 +85,7 @@ public class PceOtnNode implements PceNode {
         checkAvailableTribPort();
         this.tpAvailableTribSlot.clear();
         checkAvailableTribSlot();
-        if ((node == null) || (nodeId == null) || (nodeType != OpenroadmNodeType.MUXPDR)
-            && (nodeType != OpenroadmNodeType.SWITCH) && (nodeType != OpenroadmNodeType.TPDR)) {
-            LOG.error("PceOtnNode: one of parameters is not populated : nodeId, node type");
-            this.valid = false;
-        }
+        this.valid = isPceOtnNodeValid(this);
     }
 
     public void initXndrTps(String mode) {
@@ -170,15 +167,7 @@ public class PceOtnNode implements PceNode {
             }
         }
 
-        if ((this.otnServiceType.equals("ODU4") && mode.equals("AZ"))
-            || ((this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))
-                && ((mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1))
-                     || (mode.equals("intermediate") && checkSwPool(null, availableXpdrNWTps, 0, 2)))
-               )) {
-            this.valid = true;
-        } else {
-            this.valid = false;
-        }
+        this.valid = isPceOtnNodeValid(this);
     }
 
     private boolean checkSwPool(List<TpId> clientTps, List<TpId> netwTps, int nbClient, int nbNetw) {
@@ -282,7 +271,7 @@ public class PceOtnNode implements PceNode {
             initXndrTps("intermediate");
         }
         if (this.nodeId.getValue().equals(anodeId) || (this.nodeId.getValue().equals(znodeId))) {
-            initXndrTps("AZ");
+            initXndrTps(azModeType);
         } else {
             LOG.info("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
             valid = false;
@@ -382,12 +371,7 @@ public class PceOtnNode implements PceNode {
     }
 
     public boolean isValid() {
-        if ((node == null) || (nodeId == null) || (nodeType == null) || (this.getSupNetworkNodeId() == null)
-            || (this.getSupClliNodeId() == null)) {
-            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
-            valid = false;
-        }
-        return valid;
+        return isPceOtnNodeValid(this);
     }
 
     public boolean isPceOtnNodeValid(final PceOtnNode pceOtnNode) {
@@ -414,7 +398,7 @@ public class PceOtnNode implements PceNode {
         }
 
         //Todo refactor Strings (mode and otnServiceType ) to enums
-        if ((pceOtnNode.otnServiceType.equals("ODU4") && pceOtnNode.modeType.equals("AZ"))) {
+        if ((pceOtnNode.otnServiceType.equals("ODU4") && pceOtnNode.modeType.equals(azModeType))) {
             return true;
         }
 
@@ -432,7 +416,7 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean isAz(PceOtnNode pceOtnNode) {
-        return pceOtnNode.modeType.equals("AZ")
+        return pceOtnNode.modeType.equals(azModeType)
                 && checkSwPool(pceOtnNode.availableXpdrClientTps, pceOtnNode.availableXpdrNWTps, 1, 1);
     }
 
