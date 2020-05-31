@@ -260,7 +260,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                                 "Power Value is null: spanLossTx null or out of openROADM range ]0,28] {}", spanLossTx);
                             return false;
                         }
-                        BigDecimal powerValue = BigDecimal.valueOf(Math.min(spanLossTx.doubleValue() - 9, 2));
+                        BigDecimal powerValue = spanLossTx.subtract(BigDecimal.valueOf(9));
+                        powerValue = powerValue.min(BigDecimal.valueOf(2));
                         LOG.info("Power Value is {}", powerValue);
 
                         try {
