@@ -368,7 +368,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success',
                       res["output"]["result"])
         self.assertIn({
-            "spanloss": "6",
+            "spanloss": "5.7",
             "link-id": "ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX"
         }, res["output"]["spans"])
         time.sleep(5)
@@ -389,11 +389,11 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success',
                       res["output"]["result"])
         self.assertIn({
-            "spanloss": "15",
+            "spanloss": "15.1",
             "link-id": "ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX"
         }, res["output"]["spans"])
         self.assertIn({
-            "spanloss": "6",
+            "spanloss": "5.7",
             "link-id": "ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX"
         }, res["output"]["spans"])
         time.sleep(5)
@@ -407,8 +407,8 @@ class TransportOlmTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(6, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
-        self.assertEqual(15, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
+        self.assertEqual(5.7, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
+        self.assertEqual(15.1, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
 
     def test_16_get_OTS_DEG2_TTP_TXRX_ROADMC(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
@@ -419,8 +419,8 @@ class TransportOlmTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertEqual(15, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
-        self.assertEqual(6, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
+        self.assertEqual(15.1, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
+        self.assertEqual(5.7, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
 
     def test_17_servicePath_create_AToZ(self):
         url = "{}/operations/transportpce-device-renderer:service-path".format(self.restconf_baseurl)
@@ -566,7 +566,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
-        self.assertEqual(-3, res['roadm-connections'][0]['target-output-power'])
+        self.assertEqual(-3.3, res['roadm-connections'][0]['target-output-power'])
 
     def test_22_get_roadmconnection_ROADMC(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC01/yang-ext:mount/"
