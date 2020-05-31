@@ -15,6 +15,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
@@ -111,6 +112,7 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
         Assert.assertFalse(pceOtnNode.isValid());
+        pceOtnNode.validateSwitchingPoolBandwidth(null,null,1L);
     }
 
     @Test
@@ -140,6 +142,8 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode = new PceOtnNode(node, null,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), "100GE");
         pceOtnNode.initXndrTps("AZ");
+        pceOtnNode.checkAvailableTribPort();
+        pceOtnNode.checkAvailableTribSlot();
         Assert.assertFalse(pceOtnNode.isPceOtnNodeValid(pceOtnNode));
     }
 
@@ -148,14 +152,31 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.DEGREE,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), "100GE");
         pceOtnNode.initXndrTps("AZ");
+        pceOtnNode.checkAvailableTribPort();
+        pceOtnNode.checkAvailableTribSlot();
         Assert.assertFalse(pceOtnNode.isPceOtnNodeValid(pceOtnNode));
     }
+
+    @Test
+    public void testIsPceOtnNodeValidNode() {
+        pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.DEGREE,
+                new NodeId("optical"), ServiceFormat.OMS.getName(), "100GE");
+        pceOtnNode.initXndrTps("AZ");
+        pceOtnNode.checkAvailableTribPort();
+        pceOtnNode.checkAvailableTribSlot();
+        pceOtnNode = Mockito.mock(PceOtnNode.class);
+        Mockito.when(pceOtnNode.getNodeId()).thenReturn(null);
+        Assert.assertFalse(pceOtnNode.isPceOtnNodeValid(pceOtnNode));
+    }
+
 
     @Test
     public void testIsPceOtnNodeValidTrue() {
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), "ODU4");
         pceOtnNode.initXndrTps("AZ");
+        pceOtnNode.checkAvailableTribPort();
+        pceOtnNode.checkAvailableTribSlot();
         Assert.assertTrue(pceOtnNode.isPceOtnNodeValid(pceOtnNode));
     }
 
