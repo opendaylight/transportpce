@@ -101,7 +101,7 @@ public class PceOtnNode implements PceNode {
             = this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                 .ietf.network.topology.rev180226.Node1.class);
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-            .node.TerminationPoint> allTps = nodeTp.getTerminationPoint();
+                .node.TerminationPoint> allTps = nodeTp.getTerminationPoint();
         this.valid = false;
         if (allTps == null) {
             LOG.error("PceOtnNode: initXndrTps: XPONDER TerminationPoint list is empty for node {}", this);
@@ -109,7 +109,7 @@ public class PceOtnNode implements PceNode {
         }
 
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-            .node.TerminationPoint tp : allTps) {
+                .node.TerminationPoint tp : allTps) {
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.@Nullable TerminationPoint1 ocnTp1
                 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
                 .TerminationPoint1.class);
@@ -290,17 +290,15 @@ public class PceOtnNode implements PceNode {
     }
 
     public boolean validateSwitchingPoolBandwidth(
-            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-                .ietf.network.topology.rev180226.networks.network.node.TerminationPoint tp1,
-            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-                .ietf.network.topology.rev180226.networks.network.node.TerminationPoint tp2,
+            TerminationPoint tp1,
+            TerminationPoint tp2,
             Long neededBW) {
         if (this.nodeType != OpenroadmNodeType.TPDR) {
             return true;
         }
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1 node1 =
+        Node1 node1 =
             node.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1.class);
+                Node1.class);
         SwitchingPools sp = node1.getSwitchingPools();
         List<OduSwitchingPools> osp = sp.getOduSwitchingPools();
         for (OduSwitchingPools ospx : osp) {
