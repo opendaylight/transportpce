@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70cf157e_8a50fcaf",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 8550
+      },
+      "writtenOn": "2020-06-02T18:56:14Z",
+      "side": 1,
+      "message": "composition over inheritance \nwe can extract Jersey configuration to a class to be reusable \n(starting it , use the rest api provided and stop at the end of test)",
+      "range": {
+        "startLine": 95,
+        "startChar": 8,
+        "endLine": 95,
+        "endChar": 75
+      },
+      "revId": "862189cd09f74122dbf78233554312e25e80681c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
