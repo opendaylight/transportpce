@@ -7,6 +7,8 @@
  */
 package org.opendaylight.transportpce.pce.service;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,6 +25,16 @@ import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.PathBandwidth;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.PathPropertiesBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathMetricBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.no.path.info.NoPathBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.Response;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.ResponseBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.NoPathCaseBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.PathCaseBuilder;
+
+
 
 public class PathComputationServiceImplTest extends AbstractTest {
 
@@ -49,6 +61,31 @@ public class PathComputationServiceImplTest extends AbstractTest {
         pathComputationServiceImpl.generateGnpyResponse(null,"path");
         Assert.assertNotNull(
                 pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_simpletopology_test1_request()));
+
+    }
+
+    @Test
+    public void testPathComputationRequestNoPath() {
+        Response response = new ResponseBuilder().setResponseType(new NoPathCaseBuilder()
+                .setNoPath(new NoPathBuilder().setNoPath("no path").build()).build()).build();
+
+        pathComputationServiceImpl.generateGnpyResponse(response,"path");
+        Assert.assertNotNull(
+                pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_test3_request_54()));
+
+    }
+
+    @Test
+    public void testPathComputationRequestPathCase() {
+        Response response = new ResponseBuilder().setResponseType(new PathCaseBuilder()
+                .setPathProperties(new PathPropertiesBuilder().setPathMetric(Arrays.asList(new PathMetricBuilder()
+                .setAccumulativeValue(new BigDecimal(21))
+                        .setMetricType(PathBandwidth.class).build()))
+                .build()).build()).build();
+
+        pathComputationServiceImpl.generateGnpyResponse(response,"path");
+        Assert.assertNotNull(
+                pathComputationServiceImpl.pathComputationRequest(PceTestData.getPCE_test3_request_54()));
 
     }
 
