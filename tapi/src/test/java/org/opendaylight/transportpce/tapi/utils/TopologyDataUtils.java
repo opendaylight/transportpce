@@ -38,7 +38,7 @@ public final class TopologyDataUtils {
 
     public static GetTopologyDetailsInput buildGetTopologyDetailsInput() {
         GetTopologyDetailsInputBuilder builtInput = new GetTopologyDetailsInputBuilder();
-        builtInput.setTopologyIdOrName("topo1");
+        builtInput.setTopologyIdOrName("openroadm-topology");
         return builtInput.build();
     }
 
