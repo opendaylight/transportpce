@@ -16,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder;
@@ -46,9 +47,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1Builder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
-import org.opendaylight.yangtools.yang.common.Uint32;
-
-
 
 public class PceOpticalNodeTest extends AbstractTest {
 
@@ -263,7 +261,7 @@ public class PceOpticalNodeTest extends AbstractTest {
     }
 
     private SrgAttributes getSrgAttributes() {
-        return new SrgAttributesBuilder().setAvailableWavelengths(create96AvalWaveSrg()).build();
+        return new SrgAttributesBuilder().setAvailableWavelengths(TransactionUtils.create96AvalWaveSrg()).build();
     }
 
     private DegreeAttributes getEmptyDegAttributes() {
@@ -308,23 +306,4 @@ public class PceOpticalNodeTest extends AbstractTest {
                         .setTailEquipmentId("destNode" + "--" + "destTp").build());
     }
 
-    private static List<org.opendaylight.yang.gen
-            .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengths> create96AvalWaveSrg() {
-
-        List<org.opendaylight.yang.gen
-                .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengths>
-                waveList = new ArrayList<>();
-
-        for (int i = 1; i < 97; i++) {
-            org.opendaylight.yang.gen
-                    .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengthsBuilder
-                    avalBldr = new org.opendaylight.yang.gen
-                    .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengthsBuilder()
-                    .setIndex(Uint32.valueOf(i))
-                    .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-                            .AvailableWavelengthsKey(Uint32.valueOf(i)));
-            waveList.add(avalBldr.build());
-        }
-        return waveList;
-    }
 }
