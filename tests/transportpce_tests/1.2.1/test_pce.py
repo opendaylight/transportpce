@@ -347,7 +347,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         time.sleep(1)
 
-    # Load simple topology
+    # Load complex topology
     def test_15_load_complex_topology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
                .format(self.restconf_baseurl))
@@ -582,8 +582,112 @@ class TransportPCEtesting(unittest.TestCase):
                          ['zToA-direction']['zToA-wavelength-number'])
         time.sleep(5)
 
+    # Path computation before deleting oms-attribute of the link :openroadm1-3 to openroadm1-2
+    def test_21_path_computation_before_oms_attribute_deletion(self):
+        url = ("{}/operations/transportpce-pce:path-computation-request"
+               .format(self.restconf_baseurl))
+        body = {"input": {
+                "service-name": "service 1",
+                "resource-reserve": "true",
+                "service-handler-header": {
+                    "request-id": "request 1"
+                },
+                "service-a-end": {
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "node-id": "XPONDER-2-2",
+                    "clli": "ORANGE2"
+                },
+                "service-z-end": {
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "node-id": "XPONDER-1-2",
+                    "clli": "ORANGE1"
+                },
+                "pce-metric": "hop-count"
+                }
+                }
+        headers = {'content-type': 'application/json',
+                   "Accept": "application/json"}
+        response = requests.request(
+            "POST", url, data=json.dumps(body), headers=headers,
+            auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn('Path is calculated',
+                      res['output']['configuration-response-common']['response-message'])
+        nbElmPath = len(res['output']['response-parameters']['path-description']
+                        ['aToZ-direction']['aToZ'])
+        self.assertEqual(31, nbElmPath)
+        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2"}
+        find = False
+        for i in range(0, nbElmPath):
+            resource_i = res['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]['resource']
+            if(resource_i == link):
+                find = True
+        self.assertEqual(find, True)
+        time.sleep(5)
+
+    # Delete oms-attribute in the link :openroadm1-3 to openroadm1-2
+    def test_22_delete_oms_attribute_in_openroadm13toopenroadm12_link(self):
+        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
+               "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2/org-openroadm-network-topology:OMS-attributes/span"
+               .format(self.restconf_baseurl))
+        headers = {'content-type': 'application/xml',
+                   "Accept": "application/json"}
+        response = requests.request(
+            "DELETE", url, headers=headers, auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        time.sleep(2)
+
+    # Path computation after deleting oms-attribute of the link :openroadm1-3 to openroadm1-2
+    def test_23_path_computation_after_oms_attribute_deletion(self):
+        url = ("{}/operations/transportpce-pce:path-computation-request"
+               .format(self.restconf_baseurl))
+        body = {"input": {
+                "service-name": "service 1",
+                "resource-reserve": "true",
+                "service-handler-header": {
+                    "request-id": "request 1"
+                },
+                "service-a-end": {
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "node-id": "XPONDER-2-2",
+                    "clli": "ORANGE2"
+                },
+                "service-z-end": {
+                    "service-rate": "100",
+                    "service-format": "Ethernet",
+                    "node-id": "XPONDER-1-2",
+                    "clli": "ORANGE1"
+                },
+                "pce-metric": "hop-count"
+                }
+                }
+        headers = {'content-type': 'application/json',
+                   "Accept": "application/json"}
+        response = requests.request(
+            "POST", url, data=json.dumps(body), headers=headers,
+            auth=('admin', 'admin'))
+        self.assertEqual(response.status_code, requests.codes.ok)
+        res = response.json()
+        self.assertIn('Path is calculated',
+                      res['output']['configuration-response-common']['response-message'])
+        nbElmPath = len(res['output']['response-parameters']['path-description']
+                        ['aToZ-direction']['aToZ'])
+        self.assertEqual(47, nbElmPath)
+        link = {"link-id": "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2"}
+        find = False
+        for i in range(0, nbElmPath):
+            resource_i = res['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]['resource']
+            if (resource_i == link):
+                find = True
+        self.assertNotEqual(find, True)
+        time.sleep(5)
+
     # Delete complex topology
-    def test_21_delete_complex_topology(self):
+    def test_24_delete_complex_topology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/xml',
@@ -594,7 +698,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(2)
 
     # Test deleted complex topology
-    def test_22_test_topology_complex_deleted(self):
+    def test_25_test_topology_complex_deleted(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/node/XPONDER-3-2"
                .format(self.restconf_baseurl))
         headers = {'content-type': 'application/json',
