@@ -10,19 +10,20 @@ package org.opendaylight.transportpce.pce.impl;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.concurrent.ExecutionException;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
 import org.opendaylight.transportpce.pce.utils.NotificationPublishServiceMock;
+import org.opendaylight.transportpce.pce.utils.PceTestData;
+import org.opendaylight.transportpce.pce.utils.PceTestUtils;
+import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInputBuilder;
 
 
 
@@ -32,16 +33,17 @@ public class PceServiceRPCImplTest extends AbstractTest {
     private PathComputationService pathComputationService;
     private NotificationPublishService notificationPublishService;
     private NetworkTransactionImpl networkTransaction;
-    private RequestProcessor requestProcessor;
     private PceServiceRPCImpl pceServiceRPC;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ExecutionException, InterruptedException {
+        PceTestUtils.writeNetworkIntoDataStore(this.getDataBroker(), this.getDataStoreContextUtil(),
+                TransactionUtils.getNetworkForSpanLoss());
         notificationPublishService = new NotificationPublishServiceMock();
-        requestProcessor = Mockito.mock(RequestProcessor.class);
-        networkTransaction = new NetworkTransactionImpl(requestProcessor);
+        networkTransaction =  new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
         pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService);
         pceServiceRPC = new PceServiceRPCImpl(pathComputationService);
+
     }
 
     @Test
@@ -52,9 +54,12 @@ public class PceServiceRPCImplTest extends AbstractTest {
 
     @Test
     public void testPathComputationRequest() {
-        PathComputationRequestInput pathComputationRequestInput =
-                new PathComputationRequestInputBuilder().build();
-        assertNotNull(pceServiceRPC.pathComputationRequest(pathComputationRequestInput));
+        assertNotNull(pceServiceRPC.pathComputationRequest(PceTestData.getPCERequest()));
     }
 
+    @Test
+    public void testPathComputationRequestCoRoutingOrGeneral2() {
+        assertNotNull(pceServiceRPC.pathComputationRequest(
+                PceTestData.getPathComputationRequestInputWithCoRoutingOrGeneral2()));
+    }
 }
