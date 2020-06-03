@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "302484cb_b398ecdf",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-03T06:46:50Z",
+      "side": 1,
+      "message": "\"TapiNode1\" instead of \"TapuNode1\"",
+      "range": {
+        "startLine": 71,
+        "startChar": 45,
+        "endLine": 71,
+        "endChar": 46
+      },
+      "revId": "812a6c69bd68708dbfc82fe1f5e8a9fa5eb99f8f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
