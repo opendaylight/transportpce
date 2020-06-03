@@ -213,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "30970818_b8dfc191",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T08:09:09Z",
+      "side": 1,
+      "message": "Done https://git.opendaylight.org/gerrit/c/transportpce/+/90221",
+      "parentUuid": "8f026ccd_15451a39",
+      "range": {
+        "startLine": 130,
+        "startChar": 32,
+        "endLine": 130,
+        "endChar": 60
+      },
+      "revId": "24df2e3946d932339b480659ce773abcf6cb1c6b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e893c463_a08f0e58",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
         "patchSetId": 11
@@ -236,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "98db9b4c_1c6c7fbe",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T08:09:09Z",
+      "side": 1,
+      "message": "Done https://git.opendaylight.org/gerrit/c/transportpce/+/90221",
+      "parentUuid": "e893c463_a08f0e58",
+      "range": {
+        "startLine": 154,
+        "startChar": 1,
+        "endLine": 155,
+        "endChar": 95
+      },
+      "revId": "24df2e3946d932339b480659ce773abcf6cb1c6b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33c1a162_f0d21125",
         "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
         "patchSetId": 11
@@ -247,6 +295,24 @@
       "writtenOn": "2020-06-02T08:50:44Z",
       "side": 1,
       "message": "whitespace or LF after commas would help readability",
+      "revId": "24df2e3946d932339b480659ce773abcf6cb1c6b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "135259b4_34e1d5cf",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T08:09:09Z",
+      "side": 1,
+      "message": "done in change https://git.opendaylight.org/gerrit/c/transportpce/+/90221",
+      "parentUuid": "33c1a162_f0d21125",
       "revId": "24df2e3946d932339b480659ce773abcf6cb1c6b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
