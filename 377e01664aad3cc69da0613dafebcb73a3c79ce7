@@ -22,6 +22,30 @@
       "revId": "377e01664aad3cc69da0613dafebcb73a3c79ce7",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89ce0542_c75edc19",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T08:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72a21c34_3c06a503",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 9
+      },
+      "revId": "377e01664aad3cc69da0613dafebcb73a3c79ce7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
