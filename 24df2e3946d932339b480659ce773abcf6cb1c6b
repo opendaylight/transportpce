@@ -342,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "fa3b4bac_a3b7b18f",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T08:38:06Z",
+      "side": 1,
+      "message": "done in change https://git.opendaylight.org/gerrit/c/transportpce/+/90222",
+      "parentUuid": "5ac42e0b_02555e9d",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 39
+      },
+      "revId": "24df2e3946d932339b480659ce773abcf6cb1c6b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5fdc8a10_c0c94e7f",
         "filename": "tox.ini",
         "patchSetId": 11
