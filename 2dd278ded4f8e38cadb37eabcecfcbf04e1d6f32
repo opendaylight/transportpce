@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "3955b1fd_d199bc93",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T15:19:24Z",
+      "side": 1,
+      "message": "Your point here is irrelevant as the refactor I\u0027ve made has no impact on the other tests (no change of method signature or return ) so cherry-picking/backporting will not be a problem.\nSo I won\u0027t do more. \nIf the title of the commit is NOK, feel free to change it.",
+      "parentUuid": "655b0a3f_741102cb",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 82
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec5d3b13_13ea4e93",
         "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
         "patchSetId": 2
