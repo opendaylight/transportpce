@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72a21c34_3c06a503",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-03T08:37:09Z",
+      "side": 1,
+      "message": "Maybe openroadmTopo declaration can be put after preliminary checks.\n\n        Optional\u003cNetwork\u003e optionalOpenroadmTop \u003d null;\n        try {\n            optionalOpenroadmTop \u003d openroadmTopoOpt.get();\n        } catch (InterruptedException e) {\n            //sonar : \"InterruptedException\" should not be ignored (java:S2142)\n            //https://www.ibm.com/developerworks/java/library/j-jtp05236/index.html?ca\u003ddrs-#2.1\n            Thread.currentThread().interrupt();\n            return null;\n        } catch (ExecutionException | NoSuchElementException e) {\n            LOG.error(\"Impossible to retrieve openroadm-topology from mdsal\", e);\n            return null;\n        }\n        if (!optionalOpenroadmTop.isPresent()) {\n            LOG.warn(\"Openroadm topology is not present, returning null\");\n            return null;\n        }\n        Network openroadmTopo \u003d optionalOpenroadmTop.get();\n        List\u003cNode\u003e nodeList \u003d openroadmTopo.getNode();",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 9
+      },
+      "revId": "377e01664aad3cc69da0613dafebcb73a3c79ce7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
