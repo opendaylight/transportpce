@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "de811d29_74f87b16",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T14:29:46Z",
+      "side": 1,
+      "message": "I will not do it because I will not rewrite all the code for test_tapi to be compliant with old version of test_util. And after that redo the modification for refactoring. Creating new test is also the occasion to do some code improvment at the same time.\nIf you absolutly want one change for test_tapi and one for refactoring test_util, be my guest and feel free to do it :-)",
+      "parentUuid": "66cc92a0_37f6266d",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 82
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec5d3b13_13ea4e93",
         "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-06-03T13:52:49Z",
       "side": 1,
       "message": "OK since almost everything was written by Orange here.\nThough, note that this file was created by Samuel from Pantheon to factorize functional tests existing functions.",
+      "range": {
+        "startLine": 3,
+        "startChar": 21,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "233f087f_58eb4e4e",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T14:29:46Z",
+      "side": 1,
+      "message": "As there was no license header, I could not have known it.\nDo you want me to remove the license ?",
+      "parentUuid": "ec5d3b13_13ea4e93",
       "range": {
         "startLine": 3,
         "startChar": 21,
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "a0da1c4b_f84c7091",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T14:29:46Z",
+      "side": 1,
+      "message": "the goal of this refactor was to reduce code duplication with no impact on existing tests because those functions start_xxx_honeynode are used by all the functional tests.\nA global refactoring for all the tests should be usefull but should be done in another change.",
+      "parentUuid": "3e62f86b_7372b797",
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "47c81474_743794d9",
         "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
         "patchSetId": 2
@@ -76,6 +142,30 @@
       "writtenOn": "2020-06-03T13:52:49Z",
       "side": 1,
       "message": "probably better in another change.",
+      "range": {
+        "startLine": 107,
+        "startChar": 1,
+        "endLine": 122,
+        "endChar": 34
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f4518d0_092b2f8d",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T14:29:46Z",
+      "side": 1,
+      "message": "same answer as my comment on commit message",
+      "parentUuid": "47c81474_743794d9",
       "range": {
         "startLine": 107,
         "startChar": 1,
@@ -108,6 +198,30 @@
       "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c36f18a_8d5b16b7",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T14:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c90b26a_183d2d39",
+      "range": {
+        "startLine": 21,
+        "startChar": 147,
+        "endLine": 21,
+        "endChar": 154
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -145,6 +259,30 @@
       "writtenOn": "2020-06-03T13:52:49Z",
       "side": 1,
       "message": "since it does not support LIGHTY yet, I guess a condition would be useful here.\n\nsh -c \u0027if [ \"$USE_LIGHTY\" \u003d \"True\" ]; then echo \"TAPI functional test not supported with LIGHTY\"; else ... ;fi\u0027",
+      "range": {
+        "startLine": 48,
+        "startChar": 17,
+        "endLine": 48,
+        "endChar": 77
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "701db9fa_56caa969",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-03T14:29:46Z",
+      "side": 1,
+      "message": "I have put a skip test condition in test_tapi.py file so, no need to add it here",
+      "parentUuid": "571aae0f_71f98575",
       "range": {
         "startLine": 48,
         "startChar": 17,
