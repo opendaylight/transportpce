@@ -1,0 +1,300 @@
+{
+"{urn:ietf:params:xml:ns:netconf:base:1.0}data": {
+    "network": {
+        "nodes": [
+            {
+                "node-id": "XPDR-A1",
+                "node-info": {
+                    "node-type": "xpdr",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.4",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-clli": "NodeA"
+                },
+                "mapping": [
+                    {
+                        "logical-connection-point": "XPDR1-NETWORK2",
+                        "supporting-port": "1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "connection-map-lcp": "XPDR1-CLIENT2",
+                        "lcp-hash-val": "783222141",
+                        "port-direction": "bidirectional",
+                        "port-qual": "xpdr-network",
+                        "supporting-circuit-pack-name": "1/0/2-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "XPDR1-NETWORK1",
+                        "supporting-port": "1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "connection-map-lcp": "XPDR1-CLIENT1",
+                        "lcp-hash-val": "783222140",
+                        "port-direction": "bidirectional",
+                        "port-qual": "xpdr-network",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "XPDR1-CLIENT2",
+                        "supporting-port": "C1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-100GE"
+                        ],
+                        "connection-map-lcp": "XPDR1-NETWORK2",
+                        "lcp-hash-val": "-680537842",
+                        "port-direction": "bidirectional",
+                        "port-qual": "xpdr-client",
+                        "supporting-circuit-pack-name": "1/0/2-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "XPDR1-CLIENT1",
+                        "supporting-port": "C1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-100GE"
+                        ],
+                        "connection-map-lcp": "XPDR1-NETWORK1",
+                        "lcp-hash-val": "-680537843",
+                        "port-direction": "bidirectional",
+                        "port-qual": "xpdr-client",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    }
+                ]
+            },
+            {
+                "node-id": "XPDR-C1",
+                "node-info": {
+                    "node-type": "xpdr",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "1.2.3.5",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-clli": "NodeC"
+                },
+                "mapping": [
+                    {
+                        "logical-connection-point": "XPDR1-NETWORK2",
+                        "supporting-port": "1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "connection-map-lcp": "XPDR1-CLIENT2",
+                        "lcp-hash-val": "-237846213",
+                        "port-direction": "bidirectional",
+                        "port-qual": "xpdr-network",
+                        "supporting-circuit-pack-name": "1/0/2-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "XPDR1-NETWORK1",
+                        "supporting-port": "1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-OCH"
+                        ],
+                        "connection-map-lcp": "XPDR1-CLIENT1",
+                        "lcp-hash-val": "-237846214",
+                        "port-direction": "bidirectional",
+                        "port-qual": "xpdr-network",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-NET"
+                    },
+                    {
+                        "logical-connection-point": "XPDR1-CLIENT2",
+                        "supporting-port": "C1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-100GE"
+                        ],
+                        "connection-map-lcp": "XPDR1-NETWORK2",
+                        "lcp-hash-val": "-1960401520",
+                        "port-direction": "bidirectional",
+                        "port-qual": "xpdr-client",
+                        "supporting-circuit-pack-name": "1/0/2-PLUG-CLIENT"
+                    },
+                    {
+                        "logical-connection-point": "XPDR1-CLIENT1",
+                        "supporting-port": "C1",
+                        "supported-interface-capability": [
+                            "org-openroadm-port-types:if-100GE"
+                        ],
+                        "connection-map-lcp": "XPDR1-NETWORK1",
+                        "lcp-hash-val": "-1960401521",
+                        "port-direction": "bidirectional",
+                        "port-qual": "xpdr-client",
+                        "supporting-circuit-pack-name": "1/0/1-PLUG-CLIENT"
+                    }
+                ]
+            },
+            {
+                "node-id": "ROADM-A1",
+                "node-info": {
+                    "node-type": "rdm",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "127.0.0.11",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-clli": "NodeA"
+                },
+                "cp-to-degree": [
+                    {
+                        "circuit-pack-name": "1/0/ETH-PLUG",
+                        "degree-number": 1,
+                        "interface-name": "1GE-interface-1"
+                    },
+                    {
+                        "circuit-pack-name": "1/0",
+                        "degree-number": 1,
+                        "interface-name": "1GE-interface-1"
+                    },
+                    {
+                        "circuit-pack-name": "2/0/ETH-PLUG",
+                        "degree-number": 2,
+                        "interface-name": "1GE-interface-2"
+                    },
+                    {
+                        "circuit-pack-name": "2/0",
+                        "degree-number": 2,
+                        "interface-name": "1GE-interface-2"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "logical-connection-point": "SRG3-PP1-TXRX",
+                        "supporting-port": "C1",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "5/0"
+                    },
+                    {
+                        "logical-connection-point": "SRG3-PP4-TXRX",
+                        "supporting-port": "C4",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "5/0"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP2-TXRX",
+                        "supporting-port": "C2",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "3/0"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP4-TXRX",
+                        "supporting-port": "C4",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "3/0"
+                    },
+                    {
+                        "logical-connection-point": "SRG3-PP3-TXRX",
+                        "supporting-port": "C3",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "5/0"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP3-TXRX",
+                        "supporting-port": "C3",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "3/0"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-TXRX",
+                        "supporting-port": "L1",
+                        "port-direction": "bidirectional",
+                        "supporting-ots": "OTS-DEG2-TTP-TXRX",
+                        "supporting-circuit-pack-name": "2/0",
+                        "supporting-oms": "OMS-DEG2-TTP-TXRX"
+                    },
+                    {
+                        "logical-connection-point": "SRG3-PP2-TXRX",
+                        "supporting-port": "C2",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "5/0"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP1-TXRX",
+                        "supporting-port": "C1",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "3/0"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-TXRX",
+                        "supporting-port": "L1",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "1/0"
+                    }
+                ]
+            },
+            {
+                "node-id": "ROADM-C1",
+                "node-info": {
+                    "node-type": "rdm",
+                    "node-vendor": "vendorA",
+                    "node-ip-address": "127.0.0.13",
+                    "openroadm-version": "2.2.1",
+                    "node-model": "model2",
+                    "node-clli": "NodeC"
+                },
+                "cp-to-degree": [
+                    {
+                        "circuit-pack-name": "1/0/ETH-PLUG",
+                        "degree-number": 1,
+                        "interface-name": "1GE-interface-1"
+                    },
+                    {
+                        "circuit-pack-name": "1/0",
+                        "degree-number": 1,
+                        "interface-name": "1GE-interface-1"
+                    },
+                    {
+                        "circuit-pack-name": "2/0/ETH-PLUG",
+                        "degree-number": 2,
+                        "interface-name": "1GE-interface-2"
+                    },
+                    {
+                        "circuit-pack-name": "2/0",
+                        "degree-number": 2,
+                        "interface-name": "1GE-interface-2"
+                    }
+                ],
+                "mapping": [
+                    {
+                        "logical-connection-point": "SRG1-PP2-TXRX",
+                        "supporting-port": "C2",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "3/0"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP4-TXRX",
+                        "supporting-port": "C4",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "3/0"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP3-TXRX",
+                        "supporting-port": "C3",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "3/0"
+                    },
+                    {
+                        "logical-connection-point": "DEG2-TTP-TXRX",
+                        "supporting-port": "L1",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "2/0"
+                    },
+                    {
+                        "logical-connection-point": "SRG1-PP1-TXRX",
+                        "supporting-port": "C1",
+                        "port-direction": "bidirectional",
+                        "supporting-circuit-pack-name": "3/0"
+                    },
+                    {
+                        "logical-connection-point": "DEG1-TTP-TXRX",
+                        "supporting-port": "L1",
+                        "port-direction": "bidirectional",
+                        "supporting-ots": "OTS-DEG1-TTP-TXRX",
+                        "supporting-circuit-pack-name": "1/0",
+                        "supporting-oms": "OMS-DEG1-TTP-TXRX"
+                    }
+                ]
+            }
+        ]
+    }
+}
+}
