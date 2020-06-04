@@ -34,7 +34,7 @@ public final class EndPointCheck {
         } else {
             for (EndPoint ep : epl) {
                 //to do
-                LOG.info("ep = {}", ep.toString());
+                LOG.info("ep = {}", ep);
             }
         }
 
