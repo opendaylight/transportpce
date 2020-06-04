@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99965d01_4a53cec5",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/NetworkModelProviderTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-04T13:43:13Z",
+      "side": 1,
+      "message": "why not extend org.opendaylight.transportpce.test.AbstractTest or org.opendaylight.mdsal.binding.dom.adapter.test.AbstractConcurrentDataBrokerTest class ?",
+      "range": {
+        "startLine": 34,
+        "startChar": 7,
+        "endLine": 35,
+        "endChar": 65
+      },
+      "revId": "21935cec5ba42e40f9499137156ddca77b46d171",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c560096b_e81eacdc",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/NetworkModelProviderTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-04T13:43:13Z",
+      "side": 1,
+      "message": "There is no assert or verify in your test. How do you check if the test is OK or NOK ?",
+      "revId": "21935cec5ba42e40f9499137156ddca77b46d171",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08a7cff6_ee82684d",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/NetworkUtilsImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-04T13:43:13Z",
+      "side": 1,
+      "message": "why not extend org.opendaylight.transportpce.test.AbstractTest or org.opendaylight.mdsal.binding.dom.adapter.test.AbstractConcurrentDataBrokerTest class ?",
+      "range": {
+        "startLine": 62,
+        "startChar": 1,
+        "endLine": 63,
+        "endChar": 64
+      },
+      "revId": "21935cec5ba42e40f9499137156ddca77b46d171",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
