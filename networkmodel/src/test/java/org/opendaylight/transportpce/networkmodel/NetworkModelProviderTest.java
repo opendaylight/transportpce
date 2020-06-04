@@ -7,55 +7,52 @@
  */
 package org.opendaylight.transportpce.networkmodel;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.google.common.util.concurrent.FluentFuture;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
-import org.opendaylight.mdsal.common.api.CommitInfo;
+import org.opendaylight.transportpce.common.DataStoreContextImpl;
+import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.common.network.RequestProcessor;
+import org.opendaylight.transportpce.networkmodel.util.TpceNetwork;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
+import org.opendaylight.yangtools.concepts.ObjectRegistration;
 
+public class NetworkModelProviderTest {
 
-@RunWith(MockitoJUnitRunner.StrictStubs.class)
-public class NetworkModelProviderTest extends AbstractTest {
-    @Mock
-    NetworkTransactionService networkTransactionService;
-    @Mock
-    RpcProviderService rpcProviderService;
-    @Mock
-    TransportpceNetworkutilsService networkutilsService;
-    @Mock
-    NetConfTopologyListener topologyListener;
-
+    @Before
+    public void setUp() throws Exception {
+    }
 
     @Test
-    public void networkmodelProviderInitTest() {
-        NetworkModelProvider provider = new NetworkModelProvider(networkTransactionService, getDataBroker(),
-            rpcProviderService, networkutilsService, topologyListener);
-        Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {
+    public void initTest() {
+        DataStoreContextImpl dataStoreContext = new DataStoreContextImpl();
+        DataBroker dataBroker = dataStoreContext.getDataBroker();
+        RequestProcessor requestProcessor = new RequestProcessor(dataBroker);
+        NetworkTransactionService networkTransactionService = new NetworkTransactionImpl(requestProcessor);
+        RpcProviderService rpcProviderService = mock(RpcProviderService.class);
+        TransportpceNetworkutilsService networkutilsService = mock(TransportpceNetworkutilsService.class);
+        NetConfTopologyListener topologyListener = mock(NetConfTopologyListener.class);
+        TpceNetwork tpceNetwork = mock(TpceNetwork.class);
+        ObjectRegistration<TransportpceNetworkutilsService> networkutilsServiceRpcRegistration =
+                mock(ObjectRegistration.class);
 
-            @Override
-            public FluentFuture<CommitInfo> answer(InvocationOnMock invocation) throws Throwable {
-                return CommitInfo.emptyFluentFuture();
-            }
+        //Create a new NetworkModelProvider Object
+        NetworkModelProvider networkModelProvider = new NetworkModelProvider(networkTransactionService, dataBroker,
+                rpcProviderService, networkutilsService, topologyListener);
 
-        };
-        when(networkTransactionService.commit()).then(answer);
+        //Init; create the toopologies, register for RPC Service and for Netconf Topology Listener
+        when(rpcProviderService.registerRpcImplementation(
+                TransportpceNetworkutilsService.class, networkutilsService))
+                .thenReturn(networkutilsServiceRpcRegistration);
+        networkModelProvider.init();
 
-        provider.init();
-
-        verify(rpcProviderService, times(1))
-            .registerRpcImplementation(any(), any(TransportpceNetworkutilsService.class));
+        //Destory; clean registeration of RPC Service and Netconf Topology Listener
+        networkModelProvider.close();
     }
 
 }
