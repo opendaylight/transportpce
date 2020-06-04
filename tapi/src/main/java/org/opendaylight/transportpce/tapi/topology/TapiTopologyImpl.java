@@ -180,14 +180,13 @@ public class TapiTopologyImpl implements TapiTopologyService {
         }
         List<String> goodTpList = extractGoodTpList(clientPortMap);
         // tapi topology creation
-        List<Name> names = new ArrayList<Name>();
+        List<Name> names = new ArrayList<>();
         names.add(new NameBuilder().setValue("topo ethernet").setValueName("Topo Name").build());
         Uuid uuid = new Uuid(UUID.randomUUID().toString());
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
             tapiNodeList = new ArrayList<>();
         tapiNodeList.add(createTapiNode(goodTpList));
-        Topology topology = new TopologyBuilder().setName(names).setUuid(uuid).setNode(tapiNodeList).build();
-        return topology;
+        return new TopologyBuilder().setName(names).setUuid(uuid).setNode(tapiNodeList).build();
 
     }
 
@@ -234,13 +233,12 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 tapiNodeList.addAll(tapiFactory.getTapiNodes());
                 tapiLinkList.addAll(tapiFactory.getTapiLinks());
             }
-            Topology topology = new TopologyBuilder()
-                .setName(Arrays.asList(new NameBuilder().setValue("T0 - Multi-layer topology")
-                    .setValueName("TAPI Topology Name").build()))
-                .setUuid(topoUuid)
-                .setNode(tapiNodeList)
-                .setLink(tapiLinkList).build();
-            return topology;
+            return new TopologyBuilder()
+                    .setName(Arrays.asList(new NameBuilder().setValue("T0 - Multi-layer topology")
+                            .setValueName("TAPI Topology Name").build()))
+                    .setUuid(topoUuid)
+                    .setNode(tapiNodeList)
+                    .setLink(tapiLinkList).build();
         } else {
             return null;
         }
@@ -267,14 +265,14 @@ public class TapiTopologyImpl implements TapiTopologyService {
 
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node createTapiNode(List<
         String> tpList) {
-        List<Name> names = new ArrayList<Name>();
+        List<Name> names = new ArrayList<>();
         Name name = new NameBuilder().setValueName("node name").setValue("TapiNode1").build();
         names.add(name);
         List<LayerProtocolName> layerProtocols = new ArrayList<>();
         layerProtocols.add(LayerProtocolName.ETH);
-        List<OwnedNodeEdgePoint> onepl = new ArrayList<OwnedNodeEdgePoint>();
+        List<OwnedNodeEdgePoint> onepl = new ArrayList<>();
         for (int i = 0; i < tpList.size(); i++) {
-            List<Name> onedNames = new ArrayList<Name>();
+            List<Name> onedNames = new ArrayList<>();
             onedNames.add(new NameBuilder().setValueName("OwnedNodeEdgePoint " + i).setValue(tpList.get(i)).build());
             OwnedNodeEdgePoint onep = new OwnedNodeEdgePointBuilder().setUuid(new Uuid(UUID.randomUUID().toString()))
                 .setLayerProtocolName(LayerProtocolName.ETH).setMappedServiceInterfacePoint(createSIP(1))
@@ -285,11 +283,15 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 .build();
             onepl.add(onep);
         }
-        org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node = new NodeBuilder()
-            .setUuid(new Uuid(UUID.randomUUID().toString())).setName(names).setLayerProtocolName(layerProtocols)
-            .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
-            .setLifecycleState(LifecycleState.INSTALLED).setOwnedNodeEdgePoint(onepl).build();
-        return node;
+
+        return new NodeBuilder()
+                .setUuid(new Uuid(UUID.randomUUID().toString()))
+                .setName(names).setLayerProtocolName(layerProtocols)
+                .setAdministrativeState(AdministrativeState.UNLOCKED)
+                .setOperationalState(OperationalState.ENABLED)
+                .setLifecycleState(LifecycleState.INSTALLED)
+                .setOwnedNodeEdgePoint(onepl)
+                .build();
     }
 
     private List<MappedServiceInterfacePoint> createSIP(int nb) {
