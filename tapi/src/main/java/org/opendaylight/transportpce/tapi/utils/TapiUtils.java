@@ -23,8 +23,14 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceZEnd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.create.input.ServiceZEndBuilder;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public final class TapiUtils {
+
+    private static final String LGX_PORT_NAME = "Some lgx-port-name";
+    private static final String PORT_TYPE = "some port type";
+    private static final String LGX_DEVICE_NAME = "Some lgx-device-name";
+    private static final String PORT_RACK_VALUE = "000000.00";
 
     private TapiUtils() {
     }
@@ -52,46 +58,82 @@ public final class TapiUtils {
 
     public static ServiceAEnd buildServiceAEnd(String nodeid, String clli, String txPortDeviceName,
         String txPortName, String rxPortDeviceName, String rxPortName) {
-        ServiceAEnd serviceAEnd = new ServiceAEndBuilder().setClli(clli).setNodeId(new NodeIdType(nodeid)).setOpticType(
-            OpticTypes.Gray).setServiceFormat(
-                ServiceFormat.Ethernet).setServiceRate(Long.valueOf(100))
-            .setTxDirection(
-                new TxDirectionBuilder()
-                    .setPort(new PortBuilder().setPortDeviceName(txPortDeviceName).setPortName(txPortName)
-                        .setPortRack("000000.00").setPortShelf("00").setPortType("some port type").build())
-                    .setLgx(new LgxBuilder().setLgxDeviceName("Some lgx-device-name").setLgxPortName(
-                        "Some lgx-port-name").setLgxPortRack("000000.00").setLgxPortShelf("00").build())
-                    .build())
-            .setRxDirection(
-                new RxDirectionBuilder()
-                    .setPort(new PortBuilder().setPortDeviceName(rxPortDeviceName).setPortName(rxPortName)
-                        .setPortRack("000000.00").setPortShelf("00").setPortType("some port type").build())
-                    .setLgx(new LgxBuilder().setLgxDeviceName("Some lgx-device-name").setLgxPortName(
-                        "Some lgx-port-name").setLgxPortRack("000000.00").setLgxPortShelf("00").build()).build())
-            .build();
-        return serviceAEnd;
+        return new ServiceAEndBuilder()
+                .setClli(clli)
+                .setNodeId(new NodeIdType(nodeid))
+                .setOpticType(OpticTypes.Gray)
+                .setServiceFormat(ServiceFormat.Ethernet)
+                .setServiceRate(Uint32.valueOf(100))
+                .setTxDirection(new TxDirectionBuilder()
+                        .setPort(new PortBuilder()
+                                .setPortDeviceName(txPortDeviceName)
+                                .setPortName(txPortName)
+                                .setPortRack(PORT_RACK_VALUE)
+                                .setPortShelf("00")
+                                .setPortType(PORT_TYPE)
+                                .build())
+                        .setLgx(new LgxBuilder()
+                                .setLgxDeviceName(LGX_DEVICE_NAME)
+                                .setLgxPortName(LGX_PORT_NAME)
+                                .setLgxPortRack(PORT_RACK_VALUE)
+                                .setLgxPortShelf("00")
+                                .build())
+                        .build())
+                .setRxDirection(new RxDirectionBuilder()
+                        .setPort(new PortBuilder()
+                                .setPortDeviceName(rxPortDeviceName)
+                                .setPortName(rxPortName)
+                        .setPortRack(PORT_RACK_VALUE)
+                        .setPortShelf("00")
+                        .setPortType(PORT_TYPE)
+                        .build())
+                        .setLgx(new LgxBuilder()
+                                .setLgxDeviceName(LGX_DEVICE_NAME)
+                                .setLgxPortName(LGX_PORT_NAME)
+                                .setLgxPortRack(PORT_RACK_VALUE)
+                                .setLgxPortShelf("00")
+                                .build())
+                        .build())
+                .build();
     }
 
     public static ServiceZEnd buildServiceZEnd(String nodeid, String clli, String txPortDeviceName,
         String txPortName, String rxPortDeviceName, String rxPortName) {
-        ServiceZEnd serviceZEnd = new ServiceZEndBuilder().setClli(clli).setNodeId(new NodeIdType(nodeid)).setOpticType(
-            OpticTypes.Gray).setServiceFormat(
-                ServiceFormat.Ethernet).setServiceRate(Long.valueOf(100))
-            .setTxDirection(
-                new TxDirectionBuilder()
-                    .setPort(new PortBuilder().setPortDeviceName(txPortDeviceName).setPortName(txPortName)
-                        .setPortRack("000000.00").setPortShelf("00").setPortType("some port type").build())
-                    .setLgx(new LgxBuilder().setLgxDeviceName("Some lgx-device-name").setLgxPortName(
-                        "Some lgx-port-name").setLgxPortRack("000000.00").setLgxPortShelf("00").build())
-                    .build())
-            .setRxDirection(
-                new RxDirectionBuilder()
-                    .setPort(new PortBuilder().setPortDeviceName(rxPortDeviceName).setPortName(rxPortName)
-                        .setPortRack("000000.00").setPortShelf("00").setPortType("some port type").build())
-                    .setLgx(new LgxBuilder().setLgxDeviceName("Some lgx-device-name").setLgxPortName(
-                        "Some lgx-port-name").setLgxPortRack("000000.00").setLgxPortShelf("00").build()).build())
-            .build();
-        return serviceZEnd;
+        return  new ServiceZEndBuilder().setClli(clli).setNodeId(new NodeIdType(nodeid))
+                .setOpticType(OpticTypes.Gray)
+                .setServiceFormat(ServiceFormat.Ethernet)
+                .setServiceRate(Uint32.valueOf(100))
+                .setTxDirection(new TxDirectionBuilder()
+                        .setPort(new PortBuilder()
+                                .setPortDeviceName(txPortDeviceName)
+                                .setPortName(txPortName)
+                                .setPortRack(PORT_RACK_VALUE)
+                                .setPortShelf("00")
+                                .setPortType(PORT_TYPE)
+                                .build())
+                        .setLgx(new LgxBuilder()
+                                .setLgxDeviceName(LGX_DEVICE_NAME)
+                                .setLgxPortName(LGX_PORT_NAME)
+                                .setLgxPortRack(PORT_RACK_VALUE)
+                                .setLgxPortShelf("00")
+                                .build())
+                        .build())
+                .setRxDirection(new RxDirectionBuilder()
+                        .setPort(new PortBuilder()
+                                .setPortDeviceName(rxPortDeviceName)
+                                .setPortName(rxPortName)
+                                .setPortRack(PORT_RACK_VALUE)
+                                .setPortShelf("00")
+                                .setPortType(PORT_TYPE)
+                                .build())
+                        .setLgx(new LgxBuilder()
+                                .setLgxDeviceName(LGX_DEVICE_NAME)
+                                .setLgxPortName(LGX_PORT_NAME)
+                                .setLgxPortRack(PORT_RACK_VALUE)
+                                .setLgxPortShelf("00")
+                                .build())
+                        .build())
+                .build();
     }
 
     private static ServiceAEnd getServiceAEnd(GenericServiceEndpoint sepA, GenericServiceEndpoint sepZ) {
