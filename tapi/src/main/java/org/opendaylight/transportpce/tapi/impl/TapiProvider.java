@@ -18,7 +18,6 @@ import org.opendaylight.transportpce.tapi.utils.TapiListener;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.TapiConnectivityService;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.TapiTopologyService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev180928.ServiceInterfacePoints;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -37,9 +36,7 @@ public class TapiProvider {
     private final DataBroker dataBroker;
     private final RpcProviderService rpcProviderService;
     private ObjectRegistration<TapiConnectivityService> rpcRegistration;
-    private ObjectRegistration<TapiTopologyService> rpcRegistration2;
     private final ServiceHandlerOperations serviceHandler;
-    private ListenerRegistration<TapiListener> listenerRegistration;
     private final TapiListener tapiListener;
 
     public TapiProvider(DataBroker dataBroker, RpcProviderService rpcProviderService,
@@ -58,10 +55,10 @@ public class TapiProvider {
         TapiImpl tapi = new TapiImpl(this.serviceHandler);
         TapiTopologyImpl topo = new TapiTopologyImpl(this.dataBroker);
         rpcRegistration = rpcProviderService.registerRpcImplementation(TapiConnectivityService.class, tapi);
-        rpcRegistration2 = rpcProviderService.registerRpcImplementation(TapiTopologyService.class, topo);
+        rpcProviderService.registerRpcImplementation(TapiTopologyService.class, topo);
         @NonNull
         InstanceIdentifier<ServiceInterfacePoints> sipIID = InstanceIdentifier.create(ServiceInterfacePoints.class);
-        listenerRegistration = dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(
+        dataBroker.registerDataTreeChangeListener(DataTreeIdentifier.create(
             LogicalDatastoreType.CONFIGURATION, sipIID), tapiListener);
     }
 
@@ -70,7 +67,6 @@ public class TapiProvider {
      */
     public void close() {
         LOG.info("TapiProvider Session Closed");
-        // pcelistenerRegistration.close();
         rpcRegistration.close();
     }
 
