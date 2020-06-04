@@ -23,7 +23,7 @@ public final class MappingUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(MappingUtils.class);
 
-    private static Map<Uuid, GenericServiceEndpoint> map = new HashMap<Uuid, GenericServiceEndpoint>();
+    private static Map<Uuid, GenericServiceEndpoint> map = new HashMap<>();
 
     private MappingUtils() {
     }
@@ -71,8 +71,7 @@ public final class MappingUtils {
             Set<Entry<Uuid, GenericServiceEndpoint>> entries = map.entrySet();
             LOG.info("Displaying the static map...");
             for (Entry<Uuid, GenericServiceEndpoint> entry : entries) {
-                LOG.info("uuid = {} \t service end point = {}", entry.getKey().toString(), entry.getValue().getValue()
-                    .toString());
+                LOG.info("uuid = {} \t service end point = {}", entry.getKey(), entry.getValue().getValue());
             }
         } else {
             LOG.info("Static map is empty - Nothing to display");

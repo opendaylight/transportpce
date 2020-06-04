@@ -10,12 +10,8 @@ package org.opendaylight.transportpce.tapi.validation.checks;
 import org.opendaylight.transportpce.servicehandler.validation.checks.ComplianceCheckResult;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.ServiceType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.input.ConnectivityConstraint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class ConnConstraintCheck {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ConnConstraintCheck.class);
 
     private ConnConstraintCheck() {
     }
