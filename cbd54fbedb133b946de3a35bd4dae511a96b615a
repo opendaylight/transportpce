@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54bcc8d2_f95043fa",
+        "filename": "tox.ini",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T09:59:45Z",
+      "side": 1,
+      "message": "@Bala @Shweta: please can you check this new syntax is OK with MAC OS / BSD ?",
+      "range": {
+        "startLine": 30,
+        "startChar": 158,
+        "endLine": 30,
+        "endChar": 259
+      },
+      "revId": "cbd54fbedb133b946de3a35bd4dae511a96b615a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
