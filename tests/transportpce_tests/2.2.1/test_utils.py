@@ -23,6 +23,15 @@ TYPE_APPLICATION_JSON = {'content-type': 'application/json'}
 honeynode_executable = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "honeynode", "2.2.1", "honeynode-simulator", "honeycomb-tpce")
+
+# TODO: Need needs to be fixed
+if os.name == 'posix':
+    honeynode_executable = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "..", "..", "honeynode", "2.2.1", "honeynode-distribution", "target",
+        "honeynode-distribution-1.19.04-hc", "honeynode-distribution-1.19.04",
+        "honeycomb-tpce")
+
 samples_directory = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "sample_configs", "openroadm", "2.2.1")
@@ -33,42 +42,42 @@ log_directory = os.path.dirname(os.path.realpath(__file__))
 def start_xpdra_honeynode():
     log_file = os.path.join(log_directory, "oper-XPDRA.log")
     process = start_node(log_file, "17840", "oper-XPDRA.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
+    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100)
     return process
 
 
 def start_roadma_honeynode():
     log_file = os.path.join(log_directory, "oper-ROADMA.log")
     process = start_node(log_file, "17841", "oper-ROADMA.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
+    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100)
     return process
 
 
 def start_roadmb_honeynode():
     log_file = os.path.join(log_directory, "oper-ROADMB.log")
     process = start_node(log_file, "17842", "oper-ROADMB.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
+    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100)
     return process
 
 
 def start_roadmc_honeynode():
     log_file = os.path.join(log_directory, "oper-ROADMC.log")
     process = start_node(log_file, "17843", "oper-ROADMC.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
+    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100)
     return process
 
 
 def start_xpdrc_honeynode():
     log_file = os.path.join(log_directory, "oper-XPDRC.log")
     process = start_node(log_file, "17844", "oper-XPDRC.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
+    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100)
     return process
 
 
 def start_spdra_honeynode():
     log_file = os.path.join(log_directory, "oper-SPDRAv2.log")
     process = start_node(log_file, "17845", "oper-SPDRAv2.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
+    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100)
     return process
 
 
