@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "55807774_78f6544b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T09:54:32Z",
+      "side": 1,
+      "message": "I rather think that my points are misunderstood.\nLet\u0027s assume that I merge PS3 as it is and that I want to do some deeper refactoring on test_utils.py in a later change.\nWhen I will try to backport that work on stable/sodium, I will need to backport your change first since test_utils.py has been almost completely rewritten here. Otherwise, git cherry-pick won\u0027t be able to find the character sequences where to apply the patch modifications.\nBut since TAPI is not supported in sodium, I won\u0027t have any other choice than to modify your change to remove TAPI stuff.\nConclusion: this job will have to be done sooner or later.",
+      "parentUuid": "3955b1fd_d199bc93",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 82
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec5d3b13_13ea4e93",
         "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
         "patchSetId": 2
@@ -168,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "ea896cb6_8b84d17b",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T09:54:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2f65654e_f3370340",
+      "range": {
+        "startLine": 3,
+        "startChar": 21,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e62f86b_7372b797",
         "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
         "patchSetId": 2
@@ -200,6 +248,24 @@
       "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e58604c_6a08c22e",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T09:54:32Z",
+      "side": 1,
+      "message": "I am not saying anything else.",
+      "parentUuid": "a0da1c4b_f84c7091",
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -274,6 +340,30 @@
     },
     {
       "key": {
+        "uuid": "594ae08f_a838e988",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T09:54:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "213df6bd_5a29349f",
+      "range": {
+        "startLine": 107,
+        "startChar": 1,
+        "endLine": 122,
+        "endChar": 34
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c90b26a_183d2d39",
         "filename": "tox.ini",
         "patchSetId": 2
@@ -344,6 +434,30 @@
     },
     {
       "key": {
+        "uuid": "798741de_90ba3b56",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T09:54:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1a860104_ba9393ae",
+      "range": {
+        "startLine": 30,
+        "startChar": 174,
+        "endLine": 30,
+        "endChar": 182
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "571aae0f_71f98575",
         "filename": "tox.ini",
         "patchSetId": 2
@@ -388,6 +502,30 @@
       "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8047fd3b_ecf0b49e",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T09:54:32Z",
+      "side": 1,
+      "message": "OK I found it.",
+      "parentUuid": "701db9fa_56caa969",
+      "range": {
+        "startLine": 48,
+        "startChar": 17,
+        "endLine": 48,
+        "endChar": 77
+      },
+      "revId": "2dd278ded4f8e38cadb37eabcecfcbf04e1d6f32",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
