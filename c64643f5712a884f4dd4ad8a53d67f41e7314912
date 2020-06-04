@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "992278a0_7c972940",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T13:47:32Z",
+      "side": 1,
+      "message": "it would be coherent to create constants for the DSR strings too since their use is quite similar to OTSI ones.",
+      "range": {
+        "startLine": 343,
+        "startChar": 64,
+        "endLine": 343,
+        "endChar": 70
+      },
+      "revId": "c64643f5712a884f4dd4ad8a53d67f41e7314912",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "977f2132_7eefd891",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/validation/checks/TopoConstraintCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T13:47:32Z",
+      "side": 1,
+      "message": "Maybe this can be put in SuppressWarnings justification attributes if there is one.",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 83
+      },
+      "revId": "c64643f5712a884f4dd4ad8a53d67f41e7314912",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
