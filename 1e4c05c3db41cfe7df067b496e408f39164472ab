@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b193b169_77881bfa",
+        "filename": "networkmodel/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "The version should not be forced. (if it really needs to, at lease use a variable.)",
+      "range": {
+        "startLine": 50,
+        "startChar": 6,
+        "endLine": 50,
+        "endChar": 31
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a64b8f07_c4f90b4e",
+        "filename": "networkmodel/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 56,
+        "startChar": 6,
+        "endLine": 56,
+        "endChar": 31
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf32401f_cc891a54",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "It can be regrouped. nodeBldr is no more used after nodeInfo declaration.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 45
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67417c47_b6ade854",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 74
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a71e608c_8a169f7a",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "can be factorized",
+      "range": {
+        "startLine": 62,
+        "startChar": 1,
+        "endLine": 68,
+        "endChar": 60
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8689e12d_850eae47",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 24
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3055df5e_6c3efd9f",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopologyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "should stay sticked to ease revisions upgrades",
+      "range": {
+        "startLine": 340,
+        "startChar": 97,
+        "endLine": 341,
+        "endChar": 31
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8436395_e9005ecd",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopologyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 342,
+        "startChar": 91,
+        "endLine": 343,
+        "endChar": 31
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85cbbdfc_017c063e",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopologyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 367,
+        "startChar": 91,
+        "endLine": 368,
+        "endChar": 31
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "299d1bb6_333ca1e7",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/TpceNetworkTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "should stay sticked to ease revision upgrades",
+      "range": {
+        "startLine": 103,
+        "startChar": 85,
+        "endLine": 104,
+        "endChar": 22
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1492aaf2_df3dd534",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/TpceNetworkTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-04T10:24:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 110,
+        "startChar": 95,
+        "endLine": 111,
+        "endChar": 30
+      },
+      "revId": "1e4c05c3db41cfe7df067b496e408f39164472ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
