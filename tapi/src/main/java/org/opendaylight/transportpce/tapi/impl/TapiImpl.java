@@ -19,8 +19,6 @@ import org.opendaylight.transportpce.tapi.utils.MappingUtils;
 import org.opendaylight.transportpce.tapi.utils.TapiUtils;
 import org.opendaylight.transportpce.tapi.validation.CreateConnectivityServiceValidation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateOutput;
-//import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameBuilder;
@@ -150,11 +148,7 @@ public class TapiImpl implements TapiConnectivityService {
     @Override
     public ListenableFuture<RpcResult<DeleteConnectivityServiceOutput>> deleteConnectivityService(
         DeleteConnectivityServiceInput input) {
-        LOG.info("RPC delete-connectivity received");
-        //ServiceDeleteInput inputSh = null;
-        //this.serviceHandler.serviceDelete(inputSh);
-        this.serviceHandler.serviceDelete(null);
-        //TODO to continue...
+        //TODO Auto-generated method stub
         return null;
     }
 
