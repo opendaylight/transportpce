@@ -45,6 +45,30 @@
       "revId": "c64643f5712a884f4dd4ad8a53d67f41e7314912",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a95fb33_1596b423",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/validation/checks/TopoConstraintCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-04T16:05:04Z",
+      "side": 1,
+      "message": "No it cannot. There is no attribute like that for SuppressWarnings",
+      "parentUuid": "977f2132_7eefd891",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 83
+      },
+      "revId": "c64643f5712a884f4dd4ad8a53d67f41e7314912",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
