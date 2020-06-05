@@ -65,6 +65,12 @@
             <version>3.0.2</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>test-common</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 <!-- skipping test since this is a util project / folder -->
@@ -75,7 +81,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.18.1</version>
         <configuration>
-          <skipTests>true</skipTests>
+          <skipTests>false</skipTests>
         </configuration>
       </plugin>
     </plugins>

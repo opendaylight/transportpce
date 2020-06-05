@@ -26,6 +26,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -45,6 +46,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 
 @RunWith(MockitoJUnitRunner.class)
+@Ignore
 public class DeviceTransactionManagerTest {
 
     @Mock private MountPointService mountPointServiceMock;
