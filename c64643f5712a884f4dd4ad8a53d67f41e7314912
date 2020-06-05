@@ -93,6 +93,30 @@
       "revId": "c64643f5712a884f4dd4ad8a53d67f41e7314912",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f54798f2_88dd72db",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/validation/checks/TopoConstraintCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-05T07:25:55Z",
+      "side": 1,
+      "message": "OK so the java lang prototype is different from the FindBugs impl",
+      "parentUuid": "7a95fb33_1596b423",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 83
+      },
+      "revId": "c64643f5712a884f4dd4ad8a53d67f41e7314912",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
