@@ -155,23 +155,24 @@ public final class OpenRoadmOtnTopology {
     public static TopologyShard updateOtnLinks(List<Link> suppOdu4Links, List<TerminationPoint> oldTps,
         String serviceRate, Short tribPortNb, Short tribSoltNb, boolean isDeletion) {
         List<Link> links = new ArrayList<>();
+        Long bwIncr = 10000L;
+        if ("1G".equals(serviceRate)) {
+            bwIncr = 1000L;
+        }
         for (Link link : suppOdu4Links) {
             if (link.augmentation(Link1.class) != null && link.augmentation(Link1.class).getAvailableBandwidth() != null
                 && link.augmentation(Link1.class).getUsedBandwidth() != null) {
-                Long avlBwIncr = 10000L;
-                Long usedBwIncr = 10000L;
-                if ("1G".equals(serviceRate)) {
-                    avlBwIncr = 1000L;
-                    usedBwIncr = 1000L;
-                }
                 Uint32 avlBw = link.augmentation(Link1.class).getAvailableBandwidth();
                 Uint32 usedBw = link.augmentation(Link1.class).getUsedBandwidth();
+                if (avlBw.toJava() < bwIncr) {
+                    bwIncr = 0L;
+                }
                 if (isDeletion) {
-                    links.add(updateOtnLinkBwParameters(link, avlBw.toJava() + avlBwIncr,
-                        usedBw.toJava() - usedBwIncr));
+                    links.add(updateOtnLinkBwParameters(link, avlBw.toJava() + bwIncr,
+                        usedBw.toJava() - bwIncr));
                 } else {
-                    links.add(updateOtnLinkBwParameters(link, avlBw.toJava() - avlBwIncr,
-                        usedBw.toJava() + usedBwIncr));
+                    links.add(updateOtnLinkBwParameters(link, avlBw.toJava() - bwIncr,
+                        usedBw.toJava() + bwIncr));
                 }
             } else {
                 LOG.error("Error with otn parameters of supported link {}", link.getLinkId().getValue());
@@ -179,11 +180,14 @@ public final class OpenRoadmOtnTopology {
         }
         List<TerminationPoint> tps = new ArrayList<>();
         for (TerminationPoint tp : oldTps) {
-            tps.add(updateNodeTpTsPool(tp, serviceRate, tribPortNb, tribSoltNb, isDeletion));
+            if (bwIncr != 0) {
+                tps.add(updateNodeTpTsPool(tp, serviceRate, tribPortNb, tribSoltNb, isDeletion));
+            }
         }
         if (!links.isEmpty() && !tps.isEmpty()) {
             return new TopologyShard(null, links, tps);
         } else {
+            LOG.error("unable to update otn links");
             return new TopologyShard(null, null, null);
         }
     }
@@ -215,7 +219,6 @@ public final class OpenRoadmOtnTopology {
             = new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1Builder()
             .setOtnLinkType(linkType).build();
         Link1 otnLink1 = new Link1Builder()
-            .setLinkType(OpenroadmLinkType.OTNLINK)
             .setAvailableBandwidth(Uint32.valueOf(100000))
             .setUsedBandwidth(Uint32.valueOf(0))
             .build();
@@ -232,13 +235,21 @@ public final class OpenRoadmOtnTopology {
         LinkBuilder ietfLinkAZBldr = TopologyUtils.createLink(nodeATopo, nodeZTopo, tpA, tpZ, linkIdPrefix);
         ietfLinkAZBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1.class,
             tpceLink1)
-            .addAugmentation(Link1.class, otnLink1);
+            .addAugmentation(Link1.class, otnLink1)
+            .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder(ietfLinkAZBldr
+                    .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class))
+                .setLinkType(OpenroadmLinkType.OTNLINK).build());
         links.add(ietfLinkAZBldr.build());
         // create link Z-A
         LinkBuilder ietfLinkZABldr = TopologyUtils.createLink(nodeZTopo, nodeATopo, tpZ, tpA, linkIdPrefix);
         ietfLinkZABldr.addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1.class,
             tpceLink1)
-            .addAugmentation(Link1.class, otnLink1);
+            .addAugmentation(Link1.class, otnLink1)
+            .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder(ietfLinkZABldr
+                    .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class))
+                .setLinkType(OpenroadmLinkType.OTNLINK).build());
         links.add(ietfLinkZABldr.build());
         return links;
     }
