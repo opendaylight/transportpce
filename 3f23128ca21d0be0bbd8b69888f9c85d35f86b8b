@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "30fd5bc3_d6ef76df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-05T15:47:15Z",
+      "side": 1,
+      "message": "TAPI Sonar issues",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 16
+      },
+      "revId": "3f23128ca21d0be0bbd8b69888f9c85d35f86b8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "17693b75_9871b9ed",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
         "patchSetId": 4
