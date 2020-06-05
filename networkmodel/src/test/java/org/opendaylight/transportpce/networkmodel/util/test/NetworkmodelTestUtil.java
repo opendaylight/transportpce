@@ -7,20 +7,51 @@
  */
 package org.opendaylight.transportpce.networkmodel.util.test;
 
-
+import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
+import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.ODTU4TsAllocated;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.networks.network.node.termination.point.TpSupportedInterfaces;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.networks.network.node.termination.point.TpSupportedInterfacesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.networks.network.node.termination.point.XpdrTpPortConnectionAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.If100GE;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev181130.xpdr.otn.tp.attributes.OdtuTpnPoolBuilder;
+import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.OtnLinkType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.DestinationBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPointBuilder;
+import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +82,125 @@ public final class NetworkmodelTestUtil {
             .build();
         LOG.info("mapping = {}", mappingNode.toString());
         return mappingNode;
+    }
+
+    public static List<Link> createSuppOTNLinks(OtnLinkType type, int availBW) {
+        String prefix = null;
+        if (OtnLinkType.OTU4.equals(type)) {
+            prefix = "OTU4-";
+        } else if (OtnLinkType.ODTU4.equals(type)) {
+            prefix = "ODU4-";
+        }
+        Link linkAZ = new LinkBuilder()
+            .setLinkId(new LinkId(prefix + "SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1"))
+            .setSource(new SourceBuilder()
+                .setSourceNode(new NodeId("SPDRA-XPDR1"))
+                .setSourceTp("XPDR1-NETWORK1").build())
+            .setDestination(new DestinationBuilder()
+                .setDestNode(new NodeId("SPDRZ-XPDR1"))
+                .setDestTp("XPDR1-NETWORK1").build())
+            .addAugmentation(Link1.class, new Link1Builder()
+                .setLinkType(OpenroadmLinkType.OTNLINK)
+                .setOppositeLink(new LinkId(prefix + "SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1")).build())
+            .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1.class,
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1Builder()
+                .setAvailableBandwidth(Uint32.valueOf(availBW))
+                .setUsedBandwidth(Uint32.valueOf(100000 - availBW)).build())
+            .addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1.class,
+                new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1Builder()
+                .setOtnLinkType(type).build())
+            .build();
+        Link linkZA = new LinkBuilder()
+            .setLinkId(new LinkId(prefix + "SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1"))
+            .setSource(new SourceBuilder()
+                .setSourceNode(new NodeId("SPDRZ-XPDR1"))
+                .setSourceTp("XPDR1-NETWORK1").build())
+            .setDestination(new DestinationBuilder()
+                .setDestNode(new NodeId("SPDRA-XPDR1"))
+                .setDestTp("XPDR1-NETWORK1").build())
+            .addAugmentation(Link1.class, new Link1Builder()
+                .setLinkType(OpenroadmLinkType.OTNLINK)
+                .setOppositeLink(new LinkId(prefix + "SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1")).build())
+            .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1.class,
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1Builder()
+                .setAvailableBandwidth(Uint32.valueOf(availBW))
+                .setUsedBandwidth(Uint32.valueOf(100000 - availBW)).build())
+            .addAugmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1.class,
+                new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1Builder()
+                .setOtnLinkType(type).build())
+            .build();
+        List<Link> links = new ArrayList<>();
+        links.add(linkAZ);
+        links.add(linkZA);
+        return links;
+    }
+
+    public static List<TerminationPoint> createTpList(boolean withTpnTsPool) {
+        SupportedInterfaceCapability supCapa = new SupportedInterfaceCapabilityBuilder()
+            .setIfCapType(IfOCHOTU4ODU4.class)
+            .build();
+        List<SupportedInterfaceCapability> supInterCapaList = new ArrayList<>();
+        supInterCapaList.add(supCapa);
+        TpSupportedInterfaces tpSuppInter = new TpSupportedInterfacesBuilder()
+            .setSupportedInterfaceCapability(supInterCapaList)
+            .build();
+        XpdrTpPortConnectionAttributesBuilder xtpcaBldr = new XpdrTpPortConnectionAttributesBuilder()
+            .setRate(ODU4.class);
+        if (withTpnTsPool) {
+            List<Uint16> tsPool = new ArrayList<>();
+            for (int i = 0; i < 80; i++) {
+                tsPool.add(Uint16.valueOf(i + 1));
+            }
+            xtpcaBldr.setTsPool(tsPool);
+            List<Uint16> tpnPool = new ArrayList<>();
+            for (int i = 1; i <= 80; i++) {
+                tpnPool.add(Uint16.valueOf(i));
+            }
+            xtpcaBldr.setOdtuTpnPool(ImmutableList.of(new OdtuTpnPoolBuilder().setOdtuType(ODTU4TsAllocated.class)
+                .setTpnPool(tpnPool).build()));
+        }
+        TerminationPoint1 otnTp1 = new TerminationPoint1Builder()
+            .setTpSupportedInterfaces(tpSuppInter)
+            .setXpdrTpPortConnectionAttributes(xtpcaBldr.build())
+            .build();
+        SupportingTerminationPoint supTermPointA = new SupportingTerminationPointBuilder()
+            .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
+            .setNodeRef(new NodeId("SPDRA-XPDR1"))
+            .setTpRef("XPDR1-NETWORK1")
+            .build();
+        List<SupportingTerminationPoint> supTermPointListA = new ArrayList<>();
+        supTermPointListA.add(supTermPointA);
+        TerminationPoint tpA = new TerminationPointBuilder()
+            .setTpId(new TpId("XPDR1-NETWORK1"))
+            .setSupportingTerminationPoint(supTermPointListA)
+            .addAugmentation(TerminationPoint1.class, otnTp1)
+            .addAugmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class,
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder()
+                .setTpType(OpenroadmTpType.XPONDERNETWORK)
+                .build())
+            .build();
+        SupportingTerminationPoint supTermPointZ = new SupportingTerminationPointBuilder()
+            .setNetworkRef(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))
+            .setNodeRef(new NodeId("SPDRZ-XPDR1"))
+            .setTpRef("XPDR1-NETWORK1")
+            .build();
+        List<SupportingTerminationPoint> supTermPointListZ = new ArrayList<>();
+        supTermPointListZ.add(supTermPointZ);
+        TerminationPoint tpZ = new TerminationPointBuilder()
+            .setTpId(new TpId("XPDR1-NETWORK1"))
+            .setSupportingTerminationPoint(supTermPointListZ)
+            .addAugmentation(TerminationPoint1.class, otnTp1)
+            .addAugmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class,
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder()
+                .setTpType(OpenroadmTpType.XPONDERNETWORK)
+                .build())
+            .build();
+        List<TerminationPoint> tps = new ArrayList<>();
+        tps.add(tpA);
+        tps.add(tpZ);
+        return tps;
     }
 
     private static List<Mapping> createDegreeMappings(List<Mapping> mappingList, int degNbStart, int degNbStop) {
