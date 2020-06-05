@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17693b75_9871b9ed",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-05T15:45:53Z",
+      "side": 1,
+      "message": "LF+indent would help readability here",
+      "range": {
+        "startLine": 178,
+        "startChar": 49,
+        "endLine": 179,
+        "endChar": 107
+      },
+      "revId": "3f23128ca21d0be0bbd8b69888f9c85d35f86b8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "233c0a14_7d06b153",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-05T15:45:53Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 188,
+        "startChar": 49,
+        "endLine": 189,
+        "endChar": 107
+      },
+      "revId": "3f23128ca21d0be0bbd8b69888f9c85d35f86b8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97129d79_dcc75453",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-05T15:45:53Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 232,
+        "startChar": 66,
+        "endLine": 233,
+        "endChar": 107
+      },
+      "revId": "3f23128ca21d0be0bbd8b69888f9c85d35f86b8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4f616dc6_456d6a0e",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-05T15:45:53Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 242,
+        "startChar": 66,
+        "endLine": 243,
+        "endChar": 107
+      },
+      "revId": "3f23128ca21d0be0bbd8b69888f9c85d35f86b8b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
