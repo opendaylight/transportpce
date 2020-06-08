@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b40a0a5b_178cab9b",
+        "filename": "common/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-08T14:12:38Z",
+      "side": 1,
+      "message": "since test-common/pom.xml includes a transportpce-common dependencies, this creates an unresolvable cyclic condition",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 21
+      },
+      "revId": "255285ed1796cc2bb48cdc91e470def9de2e92a3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
