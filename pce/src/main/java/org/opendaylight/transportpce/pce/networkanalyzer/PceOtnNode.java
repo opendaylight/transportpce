@@ -240,7 +240,7 @@ public class PceOtnNode implements PceNode {
             && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getOdtuType()
                 .equals(ODTU4TsAllocated.class)
-            && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getTpnPool().isEmpty()
+            && !ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getTpnPool().isEmpty()
             && (ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb)) {
             return true;
         }
