@@ -62,7 +62,7 @@ def start_tpce():
         print("starting LIGHTY.IO TransportPCE build...")
         executable = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
-            "..", "..", "..", "lighty", "target", "lighty-transportpce-12.1.0-SNAPSHOT",
+            "..", "..", "..", "lighty", "target", "tpce",
             "clean-start-controller.sh")
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
