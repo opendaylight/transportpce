@@ -3,7 +3,8 @@ import subprocess
 
 honeynode_executable = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
-    "..", "..", "honeynode", "1.2.1", "honeynode-simulator", "honeycomb-tpce")
+    "..", "..", "honeynode", "1.2.1", "honeynode-distribution", "target", "honeynode-distribution-1.19.04-hc",
+    "honeynode-distribution-1.19.04", "honeycomb-tpce")
 samples_directory = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "sample_configs", "openroadm", "1.2.1")
@@ -70,7 +71,7 @@ def start_tpce():
         print("starting LIGHTY.IO TransportPCE build...")
         executable = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
-            "..", "..", "..", "lighty", "target", "lighty-transportpce-12.1.0-SNAPSHOT",
+            "..", "..", "..", "lighty", "target", "lighty-transportpce-12.0.0-SNAPSHOT",
             "clean-start-controller.sh")
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
