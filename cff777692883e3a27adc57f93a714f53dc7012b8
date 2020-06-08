@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4926a77b_fa4735a7",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNodeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-08T13:03:42Z",
+      "side": 1,
+      "message": "Could be factorized",
+      "range": {
+        "startLine": 58,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 36
+      },
+      "revId": "cff777692883e3a27adc57f93a714f53dc7012b8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c58ca1cd_577dd80d",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNodeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-08T13:03:42Z",
+      "side": 1,
+      "message": "Is it normal nothing (from line 87) is actually verified (with assert for example)?",
+      "revId": "cff777692883e3a27adc57f93a714f53dc7012b8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
