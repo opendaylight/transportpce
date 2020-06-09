@@ -60,6 +60,11 @@
             <artifactId>transportpce-networkmodel</artifactId>
             <version>${transportpce.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>transportpce-tapimodels</artifactId>
+            <version>${transportpce.version}</version>
+        </dependency>
         <!-- TPCE Models - END -->
 
         <!-- TPCE bundles - BEGIN -->
@@ -76,6 +81,11 @@
         <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>transportpce-servicehandler</artifactId>
+            <version>${transportpce.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>transportpce-tapi</artifactId>
             <version>${transportpce.version}</version>
         </dependency>
         <!-- TPCE bundles - END -->
