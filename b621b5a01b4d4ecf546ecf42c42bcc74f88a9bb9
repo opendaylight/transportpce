@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "3fbb0081_c42156ca",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-09T14:37:28Z",
+      "side": 1,
+      "message": "misleading indentation",
+      "range": {
+        "startLine": 175,
+        "startChar": 12,
+        "endLine": 175,
+        "endChar": 16
+      },
+      "revId": "b621b5a01b4d4ecf546ecf42c42bcc74f88a9bb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcb2a04f_69a13df5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNode.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-09T14:37:28Z",
+      "side": 1,
+      "message": "misleading indetation",
+      "range": {
+        "startLine": 177,
+        "startChar": 16,
+        "endLine": 177,
+        "endChar": 19
+      },
+      "revId": "b621b5a01b4d4ecf546ecf42c42bcc74f88a9bb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0c9a3dd_81ff93a2",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNodeTest.java",
         "patchSetId": 3
