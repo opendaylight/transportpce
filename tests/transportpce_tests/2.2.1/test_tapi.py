@@ -36,8 +36,6 @@ class TransportTapitesting(unittest.TestCase):
     # START_IGNORE_XTESTING
 
     @classmethod
-    @unittest.skipIf("USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True',
-                     "not supported for lighty")
     def setUpClass(cls):
         cls.init_failed = False
         karaf_log = os.path.join(
@@ -48,36 +46,36 @@ class TransportTapitesting(unittest.TestCase):
 
         print("starting opendaylight...")
         cls.odl_process = test_utils.start_tpce()
-        found = test_utils.wait_until_log_contains(karaf_log, searched_expr, time_to_wait=60)
-        cls.init_failed = not found
-        if not cls.init_failed:
-            print("opendaylight started")
-
-            print("installing tapi feature...")
-            result = test_utils.install_karaf_feature("odl-transportpce-tapi")
-            if result.returncode != 0:
-                cls.init_failed = True
-            print("Restarting opendaylight...")
-            test_utils.shutdown_process(cls.odl_process)
-            cls.odl_process = test_utils.start_tpce()
+        if "USE_LIGHTY" not in os.environ or os.environ['USE_LIGHTY'] != 'True':
             found = test_utils.wait_until_log_contains(karaf_log, searched_expr, time_to_wait=60)
             cls.init_failed = not found
             if not cls.init_failed:
-                print("starting XPDRA...")
-                cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
+                print("opendaylight started")
+                print("installing tapi feature...")
+                result = test_utils.install_karaf_feature("odl-transportpce-tapi")
+                if result.returncode != 0:
+                    cls.init_failed = True
+                print("Restarting opendaylight...")
+                test_utils.shutdown_process(cls.odl_process)
+                cls.odl_process = test_utils.start_tpce()
+                found = test_utils.wait_until_log_contains(karaf_log, searched_expr, time_to_wait=60)
+                cls.init_failed = not found
+        if not cls.init_failed:
+            print("starting XPDRA...")
+            cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
 
-                print("starting ROADMA...")
-                cls.honeynode_process2 = test_utils.start_roadma_honeynode()
+            print("starting ROADMA...")
+            cls.honeynode_process2 = test_utils.start_roadma_honeynode()
 
-                print("starting ROADMC...")
-                cls.honeynode_process3 = test_utils.start_roadmc_honeynode()
+            print("starting ROADMC...")
+            cls.honeynode_process3 = test_utils.start_roadmc_honeynode()
 
-                print("starting XPDRC...")
-                cls.honeynode_process4 = test_utils.start_xpdrc_honeynode()
+            print("starting XPDRC...")
+            cls.honeynode_process4 = test_utils.start_xpdrc_honeynode()
 
-                print("starting SPDRA...")
-                cls.honeynode_process5 = test_utils.start_spdra_honeynode()
-                print("all honeynodes started")
+            print("starting SPDRA...")
+            cls.honeynode_process5 = test_utils.start_spdra_honeynode()
+            print("all honeynodes started")
 
     @classmethod
     def tearDownClass(cls):
