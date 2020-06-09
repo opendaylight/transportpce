@@ -36,8 +36,6 @@ class TransportTapitesting(unittest.TestCase):
     # START_IGNORE_XTESTING
 
     @classmethod
-    @unittest.skipIf("USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True',
-                     "not supported for lighty")
     def setUpClass(cls):
         cls.init_failed = False
         karaf_log = os.path.join(
