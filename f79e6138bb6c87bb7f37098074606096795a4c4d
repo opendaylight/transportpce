@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64da354f_ead37205",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/NetConfTopologyListenerTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-09T10:19:17Z",
+      "side": 1,
+      "message": "why not extend org.opendaylight.transportpce.test.AbstractTest or org.opendaylight.mdsal.binding.dom.adapter.test.AbstractConcurrentDataBrokerTest\nto avoid this setup ?",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 65
+      },
+      "revId": "f79e6138bb6c87bb7f37098074606096795a4c4d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
