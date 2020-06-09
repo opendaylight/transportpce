@@ -134,6 +134,17 @@ public final class TPCEUtils {
             org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.$YangModuleInfoImpl.getInstance(),
 
+            //tapi models
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.oam.rev181210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.odu.rev181210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.dsr.rev181210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.photonic.media.rev181210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.path.computation.rev181210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.eth.rev181210.$YangModuleInfoImpl.getInstance(),
+
             // API models / opendaylight
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.$YangModuleInfoImpl.getInstance(),
@@ -167,7 +178,8 @@ public final class TPCEUtils {
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.extension.rev131210.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.monitoring.rev101004.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.netconf.notifications.rev120206.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.restconf.rev131019.$YangModuleInfoImpl.getInstance()
+            org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.restconf.rev131019.$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.tapi.rev180928.$YangModuleInfoImpl.getInstance()
     );
 
     public static final Set<YangModuleInfo> yangModels = Stream.concat(
