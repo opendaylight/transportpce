@@ -105,9 +105,9 @@ class TransportPCEtesting(unittest.TestCase):
              'supporting-port': 'CP1-SFP4-P1',
              'supporting-circuit-pack-name': 'CP1-SFP4',
              'logical-connection-point': 'XPDR1-CLIENT1',
-              'port-direction': 'bidirectional',
+             'port-direction': 'bidirectional',
              'port-qual': 'xpdr-client',
-              'lcp-hash-val': '8b3efff522736722500b5e68fb6e696e'},
+             'lcp-hash-val': '8b3efff522736722500b5e68fb6e696e'},
             res['mapping'])
 
     def test_03_get_portmapping_NETWORK1(self):
@@ -204,7 +204,7 @@ class TransportPCEtesting(unittest.TestCase):
         '''
         self.assertDictEqual(input_dict,
                              extract_a_from_b(input_dict,
-                                  res['interface'][0])
+                                              res['interface'][0])
                              )
         self.assertDictEqual(
             {u'frequency': 196.1, u'rate': u'org-openroadm-common-types:R100G',
@@ -278,16 +278,16 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"logical-connection-point": "XPDR1-NETWORK1",
-            "supporting-port": "CP1-CFP0-P1",
-            "supported-interface-capability": [
-                "org-openroadm-port-types:if-OCH-OTU4-ODU4"
-            ],
-            "port-direction": "bidirectional",
-            "port-qual": "xpdr-network",
-            "supporting-circuit-pack-name": "CP1-CFP0",
-            "xponder-type": "mpdr",
-            "supporting-odu4": "XPDR1-NETWORK1-ODU4",
-             "lcp-hash-val": "1021db8d2affe7386705c438c67ea21f"
+             "supporting-port": "CP1-CFP0-P1",
+             "supported-interface-capability": [
+                 "org-openroadm-port-types:if-OCH-OTU4-ODU4"
+             ],
+                "port-direction": "bidirectional",
+                "port-qual": "xpdr-network",
+                "supporting-circuit-pack-name": "CP1-CFP0",
+                "xponder-type": "mpdr",
+                "supporting-odu4": "XPDR1-NETWORK1-ODU4",
+                "lcp-hash-val": "1021db8d2affe7386705c438c67ea21f"
              },
             res['mapping'])
 
@@ -314,7 +314,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(input_dict_2,
                              extract_a_from_b(input_dict_2,
                                               res['interface'][0][
-                                                'org-openroadm-otn-odu-interfaces:odu'])
+                                                  'org-openroadm-otn-odu-interfaces:odu'])
 
                              )
         '''
@@ -408,16 +408,16 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOdu',
                         'supporting-port': 'CP1-SFP4-P1'}
         input_dict_2 = {
-          'odu-function': 'org-openroadm-otn-common-types:ODU-TTP-CTP',
-          'rate': 'org-openroadm-otn-common-types:ODU2e',
-          'monitoring-mode': 'terminated'}
+            'odu-function': 'org-openroadm-otn-common-types:ODU-TTP-CTP',
+            'rate': 'org-openroadm-otn-common-types:ODU2e',
+            'monitoring-mode': 'terminated'}
 
         self.assertDictEqual(input_dict_1, extract_a_from_b(input_dict_1,
-                                                          res['interface'][0])
+                                                            res['interface'][0])
                              )
         self.assertDictEqual(input_dict_2,
                              extract_a_from_b(input_dict_2, res['interface'][0][
-                               'org-openroadm-otn-odu-interfaces:odu'])
+                                 'org-openroadm-otn-odu-interfaces:odu'])
                              )
 
         '''
@@ -451,9 +451,9 @@ class TransportPCEtesting(unittest.TestCase):
                         'type': 'org-openroadm-interfaces:otnOdu',
                         'supporting-port': 'CP1-CFP0-P1'}
         input_dict_2 = {
-          'odu-function': 'org-openroadm-otn-common-types:ODU-CTP',
-          'rate': 'org-openroadm-otn-common-types:ODU2e',
-          'monitoring-mode': 'monitored'}
+            'odu-function': 'org-openroadm-otn-common-types:ODU-CTP',
+            'rate': 'org-openroadm-otn-common-types:ODU2e',
+            'monitoring-mode': 'monitored'}
 
         input_dict_3 = {'trib-port-number': 1}
 
@@ -464,14 +464,14 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(input_dict_2,
                              extract_a_from_b(input_dict_2,
                                               res['interface'][0][
-                                                'org-openroadm-otn-odu-interfaces:odu']
+                                                  'org-openroadm-otn-odu-interfaces:odu']
                                               ))
 
         self.assertDictEqual(input_dict_3,
                              extract_a_from_b(input_dict_3,
                                               res['interface'][0][
-                                                'org-openroadm-otn-odu-interfaces:odu'][
-                                                'parent-odu-allocation']))
+                                                  'org-openroadm-otn-odu-interfaces:odu'][
+                                                  'parent-odu-allocation']))
 
         '''
         self.assertDictContainsSubset({'name': 'XPDR1-NETWORK1-ODU2e-service1', 'administrative-state': 'inService',
@@ -489,8 +489,8 @@ class TransportPCEtesting(unittest.TestCase):
         '''
         self.assertIn(1,
                       res['interface'][0][
-                        'org-openroadm-otn-odu-interfaces:odu'][
-                        'parent-odu-allocation']['trib-slots'])
+                          'org-openroadm-otn-odu-interfaces:odu'][
+                          'parent-odu-allocation']['trib-slots'])
 
     def test_15_check_ODU2E_connection(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
@@ -503,9 +503,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {
-          'connection-name':
+            'connection-name':
             'XPDR1-CLIENT1-ODU2e-service1-x-XPDR1-NETWORK1-ODU2e-service1',
-          'direction': 'bidirectional'
+            'direction': 'bidirectional'
         }
 
         self.assertDictEqual(input_dict_1,
