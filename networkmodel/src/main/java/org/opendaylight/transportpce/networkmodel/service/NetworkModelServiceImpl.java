@@ -215,8 +215,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             NodeTypes nodeType = this.portMapping.getNode(nodeId).getNodeInfo().getNodeType();
             if (nodeType.getIntValue() == 2 && deviceVersion.getIntValue() != 1) {
                 TopologyShard otnTopologyShard = this.otnTopologyShardMountedDevice.get(nodeId);
-                LOG.info("suppression de otnTopologyShard = {}", otnTopologyShard.toString());
                 if (otnTopologyShard != null) {
+                    LOG.info("suppression de otnTopologyShard = {}", otnTopologyShard.toString());
                     for (Node otnTopologyNode : otnTopologyShard.getNodes()) {
                         LOG.info("deleting node {} in {}", otnTopologyNode.getNodeId().getValue(),
                             NetworkUtils.OTN_NETWORK_ID);
