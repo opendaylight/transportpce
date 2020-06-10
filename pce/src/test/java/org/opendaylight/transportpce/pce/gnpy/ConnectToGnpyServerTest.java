@@ -10,13 +10,17 @@ package org.opendaylight.transportpce.pce.gnpy;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.ws.rs.core.Application;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ConnectToGnpyServerTest extends JerseyTest {
@@ -43,6 +47,15 @@ public class ConnectToGnpyServerTest extends JerseyTest {
                 Paths.get("src", "test", "resources", "gnpy", "gnpy_request.json"), StandardCharsets.US_ASCII));
         assertNotNull("result should not be null", result);
         assertTrue("Result should not be empty", !result.isEmpty());
+    }
+
+    @Test
+    public void readResponseTest() throws GnpyException {
+        InputStream anyInputStream = new ByteArrayInputStream("test data".getBytes());
+        ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
+        String result = connectToGnpy.readResponse(new InputStreamReader(anyInputStream));
+        Assert.assertNotNull(result);
+
     }
 
 }
