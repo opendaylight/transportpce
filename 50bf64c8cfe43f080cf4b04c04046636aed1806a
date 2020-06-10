@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1ba0e72a_176c58fd",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T11:10:25Z",
+      "side": 1,
+      "message": "nope. I\u0027ve moved it inside the USE_LIGHTY clause.",
+      "parentUuid": "4ce6cdd2_a37dd291",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 102
+      },
+      "revId": "50bf64c8cfe43f080cf4b04c04046636aed1806a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c2c3b04_54b78005",
         "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
         "patchSetId": 4
