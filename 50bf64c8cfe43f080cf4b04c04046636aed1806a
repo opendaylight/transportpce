@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "110f3bd8_da5caf84",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T09:20:55Z",
+      "side": 1,
+      "message": "NOK with lighty",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 102
+      },
+      "revId": "50bf64c8cfe43f080cf4b04c04046636aed1806a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c2c3b04_54b78005",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T09:20:55Z",
+      "side": 1,
+      "message": "NOK with lighty",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 93
+      },
+      "revId": "50bf64c8cfe43f080cf4b04c04046636aed1806a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94bc7560_9ae06e16",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T09:20:55Z",
+      "side": 1,
+      "message": "NOK with lighty",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 35
+      },
+      "revId": "50bf64c8cfe43f080cf4b04c04046636aed1806a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
