@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da932add_e4202d1e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T13:13:38Z",
+      "side": 1,
+      "message": "indent +4",
+      "range": {
+        "startLine": 241,
+        "startChar": 20,
+        "endLine": 241,
+        "endChar": 119
+      },
+      "revId": "351eee7626c3c0779066298bdde4105257027ed7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bd398cb_f6f6a351",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T13:13:38Z",
+      "side": 1,
+      "message": "indent +4",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 16
+      },
+      "revId": "351eee7626c3c0779066298bdde4105257027ed7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c900f1cb_98586543",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T13:13:38Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 250,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 65
+      },
+      "revId": "351eee7626c3c0779066298bdde4105257027ed7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c2daa54_00f7dfbb",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T13:13:38Z",
+      "side": 1,
+      "message": "misleading indentation",
+      "range": {
+        "startLine": 135,
+        "startChar": 40,
+        "endLine": 137,
+        "endChar": 48
+      },
+      "revId": "351eee7626c3c0779066298bdde4105257027ed7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bfbfbc9_6b4fa405",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T13:13:38Z",
+      "side": 1,
+      "message": "idem\netc",
+      "range": {
+        "startLine": 353,
+        "startChar": 50,
+        "endLine": 355,
+        "endChar": 69
+      },
+      "revId": "351eee7626c3c0779066298bdde4105257027ed7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
