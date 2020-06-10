@@ -17,11 +17,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
@@ -34,6 +37,15 @@ import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
 import org.opendaylight.transportpce.pce.utils.JsonUtil;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.Resource;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.TerminationPoint;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -42,7 +54,6 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 
 public class GnpyUtilitiesImplTest extends AbstractTest {
@@ -126,14 +137,50 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
-        assertNotNull("Hard constraints should be available",gnpyUtilitiesImpl.askNewPathFromGnpy(pceHardConstraints));
+        assertNotNull("Hard constraints should be available", gnpyUtilitiesImpl.askNewPathFromGnpy(pceHardConstraints));
 
 
     }
 
-    @Test(expected = Exception.class)
-    public void gnpyResponseOneDirectionTest() throws Exception {
-        gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction, PceTestData.getPCERequest());
-        gnpyUtilitiesImpl.gnpyResponseOneDirection(null);
+    @Test
+    public void verifyComputationByGnpyTest() throws Exception {
+        // build AtoZ
+        AToZDirectionBuilder atoZDirectionBldr = buildAtZ();
+        // build ZtoA
+        ZToADirectionBuilder ztoADirectionBldr = buildZtoA();
+
+        gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
+                PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"));
+        PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
+                networkTransaction);
+        PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
+        boolean result = gnpyUtilitiesImpl.verifyComputationByGnpy(atoZDirectionBldr.build(),
+                ztoADirectionBldr.build(),
+                pceHardConstraints);
+        Assert.assertFalse(result);
+    }
+
+    private AToZDirectionBuilder buildAtZ() {
+        List<AToZ> atozList = new ArrayList<>();
+        AToZKey clientKey = new AToZKey("key");
+        TerminationPoint stp = new TerminationPointBuilder()
+                .setTpId("tpName").setTpNodeId("xname")
+                .build();
+        Resource clientResource = new ResourceBuilder().setResource(stp).build();
+        AToZ firstResource = new AToZBuilder().setId("tpName").withKey(clientKey).setResource(clientResource).build();
+        atozList.add(firstResource);
+        AToZDirectionBuilder atoZDirectionBldr = new AToZDirectionBuilder()
+                .setRate(100L)
+                .setAToZ(atozList);
+        atoZDirectionBldr.setAToZWavelengthNumber(Long.valueOf(0));
+        return atoZDirectionBldr;
+    }
+
+    private ZToADirectionBuilder buildZtoA() {
+        ZToADirectionBuilder ztoADirectionBldr = new ZToADirectionBuilder()
+                .setRate(100L)
+                .setZToA(new ArrayList());
+        ztoADirectionBldr.setZToAWavelengthNumber(Long.valueOf(0));
+        return ztoADirectionBldr;
     }
 }
