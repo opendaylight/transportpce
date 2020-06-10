@@ -116,6 +116,30 @@
       "revId": "b621b5a01b4d4ecf546ecf42c42bcc74f88a9bb9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9cb0e86_dd69ba98",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNodeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T09:07:59Z",
+      "side": 1,
+      "message": "marked as resolved since method moved and asserted in previous test",
+      "parentUuid": "e0c9a3dd_81ff93a2",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 115,
+        "endChar": 64
+      },
+      "revId": "b621b5a01b4d4ecf546ecf42c42bcc74f88a9bb9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
