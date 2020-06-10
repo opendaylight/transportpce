@@ -36,33 +36,8 @@
             <version>${transportpce.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.opendaylight.transportpce.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-common</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.transportpce.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-device</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.transportpce.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-network</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.transportpce.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-service</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>transportpce-networkmodel</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.transportpce</groupId>
-            <artifactId>transportpce-tapimodels</artifactId>
             <version>${transportpce.version}</version>
         </dependency>
         <!-- TPCE Models - END -->
@@ -99,8 +74,28 @@
             <artifactId>lighty-restconf-nb-community</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>tpce</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>True</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>
