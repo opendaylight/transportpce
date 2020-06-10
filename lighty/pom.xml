@@ -36,33 +36,8 @@
             <version>${transportpce.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.opendaylight.transportpce.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-common</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.transportpce.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-device</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.transportpce.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-network</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.transportpce.ordmodels</groupId>
-            <artifactId>transportpce-ordmodels-service</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>transportpce-networkmodel</artifactId>
-            <version>${transportpce.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.transportpce</groupId>
-            <artifactId>transportpce-tapimodels</artifactId>
             <version>${transportpce.version}</version>
         </dependency>
         <!-- TPCE Models - END -->
@@ -99,8 +74,59 @@
             <artifactId>lighty-restconf-nb-community</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>tpce</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>True</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <configLocation>odl_checks.xml</configLocation>
+                    <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+                    <!-- <sourceDirectories> are needed so that checkstyle
+                        ignores the generated sources directory -->
+                    <sourceDirectories>
+                        <directory>${project.build.sourceDirectory}</directory>
+                    </sourceDirectories>
+                    <includeResources>true</includeResources>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <includeTestResources>true</includeTestResources>
+                    <includes>**\/*.java</includes>
+                    <excludes>
+                        **/protobuff/messages/**,
+                        **/thrift/gen/*.java,
+                        **/module-info.java
+                    </excludes>
+                    <consoleOutput>true</consoleOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>
