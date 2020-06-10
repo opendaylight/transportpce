@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43dfcedf_563124ed",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/NetworkModelProviderTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-10T07:26:12Z",
+      "side": 1,
+      "message": "Given the fact that change 90244 has been merged, this test class should be removed from this change, unless it improves the current NetworkModelProviderTest class.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 39
+      },
+      "revId": "4d8577c734bd5031ad775cb996e8d11eeca99bf1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
