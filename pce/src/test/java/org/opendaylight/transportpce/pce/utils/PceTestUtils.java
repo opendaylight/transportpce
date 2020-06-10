@@ -7,7 +7,11 @@
  */
 package org.opendaylight.transportpce.pce.utils;
 
+import com.google.gson.stream.JsonReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -29,6 +33,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
@@ -62,6 +67,38 @@ public final class PceTestUtils {
                 .build();
         WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
         dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, (Network) dataObject.get());
+        dataWriteTransaction.commit().get();
+    }
+
+    public static void writeNetworkInDataStore(DataBroker dataBroker) {
+
+        try (
+                // load openroadm-network
+                Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json");
+                // load openroadm-topology
+                Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json");
+                JsonReader networkReader = new JsonReader(gnpyNetwork);
+                JsonReader topoReader = new JsonReader(gnpyTopo);
+        ) {
+
+            Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader,
+                    QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
+            saveOpenRoadmNetwork(networks.getNetwork().get(0), NetworkUtils.UNDERLAY_NETWORK_ID, dataBroker);
+            networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader,
+                    QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
+            saveOpenRoadmNetwork(networks.getNetwork().get(0), NetworkUtils.OVERLAY_NETWORK_ID, dataBroker);
+        } catch (IOException | ExecutionException | InterruptedException e) {
+            LOG.error("Cannot init test ", e);
+            Assert.fail("Cannot init test ");
+        }
+    }
+
+    private static void saveOpenRoadmNetwork(Network network, String networkId, DataBroker dataBroker)
+            throws InterruptedException, ExecutionException {
+        InstanceIdentifier<Network> nwInstanceIdentifier = InstanceIdentifier.builder(Networks.class)
+                .child(Network.class, new NetworkKey(new NetworkId(networkId))).build();
+        WriteTransaction dataWriteTransaction = dataBroker.newWriteOnlyTransaction();
+        dataWriteTransaction.put(LogicalDatastoreType.CONFIGURATION, nwInstanceIdentifier, network);
         dataWriteTransaction.commit().get();
     }
 
