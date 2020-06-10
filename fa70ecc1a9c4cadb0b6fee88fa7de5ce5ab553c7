@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba87deb9_a4ba344c",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121Test.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-10T06:30:42Z",
+      "side": 1,
+      "message": "misleading indentation\netc",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 326,
+        "endChar": 59
+      },
+      "revId": "fa70ecc1a9c4cadb0b6fee88fa7de5ce5ab553c7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
