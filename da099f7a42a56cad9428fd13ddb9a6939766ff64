@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34fbe711_e99a3cda",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/exception/TechnicalException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T07:16:53Z",
+      "side": 1,
+      "message": "some trailing blanks to remove here",
+      "revId": "da099f7a42a56cad9428fd13ddb9a6939766ff64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9fbb8da_17c5749a",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/utils/TpceBanner.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T07:16:53Z",
+      "side": 1,
+      "message": "a LF here would help readability",
+      "range": {
+        "startLine": 15,
+        "startChar": 44,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "da099f7a42a56cad9428fd13ddb9a6939766ff64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76f2a3be_35076fc9",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/utils/TpceBanner.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T07:16:53Z",
+      "side": 1,
+      "message": "a LF here would help readability",
+      "range": {
+        "startLine": 17,
+        "startChar": 64,
+        "endLine": 17,
+        "endChar": 65
+      },
+      "revId": "da099f7a42a56cad9428fd13ddb9a6939766ff64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0f1e8ab_91d6f272",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/utils/TpceBanner.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T07:16:53Z",
+      "side": 1,
+      "message": "a LF here would help readability",
+      "range": {
+        "startLine": 23,
+        "startChar": 67,
+        "endLine": 23,
+        "endChar": 68
+      },
+      "revId": "da099f7a42a56cad9428fd13ddb9a6939766ff64",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
