@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c33a5cf8_e8c94995",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-11T15:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da932add_e4202d1e",
+      "range": {
+        "startLine": 241,
+        "startChar": 20,
+        "endLine": 241,
+        "endChar": 119
+      },
+      "revId": "351eee7626c3c0779066298bdde4105257027ed7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bd398cb_f6f6a351",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c4ef7871_7337c21a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-11T15:16:36Z",
+      "side": 1,
+      "message": "are you sure?",
+      "parentUuid": "4bd398cb_f6f6a351",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 16
+      },
+      "revId": "351eee7626c3c0779066298bdde4105257027ed7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c900f1cb_98586543",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2020-06-10T13:13:38Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 250,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 65
+      },
+      "revId": "351eee7626c3c0779066298bdde4105257027ed7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a7f813_1305f8ad",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-11T15:16:36Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "c900f1cb_98586543",
       "range": {
         "startLine": 250,
         "startChar": 0,
