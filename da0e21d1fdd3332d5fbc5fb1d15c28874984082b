@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4a90974_204a264d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T12:37:05Z",
+      "side": 1,
+      "message": "usually no colon at the end of titles",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e1f8137_22cb49a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T12:37:05Z",
+      "side": 1,
+      "message": "lile length \u003e72 char",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 79
+      },
+      "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e626cc8b_5ec7d1f1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T12:37:05Z",
+      "side": 1,
+      "message": "should better stay sticked\nmisleading indentation",
+      "range": {
+        "startLine": 314,
+        "startChar": 70,
+        "endLine": 315,
+        "endChar": 53
+      },
+      "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1d7d7e3_8fb78143",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T12:37:05Z",
+      "side": 1,
+      "message": "idem\netc",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 46
+      },
+      "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e85fcee_c88f569e",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T12:37:05Z",
+      "side": 1,
+      "message": "comments are better placed on a separate line",
+      "range": {
+        "startLine": 390,
+        "startChar": 77,
+        "endLine": 390,
+        "endChar": 116
+      },
+      "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
