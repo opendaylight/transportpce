@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "5d7884c1_10f3a2d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-11T12:44:59Z",
+      "side": 1,
+      "message": "I don\u0027t cath the NPE if port-name is missing (only when circuit-pack name is missing)",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e1f8137_22cb49a2",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
