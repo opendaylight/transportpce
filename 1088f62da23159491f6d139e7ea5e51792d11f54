@@ -94,6 +94,30 @@
       "revId": "1088f62da23159491f6d139e7ea5e51792d11f54",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45591fa1_cf3ce278",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T10:39:26Z",
+      "side": 0,
+      "message": "Up to you. Why not if it does not break too many things or complicate the maintenance ?\nI am more concerned about coherency and applying the same coding conventions everywhere in the project.",
+      "parentUuid": "447e3d64_da6f993f",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 31
+      },
+      "revId": "1088f62da23159491f6d139e7ea5e51792d11f54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
