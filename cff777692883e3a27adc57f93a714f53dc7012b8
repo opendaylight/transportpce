@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d8fce784_3a4b1eed",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNodeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T13:34:02Z",
+      "side": 1,
+      "message": "@Shaaban: issue still pending here",
+      "parentUuid": "4926a77b_fa4735a7",
+      "range": {
+        "startLine": 58,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 36
+      },
+      "revId": "cff777692883e3a27adc57f93a714f53dc7012b8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c58ca1cd_577dd80d",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNodeTest.java",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "cff777692883e3a27adc57f93a714f53dc7012b8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f4b0cd6_1de947b7",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNodeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T13:34:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c58ca1cd_577dd80d",
+      "revId": "cff777692883e3a27adc57f93a714f53dc7012b8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
