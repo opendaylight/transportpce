@@ -70,6 +70,30 @@
       "revId": "1088f62da23159491f6d139e7ea5e51792d11f54",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "447e3d64_da6f993f",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-11T10:35:15Z",
+      "side": 0,
+      "message": "ok but ODL checkstyle is not configured in lighty parent. So if you want ODL checkstyle applied to lighty tpce project, please let me know and I will have to modify tpce lighty pom.",
+      "parentUuid": "2378b9c8_f4fb90c8",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 31
+      },
+      "revId": "1088f62da23159491f6d139e7ea5e51792d11f54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
