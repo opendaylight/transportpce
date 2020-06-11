@@ -46,6 +46,30 @@
       "revId": "1088f62da23159491f6d139e7ea5e51792d11f54",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2378b9c8_f4fb90c8",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-11T10:26:27Z",
+      "side": 0,
+      "message": "ah my mistake\nAnyway it is NOK\nODL checkstyle imposes the alphabetical order and no LF separations are allowed anymore...",
+      "parentUuid": "6f3786b9_0a8a8ec2",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 31
+      },
+      "revId": "1088f62da23159491f6d139e7ea5e51792d11f54",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
