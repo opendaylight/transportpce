@@ -143,7 +143,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
             new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
                 notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
         ListenableFuture<RpcResult<ServiceDeleteOutput>> result =
-             servicehandlerImpl.serviceDelete(new ServiceDeleteInputBuilder()
+            servicehandlerImpl.serviceDelete(new ServiceDeleteInputBuilder()
                 .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder().setServiceName("").build()).build());
         result.addListener(new Runnable() {
             @Override
