@@ -72,6 +72,13 @@ def start_spdra_honeynode():
     return process
 
 
+def start_spdrc_honeynode():
+    log_file = os.path.join(log_directory, "oper-SPDRCv2.log")
+    process = start_node(log_file, "17846", "oper-SPDRCv2.xml")
+    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
+    return process
+
+
 def start_tpce():
     if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
         print("starting LIGHTY.IO TransportPCE build...")
