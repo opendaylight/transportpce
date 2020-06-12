@@ -224,10 +224,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
                 .ServiceDeleteInput serviceDeleteInput =
             ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput output =
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput output =
             this.rendererServiceWrapper.performRenderer(
                 serviceDeleteInput, ServiceNotificationTypes.ServiceDeleteResult);
 
@@ -304,10 +304,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
                 .ServiceDeleteInput serviceDeleteInput =
                         ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
                 .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
                         ServiceNotificationTypes.ServiceDeleteResult);
         if (output == null) {
@@ -384,10 +384,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(serviceInput);
         this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
             .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
                     new ServiceInput(deleteInputBldr.build()));
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
             .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
                 ServiceNotificationTypes.ServiceDeleteResult);
         if (output == null) {
@@ -450,10 +450,10 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(serviceInput);
         this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
             .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
                     new ServiceInput(deleteInputBldr.build()));
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
             .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
                 ServiceNotificationTypes.ServiceDeleteResult);
         if (output == null) {
@@ -535,7 +535,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         this.rendererListenerImpl.setTempService(true);
-        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev171017.ServiceDeleteOutput output =
+        org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput output =
                 this.rendererServiceWrapper.performRenderer(input, ServiceNotificationTypes.ServiceDeleteResult);
         if (output == null) {
             LOG.error("tempServiceDelete: {}", LogMessages.RENDERER_DELETE_FAILED);
