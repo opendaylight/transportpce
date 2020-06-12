@@ -392,6 +392,30 @@
     },
     {
       "key": {
+        "uuid": "454afc04_d71f80e2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/OtnDeviceRenderingTask.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T22:10:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "053ce559_b1a74b1b",
+      "range": {
+        "startLine": 35,
+        "startChar": 13,
+        "endLine": 35,
+        "endChar": 31
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75fc71b5_3be52dbd",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
         "patchSetId": 17
@@ -583,6 +607,24 @@
       "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fedfea2f_121bc446",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T22:10:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "baaf5029_c917a377",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
