@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "70794a8e_a7c92558",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-12T19:21:40Z",
+      "side": 1,
+      "message": "Do you mean on the same line",
+      "parentUuid": "a119bb14_928c67c3",
+      "range": {
+        "startLine": 124,
+        "startChar": 108,
+        "endLine": 125,
+        "endChar": 31
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6f9e0e9_abe60d4d",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
         "patchSetId": 17
@@ -45,6 +69,30 @@
       "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "704abc2c_06dfa798",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-12T19:21:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6f9e0e9_abe60d4d",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 56
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "699e1f45_157499e9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-12T19:21:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad759fa9_1f1a5211",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 33
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e20062e3_ecf385e9",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 17
@@ -91,6 +163,30 @@
       "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad098023_3861d95d",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-12T19:21:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e20062e3_ecf385e9",
+      "range": {
+        "startLine": 617,
+        "startChar": 8,
+        "endLine": 618,
+        "endChar": 53
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "7f169f7a_650734c7",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/OtnDeviceRenderingTask.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-12T19:21:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb5296e5_05e3e319",
+      "range": {
+        "startLine": 35,
+        "startChar": 13,
+        "endLine": 35,
+        "endChar": 31
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75fc71b5_3be52dbd",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
         "patchSetId": 17
@@ -131,6 +251,24 @@
       "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78289232_511c8cc3",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-12T19:21:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75fc71b5_3be52dbd",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -151,6 +289,24 @@
     },
     {
       "key": {
+        "uuid": "dd0822cc_04b3119d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-12T19:21:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c23ed0d_fb86d6d1",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d87b393_eb661f7e",
         "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
         "patchSetId": 17
@@ -162,6 +318,24 @@
       "writtenOn": "2020-06-11T15:27:16Z",
       "side": 1,
       "message": "the sims functions skeleton shifted with the last rebase",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "839c7121_d7401659",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-12T19:21:40Z",
+      "side": 1,
+      "message": "Ok, thanks will update it",
+      "parentUuid": "9d87b393_eb661f7e",
       "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
