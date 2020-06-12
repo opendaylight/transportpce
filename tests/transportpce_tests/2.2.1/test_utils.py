@@ -70,6 +70,8 @@ def start_tpce():
         else:
             print("opendaylight failed to start")
             shutdown_process(process)
+            # TODO: Shouldn't we shut down all the processes (honeynode)
+            #  before exiting
             exit(1)
     return process
 
@@ -136,7 +138,7 @@ def generate_connect_data(node_id: str, node_port: str):
 
 
 def generate_link_data(xpdr_node: str, xpdr_num: str, network_num: str, rdm_node: str, srg_num: str,
-                       termination_num: str):
+    termination_num: str):
     data = {
         "networkutils:input": {
             "networkutils:links-input": {
