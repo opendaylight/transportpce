@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "62c52ccc_429bf1b9",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer@2020-05-20.yang",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "I think the YANG and imports update would better be in a separate change.\nI\u0027ve created the change 90434 that reuses that file.\nWe can rebase this change on top of it.",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a119bb14_928c67c3",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
         "patchSetId": 17
@@ -37,6 +54,30 @@
       "side": 1,
       "message": "Do you mean on the same line",
       "parentUuid": "a119bb14_928c67c3",
+      "range": {
+        "startLine": 124,
+        "startChar": 108,
+        "endLine": 125,
+        "endChar": 31
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18321894_8af330c7",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "70794a8e_a7c92558",
       "range": {
         "startLine": 124,
         "startChar": 108,
@@ -96,6 +137,30 @@
     },
     {
       "key": {
+        "uuid": "ed480e1a_5d0dc3d9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "nope, I unmark it as resolved",
+      "parentUuid": "704abc2c_06dfa798",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 56
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad759fa9_1f1a5211",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
         "patchSetId": 17
@@ -140,6 +205,30 @@
       "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a6b5eb4a_03c1c828",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "nope",
+      "parentUuid": "699e1f45_157499e9",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 33
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     },
     {
       "key": {
@@ -190,6 +279,30 @@
     },
     {
       "key": {
+        "uuid": "b201e0d2_38fa74e4",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "nope",
+      "parentUuid": "ad098023_3861d95d",
+      "range": {
+        "startLine": 617,
+        "startChar": 8,
+        "endLine": 618,
+        "endChar": 53
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb5296e5_05e3e319",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/OtnDeviceRenderingTask.java",
         "patchSetId": 17
@@ -237,6 +350,30 @@
     },
     {
       "key": {
+        "uuid": "053ce559_b1a74b1b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/OtnDeviceRenderingTask.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "nope",
+      "parentUuid": "7f169f7a_650734c7",
+      "range": {
+        "startLine": 35,
+        "startChar": 13,
+        "endLine": 35,
+        "endChar": 31
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "75fc71b5_3be52dbd",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
         "patchSetId": 17
@@ -272,6 +409,24 @@
     },
     {
       "key": {
+        "uuid": "2f5dfd4f_8b2eb009",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "nope",
+      "parentUuid": "78289232_511c8cc3",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5c23ed0d_fb86d6d1",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
         "patchSetId": 17
@@ -304,6 +459,41 @@
       "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "624d292a_6533bd23",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "nope",
+      "parentUuid": "dd0822cc_04b3119d",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a7f27b9_7af528e3",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-SPDRCv2.xml",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "It seems this file is not used in any test\nI guess we can put it in a separate change.",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     },
     {
       "key": {
@@ -357,6 +547,24 @@
       "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baaf5029_c917a377",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T21:18:54Z",
+      "side": 1,
+      "message": "Please mark it as resolved once the change has been pushed\n\nAlso it is not used in any test, I guess we can put that modifications in another change.",
+      "parentUuid": "ea63b09d_99fa6c70",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
