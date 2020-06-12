@@ -23,6 +23,7 @@ IMAGE221_LIST="40:xpdra-2.2.1:2.2.1/oper-XPDRA.xml
 43:roadmc-2.2.1:2.2.1/oper-ROADMC.xml
 44:xpdrc-2.2.1:2.2.1/oper-XPDRC.xml
 45:spdra-2.2.1:2.2.1/oper-SPDRA.xml
+46:spdrc-2.2.1:2.2.1/oper-SPDRC.xml
 25:spdra_no_interfaces-2.2.1:2.2.1/oper-SPDRA_no_interfaces.xml
 "
 
