@@ -17,7 +17,8 @@ SIMS = {
     'roadmc': {'port': '17843', 'configfile': 'oper-ROADMC.xml', 'logfile': 'oper-ROADMC.log'},
     'xpdrc': {'port': '17844', 'configfile': 'oper-XPDRC.xml', 'logfile': 'oper-XPDRC.log'},
     'spdrav2': {'port': '17845', 'configfile': 'oper-SPDRAv2.xml', 'logfile': 'oper-SPDRAv2.log'},
-    'spdrav1': {'port': '17846', 'configfile': 'oper-SPDRAv1.xml', 'logfile': 'oper-SPDRAv1.log'}
+    'spdrav1': {'port': '17846', 'configfile': 'oper-SPDRAv1.xml', 'logfile': 'oper-SPDRAv1.log'},
+    'spdrcv2': {'port': '17848', 'configfile': 'oper-SPDRCv2.xml', 'logfile': 'oper-SPDRCv2.log'}
 }
 
 HONEYNODE_EXECUTABLE = os.path.join(
