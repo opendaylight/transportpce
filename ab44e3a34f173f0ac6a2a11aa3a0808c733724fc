@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07d134f8_3297d2be",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/PceSendingPceRPCsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-12T07:09:42Z",
+      "side": 1,
+      "message": "please add message to assert",
+      "revId": "ab44e3a34f173f0ac6a2a11aa3a0808c733724fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2311cee7_2176079a",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-12T07:09:42Z",
+      "side": 1,
+      "message": "please add a message to assert",
+      "range": {
+        "startLine": 160,
+        "startChar": 8,
+        "endLine": 160,
+        "endChar": 35
+      },
+      "revId": "ab44e3a34f173f0ac6a2a11aa3a0808c733724fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8627da93_56866a13",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-12T07:09:42Z",
+      "side": 1,
+      "message": "JsonReader, FileReader implement autocloseable, so you could put it in try (....) to avoid the finally block",
+      "range": {
+        "startLine": 78,
+        "startChar": 7,
+        "endLine": 78,
+        "endChar": 13
+      },
+      "revId": "ab44e3a34f173f0ac6a2a11aa3a0808c733724fc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
