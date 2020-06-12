@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3e50d223_a8196b07",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer@2020-05-20.yang",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-12T22:04:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62c52ccc_429bf1b9",
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a119bb14_928c67c3",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
         "patchSetId": 17
