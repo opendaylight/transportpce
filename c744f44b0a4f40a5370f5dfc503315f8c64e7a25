@@ -71,6 +71,52 @@
     },
     {
       "key": {
+        "uuid": "e20062e3_ecf385e9",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-12T11:53:37Z",
+      "side": 1,
+      "message": "not checking if nodes is not null before accessing ?",
+      "range": {
+        "startLine": 617,
+        "startChar": 8,
+        "endLine": 618,
+        "endChar": 53
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb5296e5_05e3e319",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/tasks/OtnDeviceRenderingTask.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-12T11:53:37Z",
+      "side": 1,
+      "message": "output.isSuccess() could be null regarding OtnServicePathOutput interface, so it should be better to use primitive\nSomething like that \n        if (Boolean.TRUE.equals(output.isSuccess())) {\n        \tLOG.info(\"Device rendering finished successfully.\");\n            return OtnDeviceRenderingResult.ok(output.getNodeInterface());\n           \n        }else {//false or null case\n        \t LOG.warn(\"Device rendering not successfully finished.\");\n             return OtnDeviceRenderingResult.failed(\"Operation Failed\");\n        }",
+      "range": {
+        "startLine": 35,
+        "startChar": 13,
+        "endLine": 35,
+        "endChar": 31
+      },
+      "revId": "c744f44b0a4f40a5370f5dfc503315f8c64e7a25",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "75fc71b5_3be52dbd",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerProvider.java",
         "patchSetId": 17
