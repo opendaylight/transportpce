@@ -65,12 +65,15 @@ def start_tpce():
         # TODO: add some sort of health check similar to Karaf below
     else:
         process = start_karaf()
+        """
         if wait_until_log_contains(karaf_log, KARAF_OK_START_MSG, time_to_wait=60):
             print("opendaylight started")
         else:
             print("opendaylight failed to start")
             shutdown_process(process)
+            # TODO: Should shut down all the process (honeynode) before exiting
             exit(1)
+        """
     return process
 
 
@@ -136,7 +139,7 @@ def generate_connect_data(node_id: str, node_port: str):
 
 
 def generate_link_data(xpdr_node: str, xpdr_num: str, network_num: str, rdm_node: str, srg_num: str,
-                       termination_num: str):
+    termination_num: str):
     data = {
         "networkutils:input": {
             "networkutils:links-input": {
