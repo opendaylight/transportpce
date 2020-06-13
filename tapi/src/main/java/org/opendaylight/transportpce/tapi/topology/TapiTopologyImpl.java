@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.tapi.topology;
 
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -80,6 +81,8 @@ import org.slf4j.LoggerFactory;
 public class TapiTopologyImpl implements TapiTopologyService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TapiTopologyImpl.class);
+    private static final String ETH_TOPO = "Ethernet Topology";
+    private static final String T0_MULTI_LAYER_TOPO = "T0 - Multi-layer topology";
     private final DataBroker dataBroker;
 
     public TapiTopologyImpl(DataBroker dataBroker) {
@@ -179,8 +182,8 @@ public class TapiTopologyImpl implements TapiTopologyService {
         List<String> goodTpList = extractGoodTpList(clientPortMap);
         // tapi topology creation
         List<Name> names = new ArrayList<>();
-        names.add(new NameBuilder().setValue("topo ethernet").setValueName("Topo Name").build());
-        Uuid uuid = new Uuid(UUID.randomUUID().toString());
+        names.add(new NameBuilder().setValue(ETH_TOPO).setValueName("Topo Name").build());
+        Uuid uuid = new Uuid(UUID.nameUUIDFromBytes(ETH_TOPO.getBytes(Charset.forName("UTF-8"))).toString());
         List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
             tapiNodeList = new ArrayList<>();
         tapiNodeList.add(createTapiNode(goodTpList));
@@ -223,7 +226,8 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 new ArrayList<>();
             List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link> tapiLinkList =
                 new ArrayList<>();
-            Uuid topoUuid = new Uuid(UUID.randomUUID().toString());
+            Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(T0_MULTI_LAYER_TOPO.getBytes(Charset.forName("UTF-8")))
+                .toString());
             for (Node node : otnNodeList) {
                 ConvertORTopoObjectToTapiTopoObject tapiFactory =
                     new ConvertORTopoObjectToTapiTopoObject(node, null, topoUuid);
@@ -232,7 +236,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 tapiLinkList.addAll(tapiFactory.getTapiLinks());
             }
             return new TopologyBuilder()
-                    .setName(Arrays.asList(new NameBuilder().setValue("T0 - Multi-layer topology")
+                    .setName(Arrays.asList(new NameBuilder().setValue(T0_MULTI_LAYER_TOPO)
                             .setValueName("TAPI Topology Name").build()))
                     .setUuid(topoUuid)
                     .setNode(tapiNodeList)
@@ -264,7 +268,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
     private org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node createTapiNode(List<
         String> tpList) {
         List<Name> names = new ArrayList<>();
-        Name name = new NameBuilder().setValueName("node name").setValue("TapiNode1").build();
+        Name name = new NameBuilder().setValueName("node name").setValue("TAPI Ethernet Node").build();
         names.add(name);
         List<LayerProtocolName> layerProtocols = new ArrayList<>();
         layerProtocols.add(LayerProtocolName.ETH);
@@ -272,7 +276,9 @@ public class TapiTopologyImpl implements TapiTopologyService {
         for (int i = 0; i < tpList.size(); i++) {
             List<Name> onedNames = new ArrayList<>();
             onedNames.add(new NameBuilder().setValueName("OwnedNodeEdgePoint " + i).setValue(tpList.get(i)).build());
-            OwnedNodeEdgePoint onep = new OwnedNodeEdgePointBuilder().setUuid(new Uuid(UUID.randomUUID().toString()))
+            OwnedNodeEdgePoint onep = new OwnedNodeEdgePointBuilder()
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes(("OwnedNodeEdgePoint " + i).getBytes(Charset.forName("UTF-8")))
+                    .toString()))
                 .setLayerProtocolName(LayerProtocolName.ETH).setMappedServiceInterfacePoint(createSIP(1))
                 .setLinkPortDirection(PortDirection.BIDIRECTIONAL).setLinkPortRole(PortRole.SYMMETRIC)
                 .setAdministrativeState(AdministrativeState.UNLOCKED).setOperationalState(OperationalState.ENABLED)
@@ -283,7 +289,8 @@ public class TapiTopologyImpl implements TapiTopologyService {
         }
 
         return new NodeBuilder()
-                .setUuid(new Uuid(UUID.randomUUID().toString()))
+                .setUuid(new Uuid(UUID.nameUUIDFromBytes(name.getValue().getBytes(Charset.forName("UTF-8")))
+                    .toString()))
                 .setName(names).setLayerProtocolName(layerProtocols)
                 .setAdministrativeState(AdministrativeState.UNLOCKED)
                 .setOperationalState(OperationalState.ENABLED)
