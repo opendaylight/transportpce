@@ -31,20 +31,20 @@ import org.slf4j.LoggerFactory;
 public final class TopologyDataUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(TopologyDataUtils.class);
-    private static final String TOPOLOGY_FILE =
-        "src/test/resources/openroadm-topology2.xml";
-    private static final String PORTMAPPING_FILE =
-        "src/test/resources/portmapping-example.xml";
+    public static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/openroadm-topology2.xml";
+    public static final String OTN_TOPOLOGY_FILE = "src/test/resources/otn-topology.xml";
+    public static final String PORTMAPPING_FILE = "src/test/resources/portmapping-example.xml";
 
-    public static GetTopologyDetailsInput buildGetTopologyDetailsInput() {
+    public static GetTopologyDetailsInput buildGetTopologyDetailsInput(String topoName) {
         GetTopologyDetailsInputBuilder builtInput = new GetTopologyDetailsInputBuilder();
-        builtInput.setTopologyIdOrName("openroadm-topology");
+        builtInput.setTopologyIdOrName(topoName);
         return builtInput.build();
     }
 
-    public static void writeTopologyFromFileToDatastore(DataStoreContext dataStoreContextUtil) {
-        Networks result = null;
-        File topoFile = new File(TOPOLOGY_FILE);
+    public static <T> void writeTopologyFromFileToDatastore(DataStoreContext dataStoreContextUtil, String file,
+        InstanceIdentifier ii) {
+        Networks networks = null;
+        File topoFile = new File(file);
         if (topoFile.exists()) {
             String fileName = topoFile.getName();
             InputStream targetStream;
@@ -62,7 +62,7 @@ public final class TopologyDataUtils {
                 if (!dataObject.isPresent()) {
                     throw new IllegalStateException("Could not transform normalized nodes into data object");
                 } else {
-                    result = (Networks) dataObject.get();
+                    networks = (Networks) dataObject.get();
                 }
             } catch (FileNotFoundException e) {
                 LOG.error("File not found : {} at {}", e.getMessage(), e.getLocalizedMessage());
@@ -70,10 +70,8 @@ public final class TopologyDataUtils {
         } else {
             LOG.error("xml file {} not found at {}", topoFile.getName(), topoFile.getAbsolutePath());
         }
-        LOG.info("Storing openroadm-topology in datastore");
-        InstanceIdentifier<Networks> ietfNetworksIID = InstanceIdentifier.builder(Networks.class).build();
-        writeTransaction(dataStoreContextUtil.getDataBroker(), ietfNetworksIID, result);
-        LOG.info("openroadm-topology stored with success in datastore");
+        writeTransaction(dataStoreContextUtil.getDataBroker(), ii, networks.getNetwork().get(0));
+        LOG.info("extraction from {} stored with success in datastore", topoFile.getName());
     }
 
     @SuppressWarnings("unchecked")
@@ -120,7 +118,6 @@ public final class TopologyDataUtils {
     }
 
     private TopologyDataUtils() {
-
     }
 
 }
