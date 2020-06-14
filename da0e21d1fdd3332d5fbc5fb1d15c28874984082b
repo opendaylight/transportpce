@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7b6df108_7604836d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-14T04:46:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4a90974_204a264d",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d7884c1_10f3a2d4",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ccf14872_f1726e03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-14T04:46:26Z",
+      "side": 1,
+      "message": "Line 314 in PortMappingVersion221 checks for circuit-pack-name and port-name. So if either one fails, then we will have null-pointer exception. So that\u0027s why I had port-name. But if you think it is redundant I\u0027m fine removing this line in the commit message.",
+      "parentUuid": "5d7884c1_10f3a2d4",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e1f8137_22cb49a2",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d7708a0_89f0a174",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-14T04:46:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e1f8137_22cb49a2",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 79
+      },
+      "revId": "da0e21d1fdd3332d5fbc5fb1d15c28874984082b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
