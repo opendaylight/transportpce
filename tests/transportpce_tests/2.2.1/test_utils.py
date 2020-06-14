@@ -33,6 +33,7 @@ TYPE_APPLICATION_JSON = {'content-type': 'application/json'}
 honeynode_executable = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "honeynode", "2.2.1", "honeynode-simulator", "honeycomb-tpce")
+
 samples_directory = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "sample_configs", "openroadm", "2.2.1")
@@ -44,7 +45,7 @@ def start_sim(sim):
     print("starting simulator for " + sim + "...")
     log_file = os.path.join(log_directory, sims[sim]['logfile'])
     process = start_node(log_file, sims[sim]['port'], sims[sim]['configfile'])
-    if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000):
+    if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
         print("simulator for " + sim + " started")
     else:
         print("simulator for " + sim + "failed to start")
