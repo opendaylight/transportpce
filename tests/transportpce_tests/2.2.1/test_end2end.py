@@ -24,10 +24,10 @@ import test_utils
 class TransportPCEFulltesting(unittest.TestCase):
 
     odl_process = None
-    honeynode_process1 = None
-    honeynode_process2 = None
-    honeynode_process3 = None
-    honeynode_process4 = None
+    sim_process1 = None
+    sim_process2 = None
+    sim_process3 = None
+    sim_process4 = None
     restconf_baseurl = "http://localhost:8181/restconf"
     WAITING = 20  # nominal value is 300
 
@@ -35,22 +35,22 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print("starting honeynode1...")
-        cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
+        print("starting sim1...")
+        cls.sim_process1 = test_utils.start_sim('xpdra')
         time.sleep(20)
 
-        print("starting honeynode2...")
-        cls.honeynode_process2 = test_utils.start_roadma_honeynode()
+        print("starting sim2...")
+        cls.sim_process2 = test_utils.start_sim('roadma')
         time.sleep(20)
 
-        print("starting honeynode3...")
-        cls.honeynode_process3 = test_utils.start_roadmc_honeynode()
+        print("starting sim3...")
+        cls.sim_process3 = test_utils.start_sim('roadmc')
         time.sleep(20)
 
-        print("starting honeynode4...")
-        cls.honeynode_process4 = test_utils.start_xpdrc_honeynode()
+        print("starting sim4...")
+        cls.sim_process4 = test_utils.start_sim('xpdrc')
         time.sleep(20)
-        print("all honeynodes started")
+        print("all sims started")
 
         print("starting opendaylight...")
         cls.odl_process = test_utils.start_tpce()
@@ -64,26 +64,26 @@ class TransportPCEFulltesting(unittest.TestCase):
             child.wait()
         cls.odl_process.send_signal(signal.SIGINT)
         cls.odl_process.wait()
-        for child in psutil.Process(cls.honeynode_process1.pid).children():
+        for child in psutil.Process(cls.sim_process1.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
-        cls.honeynode_process1.send_signal(signal.SIGINT)
-        cls.honeynode_process1.wait()
-        for child in psutil.Process(cls.honeynode_process2.pid).children():
+        cls.sim_process1.send_signal(signal.SIGINT)
+        cls.sim_process1.wait()
+        for child in psutil.Process(cls.sim_process2.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
-        cls.honeynode_process2.send_signal(signal.SIGINT)
-        cls.honeynode_process2.wait()
-        for child in psutil.Process(cls.honeynode_process3.pid).children():
+        cls.sim_process2.send_signal(signal.SIGINT)
+        cls.sim_process2.wait()
+        for child in psutil.Process(cls.sim_process3.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
-        cls.honeynode_process3.send_signal(signal.SIGINT)
-        cls.honeynode_process3.wait()
-        for child in psutil.Process(cls.honeynode_process4.pid).children():
+        cls.sim_process3.send_signal(signal.SIGINT)
+        cls.sim_process3.wait()
+        for child in psutil.Process(cls.sim_process4.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
-        cls.honeynode_process4.send_signal(signal.SIGINT)
-        cls.honeynode_process4.wait()
+        cls.sim_process4.send_signal(signal.SIGINT)
+        cls.sim_process4.wait()
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
@@ -101,7 +101,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17840",
+            "netconf-node-topology:port": test_utils.sims['xpdra']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -120,7 +120,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17844",
+            "netconf-node-topology:port": test_utils.sims['xpdrc']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -139,7 +139,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17841",
+            "netconf-node-topology:port": test_utils.sims['roadma']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -158,7 +158,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17843",
+            "netconf-node-topology:port": test_utils.sims['roadmc']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}

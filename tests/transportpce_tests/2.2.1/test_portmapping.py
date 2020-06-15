@@ -23,21 +23,21 @@ import test_utils
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
 
-    honeynode_process1 = None
-    honeynode_process2 = None
+    sim_process1 = None
+    sim_process2 = None
     odl_process = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def setUpClass(cls):
-        print("starting honeynode1...")
-        cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
+        print("starting sim1...")
+        cls.sim_process1 = test_utils.start_sim('xpdra')
         time.sleep(20)
 
-        print("starting honeynode2...")
-        cls.honeynode_process2 = test_utils.start_roadma_honeynode()
+        print("starting sim2...")
+        cls.sim_process2 = test_utils.start_sim('roadma')
         time.sleep(20)
-        print("all honeynodes started")
+        print("all sims started")
 
         print("starting opendaylight...")
         cls.odl_process = test_utils.start_tpce()
@@ -51,16 +51,16 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             child.wait()
         cls.odl_process.send_signal(signal.SIGINT)
         cls.odl_process.wait()
-        for child in psutil.Process(cls.honeynode_process1.pid).children():
+        for child in psutil.Process(cls.sim_process1.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
-        cls.honeynode_process1.send_signal(signal.SIGINT)
-        cls.honeynode_process1.wait()
-        for child in psutil.Process(cls.honeynode_process2.pid).children():
+        cls.sim_process1.send_signal(signal.SIGINT)
+        cls.sim_process1.wait()
+        for child in psutil.Process(cls.sim_process2.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
-        cls.honeynode_process2.send_signal(signal.SIGINT)
-        cls.honeynode_process2.wait()
+        cls.sim_process2.send_signal(signal.SIGINT)
+        cls.sim_process2.wait()
 
     def setUp(self):
         print("execution of {}".format(self.id().split(".")[-1]))
@@ -75,7 +75,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17841",
+            "netconf-node-topology:port": test_utils.sims['roadma']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -184,7 +184,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17840",
+            "netconf-node-topology:port": test_utils.sims['xpdra']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}

@@ -27,11 +27,11 @@ CREATED_SUCCESSFULLY = 'Result message should contain Xponder Roadm Link created
 
 class TransportTapitesting(unittest.TestCase):
     odl_process = None
-    honeynode_process1 = None
-    honeynode_process2 = None
-    honeynode_process3 = None
-    honeynode_process4 = None
-    honeynode_process5 = None
+    sim_process1 = None
+    sim_process2 = None
+    sim_process3 = None
+    sim_process4 = None
+    sim_process5 = None
 
     # START_IGNORE_XTESTING
 
@@ -62,29 +62,29 @@ class TransportTapitesting(unittest.TestCase):
                 cls.init_failed = not found
         if not cls.init_failed:
             print("starting XPDRA...")
-            cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
+            cls.sim_process1 = test_utils.start_sim('xpdra')
 
             print("starting ROADMA...")
-            cls.honeynode_process2 = test_utils.start_roadma_honeynode()
+            cls.sim_process2 = test_utils.start_sim('roadma')
 
             print("starting ROADMC...")
-            cls.honeynode_process3 = test_utils.start_roadmc_honeynode()
+            cls.sim_process3 = test_utils.start_sim('roadmc')
 
             print("starting XPDRC...")
-            cls.honeynode_process4 = test_utils.start_xpdrc_honeynode()
+            cls.sim_process4 = test_utils.start_sim('xpdrc')
 
             print("starting SPDRA...")
-            cls.honeynode_process5 = test_utils.start_spdra_honeynode()
-            print("all honeynodes started")
+            cls.sim_process5 = test_utils.start_sim('spdrav2')
+            print("all sims started")
 
     @classmethod
     def tearDownClass(cls):
         test_utils.shutdown_process(cls.odl_process)
-        test_utils.shutdown_process(cls.honeynode_process1)
-        test_utils.shutdown_process(cls.honeynode_process2)
-        test_utils.shutdown_process(cls.honeynode_process3)
-        test_utils.shutdown_process(cls.honeynode_process4)
-        test_utils.shutdown_process(cls.honeynode_process5)
+        test_utils.shutdown_process(cls.sim_process1)
+        test_utils.shutdown_process(cls.sim_process2)
+        test_utils.shutdown_process(cls.sim_process3)
+        test_utils.shutdown_process(cls.sim_process4)
+        test_utils.shutdown_process(cls.sim_process5)
         print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
@@ -99,7 +99,7 @@ class TransportTapitesting(unittest.TestCase):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/SPDR-SA1"
                .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("SPDR-SA1", "17845")
+        data = test_utils.generate_connect_data("SPDR-SA1", test_utils.sims['spdrav2']['port'])
         response = test_utils.put_request(url, data, 'admin', 'admin')
         self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
         time.sleep(10)
@@ -108,7 +108,7 @@ class TransportTapitesting(unittest.TestCase):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/XPDR-A1"
                .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("XPDR-A1", "17840")
+        data = test_utils.generate_connect_data("XPDR-A1", test_utils.sims['xpdra']['port'])
         response = test_utils.put_request(url, data, 'admin', 'admin')
         self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
         time.sleep(10)
@@ -117,7 +117,7 @@ class TransportTapitesting(unittest.TestCase):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/XPDR-C1"
                .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("XPDR-C1", "17844")
+        data = test_utils.generate_connect_data("XPDR-C1", test_utils.sims['xpdrc']['port'])
         response = test_utils.put_request(url, data, 'admin', 'admin')
         self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
         time.sleep(10)
@@ -126,7 +126,7 @@ class TransportTapitesting(unittest.TestCase):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADM-A1"
                .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("ROADM-A1", "17841")
+        data = test_utils.generate_connect_data("ROADM-A1", test_utils.sims['roadma']['port'])
         response = test_utils.put_request(url, data, 'admin', 'admin')
         self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
         time.sleep(20)
@@ -135,7 +135,7 @@ class TransportTapitesting(unittest.TestCase):
         url = ("{}/config/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADM-C1"
                .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("ROADM-C1", "17843")
+        data = test_utils.generate_connect_data("ROADM-C1", test_utils.sims['roadmc']['port'])
         response = test_utils.put_request(url, data, 'admin', 'admin')
         self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
         time.sleep(20)

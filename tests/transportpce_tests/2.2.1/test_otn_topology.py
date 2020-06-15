@@ -24,14 +24,14 @@ import test_utils
 
 class TransportPCEtesting(unittest.TestCase):
 
-    honeynode_process1 = None
+    sim_process1 = None
     odl_process = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def setUpClass(cls):
-        print("starting honeynode1...")
-        cls.honeynode_process1 = test_utils.start_spdra_honeynode()
+        print("starting sim1...")
+        cls.sim_process1 = test_utils.start_sim('spdrav2')
         time.sleep(20)
 
         print("starting opendaylight...")
@@ -46,11 +46,11 @@ class TransportPCEtesting(unittest.TestCase):
             child.wait()
         cls.odl_process.send_signal(signal.SIGINT)
         cls.odl_process.wait()
-        for child in psutil.Process(cls.honeynode_process1.pid).children():
+        for child in psutil.Process(cls.sim_process1.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
-        cls.honeynode_process1.send_signal(signal.SIGINT)
-        cls.honeynode_process1.wait()
+        cls.sim_process1.send_signal(signal.SIGINT)
+        cls.sim_process1.wait()
 
     def setUp(self):
         time.sleep(5)
@@ -64,7 +64,7 @@ class TransportPCEtesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17845",
+            "netconf-node-topology:port": test_utils.sims['spdrav2']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
