@@ -20,8 +20,8 @@ import test_utils
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
 
-    honeynode_process1 = None
-    honeynode_process2 = None
+    sim_process1 = None
+    sim_process2 = None
     odl_process = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
@@ -29,12 +29,12 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print("starting honeynode1...")
-        cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
+        print("starting sim1...")
+        cls.sim_process1 = test_utils.start_sim('xpdra')
         time.sleep(20)
 
-        print("starting honeynode2...")
-        cls.honeynode_process2 = test_utils.start_roadma_honeynode()
+        print("starting sim2...")
+        cls.sim_process2 = test_utils.start_sim('roadma')
         time.sleep(20)
 
         print("starting opendaylight...")
@@ -49,16 +49,16 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             child.wait()
         cls.odl_process.send_signal(signal.SIGINT)
         cls.odl_process.wait()
-        for child in psutil.Process(cls.honeynode_process1.pid).children():
+        for child in psutil.Process(cls.sim_process1.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
-        cls.honeynode_process1.send_signal(signal.SIGINT)
-        cls.honeynode_process1.wait()
-        for child in psutil.Process(cls.honeynode_process2.pid).children():
+        cls.sim_process1.send_signal(signal.SIGINT)
+        cls.sim_process1.wait()
+        for child in psutil.Process(cls.sim_process2.pid).children():
             child.send_signal(signal.SIGINT)
             child.wait()
-        cls.honeynode_process2.send_signal(signal.SIGINT)
-        cls.honeynode_process2.wait()
+        cls.sim_process2.send_signal(signal.SIGINT)
+        cls.sim_process2.wait()
 
     def setUp(self):
         print("execution of {}".format(self.id().split(".")[-1]))
