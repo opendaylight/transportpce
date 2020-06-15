@@ -70,6 +70,21 @@ module transportpce-portmapping {
           description
             "Identifier for node-type e.g Roadm, xponder";
         }
+        leaf grid-implementation {
+          type enumeration {
+            enum flex-grid {
+              value 1;
+              description
+                "Flex grid implementation";
+            }
+            enum fixed-grid {
+              value 2;
+              description
+                "Fixed grid implementation";
+            }
+          }
+          mandatory false;
+        }
         leaf openroadm-version {
           type enumeration {
             enum 1.2.1 {
