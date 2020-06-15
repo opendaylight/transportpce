@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.NodeInfo.GridImplementation;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.SwitchingPoolLcp;
@@ -51,6 +53,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.switching.pool.lcp.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.switching.pool.lcp.NonBlockingListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CircuitPack;
@@ -113,7 +116,7 @@ public class PortMappingVersion221 {
         NodeInfo nodeInfo;
         if (deviceInfoOptional.isPresent()) {
             deviceInfo = deviceInfoOptional.get();
-            nodeInfo = createNodeInfo(deviceInfo);
+            nodeInfo = createNodeInfo(deviceInfo, nodeId);
             if (nodeInfo == null) {
                 return false;
             } else {
@@ -968,7 +971,7 @@ public class PortMappingVersion221 {
         return true;
     }
 
-    private NodeInfo createNodeInfo(Info deviceInfo) {
+    private NodeInfo createNodeInfo(Info deviceInfo, String nodeId) {
         NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder();
         if (deviceInfo.getNodeType() != null) {
             nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._221).setNodeType(deviceInfo.getNodeType());
@@ -985,6 +988,17 @@ public class PortMappingVersion221 {
             }
             if (deviceInfo.getIpAddress() != null) {
                 nodeInfoBldr.setNodeIpAddress(deviceInfo.getIpAddress());
+            }
+            //Grid-implementation
+            List<Degree> degrees = getDegrees(nodeId, deviceInfo);
+            for (Degree degree : degrees) {
+                FrequencyGHz centerFreq = degree.getMcCapabilities().getCenterFreqGranularity();
+                if (centerFreq.getValue().equals(BigDecimal.valueOf(50.0))) {
+                    nodeInfoBldr.setGridImplementation(GridImplementation.FixedGrid);
+                }
+                else {
+                    nodeInfoBldr.setGridImplementation(GridImplementation.FlexGrid);
+                }
             }
         } else {
          // TODO make mandatory in yang
