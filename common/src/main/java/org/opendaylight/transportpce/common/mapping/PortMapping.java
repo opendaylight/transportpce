@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilities;
 
 public interface PortMapping {
 
@@ -79,6 +80,31 @@ public interface PortMapping {
      * @return Result Mapping object if success otherwise null.
      */
     Mapping getMapping(String nodeId, String logicalConnPoint);
+
+    /**
+     * This method for a given node's media channel-capabilities returns the
+     * object based on portmapping.yang model stored in the MD-SAL data store
+     * which is created when the node is connected for the first time. The
+     * mapping object basically contains the following attributes of interest:
+     *
+     * <p>
+     * 1. slot width granularity
+     *
+     * <p>
+     * 2. center frequency granularity
+     *
+     * <p>
+     * 3. Supporting OMS interface (if port on ROADM) 4. Supporting OTS
+     * interface (if port on ROADM)
+     *
+     * @param nodeId
+     *            Unique Identifier for the node of interest.
+     * @param mcLcp
+     *            Name of the MC-capability
+     *
+     * @return Result McCapabilities.
+     */
+    McCapabilities getMcCapbilities(String nodeId, String mcLcp);
 
     boolean updateMapping(String nodeId, Mapping mapping);
 
