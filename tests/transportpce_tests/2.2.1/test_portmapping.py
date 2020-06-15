@@ -54,6 +54,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(
             {u'node-info': {u'node-type': u'rdm',
                             u'node-ip-address': u'127.0.0.11',
+                            u'grid-implementation': u'fixed-grid',
                             u'node-clli': u'NodeA',
                             u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
                             u'node-model': u'model2'}},

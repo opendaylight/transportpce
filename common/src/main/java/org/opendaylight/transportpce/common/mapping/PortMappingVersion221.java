@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200714.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200714.network.nodes.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200714.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200714.network.nodes.NodeInfo.GridImplementation;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200714.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200714.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200714.network.nodes.SwitchingPoolLcp;
@@ -52,6 +54,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200714.network.nodes.switching.pool.lcp.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200714.network.nodes.switching.pool.lcp.NonBlockingListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CircuitPack;
@@ -83,6 +86,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.PortConfig;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,7 +123,7 @@ public class PortMappingVersion221 {
             return false;
         }
         deviceInfo = deviceInfoOptional.get();
-        nodeInfo = createNodeInfo(deviceInfo);
+        nodeInfo = createNodeInfo(deviceInfo, nodeId);
         if (nodeInfo == null) {
             return false;
         }
@@ -515,7 +520,7 @@ public class PortMappingVersion221 {
                 = new ArrayList<>();
             LOG.info("Getting Circuitpacks for Srg Number {}", srgCounter);
             InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(SharedRiskGroup.class, new SharedRiskGroupKey(srgCounter));
+                .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(srgCounter)));
             Optional<SharedRiskGroup> ordmSrgObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
                 LogicalDatastoreType.OPERATIONAL, srgIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -650,7 +655,7 @@ public class PortMappingVersion221 {
         for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
             LOG.info("Getting Connection ports for Degree Number {}", degreeCounter);
             InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Degree.class, new DegreeKey(degreeCounter));
+                .child(Degree.class, new DegreeKey(Uint16.valueOf(degreeCounter)));
             Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -674,7 +679,7 @@ public class PortMappingVersion221 {
         for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
             LOG.info("Getting Connection ports for Degree Number {}", degreeCounter);
             InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                .child(Degree.class, new DegreeKey(degreeCounter));
+                .child(Degree.class, new DegreeKey(Uint16.valueOf(degreeCounter)));
             Optional<Degree> ordmDegreeObject = this.deviceTransactionManager.getDataFromDevice(deviceId,
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
@@ -782,7 +787,7 @@ public class PortMappingVersion221 {
             interfaceName = interfaceList.get(circuitPackName);
         }
         return new CpToDegreeBuilder().withKey(new CpToDegreeKey(circuitPackName)).setCircuitPackName(circuitPackName)
-            .setDegreeNumber(Long.valueOf(degreeNumber)).setInterfaceName(interfaceName).build();
+            .setDegreeNumber(Uint32.valueOf(degreeNumber)).setInterfaceName(interfaceName).build();
     }
 
     private Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
@@ -791,6 +796,7 @@ public class PortMappingVersion221 {
         mpBldr.withKey(new MappingKey(logicalConnectionPoint)).setLogicalConnectionPoint(logicalConnectionPoint)
             .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName())
             .setPortDirection(port.getPortDirection().getName());
+        // TODO: Here is where we need to add MC-capabilities to the mapping object
 
         // Get OMS and OTS interface provisioned on the TTP's
         if ((logicalConnectionPoint.contains(StringConstants.TTP_TOKEN)
@@ -992,29 +998,53 @@ public class PortMappingVersion221 {
         return true;
     }
 
-    private NodeInfo createNodeInfo(Info deviceInfo) {
+    private NodeInfo createNodeInfo(Info deviceInfo, String nodeId) {
         NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder();
-        if (deviceInfo.getNodeType() != null) {
-            nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._221).setNodeType(deviceInfo.getNodeType());
-            if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
-                nodeInfoBldr.setNodeClli(deviceInfo.getClli());
-            } else {
-                nodeInfoBldr.setNodeClli("defaultCLLI");
-            }
-            if (deviceInfo.getModel() != null) {
-                nodeInfoBldr.setNodeModel(deviceInfo.getModel());
-            }
-            if (deviceInfo.getVendor() != null) {
-                nodeInfoBldr.setNodeVendor(deviceInfo.getVendor());
-            }
-            if (deviceInfo.getIpAddress() != null) {
-                nodeInfoBldr.setNodeIpAddress(deviceInfo.getIpAddress());
-            }
-        } else {
-         // TODO make mandatory in yang
+        if (deviceInfo.getNodeType() == null) {
+            // TODO make mandatory in yang
             LOG.error("Node type field is missing");
             return null;
         }
+
+        nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._221).setNodeType(deviceInfo.getNodeType());
+        if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
+            nodeInfoBldr.setNodeClli(deviceInfo.getClli());
+        } else {
+            nodeInfoBldr.setNodeClli("defaultCLLI");
+        }
+
+        if (deviceInfo.getModel() != null) {
+            nodeInfoBldr.setNodeModel(deviceInfo.getModel());
+        }
+
+        if (deviceInfo.getVendor() != null) {
+            nodeInfoBldr.setNodeVendor(deviceInfo.getVendor());
+        }
+
+        if (deviceInfo.getIpAddress() != null) {
+            nodeInfoBldr.setNodeIpAddress(deviceInfo.getIpAddress());
+        }
+        // Grid-implementation
+        LOG.info("Checking if node Flex/Fixed grid support");
+        if (deviceInfo.getNodeType().equals(NodeTypes.Rdm)) {
+            List<Degree> degrees = getDegrees(nodeId, deviceInfo);
+            // TODO: Thisn is under the assumption that all degrees and SRGs have same mc-capabilities
+            // TODO: However I think this needs to to change
+            if (degrees.get(0).getMcCapabilities() != null && !degrees.get(0).getMcCapabilities()
+                .getCenterFreqGranularity().getValue().equals(BigDecimal.valueOf(50.0))) {
+                nodeInfoBldr.setGridImplementation(GridImplementation.FlexGrid);
+                nodeInfoBldr.setSlotWidthGranularity(degrees.get(0).getMcCapabilities()
+                    .getSlotWidthGranularity());
+                LOG.info("Node {} has {} support", nodeId, GridImplementation.FlexGrid);
+                LOG.info("Advertised MC-capabilities: CF-granularity {}, slot-width granularity {}",
+                    degrees.get(0).getMcCapabilities().getCenterFreqGranularity(),
+                    degrees.get(0).getMcCapabilities().getSlotWidthGranularity());
+            } else {
+                nodeInfoBldr.setGridImplementation(GridImplementation.FixedGrid);
+
+            }
+        }
+
         return nodeInfoBldr.build();
     }
 
