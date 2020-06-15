@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
 import org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface;
+import org.opendaylight.transportpce.common.fixedflex.FlexGridImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -24,6 +26,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
 
     private final PortMapping portMapping = Mockito.mock(PortMapping.class);
     private final FixedFlexInterface fixedFlex = Mockito.spy(FixedFlexInterface.class);
+    private final FlexGridImpl flexGrid = Mockito.spy(FlexGridImpl.class);
     private OpenRoadmInterface221 openRoadMInterface221;
     private final String nodeId = "node1";
 
@@ -31,7 +34,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
     public void setup() {
 
         OpenRoadmInterfaces openRoadmInterfaces = Mockito.spy(OpenRoadmInterfaces.class);
-        this.openRoadMInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces, fixedFlex);
+        this.openRoadMInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces, fixedFlex, flexGrid);
     }
 
     @Test
@@ -61,8 +64,13 @@ public class OpenRoadMInterface221Test extends AbstractTest {
         Mockito.when(fixedFlex.getStop()).thenReturn(12d);
         Mockito.when(fixedFlex.getCenterFrequency()).thenReturn(12d);
         Long waveNumber = 1000L;
-        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber));
-        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber),
+        BigDecimal centerFreq = new BigDecimal(50);
+        BigDecimal slotWidth = new BigDecimal(100);
+
+        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber,
+            centerFreq, slotWidth));
+        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber,
+            centerFreq, slotWidth),
                 Arrays.asList(logicalConnPoint + "-nmc-" + waveNumber));
     }
 
@@ -76,8 +84,12 @@ public class OpenRoadMInterface221Test extends AbstractTest {
         Mockito.when(fixedFlex.getStop()).thenReturn(12d);
         Mockito.when(fixedFlex.getCenterFrequency()).thenReturn(12d);
         Long waveNumber = 1000L;
-        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber));
-        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber),
+        BigDecimal centerFreq = new BigDecimal(50);
+        BigDecimal slotWidth = new BigDecimal(100);
+        Assert.assertNotNull(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber,
+            centerFreq, slotWidth));
+        Assert.assertEquals(openRoadMInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber,
+            centerFreq, slotWidth),
                 Arrays.asList(logicalConnPoint + "-mc-" + waveNumber, logicalConnPoint + "-nmc-" + waveNumber));
     }
 

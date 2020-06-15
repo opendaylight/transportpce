@@ -87,6 +87,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         data = {"renderer:input": {
             "renderer:service-name": "service_test",
             "renderer:wave-number": "7",
+            "renderer:center-freq": "50",
+            "renderer:slot-width": "100",
             "renderer:modulation-format": "qpsk",
             "renderer:operation": "create",
             "renderer:nodes": [
