@@ -34,11 +34,11 @@ class TransportPCERendererTesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         print("starting honeynode1...")
-        cls.honeynode_process1 = test_utils.start_xpdra_honeynode()
+        cls.honeynode_process1 = test_utils.start_sim('xpdra')
         time.sleep(20)
 
         print("starting honeynode2...")
-        cls.honeynode_process2 = test_utils.start_roadma_honeynode()
+        cls.honeynode_process2 = test_utils.start_sim('roadma')
         time.sleep(20)
 
         print("starting opendaylight...")
@@ -79,7 +79,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17831",
+            "netconf-node-topology:port": test_utils.sims['roadma']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -98,7 +98,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17830",
+            "netconf-node-topology:port": test_utils.sims['xpdra']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
