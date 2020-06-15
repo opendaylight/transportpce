@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
 import org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface;
+import org.opendaylight.transportpce.common.fixedflex.FlexGridImpl;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
@@ -24,6 +25,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
 
     private final PortMapping portMapping = Mockito.mock(PortMapping.class);
     private final FixedFlexInterface fixedFlex = Mockito.spy(FixedFlexInterface.class);
+    private final FlexGridImpl flexGrid = Mockito.spy(FlexGridImpl.class);
     private OpenRoadmInterface221 openRoadMInterface221;
     private final String nodeId = "node1";
 
@@ -31,7 +33,7 @@ public class OpenRoadMInterface221Test extends AbstractTest {
     public void setup() {
 
         OpenRoadmInterfaces openRoadmInterfaces = Mockito.spy(OpenRoadmInterfaces.class);
-        this.openRoadMInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces, fixedFlex);
+        this.openRoadMInterface221 = new OpenRoadmInterface221(portMapping, openRoadmInterfaces, fixedFlex, flexGrid);
     }
 
     @Test
