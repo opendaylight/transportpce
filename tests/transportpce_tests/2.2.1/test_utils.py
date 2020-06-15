@@ -16,6 +16,16 @@ import subprocess
 import psutil
 import requests
 
+sims = {
+    'xpdra': {'port': '17840', 'configfile': 'oper-XPDRA.xml', 'logfile': 'oper-XPDRA.log'},
+    'roadma': {'port': '17841', 'configfile': 'oper-ROADMA.xml', 'logfile': 'oper-ROADMA.log'},
+    'roadmb': {'port': '17842', 'configfile': 'oper-ROADMB.xml', 'logfile': 'oper-ROADMB.log'},
+    'roadmc': {'port': '17843', 'configfile': 'oper-ROADMC.xml', 'logfile': 'oper-ROADMC.log'},
+    'xpdrc': {'port': '17844', 'configfile': 'oper-XPDRC.xml', 'logfile': 'oper-XPDRC.log'},
+    'spdrav2': {'port': '17845', 'configfile': 'oper-SPDRAv2.xml', 'logfile': 'oper-SPDRAv2.log'},
+    'spdrav1': {'port': '17846', 'configfile': 'oper-SPDRAv1.xml', 'logfile': 'oper-SPDRAv1.log'}
+}
+
 HONEYNODE_OK_START_MSG = re.escape("Netconf SSH endpoint started successfully at 0.0.0.0")
 
 TYPE_APPLICATION_JSON = {'content-type': 'application/json'}
@@ -30,49 +40,16 @@ samples_directory = os.path.join(
 log_directory = os.path.dirname(os.path.realpath(__file__))
 
 
-def start_xpdra_honeynode():
-    log_file = os.path.join(log_directory, "oper-XPDRA.log")
-    process = start_node(log_file, "17840", "oper-XPDRA.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
-    return process
-
-
-def start_roadma_honeynode():
-    log_file = os.path.join(log_directory, "oper-ROADMA.log")
-    process = start_node(log_file, "17841", "oper-ROADMA.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
-    return process
-
-
-def start_roadmb_honeynode():
-    log_file = os.path.join(log_directory, "oper-ROADMB.log")
-    process = start_node(log_file, "17842", "oper-ROADMB.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
-    return process
-
-
-def start_roadmc_honeynode():
-    log_file = os.path.join(log_directory, "oper-ROADMC.log")
-    process = start_node(log_file, "17843", "oper-ROADMC.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
-    return process
-
-
-def start_xpdrc_honeynode():
-    log_file = os.path.join(log_directory, "oper-XPDRC.log")
-    process = start_node(log_file, "17844", "oper-XPDRC.xml")
-    wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
-    return process
-
-
-def start_spdra_honeynode():
-    log_file = os.path.join(log_directory, "oper-SPDRAv2.log")
-    process = start_node(log_file, "17845", "oper-SPDRAv2.xml")
+def start_sim(sim):
+    print("starting simulator for " + sim + "...")
+    log_file = os.path.join(log_directory, sims[sim]['logfile'])
+    process = start_node(log_file, sims[sim]['port'], sims[sim]['configfile'])
     wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000)
     return process
 
 
 def start_tpce():
+    print("starting opendaylight...")
     if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
         print("starting LIGHTY.IO TransportPCE build...")
         executable = os.path.join(
@@ -81,8 +58,7 @@ def start_tpce():
             "clean-start-controller.sh")
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
-                ["sh", executable], stdout=outfile, stderr=outfile,
-                stdin=open(os.devnull))
+                ["sh", executable], stdout=outfile, stderr=outfile, stdin=None)
     else:
         print("starting KARAF TransportPCE build...")
         executable = os.path.join(
@@ -90,8 +66,7 @@ def start_tpce():
             "..", "..", "..", "karaf", "target", "assembly", "bin", "karaf")
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
-                ["sh", executable, "server"], stdout=outfile, stderr=outfile,
-                stdin=open(os.devnull))
+                ["sh", executable, "server"], stdout=outfile, stderr=outfile, stdin=None)
 
 
 def install_karaf_feature(feature_name: str):

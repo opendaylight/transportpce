@@ -46,7 +46,6 @@ class TransportPCEtesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):  # a class method called before tests in an individual class run.
         cls._get_file()
-        print("starting opendaylight...")
         cls.odl_process = test_utils.start_tpce()
         time.sleep(90)
         print("opendaylight started")
