@@ -262,8 +262,12 @@ public class PowerMgmtImpl implements PowerMgmt {
                         }
                         BigDecimal powerValue = spanLossTx.subtract(BigDecimal.valueOf(9));
                         powerValue = powerValue.min(BigDecimal.valueOf(2));
+                        // If slot-width is other than 50GHz then calculate PSD power value
+                        if (input.getSlotWidth() != null && input.getSlotWidth().getValue().doubleValue() != 50) {
+                            Double psdPower = 10 * Math.log(input.getSlotWidth().getValue().doubleValue() / 50);
+                            powerValue = powerValue.add(new BigDecimal(psdPower));
+                        }
                         LOG.info("Power Value is {}", powerValue);
-
                         try {
                             Boolean setXconnPowerSuccessVal = crossConnect.setPowerLevel(nodeId,
                                 OpticalControlMode.Power.getName(), powerValue, connectionNumber);
