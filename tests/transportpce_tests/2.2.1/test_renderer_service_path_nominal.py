@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 
 #############################################################################
 # Copyright (c) 2017 Orange, Inc. and others.  All rights reserved.
@@ -87,6 +87,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         data = {"renderer:input": {
             "renderer:service-name": "service_test",
             "renderer:wave-number": "7",
+            "renderer:center-freq": "196",
+            "renderer:slot-width": "50",
             "renderer:modulation-format": "qpsk",
             "renderer:operation": "create",
             "renderer:nodes": [

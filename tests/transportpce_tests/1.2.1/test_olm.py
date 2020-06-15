@@ -301,6 +301,8 @@ class TransportOlmTesting(unittest.TestCase):
             "input": {
                 "service-name": "test",
                 "wave-number": "1",
+                "center-freq" : "196",
+                "slot-width" : "50",
                 "modulation-format": "qpsk",
                 "operation": "create",
                 "nodes": [
@@ -342,6 +344,8 @@ class TransportOlmTesting(unittest.TestCase):
             "input": {
                 "service-name": "test",
                 "wave-number": "1",
+                "center-freq" : "196",
+                "slot-width" : "50",
                 "modulation-format": "qpsk",
                 "operation": "create",
                 "nodes": [
@@ -569,6 +573,8 @@ class TransportOlmTesting(unittest.TestCase):
             "input": {
                 "service-name": "test",
                 "wave-number": "1",
+                "center-freq": "196",
+                "slot-width": "50",
                 "modulation-format": "qpsk",
                 "operation": "delete",
                 "nodes": [
@@ -609,6 +615,8 @@ class TransportOlmTesting(unittest.TestCase):
             "input": {
                 "service-name": "test",
                 "wave-number": "1",
+                "center-freq": "196",
+                "slot-width": "50",
                 "modulation-format": "qpsk",
                 "operation": "delete",
                 "nodes": [
@@ -693,6 +701,8 @@ class TransportOlmTesting(unittest.TestCase):
             "input": {
                 "service-name": "test2",
                 "wave-number": "2",
+                "center-freq": "196",
+                "slot-width": "50",
                 "modulation-format": "qpsk",
                 "operation": "create",
                 "nodes": [
@@ -735,6 +745,8 @@ class TransportOlmTesting(unittest.TestCase):
             "input": {
                 "service-name": "test",
                 "wave-number": "1",
+                "center-freq": "196",
+                "slot-width": "50",
                 "modulation-format": "qpsk",
                 "operation": "delete",
                 "nodes": [

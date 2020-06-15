@@ -97,6 +97,8 @@ class TransportPCEtesting(unittest.TestCase):
         data = {"renderer:input": {
             "service-name": "service_ODU4",
             "wave-number": "1",
+            "center-freq": "196",
+            "slot-width": "50",
             "modulation-format": "qpsk",
             "operation": "create",
             "nodes": [
