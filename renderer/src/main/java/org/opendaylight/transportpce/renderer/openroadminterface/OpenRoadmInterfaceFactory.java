@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -49,6 +50,19 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
+    public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
+        BigDecimal centerFreq, BigDecimal slotWidth)
+            throws OpenRoadmInterfaceException {
+        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
+                return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber);
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber,
+                    centerFreq,slotWidth);
+            default:
+                return null;
+        }
+    }
 
     /**
      * This methods creates an OCH interface on the given termination point on
@@ -60,10 +74,8 @@ public class OpenRoadmInterfaceFactory {
      * @return Name of the interface if successful, otherwise return null.
      * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      */
-
     public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber)
             throws OpenRoadmInterfaceException {
-
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber);
@@ -74,6 +86,19 @@ public class OpenRoadmInterfaceFactory {
         }
     }
 
+    public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
+        OchAttributes.ModulationFormat format, BigDecimal centerFreq, BigDecimal slotWidth)
+            throws OpenRoadmInterfaceException {
+        switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
+            case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
+                return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber, format);
+            case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
+                return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint, slotWidth,
+                    centerFreq, waveNumber);
+            default:
+                return null;
+        }
+    }
 
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
         OchAttributes.ModulationFormat format)
@@ -126,7 +151,7 @@ public class OpenRoadmInterfaceFactory {
 
     public String createOpenRoadmOdu4Interface(String anodeId, String alogicalConnPoint, String asupportingOtuInterface,
         String znodeId, String zlogicalConnPoint)
-        throws OpenRoadmInterfaceException {
+            throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(anodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOdu4Interface(anodeId, alogicalConnPoint,
@@ -177,7 +202,7 @@ public class OpenRoadmInterfaceFactory {
      */
 
     public String createOpenRoadmOtu4Interface(String anodeId, String alogicalConnPoint, String asupportOchInterface,
-            String znodeId, String zlogicalConnPoint)
+        String znodeId, String zlogicalConnPoint)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(anodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
@@ -270,7 +295,7 @@ public class OpenRoadmInterfaceFactory {
     }
 
     public String createOpenRoadmOdu0Interface(String nodeId, String logicalConnPoint, String servicename,
-            String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlot)
+        String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlot)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
@@ -285,7 +310,7 @@ public class OpenRoadmInterfaceFactory {
     }
 
     public String createOpenRoadmOdu2Interface(String nodeId, String logicalConnPoint, String servicename,
-            String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlotIndex)
+        String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlotIndex)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
@@ -300,7 +325,7 @@ public class OpenRoadmInterfaceFactory {
     }
 
     public String createOpenRoadmOdu2eInterface(String nodeId, String logicalConnPoint, String servicename,
-            String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlotIndex)
+        String payLoad, boolean isNetworkPort, int tribPortNumber, int tribSlotIndex)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
@@ -328,7 +353,7 @@ public class OpenRoadmInterfaceFactory {
 
     public String createOpenRoadmOtnOdu4Interface(String anodeId, String alogicalConnPoint,
         String asupportingOtuInterface, String znodeId, String zlogicalConnPoint)
-        throws OpenRoadmInterfaceException {
+            throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(anodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
                 return openRoadmInterface221
