@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -109,7 +110,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         ServiceListTopology topology = new ServiceListTopology();
         AtomicBoolean success = new AtomicBoolean(true);
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-
         ForkJoinTask forkJoinTask = forkJoinPool.submit(() -> nodes.parallelStream().forEach(node -> {
             String nodeId = node.getNodeId();
             // take the index of the node
@@ -126,11 +126,29 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
                     String srcTp = node.getSrcTp();
                     String destTp = node.getDestTp();
+                    // TODO: In the case of flex-grid, the wave-number becomes bitmap index
+                    // TODO: need to update transportpce-common-types accordingly, to a more, generic-term
                     Long waveNumber = input.getWaveNumber().toJava();
+                    BigDecimal centerFreq = null;
+                    BigDecimal slotWidth = null;
+                    if (input.getCenterFreq() != null) {
+                        centerFreq = input.getCenterFreq().getValue();
+                    }
+                    if (input.getSlotWidth() != null) {
+                        slotWidth = input.getSlotWidth().getValue();
+                    }
+                    LOG.info("These are CF {} and slot {}", centerFreq, slotWidth);
                     if ((destTp != null) && destTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
-                        String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
+                        String supportingOchInterface;
+                        if ((centerFreq != null) && (slotWidth != null)) {
+                            supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
+                                nodeId, destTp, waveNumber, ModulationFormat.DpQpsk, centerFreq, slotWidth);
+                        }
+                        else {
+                            supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, destTp, waveNumber, ModulationFormat.DpQpsk);
+                        }
                         createdOchInterfaces.add(supportingOchInterface);
                         // Here we pass logical connection-point of z-end to set SAPI and DAPI
                         Nodes tgtNode = null;
@@ -161,8 +179,15 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     if ((srcTp != null) && srcTp.contains(StringConstants.NETWORK_TOKEN)) {
                         crossConnectFlag++;
                         // create OpenRoadm Xponder Line Interfaces
-                        String supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
+                        String supportingOchInterface;
+                        if ((centerFreq != null) && (slotWidth != null)) {
+                            supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
+                                nodeId, srcTp, waveNumber, ModulationFormat.DpQpsk, centerFreq, slotWidth);
+                        }
+                        else {
+                            supportingOchInterface = this.openRoadmInterfaceFactory.createOpenRoadmOchInterface(
                                 nodeId, srcTp, waveNumber, ModulationFormat.DpQpsk);
+                        }
                         createdOchInterfaces.add(supportingOchInterface);
                         String supportingOtuInterface = this.openRoadmInterfaceFactory
                                 .createOpenRoadmOtu4Interface(nodeId, srcTp, supportingOchInterface);
@@ -188,15 +213,31 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     }
                     if ((srcTp != null) && (srcTp.contains(StringConstants.TTP_TOKEN)
                             || srcTp.contains(StringConstants.PP_TOKEN))) {
-                        createdOchInterfaces.addAll(
-                            this.openRoadmInterfaceFactory
-                                .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber));
+                        if ((centerFreq != null) && (slotWidth != null)) {
+                            createdOchInterfaces.addAll(
+                                this.openRoadmInterfaceFactory
+                                    .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber, centerFreq, slotWidth));
+                        }
+                        else {
+                            createdOchInterfaces.addAll(
+                                this.openRoadmInterfaceFactory
+                                    .createOpenRoadmOchInterface(nodeId, srcTp, waveNumber));
+                        }
                     }
                     if ((destTp != null) && (destTp.contains(StringConstants.TTP_TOKEN)
                             || destTp.contains(StringConstants.PP_TOKEN))) {
-                        createdOchInterfaces.addAll(
-                            this.openRoadmInterfaceFactory
-                                .createOpenRoadmOchInterface(nodeId, destTp, waveNumber));
+
+                        if ((centerFreq != null) && (slotWidth != null)) {
+                            createdOchInterfaces.addAll(
+                                this.openRoadmInterfaceFactory
+                                    .createOpenRoadmOchInterface(nodeId, destTp, waveNumber, centerFreq, slotWidth));
+                        }
+                        else {
+                            createdOchInterfaces.addAll(
+                                this.openRoadmInterfaceFactory
+                                    .createOpenRoadmOchInterface(nodeId, destTp, waveNumber));
+                        }
+
                     }
                     if (crossConnectFlag < 1) {
                         LOG.info("Creating cross connect between source {} and destination {} for node {}", srcTp,
