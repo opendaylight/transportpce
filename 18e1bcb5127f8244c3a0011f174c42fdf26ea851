@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b06414b9_980ab736",
+        "filename": "tests/transportpce_tests/1.2.1/test_utils.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-15T14:06:26Z",
+      "side": 1,
+      "message": "this remove the execution Warning\nResourceWarning: unclosed file \u003c_io.TextIOWrapper name\u003d\u0027/dev/null\u0027 mode\u003d\u0027r\u0027 encoding\u003d\u0027UTF-8\u0027\u003e\n  stdin\u003dopen(os.devnull))",
+      "range": {
+        "startLine": 39,
+        "startChar": 68,
+        "endLine": 39,
+        "endChar": 78
+      },
+      "revId": "18e1bcb5127f8244c3a0011f174c42fdf26ea851",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
