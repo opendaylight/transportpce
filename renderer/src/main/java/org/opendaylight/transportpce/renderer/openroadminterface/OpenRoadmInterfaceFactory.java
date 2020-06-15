@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.renderer.openroadminterface;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -61,14 +62,16 @@ public class OpenRoadmInterfaceFactory {
      * @throws OpenRoadmInterfaceException OpenRoadm interface exception
      */
 
-    public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber)
+    public List<String> createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
+        BigDecimal centerFreq, BigDecimal slotWidth)
             throws OpenRoadmInterfaceException {
 
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber);
+                return openRoadmInterface221.createFlexOCH(nodeId, logicalConnPoint, waveNumber,
+                    centerFreq,slotWidth);
             default:
                 return null;
         }
@@ -76,13 +79,14 @@ public class OpenRoadmInterfaceFactory {
 
 
     public String createOpenRoadmOchInterface(String nodeId, String logicalConnPoint, Long waveNumber,
-        OchAttributes.ModulationFormat format)
+        OchAttributes.ModulationFormat format, BigDecimal centerFreq, BigDecimal slotWidth)
             throws OpenRoadmInterfaceException {
         switch (mappingUtils.getOpenRoadmVersion(nodeId)) {
             case StringConstants.OPENROADM_DEVICE_VERSION_1_2_1:
                 return openRoadmInterface121.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber, format);
             case StringConstants.OPENROADM_DEVICE_VERSION_2_2_1:
-                return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber);
+                return openRoadmInterface221.createOpenRoadmOchInterface(nodeId, logicalConnPoint, waveNumber,
+                    centerFreq,slotWidth);
             default:
                 return null;
         }
