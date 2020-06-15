@@ -74,8 +74,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfa
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.PmNamesEnum;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200128.olm.get.pm.input.ResourceIdentifierBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.PmNamesEnum;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
