@@ -24,6 +24,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils"/>
   <reference id="FixedFlexImpl" interface="org.opendaylight.transportpce.common.fixedflex.FixedFlexInterface"/>
   <reference id="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService"/>
+  <reference id="FlexGridImpl" interface="org.opendaylight.transportpce.common.fixedflex.FlexGridInterface"/>
 
   <odl:rpc-service id="olmService"
       interface="org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService"/>
@@ -39,6 +40,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <argument ref="portMapping"/>
     <argument ref="openRoadmInterfaces"/>
     <argument ref="FixedFlexImpl"/>
+    <argument ref="FlexGridImpl"/>
   </bean>
 
   <bean id="openRoadmOtnInterface"

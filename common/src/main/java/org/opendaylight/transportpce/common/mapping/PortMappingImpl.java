@@ -24,6 +24,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilitiesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -52,10 +54,9 @@ public class PortMappingImpl implements PortMapping {
             return portMappingVersion121.createMappingData(nodeId);
         } else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
             return portMappingVersion22.createMappingData(nodeId);
-        } else {
-            LOG.error("Unable to create mapping data for unmanaged openroadm device version");
-            return false;
         }
+        LOG.error("Unable to create mapping data for unmanaged openroadm device version");
+        return false;
     }
 
 
@@ -74,10 +75,8 @@ public class PortMappingImpl implements PortMapping {
                 Mapping mapping = mapObject.get();
                 LOG.info("Found mapping for {} - {}. Mapping: {}", nodeId, logicalConnPoint, mapping.toString());
                 return mapping;
-            } else {
-                LOG.warn("Could not find mapping for logical connection point {} for nodeId {}", logicalConnPoint,
-                    nodeId);
             }
+            LOG.warn("Could not find mapping for logical connection point {} for nodeId {}", logicalConnPoint, nodeId);
         } catch (InterruptedException | ExecutionException ex) {
             LOG.error("Unable to read mapping for logical connection point : {} for nodeId {}", logicalConnPoint,
                 nodeId, ex);
@@ -86,6 +85,28 @@ public class PortMappingImpl implements PortMapping {
     }
 
 
+    @Override
+    public McCapabilities getMcCapbilities(String nodeId, String mcLcp) {
+        /*
+         * Getting physical mapping corresponding to logical connection point
+         */
+        InstanceIdentifier<McCapabilities> mcCapabilitiesIID = InstanceIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId)).child(McCapabilities.class, new McCapabilitiesKey(mcLcp)).build();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<McCapabilities> mcCapObject = readTx.read(LogicalDatastoreType.CONFIGURATION,
+                mcCapabilitiesIID).get();
+            if (mcCapObject.isPresent()) {
+                McCapabilities mcCap = mcCapObject.get();
+                LOG.info("Found MC-cap for {} - {}. Mapping: {}", nodeId, mcLcp, mcCap.toString());
+                return mcCap;
+            }
+            LOG.warn("Could not find mapping for logical connection point {} for nodeId {}", mcLcp, nodeId);
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.error("Unable to read mapping for logical connection point : {} for nodeId {}", mcLcp,
+                nodeId, ex);
+        }
+        return null;
+    }
 
 
     @Override
@@ -109,8 +130,7 @@ public class PortMappingImpl implements PortMapping {
         OpenroadmVersion openROADMversion = this.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
         if (openROADMversion.getIntValue() == 1) {
             return portMappingVersion121.updateMapping(nodeId,oldMapping);
-        }
-        else if (openROADMversion.getIntValue() == 2) {
+        } else if (openROADMversion.getIntValue() == 2) {
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes
                 .MappingBuilder oldMapping2Bldr = new MappingBuilder().setLogicalConnectionPoint(oldMapping
                 .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
@@ -137,10 +157,7 @@ public class PortMappingImpl implements PortMapping {
             }
             return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr.build());
         }
-
-        else {
-            return false;
-        }
+        return false;
     }
 
     @Override
@@ -154,9 +171,8 @@ public class PortMappingImpl implements PortMapping {
                 Nodes node = nodePortMapObject.get();
                 LOG.info("Found node {} in portmapping.", nodeId);
                 return node;
-            } else {
-                LOG.warn("Could not find node {} in portmapping.", nodeId);
             }
+            LOG.warn("Could not find node {} in portmapping.", nodeId);
         } catch (InterruptedException | ExecutionException ex) {
             LOG.error("Unable to get node {} in portmapping", nodeId);
         }
