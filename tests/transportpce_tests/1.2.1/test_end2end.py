@@ -19,7 +19,7 @@ from common import test_utils
 
 class TransportPCEFulltesting(unittest.TestCase):
 
-    WAITING = 20  # nominal value is 300
+    WAITING = 30  # nominal value is 300
 
     processes = None
 
