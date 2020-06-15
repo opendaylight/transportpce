@@ -17,7 +17,6 @@ import requests
 import psutil
 import test_utils
 
-
 class TransportPCEPortMappingTesting(unittest.TestCase):
 
     sim_process1 = None
@@ -97,7 +96,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17831",
+            "netconf-node-topology:port": test_utils.sims['roadma']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
@@ -190,7 +189,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             "netconf-node-topology:username": "admin",
             "netconf-node-topology:password": "admin",
             "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": "17830",
+            "netconf-node-topology:port":  test_utils.sims['xpdra']['port'],
             "netconf-node-topology:tcp-only": "false",
             "netconf-node-topology:pass-through": {}}]}
         headers = {'content-type': 'application/json'}
