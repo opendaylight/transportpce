@@ -32,7 +32,6 @@ class TransportGNPYtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print("starting opendaylight...")
         cls.odl_process = test_utils.start_tpce()
         time.sleep(30)
         print("opendaylight started")

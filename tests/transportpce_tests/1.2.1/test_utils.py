@@ -1,6 +1,16 @@
 import os
 import subprocess
 
+sims = {
+    'xpdra': {'port': '17830', 'configfile': 'oper-XPDRA.xml'},
+    'roadma': {'port': '17831', 'configfile': 'oper-ROADMA.xml'},
+    'roadmb': {'port': '17832', 'configfile': 'oper-ROADMB.xml'},
+    'roadmc': {'port': '17833', 'configfile': 'oper-ROADMC.xml'},
+    'xpdrc': {'port': '17834', 'configfile': 'oper-XPDRC.xml'},
+    'roadma-full': {'port': '17821', 'configfile': 'oper-ROADMA-full.xml'},
+    'roadmc-full': {'port': '17823', 'configfile': 'oper-ROADMC-full.xml'}
+}
+
 honeynode_executable = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "honeynode", "1.2.1", "honeynode-simulator", "honeycomb-tpce")
@@ -9,63 +19,17 @@ samples_directory = os.path.join(
     "..", "..", "sample_configs", "openroadm", "1.2.1")
 
 
-def start_xpdra_honeynode():
+def start_sim(sim):
+    print("starting simulator for " + sim + "...")
     if os.path.isfile(honeynode_executable):
-        with open('honeynode1.log', 'w') as outfile:
+        with open(sim+'.log', 'w') as outfile:
             return subprocess.Popen(
-                [honeynode_executable, "17830", os.path.join(samples_directory, "oper-XPDRA.xml")],
-                stdout=outfile, stderr=outfile)
-
-
-def start_roadma_full_honeynode():
-    if os.path.isfile(honeynode_executable):
-        with open('honeynode2.log', 'w') as outfile:
-            return subprocess.Popen(
-                [honeynode_executable, "17821", os.path.join(samples_directory, "oper-ROADMA-full.xml")],
-                stdout=outfile, stderr=outfile)
-
-
-def start_roadma_honeynode():
-    if os.path.isfile(honeynode_executable):
-        with open('honeynode2.log', 'w') as outfile:
-            return subprocess.Popen(
-                [honeynode_executable, "17831", os.path.join(samples_directory, "oper-ROADMA.xml")],
-                stdout=outfile, stderr=outfile)
-
-
-def start_roadmb_honeynode():
-    if os.path.isfile(honeynode_executable):
-        with open('honeynode3.log', 'w') as outfile:
-            return subprocess.Popen(
-                [honeynode_executable, "17832", os.path.join(samples_directory, "oper-ROADMB.xml")],
-                stdout=outfile, stderr=outfile)
-
-
-def start_roadmc_full_honeynode():
-    if os.path.isfile(honeynode_executable):
-        with open('honeynode3.log', 'w') as outfile:
-            return subprocess.Popen(
-                [honeynode_executable, "17823", os.path.join(samples_directory, "oper-ROADMC-full.xml")],
-                stdout=outfile, stderr=outfile)
-
-
-def start_roadmc_honeynode():
-    if os.path.isfile(honeynode_executable):
-        with open('honeynode4.log', 'w') as outfile:
-            return subprocess.Popen(
-                [honeynode_executable, "17833", os.path.join(samples_directory, "oper-ROADMC.xml")],
-                stdout=outfile, stderr=outfile)
-
-
-def start_xpdrc_honeynode():
-    if os.path.isfile(honeynode_executable):
-        with open('honeynode4.log', 'w') as outfile:
-            return subprocess.Popen(
-                [honeynode_executable, "17834", os.path.join(samples_directory, "oper-XPDRC.xml")],
+                [honeynode_executable, sims[sim]['port'], os.path.join(samples_directory, sims[sim]['configfile'])],
                 stdout=outfile, stderr=outfile)
 
 
 def start_tpce():
+    print("starting opendaylight...")
     if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
         print("starting LIGHTY.IO TransportPCE build...")
         executable = os.path.join(
@@ -74,8 +38,7 @@ def start_tpce():
             "clean-start-controller.sh")
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
-                ["sh", executable], stdout=outfile, stderr=outfile,
-                stdin=open(os.devnull))
+                ["sh", executable], stdout=outfile, stderr=outfile, stdin=None)
     else:
         print("starting KARAF TransportPCE build...")
         executable = os.path.join(
@@ -83,5 +46,4 @@ def start_tpce():
             "..", "..", "..", "karaf", "target", "assembly", "bin", "karaf")
         with open('odl.log', 'w') as outfile:
             return subprocess.Popen(
-                ["sh", executable, "server"], stdout=outfile, stderr=outfile,
-                stdin=open(os.devnull))
+                ["sh", executable, "server"], stdout=outfile, stderr=outfile, stdin=None)
