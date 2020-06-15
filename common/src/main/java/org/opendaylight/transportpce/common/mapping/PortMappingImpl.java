@@ -24,6 +24,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilitiesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -86,6 +88,30 @@ public class PortMappingImpl implements PortMapping {
     }
 
 
+    @Override
+    public McCapabilities getMcCapbilities(String nodeId, String mcLcp) {
+        /*
+         * Getting physical mapping corresponding to logical connection point
+         */
+        InstanceIdentifier<McCapabilities> mcCapabilitiesIID = InstanceIdentifier.builder(Network.class)
+            .child(Nodes.class, new NodesKey(nodeId)).child(McCapabilities.class, new McCapabilitiesKey(mcLcp)).build();
+        try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
+            Optional<McCapabilities> mcCapObject = readTx.read(LogicalDatastoreType.CONFIGURATION,
+                mcCapabilitiesIID).get();
+            if (mcCapObject.isPresent()) {
+                McCapabilities mcCap = mcCapObject.get();
+                LOG.info("Found MC-cap for {} - {}. Mapping: {}", nodeId, mcLcp, mcCap.toString());
+                return mcCap;
+            } else {
+                LOG.warn("Could not find mapping for logical connection point {} for nodeId {}", mcLcp,
+                    nodeId);
+            }
+        } catch (InterruptedException | ExecutionException ex) {
+            LOG.error("Unable to read mapping for logical connection point : {} for nodeId {}", mcLcp,
+                nodeId, ex);
+        }
+        return null;
+    }
 
 
     @Override
