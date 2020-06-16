@@ -465,12 +465,16 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
-             'wavelength-number': 1,
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': -3.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
+                'wavelength-number': 1,
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': -3.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP1-TXRX-1'},
             res['roadm-connections'][0]['source'])
@@ -492,12 +496,16 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
-             'wavelength-number': 1,
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': 2.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
+                'wavelength-number': 1,
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': 2.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP1-TXRX-1'},
             res['roadm-connections'][0]['source'])
@@ -833,11 +841,15 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-number': 'DEG1-TTP-TXRX-SRG1-PP2-TXRX-2',
-             'wavelength-number': 2,
-             'opticalControlMode': 'power'},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                 'connection-number': 'DEG1-TTP-TXRX-SRG1-PP2-TXRX-2',
+                 'wavelength-number': 2,
+                 'opticalControlMode': 'power'
+                 }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'DEG1-TTP-TXRX-2'},
             res['roadm-connections'][0]['source'])
@@ -1391,12 +1403,16 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
-             'wavelength-number': 1,
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': -3.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-number': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
+                'wavelength-number': 1,
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': -3.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP1-TXRX-1'},
             res['roadm-connections'][0]['source'])
@@ -1418,12 +1434,16 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
-             'wavelength-number': 1,
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': 2.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-number': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
+                'wavelength-number': 1,
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': 2.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP1-TXRX-1'},
             res['roadm-connections'][0]['source'])
@@ -1579,12 +1599,16 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-number': 'SRG1-PP2-TXRX-DEG1-TTP-TXRX-2',
-             'wavelength-number': 2,
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': -3.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-number': 'SRG1-PP2-TXRX-DEG1-TTP-TXRX-2',
+                'wavelength-number': 2,
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': -3.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP2-TXRX-2'},
             res['roadm-connections'][0]['source'])
