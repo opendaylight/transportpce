@@ -188,10 +188,17 @@ class TransportPCERendererTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset({'name': 'DEG1-TTP-TXRX-nmc-7', 'administrative-state': 'inService',
-                                       'supporting-circuit-pack-name': '1/0',
-                                       'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
-                                       'supporting-port': 'L1'}, res['interface'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                 'name': 'DEG1-TTP-TXRX-nmc-7',
+                 'administrative-state': 'inService',
+                 'supporting-circuit-pack-name': '1/0',
+                 'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
+                 'supporting-port': 'L1'
+                 }, **res['interface'][0]),
+            res['interface'][0]
+        )
         self.assertDictEqual(
             {u'frequency': 195.8, u'width': 40},
             res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
@@ -206,10 +213,17 @@ class TransportPCERendererTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset({'name': 'DEG1-TTP-TXRX-mc-7', 'administrative-state': 'inService',
-                                       'supporting-circuit-pack-name': '1/0',
-                                       'type': 'org-openroadm-interfaces:mediaChannelTrailTerminationPoint',
-                                       'supporting-port': 'L1'}, res['interface'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                 'name': 'DEG1-TTP-TXRX-mc-7',
+                 'administrative-state': 'inService',
+                 'supporting-circuit-pack-name': '1/0',
+                 'type': 'org-openroadm-interfaces:mediaChannelTrailTerminationPoint',
+                 'supporting-port': 'L1'
+                 }, **res['interface'][0]),
+            res['interface'][0]
+        )
         self.assertDictEqual(
             {u'min-freq': 195.775, u'max-freq': 195.825},
             res['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'])
@@ -224,10 +238,17 @@ class TransportPCERendererTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset({'name': 'SRG1-PP3-TXRX-nmc-7', 'administrative-state': 'inService',
-                                       'supporting-circuit-pack-name': '3/0',
-                                       'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
-                                       'supporting-port': 'C3'}, res['interface'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                 'name': 'SRG1-PP3-TXRX-nmc-7',
+                 'administrative-state': 'inService',
+                 'supporting-circuit-pack-name': '3/0',
+                 'type': 'org-openroadm-interfaces:networkMediaChannelConnectionTerminationPoint',
+                 'supporting-port': 'C3'
+                 }, **res['interface'][0]),
+            res['interface'][0]
+        )
         self.assertDictEqual(
             {u'frequency': 195.8, u'width': 40},
             res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
@@ -258,10 +279,14 @@ class TransportPCERendererTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-name': 'SRG1-PP3-TXRX-DEG1-TTP-TXRX-7',
-             'opticalControlMode': 'off'},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                 'connection-name': 'SRG1-PP3-TXRX-DEG1-TTP-TXRX-7',
+                 'opticalControlMode': 'off'
+                 }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP3-TXRX-nmc-7'},
             res['roadm-connections'][0]['source'])
@@ -279,12 +304,17 @@ class TransportPCERendererTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'name': 'XPDR1-NETWORK1-7', 'administrative-state': 'inService',
-             'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
-             'type': 'org-openroadm-interfaces:opticalChannel',
-             'supporting-port': '1'},
-            res['interface'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                 'name': 'XPDR1-NETWORK1-7',
+                 'administrative-state': 'inService',
+                 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
+                 'type': 'org-openroadm-interfaces:opticalChannel',
+                 'supporting-port': '1'
+                 }, **res['interface'][0]),
+            res['interface'][0]
+        )
         self.assertDictEqual(
             {u'rate': u'org-openroadm-common-types:R100G',
              u'transmit-power': -5,
@@ -301,13 +331,18 @@ class TransportPCERendererTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'name': 'XPDR1-NETWORK1-OTU', 'administrative-state': 'inService',
-             'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
-             'type': 'org-openroadm-interfaces:otnOtu',
-             'supporting-port': '1',
-             'supporting-interface': 'XPDR1-NETWORK1-7'},
-            res['interface'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                 'name': 'XPDR1-NETWORK1-OTU',
+                 'administrative-state': 'inService',
+                 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
+                 'type': 'org-openroadm-interfaces:otnOtu',
+                 'supporting-port': '1',
+                 'supporting-interface': 'XPDR1-NETWORK1-7'
+                 }, **res['interface'][0]),
+            res['interface'][0]
+        )
         self.assertDictEqual(
             {u'rate': u'org-openroadm-otn-common-types:OTU4',
              u'fec': u'scfec'},
@@ -323,17 +358,25 @@ class TransportPCERendererTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'name': 'XPDR1-NETWORK1-ODU', 'administrative-state': 'inService',
-             'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
-             'type': 'org-openroadm-interfaces:otnOdu',
-             'supporting-port': '1',
-             'supporting-interface': 'XPDR1-NETWORK1-OTU'},
-            res['interface'][0])
-        self.assertDictContainsSubset(
-            {'rate': 'org-openroadm-otn-common-types:ODU4',
-             u'monitoring-mode': u'terminated'},
-            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
+        # the 2 following statements replace self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                 'name': 'XPDR1-NETWORK1-ODU',
+                 'administrative-state': 'inService',
+                 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
+                 'type': 'org-openroadm-interfaces:otnOdu',
+                 'supporting-port': '1',
+                 'supporting-interface': 'XPDR1-NETWORK1-OTU'
+                 }, **res['interface'][0]),
+            res['interface'][0]
+        )
+        self.assertDictEqual(
+            dict({
+                 'rate': 'org-openroadm-otn-common-types:ODU4',
+                 u'monitoring-mode': u'terminated'
+                 }, **res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']),
+            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
+        )
         self.assertDictEqual({u'exp-payload-type': u'07', u'payload-type': u'07'},
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
@@ -347,12 +390,17 @@ class TransportPCERendererTesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'name': 'XPDR1-CLIENT1-ETHERNET', 'administrative-state': 'inService',
-             'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
-             'type': 'org-openroadm-interfaces:ethernetCsmacd',
-             'supporting-port': 'C1'},
-            res['interface'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                 'name': 'XPDR1-CLIENT1-ETHERNET',
+                 'administrative-state': 'inService',
+                 'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
+                 'type': 'org-openroadm-interfaces:ethernetCsmacd',
+                 'supporting-port': 'C1'
+                 }, **res['interface'][0]),
+            res['interface'][0]
+        )
         self.assertDictEqual(
             {u'fec': u'off', u'speed': 100000},
             res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])

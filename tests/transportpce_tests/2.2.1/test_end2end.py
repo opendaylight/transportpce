@@ -436,11 +436,15 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-name': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': -3.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-name': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': -3.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
             res['roadm-connections'][0]['source'])
@@ -459,11 +463,15 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-name': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': -3.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-name': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': -3.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
             res['roadm-connections'][0]['source'])
@@ -755,10 +763,14 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-name': 'DEG2-TTP-TXRX-SRG1-PP2-TXRX-2',
-             'opticalControlMode': 'power'},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-name': 'DEG2-TTP-TXRX-SRG1-PP2-TXRX-2',
+                'opticalControlMode': 'power'
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'DEG2-TTP-TXRX-nmc-2'},
             res['roadm-connections'][0]['source'])
@@ -1228,11 +1240,15 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-name': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': -3.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-name': 'SRG1-PP1-TXRX-DEG2-TTP-TXRX-1',
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': -3.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
             res['roadm-connections'][0]['source'])
@@ -1251,11 +1267,15 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-name': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': -3.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-name': 'SRG1-PP1-TXRX-DEG1-TTP-TXRX-1',
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': -3.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP1-TXRX-nmc-1'},
             res['roadm-connections'][0]['source'])
@@ -1396,11 +1416,15 @@ class TransportPCEFulltesting(unittest.TestCase):
             "GET", url, headers=headers, auth=('admin', 'admin'))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertDictContainsSubset(
-            {'connection-name': 'SRG1-PP2-TXRX-DEG2-TTP-TXRX-2',
-             'opticalControlMode': 'gainLoss',
-             'target-output-power': -3.0},
-            res['roadm-connections'][0])
+        # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
+        self.assertDictEqual(
+            dict({
+                'connection-name': 'SRG1-PP2-TXRX-DEG2-TTP-TXRX-2',
+                'opticalControlMode': 'gainLoss',
+                'target-output-power': -3.0
+            }, **res['roadm-connections'][0]),
+            res['roadm-connections'][0]
+        )
         self.assertDictEqual(
             {'src-if': 'SRG1-PP2-TXRX-nmc-2'},
             res['roadm-connections'][0]['source'])
