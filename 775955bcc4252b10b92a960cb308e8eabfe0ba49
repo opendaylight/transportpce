@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "387cf9ae_88b9a4d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-16T14:20:59Z",
+      "side": 1,
+      "message": "commit title NOK\n\"improve pce Junit with a new NetworkTransaction util\" ?",
+      "revId": "775955bcc4252b10b92a960cb308e8eabfe0ba49",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
