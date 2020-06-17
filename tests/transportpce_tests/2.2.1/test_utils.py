@@ -27,6 +27,8 @@ sims = {
 }
 
 HONEYNODE_OK_START_MSG = re.escape("Netconf SSH endpoint started successfully at 0.0.0.0")
+KARAF_OK_START_MSG = re.escape("Blueprint container for bundle "
+                               "org.opendaylight.netconf.restconf") + ".* was successfully created"
 
 TYPE_APPLICATION_JSON = {'content-type': 'application/json'}
 
@@ -39,11 +41,15 @@ samples_directory = os.path.join(
 
 log_directory = os.path.dirname(os.path.realpath(__file__))
 
+karaf_log = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    "..", "..", "..", "karaf", "target", "assembly", "data", "log", "karaf.log")
+
 
 def start_sim(sim):
     print("starting simulator for " + sim + "...")
     log_file = os.path.join(log_directory, sims[sim]['logfile'])
-    process = start_node(log_file, sims[sim]['port'], sims[sim]['configfile'])
+    process = start_honeynode(log_file, sims[sim]['port'], sims[sim]['configfile'])
     if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 5000):
         print("simulator for " + sim + " started")
     else:
@@ -54,22 +60,38 @@ def start_sim(sim):
 def start_tpce():
     print("starting opendaylight...")
     if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
-        print("starting LIGHTY.IO TransportPCE build...")
-        executable = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            "..", "..", "..", "lighty", "target", "tpce",
-            "clean-start-controller.sh")
-        with open('odl.log', 'w') as outfile:
-            return subprocess.Popen(
-                ["sh", executable], stdout=outfile, stderr=outfile, stdin=None)
+        process = start_lighty()
+        # TODO: add some sort of health check similar to Karaf below
     else:
-        print("starting KARAF TransportPCE build...")
-        executable = os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            "..", "..", "..", "karaf", "target", "assembly", "bin", "karaf")
-        with open('odl.log', 'w') as outfile:
-            return subprocess.Popen(
-                ["sh", executable, "server"], stdout=outfile, stderr=outfile, stdin=None)
+        process = start_karaf()
+        if wait_until_log_contains(karaf_log, KARAF_OK_START_MSG, time_to_wait=60):
+            print("opendaylight started")
+        else:
+            print("opendaylight failed to start")
+            shutdown_process(process)
+            exit(1)
+    return process
+
+
+def start_karaf():
+    print("starting KARAF TransportPCE build...")
+    executable = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "..", "..", "..", "karaf", "target", "assembly", "bin", "karaf")
+    with open('odl.log', 'w') as outfile:
+        return subprocess.Popen(
+            ["sh", executable, "server"], stdout=outfile, stderr=outfile, stdin=None)
+
+
+def start_lighty():
+    print("starting LIGHTY.IO TransportPCE build...")
+    executable = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "..", "..", "..", "lighty", "target", "tpce",
+        "clean-start-controller.sh")
+    with open('odl.log', 'w') as outfile:
+        return subprocess.Popen(
+            ["sh", executable], stdout=outfile, stderr=outfile, stdin=None)
 
 
 def install_karaf_feature(feature_name: str):
@@ -137,7 +159,7 @@ def shutdown_process(process):
         process.send_signal(signal.SIGINT)
 
 
-def start_node(log_file: str, node_port: str, node_config_file_name: str):
+def start_honeynode(log_file: str, node_port: str, node_config_file_name: str):
     if os.path.isfile(honeynode_executable):
         with open(log_file, 'w') as outfile:
             return subprocess.Popen(

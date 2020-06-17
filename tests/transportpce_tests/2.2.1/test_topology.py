@@ -35,19 +35,11 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.sim_process1 = test_utils.start_sim('xpdra')
-
-        cls.sim_process2 = test_utils.start_sim('roadma')
-
-        cls.sim_process3 = test_utils.start_sim('roadmb')
-
-        cls.sim_process4 = test_utils.start_sim('roadmc')
-        print("all sims started")
-
-        print("starting opendaylight...")
         cls.odl_process = test_utils.start_tpce()
-        time.sleep(60)
-        print("opendaylight started")
+        cls.sim_process1 = test_utils.start_sim('xpdra')
+        cls.sim_process2 = test_utils.start_sim('roadma')
+        cls.sim_process3 = test_utils.start_sim('roadmb')
+        cls.sim_process4 = test_utils.start_sim('roadmc')
 
     @classmethod
     def tearDownClass(cls):
