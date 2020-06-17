@@ -30,14 +30,9 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.sim_process1 = test_utils.start_sim('xpdra')
-
-        cls.sim_process2 = test_utils.start_sim('roadma')
-        print("all sims started")
-
         cls.odl_process = test_utils.start_tpce()
-        time.sleep(60)
-        print("opendaylight started")
+        cls.sim_process1 = test_utils.start_sim('xpdra')
+        cls.sim_process2 = test_utils.start_sim('roadma')
 
     @classmethod
     def tearDownClass(cls):

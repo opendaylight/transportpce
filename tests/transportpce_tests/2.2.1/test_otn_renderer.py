@@ -34,11 +34,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.sim_process1 = test_utils.start_sim('spdrav2')
-
         cls.odl_process = test_utils.start_tpce()
-        time.sleep(60)
-        print("opendaylight started")
+        cls.sim_process1 = test_utils.start_sim('spdrav2')
 
     @classmethod
     def tearDownClass(cls):
