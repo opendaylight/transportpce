@@ -24,27 +24,19 @@ import test_utils
 
 class TransportPCEtesting(unittest.TestCase):
 
-    sim_process1 = None
-    odl_process = None
+    processes = None
     restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def setUpClass(cls):
-        cls.odl_process = test_utils.start_tpce()
-        cls.sim_process1 = test_utils.start_sim('spdrav2')
+        cls.processes = test_utils.start_tpce()
+        cls.processes = test_utils.start_sims(['spdrav2'])
 
     @classmethod
     def tearDownClass(cls):
-        for child in psutil.Process(cls.odl_process.pid).children():
-            child.send_signal(signal.SIGINT)
-            child.wait()
-        cls.odl_process.send_signal(signal.SIGINT)
-        cls.odl_process.wait()
-        for child in psutil.Process(cls.sim_process1.pid).children():
-            child.send_signal(signal.SIGINT)
-            child.wait()
-        cls.sim_process1.send_signal(signal.SIGINT)
-        cls.sim_process1.wait()
+        for process in cls.processes:
+            test_utils.shutdown_process(process)
+        print("all processes killed")
 
     def setUp(self):
         time.sleep(5)
