@@ -46,6 +46,30 @@
       "revId": "4a3015f77bf6225e2051241154e142638b341654",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c25271b_75ef6cf9",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-17T14:19:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73a7c5ca_d0b9ffe9",
+      "range": {
+        "startLine": 30,
+        "startChar": 157,
+        "endLine": 30,
+        "endChar": 266
+      },
+      "revId": "4a3015f77bf6225e2051241154e142638b341654",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
