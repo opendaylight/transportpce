@@ -46,16 +46,23 @@ karaf_log = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "..", "karaf", "target", "assembly", "data", "log", "karaf.log")
 
+process_list = []
 
-def start_sim(sim):
-    print("starting simulator for " + sim + "...")
-    log_file = os.path.join(log_directory, sims[sim]['logfile'])
-    process = start_honeynode(log_file, sims[sim]['port'], sims[sim]['configfile'])
-    if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
-        print("simulator for " + sim + " started")
-    else:
-        print("simulator for " + sim + "failed to start")
-    return process
+def start_sims(sims_list):
+    for sim in sims_list:
+        print("starting simulator for " + sim + "...")
+        log_file = os.path.join(log_directory, sims[sim]['logfile'])
+        process = start_honeynode(log_file, sims[sim]['port'], sims[sim]['configfile'])
+        if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
+            print("simulator for " + sim + " started")
+        else:
+            print("simulator for " + sim + " failed to start")
+            shutdown_process(process)
+            for pid in process_list:
+                shutdown_process(pid)
+            exit(3)
+        process_list.append(process)
+    return process_list
 
 
 def start_tpce():
@@ -70,8 +77,11 @@ def start_tpce():
         else:
             print("opendaylight failed to start")
             shutdown_process(process)
+            for pid in process_list:
+                shutdown_process(pid)
             exit(1)
-    return process
+    process_list.append(process)
+    return process_list
 
 
 def start_karaf():
