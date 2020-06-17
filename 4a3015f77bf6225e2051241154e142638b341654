@@ -22,6 +22,30 @@
       "revId": "4a3015f77bf6225e2051241154e142638b341654",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73a7c5ca_d0b9ffe9",
+        "filename": "tox.ini",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-17T08:12:49Z",
+      "side": 1,
+      "message": "I suspect it is backslash hell with dot, let\u0027s try it in PS3",
+      "parentUuid": "892e0b3a_e7696fa6",
+      "range": {
+        "startLine": 30,
+        "startChar": 157,
+        "endLine": 30,
+        "endChar": 266
+      },
+      "revId": "4a3015f77bf6225e2051241154e142638b341654",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
