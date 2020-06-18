@@ -16,33 +16,28 @@ import requests
 import signal
 import time
 import unittest
-import test_utils
+from common import test_utils
 
 
 class TransportGNPYtesting(unittest.TestCase):
-
-    gnpy_process = None
-    odl_process = None
-    restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def __init_logfile(cls):
         if os.path.isfile("./transportpce_tests/gnpy.log"):
             os.remove("transportpce_tests/gnpy.log")
 
+    processes = None
+    restconf_baseurl = "http://localhost:8181/restconf"
+
     @classmethod
     def setUpClass(cls):
-        cls.odl_process = test_utils.start_tpce()
-        time.sleep(30)
-        print("opendaylight started")
+        cls.processes = test_utils.start_tpce()
 
     @classmethod
     def tearDownClass(cls):
-        for child in psutil.Process(cls.odl_process.pid).children():
-            child.send_signal(signal.SIGINT)
-            child.wait()
-        cls.odl_process.send_signal(signal.SIGINT)
-        cls.odl_process.wait()
+        for process in cls.processes:
+            test_utils.shutdown_process(process)
+        print("all processes killed")
 
     def setUp(self):
         time.sleep(2)

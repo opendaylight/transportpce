@@ -19,7 +19,7 @@ import subprocess
 import time
 import unittest
 import logging
-import test_utils
+from common import test_utils
 
 
 class TransportPCEtesting(unittest.TestCase):
