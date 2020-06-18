@@ -19,72 +19,28 @@ import os
 import psutil
 import shutil
 from unittest.result import failfast
-import test_utils
+from common import test_utils
 
 
 class TransportOlmTesting(unittest.TestCase):
 
-    sim_process1 = None
-    sim_process2 = None
-    sim_process3 = None
-    sim_process4 = None
-    odl_process = None
+    processes = None
     restconf_baseurl = "http://localhost:8181/restconf"
-
-# START_IGNORE_XTESTING
 
     @classmethod
     def setUpClass(cls):
-        cls.sim_process1 = test_utils.start_sim('xpdra')
-        time.sleep(20)
-
-        cls.sim_process2 = test_utils.start_sim('roadma-full')
-        time.sleep(20)
-
-        cls.sim_process3 = test_utils.start_sim('roadmc-full')
-        time.sleep(20)
-
-        cls.sim_process4 = test_utils.start_sim('xpdrc')
-        time.sleep(20)
-        print("all sims started")
-
-        cls.odl_process = test_utils.start_tpce()
-        time.sleep(60)
-        print("opendaylight started")
+        cls.processes = test_utils.start_tpce()
+        cls.processes = test_utils.start_sims(['xpdra', 'roadma-full', 'roadmc-full', 'xpdrc'])
 
     @classmethod
     def tearDownClass(cls):
-        for child in psutil.Process(cls.odl_process.pid).children():
-            child.send_signal(signal.SIGINT)
-            child.wait()
-        cls.odl_process.send_signal(signal.SIGINT)
-        cls.odl_process.wait()
-        for child in psutil.Process(cls.sim_process1.pid).children():
-            child.send_signal(signal.SIGINT)
-            child.wait()
-        cls.sim_process1.send_signal(signal.SIGINT)
-        cls.sim_process1.wait()
-        for child in psutil.Process(cls.sim_process2.pid).children():
-            child.send_signal(signal.SIGINT)
-            child.wait()
-        cls.sim_process2.send_signal(signal.SIGINT)
-        cls.sim_process2.wait()
-        for child in psutil.Process(cls.sim_process3.pid).children():
-            child.send_signal(signal.SIGINT)
-            child.wait()
-        cls.sim_process3.send_signal(signal.SIGINT)
-        cls.sim_process3.wait()
-        for child in psutil.Process(cls.sim_process4.pid).children():
-            child.send_signal(signal.SIGINT)
-            child.wait()
-        cls.sim_process4.send_signal(signal.SIGINT)
-        cls.sim_process4.wait()
+        for process in cls.processes:
+            test_utils.shutdown_process(process)
+        print("all processes killed")
 
     def setUp(self):
         print("execution of {}".format(self.id().split(".")[-1]))
         time.sleep(1)
-
-# END_IGNORE_XTESTING
 
     def test_01_xpdrA_device_connected(self):
         url = ("{}/config/network-topology:"
