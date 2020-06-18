@@ -14,7 +14,7 @@ import unittest
 
 import requests
 
-import test_utils
+from common import test_utils
 
 RESTCONF_BASE_URL = "http://localhost:8181/restconf"
 

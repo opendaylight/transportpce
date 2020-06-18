@@ -19,7 +19,7 @@ import os
 import psutil
 import shutil
 from unittest.result import failfast
-import test_utils
+from common import test_utils
 
 
 class TransportPCERendererTesting(unittest.TestCase):

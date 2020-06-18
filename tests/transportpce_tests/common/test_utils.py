@@ -16,29 +16,17 @@ import subprocess
 import psutil
 import requests
 
-sims = {
-    'xpdra': {'port': '17840', 'configfile': 'oper-XPDRA.xml', 'logfile': 'oper-XPDRA.log'},
-    'roadma': {'port': '17841', 'configfile': 'oper-ROADMA.xml', 'logfile': 'oper-ROADMA.log'},
-    'roadmb': {'port': '17842', 'configfile': 'oper-ROADMB.xml', 'logfile': 'oper-ROADMB.log'},
-    'roadmc': {'port': '17843', 'configfile': 'oper-ROADMC.xml', 'logfile': 'oper-ROADMC.log'},
-    'xpdrc': {'port': '17844', 'configfile': 'oper-XPDRC.xml', 'logfile': 'oper-XPDRC.log'},
-    'spdrav2': {'port': '17845', 'configfile': 'oper-SPDRAv2.xml', 'logfile': 'oper-SPDRAv2.log'},
-    'spdrav1': {'port': '17846', 'configfile': 'oper-SPDRAv1.xml', 'logfile': 'oper-SPDRAv1.log'}
-}
+import simulators
+
+sims = simulators.sims
+honeynode_executable = simulators.honeynode_executable
+samples_directory = simulators.samples_directory
 
 HONEYNODE_OK_START_MSG = re.escape("Netconf SSH endpoint started successfully at 0.0.0.0")
 KARAF_OK_START_MSG = re.escape("Blueprint container for bundle "
                                "org.opendaylight.netconf.restconf") + ".* was successfully created"
 
 TYPE_APPLICATION_JSON = {'content-type': 'application/json'}
-
-honeynode_executable = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    "..", "..", "honeynode", "2.2.1", "honeynode-simulator", "honeycomb-tpce")
-
-samples_directory = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    "..", "..", "sample_configs", "openroadm", "2.2.1")
 
 log_directory = os.path.dirname(os.path.realpath(__file__))
 
@@ -47,6 +35,7 @@ karaf_log = os.path.join(
     "..", "..", "..", "karaf", "target", "assembly", "data", "log", "karaf.log")
 
 process_list = []
+
 
 def start_sims(sims_list):
     for sim in sims_list:

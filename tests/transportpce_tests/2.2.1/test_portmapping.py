@@ -18,7 +18,7 @@ import shutil
 import subprocess
 import time
 import unittest
-import test_utils
+from common import test_utils
 
 
 class TransportPCEPortMappingTesting(unittest.TestCase):
