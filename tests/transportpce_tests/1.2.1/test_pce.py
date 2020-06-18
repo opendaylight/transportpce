@@ -17,20 +17,19 @@ import shutil
 import subprocess
 import time
 import unittest
-import test_utils
+from common import test_utils
 
 
 class TransportPCEtesting(unittest.TestCase):
 
-    odl_process = None
     simple_topo_bi_dir_data = None
     simple_topo_uni_dir_data = None
     complex_topo_uni_dir_data = None
-    restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def _get_file(cls):
         topo_bi_dir_file = "sample_configs/honeynode-topo.xml"
+        # TODO : fix relative paths
         if os.path.isfile(topo_bi_dir_file):
             with open(topo_bi_dir_file, 'r') as topo_bi_dir:
                 cls.simple_topo_bi_dir_data = topo_bi_dir.read()
@@ -43,20 +42,19 @@ class TransportPCEtesting(unittest.TestCase):
             with open(topo_uni_dir_complex_file, 'r') as topo_uni_dir_complex:
                 cls.complex_topo_uni_dir_data = topo_uni_dir_complex.read()
 
+    processes = None
+    restconf_baseurl = "http://localhost:8181/restconf"
+
     @classmethod
-    def setUpClass(cls):  # a class method called before tests in an individual class run.
+    def setUpClass(cls):
         cls._get_file()
-        cls.odl_process = test_utils.start_tpce()
-        time.sleep(90)
-        print("opendaylight started")
+        cls.processes = test_utils.start_tpce()
 
     @classmethod
     def tearDownClass(cls):
-        for child in psutil.Process(cls.odl_process.pid).children():
-            child.send_signal(signal.SIGINT)
-            child.wait()
-        cls.odl_process.send_signal(signal.SIGINT)
-        cls.odl_process.wait()
+        for process in cls.processes:
+            test_utils.shutdown_process(process)
+        print("all processes killed")
 
     def setUp(self):  # instruction executed before each test method
         time.sleep(1)
