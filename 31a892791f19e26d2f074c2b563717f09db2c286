@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97bf9711_bdbcfc4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-19T14:06:01Z",
+      "side": 1,
+      "message": "Hi,\n\nthanks for the push Javier. We will try to look at it.\nThough it is much too big to be integrated.\nSince you have all the intermediate steps, would it be possible for you to split it and make one push for each of the 10 items mentions here in the commit message ?\nNote the change-ID here can be reused.\nYou can copy it manually in to create a new PS from another commit.\n\nAlso, tabs must be avoided here and in the code.\nThe commit message must abide by the ODL conventions (similar to openstack:\n- commit title \u003c\u003d50 characters (so it can be read entirely in dashboard)\n- the commit body is separate from title with an empty line\n- commit body line length \u003c\u003d 72 characters (except URL that must not be wrapped)\nsee our contributors guidelines for all the details.\n\nJenkins-releng is giving -1 because Mg SR0 and SR1 snapshot depencies have been removed from nexus.\nWe will need to rebase it on top of the current master to see how it behaves. But for that, we need to resolve merge conflicts.\nBy splitting this change, the task will be much easier.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 90
+      },
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
