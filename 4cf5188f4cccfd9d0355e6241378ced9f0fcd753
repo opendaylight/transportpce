@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fe7fa3ea_a39e63db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-19T11:05:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e5a5b06_19ba8bbc",
+      "revId": "4cf5188f4cccfd9d0355e6241378ced9f0fcd753",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0afe3ed7_7a3d4f28",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/MappingUtilsImplTest.java",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "4cf5188f4cccfd9d0355e6241378ced9f0fcd753",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af7776cc_06825dc5",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/MappingUtilsImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-19T11:05:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0afe3ed7_7a3d4f28",
+      "range": {
+        "startLine": 65,
+        "startChar": 12,
+        "endLine": 65,
+        "endChar": 50
+      },
+      "revId": "4cf5188f4cccfd9d0355e6241378ced9f0fcd753",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "bcf3e704_841b60df",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-19T11:05:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "804baf46_c1c554d3",
+      "range": {
+        "startLine": 98,
+        "startChar": 44,
+        "endLine": 98,
+        "endChar": 46
+      },
+      "revId": "4cf5188f4cccfd9d0355e6241378ced9f0fcd753",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae2c1e2f_1434602d",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingImplTest.java",
         "patchSetId": 1
@@ -85,6 +151,30 @@
       "revId": "4cf5188f4cccfd9d0355e6241378ced9f0fcd753",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7b9ad8e_adb71e5a",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingImplTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-19T11:05:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ae2c1e2f_1434602d",
+      "range": {
+        "startLine": 112,
+        "startChar": 12,
+        "endLine": 112,
+        "endChar": 46
+      },
+      "revId": "4cf5188f4cccfd9d0355e6241378ced9f0fcd753",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
