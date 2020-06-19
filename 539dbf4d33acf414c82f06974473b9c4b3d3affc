@@ -22,6 +22,30 @@
       "revId": "539dbf4d33acf414c82f06974473b9c4b3d3affc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f455b64_9a8094fe",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-19T07:22:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f65252cb_92f512bc",
+      "range": {
+        "startLine": 219,
+        "startChar": 19,
+        "endLine": 219,
+        "endChar": 98
+      },
+      "revId": "539dbf4d33acf414c82f06974473b9c4b3d3affc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
