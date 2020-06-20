@@ -40,36 +40,26 @@ class TransportTapitesting(unittest.TestCase):
         cls.init_failed = False
 
         cls.odl_process = test_utils.start_tpce()
+        # TAPI feature is not installed by default in Karaf
         if "USE_LIGHTY" not in os.environ or os.environ['USE_LIGHTY'] != 'True':
-            karaf_log = os.path.join(
-                os.path.dirname(os.path.realpath(__file__)),
-                "..", "..", "..", "karaf", "target", "assembly", "data", "log", "karaf.log")
-            searched_expr = re.escape("Blueprint container for bundle "
-                                      "org.opendaylight.netconf.restconf") + ".* was successfully created"
-            found = test_utils.wait_until_log_contains(karaf_log, searched_expr, time_to_wait=60)
-            cls.init_failed = not found
-            if not cls.init_failed:
-                print("opendaylight started")
-                print("installing tapi feature...")
-                result = test_utils.install_karaf_feature("odl-transportpce-tapi")
-                if result.returncode != 0:
-                    cls.init_failed = True
-                print("Restarting opendaylight...")
-                test_utils.shutdown_process(cls.odl_process)
-                cls.odl_process = test_utils.start_tpce()
-                found = test_utils.wait_until_log_contains(karaf_log, searched_expr, time_to_wait=60)
-                cls.init_failed = not found
-        if not cls.init_failed:
-            cls.sim_process1 = test_utils.start_sim('xpdra')
-
-            cls.sim_process2 = test_utils.start_sim('roadma')
-
-            cls.sim_process3 = test_utils.start_sim('roadmc')
-
-            cls.sim_process4 = test_utils.start_sim('xpdrc')
-
-            cls.sim_process5 = test_utils.start_sim('spdrav2')
-            print("all sims started")
+            print("installing tapi feature...")
+            result = test_utils.install_karaf_feature("odl-transportpce-tapi")
+            if result.returncode != 0:
+                cls.init_failed = True
+            print("Restarting opendaylight...")
+            test_utils.shutdown_process(cls.odl_process)
+            cls.odl_process = test_utils.start_tpce()
+            cls.init_failed = not test_utils.wait_until_log_contains(
+                test_utils.karaf_log, test_utils.KARAF_OK_START_MSG, time_to_wait=60)
+        if cls.init_failed:
+            print("tapi installaiton feature failed...")
+            test_utils.shutdown_process(cls.odl_process)
+            exit(2)
+        cls.sim_process1 = test_utils.start_sim('xpdra')
+        cls.sim_process2 = test_utils.start_sim('roadma')
+        cls.sim_process3 = test_utils.start_sim('roadmc')
+        cls.sim_process4 = test_utils.start_sim('xpdrc')
+        cls.sim_process5 = test_utils.start_sim('spdrav2')
 
     @classmethod
     def tearDownClass(cls):
