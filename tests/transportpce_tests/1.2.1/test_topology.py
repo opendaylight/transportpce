@@ -10,11 +10,9 @@
 ##############################################################################
 
 import json
-import signal
 import time
 import unittest
 import requests
-import psutil
 from common import test_utils
 
 

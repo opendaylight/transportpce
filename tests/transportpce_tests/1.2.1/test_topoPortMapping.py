@@ -9,12 +9,9 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import json
-import signal
 import time
 import unittest
 import requests
-import psutil
 from common import test_utils
 
 

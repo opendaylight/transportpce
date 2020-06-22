@@ -9,15 +9,10 @@
 ##############################################################################
 
 
-import json
-import os
-import psutil
-import requests
-import signal
-import shutil
-import subprocess
-import time
 import unittest
+import json
+import time
+import requests
 from common import test_utils
 
 
@@ -1370,7 +1365,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_49_loop_create_eth_service(self):
         for i in range(1, 6):
-            print("trial number {}".format(i))
+            print("iteration number {}".format(i))
             print("eth service creation")
             self.test_11_create_eth_service1()
             print("check xc in ROADM-A1")
@@ -1405,7 +1400,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             time.sleep(5)
 
         for i in range(1, 6):
-            print("trial number {}".format(i))
+            print("iteration number {}".format(i))
             print("oc service creation")
             self.test_36_create_oc_service1()
             print("check xc in ROADM-A1")

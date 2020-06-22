@@ -8,15 +8,11 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import unittest
 import json
 import os
-import psutil
-import requests
-import signal
-import shutil
-import subprocess
 import time
-import unittest
+import requests
 from common import test_utils
 
 

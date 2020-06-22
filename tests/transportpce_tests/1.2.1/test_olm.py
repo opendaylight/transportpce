@@ -10,15 +10,10 @@
 #############################################################################
 
 import unittest
-import requests
 import time
-import subprocess
-import signal
 import json
-import os
-import psutil
-import shutil
-from unittest.result import failfast
+#from unittest.result import failfast
+import requests
 from common import test_utils
 
 

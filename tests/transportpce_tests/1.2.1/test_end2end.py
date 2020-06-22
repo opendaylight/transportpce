@@ -10,11 +10,9 @@
 
 
 import json
-import signal
 import time
 import unittest
 
-import psutil
 import requests
 from common import test_utils
 
@@ -405,12 +403,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele['tp-id'] == 'XPDR1-NETWORK1':
                 self.assertEqual({u'frequency': 196.1, u'width': 40},
-                                 ele[
-                                     'org-openroadm-network-topology:'
-                                     'xpdr-network-attributes'][
-                                     'wavelength'])
-            if ele['tp-id'] == 'XPDR1-CLIENT1' or \
-               ele['tp-id'] == 'XPDR1-CLIENT3':
+                                 ele['org-openroadm-network-topology:xpdr-network-attributes']['wavelength'])
+            if ele['tp-id'] == 'XPDR1-CLIENT1' or ele['tp-id'] == 'XPDR1-CLIENT3':
                 self.assertNotIn(
                     'org-openroadm-network-topology:xpdr-client-attributes',
                     dict.keys(ele))
@@ -1568,7 +1562,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_49_loop_create_eth_service(self):
         for i in range(1, 6):
-            print("trial number {}".format(i))
+            print("iteration number {}".format(i))
             print("eth service creation")
             self.test_11_create_eth_service1()
             print("check xc in ROADMA01")
@@ -1607,7 +1601,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             time.sleep(5)
 
         for i in range(1, 6):
-            print("trial number {}".format(i))
+            print("iteration number {}".format(i))
             print("oc service creation")
             self.test_36_create_oc_service1()
             print("check xc in ROADMA01")

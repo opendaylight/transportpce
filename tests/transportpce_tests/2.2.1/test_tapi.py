@@ -8,7 +8,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 import os
-import re
+import sys
 import time
 import unittest
 
@@ -35,15 +35,15 @@ class TransportTapitesting(unittest.TestCase):
             result = test_utils.install_karaf_feature("odl-transportpce-tapi")
             if result.returncode != 0:
                 cls.init_failed = True
-            print("Restarting opendaylight...")
+            print("Restarting OpenDaylight...")
             test_utils.shutdown_process(cls.processes[0])
             cls.processes = test_utils.start_tpce()
             cls.init_failed = not test_utils.wait_until_log_contains(
-                test_utils.karaf_log, test_utils.KARAF_OK_START_MSG, time_to_wait=60)
+                test_utils.KARAF_LOG, test_utils.KARAF_OK_START_MSG, time_to_wait=60)
         if cls.init_failed:
             print("tapi installaiton feature failed...")
             test_utils.shutdown_process(cls.odl_processes[0])
-            exit(2)
+            sys.exit(2)
         cls.processes = test_utils.start_sims(['xpdra', 'roadma', 'roadmc', 'xpdrc', 'spdrav2'])
 
     @classmethod
