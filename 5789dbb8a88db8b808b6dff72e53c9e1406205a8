@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4526a530_4f828015",
+        "filename": "tests/transportpce_tests/1.2.1/test_gnpy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-22T21:17:44Z",
+      "side": 1,
+      "message": "relative path to fix in another change.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 52
+      },
+      "revId": "5789dbb8a88db8b808b6dff72e53c9e1406205a8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c2cd724_8dabd9ab",
+        "filename": "tests/transportpce_tests/1.2.1/test_gnpy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-22T21:17:44Z",
+      "side": 1,
+      "message": "relative path to fix here too.",
+      "range": {
+        "startLine": 48,
+        "startChar": 29,
+        "endLine": 48,
+        "endChar": 65
+      },
+      "revId": "5789dbb8a88db8b808b6dff72e53c9e1406205a8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
