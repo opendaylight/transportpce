@@ -27,7 +27,6 @@ class TransportGNPYtesting(unittest.TestCase):
             os.remove("transportpce_tests/gnpy.log")
 
     processes = None
-    restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def setUpClass(cls):
@@ -45,50 +44,47 @@ class TransportGNPYtesting(unittest.TestCase):
     # Mount the different topologies
     def test_01_connect_clliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         topo_cllinet_file = "sample_configs/gnpy/clliNetwork.json"
         if os.path.isfile(topo_cllinet_file):
             with open(topo_cllinet_file, 'r') as clli_net:
                 body = clli_net.read()
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "PUT", url, data=body, headers=headers,
-            auth=('admin', 'admin'))
+            "PUT", url, data=body, headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
     def test_02_connect_openroadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         topo_ordnet_file = "sample_configs/gnpy/openroadmNetwork.json"
         if os.path.isfile(topo_ordnet_file):
             with open(topo_ordnet_file, 'r') as ord_net:
                 body = ord_net.read()
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "PUT", url, data=body, headers=headers,
-            auth=('admin', 'admin'))
+            "PUT", url, data=body, headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
     def test_03_connect_openroadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         topo_ordtopo_file = "sample_configs/gnpy/openroadmTopology.json"
         if os.path.isfile(topo_ordtopo_file):
             with open(topo_ordtopo_file, 'r') as ord_topo:
                 body = ord_topo.read()
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "PUT", url, data=body, headers=headers,
-            auth=('admin', 'admin'))
+            "PUT", url, data=body, headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
     # Path computed by PCE is feasible according to Gnpy
     def test_04_path_computation_FeasibleWithPCE(self):
         url = ("{}/operations/transportpce-pce:path-computation-request"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         body = {
             "input": {
                 "service-name": "service-1",
@@ -111,11 +107,9 @@ class TransportGNPYtesting(unittest.TestCase):
                 }
             }
         }
-        headers = {'content-type': 'application/json',
-                   "Accept": "application/json"}
         response = requests.request(
-            "POST", url, data=json.dumps(body), headers=headers,
-            auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -135,7 +129,7 @@ class TransportGNPYtesting(unittest.TestCase):
     # another one (low SNR)
     def test_05_path_computation_FoundByPCE_NotFeasibleByGnpy(self):
         url = ("{}/operations/transportpce-pce:path-computation-request"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         body = {
             "input": {
                 "service-name": "service-2",
@@ -182,11 +176,9 @@ class TransportGNPYtesting(unittest.TestCase):
                 }
             }
         }
-        headers = {'content-type': 'application/json',
-                   "Accept": "application/json"}
         response = requests.request(
-            "POST", url, data=json.dumps(body), headers=headers,
-            auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -207,7 +199,7 @@ class TransportGNPYtesting(unittest.TestCase):
     # #PCE cannot find a path while GNPy finds a feasible one
     def test_06_path_computation_NotFoundByPCE_FoundByGNPy(self):
         url = ("{}/operations/transportpce-pce:path-computation-request"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         body = {
             "input": {
                 "service-name": "service-3",
@@ -248,11 +240,9 @@ class TransportGNPYtesting(unittest.TestCase):
                 }
             }
         }
-        headers = {'content-type': 'application/json',
-                   "Accept": "application/json"}
         response = requests.request(
-            "POST", url, data=json.dumps(body), headers=headers,
-            auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -271,7 +261,7 @@ class TransportGNPYtesting(unittest.TestCase):
     # Not found path by PCE and GNPy cannot find another one
     def test_07_path_computation_FoundByPCE_NotFeasibleByGnpy(self):
         url = ("{}/operations/transportpce-pce:path-computation-request"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         body = {
             "input": {
                 "service-name": "service-4",
@@ -324,11 +314,9 @@ class TransportGNPYtesting(unittest.TestCase):
                 }
             }
         }
-        headers = {'content-type': 'application/json',
-                   "Accept": "application/json"}
         response = requests.request(
-            "POST", url, data=json.dumps(body), headers=headers,
-            auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(body), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -341,34 +329,31 @@ class TransportGNPYtesting(unittest.TestCase):
     # Disconnect the different topologies
     def test_08_disconnect_openroadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
     def test_09_disconnect_openroadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
     def test_10_disconnect_clliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 

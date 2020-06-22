@@ -25,7 +25,6 @@ from common import test_utils
 class TransportPCEtesting(unittest.TestCase):
 
     processes = None
-    restconf_baseurl = "http://localhost:8181/restconf"
 
     @classmethod
     def setUpClass(cls):
@@ -42,31 +41,14 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(5)
 
     def test_01_connect_ROADM_A1(self):
-        # Config ROADMA
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-A1"
-               .format(self.restconf_baseurl))
-        data = {"node": [{
-            "node-id": "ROADM-A1",
-            "netconf-node-topology:username": "admin",
-            "netconf-node-topology:password": "admin",
-            "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": test_utils.sims['roadma']['port'],
-            "netconf-node-topology:tcp-only": "false",
-            "netconf-node-topology:pass-through": {}}]}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.created)
-        time.sleep(20)
+        response = test_utils.mount_device("ROADM-A1", 'roadma')
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         logging.info(res)
@@ -75,10 +57,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_03_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['network'][0]['node'][0]['node-id'], 'ROADM-A1')
@@ -89,10 +70,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_04_getLinks_OpenroadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -130,10 +110,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_05_getNodes_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -200,30 +179,14 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_06_connect_XPDRA(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDR-A1"
-               .format(self.restconf_baseurl))
-        data = {"node": [{
-            "node-id": "XPDR-A1",
-            "netconf-node-topology:username": "admin",
-            "netconf-node-topology:password": "admin",
-            "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": test_utils.sims['xpdra']['port'],
-            "netconf-node-topology:tcp-only": "false",
-            "netconf-node-topology:pass-through": {}}]}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.created)
-        time.sleep(30)
+        response = test_utils.mount_device("XPDR-A1", 'xpdra')
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_07_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['network'][0]['node'][0]['node-id'], 'NodeA')
@@ -231,10 +194,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_08_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -254,10 +216,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_09_getNodes_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -344,7 +305,7 @@ class TransportPCEtesting(unittest.TestCase):
     def test_10_connect_tail_xpdr_rdm(self):
         # Connect the tail: XPDRA to ROADMA
         url = ("{}/operations/transportpce-networkutils:init-xpdr-rdm-links"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {"networkutils:input": {
             "networkutils:links-input": {
                 "networkutils:xpdr-node": "XPDR-A1",
@@ -356,16 +317,15 @@ class TransportPCEtesting(unittest.TestCase):
             }
         }
         }
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "POST", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_11_connect_tail_rdm_xpdr(self):
         # Connect the tail: ROADMA to XPDRA
         url = ("{}/operations/transportpce-networkutils:init-rdm-xpdr-links"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {"networkutils:input": {
             "networkutils:links-input": {
                 "networkutils:xpdr-node": "XPDR-A1",
@@ -377,18 +337,16 @@ class TransportPCEtesting(unittest.TestCase):
             }
         }
         }
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "POST", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "POST", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_12_getLinks_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -434,31 +392,15 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(XPDR_OUT), 0)
 
     def test_13_connect_ROADMC(self):
-        # Config ROADMC
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-C1"
-               .format(self.restconf_baseurl))
-        data = {"node": [{
-            "node-id": "ROADM-C1",
-            "netconf-node-topology:username": "admin",
-            "netconf-node-topology:password": "admin",
-            "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": test_utils.sims['roadmc']['port'],
-            "netconf-node-topology:tcp-only": "false",
-            "netconf-node-topology:pass-through": {}}]}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.created)
-        time.sleep(20)
+        response = test_utils.mount_device("ROADM-C1", 'roadmc')
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_14_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA-ROADMC oms-attributes
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
                "link/ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {"span": {
             "auto-spanloss": "true",
             "engineered-spanloss": 12.2,
@@ -467,10 +409,9 @@ class TransportPCEtesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "PUT", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_15_omsAttributes_ROADMC_ROADMA(self):
@@ -478,7 +419,7 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
                "link/ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {"span": {
             "auto-spanloss": "true",
             "engineered-spanloss": 12.2,
@@ -488,18 +429,16 @@ class TransportPCEtesting(unittest.TestCase):
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
 
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "PUT", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_16_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -517,10 +456,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_17_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -550,10 +488,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_18_getROADMLinkOpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -609,10 +546,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_19_getLinkOmsAttributesOpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -637,10 +573,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_20_getNodes_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -748,30 +683,15 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_21_connect_ROADMB(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-B1"
-               .format(self.restconf_baseurl))
-        data = {"node": [{
-            "node-id": "ROADM-B1",
-            "netconf-node-topology:username": "admin",
-            "netconf-node-topology:password": "admin",
-            "netconf-node-topology:host": "127.0.0.1",
-            "netconf-node-topology:port": test_utils.sims['roadmb']['port'],
-            "netconf-node-topology:tcp-only": "false",
-            "netconf-node-topology:pass-through": {}}]}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.created)
-        time.sleep(20)
+        response = test_utils.mount_device("ROADM-B1", 'roadmb')
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_22_omsAttributes_ROADMA_ROADMB(self):
         # Config ROADM-A1-ROADM-B1 oms-attributes
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
                "link/ROADM-A1-DEG1-DEG1-TTP-TXRXtoROADM-B1-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {"span": {
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
@@ -782,10 +702,9 @@ class TransportPCEtesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "PUT", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_23_omsAttributes_ROADMB_ROADMA(self):
@@ -793,7 +712,7 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
                "link/ROADM-B1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {"span": {
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
@@ -804,10 +723,9 @@ class TransportPCEtesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "PUT", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_24_omsAttributes_ROADMB_ROADMC(self):
@@ -815,7 +733,7 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
                "link/ROADM-B1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {"span": {
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
@@ -826,10 +744,9 @@ class TransportPCEtesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "PUT", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_25_omsAttributes_ROADMC_ROADMB(self):
@@ -837,7 +754,7 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
                "link/ROADM-C1-DEG2-DEG2-TTP-TXRXtoROADM-B1-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
                "OMS-attributes/span"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {"span": {
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
@@ -846,18 +763,16 @@ class TransportPCEtesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "PUT", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "PUT", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_26_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -877,10 +792,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_27_verifyDegree(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -898,10 +812,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_28_verifyOppositeLinkTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -915,9 +828,9 @@ class TransportPCEtesting(unittest.TestCase):
             oppLink_id = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:opposite-link']
             # Find the opposite link
             url_oppLink = "{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"+oppLink_id
-            url = (url_oppLink.format(self.restconf_baseurl))
-            headers = {'content-type': 'application/json'}
-            response_oppLink = requests.request("GET", url, headers=headers, auth=('admin', 'admin'))
+            url = (url_oppLink.format(test_utils.RESTCONF_BASE_URL))
+            response_oppLink = requests.request(
+                "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
             self.assertEqual(response_oppLink.status_code, requests.codes.ok)
             res_oppLink = response_oppLink.json()
             self.assertEqual(res_oppLink['ietf-network-topology:link'][0]
@@ -940,10 +853,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_29_getLinkOmsAttributesOpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbLink = len(res['network'][0]['ietf-network-topology:link'])
@@ -970,52 +882,34 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_30_disconnect_ROADMB(self):
         # Delete in the topology-netconf
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-B1"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils.unmount_device("ROADM-B1")
         # Delete in the clli-network
         url = ("{}/config/ietf-network:networks/network/clli-network/node/NodeB"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_31_disconnect_ROADMC(self):
         # Delete in the topology-netconf
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-C1"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils.unmount_device("ROADM-C1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         # Delete in the clli-network
         url = ("{}/config/ietf-network:networks/network/clli-network/node/NodeC"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
 
 #    def test_24_check_roadm2roadm_links_deletion(self):
 #        url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-#               .format(self.restconf_baseurl))
-#        headers = {'content-type': 'application/json'}
+#               .format(test_utils.RESTCONF_BASE_URL))
 #        response = requests.request(
-#             "GET", url, headers=headers, auth=('admin', 'admin'))
+#             "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
 #        self.assertEqual(response.status_code, requests.codes.ok)
 #        res = response.json()
 #        #Write the response in the log
@@ -1071,10 +965,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_32_getNodes_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1154,10 +1047,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_33_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -1168,10 +1060,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_34_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -1180,22 +1071,14 @@ class TransportPCEtesting(unittest.TestCase):
             self.assertNotEqual(res['network'][0]['node'][1]['org-openroadm-clli-network:clli'], 'NodeC')
 
     def test_35_disconnect_XPDRA(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDR-A1"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils.unmount_device("XPDR-A1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
     def test_36_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -1204,10 +1087,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_37_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -1217,10 +1099,9 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_38_getNodes_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -1274,30 +1155,27 @@ class TransportPCEtesting(unittest.TestCase):
         # Link-1
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
                "link/XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         # Link-2
         url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
                "link/ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_40_getLinks_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbLink = len(res['network'][0]['ietf-network-topology:link'])
@@ -1338,51 +1216,40 @@ class TransportPCEtesting(unittest.TestCase):
                                 ['org-openroadm-common-network:link-type'], 'XPONDER-INPUT')
 
     def test_41_disconnect_ROADMA(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-A1"
-               .format(self.restconf_baseurl))
-        data = {}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils.unmount_device("ROADM-A1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         # Delete in the clli-network
         url = ("{}/config/ietf-network:networks/network/clli-network/node/NodeA"
-               .format(self.restconf_baseurl))
+               .format(test_utils.RESTCONF_BASE_URL))
         data = {}
-        headers = {'content-type': 'application/json'}
         response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=headers,
-            auth=('admin', 'admin'))
+            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
+            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_42_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn('node', res['network'][0])
 
     def test_43_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn('node', res['network'][0])
 
     def test_44_check_roadm2roadm_link_persistence(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(self.restconf_baseurl))
-        headers = {'content-type': 'application/json'}
+               .format(test_utils.RESTCONF_BASE_URL))
         response = requests.request(
-            "GET", url, headers=headers, auth=('admin', 'admin'))
+            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbLink = len(res['network'][0]['ietf-network-topology:link'])

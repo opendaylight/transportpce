@@ -16,11 +16,6 @@ import requests
 
 from common import test_utils
 
-RESTCONF_BASE_URL = "http://localhost:8181/restconf"
-
-CODE_SHOULD_BE_200 = 'Http status code should be 200'
-
-CODE_SHOULD_BE_201 = 'Http status code should be 201'
 
 CREATED_SUCCESSFULLY = 'Result message should contain Xponder Roadm Link created successfully'
 
@@ -62,158 +57,137 @@ class TransportTapitesting(unittest.TestCase):
             self.fail('Feature installation failed')
         print("execution of {}".format(self.id().split(".")[-1]))
 
-    #  connect netconf devices
-
     def test_00_connect_spdr_sa1(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/SPDR-SA1"
-               .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("SPDR-SA1", test_utils.sims['spdrav2']['port'])
-        response = test_utils.put_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
+        response = test_utils.mount_device("SPDR-SA1", 'spdrav2')
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
+        # TODO replace connect and disconnect timers with test_utils.wait_until_log_contains
 
     def test_01_connect_xpdra(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDR-A1"
-               .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("XPDR-A1", test_utils.sims['xpdra']['port'])
-        response = test_utils.put_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
+        response = test_utils.mount_device("XPDR-A1", 'xpdra')
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
     def test_02_connect_xpdrc(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDR-C1"
-               .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("XPDR-C1", test_utils.sims['xpdrc']['port'])
-        response = test_utils.put_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
+        response = test_utils.mount_device("XPDR-C1", 'xpdrc')
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
     def test_03_connect_rdma(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-A1"
-               .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("ROADM-A1", test_utils.sims['roadma']['port'])
-        response = test_utils.put_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
+        response = test_utils.mount_device("ROADM-A1", 'roadma')
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(20)
 
     def test_04_connect_rdmc(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-C1"
-               .format(RESTCONF_BASE_URL))
-        data = test_utils.generate_connect_data("ROADM-C1", test_utils.sims['roadmc']['port'])
-        response = test_utils.put_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.created, CODE_SHOULD_BE_201)  # pylint: disable=no-member
+        response = test_utils.mount_device("ROADM-C1", 'roadmc')
+        self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(20)
 
     def test_05_connect_xprda_n1_to_roadma_pp1(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
         data = test_utils.generate_link_data("XPDR-A1", "1", "1", "ROADM-A1", "1", "SRG1-PP1-TXRX")
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"],
                       CREATED_SUCCESSFULLY)
         time.sleep(2)
 
     def test_06_connect_roadma_pp1_to_xpdra_n1(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
         data = test_utils.generate_link_data("XPDR-A1", "1", "1", "ROADM-A1", "1", "SRG1-PP1-TXRX")
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"],
                       CREATED_SUCCESSFULLY)
         time.sleep(2)
 
     def test_07_connect_xprdc_n1_to_roadmc_pp1(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
         data = test_utils.generate_link_data("XPDR-C1", "1", "1", "ROADM-C1", "1", "SRG1-PP1-TXRX")
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"],
                       CREATED_SUCCESSFULLY)
         time.sleep(2)
 
     def test_08_connect_roadmc_pp1_to_xpdrc_n1(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
         data = test_utils.generate_link_data("XPDR-C1", "1", "1", "ROADM-C1", "1", "SRG1-PP1-TXRX")
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"],
                       CREATED_SUCCESSFULLY)
         time.sleep(2)
 
     def test_09_connect_xprda_n2_to_roadma_pp2(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
         data = test_utils.generate_link_data("XPDR-A1", "1", "2", "ROADM-A1", "1", "SRG1-PP2-TXRX")
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"],
                       CREATED_SUCCESSFULLY)
         time.sleep(2)
 
     def test_10_connect_roadma_pp2_to_xpdra_n2(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
         data = test_utils.generate_link_data("XPDR-A1", "1", "2", "ROADM-A1", "1", "SRG1-PP2-TXRX")
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"],
                       CREATED_SUCCESSFULLY)
         time.sleep(2)
 
     def test_11_connect_xprdc_n2_to_roadmc_pp2(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
         data = test_utils.generate_link_data("XPDR-C1", "1", "2", "ROADM-C1", "1", "SRG1-PP2-TXRX")
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"],
                       CREATED_SUCCESSFULLY)
         time.sleep(2)
 
     def test_12_connect_roadmc_pp2_to_xpdrc_n2(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
         data = test_utils.generate_link_data("XPDR-C1", "1", "2", "ROADM-C1", "1", "SRG1-PP2-TXRX")
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"],
                       CREATED_SUCCESSFULLY)
         time.sleep(2)
 
     def test_13_get_tapi_openroadm_topology(self):
-        url = "{}/operations/tapi-topology:get-topology-details".format(RESTCONF_BASE_URL)
+        url = "{}/operations/tapi-topology:get-topology-details".format(test_utils.RESTCONF_BASE_URL)
         data = {
             "tapi-topology:input": {
                 "tapi-topology:topology-id-or-name": "openroadm-topology"
             }
         }
 
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertEqual(len(res["output"]["topology"]["node"]), 1, 'There should be 1 node')
         self.assertEqual(len(res["output"]["topology"]["node"][0]["owned-node-edge-point"]), 4,
                          'There should be 4 owned-node-edge-points')
 
     def test_14_get_tapi_otn_topology(self):
-        url = "{}/operations/tapi-topology:get-topology-details".format(RESTCONF_BASE_URL)
+        url = "{}/operations/tapi-topology:get-topology-details".format(test_utils.RESTCONF_BASE_URL)
         data = {
             "tapi-topology:input": {
                 "tapi-topology:topology-id-or-name": "otn-topology"
             }
         }
 
-        response = test_utils.post_request(url, data, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertEqual(len(res["output"]["topology"]["node"]), 4, 'There should be 4 nodes')
         self.assertEqual(len(res["output"]["topology"]["link"]), 5, 'There should be 5 links')
@@ -259,47 +233,28 @@ class TransportTapitesting(unittest.TestCase):
             self.fail('Wrong layer protocol name')
 
     def test_15_disconnect_xpdra(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDR-A1"
-               .format(RESTCONF_BASE_URL))
-
-        response = test_utils.delete_request(url, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.unmount_device("XPDR-A1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         time.sleep(10)
 
     def test_16_disconnect_xpdrc(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDR-C1"
-               .format(RESTCONF_BASE_URL))
-
-        response = test_utils.delete_request(url, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.unmount_device("XPDR-C1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         time.sleep(10)
 
     def test_17_disconnect_roadma(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-A1"
-               .format(RESTCONF_BASE_URL))
-
-        response = test_utils.delete_request(url, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.unmount_device("ROADM-A1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         time.sleep(10)
 
     def test_18_disconnect_roadmc(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-C1"
-               .format(RESTCONF_BASE_URL))
-
-        response = test_utils.delete_request(url, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.unmount_device("ROADM-C1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         time.sleep(10)
 
     def test_19_disconnect_spdr_sa1(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/SPDR-SA1"
-               .format(RESTCONF_BASE_URL))
-        response = test_utils.delete_request(url, 'admin', 'admin')
-        self.assertEqual(response.status_code, requests.codes.ok, CODE_SHOULD_BE_200)  # pylint: disable=no-member
+        response = test_utils.unmount_device("SPDR-SA1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
 
 def find_object_with_key(list_dicts, key, value):
