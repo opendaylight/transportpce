@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c32fa6a5_b01e2ac3",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/MappingUtilsImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 8550
+      },
+      "writtenOn": "2020-06-22T07:44:29Z",
+      "side": 1,
+      "message": "we can\u0027t extend the AbstractTest it will cause circular dependency",
+      "parentUuid": "d02c745c_c620095a",
+      "revId": "d58c4dd2d99f78ad670e9a25bb7b4f7110de8fa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87256a21_e1d8a1d6",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/MappingUtilsImplTest.java",
         "patchSetId": 5
@@ -66,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "10adb5ca_f1942be3",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/MappingUtilsImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 8550
+      },
+      "writtenOn": "2020-06-22T07:44:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b203f25_79ed4d4f",
+      "range": {
+        "startLine": 66,
+        "startChar": 12,
+        "endLine": 66,
+        "endChar": 56
+      },
+      "revId": "d58c4dd2d99f78ad670e9a25bb7b4f7110de8fa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "786f9675_111a4df1",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingImplTest.java",
         "patchSetId": 5
@@ -86,6 +128,30 @@
       "revId": "d58c4dd2d99f78ad670e9a25bb7b4f7110de8fa9",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ae65a9f_743ae4d4",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 8550
+      },
+      "writtenOn": "2020-06-22T07:44:29Z",
+      "side": 1,
+      "message": "we can\u0027t extend AbstractTest it will cause circular dependency",
+      "parentUuid": "786f9675_111a4df1",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 54
+      },
+      "revId": "d58c4dd2d99f78ad670e9a25bb7b4f7110de8fa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -136,6 +202,30 @@
     },
     {
       "key": {
+        "uuid": "091b8b20_f18c3fc9",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 8550
+      },
+      "writtenOn": "2020-06-22T07:44:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "954cc0f8_80074897",
+      "range": {
+        "startLine": 94,
+        "startChar": 12,
+        "endLine": 94,
+        "endChar": 52
+      },
+      "revId": "d58c4dd2d99f78ad670e9a25bb7b4f7110de8fa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "933f9d0b_5a4eb376",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingImplTest.java",
         "patchSetId": 5
@@ -170,6 +260,30 @@
       "writtenOn": "2020-06-21T06:49:03Z",
       "side": 1,
       "message": "Ack",
+      "parentUuid": "933f9d0b_5a4eb376",
+      "range": {
+        "startLine": 108,
+        "startChar": 11,
+        "endLine": 108,
+        "endChar": 52
+      },
+      "revId": "d58c4dd2d99f78ad670e9a25bb7b4f7110de8fa9",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a11415c4_fbaad6e6",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 8550
+      },
+      "writtenOn": "2020-06-22T07:44:29Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "933f9d0b_5a4eb376",
       "range": {
         "startLine": 108,
