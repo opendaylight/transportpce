@@ -9,7 +9,7 @@
 ##############################################################################
 import os
 
-sims = {
+SIMS = {
     'xpdra': {'port': '17830', 'configfile': 'oper-XPDRA.xml', 'logfile': 'oper-XPDRA.log'},
     'roadma': {'port': '17831', 'configfile': 'oper-ROADMA.xml', 'logfile': 'oper-ROADMA.log'},
     'roadmb': {'port': '17832', 'configfile': 'oper-ROADMB.xml', 'logfile': 'oper-ROADMB.log'},
@@ -19,9 +19,9 @@ sims = {
     'roadmc-full': {'port': '17823', 'configfile': 'oper-ROADMC-full.xml', 'logfile': 'oper-ROADMC.log'}
 }
 
-honeynode_executable = os.path.join(
+HONEYNODE_EXECUTABLE = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "honeynode", "1.2.1", "honeynode-simulator", "honeycomb-tpce")
-samples_directory = os.path.join(
+SAMPLES_DIRECTORY = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "sample_configs", "openroadm", "1.2.1")

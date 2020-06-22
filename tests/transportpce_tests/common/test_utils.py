@@ -9,6 +9,7 @@
 ##############################################################################
 import json
 import os
+import sys
 import re
 import signal
 import subprocess
@@ -18,9 +19,9 @@ import requests
 
 import simulators
 
-sims = simulators.sims
-honeynode_executable = simulators.honeynode_executable
-samples_directory = simulators.samples_directory
+SIMS = simulators.SIMS
+HONEYNODE_EXECUTABLE = simulators.HONEYNODE_EXECUTABLE
+SAMPLES_DIRECTORY = simulators.SAMPLES_DIRECTORY
 
 HONEYNODE_OK_START_MSG = "Netconf SSH endpoint started successfully at 0.0.0.0"
 KARAF_OK_START_MSG = re.escape(
@@ -39,24 +40,25 @@ TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'applicatio
 CODE_SHOULD_BE_200 = 'Http status code should be 200'
 CODE_SHOULD_BE_201 = 'Http status code should be 201'
 
-log_directory = os.path.dirname(os.path.realpath(__file__))
+LOG_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-karaf_log = os.path.join(
+KARAF_LOG = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "..", "karaf", "target", "assembly", "data", "log", "karaf.log")
 
 process_list = []
 
 if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
-    tpce_log = 'odl.log'
+    TPCE_LOG = 'odl.log'
 else:
-    tpce_log = karaf_log
+    TPCE_LOG = KARAF_LOG
+
 
 def start_sims(sims_list):
     for sim in sims_list:
         print("starting simulator for " + sim + "...")
-        log_file = os.path.join(log_directory, sims[sim]['logfile'])
-        process = start_honeynode(log_file, sims[sim]['port'], sims[sim]['configfile'])
+        log_file = os.path.join(LOG_DIRECTORY, SIMS[sim]['logfile'])
+        process = start_honeynode(log_file, SIMS[sim]['port'], SIMS[sim]['configfile'])
         if wait_until_log_contains(log_file, HONEYNODE_OK_START_MSG, 100):
             print("simulator for " + sim + " started")
         else:
@@ -64,7 +66,7 @@ def start_sims(sims_list):
             shutdown_process(process)
             for pid in process_list:
                 shutdown_process(pid)
-            exit(3)
+            sys.exit(3)
         process_list.append(process)
     return process_list
 
@@ -76,14 +78,14 @@ def start_tpce():
         # TODO: add some sort of health check similar to Karaf below
     else:
         process = start_karaf()
-        if wait_until_log_contains(karaf_log, KARAF_OK_START_MSG, time_to_wait=60):
+        if wait_until_log_contains(KARAF_LOG, KARAF_OK_START_MSG, time_to_wait=60):
             print("OpenDaylight started !")
         else:
             print("OpenDaylight failed to start !")
             shutdown_process(process)
             for pid in process_list:
                 shutdown_process(pid)
-            exit(1)
+            sys.exit(1)
     process_list.append(process)
     return process_list
 
@@ -145,11 +147,11 @@ def mount_device(node_id, sim):
         "netconf-node-topology:username": NODES_LOGIN,
         "netconf-node-topology:password": NODES_PWD,
         "netconf-node-topology:host": "127.0.0.1",
-        "netconf-node-topology:port": sims[sim]['port'],
+        "netconf-node-topology:port": SIMS[sim]['port'],
         "netconf-node-topology:tcp-only": "false",
         "netconf-node-topology:pass-through": {}}]}
     response = put_request(url, headers, ODL_LOGIN, ODL_PWD)
-    if wait_until_log_contains(tpce_log, re.escape("Triggering notification stream NETCONF for node "+node_id), 60):
+    if wait_until_log_contains(TPCE_LOG, re.escape("Triggering notification stream NETCONF for node "+node_id), 60):
         print("Node "+node_id+" correctly added to tpce topology", end='... ', flush=True)
     else:
         print("Node "+node_id+" still not added to tpce topology", end='... ', flush=True)
@@ -163,7 +165,7 @@ def unmount_device(node_id):
     url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/"
            + node_id).format(RESTCONF_BASE_URL)
     response = delete_request(url, ODL_LOGIN, ODL_PWD)
-    if wait_until_log_contains(tpce_log, re.escape("onDeviceDisConnected: "+node_id), 60):
+    if wait_until_log_contains(TPCE_LOG, re.escape("onDeviceDisConnected: "+node_id), 60):
         print("Node "+node_id+" correctly deleted from tpce topology", end='... ', flush=True)
     else:
         print("Node "+node_id+" still not deleted from tpce topology", end='... ', flush=True)
@@ -196,10 +198,10 @@ def shutdown_process(process):
 
 
 def start_honeynode(log_file: str, node_port: str, node_config_file_name: str):
-    if os.path.isfile(honeynode_executable):
+    if os.path.isfile(HONEYNODE_EXECUTABLE):
         with open(log_file, 'w') as outfile:
             return subprocess.Popen(
-                [honeynode_executable, node_port, os.path.join(samples_directory, node_config_file_name)],
+                [HONEYNODE_EXECUTABLE, node_port, os.path.join(SAMPLES_DIRECTORY, node_config_file_name)],
                 stdout=outfile, stderr=outfile)
 
 
@@ -207,7 +209,7 @@ def wait_until_log_contains(log_file, regexp, time_to_wait=20):
     found = False
     tail = None
     try:
-        with timeout(seconds=time_to_wait):
+        with TimeOut(seconds=time_to_wait):
             print("Searching for pattern '"+regexp+"' in "+os.path.basename(log_file), end='... ', flush=True)
             tail = subprocess.Popen(['tail', '-F', log_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             compiled_regexp = re.compile(regexp)
@@ -230,7 +232,7 @@ def wait_until_log_contains(log_file, regexp, time_to_wait=20):
 # TODO try to find an alternative to subprocess+tail -f (such as https://pypi.org/project/tailhead/)
 
 
-class timeout:
+class TimeOut:
     def __init__(self, seconds=1, error_message='Timeout'):
         self.seconds = seconds
         self.error_message = error_message
