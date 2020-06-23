@@ -97,7 +97,7 @@ class TransportPCEtesting(unittest.TestCase):
              'logical-connection-point': 'XPDR1-CLIENT1',
              'port-direction': 'bidirectional',
              'port-qual': 'xpdr-client',
-             'lcp-hash-val': '151922456'},
+             'lcp-hash-val': 'FqlcrxV7p30='},
             res['mapping'])
 
     def test_03_get_portmapping_NETWORK1(self):
@@ -119,7 +119,7 @@ class TransportPCEtesting(unittest.TestCase):
                 "port-qual": "xpdr-network",
                 "supporting-circuit-pack-name": "CP1-CFP0",
                 "xponder-type": "mpdr",
-             'lcp-hash-val': '819687633'},
+             'lcp-hash-val': 'Swfw02qXGyI='},
             res['mapping'])
 
     def test_04_service_path_create_OCH_OTU4(self):
@@ -165,7 +165,7 @@ class TransportPCEtesting(unittest.TestCase):
                 "port-qual": "xpdr-network",
                 "supporting-circuit-pack-name": "CP1-CFP0",
                 "xponder-type": "mpdr",
-                "lcp-hash-val": "819687633"},
+                "lcp-hash-val": "Swfw02qXGyI="},
             res['mapping'])
 
     def test_06_check_interface_och(self):
@@ -280,7 +280,7 @@ class TransportPCEtesting(unittest.TestCase):
                 "supporting-circuit-pack-name": "CP1-CFP0",
                 "xponder-type": "mpdr",
                 "supporting-odu4": "XPDR1-NETWORK1-ODU4",
-                "lcp-hash-val": "819687633"
+                "lcp-hash-val": "Swfw02qXGyI="
              },
             res['mapping'])
 
