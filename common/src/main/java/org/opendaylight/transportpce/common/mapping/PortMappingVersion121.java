@@ -13,6 +13,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -85,10 +86,10 @@ public class PortMappingVersion121 {
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmInterfaces openRoadmInterfaces;
 
-    //FNV1 128 bit hash constants
-    private static final BigInteger FNV_PRIME = new BigInteger("309485009821345068724781371");
-    private static final BigInteger FNV_INIT = new BigInteger("6c62272e07bb014262b821756295c58d", 16);
-    private static final BigInteger FNV_MOD = new BigInteger("2").pow(128);
+    //FNV1 64 bit hash constants
+    private static final BigInteger FNV_PRIME = new BigInteger("100000001b3", 16);
+    private static final BigInteger FNV_INIT = new BigInteger("cbf29ce484222325", 16);
+    private static final BigInteger FNV_MOD = new BigInteger("2").pow(64);
 
     public PortMappingVersion121(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
         OpenRoadmInterfaces openRoadmInterfaces) {
@@ -858,11 +859,13 @@ public class PortMappingVersion121 {
     }
 
     /**
-     * Implements the FNV-1 128bit algorithm.
+     * Implements the FNV-1 64bit algorithm.
+     * FNV-1 128bit would be ideal for 16 bytes but we need an overhead for Base64 encoding.
+     * Otherwise, the hash cannot be stored in a UTF-8 string.
      * https://www.wikiwand.com/en/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function#/FNV-1_hash
      * https://github.com/pmdamora/fnv-cracker-app/blob/master/src/main/java/passwordcrack/cracking/HashChecker.java
      * @param stringdata the String to be hashed
-     * @return the hash string
+     * @return the base64 formatted hash string
      */
     private String fnv(String stringdata) {
         BigInteger hash = FNV_INIT;
@@ -873,6 +876,6 @@ public class PortMappingVersion121 {
             hash = hash.xor(BigInteger.valueOf((int) b & 0xff));
         }
 
-        return hash.toString(16);
+        return Base64.getEncoder().encodeToString(hash.toByteArray());
     }
 }
