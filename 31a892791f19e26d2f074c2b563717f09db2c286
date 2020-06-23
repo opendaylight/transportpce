@@ -39,6 +39,40 @@
       "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb3b8aa1_f207ffbc",
+        "filename": "tests/kafka_broker/start_kafka.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-23T16:10:13Z",
+      "side": 1,
+      "message": "as there is now some functional tests on tapi, perhaps you could put this script call in tox.ini related to tapi test",
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19fb4fc8_b285f820",
+        "filename": "tests/tapi_mongodb/start_tapiMongodb.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-23T16:10:13Z",
+      "side": 1,
+      "message": "as there is now some functional tests on tapi, perhaps you could put this script call in tox.ini related to tapi test",
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
