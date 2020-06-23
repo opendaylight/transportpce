@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a30ea451_2223a3aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-23T14:22:37Z",
+      "side": 1,
+      "message": "@Bala: May I ask you to take care of this?\nI am pretty loaded with the DDF this week.",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "f704200f52c20f056e29dcc3caeb86dbb1100339",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
