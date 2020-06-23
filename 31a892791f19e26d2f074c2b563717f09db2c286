@@ -22,6 +22,23 @@
       "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38bbd4ea_3db0f41f",
+        "filename": "tests/honeynode/1.2.1/minimal-distribution-core/src/main/resources/honeycomb-minimal-resources/config/logback.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-23T15:39:37Z",
+      "side": 1,
+      "message": "done on https://gitlab.com/Orange-OpenSource/lfn/odl/honeynode-simulator/-/blob/device_1_2_1/minimal-distribution-core/src/main/resources/honeycomb-minimal-resources/config/logback.xml",
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
