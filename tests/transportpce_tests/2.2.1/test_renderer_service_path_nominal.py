@@ -71,7 +71,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
              'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
-             'lcp-hash-val': '8e128ba57560403cfd4ffafae38cd941'},
+             'lcp-hash-val': 'e54EtOovlcE='},
             res['nodes'][0]['mapping'])
         self.assertIn(
             {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
@@ -79,7 +79,7 @@ class TransportPCERendererTesting(unittest.TestCase):
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-client',
-             'lcp-hash-val': '3ed8ed1336784ac7c2f66c22f2f03d8'},
+             'lcp-hash-val': 'BIyxYXnFEFA='},
             res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
