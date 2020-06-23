@@ -25,6 +25,52 @@
     },
     {
       "key": {
+        "uuid": "e9416a1a_3fc2f1b1",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-23T16:12:47Z",
+      "side": 1,
+      "message": "please don\u0027t harcode this",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 40
+      },
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aef6474_655049dc",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-23T16:12:47Z",
+      "side": 1,
+      "message": "Sonar does not recommend to print stack trace\nhttps://rules.sonarsource.com/java/RSPEC-1148\n+ if datasource is required you should throw an exception and stop the application.",
+      "range": {
+        "startLine": 255,
+        "startChar": 11,
+        "endLine": 255,
+        "endChar": 32
+      },
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38bbd4ea_3db0f41f",
         "filename": "tests/honeynode/1.2.1/minimal-distribution-core/src/main/resources/honeycomb-minimal-resources/config/logback.xml",
         "patchSetId": 2
