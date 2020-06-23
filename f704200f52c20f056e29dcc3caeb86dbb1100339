@@ -22,6 +22,30 @@
       "revId": "f704200f52c20f056e29dcc3caeb86dbb1100339",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be2de044_4c4c5283",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-23T15:57:36Z",
+      "side": 1,
+      "message": "@Bala I actually managed to make it \nI let you check it works as you expect :)",
+      "parentUuid": "a30ea451_2223a3aa",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "f704200f52c20f056e29dcc3caeb86dbb1100339",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
