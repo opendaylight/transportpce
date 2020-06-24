@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4c93ee8_7c08679a",
+        "filename": "tests/transportpce_tests/2.2.1/test_utils.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-06-24T05:58:52Z",
+      "side": 1,
+      "message": "If for some reason Karaf does not start, but if there are other honeynode process then it will cause a problem. If we want to keep this behavior, we have to ensure that all the test scripts have Karaf as the first process, and then start honeynode.",
+      "revId": "df1bc961103f458c88df641090bc02a8a7740cb2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
