@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c17ea1be_18d5e76d",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_renderer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-24T07:23:27Z",
+      "side": 1,
+      "message": "NOK, hashcode was replaced by FNV1-64",
+      "range": {
+        "startLine": 266,
+        "startChar": 24,
+        "endLine": 267,
+        "endChar": 53
+      },
+      "revId": "1109e16317f25314933c837f437f05f95c783534",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
