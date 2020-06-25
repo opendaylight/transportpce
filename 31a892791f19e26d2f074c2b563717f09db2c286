@@ -25,6 +25,98 @@
     },
     {
       "key": {
+        "uuid": "166eee3a_f1401ddf",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/kafka/KafkaImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-25T14:47:36Z",
+      "side": 1,
+      "message": "defaultProperties instead of defaultPorperties ;-)",
+      "range": {
+        "startLine": 25,
+        "startChar": 23,
+        "endLine": 25,
+        "endChar": 41
+      },
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd04c47_0bdd60aa",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/kafka/KafkaImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-25T14:47:36Z",
+      "side": 1,
+      "message": "please don\u0027t hardcode this\nput this in an application.properties file and read the file + perhaps manage reading file from classpath or from external file",
+      "range": {
+        "startLine": 31,
+        "startChar": 1,
+        "endLine": 36,
+        "endChar": 45
+      },
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03b4bb13_57f09106",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/kafka/KafkaImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-25T14:47:36Z",
+      "side": 1,
+      "message": "I think that you should put ObjectMapper at least as class field to avoid to create one each time sendStream function call",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 55
+      },
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b71dc915_f6e56c8b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/kafka/KafkaImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-06-25T14:47:36Z",
+      "side": 1,
+      "message": "please don\u0027t harcode this",
+      "range": {
+        "startLine": 70,
+        "startChar": 8,
+        "endLine": 70,
+        "endChar": 80
+      },
+      "revId": "31a892791f19e26d2f074c2b563717f09db2c286",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9416a1a_3fc2f1b1",
         "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
         "patchSetId": 2
