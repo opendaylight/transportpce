@@ -13,6 +13,7 @@ import sys
 import re
 import signal
 import subprocess
+import time
 
 import psutil
 import requests
@@ -206,30 +207,34 @@ def start_honeynode(log_file: str, node_port: str, node_config_file_name: str):
 
 
 def wait_until_log_contains(log_file, regexp, time_to_wait=20):
-    found = False
-    tail = None
+    stringfound = False
+    filefound = False
+    line = None
     try:
         with TimeOut(seconds=time_to_wait):
+            while not os.path.exists(log_file):
+                time.sleep(0.2)
+            filelogs = open(log_file, 'r')
+            filelogs.seek(0, 2)
+            filefound = True
             print("Searching for pattern '"+regexp+"' in "+os.path.basename(log_file), end='... ', flush=True)
-            tail = subprocess.Popen(['tail', '-F', log_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             compiled_regexp = re.compile(regexp)
             while True:
-                line = tail.stdout.readline().decode('utf-8')
+                line = filelogs.readline()
                 if compiled_regexp.search(line):
                     print("String found!", end=' ')
-                    found = True
+                    stringfound = True
                     break
+                if not line:
+                    time.sleep(0.1)
     except TimeoutError:
         print("String not found after "+str(time_to_wait), end=" seconds! ", flush=True)
     finally:
-        if tail is not None:
-            print("Stopping tail command", end='... ', flush=True)
-            tail.stderr.close()
-            tail.stdout.close()
-            tail.kill()
-            tail.wait()
-        return found
-# TODO try to find an alternative to subprocess+tail -f (such as https://pypi.org/project/tailhead/)
+        if filefound:
+            filelogs.close()
+        else:
+            print("log file does not exist... ", flush=True)
+        return stringfound
 
 
 class TimeOut:
