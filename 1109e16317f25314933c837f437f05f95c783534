@@ -22,6 +22,30 @@
       "revId": "1109e16317f25314933c837f437f05f95c783534",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d96db573_7d957c53",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_renderer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-25T06:32:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c17ea1be_18d5e76d",
+      "range": {
+        "startLine": 266,
+        "startChar": 24,
+        "endLine": 267,
+        "endChar": 53
+      },
+      "revId": "1109e16317f25314933c837f437f05f95c783534",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
