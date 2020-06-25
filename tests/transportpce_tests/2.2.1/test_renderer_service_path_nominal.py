@@ -274,7 +274,7 @@ class TransportPCERendererTesting(unittest.TestCase):
                         'rate': 'org-openroadm-otn-common-types:OTU4',
                         'fec': 'scfec'}
         self.assertDictEqual(input_dict_2,
-            res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
+                             res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_13_service_path_create_xpdr_check(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
@@ -554,4 +554,4 @@ class TransportPCERendererTesting(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main(verbosity=2, failfast=True)
+    unittest.main(verbosity=2, failfast=False)
