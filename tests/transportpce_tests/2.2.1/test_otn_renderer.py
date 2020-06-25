@@ -147,11 +147,11 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
 
         self.assertDictEqual(dict(res['interface'][0], **{'name': 'XPDR1-NETWORK1-1',
-                                   'administrative-state': 'inService',
-                                   'supporting-circuit-pack-name': 'CP1-CFP0',
-                                   'type': 'org-openroadm-interfaces:opticalChannel',
-                                   'supporting-port': 'CP1-CFP0-P1'
-                                   } ),
+                                                          'administrative-state': 'inService',
+                                                          'supporting-circuit-pack-name': 'CP1-CFP0',
+                                                          'type': 'org-openroadm-interfaces:opticalChannel',
+                                                          'supporting-port': 'CP1-CFP0-P1'
+                                                          }),
                              res['interface'][0])
 
         self.assertDictEqual(
@@ -188,7 +188,7 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0])
 
         self.assertDictEqual(input_dict_2,
-            res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
+                             res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_08_otn_service_path_create_ODU4(self):
         url = "{}/operations/transportpce-device-renderer:otn-service-path".format(test_utils.RESTCONF_BASE_URL)
@@ -260,7 +260,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertDictEqual(dict(res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'],
                                   **input_dict_2
                                   ),
-                                  res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
+                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']
                              )
         self.assertDictEqual(
             {u'payload-type': u'21', u'exp-payload-type': u'21'},
@@ -372,10 +372,10 @@ class TransportPCEtesting(unittest.TestCase):
                                   **input_dict_2),
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'])
         self.assertDictEqual(dict(res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
-                                    'parent-odu-allocation'], **input_dict_3
-                                  ),
-                             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
-                               'parent-odu-allocation'])
+            'parent-odu-allocation'], **input_dict_3
+        ),
+            res['interface'][0]['org-openroadm-otn-odu-interfaces:odu'][
+            'parent-odu-allocation'])
         self.assertIn(1,
                       res['interface'][0][
                           'org-openroadm-otn-odu-interfaces:odu'][
