@@ -41,8 +41,8 @@ class TransportTapitesting(unittest.TestCase):
             cls.init_failed = not test_utils.wait_until_log_contains(
                 test_utils.KARAF_LOG, test_utils.KARAF_OK_START_MSG, time_to_wait=60)
         if cls.init_failed:
-            print("tapi installaiton feature failed...")
-            test_utils.shutdown_process(cls.odl_processes[0])
+            print("tapi installation feature failed...")
+            test_utils.shutdown_process(cls.processes[0])
             sys.exit(2)
         cls.processes = test_utils.start_sims(['xpdra', 'roadma', 'roadmc', 'xpdrc', 'spdrav2'])
 
