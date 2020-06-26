@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33c1c1a3_b5fd2370",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-26T07:20:29Z",
+      "side": 1,
+      "message": "maybe an except PermissionError would be welcome herd too\ne.",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 88
+      },
+      "revId": "83590dbe70332a4ab2b406a46cf2874e7ef28100",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
