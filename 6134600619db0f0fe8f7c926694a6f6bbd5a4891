@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52c402e1_c87c2be5",
+        "filename": "tests/transportpce_tests/2.2.1/simulators.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-26T11:50:21Z",
+      "side": 1,
+      "message": "no v1",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 97
+      },
+      "revId": "6134600619db0f0fe8f7c926694a6f6bbd5a4891",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
