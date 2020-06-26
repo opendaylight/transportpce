@@ -122,28 +122,45 @@ def install_karaf_feature(feature_name: str):
                           universal_newlines=True)
 
 
-def post_request(url, data, username, password):
+def get_request(url):
     return requests.request(
-        "POST", url, data=json.dumps(data),
-        headers=TYPE_APPLICATION_JSON, auth=(username, password))
+        "GET", url.format(RESTCONF_BASE_URL),
+        headers=TYPE_APPLICATION_JSON,
+        auth=(ODL_LOGIN, ODL_PWD))
 
 
-def put_request(url, data, username, password):
+def post_request(url, data):
+    if data:
+        return requests.request(
+            "POST", url.format(RESTCONF_BASE_URL),
+            data=json.dumps(data),
+            headers=TYPE_APPLICATION_JSON,
+            auth=(ODL_LOGIN, ODL_PWD))
+    else:
+        return requests.request(
+            "POST", url.format(RESTCONF_BASE_URL),
+            headers=TYPE_APPLICATION_JSON,
+            auth=(ODL_LOGIN, ODL_PWD))
+
+
+def put_request(url, data):
     return requests.request(
-        "PUT", url, data=json.dumps(data), headers=TYPE_APPLICATION_JSON,
-        auth=(username, password))
+        "PUT", url.format(RESTCONF_BASE_URL),
+        data=json.dumps(data),
+        headers=TYPE_APPLICATION_JSON,
+        auth=(ODL_LOGIN, ODL_PWD))
 
 
-def delete_request(url, username, password):
+def delete_request(url):
     return requests.request(
-        "DELETE", url, headers=TYPE_APPLICATION_JSON,
-        auth=(username, password))
+        "DELETE", url.format(RESTCONF_BASE_URL),
+        headers=TYPE_APPLICATION_JSON,
+        auth=(ODL_LOGIN, ODL_PWD))
 
 
 def mount_device(node_id, sim):
-    url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/"
-           + node_id).format(RESTCONF_BASE_URL)
-    headers = {"node": [{
+    url = "{}/config/network-topology:network-topology/topology/topology-netconf/node/"+node_id
+    body = {"node": [{
         "node-id": node_id,
         "netconf-node-topology:username": NODES_LOGIN,
         "netconf-node-topology:password": NODES_PWD,
@@ -151,7 +168,7 @@ def mount_device(node_id, sim):
         "netconf-node-topology:port": SIMS[sim]['port'],
         "netconf-node-topology:tcp-only": "false",
         "netconf-node-topology:pass-through": {}}]}
-    response = put_request(url, headers, ODL_LOGIN, ODL_PWD)
+    response = put_request(url, body)
     if wait_until_log_contains(TPCE_LOG, re.escape("Triggering notification stream NETCONF for node "+node_id), 60):
         print("Node "+node_id+" correctly added to tpce topology", end='... ', flush=True)
     else:
@@ -163,9 +180,8 @@ def mount_device(node_id, sim):
 
 
 def unmount_device(node_id):
-    url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/"
-           + node_id).format(RESTCONF_BASE_URL)
-    response = delete_request(url, ODL_LOGIN, ODL_PWD)
+    url = "{}/config/network-topology:network-topology/topology/topology-netconf/node/"+node_id
+    response = delete_request(url)
     if wait_until_log_contains(TPCE_LOG, re.escape("onDeviceDisConnected: "+node_id), 60):
         print("Node "+node_id+" correctly deleted from tpce topology", end='... ', flush=True)
     else:
@@ -173,8 +189,9 @@ def unmount_device(node_id):
     return response
 
 
-def generate_link_data(xpdr_node: str, xpdr_num: str, network_num: str, rdm_node: str, srg_num: str,
-                       termination_num: str):
+def connect_xpdr_to_rdm_request(xpdr_node: str, xpdr_num: str, network_num: str,
+                                rdm_node: str, srg_num: str, termination_num: str):
+    url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links"
     data = {
         "networkutils:input": {
             "networkutils:links-input": {
@@ -187,7 +204,25 @@ def generate_link_data(xpdr_node: str, xpdr_num: str, network_num: str, rdm_node
             }
         }
     }
-    return data
+    return post_request(url, data)
+
+
+def connect_rdm_to_xpdr_request(xpdr_node: str, xpdr_num: str, network_num: str,
+                                rdm_node: str, srg_num: str, termination_num: str):
+    url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links"
+    data = {
+        "networkutils:input": {
+            "networkutils:links-input": {
+                "networkutils:xpdr-node": xpdr_node,
+                "networkutils:xpdr-num": xpdr_num,
+                "networkutils:network-num": network_num,
+                "networkutils:rdm-node": rdm_node,
+                "networkutils:srg-num": srg_num,
+                "networkutils:termination-point-num": termination_num
+            }
+        }
+    }
+    return post_request(url, data)
 
 
 def shutdown_process(process):
@@ -222,13 +257,13 @@ def wait_until_log_contains(log_file, regexp, time_to_wait=20):
             while True:
                 line = filelogs.readline()
                 if compiled_regexp.search(line):
-                    print("String found!", end=' ')
+                    print("Pattern found!", end=' ')
                     stringfound = True
                     break
                 if not line:
                     time.sleep(0.1)
     except TimeoutError:
-        print("String not found after "+str(time_to_wait), end=" seconds! ", flush=True)
+        print("Pattern not found after "+str(time_to_wait), end=" seconds! ", flush=True)
     except PermissionError:
         print("Permission Error when trying to access the log file", end=" ... ", flush=True)
     finally:

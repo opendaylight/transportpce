@@ -42,10 +42,8 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_03_rdm_portmapping(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADM-A1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -60,10 +58,8 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_04_xpdr_portmapping(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDR-A1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -83,7 +79,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {"renderer:input": {
             "renderer:service-name": "service_test",
             "renderer:wave-number": "7",
@@ -96,10 +92,7 @@ class TransportPCERendererTesting(unittest.TestCase):
                 {"renderer:node-id": "XPDR-A1",
                  "renderer:src-tp": "XPDR1-CLIENT1",
                  "renderer:dest-tp": "XPDR1-NETWORK1"}]}}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes: ROADM-A1', res["output"]["result"])
@@ -108,10 +101,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/DEG1-TTP-TXRX-nmc-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -133,10 +124,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/DEG1-TTP-TXRX-mc-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -158,10 +147,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/SRG1-PP3-TXRX-nmc-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -184,10 +171,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/SRG1-PP3-TXRX-mc-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -199,10 +184,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/SRG1-PP3-TXRX-DEG1-TTP-TXRX-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -224,10 +207,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -251,10 +232,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-OTU"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -280,10 +259,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-ODU"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the 2 following statements replace self.assertDictContainsSubset deprecated in python 3.2
@@ -312,10 +289,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-CLIENT1-ETHERNET"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -337,10 +312,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "circuit-packs/1%2F0%2F1-PLUG-NET"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('not-reserved-inuse', res['circuit-packs'][0]["equipment-state"])
@@ -349,16 +322,14 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "circuit-packs/1%2F0%2F1-PLUG-CLIENT"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('not-reserved-inuse', res['circuit-packs'][0]["equipment-state"])
 
     def test_17_service_path_delete(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {"renderer:input": {
             "renderer:service-name": "service_test",
             "renderer:wave-number": "7",
@@ -370,10 +341,7 @@ class TransportPCERendererTesting(unittest.TestCase):
                 {"renderer:node-id": "XPDR-A1",
                  "renderer:src-tp": "XPDR1-CLIENT1",
                  "renderer:dest-tp": "XPDR1-NETWORK1"}]}}
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertEqual(response.json(), {
             'output': {'result': 'Request processed', 'success': True}})
@@ -382,10 +350,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/DEG1-TTP-TXRX-mc-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -397,10 +363,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/DEG1-TTP-TXRX-nmc-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -412,10 +376,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/SRG1-PP3-TXRX-mc-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -428,10 +390,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/SRG1-PP3-TXRX-nmc-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -444,10 +404,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "roadm-connections/SRG1-PP3-TXRX-DEG1-TTP-TXRX-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -460,10 +418,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-7"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -476,10 +432,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-OTU"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -492,10 +446,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-ODU"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -508,10 +460,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-CLIENT1-ETHERNET"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -524,10 +474,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "circuit-packs/1%2F0%2F1-PLUG-NET"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual('not-reserved-available', res["circuit-packs"][0]['equipment-state'])
@@ -536,10 +484,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "circuit-packs/1%2F0%2F1-PLUG-CLIENT"
-               .format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual('not-reserved-available', res["circuit-packs"][0]['equipment-state'])
