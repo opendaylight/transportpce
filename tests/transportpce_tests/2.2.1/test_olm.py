@@ -12,7 +12,6 @@
 import unittest
 import time
 import json
-#from unittest.result import failfast
 import requests
 from common import test_utils
 
@@ -53,105 +52,42 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_05_connect_xprdA_to_roadmA(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
-        data = {
-            "networkutils:input": {
-                "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDR-A1",
-                    "networkutils:xpdr-num": "1",
-                    "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADM-A1",
-                    "networkutils:srg-num": "1",
-                    "networkutils:termination-point-num": "SRG1-PP1-TXRX"
-                }
-            }
-        }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.connect_xpdr_to_rdm_request("XPDR-A1", "1", "1",
+                                                          "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_06_connect_roadmA_to_xpdrA(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
-        data = {
-            "networkutils:input": {
-                "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDR-A1",
-                    "networkutils:xpdr-num": "1",
-                    "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADM-A1",
-                    "networkutils:srg-num": "1",
-                    "networkutils:termination-point-num": "SRG1-PP1-TXRX"
-                }
-            }
-        }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.connect_rdm_to_xpdr_request("XPDR-A1", "1", "1",
+                                                          "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_07_connect_xprdC_to_roadmC(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
-        data = {
-            "networkutils:input": {
-                "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDR-C1",
-                    "networkutils:xpdr-num": "1",
-                    "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADM-C1",
-                    "networkutils:srg-num": "1",
-                    "networkutils:termination-point-num": "SRG1-PP1-TXRX"
-                }
-            }
-        }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.connect_xpdr_to_rdm_request("XPDR-C1", "1", "1",
+                                                          "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_08_connect_roadmC_to_xpdrC(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
-        data = {
-            "networkutils:input": {
-                "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDR-C1",
-                    "networkutils:xpdr-num": "1",
-                    "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADM-C1",
-                    "networkutils:srg-num": "1",
-                    "networkutils:termination-point-num": "SRG1-PP1-TXRX"
-                }
-            }
-        }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.connect_rdm_to_xpdr_request("XPDR-C1", "1", "1",
+                                                          "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_09_create_OTS_ROADMA(self):
-        url = "{}/operations/transportpce-device-renderer:create-ots-oms".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:create-ots-oms"
         data = {
             "input": {
                 "node-id": "ROADM-A1",
                 "logical-connection-point": "DEG1-TTP-TXRX"
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         time.sleep(10)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -159,24 +95,21 @@ class TransportOlmTesting(unittest.TestCase):
                       res["output"]["result"])
 
     def test_10_create_OTS_ROADMC(self):
-        url = "{}/operations/transportpce-device-renderer:create-ots-oms".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:create-ots-oms"
         data = {
             "input": {
                 "node-id": "ROADM-C1",
                 "logical-connection-point": "DEG2-TTP-TXRX"
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Interfaces OTS-DEG2-TTP-TXRX - OMS-DEG2-TTP-TXRX successfully created on node ROADM-C1',
                       res["output"]["result"])
 
     def test_11_get_PM_ROADMA(self):
-        url = "{}/operations/transportpce-olm:get-pm".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-olm:get-pm"
         data = {
             "input": {
                 "node-id": "ROADM-A1",
@@ -187,10 +120,7 @@ class TransportOlmTesting(unittest.TestCase):
                 }
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn({
@@ -207,7 +137,7 @@ class TransportOlmTesting(unittest.TestCase):
         }, res["output"]["measurements"])
 
     def test_12_get_PM_ROADMC(self):
-        url = "{}/operations/transportpce-olm:get-pm".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-olm:get-pm"
         data = {
             "input": {
                 "node-id": "ROADM-C1",
@@ -218,10 +148,7 @@ class TransportOlmTesting(unittest.TestCase):
                 }
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn({
@@ -238,17 +165,14 @@ class TransportOlmTesting(unittest.TestCase):
         }, res["output"]["measurements"])
 
     def test_13_calculate_span_loss_base_ROADMA_ROADMC(self):
-        url = "{}/operations/transportpce-olm:calculate-spanloss-base".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-olm:calculate-spanloss-base"
         data = {
             "input": {
                 "src-type": "link",
                 "link-id": "ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX"
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Success',
@@ -260,16 +184,13 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(5)
 
     def test_14_calculate_span_loss_base_all(self):
-        url = "{}/operations/transportpce-olm:calculate-spanloss-base".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-olm:calculate-spanloss-base"
         data = {
             "input": {
                 "src-type": "all"
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Success',
@@ -287,10 +208,8 @@ class TransportOlmTesting(unittest.TestCase):
     def test_15_get_OTS_DEG2_TTP_TXRX_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/OTS-DEG2-TTP-TXRX/"
-               "org-openroadm-optical-transport-interfaces:ots".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "org-openroadm-optical-transport-interfaces:ots")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(17.6, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
@@ -299,17 +218,15 @@ class TransportOlmTesting(unittest.TestCase):
     def test_16_get_OTS_DEG1_TTP_TXRX_ROADMC(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/ROADM-C1/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/OTS-DEG1-TTP-TXRX/"
-               "org-openroadm-optical-transport-interfaces:ots".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "org-openroadm-optical-transport-interfaces:ots")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(25.7, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
         self.assertEqual(17.6, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
 
     def test_17_servicePath_create_AToZ(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {
             "input": {
                 "service-name": "test",
@@ -340,10 +257,7 @@ class TransportOlmTesting(unittest.TestCase):
                 ]
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
@@ -351,7 +265,7 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_18_servicePath_create_ZToA(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {
             "input": {
                 "service-name": "test",
@@ -382,10 +296,7 @@ class TransportOlmTesting(unittest.TestCase):
                 ]
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
@@ -393,7 +304,7 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_19_service_power_setup_XPDRA_XPDRC(self):
-        url = "{}/operations/transportpce-olm:service-power-setup".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-olm:service-power-setup"
         data = {
             "input": {
                 "service-name": "test",
@@ -422,10 +333,7 @@ class TransportOlmTesting(unittest.TestCase):
                 ]
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Success', res["output"]["result"])
@@ -433,10 +341,8 @@ class TransportOlmTesting(unittest.TestCase):
     def test_20_get_interface_XPDRA_XPDR1_NETWORK1(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDR-A1/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/interface/XPDR1-NETWORK1-1/"
-               "org-openroadm-optical-channel-interfaces:och".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "org-openroadm-optical-channel-interfaces:och")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(-5, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])
@@ -445,10 +351,8 @@ class TransportOlmTesting(unittest.TestCase):
     def test_21_get_roadmconnection_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADM-A1/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "SRG1-PP1-TXRX-DEG2-TTP-TXRX-1".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
@@ -457,16 +361,14 @@ class TransportOlmTesting(unittest.TestCase):
     def test_22_get_roadmconnection_ROADMC(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADM-C1/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "DEG1-TTP-TXRX-SRG1-PP1-TXRX-1".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "DEG1-TTP-TXRX-SRG1-PP1-TXRX-1")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("power", res['roadm-connections'][0]['opticalControlMode'])
 
     def test_23_service_power_setup_XPDRC_XPDRA(self):
-        url = "{}/operations/transportpce-olm:service-power-setup".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-olm:service-power-setup"
         data = {
             "input": {
                 "service-name": "test",
@@ -495,10 +397,7 @@ class TransportOlmTesting(unittest.TestCase):
                 ]
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Success', res["output"]["result"])
@@ -506,10 +405,8 @@ class TransportOlmTesting(unittest.TestCase):
     def test_24_get_interface_XPDRC_XPDR1_NETWORK1(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDR-C1/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/interface/XPDR1-NETWORK1-1/"
-               "org-openroadm-optical-channel-interfaces:och".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "org-openroadm-optical-channel-interfaces:och")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(-5, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])
@@ -518,17 +415,15 @@ class TransportOlmTesting(unittest.TestCase):
     def test_25_get_roadmconnection_ROADMC(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADM-C1/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "SRG1-PP1-TXRX-DEG1-TTP-TXRX-1".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
         self.assertEqual(2.0, res['roadm-connections'][0]['target-output-power'])
 
     def test_26_service_power_turndown_XPDRA_XPDRC(self):
-        url = "{}/operations/transportpce-olm:service-power-turndown".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-olm:service-power-turndown"
         data = {
             "input": {
                 "service-name": "test",
@@ -557,10 +452,7 @@ class TransportOlmTesting(unittest.TestCase):
                 ]
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Success', res["output"]["result"])
@@ -568,10 +460,8 @@ class TransportOlmTesting(unittest.TestCase):
     def test_27_get_roadmconnection_ROADMA(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADM-A1/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "SRG1-PP1-TXRX-DEG2-TTP-TXRX-1".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
@@ -580,16 +470,14 @@ class TransportOlmTesting(unittest.TestCase):
     def test_28_get_roadmconnection_ROADMC(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADM-C1/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "DEG1-TTP-TXRX-SRG1-PP1-TXRX-1".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "DEG1-TTP-TXRX-SRG1-PP1-TXRX-1")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
 
     def test_29_servicePath_delete_AToZ(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {
             "input": {
                 "service-name": "test",
@@ -620,17 +508,14 @@ class TransportOlmTesting(unittest.TestCase):
                 ]
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Request processed', res["output"]["result"])
         time.sleep(10)
 
     def test_30_servicePath_delete_ZToA(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {
             "input": {
                 "service-name": "test",
@@ -661,10 +546,7 @@ class TransportOlmTesting(unittest.TestCase):
                 ]
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Request processed', res["output"]["result"])
@@ -673,51 +555,21 @@ class TransportOlmTesting(unittest.TestCase):
     """to test case where SRG where the xpdr is connected to has no optical range data"""
 
     def test_31_connect_xprdA_to_roadmA(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
-        data = {
-            "networkutils:input": {
-                "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDR-A1",
-                    "networkutils:xpdr-num": "1",
-                    "networkutils:network-num": "2",
-                    "networkutils:rdm-node": "ROADM-A1",
-                    "networkutils:srg-num": "1",
-                    "networkutils:termination-point-num": "SRG1-PP2-TXRX"
-                }
-            }
-        }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.connect_xpdr_to_rdm_request("XPDR-A1", "1", "2",
+                                                          "ROADM-A1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"])
 
     def test_32_connect_roadmA_to_xpdrA(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
-        data = {
-            "networkutils:input": {
-                "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDR-A1",
-                    "networkutils:xpdr-num": "1",
-                    "networkutils:network-num": "2",
-                    "networkutils:rdm-node": "ROADM-A1",
-                    "networkutils:srg-num": "1",
-                    "networkutils:termination-point-num": "SRG1-PP2-TXRX"
-                }
-            }
-        }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.connect_rdm_to_xpdr_request("XPDR-A1", "1", "2",
+                                                          "ROADM-A1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_33_servicePath_create_AToZ(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {
             "input": {
                 "service-name": "test2",
@@ -738,10 +590,7 @@ class TransportOlmTesting(unittest.TestCase):
                 ]
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
@@ -751,17 +600,15 @@ class TransportOlmTesting(unittest.TestCase):
     def test_34_get_interface_XPDRA_XPDR1_NETWORK2(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDR-A1/yang-ext:mount/"
                "org-openroadm-device:org-openroadm-device/interface/XPDR1-NETWORK2-2/"
-               "org-openroadm-optical-channel-interfaces:och".format(test_utils.RESTCONF_BASE_URL))
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "GET", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "org-openroadm-optical-channel-interfaces:och")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(-5, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])
 #         self.assertEqual(2, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
 
     def test_35_servicePath_delete_AToZ(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {
             "input": {
                 "service-name": "test",
@@ -782,10 +629,7 @@ class TransportOlmTesting(unittest.TestCase):
                 ]
             }
         }
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Request processed', res["output"]["result"])
@@ -800,10 +644,8 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
     def test_38_calculate_span_loss_current(self):
-        url = "{}/operations/transportpce-olm:calculate-spanloss-current".format(test_utils.RESTCONF_BASE_URL)
-        headers = {'content-type': 'application/json'}
-        response = requests.request(
-            "POST", url, headers=headers, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        url = "{}/operations/transportpce-olm:calculate-spanloss-current"
+        response = test_utils.post_request(url, None)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Success',

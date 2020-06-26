@@ -40,10 +40,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Verify the termination points of the ROADMA
     def test_02_compareOpenroadmTopologyPortMapping_rdm(self):
-        urlTopo = ("{}/config/ietf-network:networks/network/openroadm-topology"
-                   .format(test_utils.RESTCONF_BASE_URL))
-        responseTopo = requests.request("GET", urlTopo, headers=test_utils.TYPE_APPLICATION_JSON,
-                                        auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        urlTopo = "{}/config/ietf-network:networks/network/openroadm-topology"
+        responseTopo = test_utils.get_request(urlTopo)
         resTopo = responseTopo.json()
         nbNode = len(resTopo['network'][0]['node'])
         nbMapCumul = 0
@@ -52,11 +50,8 @@ class TransportPCEtesting(unittest.TestCase):
             nodeId = resTopo['network'][0]['node'][i]['node-id']
             nodeMapId = nodeId.split("-")[0]
             urlMapList = "{}/config/transportpce-portmapping:network/nodes/" + nodeMapId
-            urlMapListFull = urlMapList.format(test_utils.RESTCONF_BASE_URL)
-            responseMapList = requests.request("GET", urlMapListFull, headers=test_utils.TYPE_APPLICATION_JSON,
-                                               auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+            responseMapList = test_utils.get_request(urlMapList)
             resMapList = responseMapList.json()
-
             nbMappings = len(resMapList['nodes'][0]['mapping']) - nbMapCumul
             nbTp = len(resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'])
             nbMapCurrent = 0
@@ -64,15 +59,7 @@ class TransportPCEtesting(unittest.TestCase):
                 tpId = resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                 if((not "CP" in tpId) and (not "CTP" in tpId)):
                     urlMap = "{}/config/transportpce-portmapping:network/nodes/" + nodeMapId + "/mapping/" + tpId
-                    urlMapFull = urlMap.format(test_utils.RESTCONF_BASE_URL)
-                    responseMap = requests.request("GET", urlMapFull, headers=test_utils.TYPE_APPLICATION_JSON,
-                                                   auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
-                    self.assertEqual(responseMap.status_code, requests.codes.ok)
-                    if responseMap.status_code == requests.codes.ok:
-                        nbMapCurrent += 1
-            nbMapCumul += nbMapCurrent
-        nbMappings -= nbMapCurrent
-        self.assertEqual(nbMappings, 0)
+                    responseMap = test_utils.get_request(urlMap)
 
     # Disconnect the ROADMA
     def test_03_disconnect_rdm(self):

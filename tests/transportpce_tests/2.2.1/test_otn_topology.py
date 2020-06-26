@@ -41,9 +41,8 @@ class TransportPCEtesting(unittest.TestCase):
 
         url = ("{}/operational/network-topology:"
                "network-topology/topology/topology-netconf/node/SPDR-SA1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -52,9 +51,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_02_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         logging.info(res)
@@ -63,9 +61,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_03_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['network'][0]['node'][0]['node-id'], 'SPDR-SA1')
@@ -78,9 +75,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_04_getLinks_OpenroadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -88,9 +84,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_05_getNodes_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -146,18 +141,16 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_06_getLinks_OtnTopology(self):
         url = ("{}/config/ietf-network:networks/network/otn-topology"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
 
     def test_07_getNodes_OtnTopology(self):
         url = ("{}/config/ietf-network:networks/network/otn-topology"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         res = response.json()
         self.assertEqual(response.status_code, requests.codes.ok)
         nbNode = len(res['network'][0]['node'])
@@ -274,9 +267,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_09_getClliNetwork(self):
         url = ("{}/config/ietf-network:networks/network/clli-network"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -285,26 +277,23 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_10_getOpenRoadmNetwork(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn('node', res['network'][0])
 
     def test_11_getNodes_OpenRoadmTopology(self):
         url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         res = response.json()
         self.assertNotIn('node', res['network'][0])
 
     def test_12_getNodes_OtnTopology(self):
         url = ("{}/config/ietf-network:networks/network/otn-topology"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         res = response.json()
         self.assertNotIn('node', res['network'][0])
 
