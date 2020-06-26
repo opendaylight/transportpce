@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa21b4a5_4d172535",
+        "filename": "networkmodel/src/test/resources/portMapping.json",
+        "patchSetId": 38
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-26T10:17:20Z",
+      "side": 1,
+      "message": "AMkDwQ7xTmRL",
+      "range": {
+        "startLine": 16,
+        "startChar": 41,
+        "endLine": 16,
+        "endChar": 50
+      },
+      "revId": "20b2ae818f0b19079c176fffa65a8e96af435375",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0291af3_b2287c3e",
+        "filename": "networkmodel/src/test/resources/portMapping.json",
+        "patchSetId": 38
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-26T10:17:20Z",
+      "side": 1,
+      "message": "AMkDwQ7xTmRI",
+      "range": {
+        "startLine": 28,
+        "startChar": 41,
+        "endLine": 28,
+        "endChar": 51
+      },
+      "revId": "20b2ae818f0b19079c176fffa65a8e96af435375",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "556c3e79_931d4c12",
+        "filename": "networkmodel/src/test/resources/portMapping.json",
+        "patchSetId": 38
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-26T10:17:20Z",
+      "side": 1,
+      "message": "AJUUr6I5fALj",
+      "range": {
+        "startLine": 40,
+        "startChar": 41,
+        "endLine": 40,
+        "endChar": 51
+      },
+      "revId": "20b2ae818f0b19079c176fffa65a8e96af435375",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1729b605_d18b73d6",
+        "filename": "networkmodel/src/test/resources/portMapping.json",
+        "patchSetId": 38
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-26T10:17:20Z",
+      "side": 1,
+      "message": "AJUUr6I5fALg",
+      "range": {
+        "startLine": 52,
+        "startChar": 41,
+        "endLine": 52,
+        "endChar": 51
+      },
+      "revId": "20b2ae818f0b19079c176fffa65a8e96af435375",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97c2a222_c7cb3024",
+        "filename": "networkmodel/src/test/resources/portMapping.json",
+        "patchSetId": 38
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-26T10:17:20Z",
+      "side": 1,
+      "message": "Swfw02qXGyI\u003d",
+      "range": {
+        "startLine": 149,
+        "startChar": 41,
+        "endLine": 149,
+        "endChar": 50
+      },
+      "revId": "20b2ae818f0b19079c176fffa65a8e96af435375",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5d69802_4bf726b9",
+        "filename": "networkmodel/src/test/resources/portMapping.json",
+        "patchSetId": 38
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-06-26T10:17:20Z",
+      "side": 1,
+      "message": "FqlcrxV7p30\u003d",
+      "range": {
+        "startLine": 236,
+        "startChar": 41,
+        "endLine": 236,
+        "endChar": 50
+      },
+      "revId": "20b2ae818f0b19079c176fffa65a8e96af435375",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
