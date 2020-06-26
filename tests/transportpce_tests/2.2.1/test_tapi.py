@@ -85,9 +85,8 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(20)
 
     def test_05_connect_xprda_n1_to_roadma_pp1(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
-        data = test_utils.generate_link_data("XPDR-A1", "1", "1", "ROADM-A1", "1", "SRG1-PP1-TXRX")
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.connect_xpdr_to_rdm_request("XPDR-A1", "1", "1",
+                                                          "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"],
@@ -95,9 +94,8 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_06_connect_roadma_pp1_to_xpdra_n1(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
-        data = test_utils.generate_link_data("XPDR-A1", "1", "1", "ROADM-A1", "1", "SRG1-PP1-TXRX")
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.connect_rdm_to_xpdr_request("XPDR-A1", "1", "1",
+                                                          "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"],
@@ -105,9 +103,8 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_07_connect_xprdc_n1_to_roadmc_pp1(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
-        data = test_utils.generate_link_data("XPDR-C1", "1", "1", "ROADM-C1", "1", "SRG1-PP1-TXRX")
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.connect_xpdr_to_rdm_request("XPDR-C1", "1", "1",
+                                                          "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"],
@@ -115,9 +112,8 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_08_connect_roadmc_pp1_to_xpdrc_n1(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
-        data = test_utils.generate_link_data("XPDR-C1", "1", "1", "ROADM-C1", "1", "SRG1-PP1-TXRX")
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.connect_rdm_to_xpdr_request("XPDR-C1", "1", "1",
+                                                          "ROADM-C1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"],
@@ -125,9 +121,8 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_09_connect_xprda_n2_to_roadma_pp2(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
-        data = test_utils.generate_link_data("XPDR-A1", "1", "2", "ROADM-A1", "1", "SRG1-PP2-TXRX")
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.connect_xpdr_to_rdm_request("XPDR-A1", "1", "2",
+                                                          "ROADM-A1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"],
@@ -135,9 +130,8 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_10_connect_roadma_pp2_to_xpdra_n2(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
-        data = test_utils.generate_link_data("XPDR-A1", "1", "2", "ROADM-A1", "1", "SRG1-PP2-TXRX")
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.connect_rdm_to_xpdr_request("XPDR-A1", "1", "2",
+                                                          "ROADM-A1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"],
@@ -145,9 +139,8 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_11_connect_xprdc_n2_to_roadmc_pp2(self):
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links".format(test_utils.RESTCONF_BASE_URL)
-        data = test_utils.generate_link_data("XPDR-C1", "1", "2", "ROADM-C1", "1", "SRG1-PP2-TXRX")
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.connect_xpdr_to_rdm_request("XPDR-C1", "1", "2",
+                                                          "ROADM-C1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Xponder Roadm Link created successfully', res["output"]["result"],
@@ -155,9 +148,8 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_12_connect_roadmc_pp2_to_xpdrc_n2(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links".format(test_utils.RESTCONF_BASE_URL)
-        data = test_utils.generate_link_data("XPDR-C1", "1", "2", "ROADM-C1", "1", "SRG1-PP2-TXRX")
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.connect_rdm_to_xpdr_request("XPDR-C1", "1", "2",
+                                                          "ROADM-C1", "1", "SRG1-PP2-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"],
@@ -165,14 +157,14 @@ class TransportTapitesting(unittest.TestCase):
         time.sleep(2)
 
     def test_13_get_tapi_openroadm_topology(self):
-        url = "{}/operations/tapi-topology:get-topology-details".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/tapi-topology:get-topology-details"
         data = {
             "tapi-topology:input": {
                 "tapi-topology:topology-id-or-name": "openroadm-topology"
             }
         }
 
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertEqual(len(res["output"]["topology"]["node"]), 1, 'There should be 1 node')
@@ -180,14 +172,14 @@ class TransportTapitesting(unittest.TestCase):
                          'There should be 4 owned-node-edge-points')
 
     def test_14_get_tapi_otn_topology(self):
-        url = "{}/operations/tapi-topology:get-topology-details".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/tapi-topology:get-topology-details"
         data = {
             "tapi-topology:input": {
                 "tapi-topology:topology-id-or-name": "otn-topology"
             }
         }
 
-        response = test_utils.post_request(url, data, test_utils.ODL_LOGIN, test_utils.ODL_PWD)
+        response = test_utils.post_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         res = response.json()
         self.assertEqual(len(res["output"]["topology"]["node"]), 4, 'There should be 4 nodes')

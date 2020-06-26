@@ -41,9 +41,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_02_rdm_device_connected(self):
         url = ("{}/operational/network-topology:"
                "network-topology/topology/topology-netconf/node/ROADM-A1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -54,9 +53,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_03_rdm_portmapping_info(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADM-A1/node-info"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -71,9 +69,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_04_rdm_portmapping_DEG1_TTP_TXRX(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADM-A1/mapping/DEG1-TTP-TXRX"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -84,9 +81,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_05_rdm_portmapping_DEG2_TTP_TXRX_with_ots_oms(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADM-A1/mapping/DEG2-TTP-TXRX"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -99,9 +95,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_06_rdm_portmapping_SRG1_PP3_TXRX(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADM-A1/mapping/SRG1-PP3-TXRX"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -112,9 +107,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_07_rdm_portmapping_SRG3_PP1_TXRX(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/ROADM-A1/mapping/SRG3-PP1-TXRX"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -129,9 +123,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_09_xpdr_device_connected(self):
         url = ("{}/operational/network-topology:"
                "network-topology/topology/topology-netconf/node/XPDR-A1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -142,9 +135,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_10_xpdr_portmapping_info(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDR-A1/node-info"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -159,9 +151,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_11_xpdr_portmapping_NETWORK1(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDR-A1/mapping/XPDR1-NETWORK1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -175,9 +166,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_12_xpdr_portmapping_NETWORK2(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDR-A1/mapping/XPDR1-NETWORK2"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -191,9 +181,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_13_xpdr_portmapping_CLIENT1(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDR-A1/mapping/XPDR1-CLIENT1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -208,9 +197,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
     def test_14_xpdr_portmapping_CLIENT2(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/XPDR-A1/mapping/XPDR1-CLIENT2"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -228,9 +216,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_16_xpdr_device_disconnected(self):
         url = ("{}/operational/network-topology:network-topology/topology/"
-               "topology-netconf/node/XPDR-A1".format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               "topology-netconf/node/XPDR-A1")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -239,9 +226,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_17_xpdr_device_not_connected(self):
-        url = ("{}/config/transportpce-portmapping:network/nodes/XPDR-A1".format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        url = ("{}/config/transportpce-portmapping:network/nodes/XPDR-A1")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -255,9 +241,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_19_rdm_device_disconnected(self):
         url = ("{}/operational/network-topology:network-topology/topology/topology-netconf/node/ROADM-A1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -266,9 +251,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_20_rdm_device_not_connected(self):
-        url = ("{}/config/transportpce-portmapping:network/nodes/ROADM-A1".format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        url = ("{}/config/transportpce-portmapping:network/nodes/ROADM-A1")
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
