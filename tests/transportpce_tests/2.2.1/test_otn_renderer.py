@@ -41,9 +41,8 @@ class TransportPCEtesting(unittest.TestCase):
 
         url = ("{}/operational/network-topology:"
                "network-topology/topology/topology-netconf/node/SPDR-SA1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -53,9 +52,8 @@ class TransportPCEtesting(unittest.TestCase):
     def test_02_get_portmapping_CLIENT1(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/SPDR-SA1/mapping/XPDR1-CLIENT1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -74,9 +72,8 @@ class TransportPCEtesting(unittest.TestCase):
     def test_03_get_portmapping_NETWORK1(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/SPDR-SA1/mapping/XPDR1-NETWORK1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -93,7 +90,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_04_service_path_create_OCH_OTU4(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {"renderer:input": {
             "service-name": "service_ODU4",
             "wave-number": "1",
@@ -102,9 +99,7 @@ class TransportPCEtesting(unittest.TestCase):
             "nodes": [
                 {"node-id": "SPDR-SA1",
                  "dest-tp": "XPDR1-NETWORK1"}]}}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -118,9 +113,8 @@ class TransportPCEtesting(unittest.TestCase):
     def test_05_get_portmapping_NETWORK1(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/SPDR-SA1/mapping/XPDR1-NETWORK1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -140,9 +134,8 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
 
@@ -163,9 +156,8 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-OTU"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTU',
@@ -191,7 +183,7 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_08_otn_service_path_create_ODU4(self):
-        url = "{}/operations/transportpce-device-renderer:otn-service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:otn-service-path"
         data = {"renderer:input": {
             "service-name": "service_ODU4",
             "operation": "create",
@@ -200,9 +192,7 @@ class TransportPCEtesting(unittest.TestCase):
             "nodes": [
                 {"node-id": "SPDR-SA1",
                  "network-tp": "XPDR1-NETWORK1"}]}}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -215,9 +205,8 @@ class TransportPCEtesting(unittest.TestCase):
     def test_09_get_portmapping_NETWORK1(self):
         url = ("{}/config/transportpce-portmapping:network/"
                "nodes/SPDR-SA1/mapping/XPDR1-NETWORK1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -239,9 +228,8 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-ODU4"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU4', 'administrative-state': 'inService',
@@ -267,7 +255,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_11_otn_service_path_create_10GE(self):
-        url = "{}/operations/transportpce-device-renderer:otn-service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:otn-service-path"
         data = {"renderer:input": {
             "service-name": "service1",
             "operation": "create",
@@ -280,9 +268,7 @@ class TransportPCEtesting(unittest.TestCase):
                 {"node-id": "SPDR-SA1",
                  "client-tp": "XPDR1-CLIENT1",
                  "network-tp": "XPDR1-NETWORK1"}]}}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -298,9 +284,8 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-CLIENT1-ETHERNET10G"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict = {'name': 'XPDR1-CLIENT1-ETHERNET10G',
@@ -319,9 +304,8 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-CLIENT1-ODU2e-service1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
 
@@ -349,9 +333,8 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-ODU2e-service1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e-service1', 'administrative-state': 'inService',
@@ -385,9 +368,8 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "odu-connection/XPDR1-CLIENT1-ODU2e-service1-x-XPDR1-NETWORK1-ODU2e-service1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {
@@ -404,7 +386,7 @@ class TransportPCEtesting(unittest.TestCase):
                              res['odu-connection'][0]['source'])
 
     def test_16_otn_service_path_delete_10GE(self):
-        url = "{}/operations/transportpce-device-renderer:otn-service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:otn-service-path"
         data = {"renderer:input": {
             "service-name": "service1",
             "operation": "delete",
@@ -417,9 +399,7 @@ class TransportPCEtesting(unittest.TestCase):
                 {"node-id": "SPDR-SA1",
                  "client-tp": "XPDR1-CLIENT1",
                  "network-tp": "XPDR1-NETWORK1"}]}}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -430,40 +410,36 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "odu-connection/XPDR1-CLIENT1-ODU2e-service1-x-XPDR1-NETWORK1-ODU2e-service1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_18_check_no_interface_ODU2E_NETWORK(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-ODU2e-service1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_19_check_no_interface_ODU2E_CLIENT(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-CLIENT1-ODU2e-service1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_20_check_no_interface_10GE_CLIENT(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-CLIENT1-ETHERNET10G"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_21_otn_service_path_delete_ODU4(self):
-        url = "{}/operations/transportpce-device-renderer:otn-service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:otn-service-path"
         data = {"renderer:input": {
             "service-name": "service_ODU4",
             "operation": "delete",
@@ -472,9 +448,7 @@ class TransportPCEtesting(unittest.TestCase):
             "nodes": [
                 {"node-id": "SPDR-SA1",
                  "network-tp": "XPDR1-NETWORK1"}]}}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -485,13 +459,12 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-ODU4"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_23_service_path_delete_OCH_OTU4(self):
-        url = "{}/operations/transportpce-device-renderer:service-path".format(test_utils.RESTCONF_BASE_URL)
+        url = "{}/operations/transportpce-device-renderer:service-path"
         data = {"renderer:input": {
             "service-name": "service_OTU4",
             "wave-number": "1",
@@ -500,9 +473,7 @@ class TransportPCEtesting(unittest.TestCase):
             "nodes": [
                 {"node-id": "SPDR-SA1",
                  "dest-tp": "XPDR1-NETWORK1"}]}}
-        response = requests.request(
-            "POST", url, data=json.dumps(data),
-            headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+        response = test_utils.post_request(url, data)
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -513,18 +484,16 @@ class TransportPCEtesting(unittest.TestCase):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-OTU"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_25_check_no_interface_OCH(self):
         url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
                "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
                "interface/XPDR1-NETWORK1-1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        response = requests.request(
-            "GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+               )
+        response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_26_disconnect_SPDR_SA1(self):

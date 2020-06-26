@@ -42,9 +42,8 @@ class TransportPCEtesting(unittest.TestCase):
     # Verify the termination points of the ROADMA
     def test_02_compareOpenroadmTopologyPortMapping_rdm(self):
         urlTopo = ("{}/config/ietf-network:networks/network/openroadm-topology"
-                   .format(test_utils.RESTCONF_BASE_URL))
-        responseTopo = requests.request(
-            "GET", urlTopo, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+                   )
+        responseTopo = test_utils.get_request(urlTopo)
         resTopo = responseTopo.json()
         nbNode = len(resTopo['network'][0]['node'])
         nbMapCumul = 0
@@ -55,9 +54,7 @@ class TransportPCEtesting(unittest.TestCase):
             nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
             print("nodeMapId={}".format(nodeMapId))
             urlMapList = "{}/config/transportpce-portmapping:network/nodes/" + nodeMapId
-            urlMapListFull = urlMapList.format(test_utils.RESTCONF_BASE_URL)
-            responseMapList = requests.request(
-                "GET", urlMapListFull, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+            responseMapList = test_utils.get_request(urlMapList)
             resMapList = responseMapList.json()
 
             nbMappings = len(resMapList['nodes'][0]['mapping']) - nbMapCumul
@@ -67,9 +64,7 @@ class TransportPCEtesting(unittest.TestCase):
                 tpId = resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                 if((not "CP" in tpId) and (not "CTP" in tpId)):
                     urlMap = "{}/config/transportpce-portmapping:network/nodes/" + nodeMapId + "/mapping/" + tpId
-                    urlMapFull = urlMap.format(test_utils.RESTCONF_BASE_URL)
-                    responseMap = requests.request(
-                        "GET", urlMapFull, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+                    responseMap = test_utils.get_request(urlMap)
                     self.assertEqual(responseMap.status_code, requests.codes.ok)
                     if(responseMap.status_code == requests.codes.ok):
                         nbMapCurrent += 1
@@ -79,14 +74,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Disconnect the ROADMA
     def test_03_disconnect_rdm(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADM-A1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        data = {}
-        response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
-            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils.unmount_device("ROADM-A1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
 #     #Connect the XPDRA
     def test_04_connect_xpdr(self):
@@ -99,14 +88,8 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Disconnect the XPDRA
     def test_06_disconnect_device(self):
-        url = ("{}/config/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDR-A1"
-               .format(test_utils.RESTCONF_BASE_URL))
-        data = {}
-        response = requests.request(
-            "DELETE", url, data=json.dumps(data), headers=test_utils.TYPE_APPLICATION_JSON,
-            auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
-        self.assertEqual(response.status_code, requests.codes.ok)
+        response = test_utils.unmount_device("XPDR-A1")
+        self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
 
 if __name__ == "__main__":
