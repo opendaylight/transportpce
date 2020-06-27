@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef0ac463_63106275",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_sh_renderer.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-06-27T18:59:56Z",
+      "side": 1,
+      "message": "D",
+      "range": {
+        "startLine": 261,
+        "startChar": 32,
+        "endLine": 261,
+        "endChar": 33
+      },
+      "revId": "1917a12b80f0aa24ce404955a2863466c0b964b8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
