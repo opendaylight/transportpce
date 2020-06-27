@@ -22,8 +22,8 @@ IMAGE221_LIST="40:xpdra-2.2.1:2.2.1/oper-XPDRA.xml
 42:roadmb-2.2.1:2.2.1/oper-ROADMB.xml
 43:roadmc-2.2.1:2.2.1/oper-ROADMC.xml
 44:xpdrc-2.2.1:2.2.1/oper-XPDRC.xml
-45:spdrav2-2.2.1:2.2.1/oper-SPDRAv2.xml
-46:spdrav1-2.2.1:2.2.1/oper-SPDRAv1.xml
+45:spdra-2.2.1:2.2.1/oper-SPDRA.xml
+25:spdra_no_interfaces-2.2.1:2.2.1/oper-SPDRA_no_interfaces.xml
 "
 
 case "$DEVICE_VERSION" in
