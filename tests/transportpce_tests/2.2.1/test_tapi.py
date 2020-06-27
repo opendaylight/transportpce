@@ -45,7 +45,7 @@ class TransportTapitesting(unittest.TestCase):
             print("tapi installation feature failed...")
             test_utils.shutdown_process(cls.processes[0])
             sys.exit(2)
-        cls.processes = test_utils.start_sims(['xpdra', 'roadma', 'roadmc', 'xpdrc', 'spdrav2'])
+        cls.processes = test_utils.start_sims(['xpdra', 'roadma', 'roadmc', 'xpdrc', 'spdra'])
 
     @classmethod
     def tearDownClass(cls):
@@ -59,7 +59,7 @@ class TransportTapitesting(unittest.TestCase):
         print("execution of {}".format(self.id().split(".")[-1]))
 
     def test_00_connect_spdr_sa1(self):
-        response = test_utils.mount_device("SPDR-SA1", 'spdrav2')
+        response = test_utils.mount_device("SPDR-SA1", 'spdra')
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
         # TODO replace connect and disconnect timers with test_utils.wait_until_log_contains
