@@ -24,21 +24,30 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def _get_file(cls):
-        topo_bi_dir_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+        TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                         "..", "..", "sample_configs", "honeynode-topo.xml")
-        if os.path.isfile(topo_bi_dir_file):
-            with open(topo_bi_dir_file, 'r') as topo_bi_dir:
+        if os.path.isfile(TOPO_BI_DIR_FILE):
+            with open(TOPO_BI_DIR_FILE, 'r') as topo_bi_dir:
                 cls.simple_topo_bi_dir_data = topo_bi_dir.read()
-        topo_uni_dir_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+        else:
+            print("no topo_bi_dir sample file...")
+            sys.exit(2)
+        TOPO_UNI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                          "..", "..", "sample_configs", "NW-simple-topology.xml")
-        if os.path.isfile(topo_uni_dir_file):
-            with open(topo_uni_dir_file, 'r') as topo_uni_dir:
+        if os.path.isfile(TOPO_UNI_DIR_FILE):
+            with open(TOPO_UNI_DIR_FILE, 'r') as topo_uni_dir:
                 cls.simple_topo_uni_dir_data = topo_uni_dir.read()
-        topo_uni_dir_complex_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+        else:
+            print("no topo_uni_dir sample file...")
+            sys.exit(2)
+        TOPO_UNI_DIR_COMPLEX_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                                  "..", "..", "sample_configs", "NW-for-test-5-4.xml")
-        if os.path.isfile(topo_uni_dir_complex_file):
-            with open(topo_uni_dir_complex_file, 'r') as topo_uni_dir_complex:
+        if os.path.isfile(TOPO_UNI_DIR_COMPLEX_FILE):
+            with open(TOPO_UNI_DIR_COMPLEX_FILE, 'r') as topo_uni_dir_complex:
                 cls.complex_topo_uni_dir_data = topo_uni_dir_complex.read()
+        else:
+            print("no topo_uni_dir_complex sample file...")
+            sys.exit(2)
 
     processes = None
 
