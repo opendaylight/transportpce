@@ -12,6 +12,7 @@
 import unittest
 import json
 import os
+import sys
 import time
 import requests
 from common import test_utils
@@ -21,13 +22,30 @@ class TransportGNPYtesting(unittest.TestCase):
 
     @classmethod
     def __init_logfile(cls):
-        if os.path.isfile("./transportpce_tests/gnpy.log"):
-            os.remove("transportpce_tests/gnpy.log")
+        GNPY_LOGFILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                    "..", "..", "transportpce_tests", "gnpy.log")
+        if os.path.isfile(GNPY_LOFGILE):
+            os.remove(GNPY_LOFGILE)
 
     processes = None
+    TOPO_CLLINET_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                     "..", "..", "sample_configs", "gnpy", "clliNetwork.json")
+    TOPO_ORDNET_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                    "..", "..", "sample_configs", "gnpy", "openroadmNetwork.json")
+    TOPO_ORDTOPO_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                     "..", "..", "sample_configs", "gnpy", "openroadmTopology.json")
 
     @classmethod
     def setUpClass(cls):
+        if not os.path.isfile(cls.TOPO_CLLINET_FILE):
+            print("no CLLI network sample file...")
+            sys.exit(2)
+        if not os.path.isfile(cls.TOPO_ORDNET_FILE):
+            print("no OpenROADM network sample file...")
+            sys.exit(2)
+        if not os.path.isfile(cls.TOPO_ORDTOPO_FILE):
+            print("no OpenROADM topology sample file...")
+            sys.exit(2)
         cls.processes = test_utils.start_tpce()
 
     @classmethod
@@ -42,31 +60,24 @@ class TransportGNPYtesting(unittest.TestCase):
     # Mount the different topologies
     def test_01_connect_clliNetwork(self):
         url = "{}/config/ietf-network:networks/network/clli-network"
-        topo_cllinet_file = "sample_configs/gnpy/clliNetwork.json"
-        if os.path.isfile(topo_cllinet_file):
-            with open(topo_cllinet_file, 'r') as clli_net:
-                data = clli_net.read()
-        #TODO : review this os specific path and treat error with an else-statement
+        with open(self.TOPO_CLLINET_FILE, 'r') as clli_net:
+            data = clli_net.read()
         response = test_utils.rawput_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
     def test_02_connect_openroadmNetwork(self):
         url = "{}/config/ietf-network:networks/network/openroadm-network"
-        topo_ordnet_file = "sample_configs/gnpy/openroadmNetwork.json"
-        if os.path.isfile(topo_ordnet_file):
-            with open(topo_ordnet_file, 'r') as ord_net:
-                data = ord_net.read()
+        with open(self.TOPO_ORDNET_FILE, 'r') as ord_net:
+            data = ord_net.read()
         response = test_utils.rawput_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
     def test_03_connect_openroadmTopology(self):
         url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        topo_ordtopo_file = "sample_configs/gnpy/openroadmTopology.json"
-        if os.path.isfile(topo_ordtopo_file):
-            with open(topo_ordtopo_file, 'r') as ord_topo:
-                data = ord_topo.read()
+        with open(self.TOPO_ORDTOPO_FILE, 'r') as ord_topo:
+            data = ord_topo.read()
         response = test_utils.rawput_request(url, data)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
