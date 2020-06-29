@@ -11,6 +11,7 @@
 import unittest
 import json
 import os
+import sys
 import time
 import requests
 from common import test_utils
@@ -21,30 +22,41 @@ class TransportPCEtesting(unittest.TestCase):
     simple_topo_bi_dir_data = None
     simple_topo_uni_dir_data = None
     complex_topo_uni_dir_data = None
-
-    @classmethod
-    def _get_file(cls):
-        topo_bi_dir_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                        "..", "..", "sample_configs", "honeynode-topo.xml")
-        if os.path.isfile(topo_bi_dir_file):
-            with open(topo_bi_dir_file, 'r') as topo_bi_dir:
-                cls.simple_topo_bi_dir_data = topo_bi_dir.read()
-        topo_uni_dir_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                         "..", "..", "sample_configs", "NW-simple-topology.xml")
-        if os.path.isfile(topo_uni_dir_file):
-            with open(topo_uni_dir_file, 'r') as topo_uni_dir:
-                cls.simple_topo_uni_dir_data = topo_uni_dir.read()
-        topo_uni_dir_complex_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                                 "..", "..", "sample_configs", "NW-for-test-5-4.xml")
-        if os.path.isfile(topo_uni_dir_complex_file):
-            with open(topo_uni_dir_complex_file, 'r') as topo_uni_dir_complex:
-                cls.complex_topo_uni_dir_data = topo_uni_dir_complex.read()
-
     processes = None
 
     @classmethod
     def setUpClass(cls):
-        cls._get_file()
+        try:
+            sample_files_parsed = False
+            TOPO_BI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                            "..", "..", "sample_configs", "honeynode-topo.xml")
+            with open(TOPO_BI_DIR_FILE, 'r') as topo_bi_dir:
+                cls.simple_topo_bi_dir_data = topo_bi_dir.read()
+
+            TOPO_UNI_DIR_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                             "..", "..", "sample_configs", "NW-simple-topology.xml")
+
+            with open(TOPO_UNI_DIR_FILE, 'r') as topo_uni_dir:
+                cls.simple_topo_uni_dir_data = topo_uni_dir.read()
+
+            TOPO_UNI_DIR_COMPLEX_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                                     "..", "..", "sample_configs", "NW-for-test-5-4.xml")
+            with open(TOPO_UNI_DIR_COMPLEX_FILE, 'r') as topo_uni_dir_complex:
+                cls.complex_topo_uni_dir_data = topo_uni_dir_complex.read()
+            sample_files_parsed = True
+        except PermissionError as err:
+            print("Permission Error when trying to read sample files\n", err)
+            sys.exit(2)
+        except FileNotFoundError as err:
+            print("File Not found Error when trying to read sample files\n", err)
+            sys.exit(2)
+        except:
+            print("Unexpected error when trying to read sample files\n", sys.exc_info()[0])
+            sys.exit(2)
+        finally:
+            if sample_files_parsed:
+                print("sample files content loaded")
+
         cls.processes = test_utils.start_tpce()
 
     @classmethod
