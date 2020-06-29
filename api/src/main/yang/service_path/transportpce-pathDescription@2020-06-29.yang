@@ -49,6 +49,10 @@ module transportpce-pathDescription {
     description
       "Version 1.6";
   }
+  revision 2020-06-29 {
+      description
+        "Version 1.6.1. To manage otn services";
+    }
 
   grouping PCE-resource {
     description
@@ -93,7 +97,12 @@ module transportpce-pathDescription {
     container aToZ-direction {
       leaf aToZ-wavelength-number {
         type uint32;
-        mandatory true;
+      }
+      leaf trib-port-number {
+        type uint16;
+      }
+      leaf trib-slot-number {
+        type uint16;
       }
       leaf rate {
         type uint32;
@@ -116,7 +125,12 @@ module transportpce-pathDescription {
     container zToA-direction {
       leaf zToA-wavelength-number {
         type uint32;
-        mandatory true;
+      }
+      leaf trib-port-number {
+        type uint16;
+      }
+      leaf trib-slot-number {
+        type uint16;
       }
       leaf rate {
         type uint32;
