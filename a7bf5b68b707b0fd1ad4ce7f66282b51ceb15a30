@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3579a3d_10e5d2be",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-07-01T09:54:32Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be the opposite : granularity of center frequency : 50GHz --\u003e means we follow a fixed grid, Other (12.5GHz and maybe in the future, 6.25) means we follow a flexGrid?",
+      "range": {
+        "startLine": 1022,
+        "startChar": 0,
+        "endLine": 1025,
+        "endChar": 85
+      },
+      "revId": "a7bf5b68b707b0fd1ad4ce7f66282b51ceb15a30",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fc6db06_23fa8002",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-07-01T09:54:32Z",
+      "side": 1,
+      "message": "Not sure you will go through this, since if I correctly understood, when slotwidth is 50, you will call the non flex flavour of the method (createNMCInterface) : line 150",
+      "revId": "a7bf5b68b707b0fd1ad4ce7f66282b51ceb15a30",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
