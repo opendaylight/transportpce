@@ -46,14 +46,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>browserid-snapshots</id>
-      <name>browserid-snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-  </repositories>
-
   <build>
     <plugins>
       <plugin>
