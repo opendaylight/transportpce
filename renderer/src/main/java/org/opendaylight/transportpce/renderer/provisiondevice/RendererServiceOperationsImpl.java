@@ -52,10 +52,13 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OTU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescription;
@@ -66,6 +69,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.renderer.input.Nodes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,6 +131,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             serviceImplementation(ServiceImplementationRequestInput input) {
         LOG.info("Calling service impl request {}", input.getServiceName());
         return executor.submit(new Callable<ServiceImplementationRequestOutput>() {
+
             @Override
             public ServiceImplementationRequestOutput call() throws Exception {
                 sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest, input.getServiceName(),
@@ -142,67 +147,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                                 || (input.getServiceAEnd().getServiceFormat().getName().equals("OC")))) {
                             LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
                                 input.getServiceAEnd().getServiceFormat(), input.getServiceAEnd().getServiceRate());
-                            ServicePathInputData servicePathInputDataAtoZ = ModelMappingUtils
-                                .rendererCreateServiceInputAToZ(input.getServiceName(), input.getPathDescription());
-                            ServicePathInputData servicePathInputDataZtoA = ModelMappingUtils
-                                .rendererCreateServiceInputZToA(input.getServiceName(), input.getPathDescription());
-                            // Rollback should be same for all conditions, so creating a new one
-                            RollbackProcessor rollbackProcessor = new RollbackProcessor();
-                            List<DeviceRenderingResult> renderingResults =
-                                deviceRendering(rollbackProcessor, servicePathInputDataAtoZ, servicePathInputDataZtoA);
-                            if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
-                                sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                    input.getServiceName(), RpcStatusEx.Failed, DEVICE_RENDERING_ROLL_BACK_MSG);
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                            ServicePowerSetupInput olmPowerSetupInputAtoZ =
-                                ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(0).getOlmList(),
-                                    input);
-                            ServicePowerSetupInput olmPowerSetupInputZtoA =
-                                ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(1).getOlmList(),
-                                    input);
-                            olmPowerSetup(rollbackProcessor, olmPowerSetupInputAtoZ, olmPowerSetupInputZtoA);
-                            if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
-                                sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                    input.getServiceName(), RpcStatusEx.Failed, OLM_ROLL_BACK_MSG);
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                            // run service activation test twice - once on source node and once on
-                            // destination node
-                            List<Nodes> nodes = servicePathInputDataAtoZ.getServicePathInput().getNodes();
-                            if ((nodes == null) || (nodes.isEmpty())) {
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                            Nodes sourceNode = nodes.get(0);
-                            Nodes destNode = nodes.get(nodes.size() - 1);
-                            String srcNetworkTp;
-                            String dstNetowrkTp;
-                            if (sourceNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
-                                srcNetworkTp = sourceNode.getDestTp();
-                            } else {
-                                srcNetworkTp = sourceNode.getSrcTp();
-                            }
-                            if (destNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
-                                dstNetowrkTp = destNode.getDestTp();
-                            } else {
-                                dstNetowrkTp = destNode.getSrcTp();
-                            }
-                            if (!isServiceActivated(sourceNode.getNodeId(), srcNetworkTp)
-                                || !isServiceActivated(destNode.getNodeId(), dstNetowrkTp)) {
-                                rollbackProcessor.rollbackAll();
-                                sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                    input.getServiceName(), RpcStatusEx.Failed,
-                                    "Service activation test failed.");
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                            // If Service activation is success update Network ModelMappingUtils
-                            networkModelWavelengthService.useWavelengths(input.getPathDescription());
+                            createServicepathInput(input);
                         } else { // This implies, service-rate is 1 or 10G
-                            // This includes the lower-order odu (1 G, 10 G) and
+                            // This includes the lower-order odu (1G, 10G) and this is A-Z side
                             LOG.info("RPC implementation for LO-ODU");
                             String serviceRate = ""; // Assuming service at A-side and Z-side has same service rate
                             if (input.getServiceAEnd().getServiceRate() != null) {
@@ -211,21 +158,15 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             LOG.info("Start rendering for {} service with {} rate and {} format",
                                 input.getServiceName(), serviceRate,
                                 input.getServiceAEnd().getServiceFormat());
-                            // TODO: Need to create OCH-OTU4 interfaces by calling service-path input without src-tp
                             // This is A-Z side
                             OtnServicePathInput otnServicePathInputAtoZ = ModelMappingUtils
                                 .rendererCreateOtnServiceInput(input.getServiceName(),
                                     input.getServiceAEnd().getServiceFormat().getName(),
                                     serviceRate, input.getPathDescription(), true);
-                            // This is Z-A side
-                            OtnServicePathInput otnServicePathInputZtoA = ModelMappingUtils
-                                .rendererCreateOtnServiceInput(input.getServiceName(),
-                                    input.getServiceZEnd().getServiceFormat().getName(),
-                                    serviceRate, input.getPathDescription(), false);
                             // Rollback should be same for all conditions, so creating a new one
                             RollbackProcessor rollbackProcessor = new RollbackProcessor();
                             List<OtnDeviceRenderingResult> otnRenderingResults = otnDeviceRendering(rollbackProcessor,
-                                otnServicePathInputAtoZ, otnServicePathInputZtoA);
+                                otnServicePathInputAtoZ, null);
                             if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
                                 sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
                                     input.getServiceName(), RpcStatusEx.Failed, DEVICE_RENDERING_ROLL_BACK_MSG);
@@ -233,9 +174,9 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                                     OPERATION_FAILED);
                             }
                             LOG.info("OTN rendering result size {}", otnRenderingResults.size());
+                            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
+                                input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
                         }
-                        sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                            input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
                         break;
                     case Infrastructure:
                         LOG.info("RPC implementation for {}", input.getConnectionType());
@@ -244,58 +185,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             // For the service of OTU4 infrastructure
                             // First create the OCH and OTU interfaces
                             String serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
-                            LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
-                                input.getServiceAEnd().getOtuServiceRate(), serviceRate);
-                            // First render OCH and OTU interfaces
-                            ServicePathInputData servicePathInputDataAtoZ = ModelMappingUtils
-                                .rendererCreateServiceInputAToZ(input.getServiceName(), input.getPathDescription());
-                            ServicePathInputData servicePathInputDataZtoA = ModelMappingUtils
-                                .rendererCreateServiceInputZToA(input.getServiceName(), input.getPathDescription());
-                            // Rollback should be same for all conditions, so creating a new one
-                            RollbackProcessor rollbackProcessor = new RollbackProcessor();
-                            List<DeviceRenderingResult> renderingResults =
-                                deviceRendering(rollbackProcessor, servicePathInputDataAtoZ, servicePathInputDataZtoA);
-                            if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
-                                sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                    input.getServiceName(), RpcStatusEx.Failed, DEVICE_RENDERING_ROLL_BACK_MSG);
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                            LOG.info("Starting the OLM power setup");
-                            ServicePowerSetupInput olmPowerSetupInputAtoZ =
-                                ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(0).getOlmList(),
-                                    input);
-                            ServicePowerSetupInput olmPowerSetupInputZtoA =
-                                ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(1).getOlmList(),
-                                    input);
-                            olmPowerSetup(rollbackProcessor, olmPowerSetupInputAtoZ, olmPowerSetupInputZtoA);
-                            if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
-                                sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                    input.getServiceName(), RpcStatusEx.Failed, OLM_ROLL_BACK_MSG);
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                            // run service activation test twice - once on source node and once on
-                            // destination node
-                            List<Nodes> nodes = servicePathInputDataAtoZ.getServicePathInput().getNodes();
-                            if ((nodes == null) || (nodes.isEmpty())) {
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
-                            Nodes srcNode = nodes.get(0);
-                            Nodes tgtNode = nodes.get(nodes.size() - 1); // destination node or target node
-                            String srcNetworkTp = srcNode.getDestTp(); // In this case srcNode only has destTp
-                            String tgtNetowrkTp = tgtNode.getSrcTp(); // tgtNode node only has srcTp
-
-                            if (!isServiceActivated(srcNode.getNodeId(), srcNetworkTp)
-                                || !isServiceActivated(tgtNode.getNodeId(), tgtNetowrkTp)) {
-                                rollbackProcessor.rollbackAll();
-                                sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                    input.getServiceName(), RpcStatusEx.Failed,
-                                    "Service activation test failed.");
-                                return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
-                                    OPERATION_FAILED);
-                            }
+                            createServicepathInput(input);
                         }
                         if ((input.getServiceAEnd().getOduServiceRate() != null)
                             && (input.getServiceAEnd().getOduServiceRate().equals(ODU4.class))) {
@@ -305,16 +195,18 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
                                 input.getServiceAEnd().getOduServiceRate(), serviceRate);
                             // Now start rendering ODU4 interface
-                            String serviceFormat = "ODU"; // Since we need to create ODU4 Ttp interfaces as well
                             // This is A-Z side
                             OtnServicePathInput otnServicePathInputAtoZ = ModelMappingUtils
                                 .rendererCreateOtnServiceInput(input.getServiceName(),
-                                    serviceFormat, serviceRate, input.getPathDescription(), true);
+                                    input.getServiceAEnd().getServiceFormat().getName(),
+                                    input.getServiceAEnd().getOduServiceRate().getName(),
+                                    input.getPathDescription(), true);
                             // This is Z-A side
                             OtnServicePathInput otnServicePathInputZtoA = ModelMappingUtils
                                 .rendererCreateOtnServiceInput(input.getServiceName(),
                                     input.getServiceZEnd().getServiceFormat().getName(),
-                                    serviceRate, input.getPathDescription(), false);
+                                    input.getServiceZEnd().getOduServiceRate().getName(),
+                                    input.getPathDescription(), false);
                             // Rollback should be same for all conditions, so creating a new one
                             RollbackProcessor rollbackProcessor = new RollbackProcessor();
                             List<OtnDeviceRenderingResult> otnRenderingResults = otnDeviceRendering(rollbackProcessor,
@@ -336,7 +228,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_OK,
                     OPERATION_SUCCESSFUL);
             }
-
         });
     }
 
@@ -367,14 +258,14 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     }
 
     @Override
-    public ListenableFuture<ServiceDeleteOutput> serviceDelete(ServiceDeleteInput input) {
+    public ListenableFuture<ServiceDeleteOutput> serviceDelete(ServiceDeleteInput input, Services service) {
         String serviceName = input.getServiceName();
-        LOG.info("Calling service delete request {}", input.getServiceName());
+        LOG.info("Calling service delete request {}", serviceName);
         return executor.submit(new Callable<ServiceDeleteOutput>() {
 
             @Override
             public ServiceDeleteOutput call() throws Exception {
-                sendNotifications(ServicePathNotificationTypes.ServiceDelete, input.getServiceName(),
+                sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName,
                         RpcStatusEx.Pending, "Service compliant, submitting service delete Request ...");
                 // Obtain path description
                 Optional<PathDescription> pathDescriptionOpt = getPathDescriptionFromDatastore(serviceName);
@@ -383,62 +274,41 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                     pathDescription = pathDescriptionOpt.get();
                 } else {
                     LOG.error("Unable to get path description for service {}!", serviceName);
-                    sendNotifications(ServicePathNotificationTypes.ServiceDelete, input.getServiceName(),
+                    sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName,
                             RpcStatusEx.Failed, "Unable to get path description for service");
                     return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
                             OPERATION_FAILED);
                 }
-                ServicePathInputData servicePathInputDataAtoZ =
-                        ModelMappingUtils.rendererCreateServiceInputAToZ(serviceName, pathDescription);
-                ServicePathInputData servicePathInputDataZtoA =
-                        ModelMappingUtils.rendererCreateServiceInputZToA(serviceName, pathDescription);
-                // OLM turn down power
-                try {
-                    LOG.debug(TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
-                    sendNotifications(ServicePathNotificationTypes.ServiceDelete,
-                            input.getServiceName(), RpcStatusEx.Pending, TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
-                    ServicePowerTurndownOutput atozPowerTurndownOutput = olmPowerTurndown(servicePathInputDataAtoZ);
-                    // TODO add some flag rather than string
-                    if (FAILED.equals(atozPowerTurndownOutput.getResult())) {
-                        LOG.error("Service power turndown failed on A-to-Z path for service {}!", serviceName);
-                        sendNotifications(ServicePathNotificationTypes.ServiceDelete,
-                                input.getServiceName(), RpcStatusEx.Failed,
-                                "Service power turndown failed on A-to-Z path for service");
-                        return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
-                                OPERATION_FAILED);
+                switch (service.getConnectionType()) {
+                    case RoadmLine:
+                    case Service:
+                        if ((ServiceFormat.Ethernet.equals(service.getServiceAEnd().getServiceFormat())
+                                || ServiceFormat.OC.equals(service.getServiceAEnd().getServiceFormat()))
+                            && Uint32.valueOf("100").equals(service.getServiceAEnd().getServiceRate())) {
+                            return manageServicePathDeletion(serviceName, pathDescription);
+                        }
+                        if (ServiceFormat.Ethernet.equals(service.getServiceAEnd().getServiceFormat())
+                            && (Uint32.valueOf("10").equals(service.getServiceAEnd().getServiceRate())
+                                || Uint32.valueOf("1").equals(service.getServiceAEnd().getServiceRate()))) {
+                            return manageOtnServicePathDeletion(serviceName, pathDescription, service);
+                        }
+                        break;
+                    case Infrastructure:
+                        if (ServiceFormat.OTU.equals(service.getServiceAEnd().getServiceFormat())) {
+                            return manageServicePathDeletion(serviceName, pathDescription);
+                        } else if (ServiceFormat.ODU.equals(service.getServiceAEnd().getServiceFormat())) {
+                            return manageOtnServicePathDeletion(serviceName, pathDescription, service);
+                        } else {
+                            LOG.error("Unable to delete service {}", serviceName);
+                        }
+                        break;
+                    default:
+                        LOG.error("Unmanaged connection-type for deletion of service {}", serviceName);
+                        break;
                     }
-                    LOG.debug("Turning down power on Z-to-A path");
-                    sendNotifications(ServicePathNotificationTypes.ServiceDelete, input.getServiceName(),
-                            RpcStatusEx.Pending, "Turning down power on Z-to-A path");
-                    ServicePowerTurndownOutput ztoaPowerTurndownOutput = olmPowerTurndown(servicePathInputDataZtoA);
-                    // TODO add some flag rather than string
-                    if (FAILED.equals(ztoaPowerTurndownOutput.getResult())) {
-                        LOG.error("Service power turndown failed on Z-to-A path for service {}!", serviceName);
-                        sendNotifications(ServicePathNotificationTypes.ServiceDelete,
-                                input.getServiceName(), RpcStatusEx.Failed,
-                                "Service power turndown failed on Z-to-A path for service");
-                        return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
-                                OPERATION_FAILED);
-                    }
-                } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    LOG.error("Error while turning down power!", e);
-                    return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
-                            OPERATION_FAILED);
-                }
-                // delete service path with renderer
-                LOG.debug("Deleting service path via renderer");
-                sendNotifications(ServicePathNotificationTypes.ServiceDelete, input.getServiceName(),
-                        RpcStatusEx.Pending, "Deleting service path via renderer");
-                deviceRenderer.deleteServicePath(servicePathInputDataAtoZ.getServicePathInput());
-                deviceRenderer.deleteServicePath(servicePathInputDataZtoA.getServicePathInput());
-                networkModelWavelengthService.freeWavelengths(pathDescription);
-                sendNotifications(ServicePathNotificationTypes.ServiceDelete, input.getServiceName(),
-                        RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
-                return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_OK, OPERATION_SUCCESSFUL);
+                return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
             }
         });
-
-
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
@@ -526,16 +396,18 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             RENDERING_DEVICES_A_Z_MSG);
         ListenableFuture<OtnDeviceRenderingResult> atozrenderingFuture =
             this.executor.submit(new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathAtoZ));
-
-        LOG.info("Rendering devices Z-A");
-        sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-            otnServicePathZtoA.getServiceName(), RpcStatusEx.Pending,
-            RENDERING_DEVICES_Z_A_MSG);
-        ListenableFuture<OtnDeviceRenderingResult> ztoarenderingFuture =
-            this.executor.submit(new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathZtoA));
-        ListenableFuture<List<OtnDeviceRenderingResult>> renderingCombinedFuture =
-            Futures.allAsList(atozrenderingFuture, ztoarenderingFuture);
-
+        ListenableFuture<List<OtnDeviceRenderingResult>> renderingCombinedFuture;
+        if (otnServicePathZtoA != null) {
+            LOG.info("Rendering devices Z-A");
+            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
+                otnServicePathZtoA.getServiceName(), RpcStatusEx.Pending,
+                RENDERING_DEVICES_Z_A_MSG);
+            ListenableFuture<OtnDeviceRenderingResult> ztoarenderingFuture =
+                this.executor.submit(new OtnDeviceRenderingTask(this.otnDeviceRenderer, otnServicePathZtoA));
+            renderingCombinedFuture = Futures.allAsList(atozrenderingFuture, ztoarenderingFuture);
+        } else {
+            renderingCombinedFuture = Futures.allAsList(atozrenderingFuture);
+        }
         List<OtnDeviceRenderingResult> otnRenderingResults = new ArrayList<>(2);
         try {
             LOG.info("Waiting for A-Z and Z-A device renderers ...");
@@ -548,17 +420,13 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             //FIXME we can't do rollback here, because we don't have rendering results.
             return otnRenderingResults;
         }
-
         rollbackProcessor.addTask(new DeviceRenderingRollbackTask("AtoZDeviceTask",
             ! otnRenderingResults.get(0).isSuccess(), otnRenderingResults.get(0).getRenderedNodeInterfaces(),
             this.deviceRenderer));
         rollbackProcessor.addTask(new DeviceRenderingRollbackTask("ZtoADeviceTask",
             ! otnRenderingResults.get(1).isSuccess(), otnRenderingResults.get(1).getRenderedNodeInterfaces(),
             this.deviceRenderer));
-
-
         return otnRenderingResults;
-
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
@@ -653,7 +521,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         return null;
     }
 
-
     private boolean verifyPreFecBer(List<Measurements> measurements) {
         double preFecCorrectedErrors = Double.MIN_VALUE;
         double fecUncorrectableBlocks = Double.MIN_VALUE;
@@ -680,6 +547,146 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
             LOG.info("PreFEC value is {}", Double.toString(result));
             return result <= threshold;
         }
+    }
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value = "UPM_UNCALLED_PRIVATE_METHOD",
+        justification = "call in call() method")
+    private ServiceImplementationRequestOutput createServicepathInput(ServiceImplementationRequestInput input) {
+        ServicePathInputData servicePathInputDataAtoZ = ModelMappingUtils
+            .rendererCreateServiceInputAToZ(input.getServiceName(), input.getPathDescription());
+        ServicePathInputData servicePathInputDataZtoA = ModelMappingUtils
+            .rendererCreateServiceInputZToA(input.getServiceName(), input.getPathDescription());
+        // Rollback should be same for all conditions, so creating a new one
+        RollbackProcessor rollbackProcessor = new RollbackProcessor();
+        List<DeviceRenderingResult> renderingResults =
+            deviceRendering(rollbackProcessor, servicePathInputDataAtoZ, servicePathInputDataZtoA);
+        if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
+            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
+                input.getServiceName(), RpcStatusEx.Failed, DEVICE_RENDERING_ROLL_BACK_MSG);
+            return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
+                OPERATION_FAILED);
+        }
+        ServicePowerSetupInput olmPowerSetupInputAtoZ =
+            ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(0).getOlmList(), input);
+        ServicePowerSetupInput olmPowerSetupInputZtoA =
+            ModelMappingUtils.createServicePowerSetupInput(renderingResults.get(1).getOlmList(), input);
+        olmPowerSetup(rollbackProcessor, olmPowerSetupInputAtoZ, olmPowerSetupInputZtoA);
+        if (rollbackProcessor.rollbackAllIfNecessary() > 0) {
+            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
+                input.getServiceName(), RpcStatusEx.Failed, OLM_ROLL_BACK_MSG);
+            return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
+                OPERATION_FAILED);
+        }
+        // run service activation test twice - once on source node and once on
+        // destination node
+        List<Nodes> nodes = servicePathInputDataAtoZ.getServicePathInput().getNodes();
+        if ((nodes == null) || (nodes.isEmpty())) {
+            return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
+                OPERATION_FAILED);
+        }
+
+        Nodes sourceNode = nodes.get(0);
+        Nodes destNode = nodes.get(nodes.size() - 1);
+        String srcNetworkTp;
+        String dstNetowrkTp;
+        if (sourceNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
+            srcNetworkTp = sourceNode.getDestTp();
+        } else {
+            srcNetworkTp = sourceNode.getSrcTp();
+        }
+        if (destNode.getDestTp().contains(StringConstants.NETWORK_TOKEN)) {
+            dstNetowrkTp = destNode.getDestTp();
+        } else {
+            dstNetowrkTp = destNode.getSrcTp();
+        }
+        if (!isServiceActivated(sourceNode.getNodeId(), srcNetworkTp)
+            || !isServiceActivated(destNode.getNodeId(), dstNetowrkTp)) {
+            rollbackProcessor.rollbackAll();
+            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
+                input.getServiceName(), RpcStatusEx.Failed,
+                "Service activation test failed.");
+            return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
+                OPERATION_FAILED);
+        }
+        // If Service activation is success update Network ModelMappingUtils
+        networkModelWavelengthService.useWavelengths(input.getPathDescription());
+        sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
+            input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
+        return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_OK, OPERATION_SUCCESSFUL);
+    }
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value = "UPM_UNCALLED_PRIVATE_METHOD",
+        justification = "call in call() method")
+    private ServiceDeleteOutput manageServicePathDeletion(String serviceName, PathDescription pathDescription) {
+        ServicePathInputData servicePathInputDataAtoZ =
+            ModelMappingUtils.rendererCreateServiceInputAToZ(serviceName, pathDescription);
+        ServicePathInputData servicePathInputDataZtoA =
+            ModelMappingUtils.rendererCreateServiceInputZToA(serviceName, pathDescription);
+        // OLM turn down power
+        try {
+            LOG.debug(TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
+            sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName,
+                RpcStatusEx.Pending, TURNING_DOWN_POWER_ON_A_TO_Z_PATH_MSG);
+            ServicePowerTurndownOutput atozPowerTurndownOutput = olmPowerTurndown(servicePathInputDataAtoZ);
+            // TODO add some flag rather than string
+            if (FAILED.equals(atozPowerTurndownOutput.getResult())) {
+                LOG.error("Service power turndown failed on A-to-Z path for service {}!", serviceName);
+                sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Failed,
+                        "Service power turndown failed on A-to-Z path for service");
+                return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED, OPERATION_FAILED);
+            }
+            LOG.debug("Turning down power on Z-to-A path");
+            sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Pending,
+                    "Turning down power on Z-to-A path");
+            ServicePowerTurndownOutput ztoaPowerTurndownOutput = olmPowerTurndown(servicePathInputDataZtoA);
+            // TODO add some flag rather than string
+            if (FAILED.equals(ztoaPowerTurndownOutput.getResult())) {
+                LOG.error("Service power turndown failed on Z-to-A path for service {}!", serviceName);
+                sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Failed,
+                        "Service power turndown failed on Z-to-A path for service");
+                return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
+                        OPERATION_FAILED);
+            }
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.error("Error while turning down power!", e);
+            return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_FAILED,
+                    OPERATION_FAILED);
+        }
+        // delete service path with renderer
+        LOG.info("Deleting service path via renderer");
+        sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Pending,
+                "Deleting service path via renderer");
+        deviceRenderer.deleteServicePath(servicePathInputDataAtoZ.getServicePathInput());
+        deviceRenderer.deleteServicePath(servicePathInputDataZtoA.getServicePathInput());
+        networkModelWavelengthService.freeWavelengths(pathDescription);
+        sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Successful,
+                OPERATION_SUCCESSFUL);
+        return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_OK, OPERATION_SUCCESSFUL);
+    }
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value = "UPM_UNCALLED_PRIVATE_METHOD",
+        justification = "call in call() method")
+    private ServiceDeleteOutput manageOtnServicePathDeletion(String serviceName, PathDescription pathDescription,
+        Services service) {
+        OtnServicePathInput ospi = null;
+        if (ConnectionType.Infrastructure.equals(service.getConnectionType())) {
+            ospi = ModelMappingUtils.rendererCreateOtnServiceInput(
+                serviceName, service.getServiceAEnd().getServiceFormat().getName(), "100G", pathDescription, true);
+        } else if (ConnectionType.Service.equals(service.getConnectionType())) {
+            ospi = ModelMappingUtils.rendererCreateOtnServiceInput(serviceName,
+                service.getServiceAEnd().getServiceFormat().getName(),
+                service.getServiceAEnd().getServiceRate().toString() + "G", pathDescription, true);
+        }
+        LOG.info("Deleting otn-service path {} via renderer", serviceName);
+        sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Pending,
+                "Deleting otn-service path via renderer");
+        otnDeviceRenderer.deleteOtnServicePath(ospi);
+        sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Successful,
+                OPERATION_SUCCESSFUL);
+        return ModelMappingUtils.createServiceDeleteResponse(ResponseCodes.RESPONSE_OK, OPERATION_SUCCESSFUL);
     }
 
 }

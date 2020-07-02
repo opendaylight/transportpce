@@ -150,7 +150,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         Mockito.doReturn(Collections.emptyList()).when(this.crossConnect).deleteCrossConnect(Mockito.anyString(),
             Mockito.anyString(), Mockito.eq(false));
         ServiceDeleteOutput serviceDeleteOutput
-                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
+                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build(), null).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_OK,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
         Mockito.verify(this.crossConnect, Mockito.times(2))
@@ -162,7 +162,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         ServiceDeleteInputBuilder serviceDeleteInputBuilder = new ServiceDeleteInputBuilder();
         serviceDeleteInputBuilder.setServiceName("service 1");
         ServiceDeleteOutput serviceDeleteOutput
-                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
+                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build(), null).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
         Mockito.verify(this.crossConnect, Mockito.times(0))
@@ -182,7 +182,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
                 .setRequestId("request1").build());
         ListenableFuture<ServiceDeleteOutput> serviceDeleteOutput
-                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build());
+                = this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build(), null);
         ServiceDeleteOutput output = serviceDeleteOutput.get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 output.getConfigurationResponseCommon().getResponseCode());
@@ -208,7 +208,7 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         serviceDeleteInputBuilder.setServiceHandlerHeader((new ServiceHandlerHeaderBuilder())
             .setRequestId("request1").build());
         ServiceDeleteOutput serviceDeleteOutput =
-                this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build()).get();
+                this.rendererServiceOperations.serviceDelete(serviceDeleteInputBuilder.build(), null).get();
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
             serviceDeleteOutput.getConfigurationResponseCommon().getResponseCode());
         Mockito.verify(this.olmService, Mockito.times(2)).servicePowerTurndown(Mockito.any());

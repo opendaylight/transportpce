@@ -26,6 +26,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.handler.header.ServiceHandlerHeader;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.handler.header.ServiceHandlerHeaderBuilder;
@@ -62,10 +63,10 @@ public class RendererServiceWrapper {
     }
 
     public ServiceDeleteOutput performRenderer(ServiceDeleteInput serviceDeleteInput,
-            ServiceNotificationTypes notifType) {
+            ServiceNotificationTypes notifType, Services service) {
         if (validateParams(serviceDeleteInput.getServiceName(), serviceDeleteInput.getServiceHandlerHeader(), false)) {
             return performRenderer(serviceDeleteInput.getServiceName(), serviceDeleteInput.getServiceHandlerHeader(),
-                    ServiceNotificationTypes.ServiceDeleteResult);
+                    ServiceNotificationTypes.ServiceDeleteResult, service);
         } else {
             return returnRendererFailed();
         }
@@ -77,14 +78,14 @@ public class RendererServiceWrapper {
         if (validateParams(commonId, null, true)) {
             ServiceHandlerHeader serviceHandler = new ServiceHandlerHeaderBuilder().setRequestId(commonId).build();
             return performRenderer(tempServiceDeleteInput.getCommonId(), serviceHandler,
-                    ServiceNotificationTypes.ServiceDeleteResult);
+                    ServiceNotificationTypes.ServiceDeleteResult, null);
         } else {
             return returnRendererFailed();
         }
     }
 
     private ServiceDeleteOutput performRenderer(String serviceName, ServiceHandlerHeader serviceHandlerHeader,
-            ServiceNotificationTypes notifType) {
+            ServiceNotificationTypes notifType, Services service) {
         notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName(serviceName)
                 .setStatus(RpcStatusEx.Pending)
                 .setStatusMessage("Service compliant, submitting temp service delete Request ...").build();
@@ -127,7 +128,7 @@ public class RendererServiceWrapper {
         };
         ServiceDeleteInput serviceDeleteInput = createRendererRequestInput(serviceName, serviceHandlerHeader);
         ListenableFuture<ServiceDeleteOutput> renderer =
-                this.rendererServiceOperations.serviceDelete(serviceDeleteInput);
+                this.rendererServiceOperations.serviceDelete(serviceDeleteInput, service);
         Futures.addCallback(renderer, rendererCallback, executor);
         ConfigurationResponseCommon value =
                 new ConfigurationResponseCommonBuilder().setAckFinalIndicator(ResponseCodes.FINAL_ACK_NO)
