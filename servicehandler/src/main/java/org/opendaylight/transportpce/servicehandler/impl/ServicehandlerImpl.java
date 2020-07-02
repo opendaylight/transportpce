@@ -205,18 +205,21 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         //Check presence of service to be deleted
 //TODO check if an expected bug was justifying this NPE handling
 //        try {
-        Optional<Services> service = this.serviceDataStoreOperations.getService(serviceName);
+        Optional<Services> serviceOpt = this.serviceDataStoreOperations.getService(serviceName);
 //        } catch (NullPointerException e) {
 //            LOG.error("Something wrong when retrieving service '{}' from datastore : ", serviceName, e);
 //            return ModelMappingUtils.createDeleteServiceReply(
 //                    input, ResponseCodes.FINAL_ACK_YES,
 //                    LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
 //        }
-        if (!service.isPresent()) {
+        Services service;
+        if (!serviceOpt.isPresent()) {
             LOG.warn("serviceDelete: {}", LogMessages.serviceNotInDS(serviceName));
             return ModelMappingUtils.createDeleteServiceReply(
                     input, ResponseCodes.FINAL_ACK_YES,
                     LogMessages.serviceNotInDS(serviceName), ResponseCodes.RESPONSE_FAILED);
+        } else {
+            service = serviceOpt.get();
         }
         LOG.debug("serviceDelete: Service '{}' found in datastore", serviceName);
         this.pceListenerImpl.setInput(new ServiceInput(input));
@@ -229,7 +232,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput output =
             this.rendererServiceWrapper.performRenderer(
-                serviceDeleteInput, ServiceNotificationTypes.ServiceDeleteResult);
+                serviceDeleteInput, ServiceNotificationTypes.ServiceDeleteResult, service);
 
         if (output == null) {
             LOG.error("serviceDelete: {}", LogMessages.RENDERER_DELETE_FAILED);
@@ -309,7 +312,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                         ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
                 .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
-                        ServiceNotificationTypes.ServiceDeleteResult);
+                        ServiceNotificationTypes.ServiceDeleteResult, null);
         if (output == null) {
             LOG.error("serviceReconfigure: {}", LogMessages.RENDERER_DELETE_FAILED);
             return ModelMappingUtils.createCreateServiceReply(
@@ -389,7 +392,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     new ServiceInput(deleteInputBldr.build()));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
             .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
-                ServiceNotificationTypes.ServiceDeleteResult);
+                ServiceNotificationTypes.ServiceDeleteResult, null);
         if (output == null) {
             LOG.error("serviceRestoration: {}", LogMessages.RENDERER_DELETE_FAILED);
             return ModelMappingUtils.createRestoreServiceReply(
@@ -455,7 +458,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
                     new ServiceInput(deleteInputBldr.build()));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
             .ServiceDeleteOutput output = this.rendererServiceWrapper.performRenderer(serviceDeleteInput,
-                ServiceNotificationTypes.ServiceDeleteResult);
+                ServiceNotificationTypes.ServiceDeleteResult, null);
         if (output == null) {
             LOG.error("serviceReroute: {}", LogMessages.RENDERER_DELETE_FAILED);
             return ModelMappingUtils.createRerouteServiceReply(

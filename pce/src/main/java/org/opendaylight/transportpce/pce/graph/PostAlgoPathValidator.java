@@ -97,7 +97,7 @@ public class PostAlgoPathValidator {
                 break;
 
             case "10GE":
-                tribSlotNb = 10;
+                tribSlotNb = 8;
             //fallthrough
             case "1GE":
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
@@ -306,7 +306,7 @@ public class PostAlgoPathValidator {
 
     private Map<String, List<Uint16>> chooseTribSlot(GraphPath<String,
         PceGraphEdge> path, Map<NodeId, PceNode> allPceNodes, int nbSlot) {
-        LOG.info("In choosetribSlot2: edgeList = {} ", path.getEdgeList());
+        LOG.info("In choosetribSlot: edgeList = {} ", path.getEdgeList());
         Map<String, List<Uint16>> tribSlotMap = new HashMap<>();
 
         for (PceGraphEdge edge : path.getEdgeList()) {
