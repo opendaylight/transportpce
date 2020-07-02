@@ -98,7 +98,6 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     @Override
     public ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction) {
         List<Nodes> nodes = input.getNodes();
-
         // Register node for suppressing alarms
         if (!alarmSuppressionNodeRegistration(input)) {
             LOG.warn("Alarm suppresion node registration failed!!!!");

@@ -93,14 +93,28 @@ class TransportPCEtesting(unittest.TestCase):
                                 "id": "0",
                                 "resource": {
                                     "tp-node-id": "SPDR-SA1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                    "tp-id": ""
                                 }
                             },
                             {
                                 "id": "1",
                                 "resource": {
+                                    "tp-node-id": "SPDR-SA1-XPDR1",
+                                    "tp-id": "XPDR1-NETWORK1"
+                                }
+                            },
+                            {
+                                "id": "2",
+                                "resource": {
                                     "tp-node-id": "SPDR-SC1-XPDR1",
                                     "tp-id": "XPDR1-NETWORK1"
+                                }
+                            },
+                            {
+                                "id": "3",
+                                "resource": {
+                                    "tp-node-id": "SPDR-SC1-XPDR1",
+                                    "tp-id": ""
                                 }
                             }
                         ]
@@ -114,14 +128,28 @@ class TransportPCEtesting(unittest.TestCase):
                                 "id": "0",
                                 "resource": {
                                     "tp-node-id": "SPDR-SC1-XPDR1",
-                                    "tp-id": "XPDR1-NETWORK1"
+                                    "tp-id": ""
                                 }
                             },
                             {
                                 "id": "1",
                                 "resource": {
+                                    "tp-node-id": "SPDR-SC1-XPDR1",
+                                    "tp-id": "XPDR1-NETWORK1"
+                                }
+                            },
+                            {
+                                "id": "2",
+                                "resource": {
                                     "tp-node-id": "SPDR-SA1-XPDR1",
                                     "tp-id": "XPDR1-NETWORK1"
+                                }
+                            },
+                            {
+                                "id": "3",
+                                "resource": {
+                                    "tp-node-id": "SPDR-SA1-XPDR1",
+                                    "tp-id": ""
                                 }
                             }
                         ]
@@ -271,6 +299,13 @@ class TransportPCEtesting(unittest.TestCase):
                         "rate": 100,
                         "aToZ": [
                             {
+                                "id": "0",
+                                "resource": {
+                                    "tp-node-id": "SPDR-SA1-XPDR1",
+                                    "tp-id": ""
+                                }
+                            },
+                            {
                                 "id": "1",
                                 "resource": {
                                     "tp-node-id": "SPDR-SA1-XPDR1",
@@ -282,6 +317,13 @@ class TransportPCEtesting(unittest.TestCase):
                                 "resource": {
                                     "tp-node-id": "SPDR-SC1-XPDR1",
                                     "tp-id": "XPDR1-NETWORK1"
+                                }
+                            },
+                            {
+                                "id": "3",
+                                "resource": {
+                                    "tp-node-id": "SPDR-SC1-XPDR1",
+                                    "tp-id": ""
                                 }
                             }
                         ]
@@ -290,6 +332,13 @@ class TransportPCEtesting(unittest.TestCase):
                         "transportpce-renderer:rate": "100",
                         "zToA": [
                             {
+                                "id": "0",
+                                "resource": {
+                                    "tp-node-id": "SPDR-SC1-XPDR1",
+                                    "tp-id": ""
+                                }
+                            },
+                            {
                                 "id": "1",
                                 "resource": {
                                     "tp-node-id": "SPDR-SC1-XPDR1",
@@ -301,6 +350,13 @@ class TransportPCEtesting(unittest.TestCase):
                                 "resource": {
                                     "tp-node-id": "SPDR-SA1-XPDR1",
                                     "tp-id": "XPDR1-NETWORK1"
+                                }
+                            },
+                            {
+                                "id": "3",
+                                "resource": {
+                                    "tp-node-id": "SPDR-SA1-XPDR1",
+                                    "tp-id": ""
                                 }
                             }
                         ]
@@ -397,7 +453,6 @@ class TransportPCEtesting(unittest.TestCase):
                     "transportpce-renderer:service-rate": "10",
                     "transportpce-renderer:clli": "nodeSA",
                     "transportpce-renderer:node-id": "SPDR-SA1"
-
                 },
                 "transportpce-renderer:service-z-end": {
                     "transportpce-renderer:service-format": "Ethernet",
@@ -408,6 +463,8 @@ class TransportPCEtesting(unittest.TestCase):
                 "transportpce-renderer:path-description": {
                     "aToZ-direction": {
                         "rate": 10,
+                        "trib-port-number": 1,
+                        "trib-slot-number": 1,
                         "aToZ": [
                             {
                                 "id": "0",
@@ -441,7 +498,9 @@ class TransportPCEtesting(unittest.TestCase):
                         ]
                     },
                     "transportpce-renderer:zToA-direction": {
-                        "transportpce-renderer:rate": "10",
+                        "rate": "10",
+                        "trib-port-number": 1,
+                        "trib-slot-number": 1,
                         "zToA": [
                             {
                                 "id": "0",

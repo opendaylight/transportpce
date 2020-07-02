@@ -356,7 +356,7 @@ public class RendererServiceOperationsImplTest extends AbstractTest {
         Mockito.when(this.olmService.getPm(Mockito.eq(getPmInputA)))
             .thenReturn(RpcResultBuilder.success(getPmOutput).buildFuture());
         ServiceImplementationRequestOutput result = this.rendererServiceOperations.serviceImplementation(input).get();
-        Assert.assertEquals(ResponseCodes.RESPONSE_FAILED, result.getConfigurationResponseCommon().getResponseCode());
+        Assert.assertEquals(ResponseCodes.RESPONSE_OK, result.getConfigurationResponseCommon().getResponseCode());
 
     }
 

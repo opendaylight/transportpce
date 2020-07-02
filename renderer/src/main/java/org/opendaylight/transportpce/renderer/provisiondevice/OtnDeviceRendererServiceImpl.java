@@ -60,7 +60,7 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
 
     @Override
     public OtnServicePathOutput setupOtnServicePath(OtnServicePathInput input) {
-        LOG.info("Calling setup service path");
+        LOG.info("Calling setup otn-service path");
         boolean success = true;
         List<NodeInterface> nodeInterfaces = new ArrayList<>();
         List<String> results = new ArrayList<>();
@@ -139,6 +139,11 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
     }
 
     public OtnServicePathOutput deleteOtnServicePath(OtnServicePathInput input) {
+        if (input == null) {
+            LOG.error("Unable to delete otn service path. input = null");
+            return new OtnServicePathOutputBuilder().setResult("Unable to delete otn service path. input = null")
+                .setSuccess(false).build();
+        }
         List<Nodes> nodes = input.getNodes();
         AtomicBoolean success = new AtomicBoolean(true);
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
