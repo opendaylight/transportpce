@@ -36,7 +36,7 @@ public class TransportPCEServicePathRPCImpl implements TransportpceRendererServi
         LOG.info("Calling RPC service delete request {}", serviceName);
         ServiceDeleteOutput output = null;
         try {
-            output = this.rendererServiceOperations.serviceDelete(input).get();
+            output = this.rendererServiceOperations.serviceDelete(input, null).get();
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("RPC service delete failed !", e);
         }

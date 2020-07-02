@@ -78,7 +78,7 @@ public final class ModelMappingUtils {
     public static ServiceImplementationRequestInput createServiceImplementationRequest(ServiceInput input,
             PathDescription pathDescription) {
         ServiceImplementationRequestInputBuilder serviceImplementationRequestInputBuilder =
-            new ServiceImplementationRequestInputBuilder();
+            new ServiceImplementationRequestInputBuilder().setConnectionType(input.getConnectionType());
         if (input.isServiceReconfigure()) {
             serviceImplementationRequestInputBuilder.setServiceName(input.getNewServiceName());
         } else {
@@ -90,6 +90,9 @@ public final class ModelMappingUtils {
 
         serviceAEnd.setServiceFormat(input.getServiceAEnd().getServiceFormat())
             .setServiceRate(input.getServiceAEnd().getServiceRate())
+            .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate())
+            .setOduServiceRate(input.getServiceAEnd().getOduServiceRate())
+            .setClli(input.getServiceAEnd().getClli())
             .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate()) // set otu and odu
             .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
             .setClli(input.getServiceAEnd().getClli())
@@ -105,6 +108,9 @@ public final class ModelMappingUtils {
             .transportpce.renderer.rev200520.service.implementation.request.input.ServiceZEndBuilder();
         serviceZEnd.setServiceFormat(input.getServiceZEnd().getServiceFormat())
             .setServiceRate(input.getServiceZEnd().getServiceRate())
+            .setOtuServiceRate(input.getServiceZEnd().getOtuServiceRate())
+            .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
+            .setClli(input.getServiceZEnd().getClli())
             .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate()) // set otu and odu
             .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
             .setClli(input.getServiceZEnd().getClli())

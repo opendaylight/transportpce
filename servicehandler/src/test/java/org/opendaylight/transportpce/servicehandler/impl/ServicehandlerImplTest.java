@@ -185,7 +185,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
     @Test
     public void deleteServiceShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
         DataBroker dataBroker = getNewDataBroker();
-        Mockito.when(rendererServiceOperations.serviceDelete(any())).thenReturn(Futures.immediateFuture(any()));
+        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
                 notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
@@ -312,7 +312,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
 
         //mocking
         // serviceReconfigure is calling service delete method in renderer
-        Mockito.when(rendererServiceOperations.serviceDelete(any())).thenReturn(Futures.immediateFuture(any()));
+        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         //create service to reconfigure
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
@@ -395,7 +395,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
 
         //mocking
         // serviceRestoration is calling service delete method in renderer
-        Mockito.when(rendererServiceOperations.serviceDelete(any())).thenReturn(Futures.immediateFuture(any()));
+        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         //create service to restore
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
@@ -477,7 +477,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
 
         //mocking
         // serviceReroute is calling service delete method in renderer
-        Mockito.when(rendererServiceOperations.serviceDelete(any())).thenReturn(Futures.immediateFuture(any()));
+        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
         //create service to be rerouted later
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
@@ -556,7 +556,7 @@ public class ServicehandlerImplTest extends AbstractTest  {
     @Test
     public void tempServiceDeleteShouldBeSuccessForExistingService() throws ExecutionException, InterruptedException {
         DataBroker dataBroker = getNewDataBroker();
-        Mockito.when(rendererServiceOperations.serviceDelete(any())).thenReturn(Futures.immediateFuture(any()));
+        Mockito.when(rendererServiceOperations.serviceDelete(any(), any())).thenReturn(Futures.immediateFuture(any()));
 
         //create temp service to delete in the temp delete action
         ServicehandlerImpl servicehandlerImpl =

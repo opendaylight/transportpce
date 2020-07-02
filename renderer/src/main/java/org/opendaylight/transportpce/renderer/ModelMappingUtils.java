@@ -37,6 +37,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.renderer.input.NodesKey;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,8 +98,11 @@ public final class ModelMappingUtils {
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setServiceName(serviceName)
             .setOperation(ServicePathInput.Operation.Create)
-            .setWaveNumber(Long.valueOf(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava()))
             .setNodes(nodeLists.getList());
+        if (pathDescription.getAToZDirection().getAToZWavelengthNumber() != null) {
+            servicePathInputBuilder
+                .setWaveNumber(Uint32.valueOf(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava()));
+        }
         return new ServicePathInputData(servicePathInputBuilder.build(), nodeLists);
     }
 
@@ -108,8 +112,11 @@ public final class ModelMappingUtils {
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setOperation(ServicePathInput.Operation.Create)
             .setServiceName(serviceName)
-            .setWaveNumber(Long.valueOf(pathDescription.getZToADirection().getZToAWavelengthNumber().toJava()))
             .setNodes(nodeLists.getList());
+        if (pathDescription.getAToZDirection().getAToZWavelengthNumber() != null) {
+            servicePathInputBuilder
+                .setWaveNumber(Uint32.valueOf(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava()));
+        }
         return new ServicePathInputData(servicePathInputBuilder.build(), nodeLists);
     }
 
@@ -119,44 +126,19 @@ public final class ModelMappingUtils {
         // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
         List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input.Nodes> nodes =
             new ArrayList<>();
-        NodeLists nodeLists = null;
-        if (asideToZside) {
-            nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
-        } else {
+        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
+        if (!asideToZside) {
             nodeLists = getNodesListZtoA(pathDescription.getZToADirection().getZToA().iterator());
         }
         LOG.info("These are node-lists {}, {}", nodeLists.getList(), nodeLists.getOlmList());
-        for (int i = 0; i < nodeLists.getList().size(); i++) {
-            Nodes node = nodeLists.getList().get(i);
-            if (serviceRate.equals("100G")) {
-                nodes.add(
+        for (Nodes node: nodeLists.getList()) {
+            nodes.add(
                     new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input
                         .NodesBuilder()
-                        .setNodeId(node.getNodeId())
-                        .setNetworkTp(node.getDestTp())
-                        .build());
-            }
-            else { // For any other service rate (1G or 10G)
-                // For the last node in the list, clientTp and NetworkTp has to be reversed
-                if (i == nodeLists.getList().size() - 1) {
-                    nodes.add(
-                        new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input
-                            .NodesBuilder()
-                            .setNodeId(node.getNodeId())
-                            .setClientTp(node.getDestTp())
-                            .setNetworkTp(node.getSrcTp())
-                            .build());
-
-                } else {
-                    nodes.add(
-                        new org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input
-                            .NodesBuilder()
                             .setNodeId(node.getNodeId())
                             .setClientTp(node.getSrcTp())
                             .setNetworkTp(node.getDestTp())
                             .build());
-                }
-            }
         }
         OtnServicePathInputBuilder otnServicePathInputBuilder = new OtnServicePathInputBuilder()
             .setServiceName(serviceName)
@@ -164,10 +146,11 @@ public final class ModelMappingUtils {
             .setServiceRate(serviceRate)
             .setNodes(nodes);
 
-        //TODO: set the trib-slots and trib-ports for the lower oder odu, this should from SH rather than setting here
+        // set the trib-slots and trib-ports for the lower oder odu
         if (serviceRate.equals("1G") || (serviceRate.equals("10G"))) {
-            otnServicePathInputBuilder.setTribPortNumber((short) 1).setTribSlot((short) 1);
-
+            otnServicePathInputBuilder
+                .setTribPortNumber(pathDescription.getAToZDirection().getTribPortNumber().shortValue())
+                .setTribSlot(pathDescription.getAToZDirection().getTribSlotNumber().shortValue());
         }
         return otnServicePathInputBuilder.build();
     }
@@ -178,7 +161,7 @@ public final class ModelMappingUtils {
         return new ServicePathInputBuilder().setServiceName(serviceName).build();
     }
 
-    public static NodeLists getNodesListZtoA(Iterator<ZToA> iterator) {
+    private static NodeLists getNodesListZtoA(Iterator<ZToA> iterator) {
         Map<Integer, NodeIdPair> treeMap = new TreeMap<>();
         List<Nodes> olmList = new ArrayList<>();
         List<Nodes> list = new ArrayList<>();
@@ -198,24 +181,24 @@ public final class ModelMappingUtils {
                     LOG.info(" TP is {} {}", tp.getTpId(),
                             tp.getTpNodeId());
                     tpID = tp.getTpId();
-                    nodeID = tp.getTpNodeId();
                     sortId = pathDesObj.getId();
 
                     //TODO: do not rely on ID to be in certain format
                     if (tpID.contains("CTP") || tpID.contains("CP")) {
                         continue;
                     }
-                    if (!tpID.contains("TTP") && !tpID.contains("PP") && !tpID.contains("NETWORK")
-                            && !tpID.contains("CLIENT")) {
+                    if (tpID.contains(StringConstants.TTP_TOKEN)) {
+                        nodeID = tp.getTpNodeId().split("-DEG")[0];
+                    } else if (tpID.contains(StringConstants.PP_TOKEN)) {
+                        nodeID = tp.getTpNodeId().split("-SRG")[0];
+                    } else if (tpID.contains(StringConstants.NETWORK_TOKEN)
+                        || tpID.contains(StringConstants.CLIENT_TOKEN) || tpID.isEmpty()) {
+                        nodeID = tp.getTpNodeId().split("-XPDR")[0];
+                    } else {
                         continue;
                     }
-
-                    int[] pos = findTheLongestSubstring(nodeID, tpID);
-                    if (pos != null) {
-                        //TODO: do not rely on nodeId to be integer
-                        int id = Integer.parseInt(sortId);
-                        treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
-                    }
+                    int id = Integer.parseInt(sortId);
+                    treeMap.put(id, new NodeIdPair(nodeID, tpID));
                 } else if ("Link".equals(resourceType)) {
                     LOG.info("The type is link");
                 } else {
@@ -225,11 +208,12 @@ public final class ModelMappingUtils {
                 LOG.error("Dont find the getResource method", e);
             }
         }
-        populateNodeLists(treeMap, list, olmList);
+//        populateNodeLists(treeMap, list, olmList);
+        populateNodeLists(treeMap, list, olmList, false);
         return new NodeLists(olmList, list);
     }
 
-    public static NodeLists getNodesListAToZ(Iterator<AToZ> iterator) {
+    private static NodeLists getNodesListAToZ(Iterator<AToZ> iterator) {
         Map<Integer, NodeIdPair> treeMap = new TreeMap<>();
         List<Nodes> list = new ArrayList<>();
         List<Nodes> olmList = new ArrayList<>();
@@ -249,26 +233,24 @@ public final class ModelMappingUtils {
                     LOG.info("TP is {} {}", tp.getTpId(),
                             tp.getTpNodeId());
                     tpID = tp.getTpId();
-                    nodeID = tp.getTpNodeId();
                     sortId = pathDesObj.getId();
 
                     //TODO: do not rely on ID to be in certain format
                     if (tpID.contains("CTP") || tpID.contains("CP")) {
                         continue;
                     }
-                    if (!tpID.contains(StringConstants.TTP_TOKEN)
-                        && !tpID.contains(StringConstants.PP_TOKEN)
-                        && !tpID.contains(StringConstants.NETWORK_TOKEN)
-                        && !tpID.contains(StringConstants.CLIENT_TOKEN)) {
+                    if (tpID.contains(StringConstants.TTP_TOKEN)) {
+                        nodeID = tp.getTpNodeId().split("-DEG")[0];
+                    } else if (tpID.contains(StringConstants.PP_TOKEN)) {
+                        nodeID = tp.getTpNodeId().split("-SRG")[0];
+                    } else if (tpID.contains(StringConstants.NETWORK_TOKEN)
+                        || tpID.contains(StringConstants.CLIENT_TOKEN) || tpID.isEmpty()) {
+                        nodeID = tp.getTpNodeId().split("-XPDR")[0];
+                    } else {
                         continue;
                     }
-
-                    int[] pos = findTheLongestSubstring(nodeID, tpID);
-                    if (pos != null) {
-                        //TODO: do not rely on nodeId to be integer
-                        int id = Integer.parseInt(sortId);
-                        treeMap.put(id, new NodeIdPair(nodeID.substring(0, pos[0] - 1), tpID));
-                    }
+                    int id = Integer.parseInt(sortId);
+                    treeMap.put(id, new NodeIdPair(nodeID, tpID));
                 } else if ("Link".equals(resourceType)) {
                     LOG.info("The type is link");
                 } else {
@@ -279,12 +261,14 @@ public final class ModelMappingUtils {
                 LOG.error("Did not find the getResource method", e);
             }
         }
-        populateNodeLists(treeMap, list, olmList);
+        populateNodeLists(treeMap, list, olmList, true);
+//        populateNodeLists(treeMap, list, olmList);
         return new NodeLists(olmList, list);
     }
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
-            value = {"NP_LOAD_OF_KNOWN_NULL_VALUE","RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE"},
+            value = {"NP_LOAD_OF_KNOWN_NULL_VALUE","RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE",
+                "UPM_UNCALLED_PRIVATE_METHOD"},
             justification = "loop when value is not always null - "
                     + "TODO: check if something exists in Java lib")
     private static void populateNodeLists(Map<Integer, NodeIdPair> treeMap,
@@ -350,6 +334,60 @@ public final class ModelMappingUtils {
             }
         }
     }
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value = {"NP_LOAD_OF_KNOWN_NULL_VALUE","RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE"},
+        justification = "loop when value is not always null - "
+                + "TODO: check if something exists in Java lib")
+    private static void populateNodeLists(Map<Integer, NodeIdPair> treeMap, List<Nodes> list, List<Nodes> olmList,
+        boolean isAToz) {
+        String desID = null;
+        String srcID = null;
+        LOG.info("treeMap values = {}", treeMap.values());
+        for (NodeIdPair values : treeMap.values()) {
+            if (srcID == null) {
+                srcID = values.getTpID();
+            } else if (desID == null) {
+                desID = values.getTpID();
+                NodesBuilder olmNb = new NodesBuilder()
+                    .setNodeId(values.getNodeID())
+                    .setDestTp(desID)
+                    .setSrcTp(srcID);
+                olmList.add(olmNb.build());
+                if (srcID.isEmpty()) {
+                    srcID = null;
+                }
+                if (desID.isEmpty()) {
+                    desID = new StringBuilder(srcID).toString();
+                    srcID = null;
+                }
+                if (isAToz) {
+                    NodesBuilder nb = new NodesBuilder()
+                        .withKey(new NodesKey(values.getNodeID()))
+                        .setDestTp(desID)
+                        .setSrcTp(srcID);
+                    if (srcID != null && desID != null && srcID.contains(StringConstants.NETWORK_TOKEN)) {
+                        nb.setDestTp(srcID).setSrcTp(desID);
+                    }
+                    list.add(nb.build());
+                } else {
+                    if (srcID != null && desID != null && !srcID.contains(StringConstants.NETWORK_TOKEN)
+                        && !desID.contains(StringConstants.NETWORK_TOKEN)) {
+                        NodesBuilder nb = new NodesBuilder()
+                            .withKey(new NodesKey(values.getNodeID()))
+                            .setDestTp(desID)
+                            .setSrcTp(srcID);
+                        list.add(nb.build());
+                    }
+                }
+                srcID = null;
+                desID = null;
+            } else {
+                LOG.warn("both, the source and destination id are null!");
+            }
+        }
+    }
+
 
     @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
             value = "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
