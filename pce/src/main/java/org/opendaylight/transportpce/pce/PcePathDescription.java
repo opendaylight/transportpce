@@ -29,6 +29,8 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource.resource.resource.TerminationPoint;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource.resource.resource.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,13 +61,16 @@ public class PcePathDescription {
 
         buildAtoZ(atozList, pathAtoZ);
         AToZDirectionBuilder atoZDirectionBldr = new AToZDirectionBuilder()
-            .setRate(rc.getRate())
+            .setRate(Uint32.valueOf(rc.getRate()))
             .setAToZ(atozList);
         if ("100GE".equals(rc.getServiceType()) || "OTU4".equals(rc.getServiceType())) {
-            atoZDirectionBldr.setAToZWavelengthNumber(rc.getResultWavelength());
+            atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
         } else if ("10GE".equals(rc.getServiceType()) || "1GE".equals(rc.getServiceType())
             || "ODU4".equals(rc.getServiceType())) {
-            atoZDirectionBldr.setAToZWavelengthNumber(Long.valueOf(0));
+            List<Uint16> tribSlotList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
+            atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(0))
+                .setTribPortNumber(Uint16.valueOf(rc.getResultTribPort().values().toArray()[0].toString()))
+                .setTribSlotNumber(tribSlotList.get(0));
         }
         rc.setAtoZDirection(atoZDirectionBldr.build());
         pathZtoA = ImmutableList.copyOf(pathAtoZ).reverse();
@@ -79,13 +84,16 @@ public class PcePathDescription {
         }
         buildZtoA(ztoaList, pathZtoA);
         ZToADirectionBuilder ztoADirectionBldr = new ZToADirectionBuilder()
-            .setRate(rc.getRate())
+            .setRate(Uint32.valueOf(rc.getRate()))
             .setZToA(ztoaList);
         if ("100GE".equals(rc.getServiceType()) || "OTU4".equals(rc.getServiceType())) {
-            ztoADirectionBldr.setZToAWavelengthNumber(rc.getResultWavelength());
+            ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
         } else if ("10GE".equals(rc.getServiceType()) || "1GE".equals(rc.getServiceType())
             || "ODU4".equals(rc.getServiceType())) {
-            ztoADirectionBldr.setZToAWavelengthNumber(Long.valueOf(0));
+            List<Uint16> tribSlotList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
+            ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(0))
+                .setTribPortNumber(Uint16.valueOf(rc.getResultTribPort().values().toArray()[0].toString()))
+                .setTribSlotNumber(tribSlotList.get(0));
         }
         rc.setZtoADirection(ztoADirectionBldr.build());
 
