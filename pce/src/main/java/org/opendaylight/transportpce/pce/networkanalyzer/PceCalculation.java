@@ -110,8 +110,6 @@ public class PceCalculation {
     }
 
     private boolean parseInput() {
-        anodeId = input.getServiceAEnd().getNodeId();
-        znodeId = input.getServiceZEnd().getNodeId();
         if (input.getServiceAEnd().getServiceFormat() == null || input.getServiceZEnd().getServiceFormat() == null
             || input.getServiceAEnd().getServiceRate() == null) {
             LOG.error("Service Format and Service Rate are required for a path calculation");
@@ -157,6 +155,13 @@ public class PceCalculation {
         } else {
             LOG.debug("parseInput: unsupported service type: Format {} Rate {}",
                 serviceFormatA, serviceRate);
+        }
+        if ("ODU4".equals(serviceType) || "10GE".equals(serviceType)  || "1GE".equals(serviceType)) {
+            anodeId = input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName();
+            znodeId = input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName();
+        } else {
+            anodeId = input.getServiceAEnd().getNodeId();
+            znodeId = input.getServiceZEnd().getNodeId();
         }
 
         returnStructure.setRate(input.getServiceAEnd().getServiceRate().toJava());
