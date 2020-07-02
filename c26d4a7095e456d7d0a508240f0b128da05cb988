@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5da5254f_f1c878fc",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-02T09:53:05Z",
+      "side": 1,
+      "message": "Perhaps instead of doing that, why not coding in getAToZTpList method the non insertion of null object ?",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 44
+      },
+      "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10817ac6_5eca4d7f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-02T09:53:05Z",
+      "side": 1,
+      "message": "Perhaps instead of doing that, why not coding in getZToATpList method the non insertion of null object ?",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 44
+      },
+      "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeb10afa_46e01377",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-02T09:53:05Z",
+      "side": 1,
+      "message": "Perhaps instead of doing that, why not coding in getAToZTpList method the non insertion of null object ?\nPerhaps instead of doing that, why not coding in getZToATpList method the non insertion of null object ?",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 44
+      },
+      "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a75b3af_79c707f3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperations.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-02T09:53:05Z",
+      "side": 1,
+      "message": "I have a question. In functional edge, does it make sense to have 2 methods with the same and a different signature\n    ListenableFuture\u003cServiceDeleteOutput\u003e serviceDelete(ServiceDeleteInput input, Services service);\n    ListenableFuture\u003cServiceDeleteOutput\u003e serviceDelete(ServiceDeleteInput input);\nI ask because in another part of code the method is call with null value for service.",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 99
+      },
+      "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
