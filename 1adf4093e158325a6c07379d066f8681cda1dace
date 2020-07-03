@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6870c201_fe93c222",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/ModelMappingUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-03T14:02:29Z",
+      "side": 1,
+      "message": "I don\u0027t find a justifucation for this warning suppression.\nShouldn\u0027t this method be removed rather ?\nIt looks very alike the new one with a fourth boolean parameter.",
+      "range": {
+        "startLine": 271,
+        "startChar": 15,
+        "endLine": 271,
+        "endChar": 47
+      },
+      "revId": "1adf4093e158325a6c07379d066f8681cda1dace",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a51fd22_7753e03b",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-03T14:02:29Z",
+      "side": 1,
+      "message": "else-statement is useless since we already return something in the corresponding if-statement.\n\u003d\u003e this will ease the indentation.",
+      "range": {
+        "startLine": 153,
+        "startChar": 27,
+        "endLine": 153,
+        "endChar": 36
+      },
+      "revId": "1adf4093e158325a6c07379d066f8681cda1dace",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be3cfc5b_24c98642",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-03T14:02:29Z",
+      "side": 1,
+      "message": "I suspect the same remark applies here.",
+      "range": {
+        "startLine": 157,
+        "startChar": 22,
+        "endLine": 157,
+        "endChar": 32
+      },
+      "revId": "1adf4093e158325a6c07379d066f8681cda1dace",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afbf7fc9_1a663e44",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-03T14:02:29Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 197,
+        "startChar": 27,
+        "endLine": 197,
+        "endChar": 36
+      },
+      "revId": "1adf4093e158325a6c07379d066f8681cda1dace",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8250b5bd_7509da47",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-03T14:02:29Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 313,
+        "startChar": 21,
+        "endLine": 313,
+        "endChar": 33
+      },
+      "revId": "1adf4093e158325a6c07379d066f8681cda1dace",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f9c8ab5_89302cc3",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-03T14:02:29Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 315,
+        "startChar": 24,
+        "endLine": 315,
+        "endChar": 32
+      },
+      "revId": "1adf4093e158325a6c07379d066f8681cda1dace",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb6822fe_6cacf2e9",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/impl/ServicehandlerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-03T14:02:29Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 221,
+        "startChar": 7,
+        "endLine": 221,
+        "endChar": 16
+      },
+      "revId": "1adf4093e158325a6c07379d066f8681cda1dace",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
