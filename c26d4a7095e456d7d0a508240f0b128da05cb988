@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "77618c6c_a17e8f6a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-07-03T08:43:27Z",
+      "side": 1,
+      "message": "For sure, your suggestion should be better. Since this part of the code is very sensible and have lots of side effects on existing WDM services, we have decided in this first step to favour the otn-integration, minimizing the code refactoring, and to postpone in a second step when we will have developed relevant functional test to check otn service management, this refactoring and more generally the code improvement.",
+      "parentUuid": "5da5254f_f1c878fc",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 44
+      },
+      "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "10817ac6_5eca4d7f",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81f580b1_3c4ae326",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-07-03T08:43:27Z",
+      "side": 1,
+      "message": "See above",
+      "parentUuid": "10817ac6_5eca4d7f",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 44
+      },
+      "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "941b2e85_0daeee71",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-07-03T08:43:27Z",
+      "side": 1,
+      "message": "See above",
+      "parentUuid": "eeb10afa_46e01377",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 44
+      },
+      "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a75b3af_79c707f3",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperations.java",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "871fb60d_f3ad6e6e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperations.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-07-03T08:43:27Z",
+      "side": 1,
+      "message": "Your remark is relevant. Deletion of a service at the renderer level may be invoked through Service Handler (the nominal usage), where we have a global view of the service, or through the internal renderer api (service-delete, from transportpce-renderer@2020-05-20.yang), where we have the \"device view\" of a service which can be partial since we can \"renderer\" only part of the service...\nOnce again, for simplicity reason in this first step of otn service integration, we decided not refactor too much existing code given the fact it may have lots of side effects, and that all the more than we do not have all functional tests (otn) available yet.\nThis is typically the kind of code improvement we should plan for next sprints.",
+      "parentUuid": "6a75b3af_79c707f3",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 99
+      },
+      "revId": "c26d4a7095e456d7d0a508240f0b128da05cb988",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
