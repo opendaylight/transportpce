@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04168871_487d3ea0",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-07-04T07:13:55Z",
+      "side": 1,
+      "message": "Good to have removed the condition on 50GHZ slotwidth that would avoid to pass through this. However your first assumption that you will need to seperate 2 cases was good. I guess we still need to separate 2 cases : one for the 100G use case using a flexgrid (37.5 GHz), the other where we handle higher rates (200,300, 400G) and where we need to provision a 75 GHz bandwidth. But the criteria to go through one or the other case shall be based on the rate of the channel to be provisioned.",
+      "revId": "3c7a2e584d3860edd59c10b01928f3df5ad2497e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
