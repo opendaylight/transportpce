@@ -31,7 +31,12 @@ import org.opendaylight.transportpce.networkmodel.util.OpenRoadmOtnTopology;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.OtnLinkType;
@@ -41,21 +46,23 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 public class NetworkModelServiceImpl implements NetworkModelService {
 
@@ -67,6 +74,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private final PortMapping portMapping;
     private Map<String, TopologyShard> topologyShardMountedDevice;
     private Map<String, TopologyShard> otnTopologyShardMountedDevice;
+    private HashMap<String, org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State> linkHashmap;
+    private HashMap<String,
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State> tpStateHashmap;
 
     public NetworkModelServiceImpl(final NetworkTransactionService networkTransactionService,
         final R2RLinkDiscovery linkDiscovery, PortMapping portMapping) {
@@ -76,6 +86,11 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         this.portMapping = portMapping;
         this.topologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.otnTopologyShardMountedDevice = new HashMap<String, TopologyShard>();
+        // This hashmap includes the nodes and a boolean to represent if it has been updated or not in the topology
+        this.linkHashmap = new HashMap<String,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State>();
+        this.tpStateHashmap = new HashMap<String,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State>();
     }
 
     public void init() {
@@ -95,9 +110,6 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 return;
             }
             NodeInfo nodeInfo = portMapping.getNode(nodeId).getNodeInfo();
-            if (nodeInfo.getNodeType().getIntValue() == 1) {
-                this.linkDiscovery.readLLDP(new NodeId(nodeId), openRoadmVersion);
-            }
             // node creation in clli-network
             Node clliNode = ClliNetwork.createNode(nodeId, nodeInfo);
             InstanceIdentifier<Node> iiClliNode = InstanceIdentifier.builder(Networks.class)
@@ -153,8 +165,74 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
             networkTransactionService.commit().get();
             LOG.info("all nodes and links created");
+            // LLDP neighbors
+            if (nodeInfo.getNodeType().getIntValue() == 1) {
+                this.linkDiscovery.readLLDP(new NodeId(nodeId), openRoadmVersion);
+            }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error("ERROR: ", e);
+        }
+    }
+
+    // update topology based on the port state change (for the moment)
+    @Override
+    public void updateOpenRoadmNode(String nodeId, CircuitPacks circuitPacks) {
+        // Clear class variables for new notification
+        this.tpStateHashmap.clear();
+        this.linkHashmap.clear();
+
+        List<Link> linkList = new ArrayList<>();
+        List<Node> nodesList = new ArrayList<>();
+        try {
+            InstanceIdentifier.InstanceIdentifierBuilder<Network1> network1IID =
+                    InstanceIdentifier.builder(Networks.class)
+                            .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                            .augmentation(Network1.class);
+            InstanceIdentifier.InstanceIdentifierBuilder<Network> networkIID = InstanceIdentifier.builder(
+                    Networks.class).child(Network.class, new NetworkKey(
+                    new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
+            Optional<Network> networkOptional = this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
+                    networkIID.build()).get();
+            Optional<Network1> network1Optional =
+                    this.networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,
+                            network1IID.build()).get();
+            if (network1Optional.isPresent()) {
+                // Update Links
+                linkList = network1Optional.get().getLink();
+            }
+            if (networkOptional.isPresent()) {
+                // Update Nodes
+                nodesList = networkOptional.get().getNode();
+            }
+        } catch (InterruptedException e) {
+            LOG.error("Could get list of links in the network. Error = {}", e.toString());
+        } catch (ExecutionException e) {
+            LOG.error("Could get list of links in the network. Error = {}", e.toString());
+        }
+        String cpackType = circuitPacks.getCircuitPackType();
+        // remember that this works for external ports of the circuit pack. The internal cases are a bit different,
+        // as every port is mapped to the same tp. Check cross-connect!
+        switch (cpackType) {
+            case "ADDDROP":
+                // Circuit pack of a SRG. It has Client ports and AD-DEG ports
+                LOG.info("ADDROP circuit pack modified");
+                setTpStateHashmap(circuitPacks);
+                break;
+            case "WSSDEG":
+                // Circuit pack of a DEG. It has Line port and Client ports
+                LOG.info("WSSDEG circuit pack modified");
+                setTpStateHashmap(circuitPacks);
+                updateTopologyTPs(nodesList, nodeId);
+                updateTopologyLinks(linkList, nodesList);
+                break;
+            case "port":
+                LOG.info("PORT circuit pack modified");
+                break;
+            case "pluggable":
+                LOG.info("Pluggable circuit pack modified");
+                break;
+            default:
+                LOG.error("Circuit pack type not recognized = {}", cpackType);
         }
     }
 
@@ -645,5 +723,224 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
         }
 
+    }
+
+    private void updateTopologyLinks(List<Link> linkList, List<Node> nodesList) {
+        for (Link link : linkList) {
+            String srcTp = link.getSource().getSourceTp().toString();
+            String dstTp = link.getDestination().getDestTp().toString();
+            String srcNode = link.getSource().getSourceNode().getValue();
+            String dstNode = link.getDestination().getDestNode().getValue();
+            State linkState = link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+                    .rev181130.Link1.class).getOperationalState();
+            if (linkState.equals(State.InService)) {
+                if (this.linkHashmap.containsKey(srcTp) && this.linkHashmap.containsKey(dstTp)) {
+                    // Both tp seem to be changed
+                    if (this.linkHashmap.get(srcTp).equals(org.opendaylight.yang.gen.v1.http.org.openroadm
+                            .common.types.rev161014.State.OutOfService) || this.linkHashmap.get(dstTp).equals(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State
+                                    .OutOfService)) {
+                        // Change link state to OOS
+                        updateLinkToOOS(link);
+                    }
+                } else if (this.linkHashmap.containsKey(srcTp)) {
+                    // Source tp has been updated
+                    if (this.linkHashmap.get(srcTp).equals(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types
+                            .rev161014.State.OutOfService)) {
+                        updateLinkToOOS(link);
+                    }
+                } else if (this.linkHashmap.containsKey(dstTp)) {
+                    // Destination tp has been updated
+                    if (this.linkHashmap.get(dstTp).equals(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State
+                                    .OutOfService)) {
+                        updateLinkToOOS(link);
+                    }
+
+                }
+            } else {
+                if (this.linkHashmap.containsKey(srcTp) && this.linkHashmap.containsKey(dstTp)) {
+                    if (this.linkHashmap.get(srcTp).equals(org.opendaylight.yang.gen.v1.http.org.openroadm
+                            .common.types.rev161014.State.InService) && this.linkHashmap.get(dstTp).equals(
+                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State.InService)) {
+                        // Change link state to OOS
+                        updateLinkToIS(link);
+                    }
+                } else if (this.linkHashmap.containsKey(srcTp)) {
+                    // Check that the other TP is inService with function
+                    if (checkOtherEndPointStatus(dstNode, dstTp, nodesList)) {
+                        updateLinkToIS(link);
+                    } else {
+                        LOG.warn("Link {} doesnt have both TPs in Service. No update", link.getLinkId().getValue());
+                    }
+
+                } else if (this.linkHashmap.containsKey(dstTp)) {
+                    // Check if the other TP is inService with function
+                    if (checkOtherEndPointStatus(srcNode, srcTp, nodesList)) {
+                        updateLinkToIS(link);
+                    } else {
+                        LOG.warn("Link {} doesnt have both TPs in Service. No update", link.getLinkId().getValue());
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean checkOtherEndPointStatus(String nodeId, String tp, List<Node> nodeList) {
+        // check status of tps from other nodes within the link
+        boolean inService = false;
+        for (Node node : nodeList) {
+            if (node.getNodeId().getValue().equals(nodeId)) {
+                List<TerminationPoint> tpList = node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params
+                        .xml.ns.yang.ietf.network.topology.rev180226.Node1.class).getTerminationPoint();
+                if (tpList != null) {
+                    for (TerminationPoint terminationPoint : tpList) {
+                        if (terminationPoint.getTpId().getValue().equals(tp)) {
+                            State tpState = terminationPoint.augmentation(org.opendaylight.yang.gen.v1.http
+                                    .org.openroadm.common.network.rev181130.TerminationPoint1.class)
+                                    .getOperationalState();
+                            if (tpState.equals(State.InService)) {
+                                inService = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        LOG.info("Going to return that the link can be changed to inService = {}", inService);
+        return inService;
+    }
+
+    private void updateLinkToIS(Link link) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 link1 = new Link1Builder()
+                .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
+        Link updatedLink = new LinkBuilder().withKey(link.key()).setLinkId(link.getLinkId())
+                .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
+                        link1).build();
+        InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID =
+                InstanceIdentifier.builder(Networks.class).child(Network.class, new NetworkKey(new NetworkId(
+                        NetworkUtils.OVERLAY_NETWORK_ID))).augmentation(Network1.class).child(Link.class, link.key());
+        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, linkIID.build(), updatedLink);
+        try {
+            networkTransactionService.commit().get();
+        } catch (InterruptedException e) {
+            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+        } catch (ExecutionException e) {
+            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+        }
+    }
+
+    private void updateLinkToOOS(Link link) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 link1 = new Link1Builder()
+                .setOperationalState(State.OutOfService).setAdministrativeState(AdminStates.OutOfService).build();
+        Link updatedLink = new LinkBuilder().withKey(link.key()).setLinkId(link.getLinkId())
+                .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
+                        link1).build();
+        InstanceIdentifier.InstanceIdentifierBuilder<Link> linkIID = InstanceIdentifier.builder(Networks.class)
+                        .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                        .augmentation(Network1.class).child(Link.class, link.key());
+        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, linkIID.build(), updatedLink);
+        try {
+            networkTransactionService.commit().get();
+        } catch (InterruptedException e) {
+            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+        } catch (ExecutionException e) {
+            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+        }
+    }
+
+    private void updateTopologyTPs(List<Node> nodesList, String nodeId) {
+        for (Node node : nodesList) {
+            if (node.getNodeId().getValue().contains(nodeId)) {
+                if (node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                        .Node1.class).getOperationalState().equals(State.InService)) {
+                    List<TerminationPoint> tpList = node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params
+                            .xml.ns.yang.ietf.network.topology.rev180226.Node1.class).getTerminationPoint();
+                    List<TerminationPoint> updatedtpList = new ArrayList<TerminationPoint>();
+                    if (tpList != null) {
+                        for (TerminationPoint tp : tpList) {
+                            String tpid = tp.getTpId().getValue();
+                            String tpState = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
+                                    .network.rev181130.TerminationPoint1.class).getOperationalState().getName();
+                            // If the state of the tp in the topology shard is different, that means that we have found
+                            // the port with new state
+                            if (this.tpStateHashmap.containsKey(tpid)) {
+                                if (!this.tpStateHashmap.get(tpid).getName().equals(tpState)) {
+                                    State newState = null;
+                                    AdminStates newAdminState = null;
+                                    if (this.tpStateHashmap.get(tpid).equals(org.opendaylight.yang.gen.v1.http
+                                            .org.openroadm.common.types.rev161014.State.InService)) {
+                                        newState = State.InService;
+                                        newAdminState = AdminStates.InService;
+                                        this.linkHashmap.put(tpid,
+                                                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types
+                                                        .rev161014.State.InService);
+                                    } else {
+                                        newState = State.OutOfService;
+                                        newAdminState = AdminStates.OutOfService;
+                                        this.linkHashmap.put(tpid,
+                                                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types
+                                                        .rev161014.State.OutOfService);
+                                    }
+                                    TerminationPoint auxtp = new TerminationPointBuilder().withKey(tp.key())
+                                            .setTpId(tp.getTpId()).addAugmentation(
+                                                    org.opendaylight.yang.gen.v1.http.org.openroadm.common
+                                                            .network.rev181130.TerminationPoint1.class,
+                                                    new org.opendaylight.yang.gen.v1.http.org.openroadm
+                                                            .common.network.rev181130.TerminationPoint1Builder()
+                                                            .setOperationalState(newState)
+                                                            .setAdministrativeState(newAdminState).build()).build();
+                                    updatedtpList.add(auxtp);
+                                } else {
+                                    LOG.debug("TP {} has the same state", tpid);
+                                }
+                            } else {
+                                LOG.debug("TP {} doesnt exist in hashmap", tpid);
+                            }
+                        }
+                    }
+                    if (updatedtpList != null) {
+                        // Node update
+                        Node aux = new NodeBuilder()
+                                .setNodeId(node.getNodeId())
+                                .addAugmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns
+                                                .yang.ietf.network.topology.rev180226.Node1.class,
+                                        new org.opendaylight.yang.gen.v1.urn.ietf.params.xml
+                                                .ns.yang.ietf.network.topology.rev180226.Node1Builder()
+                                                .setTerminationPoint(updatedtpList).build()).build();
+                        //merge to datastore
+                        InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier.builder(
+                                Networks.class).child(Network.class, new NetworkKey(
+                                new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(Node.class, node.key()).build();
+                        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
+                                aux);
+                        try {
+                            networkTransactionService.commit().get();
+                        } catch (InterruptedException e) {
+                            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+                        } catch (ExecutionException e) {
+                            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+                        }
+                    }
+                } else {
+                    LOG.warn("Node {} is OutOfService", node.getNodeId().getValue());
+                }
+            }
+        }
+    }
+
+    private void setTpStateHashmap(CircuitPacks circuitPacks) {
+        for (Ports ports : circuitPacks.getPorts()) {
+            String lcp = ports.getLogicalConnectionPoint();
+            if (lcp != null) {
+                if (!this.tpStateHashmap.containsKey(lcp)) {
+                    this.tpStateHashmap.put(lcp, ports.getOperationalState());
+                }
+            } else {
+                LOG.warn("Port {} without mapping point", ports.getPortName());
+            }
+        }
     }
 }
