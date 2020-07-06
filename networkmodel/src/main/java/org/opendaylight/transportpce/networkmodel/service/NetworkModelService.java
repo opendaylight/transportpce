@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.networkmodel.service;
 
 import java.util.List;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
 
@@ -34,6 +35,8 @@ public interface NetworkModelService {
      *
      */
     void deleteOpenRoadmnode(String nodeId);
+
+    void updateOpenRoadmNode(String nodeId, CircuitPacks circuitPacks);
 
     /**
      * Set/update connection status of OpenROADM node.

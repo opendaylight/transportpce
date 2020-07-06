@@ -225,7 +225,8 @@ public class R2RLinkDiscovery {
         r2rlinkBuilderAToZ.setRdmANode(nodeId.getValue()).setDegANum(Uint8.valueOf(srcDegId))
             .setTerminationPointA(srcTpTx).setRdmZNode(destNodeId.getValue()).setDegZNum(Uint8.valueOf(destDegId))
             .setTerminationPointZ(destTpRx);
-        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderAToZ.build(), this.dataBroker)) {
+        if (!OrdLink.createStatefulRdm2RdmLinks(r2rlinkBuilderAToZ.build(), this.dataBroker,
+                this.networkTransactionService)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in A->Z direction", nodeId.getValue(),
                 destNodeId.getValue());
             return false;
@@ -243,7 +244,8 @@ public class R2RLinkDiscovery {
             .setRdmZNode(nodeId.getValue())
             .setDegZNum(Uint8.valueOf(srcDegId))
             .setTerminationPointZ(srcTpRx);
-        if (!OrdLink.createRdm2RdmLinks(r2rlinkBuilderZToA.build(), this.dataBroker)) {
+        if (!OrdLink.createStatefulRdm2RdmLinks(r2rlinkBuilderZToA.build(), this.dataBroker,
+                this.networkTransactionService)) {
             LOG.error("OMS Link creation failed between node: {} and nodeId: {} in Z->A direction",
                 destNodeId.getValue(), nodeId.getValue());
             return false;
