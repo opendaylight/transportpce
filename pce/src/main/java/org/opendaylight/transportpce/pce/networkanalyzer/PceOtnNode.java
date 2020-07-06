@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
@@ -52,6 +54,8 @@ public class PceOtnNode implements PceNode {
     private final OpenroadmNodeType nodeType;
     private final String pceNodeType;
     private final String otnServiceType;
+    private State otnnodeOperstate;
+    private AdminStates otnnodeAdminstate;
     private String modeType;
 
     private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<>();
@@ -67,6 +71,7 @@ public class PceOtnNode implements PceNode {
     private List<PceLink> outgoingLinks = new ArrayList<>();
     private Map<String, String> clientPerNwTp = new HashMap<>();
 
+    // TODO: states are not taken into account for OTN nodes
     public PceOtnNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, String pceNodeType, String serviceType) {
         this.node = node;
         this.nodeId = nodeId;
@@ -80,6 +85,12 @@ public class PceOtnNode implements PceNode {
         this.usedXpdrClientTps.clear();
         this.availableXpdrClientTps = new ArrayList<>();
         this.usableXpdrClientTps = new ArrayList<>();
+        this.otnnodeAdminstate = node.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+                .getAdministrativeState();
+        this.otnnodeOperstate = node.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+                .getOperationalState();
         this.tpAvailableTribPort.clear();
         checkAvailableTribPort();
         this.tpAvailableTribSlot.clear();
@@ -450,6 +461,16 @@ public class PceOtnNode implements PceNode {
     @Override
     public List<PceLink> getOutgoingLinks() {
         return outgoingLinks;
+    }
+
+    @Override
+    public AdminStates getNodeAdminstate() {
+        return otnnodeAdminstate;
+    }
+
+    @Override
+    public State getNodeOperstate() {
+        return otnnodeOperstate;
     }
 
     @Override
