@@ -1,0 +1,510 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "403fafac_146b377f",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "please have look here https://rules.sonarsource.com/java/tag/multi-threading/RSPEC-2142 to manage InterruptedException",
+      "range": {
+        "startLine": 107,
+        "startChar": 17,
+        "endLine": 107,
+        "endChar": 60
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62078767_b76d3360",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "please have look here https://rules.sonarsource.com/java/tag/multi-threading/RSPEC-2142 to manage InterruptedException",
+      "range": {
+        "startLine": 174,
+        "startChar": 16,
+        "endLine": 174,
+        "endChar": 62
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c450ab2a_74d71ec2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "you should split this method to decrease complexity",
+      "range": {
+        "startLine": 121,
+        "startChar": 34,
+        "endLine": 121,
+        "endChar": 54
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8733c95_3dfe52c4",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "could one of this element be null ?",
+      "range": {
+        "startLine": 54,
+        "startChar": 28,
+        "endLine": 54,
+        "endChar": 101
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48298a93_74b42fe8",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/listeners/DeviceListener.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "could be null ?",
+      "range": {
+        "startLine": 67,
+        "startChar": 24,
+        "endLine": 67,
+        "endChar": 36
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0accef84_c05ab9b1",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "please use the interface Map instead of the implementation HashMap for declaration\n    private Map\u003cString, org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State\u003e linkHashmap;\n\t\n    private Map\u003cString,\n\t\n            org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State\u003e tpStateHashmap;",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 105
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "392aff4b_4815833b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "please have look here https://rules.sonarsource.com/java/tag/multi-threading/RSPEC-2142 to manage InterruptedException",
+      "range": {
+        "startLine": 207,
+        "startChar": 10,
+        "endLine": 207,
+        "endChar": 42
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80c7a049_b4e736cd",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "log all exception \nLOG.error(\"Could get list of links in the network. \", e)",
+      "range": {
+        "startLine": 208,
+        "startChar": 11,
+        "endLine": 211,
+        "endChar": 9
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e9c74f6_491cb5a6",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "to avoid NPE, perhaps like that \n                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State.OutOfService.equals(his.linkHashmap.get(dstTp))",
+      "range": {
+        "startLine": 740,
+        "startChar": 76,
+        "endLine": 742,
+        "endChar": 51
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "371f6ea2_ccea3cd2",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "concat the 2 if in one",
+      "range": {
+        "startLine": 746,
+        "startChar": 23,
+        "endLine": 751,
+        "endChar": 21
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcc4106d_4b00e792",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "concat the 2 if in one",
+      "range": {
+        "startLine": 752,
+        "startChar": 18,
+        "endLine": 760,
+        "endChar": 17
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9deb0d97_9f7c07a5",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "could node or node.getNodeId() be null ?",
+      "range": {
+        "startLine": 793,
+        "startChar": 16,
+        "endLine": 793,
+        "endChar": 32
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "471138c5_0e682327",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "could terminationPoint or terminationPoint.getTpId() be null ?",
+      "range": {
+        "startLine": 798,
+        "startChar": 28,
+        "endLine": 798,
+        "endChar": 54
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73d91b06_1766bbad",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "reverse equals to avoid NPE",
+      "range": {
+        "startLine": 802,
+        "startChar": 35,
+        "endLine": 802,
+        "endChar": 63
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ce32ebb_0cbbd17e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "same as line 208-211",
+      "range": {
+        "startLine": 828,
+        "startChar": 8,
+        "endLine": 832,
+        "endChar": 9
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "479d1b88_62f016f9",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "same as line 208-211",
+      "range": {
+        "startLine": 847,
+        "startChar": 7,
+        "endLine": 851,
+        "endChar": 9
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d6b6009_431555c7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "same remarks from updateTopologyLinks",
+      "range": {
+        "startLine": 854,
+        "startChar": 17,
+        "endLine": 854,
+        "endChar": 34
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1a3ff01_4e3efdcc",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "same as line 208-211",
+      "range": {
+        "startLine": 921,
+        "startChar": 23,
+        "endLine": 925,
+        "endChar": 25
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e24be983_8af6893b",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "could ports be null ?",
+      "range": {
+        "startLine": 936,
+        "startChar": 25,
+        "endLine": 936,
+        "endChar": 59
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3901a93_34835c04",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "you should split this method to decrease the complexity",
+      "range": {
+        "startLine": 421,
+        "startChar": 31,
+        "endLine": 421,
+        "endChar": 64
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b699182b_67ed3309",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "please use constant with functional name",
+      "range": {
+        "startLine": 465,
+        "startChar": 39,
+        "endLine": 465,
+        "endChar": 41
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b737eef_caec6e0d",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-06T20:41:51Z",
+      "side": 1,
+      "message": "please use constant with functional name",
+      "range": {
+        "startLine": 467,
+        "startChar": 68,
+        "endLine": 467,
+        "endChar": 70
+      },
+      "revId": "b1c6c9bd659e799b3d564c94a8665cc94990c729",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
