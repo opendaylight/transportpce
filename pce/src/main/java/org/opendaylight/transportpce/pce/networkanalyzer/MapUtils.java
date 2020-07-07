@@ -190,7 +190,6 @@ public final class MapUtils {
 
     public static OpenroadmLinkType calcType(Link link) {
         Link1 link1 = null;
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1 link11 = null;
 
         // ID and type
         link1 = link.augmentation(Link1.class);
@@ -198,10 +197,9 @@ public final class MapUtils {
             LOG.error("MapUtils: No Link augmentation available. {}", link.getLinkId().getValue());
             return null;
         }
-        link11 = link.augmentation(
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1 link11 = link.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1.class);
-        OpenroadmLinkType tmplType = null;
-        tmplType = link1.getLinkType();
+        OpenroadmLinkType tmplType = link1.getLinkType();
 
         if (tmplType == null) {
             if (link1 == null) {

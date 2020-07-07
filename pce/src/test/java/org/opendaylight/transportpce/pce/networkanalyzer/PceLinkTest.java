@@ -22,6 +22,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev1811
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributesBuilder;
@@ -63,12 +65,22 @@ public class PceLinkTest extends AbstractTest {
 
     @Test
     public void testBuildPceLinkRoadmToRoadm() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder link1Builder
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder();
+        link1Builder.setAdministrativeState(AdminStates.InService);
+        link1Builder.setOperationalState(State.InService);
         Link link = createRoadmToRoadm("srcNode",
                 "destNode",
-                "srcTp", "destTp").build();
+                "srcTp", "destTp").addAugmentation(org.opendaylight.yang.gen.v1.http.org
+                .openroadm.common.network.rev181130.Link1.class, link1Builder.build()).build();
 
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
+        Node node = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+                .rev181130.Node1.class, node1Builder1.build()).build();
 
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
@@ -77,12 +89,22 @@ public class PceLinkTest extends AbstractTest {
 
     @Test
     public void testBuildPceLinkRoadmToRoadmWithoutLinkLatency() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder link1Builder
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder();
+        link1Builder.setAdministrativeState(AdminStates.InService);
+        link1Builder.setOperationalState(State.InService);
         Link link = createRoadmToRoadmWithoutLinkLatency("srcNode",
                 "destNode",
-                "srcTp", "destTp").build();
+                "srcTp", "destTp").addAugmentation(org.opendaylight.yang.gen.v1.http.org
+                .openroadm.common.network.rev181130.Link1.class, link1Builder.build()).build();
 
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
+        Node node = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+                .rev181130.Node1.class, node1Builder1.build()).build();
 
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
@@ -91,12 +113,22 @@ public class PceLinkTest extends AbstractTest {
 
     @Test
     public void testBuildPceLinkOTN() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder link1Builder
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder();
+        link1Builder.setAdministrativeState(AdminStates.InService);
+        link1Builder.setOperationalState(State.InService);
         Link link = createOTNLink("srcNode",
                 "destNode",
-                "srcTp", "destTp").build();
+                "srcTp", "destTp").addAugmentation(org.opendaylight.yang.gen.v1.http.org
+                .openroadm.common.network.rev181130.Link1.class, link1Builder.build()).build();
 
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
+        Node node = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+                .rev181130.Node1.class, node1Builder1.build()).build();
 
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
@@ -106,12 +138,22 @@ public class PceLinkTest extends AbstractTest {
 
     @Test
     public void testBuildPceLinkExponder() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder link1Builder
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder();
+        link1Builder.setAdministrativeState(AdminStates.InService);
+        link1Builder.setOperationalState(State.InService);
         Link link = createXponderLink("srcNode",
                 "destNode",
-                "srcTp", "destTp").build();
+                "srcTp", "destTp").addAugmentation(org.opendaylight.yang.gen.v1.http.org
+                .openroadm.common.network.rev181130.Link1.class, link1Builder.build()).build();
 
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
+        Node node = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+                .rev181130.Node1.class, node1Builder1.build()).build();
 
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
@@ -120,19 +162,29 @@ public class PceLinkTest extends AbstractTest {
 
     @Test
     public void testCalcSpanOSNR() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder link1Builder
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder();
+        link1Builder.setAdministrativeState(AdminStates.InService);
+        link1Builder.setOperationalState(State.InService);
         Link link = createRoadmToRoadm("srcNode",
                 "destNode",
-                "srcTp", "destTp").build();
+                "srcTp", "destTp").addAugmentation(org.opendaylight.yang.gen.v1.http.org
+                .openroadm.common.network.rev181130.Link1.class, link1Builder.build()).build();
 
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
+        Node node = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+                .rev181130.Node1.class, node1Builder1.build()).build();
 
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
         Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
         Assert.assertNotNull(pceLink.calcSpanOSNR());
-        Assert.assertEquals(0, pceLink.getsrlgList().size());
+        Assert.assertEquals(0, (pceLink.getsrlgList() == null) ? 0 : pceLink.getsrlgList().size());
         Assert.assertTrue(7.857119000000001 == pceLink.calcSpanOSNR());
         Assert.assertNull(pceLink.getOppositeLink());
         Assert.assertNull(pceLink.getOppositeLink());

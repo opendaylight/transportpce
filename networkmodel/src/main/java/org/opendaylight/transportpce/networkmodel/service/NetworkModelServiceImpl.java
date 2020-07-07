@@ -74,8 +74,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private final PortMapping portMapping;
     private Map<String, TopologyShard> topologyShardMountedDevice;
     private Map<String, TopologyShard> otnTopologyShardMountedDevice;
-    private HashMap<String, org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State> linkHashmap;
-    private HashMap<String,
+    private Map<String, org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State> linkHashmap;
+    private Map<String,
             org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State> tpStateHashmap;
 
     public NetworkModelServiceImpl(final NetworkTransactionService networkTransactionService,
@@ -205,9 +205,10 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 nodesList = networkOptional.get().getNode();
             }
         } catch (InterruptedException e) {
-            LOG.error("Could get list of links in the network. Error = {}", e.toString());
+            LOG.error("Couldn't get list of links in the network.", e);
+            Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            LOG.error("Could get list of links in the network. Error = {}", e.toString());
+            LOG.error("Couldn't get list of links in the network.", e);
         }
         String cpackType = circuitPacks.getCircuitPackType();
         // remember that this works for external ports of the circuit pack. The internal cases are a bit different,
@@ -736,27 +737,20 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             if (linkState.equals(State.InService)) {
                 if (this.linkHashmap.containsKey(srcTp) && this.linkHashmap.containsKey(dstTp)) {
                     // Both tp seem to be changed
-                    if (this.linkHashmap.get(srcTp).equals(org.opendaylight.yang.gen.v1.http.org.openroadm
-                            .common.types.rev161014.State.OutOfService) || this.linkHashmap.get(dstTp).equals(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State
-                                    .OutOfService)) {
+                    if (org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State.OutOfService
+                            .equals(this.linkHashmap.get(srcTp)) || org.opendaylight.yang.gen.v1.http.org.openroadm
+                            .common.types.rev161014.State.OutOfService.equals(this.linkHashmap.get(dstTp))) {
                         // Change link state to OOS
                         updateLinkToOOS(link);
                     }
-                } else if (this.linkHashmap.containsKey(srcTp)) {
+                } else if (this.linkHashmap.containsKey(srcTp) && this.linkHashmap.get(srcTp).equals(org.opendaylight
+                        .yang.gen.v1.http.org.openroadm.common.types.rev161014.State.OutOfService)) {
                     // Source tp has been updated
-                    if (this.linkHashmap.get(srcTp).equals(org.opendaylight.yang.gen.v1.http.org.openroadm.common.types
-                            .rev161014.State.OutOfService)) {
-                        updateLinkToOOS(link);
-                    }
-                } else if (this.linkHashmap.containsKey(dstTp)) {
+                    updateLinkToOOS(link);
+                } else if (this.linkHashmap.containsKey(dstTp) && this.linkHashmap.get(dstTp).equals(org.opendaylight
+                        .yang.gen.v1.http.org.openroadm.common.types.rev161014.State.OutOfService)) {
                     // Destination tp has been updated
-                    if (this.linkHashmap.get(dstTp).equals(
-                            org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.State
-                                    .OutOfService)) {
-                        updateLinkToOOS(link);
-                    }
-
+                    updateLinkToOOS(link);
                 }
             } else {
                 if (this.linkHashmap.containsKey(srcTp) && this.linkHashmap.containsKey(dstTp)) {
@@ -789,24 +783,34 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     private boolean checkOtherEndPointStatus(String nodeId, String tp, List<Node> nodeList) {
         // check status of tps from other nodes within the link
         boolean inService = false;
+        String nodeIdValue = null;
+        String tpId = null;
         for (Node node : nodeList) {
-            if (node.getNodeId().getValue().equals(nodeId)) {
-                List<TerminationPoint> tpList = node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params
-                        .xml.ns.yang.ietf.network.topology.rev180226.Node1.class).getTerminationPoint();
-                if (tpList != null) {
-                    for (TerminationPoint terminationPoint : tpList) {
-                        if (terminationPoint.getTpId().getValue().equals(tp)) {
-                            State tpState = terminationPoint.augmentation(org.opendaylight.yang.gen.v1.http
-                                    .org.openroadm.common.network.rev181130.TerminationPoint1.class)
-                                    .getOperationalState();
-                            if (tpState.equals(State.InService)) {
-                                inService = true;
+            nodeIdValue = node.getNodeId().getValue();
+            if (nodeIdValue != null) {
+                if (nodeIdValue.equals(nodeId)) {
+                    List<TerminationPoint> tpList = node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params
+                            .xml.ns.yang.ietf.network.topology.rev180226.Node1.class).getTerminationPoint();
+                    if (tpList != null) {
+                        for (TerminationPoint terminationPoint : tpList) {
+                            tpId = terminationPoint.getTpId().getValue();
+                            if (tpId != null) {
+                                if (tpId.equals(tp)) {
+                                    State tpState = terminationPoint.augmentation(org.opendaylight.yang.gen.v1.http
+                                            .org.openroadm.common.network.rev181130.TerminationPoint1.class)
+                                            .getOperationalState();
+                                    if (State.InService.equals(tpState)) {
+                                        inService = true;
+                                    }
+                                    break;
+                                }
+                                tpId = null;
                             }
-                            break;
                         }
                     }
+                    break;
                 }
-                break;
+                nodeIdValue = null;
             }
         }
         LOG.info("Going to return that the link can be changed to inService = {}", inService);
@@ -826,9 +830,10 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException e) {
-            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+            LOG.error("Couldnt commit changed to openroadm topology.", e);
+            Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+            LOG.error("Couldnt commit changed to openroadm topology.", e);
         }
     }
 
@@ -845,101 +850,117 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         try {
             networkTransactionService.commit().get();
         } catch (InterruptedException e) {
-            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+            LOG.error("Couldnt commit changed to openroadm topology.", e);
+            Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+            LOG.error("Couldnt commit changed to openroadm topology.", e);
         }
     }
 
     private void updateTopologyTPs(List<Node> nodesList, String nodeId) {
+        String nodeIdvalue = null;
+        String tpId = null;
         for (Node node : nodesList) {
-            if (node.getNodeId().getValue().contains(nodeId)) {
-                if (node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
-                        .Node1.class).getOperationalState().equals(State.InService)) {
-                    List<TerminationPoint> tpList = node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params
-                            .xml.ns.yang.ietf.network.topology.rev180226.Node1.class).getTerminationPoint();
-                    List<TerminationPoint> updatedtpList = new ArrayList<TerminationPoint>();
-                    if (tpList != null) {
-                        for (TerminationPoint tp : tpList) {
-                            String tpid = tp.getTpId().getValue();
-                            String tpState = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                                    .network.rev181130.TerminationPoint1.class).getOperationalState().getName();
-                            // If the state of the tp in the topology shard is different, that means that we have found
-                            // the port with new state
-                            if (this.tpStateHashmap.containsKey(tpid)) {
-                                if (!this.tpStateHashmap.get(tpid).getName().equals(tpState)) {
-                                    State newState = null;
-                                    AdminStates newAdminState = null;
-                                    if (this.tpStateHashmap.get(tpid).equals(org.opendaylight.yang.gen.v1.http
-                                            .org.openroadm.common.types.rev161014.State.InService)) {
-                                        newState = State.InService;
-                                        newAdminState = AdminStates.InService;
-                                        this.linkHashmap.put(tpid,
-                                                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types
-                                                        .rev161014.State.InService);
+            nodeIdvalue = node.getNodeId().getValue();
+            if (nodeIdvalue != null) {
+                if (nodeIdvalue.contains(nodeId)) {
+                    if (node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                            .Node1.class).getOperationalState().equals(State.InService)) {
+                        List<TerminationPoint> tpList = node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params
+                                .xml.ns.yang.ietf.network.topology.rev180226.Node1.class).getTerminationPoint();
+                        List<TerminationPoint> updatedtpList = new ArrayList<TerminationPoint>();
+                        if (tpList != null) {
+                            for (TerminationPoint tp : tpList) {
+                                tpId = tp.getTpId().getValue();
+                                String tpState = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
+                                        .network.rev181130.TerminationPoint1.class).getOperationalState().getName();
+                                // If the state of the tp in the topology shard is different, that means that we have
+                                // found the port with new state
+                                if (tpId != null) {
+                                    if (this.tpStateHashmap.containsKey(tpId)) {
+                                        if (!this.tpStateHashmap.get(tpId).getName().equals(tpState)) {
+                                            State newState = null;
+                                            AdminStates newAdminState = null;
+                                            if (this.tpStateHashmap.get(tpId).equals(org.opendaylight.yang.gen.v1.http
+                                                    .org.openroadm.common.types.rev161014.State.InService)) {
+                                                newState = State.InService;
+                                                newAdminState = AdminStates.InService;
+                                                this.linkHashmap.put(tpId,
+                                                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.types
+                                                                .rev161014.State.InService);
+                                            } else {
+                                                newState = State.OutOfService;
+                                                newAdminState = AdminStates.OutOfService;
+                                                this.linkHashmap.put(tpId,
+                                                        org.opendaylight.yang.gen.v1.http.org.openroadm.common.types
+                                                                .rev161014.State.OutOfService);
+                                            }
+                                            TerminationPoint auxtp = new TerminationPointBuilder().withKey(tp.key())
+                                                    .setTpId(tp.getTpId()).addAugmentation(
+                                                            org.opendaylight.yang.gen.v1.http.org.openroadm.common
+                                                                    .network.rev181130.TerminationPoint1.class,
+                                                            new org.opendaylight.yang.gen.v1.http.org.openroadm
+                                                                    .common.network.rev181130.TerminationPoint1Builder()
+                                                                    .setOperationalState(newState)
+                                                                    .setAdministrativeState(newAdminState).build())
+                                                    .build();
+                                            updatedtpList.add(auxtp);
+                                        } else {
+                                            LOG.debug("TP {} has the same state", tpId);
+                                        }
                                     } else {
-                                        newState = State.OutOfService;
-                                        newAdminState = AdminStates.OutOfService;
-                                        this.linkHashmap.put(tpid,
-                                                org.opendaylight.yang.gen.v1.http.org.openroadm.common.types
-                                                        .rev161014.State.OutOfService);
+                                        LOG.debug("TP {} doesnt exist in hashmap", tpId);
                                     }
-                                    TerminationPoint auxtp = new TerminationPointBuilder().withKey(tp.key())
-                                            .setTpId(tp.getTpId()).addAugmentation(
-                                                    org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                                                            .network.rev181130.TerminationPoint1.class,
-                                                    new org.opendaylight.yang.gen.v1.http.org.openroadm
-                                                            .common.network.rev181130.TerminationPoint1Builder()
-                                                            .setOperationalState(newState)
-                                                            .setAdministrativeState(newAdminState).build()).build();
-                                    updatedtpList.add(auxtp);
-                                } else {
-                                    LOG.debug("TP {} has the same state", tpid);
+                                    tpId = null;
                                 }
-                            } else {
-                                LOG.debug("TP {} doesnt exist in hashmap", tpid);
                             }
                         }
-                    }
-                    if (updatedtpList != null) {
-                        // Node update
-                        Node aux = new NodeBuilder()
-                                .setNodeId(node.getNodeId())
-                                .addAugmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns
-                                                .yang.ietf.network.topology.rev180226.Node1.class,
-                                        new org.opendaylight.yang.gen.v1.urn.ietf.params.xml
-                                                .ns.yang.ietf.network.topology.rev180226.Node1Builder()
-                                                .setTerminationPoint(updatedtpList).build()).build();
-                        //merge to datastore
-                        InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier.builder(
-                                Networks.class).child(Network.class, new NetworkKey(
-                                new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(Node.class, node.key()).build();
-                        networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
-                                aux);
-                        try {
-                            networkTransactionService.commit().get();
-                        } catch (InterruptedException e) {
-                            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
-                        } catch (ExecutionException e) {
-                            LOG.error("Couldnt commit changed to openroadm topology. Error = {}", e.toString());
+                        if (updatedtpList != null) {
+                            // Node update
+                            Node aux = new NodeBuilder()
+                                    .setNodeId(node.getNodeId())
+                                    .addAugmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns
+                                                    .yang.ietf.network.topology.rev180226.Node1.class,
+                                            new org.opendaylight.yang.gen.v1.urn.ietf.params.xml
+                                                    .ns.yang.ietf.network.topology.rev180226.Node1Builder()
+                                                    .setTerminationPoint(updatedtpList).build()).build();
+                            //merge to datastore
+                            InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier.builder(
+                                    Networks.class).child(Network.class, new NetworkKey(
+                                    new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(Node.class, node.key())
+                                    .build();
+                            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
+                                    aux);
+                            try {
+                                networkTransactionService.commit().get();
+                            } catch (InterruptedException e) {
+                                LOG.error("Couldnt commit changed to openroadm topology.", e);
+                                Thread.currentThread().interrupt();
+                            } catch (ExecutionException e) {
+                                LOG.error("Couldnt commit changed to openroadm topology.", e);
+                            }
                         }
+                    } else {
+                        LOG.warn("Node {} is OutOfService", node.getNodeId().getValue());
                     }
-                } else {
-                    LOG.warn("Node {} is OutOfService", node.getNodeId().getValue());
                 }
+                nodeIdvalue = null;
             }
         }
     }
 
     private void setTpStateHashmap(CircuitPacks circuitPacks) {
-        for (Ports ports : circuitPacks.getPorts()) {
-            String lcp = ports.getLogicalConnectionPoint();
-            if (lcp != null) {
-                if (!this.tpStateHashmap.containsKey(lcp)) {
-                    this.tpStateHashmap.put(lcp, ports.getOperationalState());
+        List<Ports> portsList = circuitPacks.getPorts();
+        if (portsList != null) {
+            for (Ports ports : portsList) {
+                String lcp = ports.getLogicalConnectionPoint();
+                if (lcp != null) {
+                    if (!this.tpStateHashmap.containsKey(lcp)) {
+                        this.tpStateHashmap.put(lcp, ports.getOperationalState());
+                    }
+                } else {
+                    LOG.warn("Port {} without mapping point", ports.getPortName());
                 }
-            } else {
-                LOG.warn("Port {} without mapping point", ports.getPortName());
             }
         }
     }

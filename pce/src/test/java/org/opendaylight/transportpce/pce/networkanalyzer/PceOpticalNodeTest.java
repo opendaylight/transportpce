@@ -20,7 +20,9 @@ import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.SrgAttributes;
@@ -55,8 +57,13 @@ public class PceOpticalNodeTest extends AbstractTest {
 
     @Before
     public void setUp() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.SRGTXRXPP);
-        node = node1Builder.build();
+        node = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                .Node1.class, node1Builder1.build()).build();
     }
 
     @Test
@@ -86,8 +93,13 @@ public class PceOpticalNodeTest extends AbstractTest {
 
     @Test
     public void testInitXndrTpSrgTypes() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK);
-        Node specificNode = node1Builder.build();
+        Node specificNode = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+                .rev181130.Node1.class, node1Builder1.build()).build();
         pceOpticalNode = new PceOpticalNode(specificNode,
                 OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
         pceOpticalNode.initWLlist();
@@ -140,8 +152,13 @@ public class PceOpticalNodeTest extends AbstractTest {
 
     @Test
     public void testGetRdmSrgClientEmpty() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilderEmpty(geSupportingNodes(), OpenroadmTpType.SRGTXRXPP);
-        Node specificNode = node1Builder.build();
+        Node specificNode = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+                .rev181130.Node1.class, node1Builder1.build()).build();
         pceOpticalNode = new PceOpticalNode(specificNode,
                 OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
         pceOpticalNode.initSrgTps();
@@ -166,8 +183,13 @@ public class PceOpticalNodeTest extends AbstractTest {
 
     @Test
     public void testGetRdmSrgClientsrgtxcp() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.SRGTXCP);
-        Node specificNode = node1Builder.build();
+        Node specificNode = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
+                .rev181130.Node1.class, node1Builder1.build()).build();
         pceOpticalNode = new PceOpticalNode(specificNode,
                 OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
         pceOpticalNode.initSrgTps();
@@ -179,8 +201,13 @@ public class PceOpticalNodeTest extends AbstractTest {
 
     @Test
     public void testGetRdmSrgClientDegreerxtpp() {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
-        node = node1Builder.build();
+        node = node1Builder.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                .Node1.class, node1Builder1.build()).build();
         pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
         pceOpticalNode.initSrgTps();
@@ -208,7 +235,8 @@ public class PceOpticalNodeTest extends AbstractTest {
 
     private NodeBuilder getNodeBuilder(List<SupportingNode> supportingNodes1, OpenroadmTpType openroadmTpType) {
 
-        TerminationPoint1Builder tp1Bldr = getTerminationPoint1Builder(openroadmTpType);
+        TerminationPoint1Builder tp1Bldr = getTerminationPoint1Builder(openroadmTpType)
+                .setAdministrativeState(AdminStates.InService).setOperationalState(State.InService);
         TerminationPointBuilder xpdrTpBldr = getTerminationPointBuilder();
         xpdrTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
         xpdrTpBldr.addAugmentation(
@@ -234,7 +262,8 @@ public class PceOpticalNodeTest extends AbstractTest {
 
     private NodeBuilder getNodeBuilderEmpty(List<SupportingNode> supportingNodes1, OpenroadmTpType openroadmTpType) {
 
-        TerminationPoint1Builder tp1Bldr = getTerminationPoint1Builder(openroadmTpType);
+        TerminationPoint1Builder tp1Bldr = getTerminationPoint1Builder(openroadmTpType)
+                .setAdministrativeState(AdminStates.InService).setOperationalState(State.InService);
         TerminationPointBuilder xpdrTpBldr = getTerminationPointBuilder();
         xpdrTpBldr.addAugmentation(TerminationPoint1.class, tp1Bldr.build());
         xpdrTpBldr.addAugmentation(
@@ -304,7 +333,6 @@ public class PceOpticalNodeTest extends AbstractTest {
     }
 
     private TerminationPoint1Builder getTerminationPoint1Builder(OpenroadmTpType openroadmTpType) {
-
         return new TerminationPoint1Builder().setTpType(openroadmTpType);
 
     }

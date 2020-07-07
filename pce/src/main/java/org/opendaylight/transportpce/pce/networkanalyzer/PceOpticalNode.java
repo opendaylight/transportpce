@@ -57,12 +57,14 @@ public class PceOpticalNode implements PceNode {
         this.nodeType = nodeType;
         this.serviceFormat = serviceFormat;
         this.pceNodeType = pceNodeType;
-        this.nodeAdminstate = node.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
-                .getAdministrativeState();
-        this.nodeOperstate = node.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
-                .getOperationalState();
+        if (node != null) {
+            this.nodeAdminstate = node.augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+                    .getAdministrativeState();
+            this.nodeOperstate = node.augmentation(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+                    .getOperationalState();
+        }
 
         if ((node == null) || (nodeId == null) || (nodeType == null)) {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type");
@@ -100,7 +102,7 @@ public class PceOpticalNode implements PceNode {
                 case SRGTXRXCP:
                 case SRGRXCP:
                 case SRGTXCP:
-                    if (cntp1.getOperationalState().equals(State.InService)) {
+                    if (State.InService.equals(cntp1.getOperationalState())) {
                         LOG.info("initSrgTpList: adding SRG-CP tp = {} ", tp.getTpId().getValue());
                         this.availableSrgCp.put(tp.getTpId().getValue(), cntp1.getTpType());
                     }
@@ -120,7 +122,7 @@ public class PceOpticalNode implements PceNode {
                         used = false;
                     }
                     if (!used) {
-                        if (cntp1.getOperationalState().equals(State.InService)) {
+                        if (State.InService.equals(cntp1.getOperationalState())) {
                             LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
                             this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
                         } else {
@@ -153,7 +155,7 @@ public class PceOpticalNode implements PceNode {
                 org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class);
         switch (this.nodeType) {
             case SRG :
-                if (node11.getOperationalState().equals(State.InService)) {
+                if (State.InService.equals(node11.getOperationalState())) {
                     List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
                             .AvailableWavelengths> srgAvailableWL =
                             node1.getSrgAttributes().getAvailableWavelengths();
@@ -174,7 +176,7 @@ public class PceOpticalNode implements PceNode {
                 }
                 break;
             case DEGREE :
-                if (node11.getOperationalState().equals(State.InService)) {
+                if (State.InService.equals(node11.getOperationalState())) {
                     List<org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes
                             .AvailableWavelengths> degAvailableWL = node1.getDegreeAttributes()
                             .getAvailableWavelengths();
@@ -195,7 +197,7 @@ public class PceOpticalNode implements PceNode {
                 }
                 break;
             case XPONDER :
-                if (node11.getOperationalState().equals(State.InService)) {
+                if (State.InService.equals(node11.getOperationalState())) {
                     // HARD CODED 96
                     for (long i = 1; i <= 96; i++) {
                         this.availableWLindex.add(i);
@@ -240,7 +242,7 @@ public class PceOpticalNode implements PceNode {
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
                 .TerminationPoint1.class);
             if (cntp1.getTpType() == OpenroadmTpType.XPONDERNETWORK) {
-                if (cntp1.getOperationalState().equals(State.InService)) {
+                if (State.InService.equals(cntp1.getOperationalState())) {
                     if (nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
                         this.usedXpndrNWTps.add(tp.getTpId().getValue());
                         LOG.info("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());

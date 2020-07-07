@@ -236,7 +236,8 @@ public final class TransactionUtils {
     }
 
     private static Augmentation<Node> getNode1AugImpl() {
-        return  new Node1Builder().setNodeType(OpenroadmNodeType.DEGREE).build();
+        return  new Node1Builder().setNodeType(OpenroadmNodeType.DEGREE).setOperationalState(State.InService)
+                .setAdministrativeState(AdminStates.InService).build();
     }
 
     public static Mapping getMapping1() {

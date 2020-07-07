@@ -145,59 +145,54 @@ final class Rdm2XpdrLink {
         } else {
             nodeBldr.setNodeId(new NodeId(srcNode));
         }
-        // checking the state of both end TPs of the Xpdr-Rdm link, to assign the corresponding state
+
+        LinkBuilder linkBuilder = createStatefulLinkBuilder(xpdrTp, rdmTp, isXponderInput, srcNode, srcTp, destNode,
+                destTp);
+        LOG.info("Link id in the linkbldr {}", linkBuilder.getLinkId());
+        LOG.info("Link with oppo link {}", linkBuilder.augmentation(Link1.class));
+        Network1Builder nwBldr1 = new Network1Builder().setLink(ImmutableList.of(linkBuilder.build()));
+        NetworkId nwId = new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID);
+        NetworkBuilder nwBuilder = new NetworkBuilder()
+                .setNetworkId(nwId)
+                .withKey(new NetworkKey(nwId))
+                .addAugmentation(Network1.class, nwBldr1.build())
+                .setNode(ImmutableList.of(nodeBldr.build()));
+        return nwBuilder;
+    }
+
+    // checking the state of both end TPs of the Xpdr-Rdm link, to assign the corresponding state
+    private static LinkBuilder createStatefulLinkBuilder(TerminationPoint xpdrTp, TerminationPoint rdmTp,
+                                                         boolean isXponderInput, String srcNode, String srcTp,
+                                                         String destNode, String destTp) {
+        Link1Builder lnk1bldr = new Link1Builder();
+        LinkBuilder linkBuilder;
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder lnk2bldr
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder();
         if (xpdrTp.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class)
                 .getOperationalState().equals(State.InService) && rdmTp.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class)
                 .getOperationalState().equals(State.InService)) {
-            Link1Builder lnk1bldr = new Link1Builder();
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder lnk2bldr
-                    = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
-                    .setAdministrativeState(AdminStates.InService)
-                    .setOperationalState(State.InService)
+            lnk2bldr.setAdministrativeState(AdminStates.InService).setOperationalState(State.InService)
                     .setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT)
                     .setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
-            LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null)
+            linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null)
                     .addAugmentation(Link1.class, lnk1bldr.build())
                     .addAugmentation(
                             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
                             lnk2bldr.build());
+            return linkBuilder;
 
-            LOG.info("Link id in the linkbldr {}", linkBuilder.getLinkId());
-            LOG.info("Link with oppo link {}", linkBuilder.augmentation(Link1.class));
-            Network1Builder nwBldr1 = new Network1Builder().setLink(ImmutableList.of(linkBuilder.build()));
-            NetworkId nwId = new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID);
-            NetworkBuilder nwBuilder = new NetworkBuilder()
-                    .setNetworkId(nwId)
-                    .withKey(new NetworkKey(nwId))
-                    .addAugmentation(Network1.class, nwBldr1.build())
-                    .setNode(ImmutableList.of(nodeBldr.build()));
-            return nwBuilder;
         } else {
-            Link1Builder lnk1bldr = new Link1Builder();
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder lnk2bldr
-                    = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
-                    .setAdministrativeState(AdminStates.OutOfService)
-                    .setOperationalState(State.OutOfService)
+            lnk2bldr.setAdministrativeState(AdminStates.OutOfService).setOperationalState(State.OutOfService)
                     .setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT)
                     .setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
-            LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null)
+            linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null)
                     .addAugmentation(Link1.class, lnk1bldr.build())
                     .addAugmentation(
                             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
                             lnk2bldr.build());
-
-            LOG.info("Link id in the linkbldr {}", linkBuilder.getLinkId());
-            LOG.info("Link with oppo link {}", linkBuilder.augmentation(Link1.class));
-            Network1Builder nwBldr1 = new Network1Builder().setLink(ImmutableList.of(linkBuilder.build()));
-            NetworkId nwId = new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID);
-            NetworkBuilder nwBuilder = new NetworkBuilder()
-                    .setNetworkId(nwId)
-                    .withKey(new NetworkKey(nwId))
-                    .addAugmentation(Network1.class, nwBldr1.build())
-                    .setNode(ImmutableList.of(nodeBldr.build()));
-            return nwBuilder;
+            return linkBuilder;
         }
     }
 
