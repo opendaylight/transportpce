@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc2b52e9_268df2aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-07T11:34:08Z",
+      "side": 1,
+      "message": "I am not sure this is an open standard.\nIt looks more like a production standard.\n\nI don\u0027t see the benefit here.\nhttps://docs.docker.com/engine/reference/run/#clean-up---rm\nFrom what I understand, this option removes some persistent files but also prevents from debugging the container state afterwards...",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 9,
+        "endChar": 59
+      },
+      "revId": "1697a69fb2807e2ae197e2132801cc2e09eebf4c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
