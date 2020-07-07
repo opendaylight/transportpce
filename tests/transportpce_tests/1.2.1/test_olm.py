@@ -205,20 +205,18 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(5)
 
     def test_15_get_OTS_DEG1_TTP_TXRX_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMA01/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/OTS-DEG1-TTP-TXRX/"
-               "org-openroadm-optical-transport-interfaces:ots")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request(
+            "ROADMA01",
+            "interface/OTS-DEG1-TTP-TXRX/org-openroadm-optical-transport-interfaces:ots")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(5.7, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
         self.assertEqual(15.1, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
 
     def test_16_get_OTS_DEG2_TTP_TXRX_ROADMC(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADMC01/yang-ext:mount/org-openroadm-device:org-openroadm-device/interface/OTS-DEG2-TTP-TXRX/"
-               "org-openroadm-optical-transport-interfaces:ots")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request(
+            "ROADMC01",
+            "interface/OTS-DEG2-TTP-TXRX/org-openroadm-optical-transport-interfaces:ots")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(15.1, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-transmit'])
@@ -338,30 +336,23 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_20_get_interface_XPDRA_XPDR1_NETWORK1(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA01/yang-ext:mount/"
-               "org-openroadm-device:org-openroadm-device/interface/XPDR1-NETWORK1-1/"
-               "org-openroadm-optical-channel-interfaces:och")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request(
+            "XPDRA01",
+            "interface/XPDR1-NETWORK1-1/org-openroadm-optical-channel-interfaces:och")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(0, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])
         self.assertEqual(1, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
 
     def test_21_get_roadmconnection_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA01/yang-ext:mount/"
-               "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
         self.assertEqual(-3.3, res['roadm-connections'][0]['target-output-power'])
 
     def test_22_get_roadmconnection_ROADMC(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC01/yang-ext:mount/"
-               "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "DEG2-TTP-TXRX-SRG1-PP1-TXRX-1")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP1-TXRX-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("power", res['roadm-connections'][0]['opticalControlMode'])
@@ -402,20 +393,16 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_24_get_interface_XPDRC_XPDR1_NETWORK1(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRC01/yang-ext:mount/"
-               "org-openroadm-device:org-openroadm-device/interface/XPDR1-NETWORK1-1/"
-               "org-openroadm-optical-channel-interfaces:och")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request(
+            "XPDRC01",
+            "interface/XPDR1-NETWORK1-1/org-openroadm-optical-channel-interfaces:och")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(0, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])
         self.assertEqual(1, res['org-openroadm-optical-channel-interfaces:och']['wavelength-number'])
 
     def test_25_get_roadmconnection_ROADMC(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC01/yang-ext:mount/"
-               "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("gainLoss", res['roadm-connections'][0]['opticalControlMode'])
@@ -457,20 +444,14 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Success', res["output"]["result"])
 
     def test_27_get_roadmconnection_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMA01/yang-ext:mount/"
-               "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
         self.assertEqual(-60, res['roadm-connections'][0]['target-output-power'])
 
     def test_28_get_roadmconnection_ROADMC(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/ROADMC01/yang-ext:mount/"
-               "org-openroadm-device:org-openroadm-device/roadm-connections/"
-               "DEG2-TTP-TXRX-SRG1-PP1-TXRX-1")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADMC01", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP1-TXRX-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual("off", res['roadm-connections'][0]['opticalControlMode'])
@@ -597,10 +578,9 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_34_get_interface_XPDRA_XPDR1_NETWORK2(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/node/XPDRA01/yang-ext:mount/"
-               "org-openroadm-device:org-openroadm-device/interface/XPDR1-NETWORK2-2/"
-               "org-openroadm-optical-channel-interfaces:och")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request(
+            "XPDRA01",
+            "interface/XPDR1-NETWORK2-2/org-openroadm-optical-channel-interfaces:och")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(-5, res['org-openroadm-optical-channel-interfaces:och']['transmit-power'])

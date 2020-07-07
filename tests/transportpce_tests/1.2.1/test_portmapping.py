@@ -35,9 +35,9 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
 #    def test_01_restconfAPI(self):
-#        url = ("{}/operational/network-topology:network-topology/topology/"
-#        "topology-netconf/node/controller-config")
-#        response = requests.request("GET", url, headers=test_utils.TYPE_APPLICATION_JSON, auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
+#        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/controller-config"
+#        response = requests.request("GET", url, headers=test_utils.TYPE_APPLICATION_JSON,
+#                    auth=(test_utils.ODL_LOGIN, test_utils.ODL_PWD))
 #        self.assertEqual(response.status_code, requests.codes.ok)
 #        res = response.json()
 #        self.assertEqual(res['node'] [0] ['netconf-node-topology:connection-status'],
@@ -59,9 +59,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_rdm_device_connected(self):
-        url = ("{}/operational/network-topology:"
-               "network-topology/topology/topology-netconf/node/ROADMA01"
-               )
+        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/ROADMA01"
         response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -127,9 +125,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_08_xpdr_device_connected(self):
-        url = ("{}/operational/network-topology:"
-               "network-topology/topology/topology-netconf/node/XPDRA01"
-               )
+        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/XPDRA01"
         response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -246,8 +242,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
     def test_17_xpdr_device_disconnected(self):
-        url = ("{}/operational/network-topology:network-topology/topology/"
-               "topology-netconf/node/XPDRA01")
+        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/XPDRA01"
         response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
@@ -271,8 +266,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
     def test_20_rdm_device_disconnected(self):
-        url = ("{}/operational/network-topology:network-topology/topology/topology-netconf/node/ROADMA01"
-               )
+        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/ROADMA01"
         response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()

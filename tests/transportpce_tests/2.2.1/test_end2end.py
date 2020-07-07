@@ -233,10 +233,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_13_check_xc1_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -257,10 +254,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(5)
 
     def test_14_check_xc1_ROADMC(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-C1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-C1", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -479,10 +473,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_24_check_xc2_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "roadm-connections/DEG2-TTP-TXRX-SRG1-PP2-TXRX-2")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "roadm-connections/DEG2-TTP-TXRX-SRG1-PP2-TXRX-2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -740,9 +731,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(20)
 
     def test_32_check_no_xc_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "")
         res = response.json()
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertNotIn('roadm-connections', dict.keys(res['org-openroadm-device']))
@@ -913,10 +902,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_38_check_xc1_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "roadm-connections/SRG1-PP1-TXRX-DEG2-TTP-TXRX-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -937,10 +923,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(7)
 
     def test_39_check_xc1_ROADMC(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-C1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-C1", "roadm-connections/SRG1-PP1-TXRX-DEG1-TTP-TXRX-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -1074,10 +1057,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_42_check_xc2_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "roadm-connections/SRG1-PP2-TXRX-DEG2-TTP-TXRX-2")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "roadm-connections/SRG1-PP2-TXRX-DEG2-TTP-TXRX-2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -1159,9 +1139,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(1)
 
     def test_47_get_no_xc_ROADMA(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf"
-               "/node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/")
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn(['roadm-connections'][0], res['org-openroadm-device'])

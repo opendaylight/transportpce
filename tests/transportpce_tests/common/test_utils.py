@@ -34,6 +34,7 @@ ODL_LOGIN = "admin"
 ODL_PWD = "admin"
 NODES_LOGIN = "admin"
 NODES_PWD = "admin"
+URL_CONFIG_NETCONF_TOPO = "{}/config/network-topology:network-topology/topology/topology-netconf/"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -184,7 +185,7 @@ def delete_request(url):
 
 
 def mount_device(node_id, sim):
-    url = "{}/config/network-topology:network-topology/topology/topology-netconf/node/"+node_id
+    url = URL_CONFIG_NETCONF_TOPO+"node/"+node_id
     body = {"node": [{
         "node-id": node_id,
         "netconf-node-topology:username": NODES_LOGIN,
@@ -205,7 +206,7 @@ def mount_device(node_id, sim):
 
 
 def unmount_device(node_id):
-    url = "{}/config/network-topology:network-topology/topology/topology-netconf/node/"+node_id
+    url = URL_CONFIG_NETCONF_TOPO+"node/"+node_id
     response = delete_request(url)
     if wait_until_log_contains(TPCE_LOG, re.escape("onDeviceDisConnected: "+node_id), 60):
         print("Node "+node_id+" correctly deleted from tpce topology", end='... ', flush=True)
@@ -248,6 +249,13 @@ def connect_rdm_to_xpdr_request(xpdr_node: str, xpdr_num: str, network_num: str,
         }
     }
     return post_request(url, data)
+
+
+def check_netconf_node_request(node: str, suffix: str):
+    url = URL_CONFIG_NETCONF_TOPO + (
+        "node/" + node + "/yang-ext:mount/org-openroadm-device:org-openroadm-device/" + suffix
+    )
+    return get_request(url)
 
 
 def shutdown_process(process):

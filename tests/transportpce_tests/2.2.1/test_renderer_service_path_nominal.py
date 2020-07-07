@@ -94,11 +94,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertIn('Roadm-connection successfully created for nodes: ROADM-A1', res["output"]["result"])
 
     def test_06_service_path_create_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/DEG1-TTP-TXRX-nmc-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-nmc-7")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -117,11 +113,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-network-media-channel-interfaces:nmc-ctp'])
 
     def test_07_service_path_create_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/DEG1-TTP-TXRX-mc-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-mc-7")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -140,11 +132,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-media-channel-interfaces:mc-ttp'])
 
     def test_08_service_path_create_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/SRG1-PP3-TXRX-nmc-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-nmc-7")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -164,11 +152,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     # -mc supporting interfaces must not be created for SRG, only degrees
     def test_09_service_path_create_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/SRG1-PP3-TXRX-mc-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-mc-7")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -177,11 +161,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_10_service_path_create_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "roadm-connections/SRG1-PP3-TXRX-DEG1-TTP-TXRX-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "roadm-connections/SRG1-PP3-TXRX-DEG1-TTP-TXRX-7")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -200,11 +180,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['roadm-connections'][0]['destination'])
 
     def test_11_service_path_create_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-7")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -225,11 +201,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_12_service_path_create_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-OTU"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-OTU")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -252,11 +224,7 @@ class TransportPCERendererTesting(unittest.TestCase):
                              res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_13_service_path_create_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-ODU"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-ODU")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the 2 following statements replace self.assertDictContainsSubset deprecated in python 3.2
@@ -282,11 +250,7 @@ class TransportPCERendererTesting(unittest.TestCase):
                              res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_14_service_path_create_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-CLIENT1-ETHERNET"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-CLIENT1-ETHERNET")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
@@ -305,21 +269,13 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
 
     def test_15_service_path_create_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "circuit-packs/1%2F0%2F1-PLUG-NET"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "circuit-packs/1%2F0%2F1-PLUG-NET")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('not-reserved-inuse', res['circuit-packs'][0]["equipment-state"])
 
     def test_16_service_path_create_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "circuit-packs/1%2F0%2F1-PLUG-CLIENT"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "circuit-packs/1%2F0%2F1-PLUG-CLIENT")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('not-reserved-inuse', res['circuit-packs'][0]["equipment-state"])
@@ -343,11 +299,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             'output': {'result': 'Request processed', 'success': True}})
 
     def test_18_service_path_delete_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/DEG1-TTP-TXRX-mc-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-mc-7")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -356,11 +308,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_19_service_path_delete_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/DEG1-TTP-TXRX-nmc-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-nmc-7")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -369,11 +317,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_20_service_path_delete_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/SRG1-PP3-TXRX-mc-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-mc-7")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -383,11 +327,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_21_service_path_delete_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/SRG1-PP3-TXRX-nmc-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-nmc-7")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -397,11 +337,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_22_service_path_delete_rdm_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/ROADM-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "roadm-connections/SRG1-PP3-TXRX-DEG1-TTP-TXRX-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-DEG1-TTP-TXRX-7")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -411,11 +347,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_23_service_path_delete_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-7"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-7")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -425,11 +357,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_24_service_path_delete_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-OTU"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-OTU")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -439,11 +367,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_25_service_path_delete_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-ODU"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-ODU")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -453,11 +377,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_26_service_path_delete_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-CLIENT1-ETHERNET"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-CLIENT1-ETHERNET")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn({
@@ -467,21 +387,13 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_27_service_path_delete_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "circuit-packs/1%2F0%2F1-PLUG-NET"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "circuit-packs/1%2F0%2F1-PLUG-NET")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual('not-reserved-available', res["circuit-packs"][0]['equipment-state'])
 
     def test_28_service_path_delete_xpdr_check(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/XPDR-A1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "circuit-packs/1%2F0%2F1-PLUG-CLIENT"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("XPDR-A1", "circuit-packs/1%2F0%2F1-PLUG-CLIENT")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual('not-reserved-available', res["circuit-packs"][0]['equipment-state'])
