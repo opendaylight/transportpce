@@ -34,6 +34,7 @@ ODL_LOGIN = "admin"
 ODL_PWD = "admin"
 NODES_LOGIN = "admin"
 NODES_PWD = "admin"
+URL_CONFIG_NETCONF_TOPO = "{}/config/network-topology:network-topology/topology/topology-netconf/"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -249,6 +250,11 @@ def connect_rdm_to_xpdr_request(xpdr_node: str, xpdr_num: str, network_num: str,
     }
     return post_request(url, data)
 
+def check_netconf_node_request(node: str, suffix: str):
+    url = URL_CONFIG_NETCONF_TOPO + (
+        "node/" + node + "/yang-ext:mount/org-openroadm-device:org-openroadm-device/" + suffix
+        )
+    return get_request(url)
 
 def shutdown_process(process):
     if process is not None:
