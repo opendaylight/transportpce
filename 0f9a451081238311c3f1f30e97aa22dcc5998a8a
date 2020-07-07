@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e794f00_9bdee57e",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-07T07:56:42Z",
+      "side": 1,
+      "message": "\"else if\" might be more indicated here but I guess this will be rationalized in a second step",
+      "range": {
+        "startLine": 301,
+        "startChar": 24,
+        "endLine": 302,
+        "endChar": 26
+      },
+      "revId": "0f9a451081238311c3f1f30e97aa22dcc5998a8a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
