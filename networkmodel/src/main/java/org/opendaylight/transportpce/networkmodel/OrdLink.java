@@ -104,10 +104,12 @@ final class OrdLink {
             LOG.info("A new link with linkId: {} added into {} layer.",
                     linkId.getValue(), NetworkUtils.OVERLAY_NETWORK_ID);
             return true;
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (ExecutionException e) {
             LOG.warn("Failed to create Roadm 2 Roadm Link for topo layer ");
-            return false;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
+        return false;
     }
 
     /**Method to create OMS links if not discovered by LLDP. This is helpful
@@ -171,9 +173,11 @@ final class OrdLink {
             if (terminationPoint.isPresent()) {
                 return terminationPoint.get();
             }
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (ExecutionException e) {
             LOG.error("Impossible to get tp-id {} of node {} from {}", srcTp, srcNode,
                     NetworkUtils.OVERLAY_NETWORK_ID, e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
         return null;
     }

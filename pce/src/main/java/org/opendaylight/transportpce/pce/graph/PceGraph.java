@@ -176,11 +176,13 @@ public class PceGraph {
         Iterator<Map.Entry<NodeId, PceNode>> nodes = allPceNodes.entrySet().iterator();
         while (nodes.hasNext()) {
             Map.Entry<NodeId, PceNode> node = nodes.next();
-            if (node.getValue().getNodeOperstate().equals(State.InService)) {
-                weightedGraph.addVertex(node.getValue().getNodeId().getValue());
-                LOG.info("In populateWithNodes in node : {}", node.getValue());
-            } else {
-                LOG.error("In populateWithNodes node {} is OOS/degraded", node.getValue());
+            if (node.getValue() != null) {
+                if (State.InService.equals(node.getValue().getNodeOperstate())) {
+                    weightedGraph.addVertex(node.getValue().getNodeId().getValue());
+                    LOG.info("In populateWithNodes in node : {}", node.getValue());
+                } else {
+                    LOG.error("In populateWithNodes node {} is OOS/degraded", node.getValue());
+                }
             }
         }
     }
@@ -204,7 +206,7 @@ public class PceGraph {
                     continue;
                 }
 
-                if (link.getLinkoperState().equals(State.InService)) {
+                if (State.InService.equals(link.getLinkoperState())) {
                     LOG.info("In populateWithLinks node {} : add edge to graph {}", pcenode, link);
                     PceGraphEdge graphLink = new PceGraphEdge(link);
                     weightedGraph.addEdge(link.getSourceId().getValue(), link.getDestId().getValue(), graphLink);

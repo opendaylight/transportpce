@@ -20,7 +20,9 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.SrgAttributes;
@@ -67,7 +69,12 @@ public class PceOtnNodeTest extends AbstractTest {
 
     @Before
     public void setUp() {
-        node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK).build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
+        node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK).addAugmentation(org.opendaylight
+                .yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class, node1Builder1.build()).build();
     }
 
     @Test
@@ -94,7 +101,12 @@ public class PceOtnNodeTest extends AbstractTest {
 
     @Test
     public void testInitXndrTps10GXponderClient1() {
-        node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
+        node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).addAugmentation(org.opendaylight.yang
+                .gen.v1.http.org.openroadm.common.network.rev181130.Node1.class, node1Builder1.build()).build();
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.ROADM,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), "10GE");
         pceOtnNode.initXndrTps("mode");
@@ -108,7 +120,13 @@ public class PceOtnNodeTest extends AbstractTest {
 
     @Test
     public void testInitXndrTps1GXponderClient() {
-        node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
+        node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).addAugmentation(org.opendaylight.yang
+                .gen.v1.http.org.openroadm.common.network.rev181130
+                .Node1.class, node1Builder1.build()).build();
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), "1GE");
         pceOtnNode.initXndrTps("mode");
@@ -185,7 +203,12 @@ public class PceOtnNodeTest extends AbstractTest {
 
     @Test
     public void testIsPceOtnNodeValidChecksw() {
-        node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node1Builder1
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        node1Builder1.setAdministrativeState(AdminStates.InService);
+        node1Builder1.setOperationalState(State.InService);
+        node = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERCLIENT).addAugmentation(org.opendaylight.yang
+                .gen.v1.http.org.openroadm.common.network.rev181130.Node1.class, node1Builder1.build()).build();
         pceOtnNode = new PceOtnNode(node, OpenroadmNodeType.MUXPDR,
                 new NodeId("optical"), ServiceFormat.OMS.getName(), "1GE");
         pceOtnNode.initXndrTps("mode");

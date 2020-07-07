@@ -32,6 +32,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.n
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributes;
@@ -428,7 +429,6 @@ public final class OpenRoadmTopology {
             for (int j = i + 1; j < nodes.size(); j++) {
                 srcNode = nodes.get(i).getNodeId().getValue();
                 destNode = nodes.get(j).getNodeId().getValue();
-                // A to Z direction
                 srcTp = nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf
                         .network.topology.rev180226.Node1.class).getTerminationPoint().stream()
                         .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
@@ -437,123 +437,48 @@ public final class OpenRoadmTopology {
                         .network.topology.rev180226.Node1.class).getTerminationPoint().stream()
                         .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
                         .findFirst().get().getTpId().getValue();
-                // State of the link is based on the state of the TPs
-                if (nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
-                        .topology.rev180226.Node1.class).getTerminationPoint().stream()
-                        .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
-                        .findFirst().get().augmentation(TerminationPoint1.class).getOperationalState()
-                        .equals(State.InService)
-                        && nodes.get(j).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf
-                        .network.topology.rev180226.Node1.class).getTerminationPoint().stream()
-                        .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
-                        .findFirst().get().augmentation(TerminationPoint1.class).getOperationalState()
-                        .equals(State.InService)) {
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                            .Link1Builder ocnAzLinkBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.network
-                            .topology.rev181130.Link1Builder();
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder ocnAzlnk2bldr
-                            = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
-                            .Link1Builder();
-                    ocnAzlnk2bldr.setAdministrativeState(AdminStates.InService);
-                    ocnAzlnk2bldr.setOperationalState(State.InService);
-                    int srcNodeType = nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                            .network.rev181130.Node1.class)
-                            .getNodeType().getIntValue();
-                    int destNodeType = nodes.get(j).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                            .network.rev181130.Node1.class)
-                            .getNodeType().getIntValue();
-                    if (srcNodeType == 11 && destNodeType == 11) {
-                        ocnAzLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
-                    } else if (srcNodeType == 11 && destNodeType == 12) {
-                        ocnAzLinkBldr.setLinkType(OpenroadmLinkType.DROPLINK);
-                    } else if (srcNodeType == 12 && destNodeType == 11) {
-                        ocnAzLinkBldr.setLinkType(OpenroadmLinkType.ADDLINK);
+                int srcNodeType = nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
+                        .network.rev181130.Node1.class)
+                        .getNodeType().getIntValue();
+                int destNodeType = nodes.get(j).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
+                        .network.rev181130.Node1.class)
+                        .getNodeType().getIntValue();
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                        .Link1Builder ocnZalnk2bldr = null;
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                        .Link1Builder ocnAzlnk2bldr = null;
+                // First check that both nodes are not SRGs
+                if (!(srcNodeType == OpenroadmNodeType.SRG.getIntValue()
+                        && destNodeType == OpenroadmNodeType.SRG.getIntValue())) {
+                    // State of the link is based on the state of the TPs
+                    if (nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
+                            .topology.rev180226.Node1.class).getTerminationPoint().stream()
+                            .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue()
+                                    .contains("CTP"))
+                            .findFirst().get().augmentation(TerminationPoint1.class).getOperationalState()
+                            .equals(State.InService)
+                            && nodes.get(j).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf
+                            .network.topology.rev180226.Node1.class).getTerminationPoint().stream()
+                            .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue()
+                                    .contains("CTP"))
+                            .findFirst().get().augmentation(TerminationPoint1.class).getOperationalState()
+                            .equals(State.InService)) {
+                        ocnZalnk2bldr = createStatefulLinkZtoA(AdminStates.InService, State.InService);
+                        ocnAzlnk2bldr = createStatefulLinkAtoZ(AdminStates.InService, State.InService);
                     } else {
-                        continue;
+                        ocnZalnk2bldr = createStatefulLinkZtoA(AdminStates.OutOfService, State.OutOfService);
+                        ocnAzlnk2bldr = createStatefulLinkAtoZ(AdminStates.OutOfService, State.OutOfService);
                     }
-                    // Z to A direction
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                            .Link1Builder ocnZaLinkBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.network
-                            .topology.rev181130.Link1Builder();
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder ocnZalnk2bldr
-                            = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
-                            .Link1Builder();
-                    ocnZalnk2bldr.setAdministrativeState(AdminStates.InService);
-                    ocnZalnk2bldr.setOperationalState(State.InService);
-                    if (srcNodeType == 11 && destNodeType == 11) {
-                        ocnZaLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
-                    } else if (destNodeType == 11 && srcNodeType == 12) {
-                        ocnZaLinkBldr.setLinkType(OpenroadmLinkType.DROPLINK);
-                    } else if (destNodeType == 12 && srcNodeType == 11) {
-                        ocnZaLinkBldr.setLinkType(OpenroadmLinkType.ADDLINK);
-                    } else {
-                        continue;
-                    }
-                    // set opposite link augmentations
                     LinkBuilder ietfAzLinkBldr = createLink(srcNode, destNode, srcTp, destTp);
                     LinkBuilder ietfZaLinkBldr = createLink(destNode, srcNode, destTp, srcTp);
+                    // set opposite link augmentations
+                    Link1Builder ocnAzLinkBldr = createLinkTypeAtoZ(srcNodeType, destNodeType);
                     ocnAzLinkBldr.setOppositeLink(ietfZaLinkBldr.getLinkId());
                     ietfAzLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
                             .rev181130.Link1.class, ocnAzLinkBldr.build());
                     ietfAzLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
                             .rev181130.Link1.class, ocnAzlnk2bldr.build());
-                    ocnZaLinkBldr.setOppositeLink(ietfAzLinkBldr.getLinkId());
-                    ietfZaLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
-                            .rev181130.Link1.class, ocnZaLinkBldr.build());
-                    ietfZaLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
-                            .rev181130.Link1.class, ocnZalnk2bldr.build());
-                    links.add(ietfAzLinkBldr.build());
-                    links.add(ietfZaLinkBldr.build());
-                } else {
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                            .Link1Builder ocnAzLinkBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.network
-                            .topology.rev181130.Link1Builder();
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder ocnAzlnk2bldr
-                            = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
-                            .Link1Builder();
-                    ocnAzlnk2bldr.setAdministrativeState(AdminStates.OutOfService);
-                    ocnAzlnk2bldr.setOperationalState(State.OutOfService);
-                    int srcNodeType = nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                            .network.rev181130.Node1.class)
-                            .getNodeType().getIntValue();
-                    int destNodeType = nodes.get(j).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                            .network.rev181130.Node1.class)
-                            .getNodeType().getIntValue();
-                    if (srcNodeType == 11 && destNodeType == 11) {
-                        ocnAzLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
-                    } else if (srcNodeType == 11 && destNodeType == 12) {
-                        ocnAzLinkBldr.setLinkType(OpenroadmLinkType.DROPLINK);
-                    } else if (srcNodeType == 12 && destNodeType == 11) {
-                        ocnAzLinkBldr.setLinkType(OpenroadmLinkType.ADDLINK);
-                    } else {
-                        continue;
-                    }
-                    // Z to A direction
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                            .Link1Builder ocnZaLinkBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.network
-                            .topology.rev181130.Link1Builder();
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder ocnZalnk2bldr
-                            = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
-                            .Link1Builder();
-                    ocnZalnk2bldr.setAdministrativeState(AdminStates.OutOfService);
-                    ocnZalnk2bldr.setOperationalState(State.OutOfService);
-                    if (srcNodeType == 11 && destNodeType == 11) {
-                        ocnZaLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
-                    } else if (destNodeType == 11 && srcNodeType == 12) {
-                        ocnZaLinkBldr.setLinkType(OpenroadmLinkType.DROPLINK);
-                    } else if (destNodeType == 12 && srcNodeType == 11) {
-                        ocnZaLinkBldr.setLinkType(OpenroadmLinkType.ADDLINK);
-                    } else {
-                        continue;
-                    }
-                    // set opposite link augmentations
-                    LinkBuilder ietfAzLinkBldr = createLink(srcNode, destNode, srcTp, destTp);
-                    LinkBuilder ietfZaLinkBldr = createLink(destNode, srcNode, destTp, srcTp);
-                    ocnAzLinkBldr.setOppositeLink(ietfZaLinkBldr.getLinkId());
-                    ietfAzLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
-                            .rev181130.Link1.class, ocnAzLinkBldr.build());
-                    ietfAzLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
-                            .rev181130.Link1.class, ocnAzlnk2bldr.build());
+                    Link1Builder ocnZaLinkBldr = createLinkTypeZtoA(srcNodeType, destNodeType);
                     ocnZaLinkBldr.setOppositeLink(ietfAzLinkBldr.getLinkId());
                     ietfZaLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
                             .rev181130.Link1.class, ocnZaLinkBldr.build());
@@ -565,6 +490,60 @@ public final class OpenRoadmTopology {
             }
         }
         return links;
+    }
+
+    private static org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            .Link1Builder createStatefulLinkZtoA(AdminStates adminStates, State state) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder ocnZalnk2bldr
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                .Link1Builder();
+        ocnZalnk2bldr.setAdministrativeState(adminStates);
+        ocnZalnk2bldr.setOperationalState(state);
+        return ocnZalnk2bldr;
+    }
+
+    private static org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            .Link1Builder createStatefulLinkAtoZ(AdminStates adminStates, State state) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder ocnAzlnk2bldr
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                .Link1Builder();
+        ocnAzlnk2bldr.setAdministrativeState(adminStates);
+        ocnAzlnk2bldr.setOperationalState(state);
+        return ocnAzlnk2bldr;
+    }
+
+    private static Link1Builder createLinkTypeZtoA(int srcNodeType, int destNodeType) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
+                .Link1Builder ocnZaLinkBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.network
+                .topology.rev181130.Link1Builder();
+        if (srcNodeType == OpenroadmNodeType.DEGREE.getIntValue() && destNodeType
+                == OpenroadmNodeType.DEGREE.getIntValue()) {
+            ocnZaLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
+        } else if (destNodeType == OpenroadmNodeType.DEGREE.getIntValue() && srcNodeType
+                == OpenroadmNodeType.SRG.getIntValue()) {
+            ocnZaLinkBldr.setLinkType(OpenroadmLinkType.DROPLINK);
+        } else if (destNodeType == OpenroadmNodeType.SRG.getIntValue() && srcNodeType
+                == OpenroadmNodeType.DEGREE.getIntValue()) {
+            ocnZaLinkBldr.setLinkType(OpenroadmLinkType.ADDLINK);
+        }
+        return ocnZaLinkBldr;
+    }
+
+    private static Link1Builder createLinkTypeAtoZ(int srcNodeType, int destNodeType) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
+                .Link1Builder ocnAzLinkBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.network
+                .topology.rev181130.Link1Builder();
+        if (srcNodeType == OpenroadmNodeType.DEGREE.getIntValue() && destNodeType
+                == OpenroadmNodeType.DEGREE.getIntValue()) {
+            ocnAzLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
+        } else if (srcNodeType == OpenroadmNodeType.DEGREE.getIntValue() && destNodeType
+                == OpenroadmNodeType.SRG.getIntValue()) {
+            ocnAzLinkBldr.setLinkType(OpenroadmLinkType.DROPLINK);
+        } else if (srcNodeType == OpenroadmNodeType.SRG.getIntValue() && destNodeType
+                == OpenroadmNodeType.DEGREE.getIntValue()) {
+            ocnAzLinkBldr.setLinkType(OpenroadmLinkType.ADDLINK);
+        }
+        return ocnAzLinkBldr;
     }
 
     // This method returns the linkBuilder object for given source and destination
