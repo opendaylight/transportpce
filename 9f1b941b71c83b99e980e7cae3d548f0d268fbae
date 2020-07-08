@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb3baaee_256ef329",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_sh_renderer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-08T10:55:12Z",
+      "side": 0,
+      "message": "@Bala: I switched to SPDR-C1 because I supposed you meant initially SPDR-SC1 because the tests are the same than for test 15.",
+      "range": {
+        "startLine": 598,
+        "startChar": 21,
+        "endLine": 598,
+        "endChar": 29
+      },
+      "revId": "9f1b941b71c83b99e980e7cae3d548f0d268fbae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
