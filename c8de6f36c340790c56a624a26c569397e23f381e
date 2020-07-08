@@ -94,6 +94,29 @@
     },
     {
       "key": {
+        "uuid": "f123d52b_59e77d74",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-08T08:39:41Z",
+      "side": 1,
+      "message": "this code is dead code because if link1 is null we will have return at line 198",
+      "range": {
+        "startLine": 207,
+        "startChar": 11,
+        "endLine": 210,
+        "endChar": 13
+      },
+      "revId": "c8de6f36c340790c56a624a26c569397e23f381e",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e70bd3a_4466298a",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
         "patchSetId": 1
