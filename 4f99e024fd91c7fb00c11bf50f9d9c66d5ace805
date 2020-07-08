@@ -46,6 +46,30 @@
       "revId": "4f99e024fd91c7fb00c11bf50f9d9c66d5ace805",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b1000b4_59d58b0b",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl121Test.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-08T13:26:44Z",
+      "side": 1,
+      "message": "almost that\n+4 \").thenReturn\"\n\u003d\u003e it can not be aligned with \"Mockito.when()\"\n\n        Mockito.when(\n                deviceTransactionManager.getDataFromDevice(\n                        \"deviceId\",\n                        LogicalDatastoreType.OPERATIONAL,\n\t\n                        deviceIID,\n\t\n                        Timeouts.DEVICE_READ_TIMEOUT,\n\t\n                        Timeouts.DEVICE_READ_TIMEOUT_UNIT)\n\t\n            ).thenReturn(Optional.of(mock(RoadmConnections.class)));\n\n\nalso similar structures indentations are not solved afterwards...\nsee change 90624 for other examples",
+      "parentUuid": "5eab55bf_89129d78",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 71
+      },
+      "revId": "4f99e024fd91c7fb00c11bf50f9d9c66d5ace805",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
