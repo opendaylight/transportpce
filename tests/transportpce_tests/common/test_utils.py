@@ -258,6 +258,11 @@ def check_netconf_node_request(node: str, suffix: str):
     return get_request(url)
 
 
+def get_netconf_oper_request(node: str):
+    url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/" + node
+    return get_request(url)
+
+
 def shutdown_process(process):
     if process is not None:
         for child in psutil.Process(process.pid).children():

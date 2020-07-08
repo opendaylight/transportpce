@@ -39,8 +39,7 @@ class TransportPCEtesting(unittest.TestCase):
                          test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
-        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/SPDR-SA1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_netconf_oper_request("SPDR-SA1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -53,8 +52,7 @@ class TransportPCEtesting(unittest.TestCase):
                          test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
-        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/SPDR-SC1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_netconf_oper_request("SPDR-SC1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
