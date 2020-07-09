@@ -1,3 +1,10 @@
+/*
+ * Copyright © 2017 Orange, Inc. and others.  All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.opendaylight.transportpce.servicehandler.listeners;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -24,14 +31,14 @@ import org.slf4j.LoggerFactory;
 
 @SuppressFBWarnings(value = {"ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", "MS_PKGPROTECT"},
         justification = "It will have conflicts with TAPI module")
-public class NetworkModelListenerImp implements TransportpceNetworkmodelListener {
+public class NetworkModelListenerImpl implements TransportpceNetworkmodelListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NetworkModelListenerImp.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NetworkModelListenerImpl.class);
     public static ServiceDataStoreOperations serviceDataStoreOperations;
     private final NotificationPublishService notificationPublishService;
 
-    public NetworkModelListenerImp(NotificationPublishService notificationPublishService,
-                                   ServiceDataStoreOperations serviceDataStoreOperations) {
+    public NetworkModelListenerImpl(NotificationPublishService notificationPublishService,
+                                    ServiceDataStoreOperations serviceDataStoreOperations) {
         this.serviceDataStoreOperations = serviceDataStoreOperations;
         this.notificationPublishService = notificationPublishService;
 

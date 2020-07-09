@@ -22,7 +22,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOpe
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
-import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImp;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
@@ -101,7 +101,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private RendererServiceWrapper rendererServiceWrapper;
     private PceListenerImpl pceListenerImpl;
     private RendererListenerImpl rendererListenerImpl;
-    private NetworkModelListenerImp networkModelListenerImp;
+    private NetworkModelListenerImpl networkModelListenerImpl;
 
     //TODO: remove private request fields as they are in global scope
 
@@ -109,7 +109,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
             NetworkModelWavelengthService networkModelWavelengthService,
-                              NetworkModelListenerImp networkModelListenerImp) {
+                              NetworkModelListenerImpl networkModelListenerImpl) {
         this.db = databroker;
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
         this.serviceDataStoreOperations.initialize();
@@ -117,7 +117,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererServiceWrapper = new RendererServiceWrapper(rendererServiceOperations, notificationPublishService);
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
-        this.networkModelListenerImp = networkModelListenerImp;
+        this.networkModelListenerImpl = networkModelListenerImpl;
     }
 
 
@@ -170,7 +170,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        this.networkModelListenerImp.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         LOG.debug("serviceCreate: {}", LogMessages.PCE_CALLING);
@@ -227,7 +227,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        this.networkModelListenerImp.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
@@ -269,7 +269,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setServiceFeasiblity(true);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        this.networkModelListenerImp.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         LOG.debug("serviceFeasabilityCheck: {}", LogMessages.PCE_CALLING);
@@ -309,7 +309,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(true);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        this.networkModelListenerImp.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
@@ -390,7 +390,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setInput(serviceInput);
         this.pceListenerImpl.setServiceReconfigure(true);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        this.networkModelListenerImp.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(serviceInput);
         this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
@@ -457,7 +457,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setInput(serviceInput);
         this.pceListenerImpl.setServiceReconfigure(true);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        this.networkModelListenerImp.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(serviceInput);
         this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
@@ -542,7 +542,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setInput(new ServiceInput(input));
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
-        this.networkModelListenerImp.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         this.rendererListenerImpl.setTempService(true);
@@ -580,7 +580,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setServiceReconfigure(false);
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.pceListenerImpl.setTempService(true);
-        this.networkModelListenerImp.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         this.rendererListenerImpl.setTempService(true);
