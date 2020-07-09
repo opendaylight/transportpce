@@ -17,6 +17,7 @@ import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOper
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.LifecycleState;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
@@ -29,12 +30,15 @@ import org.slf4j.LoggerFactory;
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
+
+@SuppressFBWarnings(value = {"ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", "MS_PKGPROTECT"},
+        justification = "It will have conflicts with TAPI module")
 public class RendererListenerImpl implements TransportpceRendererListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(RendererListenerImpl.class);
     private ServiceRpcResultSp serviceRpcResultSp;
-    private ServiceDataStoreOperations serviceDataStoreOperations;
-    private ServiceInput input;
+    public static ServiceDataStoreOperations serviceDataStoreOperations;
+    public static ServiceInput input;
     private PCEServiceWrapper pceServiceWrapper;
     private Boolean tempService;
 
@@ -69,7 +73,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                         } else {
                             operationResult = this.serviceDataStoreOperations.modifyService(
                                     serviceRpcResultSp.getServiceName(),
-                                    State.InService, AdminStates.InService);
+                                    State.InService, AdminStates.InService, LifecycleState.Deployed);
                             if (!operationResult.isSuccess()) {
                                 LOG.warn("Service status not updated in datastore !");
                             }

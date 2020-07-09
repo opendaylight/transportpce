@@ -24,6 +24,7 @@ import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
@@ -54,6 +55,8 @@ public class PceGraphTest {
                 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder();
         link1Builder.setAdministrativeState(AdminStates.InService);
         link1Builder.setOperationalState(State.InService);
+        link1Builder.setLinkType(OpenroadmLinkType.ROADMTOROADM);
+        link1Builder.setLinkLatency(30L);
         link = NodeUtils.createRoadmToRoadm("OpenROADM-3-2-DEG1",
                 "OpenROADM-3-1-DEG1",
                 "DEG1-TTP-TX", "DEG1-TTP-RX").addAugmentation(org.opendaylight.yang.gen.v1.http.org

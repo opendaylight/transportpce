@@ -40,6 +40,7 @@ import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
@@ -121,18 +122,15 @@ public class OpenRoadmTopologyTest {
         assertNotNull(topologyShard);
         assertEquals("Should contain 2 Deg and 2 SRG nodes", 4, topologyShard.getNodes().size());
         List<Link> addLinks = topologyShard.getLinks().stream()
-            .filter(lk -> lk.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
-                    .rev181130.Link1.class).getLinkType().equals(OpenroadmLinkType.ADDLINK))
+            .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.ADDLINK))
             .collect(Collectors.toList());
         assertEquals("Should contain 4 add links", 4, addLinks.size());
         List<Link> dropLinks = topologyShard.getLinks().stream()
-            .filter(lk -> lk.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
-                    .rev181130.Link1.class).getLinkType().equals(OpenroadmLinkType.DROPLINK))
+            .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.DROPLINK))
             .collect(Collectors.toList());
         assertEquals("Should contain 4 drop links", 4, dropLinks.size());
         List<Link> expressLinks = topologyShard.getLinks().stream()
-            .filter(lk -> lk.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
-                    .rev181130.Link1.class).getLinkType().equals(OpenroadmLinkType.EXPRESSLINK))
+            .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.EXPRESSLINK))
             .collect(Collectors.toList());
         assertEquals("Should contain 2 express links", 2, expressLinks.size());
     }

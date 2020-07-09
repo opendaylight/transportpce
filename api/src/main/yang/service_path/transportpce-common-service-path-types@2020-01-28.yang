@@ -105,6 +105,9 @@ module transportpce-common-service-path-types {
       enum service-delete {
         value 4;
       }
+      enum service-update {
+        value 5;
+      }
     }
   }
 

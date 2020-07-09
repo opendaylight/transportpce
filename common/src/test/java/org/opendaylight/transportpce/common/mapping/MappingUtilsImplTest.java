@@ -68,6 +68,4 @@ public class MappingUtilsImplTest {
         assertNotNull("node is existed", mappingUtils.getOpenRoadmVersion("node"));
         assertNotNull("node2 is existed", mappingUtils.getOpenRoadmVersion("node2"));
     }
-
-
 }

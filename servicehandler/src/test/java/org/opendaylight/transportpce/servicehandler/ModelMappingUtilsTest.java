@@ -135,20 +135,20 @@ public class ModelMappingUtilsTest extends AbstractTest {
 
     @Test
     public void mappingServicesNullServiceCreateInput() {
-        Services services = ModelMappingUtils.mappingServices(null, null);
+        Services services = ModelMappingUtils.mappingServices(null, null, null, null);
         Assert.assertEquals(new ServicesBuilder().build(), services);
     }
 
     @Test
     public void mappingServiceNotNullServiceReconfigureInput() {
-        Services services = ModelMappingUtils.mappingServices(null, buildServiceConfigurationInput());
+        Services services = ModelMappingUtils.mappingServices(null, buildServiceConfigurationInput(), null, null);
         Assert.assertEquals("service 1", services.getServiceName());
     }
 
     @Test
     public void mappingServiceValid() {
         Services services = ModelMappingUtils.mappingServices(ServiceDataUtils.buildServiceCreateInput(),
-                null);
+                null, null, null);
         Assert.assertEquals("service 1", services.getServiceName());
     }
 

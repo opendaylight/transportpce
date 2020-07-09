@@ -166,6 +166,8 @@ public class PceLinkTest extends AbstractTest {
                 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder();
         link1Builder.setAdministrativeState(AdminStates.InService);
         link1Builder.setOperationalState(State.InService);
+        link1Builder.setLinkType(OpenroadmLinkType.ROADMTOROADM);
+        link1Builder.setLinkLatency(30L);
         Link link = createRoadmToRoadm("srcNode",
                 "destNode",
                 "srcTp", "destTp").addAugmentation(org.opendaylight.yang.gen.v1.http.org
@@ -184,7 +186,7 @@ public class PceLinkTest extends AbstractTest {
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
         Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
         Assert.assertNotNull(pceLink.calcSpanOSNR());
-        Assert.assertEquals(0, (pceLink.getsrlgList() == null) ? 0 : pceLink.getsrlgList().size());
+        Assert.assertEquals(0, pceLink.getsrlgList().size());
         Assert.assertTrue(7.857119000000001 == pceLink.calcSpanOSNR());
         Assert.assertNull(pceLink.getOppositeLink());
         Assert.assertNull(pceLink.getOppositeLink());

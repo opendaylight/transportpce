@@ -29,15 +29,17 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressFBWarnings(value = {"ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", "MS_PKGPROTECT"},
+        justification = "It will have conflicts with TAPI module")
 public class PceListenerImpl implements TransportpcePceListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(PceListenerImpl.class);
 
     private ServicePathRpcResult servicePathRpcResult;
-    private RendererServiceOperations rendererServiceOperations;
-    private ServiceDataStoreOperations serviceDataStoreOperations;
+    public static RendererServiceOperations rendererServiceOperations;
+    public static ServiceDataStoreOperations serviceDataStoreOperations;
     private PCEServiceWrapper pceServiceWrapper;
-    private ServiceInput input;
+    public static ServiceInput input;
     private Boolean serviceReconfigure;
     private Boolean tempService;
     private Boolean serviceFeasiblity;
@@ -79,13 +81,13 @@ public class PceListenerImpl implements TransportpcePceListener {
                                 OperationResult operationResult = null;
                                 if (tempService) {
                                     operationResult = this.serviceDataStoreOperations
-                                        .createTempService(input.getTempServiceCreateInput());
+                                        .createTempService(input.getTempServiceCreateInput(), pathDescription);
                                     if (!operationResult.isSuccess()) {
                                         LOG.error("Temp Service not created in datastore !");
                                     }
                                 } else {
                                     operationResult = this.serviceDataStoreOperations
-                                        .createService(input.getServiceCreateInput());
+                                        .createService(input.getServiceCreateInput(), pathDescription);
                                     if (!operationResult.isSuccess()) {
                                         LOG.error("Service not created in datastore !");
                                     }

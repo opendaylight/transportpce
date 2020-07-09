@@ -193,12 +193,11 @@ public final class MapUtils {
 
         // ID and type
         link1 = link.augmentation(Link1.class);
+        LOG.info("Link received {}", link);
         if (link1 == null) {
             LOG.error("MapUtils: No Link augmentation available. {}", link.getLinkId().getValue());
             return null;
         }
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1 link11 = link.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1.class);
         OpenroadmLinkType tmplType = link1.getLinkType();
 
         if (tmplType == null) {
@@ -206,7 +205,7 @@ public final class MapUtils {
                 LOG.error("MapUtils: No Link augmentation available. {}", link.getLinkId().getValue());
                 return null;
             }
-            tmplType = link11.getLinkType();
+            tmplType = link1.getLinkType();
             if (tmplType == null) {
                 LOG.error("MapUtils: No Link type available. {}", link.getLinkId().getValue());
                 return null;

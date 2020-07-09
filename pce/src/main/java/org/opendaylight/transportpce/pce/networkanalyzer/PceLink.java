@@ -69,6 +69,7 @@ public class PceLink implements Serializable {
 
     public PceLink(Link link, PceNode source, PceNode dest) {
         LOG.info("PceLink: : PceLink start ");
+        LOG.info("PCE link: {}", link);
 
         this.linkId = link.getLinkId();
 
