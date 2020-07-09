@@ -85,7 +85,7 @@ class TransportPCEtesting(unittest.TestCase):
     def test_04_service_path_create_OCH_OTU4(self):
         url = "{}/operations/transportpce-device-renderer:service-path"
         data = {"renderer:input": {
-            "service-name": "service_ODU4",
+            "service-name": "service_OCH_OTU4",
             "wave-number": "1",
             "modulation-format": "qpsk",
             "operation": "create",
