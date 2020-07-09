@@ -7,13 +7,19 @@
  */
 package org.opendaylight.transportpce.servicehandler.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.PcePathDescriptionElementsAToZ;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.PcePathDescriptionElementsZToA;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.LifecycleState;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 
@@ -35,6 +41,8 @@ public interface ServiceDataStoreOperations {
      * @return Optional of Services
      */
     Optional<Services> getService(String serviceName);
+
+    Optional<ServiceList> getServices();
 
     /**
      * get temp service by common-id.
@@ -64,6 +72,14 @@ public interface ServiceDataStoreOperations {
      */
     OperationResult deleteTempService(String commonId);
 
+    OperationResult modifyServiceNM(String serviceName, State operationalState, AdminStates administrativeState,
+                                    LifecycleState lifecycleState, List<PcePathDescriptionElementsAToZ> atozList,
+                                    List<PcePathDescriptionElementsZToA> ztoaList);
+
+    OperationResult modifyTempServiceNM(String serviceName, State operationalState,
+                                        AdminStates administrativeState, List<PcePathDescriptionElementsAToZ> atozList,
+                                        List<PcePathDescriptionElementsZToA> ztoaList);
+
     /**
      * modifyService service attributes.
      *
@@ -75,7 +91,8 @@ public interface ServiceDataStoreOperations {
      *   administrative state of service
      * @return result of modifyService operation
      */
-    OperationResult modifyService(String serviceName, State operationalState, AdminStates administrativeState);
+    OperationResult modifyService(String serviceName, State operationalState, AdminStates administrativeState,
+                                  LifecycleState lifecycleState);
 
     /**
      * modify Temp Service.
@@ -93,7 +110,7 @@ public interface ServiceDataStoreOperations {
      * @param serviceCreateInput serviceCreateInput data for creation of service
      * @return result of createService operation
      */
-    OperationResult createService(ServiceCreateInput serviceCreateInput);
+    OperationResult createService(ServiceCreateInput serviceCreateInput, PathDescription pathDescription);
 
     /**
      * create new servicePath entry.
@@ -113,7 +130,7 @@ public interface ServiceDataStoreOperations {
      *                               service
      * @return result of createTempService operation
      */
-    OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput);
+    OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput, PathDescription pathDescription);
 
     /**
      * deleteServicePath by name.

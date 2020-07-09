@@ -191,6 +191,8 @@ public final class TPCEUtils {
             // API models / opendaylight
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
             .$YangModuleInfoImpl.getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev200512.$YangModuleInfoImpl
+                    .getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.$YangModuleInfoImpl
                     .getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.$YangModuleInfoImpl
@@ -220,6 +222,8 @@ public final class TPCEUtils {
                     .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.$YangModuleInfoImpl
                     .getInstance(),
+            org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.topology.types.rev200512
+                    .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.$YangModuleInfoImpl.getInstance(),
 
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.iana._if.type.rev170119.$YangModuleInfoImpl

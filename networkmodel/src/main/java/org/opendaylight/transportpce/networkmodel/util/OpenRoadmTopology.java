@@ -24,6 +24,7 @@ import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
@@ -32,7 +33,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.n
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributes;
@@ -472,16 +472,12 @@ public final class OpenRoadmTopology {
                     LinkBuilder ietfAzLinkBldr = createLink(srcNode, destNode, srcTp, destTp);
                     LinkBuilder ietfZaLinkBldr = createLink(destNode, srcNode, destTp, srcTp);
                     // set opposite link augmentations
-                    Link1Builder ocnAzLinkBldr = createLinkTypeAtoZ(srcNodeType, destNodeType);
-                    ocnAzLinkBldr.setOppositeLink(ietfZaLinkBldr.getLinkId());
-                    ietfAzLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
-                            .rev181130.Link1.class, ocnAzLinkBldr.build());
+                    ocnAzlnk2bldr = createLinkTypeAtoZ(srcNodeType, destNodeType, ocnAzlnk2bldr);
+                    ocnAzlnk2bldr.setOppositeLink(ietfZaLinkBldr.getLinkId());
                     ietfAzLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
                             .rev181130.Link1.class, ocnAzlnk2bldr.build());
-                    Link1Builder ocnZaLinkBldr = createLinkTypeZtoA(srcNodeType, destNodeType);
-                    ocnZaLinkBldr.setOppositeLink(ietfAzLinkBldr.getLinkId());
-                    ietfZaLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology
-                            .rev181130.Link1.class, ocnZaLinkBldr.build());
+                    ocnZalnk2bldr = createLinkTypeZtoA(srcNodeType, destNodeType, ocnZalnk2bldr);
+                    ocnZalnk2bldr.setOppositeLink(ietfAzLinkBldr.getLinkId());
                     ietfZaLinkBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
                             .rev181130.Link1.class, ocnZalnk2bldr.build());
                     links.add(ietfAzLinkBldr.build());
@@ -512,38 +508,34 @@ public final class OpenRoadmTopology {
         return ocnAzlnk2bldr;
     }
 
-    private static Link1Builder createLinkTypeZtoA(int srcNodeType, int destNodeType) {
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                .Link1Builder ocnZaLinkBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.network
-                .topology.rev181130.Link1Builder();
+    private static org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            .Link1Builder createLinkTypeZtoA(int srcNodeType, int destNodeType, Link1Builder ocnZalnk2bldr) {
         if (srcNodeType == OpenroadmNodeType.DEGREE.getIntValue() && destNodeType
                 == OpenroadmNodeType.DEGREE.getIntValue()) {
-            ocnZaLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
+            ocnZalnk2bldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
         } else if (destNodeType == OpenroadmNodeType.DEGREE.getIntValue() && srcNodeType
                 == OpenroadmNodeType.SRG.getIntValue()) {
-            ocnZaLinkBldr.setLinkType(OpenroadmLinkType.DROPLINK);
+            ocnZalnk2bldr.setLinkType(OpenroadmLinkType.DROPLINK);
         } else if (destNodeType == OpenroadmNodeType.SRG.getIntValue() && srcNodeType
                 == OpenroadmNodeType.DEGREE.getIntValue()) {
-            ocnZaLinkBldr.setLinkType(OpenroadmLinkType.ADDLINK);
+            ocnZalnk2bldr.setLinkType(OpenroadmLinkType.ADDLINK);
         }
-        return ocnZaLinkBldr;
+        return ocnZalnk2bldr;
     }
 
-    private static Link1Builder createLinkTypeAtoZ(int srcNodeType, int destNodeType) {
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                .Link1Builder ocnAzLinkBldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.network
-                .topology.rev181130.Link1Builder();
+    private static org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            .Link1Builder createLinkTypeAtoZ(int srcNodeType, int destNodeType, Link1Builder ocnAzlnk2bldr) {
         if (srcNodeType == OpenroadmNodeType.DEGREE.getIntValue() && destNodeType
                 == OpenroadmNodeType.DEGREE.getIntValue()) {
-            ocnAzLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
+            ocnAzlnk2bldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
         } else if (srcNodeType == OpenroadmNodeType.DEGREE.getIntValue() && destNodeType
                 == OpenroadmNodeType.SRG.getIntValue()) {
-            ocnAzLinkBldr.setLinkType(OpenroadmLinkType.DROPLINK);
+            ocnAzlnk2bldr.setLinkType(OpenroadmLinkType.DROPLINK);
         } else if (srcNodeType == OpenroadmNodeType.SRG.getIntValue() && destNodeType
                 == OpenroadmNodeType.DEGREE.getIntValue()) {
-            ocnAzLinkBldr.setLinkType(OpenroadmLinkType.ADDLINK);
+            ocnAzlnk2bldr.setLinkType(OpenroadmLinkType.ADDLINK);
         }
-        return ocnAzLinkBldr;
+        return ocnAzlnk2bldr;
     }
 
     // This method returns the linkBuilder object for given source and destination

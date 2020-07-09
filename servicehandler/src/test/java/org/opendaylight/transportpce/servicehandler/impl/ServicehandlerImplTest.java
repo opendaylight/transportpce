@@ -14,6 +14,8 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -28,11 +30,14 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImp;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev190531.RpcStatus;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInputBuilder;
@@ -59,6 +64,16 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.delete.input.ServiceDeleteReqInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.AToZDirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ZToADirectionBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZ;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.atoz.direction.AToZBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.path.description.ztoa.direction.ZToABuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev171017.pce.resource.resource.resource.NodeBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 
 public class ServicehandlerImplTest extends AbstractTest  {
@@ -78,10 +93,14 @@ public class ServicehandlerImplTest extends AbstractTest  {
     @Mock
     private RendererListenerImpl rendererListenerImpl;
 
+    @Mock
+    private NetworkModelListenerImp networkModelListenerImp;
+
     private ListeningExecutorService executorService;
     private CountDownLatch endSignal;
     private static final int NUM_THREADS = 5;
     private boolean callbackRan;
+    private PathDescription pathDescription;
 
     @Before
     public void setUp() {
@@ -89,13 +108,43 @@ public class ServicehandlerImplTest extends AbstractTest  {
         endSignal = new CountDownLatch(1);
         callbackRan = false;
         MockitoAnnotations.initMocks(this);
+        // dummy path description to pass tests
+        List<AToZ> atozList = createAToZList();
+        List<ZToA> ztoaList = createZToAList();
+        AToZDirection atozDirection = new AToZDirectionBuilder().setAToZ(atozList).build();
+        ZToADirection ztoaDirection = new ZToADirectionBuilder().setZToA(ztoaList).build();
+        this.pathDescription = new PathDescriptionBuilder().setAToZDirection(atozDirection)
+                .setZToADirection(ztoaDirection).build();
+    }
+
+    private List<ZToA> createZToAList() {
+        List<ZToA> ztoaList = new ArrayList<>();
+        ZToA ztoA = new ZToABuilder().setId("0").setResource(new ResourceBuilder().setResource(new NodeBuilder()
+                .setNodeId("XPONDER-3-2").build()).build()).build();
+        ZToA ztoA1 = new ZToABuilder().setId("1").setResource(new ResourceBuilder().setResource(new NodeBuilder()
+                .setNodeId("XPONDER-1-2").build()).build()).build();
+        ztoaList.add(ztoA);
+        ztoaList.add(ztoA1);
+        return ztoaList;
+    }
+
+    private List<AToZ> createAToZList() {
+        List<AToZ> atozList = new ArrayList<>();
+        AToZ atoZ = new AToZBuilder().setId("0").setResource(new ResourceBuilder().setResource(new NodeBuilder()
+                .setNodeId("XPONDER-1-2").build()).build()).build();
+        AToZ atoZ1 = new AToZBuilder().setId("1").setResource(new ResourceBuilder().setResource(new NodeBuilder()
+                .setNodeId("XPONDER-3-2").build()).build()).build();
+        atozList.add(atoZ);
+
+        return atozList;
     }
 
     @Test
     public void createServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                    networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceCreateOutput>> result =
             servicehandlerImpl.serviceCreate(new ServiceCreateInputBuilder().build());
         result.addListener(new Runnable() {
@@ -120,7 +169,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
         Mockito.when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                    networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceCreateOutput>> result =  servicehandlerImpl.serviceCreate(input);
         result.addListener(new Runnable() {
             @Override
@@ -141,7 +191,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
     public void deleteServiceShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                    networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceDeleteOutput>> result =
             servicehandlerImpl.serviceDelete(new ServiceDeleteInputBuilder()
                 .setServiceDeleteReqInfo(new ServiceDeleteReqInfoBuilder().setServiceName("").build()).build());
@@ -165,7 +216,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
         ServiceDeleteInput input = ServiceDataUtils.buildServiceDeleteInput();
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                    networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceDeleteOutput>> result = servicehandlerImpl.serviceDelete(input);
         result.addListener(new Runnable() {
             @Override
@@ -188,10 +240,11 @@ public class ServicehandlerImplTest extends AbstractTest  {
         Mockito.when(rendererServiceOperations.serviceDelete(any())).thenReturn(Futures.immediateFuture(any()));
         ServicehandlerImpl servicehandlerImpl =
             new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
-                notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                    networkModelListenerImp);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        serviceDataStoreOperations.createService(createInput);
+        serviceDataStoreOperations.createService(createInput, this.pathDescription);
         ServiceDeleteInput input = ServiceDataUtils.buildServiceDeleteInput();
         ListenableFuture<RpcResult<ServiceDeleteOutput>> result = servicehandlerImpl.serviceDelete(input);
         result.addListener(new Runnable() {
@@ -214,7 +267,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
     public void serviceFeasibilityCheckShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> result =
                 servicehandlerImpl.serviceFeasibilityCheck(new ServiceFeasibilityCheckInputBuilder().build());
         result.addListener(new Runnable() {
@@ -239,7 +293,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
         Mockito.when(pathComputationService.pathComputationRequest(any())).thenReturn(Futures.immediateFuture(any()));
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceFeasibilityCheckOutput>> result =
             servicehandlerImpl.serviceFeasibilityCheck(input);
         result.addListener(new Runnable() {
@@ -261,7 +316,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
     public void serviceReconfigureShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceReconfigureOutput>> result =
                 servicehandlerImpl.serviceReconfigure(new ServiceReconfigureInputBuilder().setServiceName("").build());
         result.addListener(new Runnable() {
@@ -287,7 +343,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
         //action -> service reconfigure
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceReconfigureOutput>> result = servicehandlerImpl.serviceReconfigure(input);
 
         result.addListener(new Runnable() {
@@ -316,10 +373,11 @@ public class ServicehandlerImplTest extends AbstractTest  {
         //create service to reconfigure
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        serviceDataStoreOperations.createService(createInput);
+        serviceDataStoreOperations.createService(createInput, this.pathDescription);
 
         //service reconfigure test action
         ServiceReconfigureInput input = ServiceDataUtils.buildServiceReconfigureInput();
@@ -344,7 +402,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
     public void serviceReRestorationShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceRestorationOutput>> result =
                 servicehandlerImpl.serviceRestoration(new ServiceRestorationInputBuilder().setServiceName("").build());
         result.addListener(new Runnable() {
@@ -370,7 +429,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
         //action -> service restore
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceRestorationOutput>> result = servicehandlerImpl.serviceRestoration(input);
 
         result.addListener(new Runnable() {
@@ -399,10 +459,11 @@ public class ServicehandlerImplTest extends AbstractTest  {
         //create service to restore
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        serviceDataStoreOperations.createService(createInput);
+        serviceDataStoreOperations.createService(createInput, this.pathDescription);
 
         //service Restoration test action
         ServiceRestorationInput input = ServiceDataUtils.buildServiceRestorationInput();
@@ -427,7 +488,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
     public void serviceRerouteShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceRerouteOutput>> result =
                 servicehandlerImpl.serviceReroute(new ServiceRerouteInputBuilder().setServiceName("").build());
         result.addListener(new Runnable() {
@@ -452,7 +514,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
         //action -> service reconfigure
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<ServiceRerouteOutput>> result = servicehandlerImpl.serviceReroute(input);
 
         result.addListener(new Runnable() {
@@ -481,10 +544,11 @@ public class ServicehandlerImplTest extends AbstractTest  {
         //create service to be rerouted later
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         ServiceCreateInput createInput = ServiceDataUtils.buildServiceCreateInput();
-        serviceDataStoreOperations.createService(createInput);
+        serviceDataStoreOperations.createService(createInput, this.pathDescription);
 
         //service reroute test action
         ServiceRerouteInput input = ServiceDataUtils.buildServiceRerouteInput();
@@ -509,7 +573,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
     public void tempServiceDeleteShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<TempServiceDeleteOutput>> result =
                 servicehandlerImpl.tempServiceDelete(new TempServiceDeleteInputBuilder()
                         .setCommonId("").build());
@@ -536,7 +601,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
         TempServiceDeleteInput input = ServiceDataUtils.buildTempServiceDeleteInput();
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<TempServiceDeleteOutput>> result = servicehandlerImpl.tempServiceDelete(input);
         result.addListener(new Runnable() {
             @Override
@@ -561,10 +627,11 @@ public class ServicehandlerImplTest extends AbstractTest  {
         //create temp service to delete in the temp delete action
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(dataBroker, pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ServiceDataStoreOperationsImpl serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(dataBroker);
         TempServiceCreateInput createInput = ServiceDataUtils.buildTempServiceCreateInput();
-        serviceDataStoreOperations.createTempService(createInput);
+        serviceDataStoreOperations.createTempService(createInput, this.pathDescription);
 
 
         TempServiceDeleteInput input = ServiceDataUtils.buildTempServiceDeleteInput(createInput.getCommonId());
@@ -588,7 +655,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
     public void tempServiceCreateShouldBeFailedWithEmptyInput() throws ExecutionException, InterruptedException {
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
         ListenableFuture<RpcResult<TempServiceCreateOutput>> result =
                 servicehandlerImpl.tempServiceCreate(new TempServiceCreateInputBuilder().build());
         result.addListener(new Runnable() {
@@ -615,7 +683,8 @@ public class ServicehandlerImplTest extends AbstractTest  {
 
         ServicehandlerImpl servicehandlerImpl =
                 new ServicehandlerImpl(getNewDataBroker(), pathComputationService, rendererServiceOperations,
-                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null);
+                        notificationPublishService, pceListenerImpl, rendererListenerImpl, null,
+                        networkModelListenerImp);
 
         ListenableFuture<RpcResult<TempServiceCreateOutput>> result =  servicehandlerImpl.tempServiceCreate(input);
         result.addListener(new Runnable() {

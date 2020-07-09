@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.servicehandler;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.List;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.path.computation.request.input.ServiceAEnd;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.path.computation.request.input.ServiceAEndBuilder;
@@ -21,6 +22,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev1811
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommon;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.configuration.response.common.ConfigurationResponseCommonBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.response.parameters.ResponseParametersBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.PcePathDescriptionElementsAToZ;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.PcePathDescriptionElementsZToA;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.LifecycleState;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev190531.RpcStatus;
@@ -310,7 +313,8 @@ public final class ModelMappingUtils {
     }
 
     public static Services mappingServices(ServiceCreateInput serviceCreateInput,
-            ServiceReconfigureInput serviceReconfigureInput) {
+            ServiceReconfigureInput serviceReconfigureInput, List<PcePathDescriptionElementsAToZ> atoz,
+                                           List<PcePathDescriptionElementsZToA> ztoa) {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEnd aend = null;
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceZEnd zend = null;
         ServicesBuilder service = new ServicesBuilder();
@@ -321,6 +325,8 @@ public final class ModelMappingUtils {
                 .ServiceZEndBuilder(serviceCreateInput.getServiceZEnd()).build();
             service.setServiceName(serviceCreateInput.getServiceName()).setAdministrativeState(AdminStates.OutOfService)
                 .setOperationalState(State.OutOfService).setCommonId(serviceCreateInput.getCommonId())
+                .setPcePathDescriptionElementsAToZ(atoz)
+                .setPcePathDescriptionElementsZToA(ztoa)
                 .setConnectionType(serviceCreateInput.getConnectionType())
                 .setCustomer(serviceCreateInput.getCustomer())
                 .setCustomerContact(serviceCreateInput.getCustomerContact())
@@ -336,6 +342,8 @@ public final class ModelMappingUtils {
             service.setServiceName(serviceReconfigureInput.getServiceName())
                 .setAdministrativeState(AdminStates.OutOfService)
                 .setOperationalState(State.OutOfService).setCommonId(serviceReconfigureInput.getCommonId())
+                .setPcePathDescriptionElementsAToZ(atoz)
+                .setPcePathDescriptionElementsZToA(ztoa)
                 .setConnectionType(serviceReconfigureInput.getConnectionType())
                 .setCustomer(serviceReconfigureInput.getCustomer())
                 .setCustomerContact(serviceReconfigureInput.getCustomerContact())
@@ -347,7 +355,8 @@ public final class ModelMappingUtils {
     }
 
     public static org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list.Services
-            mappingServices(TempServiceCreateInput tempServiceCreateInput) {
+            mappingServices(TempServiceCreateInput tempServiceCreateInput, List<PcePathDescriptionElementsAToZ> atoz,
+                            List<PcePathDescriptionElementsZToA> ztoa) {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceAEnd aend = null;
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.ServiceZEnd zend = null;
         org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
@@ -359,6 +368,8 @@ public final class ModelMappingUtils {
             .ServiceZEndBuilder(tempServiceCreateInput.getServiceZEnd()).build();
         service.setServiceName(tempServiceCreateInput.getCommonId()).setAdministrativeState(AdminStates.OutOfService)
             .setOperationalState(State.OutOfService).setCommonId(tempServiceCreateInput.getCommonId())
+            .setPcePathDescriptionElementsAToZ(atoz)
+            .setPcePathDescriptionElementsZToA(ztoa)
             .setConnectionType(tempServiceCreateInput.getConnectionType())
             .setCustomer(tempServiceCreateInput.getCustomer())
             .setCustomerContact(tempServiceCreateInput.getCustomerContact())
