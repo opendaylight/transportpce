@@ -41,8 +41,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Verify the termination points of the ROADMA
     def test_02_compareOpenroadmTopologyPortMapping_rdm(self):
-        urlTopo = "{}/config/ietf-network:networks/network/openroadm-topology"
-        responseTopo = test_utils.get_request(urlTopo)
+        responseTopo = test_utils.get_ordm_topo_request("")
         resTopo = responseTopo.json()
         nbNode = len(resTopo['network'][0]['node'])
         nbMapCumul = 0
