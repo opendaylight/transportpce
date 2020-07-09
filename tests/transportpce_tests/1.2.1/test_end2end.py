@@ -106,13 +106,6 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_09_add_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA-ROADMC oms-attributes
-        url = (
-            "{}/config/ietf-network:"
-            "networks/network/openroadm-topology/ietf-network-topology:"
-            "link/ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX/"
-            "org-openroadm-network-topology:"
-            "OMS-attributes/span"
-        )
         data = {"span": {
             "clfi": "fiber1",
             "auto-spanloss": "true",
@@ -124,18 +117,11 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.put_request(url, data)
+        response = test_utils.add_oms_attr_request("ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_10_add_omsAttributes_ROADMC_ROADMA(self):
         # Config ROADMC-ROADMA oms-attributes
-        url = (
-            "{}/config/ietf-network:"
-            "networks/network/openroadm-topology/ietf-network-topology:"
-            "link/ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX/"
-            "org-openroadm-network-topology:"
-            "OMS-attributes/span"
-        )
         data = {"span": {
             "clfi": "fiber1",
             "auto-spanloss": "true",
@@ -147,7 +133,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.put_request(url, data)
+        response = test_utils.add_oms_attr_request("ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     # test service-create for Eth service from xpdr to xpdr
@@ -320,8 +306,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(5)
 
     def test_15_check_topo_XPDRA(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA01-XPDR1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/XPDRA01-XPDR1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
@@ -340,8 +325,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(3)
 
     def test_16_check_topo_ROADMA_SRG1(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn({u'index': 1},
@@ -360,8 +344,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(3)
 
     def test_17_check_topo_ROADMA_DEG1(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-DEG1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/ROADMA01-DEG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn({u'index': 1},
@@ -564,8 +547,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             res['roadm-connections'][0]['destination'])
 
     def test_25_check_topo_XPDRA(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA01-XPDR1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/XPDRA01-XPDR1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
@@ -588,8 +570,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_26_check_topo_ROADMA_SRG1(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn({u'index': 1}, res['node'][0][
@@ -622,8 +603,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_27_check_topo_ROADMA_DEG1(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-DEG1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/ROADMA01-DEG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn({u'index': 1}, res['node'][0][
@@ -847,8 +827,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_33_check_topo_XPDRA(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/XPDRA01-XPDR1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/XPDRA01-XPDR1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
@@ -871,8 +850,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_34_check_topo_ROADMA_SRG1(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn({u'index': 1}, res['node'][0][
@@ -893,8 +871,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(10)
 
     def test_35_check_topo_ROADMA_DEG1(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-DEG1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/ROADMA01-DEG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn({u'index': 1}, res['node'][0][

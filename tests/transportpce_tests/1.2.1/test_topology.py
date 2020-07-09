@@ -39,8 +39,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_getClliNetwork(self):
-        url = ("{}/config/ietf-network:networks/network/clli-network"
-               )
+        url = "{}/config/ietf-network:networks/network/clli-network"
         response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -48,8 +47,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_03_getOpenRoadmNetwork(self):
-        url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               )
+        url = "{}/config/ietf-network:networks/network/openroadm-network"
         response = test_utils.get_request(url)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -60,8 +58,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:model'], '2')
 
     def test_04_getLinks_OpenroadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -94,8 +91,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(len(dropLink), 0)
 
     def test_05_getNodes_OpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -194,8 +190,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 self.assertFalse(True)
 
     def test_09_getNodes_OpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -291,8 +286,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_12_getLinks_OpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -343,10 +337,6 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_14_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA01-ROADMC01 oms-attributes
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
-               "OMS-attributes/span"
-               )
         data = {"span": {
             "auto-spanloss": "true",
             "engineered-spanloss": 12.2,
@@ -355,15 +345,11 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.put_request(url, data)
+        response = test_utils.add_oms_attr_request("ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_15_omsAttributes_ROADMC_ROADMA(self):
         # Config ROADMC01-ROADMA oms-attributes
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
-               "OMS-attributes/span"
-               )
         data = {"span": {
             "auto-spanloss": "true",
             "engineered-spanloss": 12.2,
@@ -372,7 +358,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 "fiber-type": "smf",
                 "SRLG-length": 100000,
                 "pmd": 0.5}]}}
-        response = test_utils.put_request(url, data)
+        response = test_utils.add_oms_attr_request("ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_16_getClliNetwork(self):
@@ -426,8 +412,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_18_getROADMLinkOpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -482,8 +467,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(len(XPDR_OUT), 0)
 
     def test_19_getLinkOmsAttributesOpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -507,8 +491,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(len(R2RLink), 0)
 
     def test_20_getNodes_OpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -621,10 +604,6 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_22_omsAttributes_ROADMA_ROADMB(self):
         # Config ROADMA01-ROADMB01 oms-attributes
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB01-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
-               "OMS-attributes/span"
-               )
         data = {"span": {
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
@@ -633,15 +612,11 @@ class TransportPCETopologyTesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        response = test_utils.put_request(url, data)
+        response = test_utils.add_oms_attr_request("ROADMA01-DEG2-DEG2-TTP-TXRXtoROADMB01-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_23_omsAttributes_ROADMB_ROADMA(self):
         # Config ROADMB01-ROADMA01 oms-attributes
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMB01-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
-               "OMS-attributes/span"
-               )
         data = {"span": {
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
@@ -650,15 +625,11 @@ class TransportPCETopologyTesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        response = test_utils.put_request(url, data)
+        response = test_utils.add_oms_attr_request("ROADMB01-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_24_omsAttributes_ROADMB_ROADMC(self):
         # Config ROADMB01-ROADMC01 oms-attributes
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMB01-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX/org-openroadm-network-topology:"
-               "OMS-attributes/span"
-               )
         data = {"span": {
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
@@ -667,15 +638,11 @@ class TransportPCETopologyTesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        response = test_utils.put_request(url, data)
+        response = test_utils.add_oms_attr_request("ROADMB01-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_25_omsAttributes_ROADMC_ROADMB(self):
         # Config ROADMC01-ROADMB01 oms-attributes
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB01-DEG2-DEG2-TTP-TXRX/org-openroadm-network-topology:"
-               "OMS-attributes/span"
-               )
         data = {"span": {
                 "auto-spanloss": "true",
                 "engineered-spanloss": 12.2,
@@ -684,7 +651,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
                     "fiber-type": "smf",
                     "SRLG-length": 100000,
                     "pmd": 0.5}]}}
-        response = test_utils.put_request(url, data)
+        response = test_utils.add_oms_attr_request("ROADMC01-DEG1-DEG1-TTP-TXRXtoROADMB01-DEG2-DEG2-TTP-TXRX", data)
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_26_getClliNetwork(self):
@@ -708,8 +675,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_27_verifyDegree(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -726,8 +692,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(len(listR2RLink), 0)
 
     def test_28_verifyOppositeLinkTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
@@ -740,8 +705,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
             link_dest = res['network'][0]['ietf-network-topology:link'][i]['destination']['dest-node']
             oppLink_id = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:opposite-link']
             # Find the opposite link
-            url_oppLink = "{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"+oppLink_id
-            response_oppLink = test_utils.get_request(url_oppLink)
+            response_oppLink = test_utils.get_ordm_topo_request("ietf-network-topology:link/"+oppLink_id)
             self.assertEqual(response_oppLink.status_code, requests.codes.ok)
             res_oppLink = response_oppLink.json()
             self.assertEqual(res_oppLink['ietf-network-topology:link'][0]
@@ -763,9 +727,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
                 self.assertEqual(oppLink_type, 'XPONDER-INPUT')
 
     def test_29_getLinkOmsAttributesOpenRoadmTopology(self):
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbLink = len(res['network'][0]['ietf-network-topology:link'])
@@ -810,8 +772,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_32_getNodes_OpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -936,8 +897,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
             self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'XPDRA01')
 
     def test_38_getNodes_OpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -989,23 +949,14 @@ class TransportPCETopologyTesting(unittest.TestCase):
 
     def test_39_disconnect_ROADM_XPDRA_link(self):
         # Link-1
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX"
-               )
-        data = {}
-        response = test_utils.delete_request(url)
+        response = test_utils.del_link_request("XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         # Link-2
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:"
-               "link/ROADMA01-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1"
-               )
-        data = {}
-        response = test_utils.delete_request(url)
+        response = test_utils.del_link_request("ROADMA01-SRG1-SRG1-PP1-TXRXtoXPDRA01-XPDR1-XPDR1-NETWORK1")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_40_getLinks_OpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbLink = len(res['network'][0]['ietf-network-topology:link'])
@@ -1069,8 +1020,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertNotIn('node', res['network'][0])
 
     def test_44_check_roadm2roadm_link_persistence(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbLink = len(res['network'][0]['ietf-network-topology:link'])
