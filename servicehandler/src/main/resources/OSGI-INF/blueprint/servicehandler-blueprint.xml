@@ -53,7 +53,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="notificationPublishService" />
     </bean>
 
-    <bean id="networkModelListener" class="org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImp">
+    <bean id="networkModelListener" class="org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl">
         <argument ref="notificationPublishService" />
         <argument ref="serviceDatastoreOperation" />
     </bean>

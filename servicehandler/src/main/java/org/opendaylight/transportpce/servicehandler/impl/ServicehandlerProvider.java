@@ -15,7 +15,7 @@ import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
-import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImp;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev200512.TransportpceNetworkmodelListener;
@@ -72,14 +72,14 @@ public class ServicehandlerProvider {
                 pathComputationService, notificationPublishService, null);
         final RendererListenerImpl rendererListenerImpl =
                 new RendererListenerImpl(pathComputationService, notificationPublishService);
-        final NetworkModelListenerImp networkModelListenerImp =
-                new NetworkModelListenerImp(notificationPublishService, null);
+        final NetworkModelListenerImpl networkModelListenerImpl =
+                new NetworkModelListenerImpl(notificationPublishService, null);
         pcelistenerRegistration = notificationService.registerNotificationListener(pceListenerImpl);
         rendererlistenerRegistration = notificationService.registerNotificationListener(rendererListenerImpl);
-        networkmodellistenerRegistration = notificationService.registerNotificationListener(networkModelListenerImp);
+        networkmodellistenerRegistration = notificationService.registerNotificationListener(networkModelListenerImpl);
         final ServicehandlerImpl servicehandler = new ServicehandlerImpl(dataBroker, pathComputationService,
                 rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-                networkModelWavelengthService, networkModelListenerImp);
+                networkModelWavelengthService, networkModelListenerImpl);
         rpcRegistration =
             rpcService.registerRpcImplementation(OrgOpenroadmServiceService.class, servicehandler);
     }
