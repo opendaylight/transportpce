@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "270ad5f4_ac96281c",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImp.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-09T09:46:51Z",
+      "side": 1,
+      "message": "missing license header",
+      "revId": "e7871166f196533da6db3120aa3237dc73d2cd45",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01e56d0e_72bc381a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/NetworkModelListenerImp.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-07-09T09:46:51Z",
+      "side": 1,
+      "message": "should be NetworkModelListenerImpl not NetworkModelListenerImp",
+      "range": {
+        "startLine": 27,
+        "startChar": 13,
+        "endLine": 27,
+        "endChar": 36
+      },
+      "revId": "e7871166f196533da6db3120aa3237dc73d2cd45",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
