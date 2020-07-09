@@ -69,16 +69,14 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:ip'], '1.2.3.4')
 
     def test_04_getLinks_OpenroadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         # Tests related to links
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
 
     def test_05_getNodes_OpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
         self.assertEqual(response.status_code, requests.codes.ok)
@@ -273,8 +271,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertNotIn('node', res['network'][0])
 
     def test_11_getNodes_OpenRoadmTopology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("")
         res = response.json()
         self.assertNotIn('node', res['network'][0])
 

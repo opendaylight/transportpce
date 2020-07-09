@@ -35,6 +35,7 @@ ODL_PWD = "admin"
 NODES_LOGIN = "admin"
 NODES_PWD = "admin"
 URL_CONFIG_NETCONF_TOPO = "{}/config/network-topology:network-topology/topology/topology-netconf/"
+URL_CONFIG_ORDM_TOPO = "{}/config/ietf-network:networks/network/openroadm-topology/"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -261,6 +262,30 @@ def check_netconf_node_request(node: str, suffix: str):
 def get_netconf_oper_request(node: str):
     url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/" + node
     return get_request(url)
+
+
+def get_ordm_topo_request(suffix: str):
+    url = URL_CONFIG_ORDM_TOPO + suffix
+    return get_request(url)
+
+
+def add_oms_attr_request(link: str, attr):
+    url = URL_CONFIG_ORDM_TOPO + (
+        "ietf-network-topology:link/" + link + "/org-openroadm-network-topology:OMS-attributes/span"
+    )
+    return put_request(url, attr)
+
+
+def del_oms_attr_request(link: str):
+    url = URL_CONFIG_ORDM_TOPO + (
+        "ietf-network-topology:link/" + link + "/org-openroadm-network-topology:OMS-attributes/span"
+    )
+    return delete_request(url)
+
+
+def del_link_request(link: str):
+    url = URL_CONFIG_ORDM_TOPO + ("ietf-network-topology:link/" + link)
+    return delete_request(url)
 
 
 def shutdown_process(process):
