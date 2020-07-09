@@ -39,8 +39,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_rdm_device_connected(self):
-        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/ROADM-A1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_netconf_oper_request("ROADM-A1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -109,8 +108,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_09_xpdr_device_connected(self):
-        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/XPDR-A1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_netconf_oper_request("XPDR-A1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -191,8 +189,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
     def test_16_xpdr_device_disconnected(self):
-        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/XPDR-A1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_netconf_oper_request("XPDR-A1")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -215,8 +212,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
     def test_19_rdm_device_disconnected(self):
-        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/ROADM-A1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_netconf_oper_request("ROADM-A1")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(

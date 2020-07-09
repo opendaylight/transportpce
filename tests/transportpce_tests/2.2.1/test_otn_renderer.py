@@ -39,8 +39,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
         time.sleep(10)
 
-        url = "{}/operational/network-topology:network-topology/topology/topology-netconf/node/SPDR-SA1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_netconf_oper_request("SPDR-SA1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -123,11 +122,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_06_check_interface_och(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-1"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
 
@@ -145,11 +140,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_07_check_interface_OTU(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-OTU"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-OTU")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {'name': 'XPDR1-NETWORK1-OTU',
@@ -215,11 +206,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_10_check_interface_ODU4(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-ODU4"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU4', 'administrative-state': 'inService',
@@ -271,11 +258,7 @@ class TransportPCEtesting(unittest.TestCase):
              'eth-interface-id': ['XPDR1-CLIENT1-ETHERNET10G']}, res["output"]['node-interface'])
 
     def test_12_check_interface_10GE_CLIENT(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-CLIENT1-ETHERNET10G"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-CLIENT1-ETHERNET10G")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict = {'name': 'XPDR1-CLIENT1-ETHERNET10G',
@@ -291,11 +274,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-ethernet-interfaces:ethernet'])
 
     def test_13_check_interface_ODU2E_CLIENT(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-CLIENT1-ODU2e-service1"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-CLIENT1-ODU2e-service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
 
@@ -320,11 +299,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_14_check_interface_ODU2E_NETWORK(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-ODU2e-service1"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-ODU2e-service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {'name': 'XPDR1-NETWORK1-ODU2e-service1', 'administrative-state': 'inService',
@@ -355,11 +330,9 @@ class TransportPCEtesting(unittest.TestCase):
                           'parent-odu-allocation']['trib-slots'])
 
     def test_15_check_ODU2E_connection(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "odu-connection/XPDR1-CLIENT1-ODU2e-service1-x-XPDR1-NETWORK1-ODU2e-service1"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request(
+            "SPDR-SA1",
+            "odu-connection/XPDR1-CLIENT1-ODU2e-service1-x-XPDR1-NETWORK1-ODU2e-service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         input_dict_1 = {
@@ -397,35 +370,21 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertTrue(res["output"]["success"])
 
     def test_17_check_no_ODU2E_connection(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "odu-connection/XPDR1-CLIENT1-ODU2e-service1-x-XPDR1-NETWORK1-ODU2e-service1"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request(
+            "SPDR-SA1",
+            "odu-connection/XPDR1-CLIENT1-ODU2e-service1-x-XPDR1-NETWORK1-ODU2e-service1")
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_18_check_no_interface_ODU2E_NETWORK(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-ODU2e-service1"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-ODU2e-service1")
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_19_check_no_interface_ODU2E_CLIENT(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-CLIENT1-ODU2e-service1"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-CLIENT1-ODU2e-service1")
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_20_check_no_interface_10GE_CLIENT(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-CLIENT1-ETHERNET10G"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-CLIENT1-ETHERNET10G")
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_21_otn_service_path_delete_ODU4(self):
@@ -446,11 +405,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertTrue(res["output"]["success"])
 
     def test_22_check_no_interface_ODU4(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-ODU4"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-ODU4")
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_23_service_path_delete_OCH_OTU4(self):
@@ -471,19 +426,11 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertTrue(res["output"]["success"])
 
     def test_24_check_no_interface_OTU4(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-OTU"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-OTU")
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_25_check_no_interface_OCH(self):
-        url = ("{}/config/network-topology:network-topology/topology/topology-netconf/"
-               "node/SPDR-SA1/yang-ext:mount/org-openroadm-device:org-openroadm-device/"
-               "interface/XPDR1-NETWORK1-1"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-1")
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_26_disconnect_SPDR_SA1(self):
