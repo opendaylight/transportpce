@@ -70,16 +70,13 @@ class TransportPCEtesting(unittest.TestCase):
 
      # Load simple bidirectional topology
     def test_01_load_simple_topology_bi(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        data = self.simple_topo_bi_dir_data
-        response = test_utils.put_xmlrequest(url, data)
+        response = test_utils.put_xmlrequest(test_utils.URL_CONFIG_ORDM_TOPO, self.simple_topo_bi_dir_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
     # Get existing nodeId
     def test_02_get_nodeId(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -88,8 +85,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing linkId
     def test_03_get_linkId(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/link/XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("link/XPDRA01-XPDR1-XPDR1-NETWORK1toROADMA01-SRG1-SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -161,30 +157,25 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Delete topology
     def test_06_delete_simple_topology_bi(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.delete_request(url)
+        response = test_utils.delete_request(test_utils.URL_CONFIG_ORDM_TOPO)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
     # Test deleted topology
     def test_07_test_topology_simple_bi_deleted(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/ROADMA01-SRG1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
         self.assertEqual(response.status_code, 404)
         time.sleep(1)
 
     # Load simple bidirectional topology
     def test_08_load_simple_topology_uni(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        data = self.simple_topo_uni_dir_data
-        response = test_utils.put_xmlrequest(url, data)
+        response = test_utils.put_xmlrequest(test_utils.URL_CONFIG_ORDM_TOPO, self.simple_topo_uni_dir_data)
         self.assertEqual(response.status_code, 201)
         time.sleep(2)
 
     # Get existing nodeId
     def test_09_get_nodeId(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/XPONDER-1-2"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/XPONDER-1-2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -194,8 +185,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Get existing linkId
     def test_10_get_linkId(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/link/XPONDER-1-2XPDR-NW1-TX-toOpenROADM-1-2-SRG1-SRG1-PP1-RX"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("link/XPONDER-1-2XPDR-NW1-TX-toOpenROADM-1-2-SRG1-SRG1-PP1-RX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -279,30 +269,25 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Delete topology
     def test_13_delete_simple_topology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.delete_request(url)
+        response = test_utils.delete_request(test_utils.URL_CONFIG_ORDM_TOPO)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
     # Test deleted topology
     def test_14_test_topology_simple_deleted(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/XPONDER-1-2"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/XPONDER-1-2")
         self.assertEqual(response.status_code, 404)
         time.sleep(1)
 
     # Load complex topology
     def test_15_load_complex_topology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        data = self.complex_topo_uni_dir_data
-        response = test_utils.put_xmlrequest(url, data)
+        response = test_utils.put_xmlrequest(test_utils.URL_CONFIG_ORDM_TOPO, self.complex_topo_uni_dir_data)
         self.assertEqual(response.status_code, 201)
         time.sleep(2)
 
     # Get existing nodeId
     def test_16_get_nodeId(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/XPONDER-3-2"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/XPONDER-3-2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -540,10 +525,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Delete oms-attribute in the link :openroadm1-3 to openroadm1-2
     def test_22_delete_oms_attribute_in_openroadm13toopenroadm12_link(self):
-        url = ("{}/config/ietf-network:networks/network/openroadm-topology/ietf-network-topology:link/"
-               "OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2/org-openroadm-network-topology:OMS-attributes/span"
-               )
-        response = test_utils.delete_request(url)
+        response = test_utils.del_oms_attr_request("OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2")
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
@@ -590,15 +572,13 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Delete complex topology
     def test_24_delete_complex_topology(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology"
-        response = test_utils.delete_request(url)
+        response = test_utils.delete_request(test_utils.URL_CONFIG_ORDM_TOPO)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(2)
 
     # Test deleted complex topology
     def test_25_test_topology_complex_deleted(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-topology/node/XPONDER-3-2"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_topo_request("node/XPONDER-3-2")
         self.assertEqual(response.status_code, 404)
         time.sleep(1)
 
