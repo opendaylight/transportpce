@@ -12,13 +12,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <parent>
         <groupId>org.opendaylight.odlparent</groupId>
         <artifactId>odlparent</artifactId>
-        <version>6.0.6</version>
+        <version>6.0.9</version>
         <relativePath/>
     </parent>
 
     <groupId>org.opendaylight.transportpce</groupId>
     <artifactId>transportpce-aggregator</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     <name>transportpce</name>
     <packaging>pom</packaging>
 
