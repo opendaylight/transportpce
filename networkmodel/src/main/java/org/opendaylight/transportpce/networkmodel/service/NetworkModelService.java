@@ -20,9 +20,9 @@ public interface NetworkModelService {
      * Create new OpenROADM node in all OpenROADM topologies.
      *
      * @param nodeId
-     *   unique node ID of new OpenROADM node
+     *     unique node ID of new OpenROADM node
      * @param nodeVersion
-     *   OpenROADM node version
+     *     OpenROADM node version
      */
     void createOpenRoadmNode(String nodeId, String nodeVersion);
 
@@ -30,7 +30,7 @@ public interface NetworkModelService {
      * Delete OpenROADM node mapping and topologies.
      *
      * @param nodeId
-     *   unique node ID of OpenROADM node.
+     *     unique node ID of OpenROADM node.
      *
      */
     void deleteOpenRoadmnode(String nodeId);
@@ -39,9 +39,9 @@ public interface NetworkModelService {
      * Set/update connection status of OpenROADM node.
      *
      * @param nodeId
-     *   unique node ID of new OpenROADM node
+     *     unique node ID of new OpenROADM node
      * @param connectionStatus
-     *   connection status of the node
+     *     connection status of the node
      */
     void setOpenRoadmNodeStatus(String nodeId, NetconfNodeConnectionStatus.ConnectionStatus connectionStatus);
 
@@ -49,15 +49,15 @@ public interface NetworkModelService {
      * create new otn link in otn-topology.
      *
      * @param nodeA
-     *   OpenROADM node ID for link termination point A
+     *     OpenROADM node ID for link termination point A
      * @param tpA
-     *   OpenROADM tp id on nodeA for link termination point A
+     *     OpenROADM tp id on nodeA for link termination point A
      * @param nodeZ
-     *   OpenROADM node ID for link termination point Z
+     *     OpenROADM node ID for link termination point Z
      * @param tpZ
-     *   OpenROADM tp id on nodeZ for link termination point Z
+     *     OpenROADM tp id on nodeZ for link termination point Z
      * @param linkType
-     *   OtnLinkType, as OTU4, ODTU, etc
+     *     OtnLinkType, as OTU4, ODTU, etc
      */
     void createOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ, OtnLinkType linkType);
 
@@ -65,15 +65,15 @@ public interface NetworkModelService {
      * delete otn links from otn-topology.
      *
      * @param nodeA
-     *   OpenROADM node ID for link termination point A
+     *     OpenROADM node ID for link termination point A
      * @param tpA
-     *   OpenROADM tp id on nodeA for link termination point A
+     *     OpenROADM tp id on nodeA for link termination point A
      * @param nodeZ
-     *   OpenROADM node ID for link termination point Z
+     *     OpenROADM node ID for link termination point Z
      * @param tpZ
-     *   OpenROADM tp id on nodeZ for link termination point Z
+     *     OpenROADM tp id on nodeZ for link termination point Z
      * @param linkType
-     *   OtnLinkType, as OTU4, ODTU, etc
+     *     OtnLinkType, as OTU4, ODTU, etc
      */
     void deleteOtnLinks(String nodeA, String tpA, String nodeZ, String tpZ, OtnLinkType linkType);
 
@@ -81,16 +81,16 @@ public interface NetworkModelService {
      * update otn links from otn-topology.
      *
      * @param nodeTps
-     *   List containing a string composed of the netconf nodeId , and the
+     *     List containing a string composed of the netconf nodeId , and the
      *       termination point supporting the service
      * @param serviceRate
-     *   Service rate may be 1G, 10G or 100G
+     *     Service rate may be 1G, 10G or 100G
      * @param tribPortNb
-     *   Trib port number allocated by the service
+     *     Trib port number allocated by the service
      * @param tribSoltNb
-     *   First trib slot number allocated by the service
+     *     First trib slot number allocated by the service
      * @param isDeletion
-     *   True indicates if the low-order otn service must be deleted
+     *       True indicates if the low-order otn service must be deleted
      */
     void updateOtnLinks(List<String> nodeTps, String serviceRate, Short tribPortNb, Short tribSoltNb,
         boolean isDeletion);
