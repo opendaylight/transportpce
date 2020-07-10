@@ -31,7 +31,7 @@ public interface ServiceDataStoreOperations {
      * get service by name.
      *
      * @param serviceName
-     *   unique name of the service
+     *     unique name of the service
      * @return Optional of Services
      */
     Optional<Services> getService(String serviceName);
@@ -40,7 +40,7 @@ public interface ServiceDataStoreOperations {
      * get temp service by common-id.
      *
      * @param commonId
-     *   unique common-id of the service
+     *     unique common-id of the service
      * @return Optional of Services
      */
     Optional<org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.temp.service.list
@@ -50,7 +50,7 @@ public interface ServiceDataStoreOperations {
      * deleteService service by name.
      *
      * @param serviceName
-     *   unique name of the service
+     *     unique name of the service
      * @return result of Delete operation
      */
     OperationResult deleteService(String serviceName);
@@ -59,7 +59,7 @@ public interface ServiceDataStoreOperations {
      * deleteService service by common-id.
      *
      * @param commonId
-     *   unique common-id of the service
+     *     unique common-id of the service
      * @return result of Delete operation
      */
     OperationResult deleteTempService(String commonId);
@@ -68,11 +68,11 @@ public interface ServiceDataStoreOperations {
      * modifyService service attributes.
      *
      * @param serviceName
-     *   unique name of the service
+     *     unique name of the service
      * @param operationalState
-     *   operational state of service
+     *     operational state of service
      * @param administrativeState
-     *   administrative state of service
+     *     administrative state of service
      * @return result of modifyService operation
      */
     OperationResult modifyService(String serviceName, State operationalState, AdminStates administrativeState);
@@ -99,9 +99,9 @@ public interface ServiceDataStoreOperations {
      * create new servicePath entry.
      *
      * @param serviceInput
-     *   ServiceInput data for creation of service
+     *     ServiceInput data for creation of service
      * @param outputFromPce
-     *   output from pce request which is used as input for creating of service.
+     *     output from pce request which is used as input for creating of service.
      * @return result of createServicePath operation
      */
     OperationResult createServicePath(ServiceInput serviceInput, PathComputationRequestOutput outputFromPce);
@@ -119,7 +119,7 @@ public interface ServiceDataStoreOperations {
      * deleteServicePath by name.
      *
      * @param serviceName
-     *   unique name of the service
+     *     unique name of the service
      * @return result of Delete operation
      */
     OperationResult deleteServicePath(String serviceName);
@@ -129,7 +129,7 @@ public interface ServiceDataStoreOperations {
      * This method exists only for backwards compatibility. It will be deleted once refactoring is done.
      *
      * @param serviceName
-     *   unique name of the service
+     *     unique name of the service
      * @param input ServiceCreateInput data
      * @param output PathComputationRequestOutput data
      * @param choice 0:modify, 1:delete, 2:write
