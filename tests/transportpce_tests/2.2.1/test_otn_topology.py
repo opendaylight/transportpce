@@ -129,15 +129,13 @@ class TransportPCEtesting(unittest.TestCase):
             self.assertEqual(len(listNode), 0)
 
     def test_06_getLinks_OtnTopology(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
 
     def test_07_getNodes_OtnTopology(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         res = response.json()
         self.assertEqual(response.status_code, requests.codes.ok)
         nbNode = len(res['network'][0]['node'])
@@ -272,8 +270,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertNotIn('node', res['network'][0])
 
     def test_12_getNodes_OtnTopology(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         res = response.json()
         self.assertNotIn('node', res['network'][0])
 
