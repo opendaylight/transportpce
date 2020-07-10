@@ -47,8 +47,7 @@ class TransportPCEtesting(unittest.TestCase):
             'connected')
 
     def test_02_getClliNetwork(self):
-        url = "{}/config/ietf-network:networks/network/clli-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_clli_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         logging.info(res)
@@ -255,8 +254,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
     def test_09_getClliNetwork(self):
-        url = "{}/config/ietf-network:networks/network/clli-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_clli_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
