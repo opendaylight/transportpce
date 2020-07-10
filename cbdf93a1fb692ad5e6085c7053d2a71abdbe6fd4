@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d309d5b4_9915f584",
+        "filename": "api/src/main/yang/transportpce-portmapping@2020-04-29.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-10T08:23:52Z",
+      "side": 1,
+      "message": "note that this comment was already made in PS7 and is still open there. So I mark it resolved here in PS13 to avoid doppelgangers.\nTry to use/check gerrit tracking system - it is useful to not forget any previous comments.\n\n@Olivier: your comments are still marked un resolved. If you think they are covered, please mark them resolved.",
+      "parentUuid": "6a08fd70_b0903fc5",
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c78d7ee9_873e3465",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 13
