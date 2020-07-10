@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a08fd70_b0903fc5",
+        "filename": "api/src/main/yang/transportpce-portmapping@2020-04-29.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-10T08:13:31Z",
+      "side": 1,
+      "message": "the revision date should be changed\n\u003d\u003e create another change for that to dissociate import modifications",
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c78d7ee9_873e3465",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-10T08:13:31Z",
+      "side": 1,
+      "message": "reversing the logic would simplify the code and the indentation here\n\nif (deviceInfo.getNodeType() \u003d\u003d null) {\n         // TODO make mandatory in yang\n         LOG.error(\"Node type field is missing\");\n         return null;\n}\n\nNodeInfoBuilder nodeInfoBldr \u003d new NodeInfoBuilder();\n[..]\nif (deviceInfo.getNodeType().equals(NodeTypes.Rdm)) {\n     List\u003cDegree\u003e degrees \u003d getDegrees(nodeId, deviceInfo);\n     if (degrees.get(0).getMcCapabilities() \u003d\u003d null\n        || degrees.get(0).getMcCapabilities()       \n        .getCenterFreqGranularity().getValue().equals(BigDecimal.valueOf(50.0))) {         \n         nodeInfoBldr.setGridImplementation(GridImplementation.FixedGrid);\n         return nodeInfoBldr.build();\n     }\n     nodeInfoBldr.setGridImplementation(GridImplementation.FlexGrid);\n}\nreturn nodeInfoBldr.build();",
+      "range": {
+        "startLine": 1002,
+        "startChar": 0,
+        "endLine": 1033,
+        "endChar": 36
+      },
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fc17b68_8ec53e5c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-10T08:13:31Z",
+      "side": 1,
+      "message": "LF not needed I guess",
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddd8c63b_01a3b26a",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-10T08:13:31Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffd55fea_b4eacc97",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-10T08:13:31Z",
+      "side": 1,
+      "message": "indent +4 to separate clearly method input from setters",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 12
+      },
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e026fc6_98bccf45",
+        "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-10T08:13:31Z",
+      "side": 1,
+      "message": "is that required for flex grid?\nWhy 20 is no more OK ?",
+      "range": {
+        "startLine": 22,
+        "startChar": 14,
+        "endLine": 22,
+        "endChar": 16
+      },
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
