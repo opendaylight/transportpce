@@ -36,6 +36,7 @@ NODES_LOGIN = "admin"
 NODES_PWD = "admin"
 URL_CONFIG_NETCONF_TOPO = "{}/config/network-topology:network-topology/topology/topology-netconf/"
 URL_CONFIG_ORDM_TOPO = "{}/config/ietf-network:networks/network/openroadm-topology/"
+URL_CONFIG_CLLI_NET = "{}/config/ietf-network:networks/network/clli-network/"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -282,11 +283,16 @@ def del_oms_attr_request(link: str):
     )
     return delete_request(url)
 
+def get_clli_net_request():
+    return get_request(URL_CONFIG_CLLI_NET)
 
 def del_link_request(link: str):
     url = URL_CONFIG_ORDM_TOPO + ("ietf-network-topology:link/" + link)
     return delete_request(url)
 
+def del_node_request(node: str):
+    url = URL_CONFIG_CLLI_NET + ("node/" + node)
+    return delete_request(url)
 
 def shutdown_process(process):
     if process is not None:

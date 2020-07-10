@@ -40,8 +40,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_02_getClliNetwork(self):
-        url = "{}/config/ietf-network:networks/network/clli-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_clli_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         logging.info(res)
@@ -168,8 +167,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_07_getClliNetwork(self):
-        url = "{}/config/ietf-network:networks/network/clli-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_clli_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['network'][0]['node'][0]['node-id'], 'NodeA')
@@ -392,8 +390,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_16_getClliNetwork(self):
-        url = "{}/config/ietf-network:networks/network/clli-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_clli_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -689,8 +686,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
 
     def test_26_getClliNetwork(self):
-        url = "{}/config/ietf-network:networks/network/clli-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_clli_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -790,9 +786,7 @@ class TransportPCEtesting(unittest.TestCase):
         # Delete in the topology-netconf
         response = test_utils.unmount_device("ROADM-B1")
         # Delete in the clli-network
-        url = "{}/config/ietf-network:networks/network/clli-network/node/NodeB"
-        data = {}
-        response = test_utils.delete_request(url)
+        response = test_utils.del_node_request("NodeB")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_31_disconnect_ROADMC(self):
@@ -800,9 +794,7 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.unmount_device("ROADM-C1")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         # Delete in the clli-network
-        url = "{}/config/ietf-network:networks/network/clli-network/node/NodeC"
-        data = {}
-        response = test_utils.delete_request(url)
+        response = test_utils.del_node_request("NodeC")
         self.assertEqual(response.status_code, requests.codes.ok)
 
 #    def test_24_check_roadm2roadm_links_deletion(self):
@@ -951,8 +943,7 @@ class TransportPCEtesting(unittest.TestCase):
             self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'ROADM-B1')
 
     def test_34_getClliNetwork(self):
-        url = "{}/config/ietf-network:networks/network/clli-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_clli_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -965,8 +956,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
     def test_36_getClliNetwork(self):
-        url = "{}/config/ietf-network:networks/network/clli-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_clli_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -1087,14 +1077,11 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.unmount_device("ROADM-A1")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
         # Delete in the clli-network
-        url = "{}/config/ietf-network:networks/network/clli-network/node/NodeA"
-        data = {}
-        response = test_utils.delete_request(url)
+        response = test_utils.del_node_request("NodeA")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_42_getClliNetwork(self):
-        url = "{}/config/ietf-network:networks/network/clli-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_clli_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn('node', res['network'][0])
