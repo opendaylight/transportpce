@@ -46,8 +46,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_03_getOpenRoadmNetwork(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['network'][0]['node'][0]['node-id'], 'ROADMA01')
@@ -168,8 +167,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_08_getOpenRoadmNetwork(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -378,8 +376,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_17_getOpenRoadmNetwork(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -842,8 +839,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
             self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'ROADMC01-DEG2')
 
     def test_33_getOpenRoadmNetwork(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -874,9 +870,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_37_getOpenRoadmNetwork(self):
-        url = ("{}/config/ietf-network:networks/network/openroadm-network"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -998,8 +992,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         self.assertNotIn('node', res['network'][0])
 
     def test_43_getOpenRoadmNetwork(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn('node', res['network'][0])
