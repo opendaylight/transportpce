@@ -55,8 +55,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
 
     def test_03_getOpenRoadmNetwork(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['network'][0]['node'][0]['node-id'], 'SPDR-SA1')
@@ -262,8 +261,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeSA')
 
     def test_10_getOpenRoadmNetwork(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-network"
-        response = test_utils.get_request(url)
+        response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn('node', res['network'][0])
