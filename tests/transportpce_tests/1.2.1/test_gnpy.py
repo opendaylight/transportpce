@@ -82,8 +82,7 @@ class TransportGNPYtesting(unittest.TestCase):
         time.sleep(3)
 
     def test_02_connect_openroadmNetwork(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-network"
-        response = test_utils.rawput_request(url, self.topo_ordnet_data)
+        response = test_utils.rawput_request(test_utils.URL_CONFIG_ORDM_NET, self.topo_ordnet_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
@@ -332,8 +331,7 @@ class TransportGNPYtesting(unittest.TestCase):
         time.sleep(3)
 
     def test_09_disconnect_openroadmNetwork(self):
-        url = "{}/config/ietf-network:networks/network/openroadm-network"
-        response = test_utils.delete_request(url)
+        response = test_utils.delete_request(test_utils.URL_CONFIG_ORDM_NET)
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
