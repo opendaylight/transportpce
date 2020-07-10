@@ -114,8 +114,7 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test service-create for OCH-OTU4 service from spdr to spdr
     def test_11_check_otn_topology(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nbNode = len(res['network'][0]['node'])
@@ -386,8 +385,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(3)
 
     def test_22_check_otn_topo_otu4_links(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nb_links = len(res['network'][0]['ietf-network-topology:link'])
@@ -585,8 +583,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_27_check_otn_topo_links(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nb_links = len(res['network'][0]['ietf-network-topology:link'])
@@ -610,8 +607,7 @@ class TransportPCEtesting(unittest.TestCase):
                 self.fail("this link should not exist")
 
     def test_28_check_otn_topo_tp(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
             if (node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1'):
@@ -927,8 +923,7 @@ class TransportPCEtesting(unittest.TestCase):
                              res['odu-connection'][0]['source'])
 
     def test_39_check_otn_topo_links(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nb_links = len(res['network'][0]['ietf-network-topology:link'])
@@ -941,8 +936,7 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(link['org-openroadm-otn-network-topology:used-bandwidth'], 10000)
 
     def test_40_check_otn_topo_tp(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
             if (node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1'):
@@ -1006,8 +1000,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_47_check_otn_topo_links(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         nb_links = len(res['network'][0]['ietf-network-topology:link'])
@@ -1020,8 +1013,7 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertEqual(link['org-openroadm-otn-network-topology:used-bandwidth'], 0)
 
     def test_48_check_otn_topo_tp(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
             if (node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1'):
@@ -1070,8 +1062,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.test_22_check_otn_topo_otu4_links()
 
     def test_53_check_otn_topo_tp(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
             if (node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1'):
@@ -1124,8 +1115,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_58_getLinks_OtnTopology(self):
-        url = "{}/config/ietf-network:networks/network/otn-topology"
-        response = test_utils.get_request(url)
+        response = test_utils.get_otn_topo_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
