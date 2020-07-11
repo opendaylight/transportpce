@@ -44,10 +44,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     def test_03_rdm_portmapping(self):
-        url = ("{}/config/transportpce-portmapping:network/"
-               "nodes/ROADMA01"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("ROADMA01")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -60,10 +57,7 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['nodes'][0]['mapping'])
 
     def test_04_xpdr_portmapping(self):
-        url = ("{}/config/transportpce-portmapping:network/"
-               "nodes/XPDRA01"
-               )
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("XPDRA01")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(

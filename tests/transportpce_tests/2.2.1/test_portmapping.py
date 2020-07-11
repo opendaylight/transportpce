@@ -48,8 +48,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_03_rdm_portmapping_info(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/ROADM-A1/node-info"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("ROADM-A1/node-info")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -62,8 +61,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(3)
 
     def test_04_rdm_portmapping_DEG1_TTP_TXRX(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/ROADM-A1/mapping/DEG1-TTP-TXRX"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("ROADM-A1/mapping/DEG1-TTP-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -72,8 +70,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_05_rdm_portmapping_DEG2_TTP_TXRX_with_ots_oms(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/ROADM-A1/mapping/DEG2-TTP-TXRX"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("ROADM-A1/mapping/DEG2-TTP-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -84,8 +81,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_06_rdm_portmapping_SRG1_PP3_TXRX(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/ROADM-A1/mapping/SRG1-PP3-TXRX"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("ROADM-A1/mapping/SRG1-PP3-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -94,8 +90,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_07_rdm_portmapping_SRG3_PP1_TXRX(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/ROADM-A1/mapping/SRG3-PP1-TXRX"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("ROADM-A1/mapping/SRG3-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -117,8 +112,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_10_xpdr_portmapping_info(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/XPDR-A1/node-info"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("XPDR-A1/node-info")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -131,8 +125,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         time.sleep(3)
 
     def test_11_xpdr_portmapping_NETWORK1(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/XPDR-A1/mapping/XPDR1-NETWORK1"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("XPDR-A1/mapping/XPDR1-NETWORK1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -144,8 +137,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_12_xpdr_portmapping_NETWORK2(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/XPDR-A1/mapping/XPDR1-NETWORK2"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("XPDR-A1/mapping/XPDR1-NETWORK2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -157,8 +149,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_13_xpdr_portmapping_CLIENT1(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/XPDR-A1/mapping/XPDR1-CLIENT1"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("XPDR-A1/mapping/XPDR1-CLIENT1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -171,8 +162,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['mapping'])
 
     def test_14_xpdr_portmapping_CLIENT2(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/XPDR-A1/mapping/XPDR1-CLIENT2"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("XPDR-A1/mapping/XPDR1-CLIENT2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -198,8 +188,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_17_xpdr_device_not_connected(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/XPDR-A1"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("XPDR-A1")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -221,8 +210,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
             res['errors']['error'])
 
     def test_20_rdm_device_not_connected(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/ROADM-A1"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("ROADM-A1")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
