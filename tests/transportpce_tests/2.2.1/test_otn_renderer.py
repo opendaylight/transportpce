@@ -47,8 +47,7 @@ class TransportPCEtesting(unittest.TestCase):
             'connected')
 
     def test_02_get_portmapping_CLIENT1(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/SPDR-SA1/mapping/XPDR1-CLIENT1"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-CLIENT1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -65,8 +64,7 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_03_get_portmapping_NETWORK1(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/SPDR-SA1/mapping/XPDR1-NETWORK1"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-NETWORK1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -104,8 +102,7 @@ class TransportPCEtesting(unittest.TestCase):
              'och-interface-id': ['XPDR1-NETWORK1-1']}, res["output"]['node-interface'])
 
     def test_05_get_portmapping_NETWORK1(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/SPDR-SA1/mapping/XPDR1-NETWORK1"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-NETWORK1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
@@ -186,8 +183,7 @@ class TransportPCEtesting(unittest.TestCase):
              'odu-interface-id': ['XPDR1-NETWORK1-ODU4']}, res["output"]['node-interface'])
 
     def test_09_get_portmapping_NETWORK1(self):
-        url = "{}/config/transportpce-portmapping:network/nodes/SPDR-SA1/mapping/XPDR1-NETWORK1"
-        response = test_utils.get_request(url)
+        response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-NETWORK1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
