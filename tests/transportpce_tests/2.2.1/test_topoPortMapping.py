@@ -51,8 +51,7 @@ class TransportPCEtesting(unittest.TestCase):
             print("nodeId={}".format(nodeId))
             nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
             print("nodeMapId={}".format(nodeMapId))
-            urlMapList = "{}/config/transportpce-portmapping:network/nodes/" + nodeMapId
-            responseMapList = test_utils.get_request(urlMapList)
+            responseMapList = test_utils.portmapping_request(nodeMapId)
             resMapList = responseMapList.json()
 
             nbMappings = len(resMapList['nodes'][0]['mapping']) - nbMapCumul
@@ -61,8 +60,7 @@ class TransportPCEtesting(unittest.TestCase):
             for j in range(0, nbTp):
                 tpId = resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                 if((not "CP" in tpId) and (not "CTP" in tpId)):
-                    urlMap = "{}/config/transportpce-portmapping:network/nodes/" + nodeMapId + "/mapping/" + tpId
-                    responseMap = test_utils.get_request(urlMap)
+                    responseMap = test_utils.portmapping_request(nodeMapId+"/mapping/"+tpId)
                     self.assertEqual(responseMap.status_code, requests.codes.ok)
                     if(responseMap.status_code == requests.codes.ok):
                         nbMapCurrent += 1
