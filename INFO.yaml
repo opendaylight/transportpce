@@ -1,0 +1,58 @@
+---
+project: 'transportpce'
+project_creation_date: '2016-05-26'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &odl_transportpce_ptl
+    name: 'Guillaume Lambert'
+    email: 'guillaume.lambert@orange.com'
+    company: 'orange'
+    id: 'guillaume.lambert'
+    timezone: 'Europe/Paris'
+primary_contact: *odl_transportpce_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.opendaylight.org/projects/'
+    key: 'transportpce'
+mailing_list:
+    type: 'groups.io'
+    url: 'app-dev@lists.opendaylight.org'
+    tag: '[]'
+realtime_discussion:
+    type: 'irc'
+    server: 'freenode.net'
+    channel: '#opendaylight'
+meetings:
+    - type: 'gotomeeting+irc'
+      agenda: 'https://wiki.opendaylight.org'
+      url: ''
+      server: 'freenode.net'
+      channel: '#opendaylight'
+      repeats: ''
+      time: ''
+repositories:
+    - transportpce
+committers:
+    - <<: *odl_transportpce_ptl
+    - name: 'Gilles Thouenon'
+      email: 'gilles.thouenon@orange.com'
+      company: 'orange'
+      id: 'gthouenon'
+      timezone: 'Europe/Paris'
+    - name: 'Shweta Vachhani'
+      email: 'sv111y@att.com'
+      company: 'att'
+      id: 'svachhani'
+      timezone: 'America/New_York'
+    - name: 'Cédric Ollivier'
+      email: 'cedric.ollivier@orange.com'
+      company: 'orange'
+      id: 'collivier'
+      timezone: 'Europe/Paris'
+tsc:
+    # yamllint disable rule:line-length
+    approval: 'https://meetings.opendaylight.org/opendaylight-meeting/2016/tsc/opendaylight-meeting-tsc.2016-05-26-17.00.html'
+    changes:
+        - type: ''
+          name: ''
+          link: ''
