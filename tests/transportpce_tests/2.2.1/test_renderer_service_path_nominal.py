@@ -195,6 +195,7 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertDictEqual(
             {u'rate': u'org-openroadm-common-types:R100G',
              u'transmit-power': -5,
+             u'modulation-format': 'dp-qpsk',
              u'frequency': 195.8},
             res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
