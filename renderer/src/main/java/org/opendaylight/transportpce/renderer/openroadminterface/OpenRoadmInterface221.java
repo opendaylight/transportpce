@@ -23,6 +23,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PowerDBm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.R100G;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceBuilder;
@@ -48,6 +49,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnOtu;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.media.channel.interfaces.rev181019.mc.ttp.container.McTtpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.media.channel.interfaces.rev181019.nmc.ctp.container.NmcCtpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev181019.OchAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev181019.och.container.OchBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.OtsAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev181019.ots.container.OtsBuilder;
@@ -235,6 +237,8 @@ public class OpenRoadmInterface221 {
         OchBuilder ocIfBuilder = new OchBuilder()
                 .setFrequency(FrequencyTHz.getDefaultInstance(String.valueOf(fixedFlex.getCenterFrequency())))
                 .setRate(R100G.class)
+                // TODO: Check if this the correct way to set modulation format here
+                .setModulationFormat(ModulationFormat.DpQpsk)
                 .setTransmitPower(new PowerDBm(new BigDecimal("-5")));
 
         // Create generic interface
