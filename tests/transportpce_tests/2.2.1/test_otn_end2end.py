@@ -261,7 +261,7 @@ class TransportPCEtesting(unittest.TestCase):
 
         self.assertDictEqual(
             {u'frequency': 196.1, u'rate': u'org-openroadm-common-types:R100G',
-             u'transmit-power': -5},
+             u'transmit-power': -5, u'modulation-format': 'dp-qpsk'},
             res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_15_check_interface_OTU4_spdra(self):
@@ -301,7 +301,7 @@ class TransportPCEtesting(unittest.TestCase):
 
         self.assertDictEqual(
             {u'frequency': 196.1, u'rate': u'org-openroadm-common-types:R100G',
-             u'transmit-power': -5},
+             u'transmit-power': -5, u'modulation-format': 'dp-qpsk'},
             res['interface'][0]['org-openroadm-optical-channel-interfaces:och'])
 
     def test_17_check_interface_OTU4_spdrc(self):
