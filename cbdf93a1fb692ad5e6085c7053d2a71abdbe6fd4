@@ -78,6 +78,30 @@
     },
     {
       "key": {
+        "uuid": "f9fe5eea_c47ab83b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-07-15T22:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c78d7ee9_873e3465",
+      "range": {
+        "startLine": 1002,
+        "startChar": 0,
+        "endLine": 1033,
+        "endChar": 36
+      },
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5fc17b68_8ec53e5c",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
         "patchSetId": 13
@@ -92,6 +116,24 @@
       "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab2e4e0f_73e70f68",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-07-15T22:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fc17b68_8ec53e5c",
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -135,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "d3b68a5b_3a619f40",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-07-15T22:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffd55fea_b4eacc97",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 12
+      },
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e026fc6_98bccf45",
         "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
         "patchSetId": 13
@@ -155,6 +221,30 @@
       "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dbc9a91_243d86ad",
+        "filename": "tests/transportpce_tests/1.2.1/test_end2end.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-07-15T22:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e026fc6_98bccf45",
+      "range": {
+        "startLine": 22,
+        "startChar": 14,
+        "endLine": 22,
+        "endChar": 16
+      },
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
