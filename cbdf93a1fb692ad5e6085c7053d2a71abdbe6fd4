@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1805e8f7_4a8a69fa",
+        "filename": "api/src/main/yang/transportpce-portmapping@2020-04-29.yang",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-07-15T15:34:01Z",
+      "side": 1,
+      "message": "Hi Guillaume, I will look into it. Thanks",
+      "parentUuid": "d309d5b4_9915f584",
+      "revId": "cbdf93a1fb692ad5e6085c7053d2a71abdbe6fd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c78d7ee9_873e3465",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 13
