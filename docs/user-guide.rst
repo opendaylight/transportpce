@@ -63,6 +63,8 @@ Preparing for Installation
 
 1. Devices must support the standard OpenROADM Models more precisely versions 1.2.1 and 2.2.1.
    Since Magnesium SR0, an OTN experimental support is provided for OpenROADM devices 2.2.1.
+   Magnesium SR2 is the first release managing end-to-end OTN services, as OCH-OTU4,
+   structured ODU4 or again 10GE-ODU2e services.
 
 2. Devices must support configuration through NETCONF protocol/API.
 
