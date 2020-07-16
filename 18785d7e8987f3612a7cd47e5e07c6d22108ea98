@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dc1ad1e_ae535d2e",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-16T08:14:08Z",
+      "side": 1,
+      "message": "this is the old list of committer\nThe current list is up-to-date on the new wiki\n\nhttps://wiki.opendaylight.org/display/ODL/TransportPCE",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 33
+      },
+      "revId": "18785d7e8987f3612a7cd47e5e07c6d22108ea98",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
