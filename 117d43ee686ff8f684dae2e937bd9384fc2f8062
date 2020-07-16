@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ff9db77_dcf40c8d",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-07-16T14:08:12Z",
+      "side": 1,
+      "message": "OCH-OTU4 and ODU4 services which are part of OTN infrastructure are fully supported by MgSR2.",
+      "parentUuid": "90a5f8c5_461685c7",
+      "range": {
+        "startLine": 79,
+        "startChar": 14,
+        "endLine": 79,
+        "endChar": 28
+      },
+      "revId": "117d43ee686ff8f684dae2e937bd9384fc2f8062",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd21e71d_1cd01c4a",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "cf635369_7ca79101",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-07-16T14:08:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd21e71d_1cd01c4a",
+      "range": {
+        "startLine": 81,
+        "startChar": 43,
+        "endLine": 81,
+        "endChar": 48
+      },
+      "revId": "117d43ee686ff8f684dae2e937bd9384fc2f8062",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d41e0cc5_29a932ed",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "117d43ee686ff8f684dae2e937bd9384fc2f8062",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36607ddf_99827fc0",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-07-16T14:08:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d41e0cc5_29a932ed",
+      "range": {
+        "startLine": 838,
+        "startChar": 95,
+        "endLine": 838,
+        "endChar": 96
+      },
+      "revId": "117d43ee686ff8f684dae2e937bd9384fc2f8062",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
