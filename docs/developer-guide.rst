@@ -52,7 +52,9 @@ OpenDaylight. By experimental, we mean not all features can be accessed through
 northbound API based on RESTCONF encoded OpenROADM Service model. In the meanwhile,
 "east/west" APIs shall be used to trigger a path computation in the PCE (using
 path-computation-request RPC) and to create services (using otn-service-path RPC).
-OTN support will be improved in the following magnesium releases.
+With Magnesium SR2, TransportPCE starts to manage some end-to-end OTN services, as for example,
+OCH-OTU4, structured ODU4 or again 10GE-ODU2e services.
+OTN support will continue to be improved in the following releases.
 
 
 
@@ -74,8 +76,12 @@ Renderer and the OLM to delete connections and reset power levels associated wit
 service. The service-list is updated following a successful service deletion. In Neon SR0 is
 added the support for service from ROADM to ROADM, which brings additional flexibility and
 notably allows reserving resources when transponders are not in place at day one.
-The full support of OTN services, including OTU, HO-ODU and LO-ODU will be introduced
-in next release of Magnesium.
+Magnesium SR2 fully supports end-to-end OTN services which are part of the OTN infrastructure.
+It concerns the management of OCH-OTU4 (also part of the optical infrastructure) and structured
+HO-ODU4 services. Moreover, once these two kinds of OTN infrastructure service created, it is
+possible to manage some LO-ODU services (for the time being, only 10GE-ODU2e services).
+The full support of OTN services, including 1GE-ODU0 or 100GE, will be introduced along next
+releases.
 
 PCE
 ^^^
@@ -136,8 +142,8 @@ It includes several network layers:
    mux-ponders having the ability to switch OTN containers from client to line cards. SR0 release
    includes creation of the switching pool (used to model cross-connect matrices),
    tributary-ports and tributary-slots at the initial connection of NETCONF devices.
-   However, the population of OTN links, and the adjustment of the tributary ports/slots
-   pull occupancy when OTN services are created will be handled in later Magnesium release.**
+   The population of OTN links (OTU4 and ODU4), and the adjustment of the tributary ports/slots
+   pool occupancy when OTN services are created is supported since Magnesium SR2.**
 
 
 Renderer
@@ -169,8 +175,8 @@ rollback function is called to set the equipment on the path back to their initi
 
 Magnesium brings the support of OTN services. SR0 supports the creation of OTU4, ODU4, ODU2/ODU2e
 and ODU0 interfaces. The creation of these low-order otn interfaces must be triggered through
-otn-service-path RPC. Full support (service-implementation-request /service delete rpc, topology
-alignement after the service has been created) will be provided in later releases of Magnesium.
+otn-service-path RPC. Magnesium SR2 fully supports end-to-end otn service implementation into devices
+(service-implementation-request /service delete rpc, topology alignement after the service has been created).
 
 
 OLM
@@ -580,40 +586,15 @@ OTN topology, use the following command on the REST API :
 
 **REST API** : *GET /restconf/config/ietf-network:network/otn-topology*
 
-An optical connectivity service shall have been created in a first setp. In Magnesium SR0, the OTN
-links are not automatically populated in the topology after the Och, OTU4 and ODU4 interfaces have
-been created on the two network ports of the xpdr. Thus the otn link must be posted manually through
-the REST API (as APIDoc for example).
-
-**REST API** : *POST /restconf/config/ietf-network:networks/network/otn-topology/ietf-network-topology:link/<link-id>*
-
-**Sample JSON Data**
-
-.. code:: json
-
-   {
-   "ietf-network-topology:link": [
-     {
-       "link-id": "<link-id>",
-         "source": {
-           "source-node": "<xpdr-node-id>",
-           "source-tp": "<xpdr-network-port-id>"
-         },
-         "org-openroadm-common-network:link-type": "OTN-LINK",
-         "destination": {
-           "dest-node": "<xpdr-node-id>",
-           "dest-tp": "<xpdr-network-port-id>"
-         }
-       }
-     ]
-   }
-
+An optical connectivity service shall have been created in a first setp. Since Magnesium SR2, the OTN
+links are automatically populated in the topology after the Och, OTU4 and ODU4 interfaces have
+been created on the two network ports of the xpdr.
 
 Creating a service
 ~~~~~~~~~~~~~~~~~~
 
 Use the *service handler* module to create any end-to-end connectivity service on an OpenROADM
-network. Two kind of end-to-end services are managed by TransportPCE :
+network. Two kind of end-to-end "optical" services are managed by TransportPCE:
 - 100GE service from client port to client port of two transponders (TPDR)
 - Optical Channel (OC) service from client add/drop port (PP port of SRG) to client add/drop port of
 two ROADMs.
@@ -623,26 +604,18 @@ interfaces and cross-connection on each device supporting the service.
 As an example, the creation of a 100GE service implies among other things, the creation of OCH, OTU4
 and ODU4 interfaces on the Network port of TPDR devices.
 
-In Magnesium SR0, the *service handler* module does not manage directly the end-to-end aspect of otn
-connectivity services. OTN services must be manualy created invoking directly the *renderer* module.
-
-
-Before creating a low-order otn service (1GE or 10GE services terminating on client port of MUXPDR
+Since Magnesium SR2, the *service handler* module directly manages some end-to-end otn
+connectivity services.
+Before creating a low-order OTN service (1GE or 10GE services terminating on client port of MUXPDR
 or SWITCH), the user must ensure that a high-order ODU4 container exists and has previously been
-configured (low-order structured) to support low-order OTN containers. Thus, otn service creation
-implies two steps:
-1. OCH, OTU-4 and ODU-4 service from network port to network port of two OTN Xponders
-(MUXPDR or SWITCH)
-2. 1GE or 10GE service creation from client port to client port of two OTN Xponders
-(MUXPDR or SWITCH)
+configured (it means structured to support low-order otn services) to support low-order OTN containers.
+Thus, OTN service creation implies three steps:
+1. OCH-OTU4 service from network port to network port of two OTN Xponders (MUXPDR or SWITCH)
+2. HO-ODU4 service from network port to network port of two OTN Xponders (MUXPDR or SWITCH)
+3. 10GE service creation from client port to client port of two OTN Xponders (MUXPDR or SWITCH)
 
-Since in Magnesium SR0 otn service creation is not automatically done by TransportPCE, the user has
-to check the connectivity between nodes using the internal API of the *PCE* module, through the
-path-computation-request rpc.
-Afterwards, for the first step otn service creation, the user has to use the internal service-path
-rpc of the *renderer* module.
-Finally, the 1GE and 10GE services creation is performed using internal otn-service-path rpc of the
-*renderer* module.
+The management of other OTN services (1GE-ODU0, 100GE...) is planned for future releases.
+
 
 100GE service creation
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -857,81 +830,350 @@ As for the previous RPC, this RPC invokes the *PCE* module to compute a path ove
 *openroadm-topology* and then invokes *renderer* and *OLM* to implement the end-to-end path into
 the devices.
 
-OTN OCH, OTU4 and ODU4 service creation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OTN OCH-OTU4 service creation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Use the following REST RPC to invoke *renderer* module in order to create adequate interfaces on
-otn device in order to support a bidirectional end-to-end Low-Order OTN connectivity service on
-network port of a MUXPDR or SWITCH xpdr node.
+Use the following REST RPC to invoke *service handler* module in order to create over the optical
+infrastructure a bidirectional end-to-end OTU4 over an optical wavelength connectivity service
+between two optical network ports of OTN Xponder (MUXPDR or SWITCH). Such service configure the
+optical network infrastructure composed of rdm nodes.
 
-**REST API** : *POST /restconf/operations/transportpce-device-renderer:service-path*
-
-**Sample JSON Data**
-
-.. code:: json
-
-   {
-     "input": {
-       "nodes": [
-         {
-           "node-id": "<otn-node-id>",
-           "dest-tp": "<otn-network-port-logical-connection-point>"
-         }
-       ],
-           "modulation-format": "qpsk",
-           "operation": "create",
-           "service-name": "<service-name>",
-           "wave-number": "<wavenumber-returned-by-PCE>"
-     }
-   }
-
-1GE/ODU0 and 10GE/ODU2e service creation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Use the following REST RPC to invoke *renderer* module and create adequate interfaces on otn xpdr
-device (MUXPDR or SWITCH) in order to support a low-order otn service on its client port.
-
-- 1GE and ODU0 interfaces for 1GE services
-- 10GE and ODU2e interfaces for 10GE services
-
-The following example corresponds to the creation of a 10GE service
-
-*REST API** : *POST /restconf/operations/transportpce-device-renderer:otn-service-path*
+**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
 
 **Sample JSON Data**
 
 .. code:: json
 
-   {
-     "input": {
-       "service-rate": "10G",
-       "service-type": "Ethernet",
-       "ethernet-encoding": "something",
-       "trib-slot": "<trib-slot-number-inside-supported-ODU4>",
-       "trib-port-number": "<trib-port-number-inside-supported-ODU4>",
-       "operation": "create",
-       "service-name": "something",
-       "nodes": [
-         {
-         "node-id": "<otn-node-id>",
-         "client-tp": "<client-port-logical-connection-point>",
-         "network-tp": "<network-port-logical-connection-point>"
-         }
-       ]
-     }
-   }
+    {
+        "input": {
+            "sdnc-request-header": {
+                "request-id": "request-1",
+                "rpc-action": "service-create",
+                "request-system-id": "appname"
+            },
+            "service-name": "something",
+            "common-id": "commonId",
+            "connection-type": "infrastructure",
+            "service-a-end": {
+                "service-rate": "100",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "OTU",
+                "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
+                "clli": "<ccli-name>",
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "service-z-end": {
+                "service-rate": "100",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "OTU",
+                "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
+                "clli": "<ccli-name>",
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "due-date": "yyyy-mm-ddT00:00:01Z",
+            "operator-contact": "some-contact-info"
+        }
+    }
+
+As for the previous RPC, this RPC invokes the *PCE* module to compute a path over the
+*openroadm-topology* and then invokes *renderer* and *OLM* to implement the end-to-end path into
+the devices.
+
+OTN HO-ODU4 service creation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the following REST RPC to invoke *service handler* module in order to create over the optical
+infrastructure a bidirectional end-to-end ODU4 OTN service over an OTU4 and structured to support
+low-order OTN services (ODU2e, ODU0). As for OTU4, such a service must be created between two network
+ports of OTN Xponder (MUXPDR or SWITCH).
+
+**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+        "input": {
+            "sdnc-request-header": {
+                "request-id": "request-1",
+                "rpc-action": "service-create",
+                "request-system-id": "appname"
+            },
+            "service-name": "something",
+            "common-id": "commonId",
+            "connection-type": "infrastructure",
+            "service-a-end": {
+                "service-rate": "100",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "ODU",
+                "otu-service-rate": "org-openroadm-otn-common-types:ODU4",
+                "clli": "<ccli-name>",
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "service-z-end": {
+                "service-rate": "100",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "ODU",
+                "otu-service-rate": "org-openroadm-otn-common-types:ODU4",
+                "clli": "<ccli-name>",
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-network-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "due-date": "yyyy-mm-ddT00:00:01Z",
+            "operator-contact": "some-contact-info"
+        }
+    }
+
+As for the previous RPC, this RPC invokes the *PCE* module to compute a path over the
+*otn-topology* that must contains OTU4 links with valid bandwidth parameters, and then
+invokes *renderer* and *OLM* to implement the end-to-end path into the devices.
+
+OTN 10GE-ODU2e service creation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use the following REST RPC to invoke *service handler* module in order to create over the OTN
+infrastructure a bidirectional end-to-end 10GE-ODU2e OTN service over an ODU4.
+Such a service must be created between two client ports of OTN Xponder (MUXPDR or SWITCH)
+configured to support 10GE interfaces.
+
+**REST API** : *POST /restconf/operations/org-openroadm-service:service-create*
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+        "input": {
+            "sdnc-request-header": {
+                "request-id": "request-1",
+                "rpc-action": "service-create",
+                "request-system-id": "appname"
+            },
+            "service-name": "something",
+            "common-id": "commonId",
+            "connection-type": "service",
+            "service-a-end": {
+                "service-rate": "10",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "Ethernet",
+                "clli": "<ccli-name>",
+                "subrate-eth-sla": {
+                    "subrate-eth-sla": {
+                        "committed-info-rate": "10000",
+                        "committed-burst-size": "64"
+                    }
+                },
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-client-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-client-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "service-z-end": {
+                "service-rate": "10",
+                "node-id": "<xpdr-node-id>",
+                "service-format": "Ethernet",
+                "clli": "<ccli-name>",
+                "subrate-eth-sla": {
+                    "subrate-eth-sla": {
+                        "committed-info-rate": "10000",
+                        "committed-burst-size": "64"
+                    }
+                },
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-client-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "<xpdr-node-id-in-otn-topology>",
+                        "port-type": "fixed",
+                        "port-name": "<xpdr-client-port-in-otn-topology>",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "due-date": "yyyy-mm-ddT00:00:01Z",
+            "operator-contact": "some-contact-info"
+        }
+    }
+
+As for the previous RPC, this RPC invokes the *PCE* module to compute a path over the
+*otn-topology* that must contains ODU4 links with valid bandwidth parameters, and then
+invokes *renderer* and *OLM* to implement the end-to-end path into the devices.
+
 
 .. note::
-    OTN links are not automatically populated in the topology after the ODU2e interfaces have
-    been created on the two client ports of the xpdr. The otn link can be posted manually through
-    the REST API (APIDoc).
+    Since Magnesium SR2, the service-list corresponding to OCH-OTU4, ODU4 or again 10GE-ODU2e services is
+    updated in the service-list datastore.
 
 .. note::
-    With Magnesium SR0, the service-list corresponding to 1GE/10GE and OTU4/ODU4 services is not
-    updated in the datastore after the interfaces have been created in the device.
-
-.. note::
-    trib-slot is used when the equipment supports contiguous trib-slot allocation (supported in
+    trib-slot is used when the equipment supports contiguous trib-slot allocation (supported from
     Magnesium SR0). The trib-slot provided corresponds to the first of the used trib-slots.
     complex-trib-slots will be used when the equipment does not support contiguous trib-slot
     allocation. In this case a list of the different trib-slots to be used shall be provided.
@@ -940,8 +1182,8 @@ The following example corresponds to the creation of a 10GE service
 Deleting a service
 ~~~~~~~~~~~~~~~~~~
 
-Deleting a 100GE and OC service
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Deleting any kind of service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Use the following REST RPC to invoke *service handler* module in order to delete a given optical
 connectivity service.
@@ -969,68 +1211,13 @@ connectivity service.
 
 Most important parameters for this REST RPC is the *service-name*.
 
-Deleting 1GE/ODU0 or 10GE/ODU2e
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Use the following REST RPC to invoke *renderer* module and delete adequate interfaces on otn node.
-The following example corresponds to the deletion of a 10GE service
-
-*REST API** : *POST /restconf/operations/transportpce-device-renderer:otn-service-path*
-
-**Sample JSON Data**
-
-.. code:: json
-
-   {
-     "input": {
-       "service-rate": "10G",
-       "service-type": "Ethernet",
-       "ethernet-encoding": "something",
-       "trib-slot": "<trib-slot-number-inside-supported-ODU4>",
-       "trib-port-number": "<trib-port-number-inside-supported-ODU4>",
-       "operation": "delete",
-       "service-name": "something",
-       "nodes": [
-         {
-         "node-id": "<otn-node-id>",
-         "client-tp": "<client-port-logical-connection-point>",
-         "network-tp": "<network-port-logical-connection-point>"
-         }
-       ]
-     }
-   }
-
-
-Deleting OTN OCH, OTU4 and ODU4 service
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Use the following REST RPC to invoke *renderer* module in order to delete adequate interfaces on
-otn node.
-
-**REST API** : *POST /restconf/operations/transportpce-device-renderer:service-path*
-
-**Sample JSON Data**
-
-.. code:: json
-
-   {
-     "input": {
-       "nodes": [
-         {
-           "node-id": "<otn-node-id>",
-           "dest-tp": "<otn-network-port-logical-connection-point>"
-         }
-       ],
-       "modulation-format": "qpsk",
-       "operation": "delete",
-       "service-name": "<service-name>",
-       "wave-number": "<wavenumber-returned-by-PCE>",
-     }
-   }
 
 .. note::
-    Be sure to have deleted all low-order otn services before deleting high-order OTN container
-
+    Deleting OTN services implies proceeding in the reverse way to their creation. Thus, OTN
+    service deletion must respect the three following steps:
+    1. delete first all 10GE services supported over any ODU4 to be deleted
+    2. delete ODU4
+    3. delete OCH-OTU4 supporting the just deleted ODU4
 
 Invoking PCE module
 ~~~~~~~~~~~~~~~~~~~
