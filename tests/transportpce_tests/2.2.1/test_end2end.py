@@ -212,8 +212,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_12_get_eth_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -448,8 +447,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_23_get_eth_service2(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service2"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -871,8 +869,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_37_get_oc_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -1026,8 +1023,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_41_get_oc_service2(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service2"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -1113,8 +1109,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_46_get_no_oc_services(self):
         print("start test")
-        url = "{}/operational/org-openroadm-service:service-list"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -1147,8 +1142,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             self.test_30_delete_eth_service1()
 
     def test_50_loop_create_oc_service(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1")
         if response.status_code != 404:
             url = "{}/operations/org-openroadm-service:service-delete"
             data = {"input": {

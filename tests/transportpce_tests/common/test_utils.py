@@ -40,6 +40,7 @@ URL_CONFIG_OTN_TOPO = "{}/config/ietf-network:networks/network/otn-topology/"
 URL_CONFIG_CLLI_NET = "{}/config/ietf-network:networks/network/clli-network/"
 URL_CONFIG_ORDM_NET = "{}/config/ietf-network:networks/network/openroadm-network/"
 URL_PORTMAPPING = "{}/config/transportpce-portmapping:network/nodes/"
+URL_OPER_SERV_LIST = "{}/operational/org-openroadm-service:service-list/"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -311,6 +312,10 @@ def del_node_request(node: str):
 
 def portmapping_request(suffix: str):
     url = URL_PORTMAPPING + suffix
+    return get_request(url)
+
+def get_service_list_request(suffix: str):
+    url = URL_OPER_SERV_LIST + suffix
     return get_request(url)
 
 

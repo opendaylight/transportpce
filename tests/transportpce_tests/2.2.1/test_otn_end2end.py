@@ -232,8 +232,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_13_get_OCH_OTU4_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1-OCH-OTU4"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1-OCH-OTU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -512,8 +511,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_24_get_ODU4_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1-ODU4"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -730,8 +728,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_30_get_10GE_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1-10GE"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1-10GE")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -973,8 +970,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(20)
 
     def test_42_check_service_list(self):
-        url = "{}/operational/org-openroadm-service:service-list"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(len(res['service-list']['services']), 2)
@@ -1047,8 +1043,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(20)
 
     def test_50_check_service_list(self):
-        url = "{}/operational/org-openroadm-service:service-list"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(len(res['service-list']['services']), 1)
@@ -1096,8 +1091,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(20)
 
     def test_55_get_no_service(self):
-        url = "{}/operational/org-openroadm-service:service-list"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
