@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90a5f8c5_461685c7",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-16T13:30:22Z",
+      "side": 1,
+      "message": "Previous \"some E2E servivces\" statement means no full support",
+      "range": {
+        "startLine": 79,
+        "startChar": 14,
+        "endLine": 79,
+        "endChar": 28
+      },
+      "revId": "117d43ee686ff8f684dae2e937bd9384fc2f8062",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd21e71d_1cd01c4a",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-16T13:30:22Z",
+      "side": 1,
+      "message": "kinds",
+      "range": {
+        "startLine": 81,
+        "startChar": 43,
+        "endLine": 81,
+        "endChar": 48
+      },
+      "revId": "117d43ee686ff8f684dae2e937bd9384fc2f8062",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d41e0cc5_29a932ed",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-16T13:30:22Z",
+      "side": 1,
+      "message": "trailing blank",
+      "range": {
+        "startLine": 838,
+        "startChar": 95,
+        "endLine": 838,
+        "endChar": 96
+      },
+      "revId": "117d43ee686ff8f684dae2e937bd9384fc2f8062",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
