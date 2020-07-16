@@ -115,7 +115,6 @@ class TransportPCEFulltesting(unittest.TestCase):
 
 # test service-create for Eth service from xpdr to xpdr
     def test_11_create_eth_service1(self):
-        url = "{}/operations/org-openroadm-service:service-create"
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -204,7 +203,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "operator-contact": "pw1234"
                 }
                 }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_create_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -212,8 +211,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_12_get_eth_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -351,7 +349,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_22_create_eth_service2(self):
-        url = "{}/operations/org-openroadm-service:service-create"
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -440,7 +437,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "operator-contact": "pw1234"
                 }
                 }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_create_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -448,8 +445,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_23_get_eth_service2(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service2"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -553,7 +549,6 @@ class TransportPCEFulltesting(unittest.TestCase):
 
 #     creation service test on a non-available resource
     def test_28_create_eth_service3(self):
-        url = "{}/operations/org-openroadm-service:service-create"
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -642,7 +637,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "operator-contact": "pw1234"
                 }
                 }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_create_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -774,7 +769,6 @@ class TransportPCEFulltesting(unittest.TestCase):
 
 # test service-create for Optical Channel (OC) service from srg-pp to srg-pp
     def test_36_create_oc_service1(self):
-        url = "{}/operations/org-openroadm-service:service-create"
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -863,7 +857,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "operator-contact": "pw1234"
                 }
                 }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_create_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -871,8 +865,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_37_get_oc_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -929,7 +922,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(7)
 
     def test_40_create_oc_service2(self):
-        url = "{}/operations/org-openroadm-service:service-create"
         data = {"input": {
                 "sdnc-request-header": {
                     "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
@@ -1018,7 +1010,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                 "operator-contact": "pw1234"
                 }
                 }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_create_request(data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -1026,8 +1018,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_41_get_oc_service2(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service2"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -1113,8 +1104,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     def test_46_get_no_oc_services(self):
         print("start test")
-        url = "{}/operational/org-openroadm-service:service-list"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
@@ -1147,8 +1137,7 @@ class TransportPCEFulltesting(unittest.TestCase):
             self.test_30_delete_eth_service1()
 
     def test_50_loop_create_oc_service(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1")
         if response.status_code != 404:
             url = "{}/operations/org-openroadm-service:service-delete"
             data = {"input": {
