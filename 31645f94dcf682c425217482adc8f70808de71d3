@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c42d997_c3fd8df1",
+        "filename": "INFO.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-16T08:24:44Z",
+      "side": 1,
+      "message": "not sure this is the expected format",
+      "range": {
+        "startLine": 46,
+        "startChar": 17,
+        "endLine": 46,
+        "endChar": 33
+      },
+      "revId": "31645f94dcf682c425217482adc8f70808de71d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2415b13_48fccd53",
+        "filename": "INFO.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-16T08:24:44Z",
+      "side": 1,
+      "message": "not sure of that",
+      "range": {
+        "startLine": 50,
+        "startChar": 11,
+        "endLine": 50,
+        "endChar": 20
+      },
+      "revId": "31645f94dcf682c425217482adc8f70808de71d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
