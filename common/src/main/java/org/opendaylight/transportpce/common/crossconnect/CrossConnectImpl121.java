@@ -38,6 +38,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +61,7 @@ public class CrossConnectImpl121 {
         RoadmConnectionsBuilder rdmConnBldr = new RoadmConnectionsBuilder();
         String connectionNumber = generateConnectionNumber(srcTp, destTp, waveNumber);
         rdmConnBldr.setConnectionNumber(connectionNumber);
-        rdmConnBldr.setWavelengthNumber(waveNumber);
+        rdmConnBldr.setWavelengthNumber(Uint32.valueOf(waveNumber));
         rdmConnBldr.setOpticalControlMode(OpticalControlMode.Off);
         rdmConnBldr.setSource(new SourceBuilder().setSrcIf(srcTp + "-" + waveNumber.toString()).build());
         rdmConnBldr.setDestination(new DestinationBuilder().setDstIf(destTp + "-" + waveNumber.toString()).build());
