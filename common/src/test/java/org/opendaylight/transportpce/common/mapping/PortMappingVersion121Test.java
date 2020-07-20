@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -32,8 +33,8 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
@@ -468,12 +469,14 @@ public class PortMappingVersion121Test {
             fail();
 
         }
-        List<String> testMappings = List.of("SRG2-PP1-RX", "SRG3-PP1-RX", "SRG1-PP1-TXRX", "SRG3-PP1-TX",
-                "DEG1-TTP-TXRX", "SRG2-PP1-TX", "DEG2-TTP-RX", "DEG2-TTP-TX", "DEG3-TTP-RX", "DEG3-TTP-TX");
+        List<String> testMappings = new ArrayList<>(List.of("SRG2-PP1-RX", "SRG3-PP1-RX", "SRG1-PP1-TXRX",
+            "SRG3-PP1-TX", "DEG1-TTP-TXRX", "SRG2-PP1-TX", "DEG2-TTP-RX", "DEG2-TTP-TX", "DEG3-TTP-RX", "DEG3-TTP-TX"));
         List<String> mappings = new ArrayList<>();
         for (int i = 0; i < testMappings.size(); i++) {
             mappings.add(network.getNodes().get(0).getMapping().get(i).getLogicalConnectionPoint());
         }
+        Collections.sort(testMappings);
+        Collections.sort(mappings);
         assertTrue("test mapping are equals to mapping" , testMappings.equals(mappings));
 
         //test updateMapping
@@ -639,12 +642,14 @@ public class PortMappingVersion121Test {
             LOG.error("Failed to read mapping.", e);
             fail();
         }
-        List<String> testMappings = List.of("XPDR1-CLIENT1", "XPDR1-NETWORK5", "XPDR1-NETWORK4", "XPDR1-NETWORK3",
-                "XPDR1-NETWORK2", "XPDR1-NETWORK1");
+        List<String> testMappings = new ArrayList<>(List.of("XPDR1-CLIENT1", "XPDR1-NETWORK5", "XPDR1-NETWORK4",
+            "XPDR1-NETWORK3", "XPDR1-NETWORK2", "XPDR1-NETWORK1"));
         List<String> mappings = new ArrayList<>();
         for (int i = 0; i < testMappings.size(); i++) {
             mappings.add(network.getNodes().get(0).getMapping().get(i).getLogicalConnectionPoint());
         }
+        Collections.sort(testMappings);
+        Collections.sort(mappings);
         assertTrue("test mapping are equals to mapping", testMappings.equals(mappings));
 
     }
