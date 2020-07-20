@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -318,12 +319,12 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             return Collections.emptyList();
         }
 
-        List<Link> networkLinks = networkOptional.get().getLink();
+        @Nullable Map<LinkKey, Link> networkLinks = networkOptional.get().getLink();
         if ((networkLinks == null) || networkLinks.isEmpty()) {
             LOG.warn("Links are not present in {} topology.", NetworkUtils.OVERLAY_NETWORK_ID);
             return Collections.emptyList();
         }
-        return networkLinks;
+        return new ArrayList<>(networkLinks.values());
     }
 
     /**
@@ -418,7 +419,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                     } else {
                         otsBuilder.setSpanLossTransmit(spanLossTx).setSpanLossReceive(new RatioDB(spanLoss));
                     }
-                    interfaceBuilder.addAugmentation(Interface1.class, intf1Builder.setOts(otsBuilder.build()).build());
+                    interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
                     openRoadmInterfaces.postInterface(realNodeId,interfaceBuilder);
                     LOG.info("Spanloss Value update completed successfully");
                     return true;
@@ -477,9 +478,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.RatioDB(spanLoss)
                         );
                     }
-                    interfaceBuilder.addAugmentation(org.opendaylight.yang.gen.v1.http
-                        .org.openroadm.optical.transport.interfaces.rev181019.Interface1.class,
-                        intf1Builder.setOts(otsBuilder.build()).build());
+                    interfaceBuilder.addAugmentation(intf1Builder.setOts(otsBuilder.build()).build());
                     openRoadmInterfaces.postInterface(realNodeId,interfaceBuilder);
                     LOG.info("Spanloss Value update completed successfully");
                     return true;
@@ -513,7 +512,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
      * @return map with list of spans with their spanloss value
      */
     private Map<LinkId, BigDecimal> getLinkSpanloss(List<RoadmLinks> roadmLinks) {
-        Map<LinkId, BigDecimal> map = new HashMap<LinkId, BigDecimal>();
+        Map<LinkId, BigDecimal> map = new HashMap<>();
         LOG.info("Executing GetLinkSpanLoss");
         BigDecimal spanLoss;
         for (RoadmLinks link : roadmLinks) {
@@ -527,7 +526,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
                 LOG.warn("OTS is not present for the link {}", link);
                 continue;
             }
-            spanLoss = new BigDecimal(srcOtsPmHoler.getOtsParameterVal() - destOtsPmHoler.getOtsParameterVal())
+            spanLoss = BigDecimal.valueOf(srcOtsPmHoler.getOtsParameterVal() - destOtsPmHoler.getOtsParameterVal())
                 .setScale(1, RoundingMode.HALF_UP);
             LOG.info("Spanloss Calculated as :{}={}-{}",
                 spanLoss, srcOtsPmHoler.getOtsParameterVal(), destOtsPmHoler.getOtsParameterVal());
@@ -562,7 +561,7 @@ public class OlmPowerServiceImpl implements OlmPowerService {
             throw new IllegalArgumentException(
                 String.format("Could not find node %s, or supporting node is not present", mappedNodeId));
         }
-        List<SupportingNode> collect = realNode.get().getSupportingNode().stream()
+        List<SupportingNode> collect = realNode.get().nonnullSupportingNode().values().stream()
             .filter(node -> (node.getNetworkRef() != null)
                 && NetworkUtils.UNDERLAY_NETWORK_ID.equals(node.getNetworkRef().getValue())
                 && (node.getNodeRef() != null) && !Strings.isNullOrEmpty(node.getNodeRef().getValue()))

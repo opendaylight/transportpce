@@ -24,7 +24,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.junit.Test;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
@@ -35,9 +37,11 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
@@ -77,15 +81,16 @@ public class OpenRoadmOtnTopologyTest {
                 JsonReader portMappingReader = new JsonReader(reader)) {
             Network portMapping = (Network) JsonUtil.getInstance().getDataObjectFromJson(portMappingReader,
                     QName.create("http://org/opendaylight/transportpce/portmapping", "2020-04-29", "network"));
-            for (Nodes nodes : portMapping.getNodes()) {
+            for (Nodes nodes : portMapping.nonnullNodes().values()) {
                 if (nodes.getNodeId().equals("XPDR-A1")) {
                     this.portMappingTpdr = nodes;
                 } else {
                     this.portMappingSpdr = nodes;
                 }
             }
-            List<Mapping> mappingList = new ArrayList<>();
-            mappingList.add(new MappingBuilder().setLogicalConnectionPoint("XPDR0-NETWORK0").build());
+            Map<MappingKey,Mapping> mappingList = new HashMap<>();
+            Mapping mapping = new MappingBuilder().setLogicalConnectionPoint("XPDR0-NETWORK0").build();
+            mappingList.put(mapping.key(),mapping);
             this.portMappingBad = new NodesBuilder()
                 .setNodeId(this.portMappingTpdr.getNodeId())
                 .setNodeInfo(new NodeInfoBuilder(this.portMappingTpdr.getNodeInfo()).setNodeType(NodeTypes.Ila).build())
@@ -109,7 +114,7 @@ public class OpenRoadmOtnTopologyTest {
         Node node = topologyShard.getNodes().get(0);
         assertEquals("XPDR-A1-XPDR1", node.getNodeId().getValue());
         // tests supporting nodes
-        List<SupportingNode> supportingNodes = node.getSupportingNode().stream()
+        List<SupportingNode> supportingNodes = node.nonnullSupportingNode().values().stream()
             .sorted((sn1, sn2) -> sn1.getNetworkRef().getValue().compareTo(sn2.getNetworkRef().getValue()))
             .collect(Collectors.toList());
         assertEquals("Should contain 3 supporting nodes", 3, supportingNodes.size());
@@ -129,7 +134,7 @@ public class OpenRoadmOtnTopologyTest {
         //tests list of TPs
         List<TerminationPoint> tps = node.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
-            .getTerminationPoint().stream()
+            .nonnullTerminationPoint().values().stream()
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
         assertEquals("node should contain 4 TPs", 4, tps.size());
@@ -152,8 +157,9 @@ public class OpenRoadmOtnTopologyTest {
             tps.get(0).augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
-                .getTpSupportedInterfaces().getSupportedInterfaceCapability()
-                .get(0).getIfCapType().getName());
+                .getTpSupportedInterfaces().nonnullSupportedInterfaceCapability()
+                .values().stream().findFirst()
+                .get().getIfCapType().getName());
         assertEquals(
             "first TP must be of type client",
             OpenroadmTpType.XPONDERCLIENT,
@@ -182,7 +188,8 @@ public class OpenRoadmOtnTopologyTest {
                         .TerminationPoint1.class)
                 .getTpSupportedInterfaces()
                 .getSupportedInterfaceCapability()
-                .get(0)
+                .values().stream().findFirst()
+                .get()
                 .getIfCapType()
                 .getName());
         assertEquals(
@@ -367,7 +374,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes()
-                .getOdtuTpnPool().get(0)
+                .getOdtuTpnPool().values().stream().findFirst()
+                .get()
                 .getTpnPool());
         assertEquals(
             "Tpn pool list should be full, with 80 trib ports",
@@ -377,7 +385,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes()
-                .getOdtuTpnPool().get(0)
+                .getOdtuTpnPool().values().stream().findFirst()
+                .get()
                 .getTpnPool()
                 .size());
     }
@@ -517,7 +526,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes()
-                .getOdtuTpnPool().get(0)
+                .getOdtuTpnPool().values().stream().findFirst()
+                .get()
                 .getTpnPool()
                 .size());
         assertThat(
@@ -527,7 +537,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes()
-                .getOdtuTpnPool().get(0)
+                .getOdtuTpnPool().values().stream().findFirst()
+                .get()
                 .getTpnPool(),
             not(hasItem(Uint16.valueOf(1))));
 
@@ -576,7 +587,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                     .getXpdrTpPortConnectionAttributes()
-                    .getOdtuTpnPool().get(0)
+                    .getOdtuTpnPool().values().stream().findFirst()
+                    .get()
                     .getTpnPool()
                     .size());
         assertThat(
@@ -586,7 +598,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes()
-                .getOdtuTpnPool().get(0)
+                .getOdtuTpnPool().values().stream().findFirst()
+                .get()
                 .getTpnPool(),
             hasItem(Uint16.valueOf(1)));
     }
@@ -650,7 +663,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes()
-                .getOdtuTpnPool().get(0)
+                .getOdtuTpnPool().values().stream().findFirst()
+                .get()
                 .getTpnPool()
                 .size());
         assertThat(
@@ -660,7 +674,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes()
-                .getOdtuTpnPool().get(0)
+                .getOdtuTpnPool().values().stream().findFirst()
+                .get()
                 .getTpnPool(),
             not(hasItem(Uint16.valueOf(1))));
 
@@ -712,7 +727,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes()
-                .getOdtuTpnPool().get(0)
+                .getOdtuTpnPool().values().stream().findFirst()
+                .get()
                 .getTpnPool()
                 .size());
         assertThat(
@@ -722,7 +738,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getXpdrTpPortConnectionAttributes()
-                .getOdtuTpnPool().get(0)
+                .getOdtuTpnPool().values().stream().findFirst()
+                .get()
                 .getTpnPool(),
             hasItem(Uint16.valueOf(1)));
     }
@@ -770,7 +787,7 @@ public class OpenRoadmOtnTopologyTest {
             assertEquals(OpenroadmNodeType.SWITCH, node.augmentation(Node1.class).getNodeType());
         }
         // tests supporting nodes
-        List<SupportingNode> supportingNodes = node.getSupportingNode().stream()
+        List<SupportingNode> supportingNodes = node.nonnullSupportingNode().values().stream()
             .sorted((sn1, sn2) -> sn1.getNetworkRef().getValue().compareTo(sn2.getNetworkRef().getValue()))
             .collect(Collectors.toList());
         assertEquals("Should contain 3 supporting nodes", 3, supportingNodes.size());
@@ -787,34 +804,38 @@ public class OpenRoadmOtnTopologyTest {
                 .getSwitchingPools());
         List<TerminationPoint> tpList = node.augmentation(
                 org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
-            .getTerminationPoint().stream()
+            .nonnullTerminationPoint().values().stream()
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
         checkSpdrTpList(xpdrNb, tpList);
     }
 
     private void checkSpdrSwitchingPools(Uint16 xpdrNb, SwitchingPools sp) {
+        List<OduSwitchingPools> oduSwitchingPools = new ArrayList<>(sp.nonnullOduSwitchingPools().values());
         assertEquals(
             "switching-pools augmentation should contain a single odu-switching-pools",
             1,
-            sp.getOduSwitchingPools().size());
+            oduSwitchingPools.size());
         assertEquals(
             "switching-pool-number should be 1",
             Uint16.valueOf(1),
-            sp.getOduSwitchingPools().get(0).getSwitchingPoolNumber());
+            oduSwitchingPools.get(0).getSwitchingPoolNumber());
         assertEquals(
             "switching-pool-type should be non-blocking",
             "non-blocking",
-            sp.getOduSwitchingPools().get(0).getSwitchingPoolType().getName());
+            oduSwitchingPools.get(0).getSwitchingPoolType().getName());
+
+        List<NonBlockingList> nonBlockingList =
+                new ArrayList<>(oduSwitchingPools.get(0).nonnullNonBlockingList().values());
         if (xpdrNb.equals(Uint16.valueOf(1))) {
             assertEquals(
                 "Mux should contain 4 non blocking list",
                 4,
-                sp.getOduSwitchingPools().get(0).getNonBlockingList().size());
+                nonBlockingList.size());
             assertEquals(
                 Uint16.valueOf(1),
-                sp.getOduSwitchingPools().get(0).getNonBlockingList().get(0).getNblNumber());
-            List<NonBlockingList> nblList = sp.getOduSwitchingPools().get(0).getNonBlockingList().stream()
+                nonBlockingList.get(0).getNblNumber());
+            List<NonBlockingList> nblList = oduSwitchingPools.get(0).nonnullNonBlockingList().values().stream()
                 .sorted((nbl1, nbl2) -> nbl1.getNblNumber().compareTo(nbl2.getNblNumber()))
                 .collect(Collectors.toList());
             for (NonBlockingList nbl : nblList) {
@@ -837,16 +858,16 @@ public class OpenRoadmOtnTopologyTest {
             assertEquals(
                 "Switch should contain a single non blocking list",
                 1,
-                sp.getOduSwitchingPools().get(0).getNonBlockingList().size());
+                nonBlockingList.size());
             assertEquals(
                 Uint16.valueOf(1),
-                sp.getOduSwitchingPools().get(0).getNonBlockingList().get(0).getNblNumber());
+                nonBlockingList.get(0).getNblNumber());
             assertThat(
                 "for a 100G Switch, non blocking list should contain 8 entries (4 clients + 4 network ports)",
-                sp.getOduSwitchingPools().get(0).getNonBlockingList().get(0).getTpList(),
+                nonBlockingList.get(0).getTpList(),
                 hasSize(8));
             assertThat(
-                sp.getOduSwitchingPools().get(0).getNonBlockingList().get(0).getTpList(),
+                nonBlockingList.get(0).getTpList(),
                 containsInAnyOrder(
                     new TpId("XPDR2-CLIENT1"), new TpId("XPDR2-NETWORK1"), new TpId("XPDR2-CLIENT2"),
                     new TpId("XPDR2-NETWORK2"), new TpId("XPDR2-CLIENT3"), new TpId("XPDR2-NETWORK3"),
@@ -863,7 +884,8 @@ public class OpenRoadmOtnTopologyTest {
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                         .TerminationPoint1.class)
                 .getTpSupportedInterfaces()
-                .getSupportedInterfaceCapability().get(0)
+                .getSupportedInterfaceCapability().values().stream().findFirst()
+                .get()
                 .getIfCapType());
         assertEquals(
             "the rate should be ODU4",
@@ -876,13 +898,16 @@ public class OpenRoadmOtnTopologyTest {
                 .getRate());
         assertEquals(
             "openroadm-topology",
-            tpList.get(4).getSupportingTerminationPoint().get(0).getNetworkRef().getValue());
+            tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst()
+            .get().getNetworkRef().getValue());
         assertEquals(
             "SPDR-SA1-XPDR" + xpdrNb,
-            tpList.get(4).getSupportingTerminationPoint().get(0).getNodeRef().getValue());
+            tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst()
+            .get().getNodeRef().getValue());
         assertEquals(
             "XPDR" + xpdrNb + "-NETWORK1",
-            tpList.get(4).getSupportingTerminationPoint().get(0).getTpRef());
+            tpList.get(4).getSupportingTerminationPoint().values().stream().findFirst()
+            .get().getTpRef());
         if (xpdrNb.equals(Uint16.valueOf(1))) {
             assertEquals("should contain 5 TPs", 5, tpList.size());
             assertEquals("XPDR1-CLIENT1", tpList.get(0).getTpId().getValue());
@@ -896,7 +921,8 @@ public class OpenRoadmOtnTopologyTest {
                         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                             .TerminationPoint1.class)
                     .getTpSupportedInterfaces()
-                    .getSupportedInterfaceCapability().get(0)
+                    .getSupportedInterfaceCapability().values().stream().findFirst()
+                    .get()
                     .getIfCapType());
             assertEquals(
                 "the rate should be ODU2e",
@@ -937,7 +963,8 @@ public class OpenRoadmOtnTopologyTest {
                         org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130
                                 .TerminationPoint1.class)
                     .getTpSupportedInterfaces()
-                    .getSupportedInterfaceCapability().get(0)
+                    .getSupportedInterfaceCapability().values().stream().findFirst()
+                    .get()
                     .getIfCapType());
             assertEquals(
                 "the rate should be ODU4",

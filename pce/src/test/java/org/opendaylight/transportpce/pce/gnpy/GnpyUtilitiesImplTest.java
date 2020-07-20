@@ -17,8 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -52,6 +51,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.QName;
+import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -161,27 +161,25 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     }
 
     private AToZDirectionBuilder buildAtZ() {
-        List<AToZ> atozList = new ArrayList<>();
         AToZKey clientKey = new AToZKey("key");
         TerminationPoint stp = new TerminationPointBuilder()
                 .setTpId("tpName").setTpNodeId("xname")
                 .build();
         Resource clientResource = new ResourceBuilder().setResource(stp).build();
         AToZ firstResource = new AToZBuilder().setId("tpName").withKey(clientKey).setResource(clientResource).build();
-        atozList.add(firstResource);
 
         return new AToZDirectionBuilder()
-                .setRate(100L)
-                .setAToZ(atozList)
-                .setAToZWavelengthNumber(Long.valueOf(0));
+                .setRate(Uint32.valueOf(100))
+                .setAToZ(Map.of(firstResource.key(),firstResource))
+                .setAToZWavelengthNumber(Uint32.valueOf(0));
 
     }
 
     private ZToADirectionBuilder buildZtoA() {
         return new ZToADirectionBuilder()
-                .setRate(100L)
-                .setZToA(new ArrayList())
-                .setZToAWavelengthNumber(Long.valueOf(0));
+                .setRate(Uint32.valueOf(100))
+                .setZToA(Map.of())
+                .setZToAWavelengthNumber(Uint32.valueOf(0));
 
     }
 }

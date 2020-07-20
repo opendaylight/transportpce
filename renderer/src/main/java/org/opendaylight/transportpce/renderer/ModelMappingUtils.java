@@ -94,7 +94,7 @@ public final class ModelMappingUtils {
 
     public static ServicePathInputData rendererCreateServiceInputAToZ(String serviceName,
             PathDescription pathDescription) {
-        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
+        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().nonnullAToZ().values().iterator());
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setServiceName(serviceName)
             .setOperation(ServicePathInput.Operation.Create)
@@ -108,7 +108,7 @@ public final class ModelMappingUtils {
 
     public static ServicePathInputData rendererCreateServiceInputZToA(String serviceName,
             PathDescription pathDescription) {
-        NodeLists nodeLists = getNodesListZtoA(pathDescription.getZToADirection().getZToA().iterator());
+        NodeLists nodeLists = getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setOperation(ServicePathInput.Operation.Create)
             .setServiceName(serviceName)
@@ -126,9 +126,9 @@ public final class ModelMappingUtils {
         // If atoZ is set true use A-to-Z direction otherwise use Z-to-A
         List<org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.otn.renderer.input.Nodes> nodes =
             new ArrayList<>();
-        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
+        NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().nonnullAToZ().values().iterator());
         if (!asideToZside) {
-            nodeLists = getNodesListZtoA(pathDescription.getZToADirection().getZToA().iterator());
+            nodeLists = getNodesListZtoA(pathDescription.getZToADirection().nonnullZToA().values().iterator());
         }
         LOG.info("These are node-lists {}, {}", nodeLists.getList(), nodeLists.getOlmList());
         for (Nodes node: nodeLists.getList()) {
