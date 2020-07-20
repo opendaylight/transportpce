@@ -14,7 +14,6 @@ import java.util.concurrent.TimeoutException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.NetworkTypes1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.NetworkTypes1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.networks.network.network.types.ClliNetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.networks.network.network.types.OpenroadmCommonNetworkBuilder;
@@ -70,7 +69,7 @@ public class TpceNetwork {
                 Augmentation<NetworkTypes> ordClli = new NetworkTypes1Builder()
                     .setClliNetwork(new ClliNetworkBuilder().build())
                     .build();
-                networkTypesBldr.addAugmentation(NetworkTypes1.class, ordClli);
+                networkTypesBldr.addAugmentation(ordClli);
                 break;
             case NetworkUtils.UNDERLAY_NETWORK_ID:
             case NetworkUtils.OVERLAY_NETWORK_ID:
@@ -79,8 +78,7 @@ public class TpceNetwork {
                     .network.rev181130.NetworkTypes1Builder()
                     .setOpenroadmCommonNetwork(new OpenroadmCommonNetworkBuilder().build())
                     .build();
-                networkTypesBldr.addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
-                    .rev181130.NetworkTypes1.class, ordTopology);
+                networkTypesBldr.addAugmentation(ordTopology);
                 break;
             default:
                 LOG.error("Unknown network type");
