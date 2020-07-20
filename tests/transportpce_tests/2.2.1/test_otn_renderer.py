@@ -52,9 +52,9 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {'supported-interface-capability': [
-                'org-openroadm-port-types:if-10GE-ODU2e',
+                'org-openroadm-port-types:if-10GE',
                 'org-openroadm-port-types:if-10GE-ODU2',
-                'org-openroadm-port-types:if-10GE'],
+                'org-openroadm-port-types:if-10GE-ODU2e'],
              'supporting-port': 'CP1-SFP4-P1',
              'supporting-circuit-pack-name': 'CP1-SFP4',
              'logical-connection-point': 'XPDR1-CLIENT1',
