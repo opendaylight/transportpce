@@ -8,13 +8,17 @@
 package org.opendaylight.transportpce.renderer.provisiondevice.tasks;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.opendaylight.transportpce.renderer.provisiondevice.DeviceRendererService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.RendererRollbackInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.RendererRollbackInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.RendererRollbackOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.renderer.rollback.output.FailedToRollback;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.node.interfaces.NodeInterface;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.node.interfaces.NodeInterfaceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,14 +27,21 @@ public class DeviceRenderingRollbackTask extends RollbackTask {
     private static final Logger LOG = LoggerFactory.getLogger(DeviceRenderingRollbackTask.class);
     private final boolean isRollbackNecessary;
     private final DeviceRendererService rendererService;
-    private final List<NodeInterface> renderedInterfaces;
+    private final Map<NodeInterfaceKey,NodeInterface> renderedInterfaces;
 
     public DeviceRenderingRollbackTask(String id, boolean isRollbackNecessary, List<NodeInterface> renderedInterfaces,
             DeviceRendererService rendererService) {
         super(id);
         this.isRollbackNecessary = isRollbackNecessary;
         this.rendererService = rendererService;
-        this.renderedInterfaces = renderedInterfaces;
+        this.renderedInterfaces = new HashMap<>();
+        if (renderedInterfaces != null) {
+            for (NodeInterface nodeInterface : renderedInterfaces) {
+                if (nodeInterface != null) {
+                    this.renderedInterfaces.put(nodeInterface.key(), nodeInterface);
+                }
+            }
+        }
     }
 
     @Override
@@ -46,14 +57,14 @@ public class DeviceRenderingRollbackTask extends RollbackTask {
         RendererRollbackOutput rollbackOutput = this.rendererService.rendererRollback(rollbackInput);
         if (! rollbackOutput.isSuccess()) {
             LOG.warn("Device rendering rollback of {} was not successful! Failed rollback on {}.", this.getId(),
-                    createErrorMessage(rollbackOutput.getFailedToRollback()));
+                    createErrorMessage(rollbackOutput.nonnullFailedToRollback().values()));
         } else {
             LOG.info("Device rollback of {} successful.", this.getId());
         }
         return null;
     }
 
-    private String createErrorMessage(List<FailedToRollback> failedRollbacks) {
+    private String createErrorMessage(Collection<FailedToRollback> failedRollbacks) {
         List<String> failedRollbackNodes = new ArrayList<>();
         failedRollbacks.forEach(failedRollback -> {
             String nodeId = failedRollback.getNodeId();
