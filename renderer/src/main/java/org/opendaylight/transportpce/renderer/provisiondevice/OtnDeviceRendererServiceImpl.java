@@ -8,8 +8,10 @@
 package org.opendaylight.transportpce.renderer.provisiondevice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -131,9 +133,15 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
                 results.add("Otn Service path was set up successfully for node :" + nodeInterface.getNodeId());
             }
         }
+        Map<NodeInterfaceKey,NodeInterface> nodeInterfacesMap = new HashMap<>();
+        for (NodeInterface nodeInterface : nodeInterfaces) {
+            if (nodeInterface != null) {
+                nodeInterfacesMap.put(nodeInterface.key(), nodeInterface);
+            }
+        }
         OtnServicePathOutputBuilder otnServicePathOutputBuilder = new OtnServicePathOutputBuilder()
                 .setSuccess(success)
-                .setNodeInterface(nodeInterfaces)
+                .setNodeInterface(nodeInterfacesMap)
                 .setResult(String.join("\n", results));
         return otnServicePathOutputBuilder.build();
     }

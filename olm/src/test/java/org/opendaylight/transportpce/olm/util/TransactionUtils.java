@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.olm.util;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +25,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.NodesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.CpToDegree;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.CpToDegreeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.CpToDegreeKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.MappingBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.MappingKey;
@@ -34,10 +36,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev1811
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLinkKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.SectionElementBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.AmplifiedLinkBuilder;
@@ -55,13 +58,17 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1Builder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SupportingLink;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SupportingLinkBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SupportingLinkKey;
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public final class TransactionUtils {
 
@@ -103,64 +110,61 @@ public final class TransactionUtils {
 //    }
 
     public static Network1 getNullNetwork() {
-        Network1 network = new Network1Builder().setLink(null).build();
+        Map<LinkKey, Link> nullMap = null;
+        Network1 network = new Network1Builder().setLink(nullMap).build();
         Optional.of(network);
         return network;
     }
 
     public static Network1 getEmptyNetwork() {
-        Network1 network = new Network1Builder().setLink(new ArrayList<>()).build();
+        Network1 network = new Network1Builder().setLink(Map.of()).build();
         Optional.of(network);
         return network;
     }
 
     public static org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network
             .rev180226.networks.Network getOverLayNetwork() {
-        List<SupportingNode> supportingNodes1 = new ArrayList<>();
-        supportingNodes1
-            .add(new SupportingNodeBuilder()
-                    .setNodeRef(new NodeId("node 1"))
-                    .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
-                .build());
+        SupportingNode supportingNode = new SupportingNodeBuilder()
+                .setNodeRef(new NodeId("node 1"))
+                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .build();
         NodeBuilder node1Builder = new NodeBuilder()
                 .setNodeId(new NodeId("node 1"))
                 .withKey(new NodeKey(new NodeId("node 1")))
-                .setSupportingNode(supportingNodes1);
-        List<Node> nodes = new ArrayList<>();
-        nodes.add(node1Builder.build());
-        List<SupportingNode> supportingNodes = new ArrayList<>();
-        supportingNodes
-                .add(new SupportingNodeBuilder()
-                    .setNodeRef(new NodeId("node 2"))
-                    .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
-                .build());
+                .setSupportingNode(Map.of(supportingNode.key(),supportingNode));
+        Map<NodeKey,Node> nodes = new HashMap<>();
+        Node node1 = node1Builder.build();
+        nodes.put(node1.key(),node1);
+        SupportingNode supportingNode2 = new SupportingNodeBuilder()
+            .setNodeRef(new NodeId("node 2"))
+            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .build();
         NodeBuilder node2Builder = new NodeBuilder()
                 .setNodeId(new NodeId("node 2"))
                 .withKey(new NodeKey(new NodeId("node 2")))
-                .setSupportingNode(supportingNodes);
-        nodes.add(node2Builder.build());
-        List<SupportingNode> supportingNodes3 = new ArrayList<>();
-        supportingNodes3
-            .add(new SupportingNodeBuilder()
-                .setNodeRef(new NodeId("node 3"))
-                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
-            .build());
+                .setSupportingNode(Map.of(supportingNode2.key(),supportingNode2));
+        Node node2 = node2Builder.build();
+        nodes.put(node2.key(),node2);
+        SupportingNode supportingNode3 = new SupportingNodeBuilder()
+            .setNodeRef(new NodeId("node 3"))
+            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .build();
         NodeBuilder node3Builder = new NodeBuilder()
                 .setNodeId(new NodeId("node 3"))
                 .withKey(new NodeKey(new NodeId("node 3")))
-                .setSupportingNode(supportingNodes3);
-        nodes.add(node3Builder.build());
-        List<SupportingNode> supportingNodes4 = new ArrayList<>();
-        supportingNodes4
-            .add(new SupportingNodeBuilder()
-                .setNodeRef(new NodeId("node 4"))
-                .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
-            .build());
+                .setSupportingNode(Map.of(supportingNode3.key(),supportingNode3));
+        Node node3 = node3Builder.build();
+        nodes.put(node3.key(),node3);
+        SupportingNode supportingNode4 = new SupportingNodeBuilder()
+            .setNodeRef(new NodeId("node 4"))
+            .setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
+            .build();
         NodeBuilder node4Builder = new NodeBuilder()
                 .setNodeId(new NodeId("node 4"))
                 .withKey(new NodeKey(new NodeId("node 4")))
-                .setSupportingNode(supportingNodes4);
-        nodes.add(node4Builder.build());
+                .setSupportingNode(Map.of(supportingNode4.key(),supportingNode4));
+        Node node4 = node4Builder.build();
+        nodes.put(node4.key(),node4);
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkBuilder
             networkBuilder =
                 new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
@@ -174,7 +178,7 @@ public final class TransactionUtils {
     }
 
     public static Network1 getNetwork() {
-        List<SupportingLink> supportingLinks = new ArrayList<>();
+        Map<SupportingLinkKey,SupportingLink> supportingLinks = new HashMap<>();
         SupportingLink supportingLink1 = new SupportingLinkBuilder()
                 .setLinkRef("ref1")
                 .setNetworkRef(new NetworkId("net1"))
@@ -183,9 +187,9 @@ public final class TransactionUtils {
                 .setLinkRef("ref2")
                 .setNetworkRef(new NetworkId("net2"))
                 .build();
-        supportingLinks.add(supportingLink1);
-        supportingLinks.add(supportingLink2);
-        List<Link> links = new ArrayList<>();
+        supportingLinks.put(supportingLink1.key(),supportingLink1);
+        supportingLinks.put(supportingLink2.key(),supportingLink2);
+        Map<LinkKey,Link> links = new HashMap<>();
         Link link1 = new LinkBuilder()
                 .setLinkId(new LinkId("link 1"))
                 .setDestination(
@@ -214,31 +218,31 @@ public final class TransactionUtils {
                         .build())
                 .setSupportingLink(supportingLinks)
                 .build();
-        links.add(link1);
-        links.add(link2);
+        links.put(link1.key(),link1);
+        links.put(link2.key(),link2);
         Network1 network = new Network1Builder().setLink(links).build();
         Optional.of(network);
         return network;
     }
 
     public static Network1 getNetwork2() {
-        List<LinkConcatenation> linkConcentationValues = new ArrayList<>();
+        Map<LinkConcatenationKey,LinkConcatenation> linkConcentationValues = new HashMap<>();
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
             .setFiberType(LinkConcatenation.FiberType.Truewave)
             .setPmd(new FiberPmd(BigDecimal.ONE))
-            .setSRLGId(Long.valueOf(1))
-            .setSRLGLength(Long.valueOf(1))
+            .setSRLGId(Uint32.valueOf(1))
+            .setSRLGLength(Uint32.valueOf(1))
             .build();
         LinkConcatenation linkConcatenation2 = new LinkConcatenationBuilder()
             .setFiberType(LinkConcatenation.FiberType.Truewave)
             .setPmd(new FiberPmd(BigDecimal.ONE))
-            .setSRLGId(Long.valueOf(1))
-            .setSRLGLength(Long.valueOf(1))
+            .setSRLGId(Uint32.valueOf(1))
+            .setSRLGLength(Uint32.valueOf(1))
             .build();
-        linkConcentationValues.add(linkConcatenation);
-        linkConcentationValues.add(linkConcatenation2);
-        List<AmplifiedLink>
-            amplifiedLinkValues = new ArrayList<>();
+        linkConcentationValues.put(linkConcatenation.key(),linkConcatenation);
+        linkConcentationValues.put(linkConcatenation2.key(),linkConcatenation2);
+        Map<AmplifiedLinkKey,AmplifiedLink>
+            amplifiedLinkValues = new HashMap<>();
         org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
                     .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
@@ -256,7 +260,7 @@ public final class TransactionUtils {
                                     .build())
                     .build())
                 .build())
-            .setSectionEltNumber(Integer.valueOf(1)).build();
+            .setSectionEltNumber(Uint16.valueOf(1)).build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al2 = new
             org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
                 .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
@@ -274,51 +278,51 @@ public final class TransactionUtils {
                                     .build())
                                     .build())
             .build())
-            .setSectionEltNumber(Integer.valueOf(1)).build();
-        amplifiedLinkValues.add(al);
-        amplifiedLinkValues.add(al2);
+            .setSectionEltNumber(Uint16.valueOf(1)).build();
+        amplifiedLinkValues.put(al.key(),al);
+        amplifiedLinkValues.put(al2.key(),al2);
         Map<Class<? extends Augmentation<Link>>, Augmentation<Link>> map = Collections.emptyMap();
-        Augmentation<Link> aug1 = new Link1Builder().setAdministrativeGroup(Long.valueOf(123))
+        Augmentation<Link> aug1 = new Link1Builder().setAdministrativeGroup(Uint32.valueOf(123))
             .setAdministrativeState(State.InService)
             .setAmplified(true)
-            .setLinkLatency(Long.valueOf(123))
+            .setLinkLatency(Uint32.valueOf(123))
             .setLinkLength(BigDecimal.valueOf(123))
             .setLinkType(OpenroadmLinkType.ROADMTOROADM)
             .setOMSAttributes(new OMSAttributesBuilder()
                 .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
                 .setOppositeLink(new LinkId("link 1"))
                 .setSpan(new SpanBuilder().build())
-                .setTEMetric(Long.valueOf(123)).build())
+                .setTEMetric(Uint32.valueOf(123)).build())
             .setOperationalState(State.InService).build();
-        Augmentation<Link> aug2 = new Link1Builder().setAdministrativeGroup(Long.valueOf(123))
+        Augmentation<Link> aug2 = new Link1Builder().setAdministrativeGroup(Uint32.valueOf(123))
             .setAdministrativeState(State.InService)
             .setAmplified(true)
-            .setLinkLatency(Long.valueOf(123))
+            .setLinkLatency(Uint32.valueOf(123))
             .setLinkLength(BigDecimal.valueOf(123))
             .setLinkType(OpenroadmLinkType.ROADMTOROADM)
             .setOMSAttributes(new OMSAttributesBuilder()
                 .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
                 .setOppositeLink(new LinkId("link 1"))
                 .setSpan(new SpanBuilder().build())
-                .setTEMetric(Long.valueOf(123)).build())
+                .setTEMetric(Uint32.valueOf(123)).build())
             .setOperationalState(State.InService).build();
 
-        List<SupportingLink> supportingLinks = new ArrayList<>();
+        Map<SupportingLinkKey,SupportingLink> supportingLinks = new HashMap<>();
         SupportingLink supportingLink = new SupportingLinkBuilder().setLinkRef("ref1")
             .setNetworkRef(new NetworkId("net1")).build();
         SupportingLink supportingLink2 = new SupportingLinkBuilder().setLinkRef("ref2")
             .setNetworkRef(new NetworkId("net1")).build();
-        supportingLinks.add(supportingLink);
-        supportingLinks.add(supportingLink2);
-        List<Link> links = new ArrayList<>();
+        supportingLinks.put(supportingLink.key(),supportingLink);
+        supportingLinks.put(supportingLink2.key(),supportingLink2);
+        Map<LinkKey,Link> links = new HashMap<>();
         Link link1 = new LinkBuilder().setLinkId(new LinkId("link 1"))
             .setDestination(new DestinationBuilder().setDestNode(new NodeId("node 1"))
                 .setDestTp("dest tp").build())
             .setSource(new SourceBuilder().setSourceNode(new NodeId("node 2"))
                 .setSourceTp("src tp").build())
             .setSupportingLink(supportingLinks)
-            .addAugmentation(Link1.class, aug1)
-            .addAugmentation(Link1.class, aug2).build();
+            .addAugmentation(aug1)
+            .addAugmentation(aug2).build();
 
         Link link2 = new LinkBuilder().setLinkId(new LinkId("link 2"))
             .setDestination(new DestinationBuilder().setDestNode(new NodeId("node 3"))
@@ -326,8 +330,8 @@ public final class TransactionUtils {
             .setSource(new SourceBuilder().setSourceNode(new NodeId("node 4"))
                 .setSourceTp("src tp").build())
             .setSupportingLink(supportingLinks).build();
-        links.add(link1);
-        links.add(link2);
+        links.put(link1.key(),link1);
+        links.put(link2.key(),link2);
         Network1 network = new Network1Builder().setLink(links).build();
         Optional.of(network);
         return network;
@@ -347,18 +351,17 @@ public final class TransactionUtils {
     }
 
     public static Nodes getNodes(String nodeId, String mappingKey) {
-        List<CpToDegree> cpList = new ArrayList<>();
+        Map<CpToDegreeKey,CpToDegree> cpList = new HashMap<>();
         CpToDegree cp1 = new CpToDegreeBuilder()
-            .setCircuitPackName("circuit name")
-            .setDegreeNumber(Long.valueOf(123))
+            .setCircuitPackName("circuit name1")
+            .setDegreeNumber(Uint32.valueOf(123))
             .build();
         CpToDegree cp2 = new CpToDegreeBuilder()
-            .setCircuitPackName("circuit name")
-            .setDegreeNumber(Long.valueOf(123))
+            .setCircuitPackName("circuit name2")
+            .setDegreeNumber(Uint32.valueOf(123))
             .build();
-        cpList.add(cp1);
-        cpList.add(cp2);
-        List<Mapping> mappingList = new ArrayList<>();
+        cpList.put(cp1.key(),cp1);
+        cpList.put(cp2.key(),cp2);
         Mapping map1 = new MappingBuilder()
             .setLogicalConnectionPoint("point")
             .setSupportingCircuitPackName("circuit name")
@@ -367,7 +370,6 @@ public final class TransactionUtils {
             .setSupportingPort("port")
             .withKey(new MappingKey((mappingKey != null) ? mappingKey : "null"))
             .build();
-        mappingList.add(map1);
         Nodes nodes = new NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder()
@@ -375,24 +377,23 @@ public final class TransactionUtils {
                 .setOpenroadmVersion(OpenroadmVersion._121)
                 .build())
             .setCpToDegree(cpList)
-            .setMapping(mappingList)
+            .setMapping(Map.of(map1.key(),map1))
             .build();
         return nodes;
     }
 
     public static Nodes getNodes2(String nodeId, String mappingKey) {
-        List<CpToDegree> cpList = new ArrayList<>();
+        Map<CpToDegreeKey,CpToDegree> cpList = new HashMap<>();
         CpToDegree cp1 = new CpToDegreeBuilder()
-            .setCircuitPackName("circuit name")
-            .setDegreeNumber(Long.valueOf(123))
+            .setCircuitPackName("circuit name1")
+            .setDegreeNumber(Uint32.valueOf(123))
             .build();
         CpToDegree cp2 = new CpToDegreeBuilder()
-            .setCircuitPackName("circuit name")
-            .setDegreeNumber(Long.valueOf(123))
+            .setCircuitPackName("circuit name2")
+            .setDegreeNumber(Uint32.valueOf(123))
             .build();
-        cpList.add(cp1);
-        cpList.add(cp2);
-        List<Mapping> mappingList = new ArrayList<>();
+        cpList.put(cp1.key(),cp1);
+        cpList.put(cp2.key(),cp2);
         Mapping map1 = new MappingBuilder()
             .setLogicalConnectionPoint("point")
             .setSupportingCircuitPackName("circuit name")
@@ -401,7 +402,6 @@ public final class TransactionUtils {
             .setSupportingPort("port")
             .withKey(new MappingKey((mappingKey != null) ? mappingKey : "null"))
             .build();
-        mappingList.add(map1);
         Nodes nodes = new NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder()
@@ -409,24 +409,23 @@ public final class TransactionUtils {
                 .setOpenroadmVersion(OpenroadmVersion._121)
                 .build())
             .setCpToDegree(cpList)
-            .setMapping(mappingList)
+            .setMapping(Map.of(map1.key(),map1))
             .build();
         return nodes;
     }
 
     public static Nodes getNodes3(String nodeId, String mappingKey) {
-        List<CpToDegree> cpList = new ArrayList<>();
+        Map<CpToDegreeKey,CpToDegree> cpList = new HashMap<>();
         CpToDegree cp1 = new CpToDegreeBuilder()
-            .setCircuitPackName("circuit name")
-            .setDegreeNumber(Long.valueOf(123))
+            .setCircuitPackName("circuit name1")
+            .setDegreeNumber(Uint32.valueOf(123))
             .build();
         CpToDegree cp2 = new CpToDegreeBuilder()
-            .setCircuitPackName("circuit name")
-            .setDegreeNumber(Long.valueOf(123))
+            .setCircuitPackName("circuit name2")
+            .setDegreeNumber(Uint32.valueOf(123))
             .build();
-        cpList.add(cp1);
-        cpList.add(cp2);
-        List<Mapping> mappingList = new ArrayList<>();
+        cpList.put(cp1.key(),cp1);
+        cpList.put(cp2.key(),cp2);
         Mapping map1 = new MappingBuilder()
             .setLogicalConnectionPoint("point")
             .setSupportingCircuitPackName("circuit name")
@@ -435,7 +434,6 @@ public final class TransactionUtils {
             .setSupportingPort("port")
             .withKey(new MappingKey((mappingKey != null) ? mappingKey : "null"))
             .build();
-        mappingList.add(map1);
         Nodes nodes = new NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder()
@@ -443,7 +441,7 @@ public final class TransactionUtils {
                 .setOpenroadmVersion(OpenroadmVersion._121)
                 .build())
             .setCpToDegree(cpList)
-            .setMapping(mappingList)
+            .setMapping(Map.of(map1.key(),map1))
             .build();
         return nodes;
     }
