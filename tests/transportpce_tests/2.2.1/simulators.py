@@ -15,6 +15,7 @@ SIMS = {
     'roadma': {'port': '17841', 'configfile': 'oper-ROADMA.xml', 'logfile': 'oper-ROADMA.log'},
     'roadmb': {'port': '17842', 'configfile': 'oper-ROADMB.xml', 'logfile': 'oper-ROADMB.log'},
     'roadmc': {'port': '17843', 'configfile': 'oper-ROADMC.xml', 'logfile': 'oper-ROADMC.log'},
+    'roadmd': {'port': '17847', 'configfile': 'oper-ROADMD.xml', 'logfile': 'oper-ROADMD.log'},
     'xpdrc': {'port': '17844', 'configfile': 'oper-XPDRC.xml', 'logfile': 'oper-XPDRC.log'},
     'spdra': {'port': '17845', 'configfile': 'oper-SPDRA.xml', 'logfile': 'oper-SPDRA.log'},
     'spdrc': {'port': '17846', 'configfile': 'oper-SPDRC.xml', 'logfile': 'oper-SPDRC.log'}
