@@ -67,6 +67,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Protocols;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.connection.map.Destination;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev161014.OpenROADMOpticalMultiplex;
@@ -205,7 +206,8 @@ public class PortMappingVersion121 {
         Map<String, Mapping> mappingMap = new HashMap<>();
 
         // com.google.common.collect.ImmutableList implementation of List
-        List<CircuitPacks> circuitPackList = new ArrayList<>(deviceObject.get().getCircuitPacks());
+        List<CircuitPacks> circuitPackList = new ArrayList<>(deviceObject.get()
+                .nonnullCircuitPacks().values());
         circuitPackList.sort(Comparator.comparing(CircuitPack::getCircuitPackName));
 
         for (CircuitPacks cp : circuitPackList) {
@@ -216,7 +218,7 @@ public class PortMappingVersion121 {
             }
 
             // com.google.common.collect.ImmutableList implementation of List
-            List<Ports> portList = new ArrayList<>(cp.getPorts());
+            List<Ports> portList = new ArrayList<>(cp.nonnullPorts().values());
             portList.sort(Comparator.comparing(Ports::getPortName));
             for (Ports port : portList) {
                 if (port.getPortQual() == null) {
@@ -242,7 +244,8 @@ public class PortMappingVersion121 {
                     Optional<CircuitPacks> cpOpt = circuitPackList.stream().filter(cP -> cP.getCircuitPackName()
                         .equals(port.getPartnerPort().getCircuitPackName())).findFirst();
                     if (cpOpt.isPresent()) {
-                        Optional<Ports> poOpt = cpOpt.get().getPorts().stream().filter(p -> p.getPortName().equals(port
+                        Optional<Ports> poOpt = cpOpt.get().nonnullPorts()
+                                .values().stream().filter(p -> p.getPortName().equals(port
                             .getPartnerPort().getPortName().toString())).findFirst();
                         if (poOpt.isPresent()) {
                             Ports port2 = poOpt.get();
@@ -296,7 +299,7 @@ public class PortMappingVersion121 {
                 }
             }
         }
-        List<ConnectionMap> connectionMap = deviceObject.get().getConnectionMap();
+        List<ConnectionMap> connectionMap = new ArrayList<>(deviceObject.get().nonnullConnectionMap().values());
         String slcp = null;
         String dlcp = null;
         for (ConnectionMap cm : connectionMap) {
@@ -304,8 +307,9 @@ public class PortMappingVersion121 {
             if (lcpMap.containsKey(skey)) {
                 slcp = lcpMap.get(skey);
             }
-            String dkey = cm.getDestination().get(0).getCircuitPackName() + "+"
-                + cm.getDestination().get(0).getPortName();
+            List<Destination> destinations = new ArrayList<>(cm.nonnullDestination().values());
+            String dkey = destinations.get(0).getCircuitPackName() + "+"
+                + destinations.get(0).getPortName();
             if (lcpMap.containsKey(dkey)) {
                 dlcp = lcpMap.get(dkey);
             }
@@ -347,7 +351,7 @@ public class PortMappingVersion121 {
                 LogicalDatastoreType.OPERATIONAL, srgIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmSrgObject.isPresent()) {
-                srgCps.addAll(ordmSrgObject.get().getCircuitPacks());
+                srgCps.addAll(ordmSrgObject.get().nonnullCircuitPacks().values());
                 cpPerSrg.put(ordmSrgObject.get().getSrgNumber().toJava(), srgCps);
             }
         }
@@ -380,7 +384,7 @@ public class PortMappingVersion121 {
                 }
                 // com.google.common.collect.ImmutableList implementation of List
                 @Nullable
-                List<Ports> portList = new ArrayList<>(circuitPackObject.get().getPorts());
+                List<Ports> portList = new ArrayList<>(circuitPackObject.get().nonnullPorts().values());
                 Collections.sort(portList, new SortPort121ByName());
                 int portIndex = 1;
                 for (Ports port : portList) {
@@ -520,7 +524,8 @@ public class PortMappingVersion121 {
                 LogicalDatastoreType.OPERATIONAL, deviceIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmDegreeObject.isPresent()) {
-                conPortMap.put(degreeCounter, ordmDegreeObject.get().getConnectionPorts());
+                conPortMap.put(degreeCounter, new ArrayList<>(ordmDegreeObject.get()
+                        .nonnullConnectionPorts().values()));
             }
         }
         LOG.info("Device {} has {} degree", deviceId, conPortMap.size());
@@ -537,7 +542,7 @@ public class PortMappingVersion121 {
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (protocolObject.isPresent() && protocolObject.get().augmentation(Protocols1.class).getLldp() != null) {
             Lldp lldp = protocolObject.get().augmentation(Protocols1.class).getLldp();
-            for (PortConfig portConfig : lldp.getPortConfig()) {
+            for (PortConfig portConfig : lldp.nonnullPortConfig().values()) {
                 if (portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
                     InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                         .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
@@ -573,7 +578,7 @@ public class PortMappingVersion121 {
         for (Degree degree : degrees) {
             if (degree.getCircuitPacks() != null) {
                 LOG.info("Inside CP to degree list");
-                cpToDegreeList.addAll(degree.getCircuitPacks().stream()
+                cpToDegreeList.addAll(degree.nonnullCircuitPacks().values().stream()
                     .map(cp -> createCpToDegreeObject(cp.getCircuitPackName(),
                         degree.getDegreeNumber().toString(), nodeId, interfaceList))
                     .collect(Collectors.toList()));

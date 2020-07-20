@@ -10,9 +10,9 @@ package org.opendaylight.transportpce.common;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
+import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
 import org.opendaylight.mdsal.dom.api.DOMDataBroker;
-import org.opendaylight.yangtools.yang.model.api.SchemaContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 
 public interface DataStoreContext {
 
@@ -24,9 +24,9 @@ public interface DataStoreContext {
 
     NotificationPublishService createNotificationPublishService();
 
-    SchemaContext getSchemaContext();
+    EffectiveModelContext getSchemaContext();
 
-    BindingNormalizedNodeCodecRegistry getBindingToNormalizedNodeCodec();
+    BindingNormalizedNodeSerializer getBindingToNormalizedNodeCodec();
 
     NotificationService getNotificationService();
 

@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.common.mapping;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -17,8 +18,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Before;
@@ -34,6 +39,8 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
@@ -92,6 +99,7 @@ public class PortMappingVersion121Test {
     private static DeviceTransactionManager deviceTransactionManager;
     private static OpenRoadmInterfaces openRoadmInterfaces;
     private static  PortMappingVersion121 portMappingVersion121;
+    private Random ran = new Random();
 
     @Before
     public void setUp() throws Exception {
@@ -209,9 +217,15 @@ public class PortMappingVersion121Test {
                 new ArrayList<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks>();
         circuitPacksList3.add(circuitPacks3);
 
+        Map<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksKey,
+            org.opendaylight.yang.gen.v1.http.org.openroadm
+            .device.rev170206.degree.CircuitPacks> values = new HashMap<>();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksKey circuitPackKey =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree
+                .CircuitPacksKey(Uint32.valueOf(3));
+        values.put(circuitPackKey, circuitPacks3);
         final Degree ordmDegreeObject3 = new DegreeBuilder().setDegreeNumber(Uint16.valueOf(2))
-                .setCircuitPacks(circuitPacksList3).setConnectionPorts(connectionPortsList3).build();
-
+                .setCircuitPacks(values).setConnectionPorts(connectionPortsList3).build();
         //mock one srg with 2 unidirectional ports
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks srgCircuitPacks4 =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksBuilder()
@@ -230,9 +244,14 @@ public class PortMappingVersion121Test {
         List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks> circuitPacksList5 =
                 new ArrayList<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks>();
         circuitPacksList5.add(circuitPacks5);
-
-        final Degree ordmDegreeObject5 = new DegreeBuilder().setDegreeNumber(Uint16.valueOf(3))
-                .setCircuitPacks(circuitPacksList5).setConnectionPorts(connectionPortsList33).build();
+        values = new HashMap<>();
+        circuitPackKey =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree
+                .CircuitPacksKey(Uint32.valueOf(5));
+        values.put(circuitPackKey, circuitPacks5);
+        final Degree ordmDegreeObject5 = new DegreeBuilder().setDegreeNumber(Uint16.valueOf(3)).setCircuitPacks(values)
+                .setConnectionPorts(connectionPortsList44)
+                .build();
 
         //mock one srg with 2 unidirectional ports, reverse direction
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks srgCircuitPacks6 =
@@ -468,17 +487,21 @@ public class PortMappingVersion121Test {
             fail();
 
         }
-        List<String> testMappings = List.of("SRG2-PP1-RX", "SRG3-PP1-RX", "SRG1-PP1-TXRX", "SRG3-PP1-TX",
+        List<String> testMappings = Arrays.asList("SRG2-PP1-RX", "SRG3-PP1-RX", "SRG1-PP1-TXRX", "SRG3-PP1-TX",
                 "DEG1-TTP-TXRX", "SRG2-PP1-TX", "DEG2-TTP-RX", "DEG2-TTP-TX", "DEG3-TTP-RX", "DEG3-TTP-TX");
         List<String> mappings = new ArrayList<>();
+        List<Nodes> nodes = new ArrayList<>(network.nonnullNodes().values());
+        List<Mapping> mappingValues = new ArrayList<>(nodes.get(0).nonnullMapping().values());
         for (int i = 0; i < testMappings.size(); i++) {
-            mappings.add(network.getNodes().get(0).getMapping().get(i).getLogicalConnectionPoint());
+            mappings.add(mappingValues.get(i).getLogicalConnectionPoint());
         }
-        assertTrue("test mapping are equals to mapping" , testMappings.equals(mappings));
+        Collections.sort(testMappings);
+        Collections.sort(mappings);
+        assertEquals("test mapping are equals to mapping", testMappings,mappings);
 
         //test updateMapping
         assertTrue("update mapping for node returns true", portMappingVersion121
-                .updateMapping("node", network.getNodes().get(0).getMapping().get(0)));
+                .updateMapping("node", mappingValues.get(0)));
 
         //test createMapping for non-existent roadm node
         assertFalse("create non existed roadm node returns false" ,
@@ -486,7 +509,7 @@ public class PortMappingVersion121Test {
 
         //test updateMapping for null roadm node
         assertFalse("updating null roadm node returns false",
-                portMappingVersion121.updateMapping(null, network.getNodes().get(0).getMapping().get(0)));
+                portMappingVersion121.updateMapping(null, mappingValues.get(0)));
 
     }
 
@@ -642,10 +665,12 @@ public class PortMappingVersion121Test {
         List<String> testMappings = List.of("XPDR1-CLIENT1", "XPDR1-NETWORK5", "XPDR1-NETWORK4", "XPDR1-NETWORK3",
                 "XPDR1-NETWORK2", "XPDR1-NETWORK1");
         List<String> mappings = new ArrayList<>();
+        List<Nodes> nodes = new ArrayList<>(network.nonnullNodes().values());
+        List<Mapping> mappingValues = new ArrayList<>(nodes.get(0).nonnullMapping().values());
         for (int i = 0; i < testMappings.size(); i++) {
-            mappings.add(network.getNodes().get(0).getMapping().get(i).getLogicalConnectionPoint());
+            mappings.add(mappingValues.get(i).getLogicalConnectionPoint());
         }
-        assertTrue("test mapping are equals to mapping", testMappings.equals(mappings));
+        assertEquals("test mapping are equals to mapping", testMappings,mappings);
 
     }
 
@@ -677,7 +702,8 @@ public class PortMappingVersion121Test {
     }
 
     private ConnectionPorts getConnectionPorts(String c1, String p1) {
-        return new ConnectionPortsBuilder().setCircuitPackName(c1).setPortName(p1).build();
+        return new ConnectionPortsBuilder().setIndex(Uint32.valueOf(ran.nextInt(Integer.MAX_VALUE)))
+                .setCircuitPackName(c1).setPortName(p1).build();
     }
 
     private CircuitPacks getCircuitPacks(List<Ports> portsList, String c1, String pc1) {
