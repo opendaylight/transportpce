@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -32,8 +33,8 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Direction;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
@@ -114,8 +115,12 @@ public class PortMappingVersion121Test {
                 getInterfaces("i2"));
 
         //mock 1 bidirectional port for degree
-        Ports ports = getPortsWithInterfaces(interfacesList);
+        Ports ports = getPortsWithInterfaces(interfacesList, "p1");
         List<Ports> portsList = Arrays.asList(ports);
+
+        //mock 2 bidirectional port for SRG
+        Ports ports1 = getPortsWithInterfaces(interfacesList, "p2");
+        List<Ports> portsList1 = Arrays.asList(ports1);
 
         //mock 2 unidirectional ports for degree
         Ports ports2 = getPorts("p2", Port.PortQual.RoadmExternal, "c3", "p3", Direction.Rx);
@@ -307,6 +312,12 @@ public class PortMappingVersion121Test {
                     Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                 .thenReturn(Optional.of(ports));
 
+        InstanceIdentifier<Ports> portID1 = getChild("c2", "p1");
+        when(deviceTransactionManager.getDataFromDevice("node",
+            LogicalDatastoreType.OPERATIONAL, portID1,
+            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
+            .thenReturn(Optional.of(ports1));
+
         InstanceIdentifier<Ports> portID2 = getChild("c3", "p2");
         when(deviceTransactionManager.getDataFromDevice("node",
                     LogicalDatastoreType.OPERATIONAL, portID2,
@@ -468,12 +479,14 @@ public class PortMappingVersion121Test {
             fail();
 
         }
-        List<String> testMappings = List.of("SRG2-PP1-RX", "SRG3-PP1-RX", "SRG1-PP1-TXRX", "SRG3-PP1-TX",
-                "DEG1-TTP-TXRX", "SRG2-PP1-TX", "DEG2-TTP-RX", "DEG2-TTP-TX", "DEG3-TTP-RX", "DEG3-TTP-TX");
+        List<String> testMappings = new ArrayList<>(List.of("SRG2-PP1-RX", "SRG3-PP1-RX", "SRG1-PP1-TXRX",
+            "SRG3-PP1-TX", "DEG1-TTP-TXRX", "SRG2-PP1-TX", "DEG2-TTP-RX", "DEG2-TTP-TX", "DEG3-TTP-RX", "DEG3-TTP-TX"));
         List<String> mappings = new ArrayList<>();
         for (int i = 0; i < testMappings.size(); i++) {
             mappings.add(network.getNodes().get(0).getMapping().get(i).getLogicalConnectionPoint());
         }
+        Collections.sort(testMappings);
+        Collections.sort(mappings);
         assertTrue("test mapping are equals to mapping" , testMappings.equals(mappings));
 
         //test updateMapping
@@ -639,12 +652,14 @@ public class PortMappingVersion121Test {
             LOG.error("Failed to read mapping.", e);
             fail();
         }
-        List<String> testMappings = List.of("XPDR1-CLIENT1", "XPDR1-NETWORK5", "XPDR1-NETWORK4", "XPDR1-NETWORK3",
-                "XPDR1-NETWORK2", "XPDR1-NETWORK1");
+        List<String> testMappings = new ArrayList<>(List.of("XPDR1-CLIENT1", "XPDR1-NETWORK5", "XPDR1-NETWORK4",
+            "XPDR1-NETWORK3", "XPDR1-NETWORK2", "XPDR1-NETWORK1"));
         List<String> mappings = new ArrayList<>();
         for (int i = 0; i < testMappings.size(); i++) {
             mappings.add(network.getNodes().get(0).getMapping().get(i).getLogicalConnectionPoint());
         }
+        Collections.sort(testMappings);
+        Collections.sort(mappings);
         assertTrue("test mapping are equals to mapping", testMappings.equals(mappings));
 
     }
@@ -687,8 +702,8 @@ public class PortMappingVersion121Test {
     }
 
 
-    private Ports getPortsWithInterfaces(List<Interfaces> interfacesList) {
-        return new PortsBuilder().setPortName("p1").setPortQual(Port.PortQual.RoadmExternal)
+    private Ports getPortsWithInterfaces(List<Interfaces> interfacesList, String p1) {
+        return new PortsBuilder().setPortName(p1).setPortQual(Port.PortQual.RoadmExternal)
                 .setPortDirection(Direction.Bidirectional).setInterfaces(interfacesList).build();
     }
 
