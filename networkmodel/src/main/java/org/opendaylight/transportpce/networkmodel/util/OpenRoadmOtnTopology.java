@@ -344,7 +344,8 @@ public final class OpenRoadmOtnTopology {
             .setTpnPool(tpnPool).build()));
 
         tpBldr.addAugmentation(TerminationPoint1.class,
-            new TerminationPoint1Builder().setXpdrTpPortConnectionAttributes(xtpcaBldr.build()).build());
+            new TerminationPoint1Builder(tp.augmentation(TerminationPoint1.class))
+                .setXpdrTpPortConnectionAttributes(xtpcaBldr.build()).build());
         return tpBldr.build();
     }
 
