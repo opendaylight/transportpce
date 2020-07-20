@@ -26,16 +26,9 @@ public interface NetworkTransactionService {
 
     void delete(LogicalDatastoreType store, InstanceIdentifier<?> path);
 
-    <T extends DataObject> void put(LogicalDatastoreType store, InstanceIdentifier<T> path, T data,
-                                    boolean createMissingParents);
-
-
     <T extends DataObject> void put(LogicalDatastoreType store, InstanceIdentifier<T> path,T data);
 
     <T extends DataObject> void merge(LogicalDatastoreType store, InstanceIdentifier<T> path, T data);
-
-    <T extends DataObject> void merge(LogicalDatastoreType store, InstanceIdentifier<T> path, T data,
-                                      boolean createMissingParents);
 
     FluentFuture<? extends @NonNull CommitInfo> commit();
 
