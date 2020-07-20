@@ -13,6 +13,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.HEAD;
@@ -60,7 +61,7 @@ public class GnpyStub {
         // TODO: return different response based on body data
         try {
             String response = null;
-            List<PathRequest> pathRequest = request.getServiceFile().getPathRequest();
+            List<PathRequest> pathRequest = new ArrayList<>(request.getServiceFile().nonnullPathRequest().values());
             // this condition is totally arbitrary and could be modified
             if (!pathRequest.isEmpty() && "127.0.0.31".contentEquals(pathRequest.get(0).getSource().stringValue())) {
                 response = Files

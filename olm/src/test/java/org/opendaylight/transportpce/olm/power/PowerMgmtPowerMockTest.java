@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.olm.power;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -59,7 +58,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.Op
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev161014.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.Interface1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.Ots;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
@@ -221,7 +219,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
         Ots ots = new OtsBuilder().setSpanLossTransmit(new RatioDB(new BigDecimal(23))).build();
         Interface1Builder intf1Builder = new Interface1Builder();
         Mockito.when(openRoadmInterfacesImpl121Spy.getInterface(Mockito.anyString(), Mockito.anyString())).thenReturn(
-                Optional.of(new InterfaceBuilder().addAugmentation(Interface1.class, intf1Builder.setOts(ots).build())
+                Optional.of(new InterfaceBuilder().addAugmentation(intf1Builder.setOts(ots).build())
                         .build()));
         CrossConnect crossConnectMock = Mockito.mock(CrossConnectImpl.class);
         Mockito.when(crossConnectMock
@@ -243,30 +241,32 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
 
     private Nodes getXpdrNodesFromNodesBuilderDeg() {
         MappingBuilder mappingBuilder = getMappingBuilderDeg();
+        Mapping mapping = mappingBuilder.build();
         return new NodesBuilder().setNodeId("node 1")
                 .setNodeInfo(new NodeInfoBuilder().setNodeType(NodeTypes.Xpdr).build())
-                .setMapping(Arrays.asList(mappingBuilder.build()))
+                .setMapping(Map.of(mapping.key(),mapping))
                 .build();
     }
 
     private Nodes getXpdrNodesFromNodesBuilderNetwork() {
         MappingBuilder mappingBuilder = getMappingBuilderNetWork();
+        Mapping mapping = mappingBuilder.build();
         return new NodesBuilder().setNodeId("node 1")
                 .setNodeInfo(new NodeInfoBuilder().setNodeType(NodeTypes.Xpdr)
                         .setOpenroadmVersion(NodeInfo.OpenroadmVersion._121)
                         .build())
-                .setMapping(Arrays.asList(mappingBuilder.build()))
+                .setMapping(Map.of(mapping.key(),mapping))
                 .build();
     }
 
     private Nodes getRdmNodesFromNodesBuilder() {
         MappingBuilder mappingBuilder = getMappingBuilderDeg();
-
+        Mapping mapping = mappingBuilder.build();
         return new NodesBuilder().setNodeId("node 1").setNodeInfo(
                 new NodeInfoBuilder().setNodeType(NodeTypes.Rdm)
                         .setOpenroadmVersion(NodeInfo.OpenroadmVersion._121)
                         .build())
-                .setMapping(Arrays.asList(mappingBuilder.build()))
+                .setMapping(Map.of(mapping.key(),mapping))
                 .build();
     }
 

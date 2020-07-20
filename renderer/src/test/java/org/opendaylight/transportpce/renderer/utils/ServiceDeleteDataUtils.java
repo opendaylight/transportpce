@@ -8,8 +8,8 @@
 
 package org.opendaylight.transportpce.renderer.utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.AToZDirection;
@@ -31,6 +31,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.ServiceAEndBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.ServiceZEndBuilder;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public final class ServiceDeleteDataUtils {
 
@@ -39,7 +40,7 @@ public final class ServiceDeleteDataUtils {
     }
 
     public static PathDescription createTransactionPathDescription(String tpId) {
-        List<AToZ> atoZList = new ArrayList<AToZ>();
+        Map<AToZKey,AToZ> atoZMap = new HashMap<>();
         TerminationPointBuilder terminationPointBuilder = new TerminationPointBuilder();
         TerminationPoint terminationPoint = terminationPointBuilder.setTpNodeId("node2" + tpId)
                         .setTpId(tpId).build();
@@ -49,25 +50,25 @@ public final class ServiceDeleteDataUtils {
                 .setResource(terminationPoint).build()).build();
         AToZ atoZ2 = new AToZBuilder().setId("2").withKey(new AToZKey("2")).setResource(new ResourceBuilder()
                 .setResource(terminationPoint2).build()).build();
-        atoZList.add(atoZ);
-        atoZList.add(atoZ2);
+        atoZMap.put(atoZ.key(),atoZ);
+        atoZMap.put(atoZ2.key(),atoZ2);
         AToZDirection atozDirection = new AToZDirectionBuilder()
-                .setRate(20L)
-                .setAToZWavelengthNumber(20L)
-                .setAToZ(atoZList)
+                .setRate(Uint32.valueOf(20))
+                .setAToZWavelengthNumber(Uint32.valueOf(20))
+                .setAToZ(atoZMap)
                 .setModulationFormat("OC")
                 .build();
-        List<ZToA> ztoAList = new ArrayList<ZToA>();
+        Map<ZToAKey,ZToA> ztoAMap = new HashMap<>();
         ZToA ztoA = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
                 .setResource(terminationPoint).build()).build();
         ZToA ztoA2 = new ZToABuilder().setId("2").withKey(new ZToAKey("2")).setResource(new ResourceBuilder()
                 .setResource(terminationPoint).build()).build();
-        ztoAList.add(ztoA);
-        ztoAList.add(ztoA2);
+        ztoAMap.put(ztoA.key(),ztoA);
+        ztoAMap.put(ztoA2.key(),ztoA2);
         ZToADirection ztoaDirection = new ZToADirectionBuilder()
-                .setRate(20L)
-                .setZToAWavelengthNumber(20L)
-                .setZToA(ztoAList)
+                .setRate(Uint32.valueOf(20))
+                .setZToAWavelengthNumber(Uint32.valueOf(20))
+                .setZToA(ztoAMap)
                 .setModulationFormat("OC")
                 .build();
         PathDescriptionBuilder pathDescriptionBuilder = new PathDescriptionBuilder();
@@ -78,7 +79,8 @@ public final class ServiceDeleteDataUtils {
 
     public static ServiceAEndBuilder getServiceAEndBuild() {
         return new ServiceAEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC)
+            .setServiceRate(Uint32.valueOf(1)).setNodeId("XPONDER-1-2")
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
@@ -95,7 +97,8 @@ public final class ServiceDeleteDataUtils {
 
     public static ServiceZEndBuilder getServiceZEndBuild() {
         return new ServiceZEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-2-3")
+            .setClli("clli").setServiceFormat(ServiceFormat.OC)
+            .setServiceRate(Uint32.valueOf(1)).setNodeId("XPONDER-2-3")
             .setTxDirection(
                 new TxDirectionBuilder()
                     .setPort(new PortBuilder().setPortDeviceName("device name").setPortName("port name")
