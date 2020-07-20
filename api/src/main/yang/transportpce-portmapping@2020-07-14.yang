@@ -29,6 +29,11 @@ module transportpce-portmapping {
      AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
      ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
 
+  revision 2020-07-14 {
+    description
+    "Add support to differentiate flexible and fixed
+     grid capabilities";
+  }
   revision 2020-04-29 {
     description
       "Add SAPI/DAPI lcp hash value";
@@ -103,6 +108,26 @@ module transportpce-portmapping {
           type ietf-inet-types:ip-address;
           description
             "Current IP Address of device";
+        }
+        leaf grid-implementation {
+          type enumeration {
+            enum flex-grid {
+              value 1;
+              description
+                "Flex grid implementation";
+            }
+            enum fixed-grid {
+              value 2;
+              description
+                "Fixed grid implementation";
+            }
+          }
+          mandatory false;
+        }
+        leaf slot-width-granularity {
+          type org-openroadm-common-types:frequency-GHz;
+          description
+            "Width of a slot measured in GHz.";
         }
       }
       list mapping {
