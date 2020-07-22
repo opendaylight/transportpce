@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99836734_0ed65e72",
+        "filename": "common/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-22T15:02:19Z",
+      "side": 1,
+      "message": "is now 5.0.13",
+      "range": {
+        "startLine": 13,
+        "startChar": 17,
+        "endLine": 13,
+        "endChar": 23
+      },
+      "revId": "a46462e04445aedd744017a5c87f8383dbc26a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a429ff8e_34bb8cc7",
+        "filename": "features/odl-transportpce/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-22T15:02:19Z",
+      "side": 1,
+      "message": "is now 6.0.10",
+      "range": {
+        "startLine": 15,
+        "startChar": 13,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "a46462e04445aedd744017a5c87f8383dbc26a59",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
