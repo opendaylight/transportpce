@@ -45,6 +45,30 @@
       "revId": "31645f94dcf682c425217482adc8f70808de71d3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac035ec0_4dbac14d",
+        "filename": "INFO.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-07-24T09:38:45Z",
+      "side": 1,
+      "message": "@Anil can you confirm the format and the login here ?",
+      "parentUuid": "e2415b13_48fccd53",
+      "range": {
+        "startLine": 50,
+        "startChar": 11,
+        "endLine": 50,
+        "endChar": 20
+      },
+      "revId": "31645f94dcf682c425217482adc8f70808de71d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
