@@ -20,6 +20,110 @@ class TransportPCEtesting(unittest.TestCase):
     processes = None
     WAITING = 20  # nominal value is 300
 
+    cr_serv_sample_data = {"input": {
+            "sdnc-request-header": {
+                "request-id": "request-1",
+                "rpc-action": "service-create",
+                "request-system-id": "appname"
+            },
+            "service-name": "service1-OCH-OTU4",
+            "common-id": "commonId",
+            "connection-type": "infrastructure",
+            "service-a-end": {
+                "service-rate": "100",
+                "node-id": "SPDR-SA1",
+                "service-format": "OTU",
+                "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
+                "clli": "NodeSA",
+                "subrate-eth-sla": {
+                    "subrate-eth-sla": {
+                        "committed-info-rate": "100000",
+                        "committed-burst-size": "64"
+                    }
+                },
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "SPDR-SA1-XPDR1",
+                        "port-type": "fixed",
+                        "port-name": "XPDR1-NETWORK1",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "SPDR-SA1-XPDR1",
+                        "port-type": "fixed",
+                        "port-name": "XPDR1-NETWORK1",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+            "service-z-end": {
+                "service-rate": "100",
+                "node-id": "SPDR-SC1",
+                "service-format": "OTU",
+                "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
+                "clli": "NodeSC",
+                "subrate-eth-sla": {
+                    "subrate-eth-sla": {
+                        "committed-info-rate": "100000",
+                        "committed-burst-size": "64"
+                    }
+                },
+                "tx-direction": {
+                    "port": {
+                        "port-device-name": "SPDR-SC1-XPDR1",
+                        "port-type": "fixed",
+                        "port-name": "XPDR1-NETWORK1",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "rx-direction": {
+                    "port": {
+                        "port-device-name": "SPDR-SC1-XPDR1",
+                        "port-type": "fixed",
+                        "port-name": "XPDR1-NETWORK1",
+                        "port-rack": "000000.00",
+                        "port-shelf": "Chassis#1"
+                    },
+                    "lgx": {
+                        "lgx-device-name": "Some lgx-device-name",
+                        "lgx-port-name": "Some lgx-port-name",
+                        "lgx-port-rack": "000000.00",
+                        "lgx-port-shelf": "00"
+                    }
+                },
+                "optic-type": "gray"
+            },
+        "due-date": "2018-06-15T00:00:01Z",
+        "operator-contact": "pw1234"
+        }
+    }
+
+
+
     @classmethod
     def setUpClass(cls):
         cls.processes = test_utils.start_tpce()
@@ -121,110 +225,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(nbNode, 4)
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
 
+
     def test_12_create_OCH_OTU4_service(self):
-        url = "{}/operations/org-openroadm-service:service-create"
-        data = {"input": {
-                "sdnc-request-header": {
-                    "request-id": "request-1",
-                    "rpc-action": "service-create",
-                    "request-system-id": "appname"
-                },
-                "service-name": "service1-OCH-OTU4",
-                "common-id": "commonId",
-                "connection-type": "infrastructure",
-                "service-a-end": {
-                    "service-rate": "100",
-                    "node-id": "SPDR-SA1",
-                    "service-format": "OTU",
-                    "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
-                    "clli": "NodeSA",
-                    "subrate-eth-sla": {
-                        "subrate-eth-sla": {
-                            "committed-info-rate": "100000",
-                            "committed-burst-size": "64"
-                        }
-                    },
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SA1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-NETWORK1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SA1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-NETWORK1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "service-z-end": {
-                    "service-rate": "100",
-                    "node-id": "SPDR-SC1",
-                    "service-format": "OTU",
-                    "otu-service-rate": "org-openroadm-otn-common-types:OTU4",
-                    "clli": "NodeSC",
-                    "subrate-eth-sla": {
-                        "subrate-eth-sla": {
-                            "committed-info-rate": "100000",
-                            "committed-burst-size": "64"
-                        }
-                    },
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SC1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-NETWORK1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SC1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-NETWORK1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "due-date": "2018-06-15T00:00:01Z",
-                "operator-contact": "pw1234"
-                }
-                }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -232,8 +235,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_13_get_OCH_OTU4_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1-OCH-OTU4"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1-OCH-OTU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -402,109 +404,15 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test service-create for ODU4 service from spdr to spdr
     def test_23_create_ODU4_service(self):
-        url = "{}/operations/org-openroadm-service:service-create"
-        data = {"input": {
-                "sdnc-request-header": {
-                    "request-id": "request-1",
-                    "rpc-action": "service-create",
-                    "request-system-id": "appname"
-                },
-                "service-name": "service1-ODU4",
-                "common-id": "commonId",
-                "connection-type": "infrastructure",
-                "service-a-end": {
-                    "service-rate": "100",
-                    "node-id": "SPDR-SA1",
-                    "service-format": "ODU",
-                    "odu-service-rate": "org-openroadm-otn-common-types:ODU4",
-                    "clli": "NodeSA",
-                    "subrate-eth-sla": {
-                        "subrate-eth-sla": {
-                            "committed-info-rate": "100000",
-                            "committed-burst-size": "64"
-                        }
-                    },
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SA1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-NETWORK1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SA1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-NETWORK1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "service-z-end": {
-                    "service-rate": "100",
-                    "node-id": "SPDR-SC1",
-                    "service-format": "ODU",
-                    "odu-service-rate": "org-openroadm-otn-common-types:ODU4",
-                    "clli": "NodeSC",
-                    "subrate-eth-sla": {
-                        "subrate-eth-sla": {
-                            "committed-info-rate": "100000",
-                            "committed-burst-size": "64"
-                        }
-                    },
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SC1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-NETWORK1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SC1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-NETWORK1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "due-date": "2018-06-15T00:00:01Z",
-                "operator-contact": "pw1234"
-                }
-                }
-        response = test_utils.post_request(url, data)
+        self.cr_serv_sample_data["input"]["service-name"] = "service1-ODU4"
+        self.cr_serv_sample_data["input"]["service-a-end"]["service-format"] = "ODU"
+        del self.cr_serv_sample_data["input"]["service-a-end"]["otu-service-rate"]
+        self.cr_serv_sample_data["input"]["service-a-end"]["odu-service-rate"] = "org-openroadm-otn-common-types:ODU4"
+        self.cr_serv_sample_data["input"]["service-z-end"]["service-format"] = "ODU"
+        del self.cr_serv_sample_data["input"]["service-z-end"]["otu-service-rate"]
+        self.cr_serv_sample_data["input"]["service-z-end"]["odu-service-rate"] = "org-openroadm-otn-common-types:ODU4"
+
+        response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -512,8 +420,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_24_get_ODU4_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1-ODU4"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -622,107 +529,19 @@ class TransportPCEtesting(unittest.TestCase):
 
 # test service-create for 10GE service from spdr to spdr
     def test_29_create_10GE_service(self):
-        url = "{}/operations/org-openroadm-service:service-create"
-        data = {"input": {
-                "sdnc-request-header": {
-                    "request-id": "request-1",
-                    "rpc-action": "service-create",
-                    "request-system-id": "appname"
-                },
-                "service-name": "service1-10GE",
-                "common-id": "commonId",
-                "connection-type": "service",
-                "service-a-end": {
-                    "service-rate": "10",
-                    "node-id": "SPDR-SA1",
-                    "service-format": "Ethernet",
-                    "clli": "NodeSA",
-                    "subrate-eth-sla": {
-                        "subrate-eth-sla": {
-                            "committed-info-rate": "100000",
-                            "committed-burst-size": "64"
-                        }
-                    },
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SA1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-CLIENT1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SA1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-CLIENT1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "service-z-end": {
-                    "service-rate": "10",
-                    "node-id": "SPDR-SC1",
-                    "service-format": "Ethernet",
-                    "clli": "NodeSC",
-                    "subrate-eth-sla": {
-                        "subrate-eth-sla": {
-                            "committed-info-rate": "100000",
-                            "committed-burst-size": "64"
-                        }
-                    },
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SC1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-CLIENT1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name": "SPDR-SC1-XPDR1",
-                            "port-type": "fixed",
-                            "port-name": "XPDR1-CLIENT1",
-                            "port-rack": "000000.00",
-                            "port-shelf": "Chassis#1"
-                        },
-                        "lgx": {
-                            "lgx-device-name": "Some lgx-device-name",
-                            "lgx-port-name": "Some lgx-port-name",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "due-date": "2018-06-15T00:00:01Z",
-                "operator-contact": "pw1234"
-                }
-                }
-        response = test_utils.post_request(url, data)
+        self.cr_serv_sample_data["input"]["service-name"] = "service1-10GE"
+        self.cr_serv_sample_data["input"]["connection-type"] = "service"
+        self.cr_serv_sample_data["input"]["service-a-end"]["service-rate"] = "10"
+        self.cr_serv_sample_data["input"]["service-a-end"]["service-format"] = "Ethernet"
+        del self.cr_serv_sample_data["input"]["service-a-end"]["odu-service-rate"]
+        self.cr_serv_sample_data["input"]["service-a-end"]["tx-direction"]["port"]["port-name"] = "XPDR1-CLIENT1"
+        self.cr_serv_sample_data["input"]["service-a-end"]["rx-direction"]["port"]["port-name"] = "XPDR1-CLIENT1"
+        self.cr_serv_sample_data["input"]["service-z-end"]["service-rate"] = "10"
+        self.cr_serv_sample_data["input"]["service-z-end"]["service-format"] = "Ethernet"
+        del self.cr_serv_sample_data["input"]["service-z-end"]["odu-service-rate"]
+        self.cr_serv_sample_data["input"]["service-z-end"]["tx-direction"]["port"]["port-name"] = "XPDR1-CLIENT1"
+        self.cr_serv_sample_data["input"]["service-z-end"]["rx-direction"]["port"]["port-name"] = "XPDR1-CLIENT1"
+        response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -730,8 +549,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(self.WAITING)
 
     def test_30_get_10GE_service1(self):
-        url = "{}/operational/org-openroadm-service:service-list/services/service1-10GE"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("services/service1-10GE")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
@@ -973,8 +791,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(20)
 
     def test_42_check_service_list(self):
-        url = "{}/operational/org-openroadm-service:service-list"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(len(res['service-list']['services']), 2)
@@ -1047,8 +864,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(20)
 
     def test_50_check_service_list(self):
-        url = "{}/operational/org-openroadm-service:service-list"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(len(res['service-list']['services']), 1)
@@ -1096,8 +912,7 @@ class TransportPCEtesting(unittest.TestCase):
         time.sleep(20)
 
     def test_55_get_no_service(self):
-        url = "{}/operational/org-openroadm-service:service-list"
-        response = test_utils.get_request(url)
+        response = test_utils.get_service_list_request("")
         self.assertEqual(response.status_code, requests.codes.not_found)
         res = response.json()
         self.assertIn(
