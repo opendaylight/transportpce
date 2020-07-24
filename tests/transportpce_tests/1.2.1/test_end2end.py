@@ -19,9 +19,105 @@ from common import test_utils
 
 class TransportPCEFulltesting(unittest.TestCase):
 
-    WAITING = 20  # nominal value is 300
-
+    cr_serv_sample_data = { "input": {
+                "sdnc-request-header": {
+                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
+                    "rpc-action": "service-create",
+                    "request-system-id": "appname",
+                    "notification-url":
+                        "http://localhost:8585/NotificationServer/notify"
+                },
+                "service-name": "service1",
+                "common-id": "ASATT1234567",
+                "connection-type": "service",
+                "service-a-end": {
+                    "service-rate": "100",
+                    "node-id": "XPDRA01",
+                    "service-format": "Ethernet",
+                    "clli": "SNJSCAMCJP8",
+                    "tx-direction": {
+                        "port": {
+                            "port-device-name":
+                                "ROUTER_SNJSCAMCJP8_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name":
+                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                            "lgx-port-name": "LGX Back.3",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "rx-direction": {
+                        "port": {
+                            "port-device-name":
+                                "ROUTER_SNJSCAMCJP8_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name":
+                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                            "lgx-port-name": "LGX Back.4",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "optic-type": "gray"
+                },
+                "service-z-end": {
+                    "service-rate": "100",
+                    "node-id": "XPDRC01",
+                    "service-format": "Ethernet",
+                    "clli": "SNJSCAMCJT4",
+                    "tx-direction": {
+                        "port": {
+                            "port-device-name":
+                                "ROUTER_SNJSCAMCJT4_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name":
+                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.29",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "rx-direction": {
+                        "port": {
+                            "port-device-name":
+                                "ROUTER_SNJSCAMCJT4_000000.00_00",
+                            "port-type": "router",
+                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
+                            "port-rack": "000000.00",
+                            "port-shelf": "00"
+                        },
+                        "lgx": {
+                            "lgx-device-name":
+                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                            "lgx-port-name": "LGX Back.30",
+                            "lgx-port-rack": "000000.00",
+                            "lgx-port-shelf": "00"
+                        }
+                    },
+                    "optic-type": "gray"
+                },
+                "due-date": "2016-11-28T00:00:01Z",
+                "operator-contact": "pw1234"
+            }
+        }
     processes = None
+    WAITING = 20
 
     @classmethod
     def setUpClass(cls):
@@ -138,105 +234,8 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     # test service-create for Eth service from xpdr to xpdr
     def test_11_create_eth_service1(self):
-        data = {
-            "input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-create",
-                    "request-system-id": "appname",
-                    "notification-url":
-                        "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-name": "service1",
-                "common-id": "ASATT1234567",
-                "connection-type": "service",
-                "service-a-end": {
-                    "service-rate": "100",
-                    "node-id": "XPDRA01",
-                    "service-format": "Ethernet",
-                    "clli": "SNJSCAMCJP8",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.3",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.4",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "service-z-end": {
-                    "service-rate": "100",
-                    "node-id": "XPDRC01",
-                    "service-format": "Ethernet",
-                    "clli": "SNJSCAMCJT4",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.29",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.30",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "due-date": "2016-11-28T00:00:01Z",
-                "operator-contact": "pw1234"
-            }
-        }
-        response = test_utils.service_create_request(data)
+        self.cr_serv_sample_data["input"]["service-name"] = "service1"
+        response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -401,105 +400,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_22_create_eth_service2(self):
-        data = {
-            "input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-create",
-                    "request-system-id": "appname",
-                    "notification-url":
-                        "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-name": "service2",
-                "common-id": "ASATT1234567",
-                "connection-type": "service",
-                "service-a-end": {
-                    "service-rate": "100",
-                    "node-id": "XPDRA01",
-                    "service-format": "Ethernet",
-                    "clli": "SNJSCAMCJP8",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.3",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.4",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "service-z-end": {
-                    "service-rate": "100",
-                    "node-id": "XPDRC01",
-                    "service-format": "Ethernet",
-                    "clli": "SNJSCAMCJT4",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.29",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.30",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "due-date": "2016-11-28T00:00:01Z",
-                "operator-contact": "pw1234"
-            }
-        }
-        response = test_utils.service_create_request(data)
+        self.cr_serv_sample_data["input"]["service-name"] = "service2"
+        response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -628,105 +530,8 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     #     creation service test on a non-available resource
     def test_28_create_eth_service3(self):
-        data = {
-            "input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-create",
-                    "request-system-id": "appname",
-                    "notification-url":
-                        "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-name": "service3",
-                "common-id": "ASATT1234567",
-                "connection-type": "service",
-                "service-a-end": {
-                    "service-rate": "100",
-                    "node-id": "XPDRA01",
-                    "service-format": "Ethernet",
-                    "clli": "SNJSCAMCJP8",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.3",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.4",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "service-z-end": {
-                    "service-rate": "100",
-                    "node-id": "XPDRC01",
-                    "service-format": "Ethernet",
-                    "clli": "SNJSCAMCJT4",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.29",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.30",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "due-date": "2016-11-28T00:00:01Z",
-                "operator-contact": "pw1234"
-            }
-        }
-        response = test_utils.service_create_request(data)
+        self.cr_serv_sample_data["input"]["service-name"] = "service3"
+        response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -887,105 +692,13 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     # test service-create for Optical Channel (OC) service from srg-pp to srg-pp
     def test_36_create_oc_service1(self):
-        data = {
-            "input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-create",
-                    "request-system-id": "appname",
-                    "notification-url":
-                        "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-name": "service1",
-                "common-id": "ASATT1234567",
-                "connection-type": "roadm-line",
-                "service-a-end": {
-                    "service-rate": "100",
-                    "node-id": "ROADMA01",
-                    "service-format": "OC",
-                    "clli": "SNJSCAMCJP8",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.3",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.4",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "service-z-end": {
-                    "service-rate": "100",
-                    "node-id": "ROADMC01",
-                    "service-format": "OC",
-                    "clli": "SNJSCAMCJT4",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.29",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.30",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "due-date": "2016-11-28T00:00:01Z",
-                "operator-contact": "pw1234"
-            }
-        }
-        response = test_utils.service_create_request(data)
+        self.cr_serv_sample_data["input"]["service-name"] = "service1"
+        self.cr_serv_sample_data["input"]["connection-type"] = "roadm-line"
+        self.cr_serv_sample_data["input"]["service-a-end"]["node-id"] = "ROADMA01"
+        self.cr_serv_sample_data["input"]["service-a-end"]["service-format"] = "OC"
+        self.cr_serv_sample_data["input"]["service-z-end"]["node-id"] = "ROADMC01"
+        self.cr_serv_sample_data["input"]["service-z-end"]["service-format"] = "OC"
+        response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
@@ -1053,105 +766,13 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(7)
 
     def test_40_create_oc_service2(self):
-        data = {
-            "input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-create",
-                    "request-system-id": "appname",
-                    "notification-url":
-                        "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-name": "service2",
-                "common-id": "ASATT1234567",
-                "connection-type": "roadm-line",
-                "service-a-end": {
-                    "service-rate": "100",
-                    "node-id": "ROADMA01",
-                    "service-format": "OC",
-                    "clli": "SNJSCAMCJP8",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.3",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.4",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "service-z-end": {
-                    "service-rate": "100",
-                    "node-id": "ROADMC01",
-                    "service-format": "OC",
-                    "clli": "SNJSCAMCJT4",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.29",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.30",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
-                    "optic-type": "gray"
-                },
-                "due-date": "2016-11-28T00:00:01Z",
-                "operator-contact": "pw1234"
-            }
-        }
-        response = test_utils.service_create_request(data)
+        self.cr_serv_sample_data["input"]["service-name"] = "service2"
+        self.cr_serv_sample_data["input"]["connection-type"] = "roadm-line"
+        self.cr_serv_sample_data["input"]["service-a-end"]["node-id"] = "ROADMA01"
+        self.cr_serv_sample_data["input"]["service-a-end"]["service-format"] = "OC"
+        self.cr_serv_sample_data["input"]["service-z-end"]["node-id"] = "ROADMC01"
+        self.cr_serv_sample_data["input"]["service-z-end"]["service-format"] = "OC"
+        response = test_utils.service_create_request(self.cr_serv_sample_data)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('PCE calculation in progress',
