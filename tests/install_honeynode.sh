@@ -31,6 +31,6 @@ unzip $(dirname $0)/honeynode/1.2.1/artifact.zip -d $(dirname $0)/honeynode/1.2.
 rm -f $(dirname $0)/honeynode/1.2.1/artifact.zip
 #download honeynode for 2.2.1 devices and install it
 echo "Installing honeynode for 2.2.1 devices to $(dirname $0)/honeynode/2.2.1/honeynode-simulator directory "
-curl --location --request GET "https://gitlab.com/api/v4/projects/17518226/jobs/artifacts/honeynode-plugin-aggregator-2.0.3/download?job=mvn-build" -o $(dirname $0)/honeynode/2.2.1/artifact.zip
+curl --location --request GET "https://gitlab.com/api/v4/projects/17518226/jobs/artifacts/honeynode-plugin-aggregator-2.0.4/download?job=mvn-build" -o $(dirname $0)/honeynode/2.2.1/artifact.zip
 unzip $(dirname $0)/honeynode/2.2.1/artifact.zip -d $(dirname $0)/honeynode/2.2.1
 rm -f $(dirname $0)/honeynode/2.2.1/artifact.zip
