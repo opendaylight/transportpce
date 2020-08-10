@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7e9ca30_5ca8f46f",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121Test.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-08-10T07:28:51Z",
+      "side": 1,
+      "message": "I don\u0027t think that this modification is induced by the model upgrade.\nIf it is not, this should be put in another change.",
+      "range": {
+        "startLine": 472,
+        "startChar": 7,
+        "endLine": 472,
+        "endChar": 60
+      },
+      "revId": "b8a3681afb4dc63fee55061d6d1388e75a7a7269",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
