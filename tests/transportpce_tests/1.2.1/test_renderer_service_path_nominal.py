@@ -75,20 +75,11 @@ class TransportPCERendererTesting(unittest.TestCase):
             res['nodes'][0]['mapping'])
 
     def test_05_service_path_create(self):
-        url = "{}/operations/transportpce-device-renderer:service-path"
-        data = {"renderer:input": {
-            "renderer:service-name": "service_test",
-            "renderer:wave-number": "7",
-            "renderer:modulation-format": "qpsk",
-            "renderer:operation": "create",
-            "renderer:nodes": [
-                {"renderer:node-id": "ROADMA01",
-                 "renderer:src-tp": "SRG1-PP7-TXRX",
-                 "renderer:dest-tp": "DEG1-TTP-TXRX"},
-                {"renderer:node-id": "XPDRA01",
-                 "renderer:src-tp": "XPDR1-CLIENT1",
-                 "renderer:dest-tp": "XPDR1-NETWORK1"}]}}
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_path_request("create", "service_test", "7",
+                                                   [{"renderer:node-id": "ROADMA01",
+                                                     "renderer:src-tp": "SRG1-PP7-TXRX", "renderer:dest-tp": "DEG1-TTP-TXRX"},
+                                                    {"renderer:node-id": "XPDRA01",
+                                                     "renderer:src-tp": "XPDR1-CLIENT1", "renderer:dest-tp": "XPDR1-NETWORK1"}])
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes: ROADMA01', res["output"]["result"])
@@ -250,19 +241,11 @@ class TransportPCERendererTesting(unittest.TestCase):
         self.assertIn('not-reserved-inuse', res['circuit-packs'][0]["equipment-state"])
 
     def test_14_service_path_delete(self):
-        url = "{}/operations/transportpce-device-renderer:service-path"
-        data = {"renderer:input": {
-            "renderer:service-name": "service_test",
-            "renderer:wave-number": "7",
-            "renderer:operation": "delete",
-            "renderer:nodes": [
-                {"renderer:node-id": "ROADMA01",
-                 "renderer:src-tp": "SRG1-PP7-TXRX",
-                 "renderer:dest-tp": "DEG1-TTP-TXRX"},
-                {"renderer:node-id": "XPDRA01",
-                 "renderer:src-tp": "XPDR1-CLIENT1",
-                 "renderer:dest-tp": "XPDR1-NETWORK1"}]}}
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_path_request("delete", "service_test", "7",
+                                                   [{"renderer:node-id": "ROADMA01",
+                                                     "renderer:src-tp": "SRG1-PP7-TXRX", "renderer:dest-tp": "DEG1-TTP-TXRX"},
+                                                    {"renderer:node-id": "XPDRA01",
+                                                     "renderer:src-tp": "XPDR1-CLIENT1", "renderer:dest-tp": "XPDR1-NETWORK1"}])
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertEqual(response.json(), {
             'output': {'result': 'Request processed', 'success': True}})
