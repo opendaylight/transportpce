@@ -223,38 +223,15 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertEqual(5.7, res['org-openroadm-optical-transport-interfaces:ots']['span-loss-receive'])
 
     def test_17_servicePath_create_AToZ(self):
-        url = "{}/operations/transportpce-device-renderer:service-path"
-        data = {
-            "input": {
-                "service-name": "test",
-                "wave-number": "1",
-                "modulation-format": "qpsk",
-                "operation": "create",
-                "nodes": [
-                    {
-                        "dest-tp": "XPDR1-NETWORK1",
-                        "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRA01"
-                    },
-                    {
-                        "dest-tp": "DEG1-TTP-TXRX",
-                        "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMA01"
-                    },
-                    {
-                        "dest-tp": "SRG1-PP1-TXRX",
-                        "src-tp": "DEG2-TTP-TXRX",
-                        "node-id": "ROADMC01"
-                    },
-                    {
-                        "dest-tp": "XPDR1-CLIENT1",
-                        "src-tp": "XPDR1-NETWORK1",
-                        "node-id": "XPDRC01"
-                    }
-                ]
-            }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.create_serv_path_request("test", "1",
+                                                       [{"node-id": "XPDRA01",
+                                                         "dest-tp": "XPDR1-NETWORK1", "src-tp": "XPDR1-CLIENT1"},
+                                                        {"node-id": "ROADMA01",
+                                                         "dest-tp": "DEG1-TTP-TXRX", "src-tp": "SRG1-PP1-TXRX"},
+                                                        {"node-id": "ROADMC01",
+                                                         "dest-tp": "SRG1-PP1-TXRX", "src-tp": "DEG2-TTP-TXRX"},
+                                                        {"node-id": "XPDRC01",
+                                                         "dest-tp": "XPDR1-CLIENT1", "src-tp": "XPDR1-NETWORK1"}])
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
@@ -262,38 +239,15 @@ class TransportOlmTesting(unittest.TestCase):
         time.sleep(10)
 
     def test_18_servicePath_create_ZToA(self):
-        url = "{}/operations/transportpce-device-renderer:service-path"
-        data = {
-            "input": {
-                "service-name": "test",
-                "wave-number": "1",
-                "modulation-format": "qpsk",
-                "operation": "create",
-                "nodes": [
-                    {
-                        "dest-tp": "XPDR1-NETWORK1",
-                        "src-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRC01"
-                    },
-                    {
-                        "dest-tp": "DEG2-TTP-TXRX",
-                        "src-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMC01"
-                    },
-                    {
-                        "src-tp": "DEG1-TTP-TXRX",
-                        "dest-tp": "SRG1-PP1-TXRX",
-                        "node-id": "ROADMA01"
-                    },
-                    {
-                        "src-tp": "XPDR1-NETWORK1",
-                        "dest-tp": "XPDR1-CLIENT1",
-                        "node-id": "XPDRA01"
-                    }
-                ]
-            }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.create_serv_path_request("test", "1",
+                                                       [{"node-id": "XPDRC01",
+                                                         "dest-tp": "XPDR1-NETWORK1", "src-tp": "XPDR1-CLIENT1"},
+                                                        {"node-id": "ROADMC01",
+                                                         "dest-tp": "DEG2-TTP-TXRX", "src-tp": "SRG1-PP1-TXRX"},
+                                                        {"node-id": "ROADMA01",
+                                                         "src-tp": "DEG1-TTP-TXRX", "dest-tp": "SRG1-PP1-TXRX"},
+                                                        {"node-id": "XPDRA01",
+                                                         "src-tp": "XPDR1-NETWORK1", "dest-tp": "XPDR1-CLIENT1"}])
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])
@@ -549,28 +503,11 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Roadm Xponder links created successfully', res["output"]["result"])
 
     def test_33_servicePath_create_AToZ(self):
-        url = "{}/operations/transportpce-device-renderer:service-path"
-        data = {
-            "input": {
-                "service-name": "test2",
-                "wave-number": "2",
-                "modulation-format": "qpsk",
-                "operation": "create",
-                "nodes": [
-                    {
-                        "dest-tp": "XPDR1-NETWORK2",
-                        "src-tp": "XPDR1-CLIENT2",
-                        "node-id": "XPDRA01"
-                    },
-                    {
-                        "dest-tp": "DEG1-TTP-TXRX",
-                        "src-tp": "SRG1-PP2-TXRX",
-                        "node-id": "ROADMA01"
-                    }
-                ]
-            }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.create_serv_path_request("test2", "2",
+                                                       [{"node-id": "XPDRA01",
+                                                         "dest-tp": "XPDR1-NETWORK2", "src-tp": "XPDR1-CLIENT2"},
+                                                        {"node-id": "ROADMA01",
+                                                           "dest-tp": "DEG1-TTP-TXRX", "src-tp": "SRG1-PP2-TXRX"}])
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes', res["output"]["result"])

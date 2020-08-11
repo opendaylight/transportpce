@@ -20,20 +20,20 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     processes = None
     cr_serv_sample_data = {"input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-create",
-                    "request-system-id": "appname",
-                    "notification-url": "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-name": "service1",
-                "common-id": "ASATT1234567",
-                "connection-type": "service",
-                "service-a-end": {
-                    "service-rate": "100",
-                    "node-id": "XPDR-A1",
-                    "service-format": "Ethernet",
-                    "clli": "SNJSCAMCJP8",
+        "sdnc-request-header": {
+            "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
+            "rpc-action": "service-create",
+            "request-system-id": "appname",
+            "notification-url": "http://localhost:8585/NotificationServer/notify"
+        },
+        "service-name": "service1",
+        "common-id": "ASATT1234567",
+        "connection-type": "service",
+        "service-a-end": {
+            "service-rate": "100",
+            "node-id": "XPDR-A1",
+            "service-format": "Ethernet",
+            "clli": "SNJSCAMCJP8",
                     "tx-direction": {
                         "port": {
                             "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
@@ -49,7 +49,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                             "lgx-port-shelf": "00"
                         }
                     },
-                    "rx-direction": {
+            "rx-direction": {
                         "port": {
                             "port-device-name": "ROUTER_SNJSCAMCJP8_000000.00_00",
                             "port-type": "router",
@@ -64,13 +64,13 @@ class TransportPCEFulltesting(unittest.TestCase):
                             "lgx-port-shelf": "00"
                         }
                     },
-                    "optic-type": "gray"
-                },
-                "service-z-end": {
-                    "service-rate": "100",
-                    "node-id": "XPDR-C1",
-                    "service-format": "Ethernet",
-                    "clli": "SNJSCAMCJT4",
+            "optic-type": "gray"
+        },
+        "service-z-end": {
+            "service-rate": "100",
+            "node-id": "XPDR-C1",
+            "service-format": "Ethernet",
+            "clli": "SNJSCAMCJT4",
                     "tx-direction": {
                         "port": {
                             "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
@@ -86,7 +86,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                             "lgx-port-shelf": "00"
                         }
                     },
-                    "rx-direction": {
+            "rx-direction": {
                         "port": {
                             "port-device-name": "ROUTER_SNJSCAMCJT4_000000.00_00",
                             "port-type": "router",
@@ -101,12 +101,12 @@ class TransportPCEFulltesting(unittest.TestCase):
                             "lgx-port-shelf": "00"
                         }
                     },
-                    "optic-type": "gray"
-                },
-                "due-date": "2016-11-28T00:00:01Z",
-                "operator-contact": "pw1234"
-                }
-                }
+            "optic-type": "gray"
+        },
+        "due-date": "2016-11-28T00:00:01Z",
+        "operator-contact": "pw1234"
+    }
+    }
 
     WAITING = 20  # nominal value is 300
 
