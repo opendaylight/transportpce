@@ -42,6 +42,9 @@ URL_CONFIG_ORDM_NET = "{}/config/ietf-network:networks/network/openroadm-network
 URL_PORTMAPPING = "{}/config/transportpce-portmapping:network/nodes/"
 URL_OPER_SERV_LIST = "{}/operational/org-openroadm-service:service-list/"
 URL_SERV_CREATE = "{}/operations/org-openroadm-service:service-create"
+URL_SERVICE_PATH = "{}/operations/transportpce-device-renderer:service-path"
+URL_OTN_SERVICE_PATH = "{}/operations/transportpce-device-renderer:otn-service-path"
+URL_CREATE_OTS_OMS = "{}/operations/transportpce-device-renderer:create-ots-oms"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -315,12 +318,42 @@ def portmapping_request(suffix: str):
     url = URL_PORTMAPPING + suffix
     return get_request(url)
 
+
 def get_service_list_request(suffix: str):
     url = URL_OPER_SERV_LIST + suffix
     return get_request(url)
 
+
 def service_create_request(attr):
     return post_request(URL_SERV_CREATE, attr)
+
+
+def service_path_request(operation: str, servicename: str, wavenumber: str, nodes):
+    attr = {"renderer:input": {
+            "renderer:service-name": servicename,
+            "renderer:wave-number": wavenumber,
+            "renderer:modulation-format": "qpsk",
+            "renderer:operation": operation,
+            "renderer:nodes": nodes}}
+    return post_request(URL_SERVICE_PATH, attr)
+
+
+def otn_service_path_request(operation: str, servicename: str, servicerate: str, servicetype: str, nodes, eth_attr=None):
+    attr = {"service-name": servicename,
+            "operation": operation,
+            "service-rate": servicerate,
+            "service-type": servicetype,
+            "nodes": nodes}
+    if eth_attr:
+        attr.update(eth_attr)
+    return post_request(URL_OTN_SERVICE_PATH, {"renderer:input": attr})
+
+
+def create_ots_oms_request(nodeid: str, lcp: str):
+    attr = {"input": {
+            "node-id": nodeid,
+            "logical-connection-point": lcp}}
+    return post_request(URL_CREATE_OTS_OMS, attr)
 
 
 def shutdown_process(process):
