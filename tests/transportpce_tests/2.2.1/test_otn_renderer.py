@@ -81,16 +81,8 @@ class TransportPCEtesting(unittest.TestCase):
             res['mapping'])
 
     def test_04_service_path_create_OCH_OTU4(self):
-        url = "{}/operations/transportpce-device-renderer:service-path"
-        data = {"renderer:input": {
-            "service-name": "service_OCH_OTU4",
-            "wave-number": "1",
-            "modulation-format": "qpsk",
-            "operation": "create",
-            "nodes": [
-                {"node-id": "SPDR-SA1",
-                 "dest-tp": "XPDR1-NETWORK1"}]}}
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_path_request("create", "service_OCH_OTU4", "1",
+                                                   [{"node-id": "SPDR-SA1", "dest-tp": "XPDR1-NETWORK1"}])
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -163,16 +155,8 @@ class TransportPCEtesting(unittest.TestCase):
                              res['interface'][0]['org-openroadm-otn-otu-interfaces:otu'])
 
     def test_08_otn_service_path_create_ODU4(self):
-        url = "{}/operations/transportpce-device-renderer:otn-service-path"
-        data = {"renderer:input": {
-            "service-name": "service_ODU4",
-            "operation": "create",
-            "service-rate": "100G",
-            "service-type": "ODU",
-            "nodes": [
-                {"node-id": "SPDR-SA1",
-                 "network-tp": "XPDR1-NETWORK1"}]}}
-        response = test_utils.post_request(url, data)
+        response = test_utils.otn_service_path_request("create", "service_ODU4", "100G", "ODU",
+                                                       [{"node-id": "SPDR-SA1", "network-tp": "XPDR1-NETWORK1"}])
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -228,20 +212,10 @@ class TransportPCEtesting(unittest.TestCase):
             res['interface'][0]['org-openroadm-otn-odu-interfaces:odu']['opu'])
 
     def test_11_otn_service_path_create_10GE(self):
-        url = "{}/operations/transportpce-device-renderer:otn-service-path"
-        data = {"renderer:input": {
-            "service-name": "service1",
-            "operation": "create",
-            "service-rate": "10G",
-            "service-type": "Ethernet",
-            "ethernet-encoding": "eth encode",
-            "trib-slot": ["1"],
-            "trib-port-number": "1",
-            "nodes": [
-                {"node-id": "SPDR-SA1",
-                 "client-tp": "XPDR1-CLIENT1",
-                 "network-tp": "XPDR1-NETWORK1"}]}}
-        response = test_utils.post_request(url, data)
+        response = test_utils.otn_service_path_request("create", "service1", "10G", "Ethernet",
+                                                       [{"node-id": "SPDR-SA1", "client-tp": "XPDR1-CLIENT1",
+                                                           "network-tp": "XPDR1-NETWORK1"}],
+                                                       {"ethernet-encoding": "eth encode", "trib-slot": ["1"], "trib-port-number": "1"})
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -345,20 +319,10 @@ class TransportPCEtesting(unittest.TestCase):
                              res['odu-connection'][0]['source'])
 
     def test_16_otn_service_path_delete_10GE(self):
-        url = "{}/operations/transportpce-device-renderer:otn-service-path"
-        data = {"renderer:input": {
-            "service-name": "service1",
-            "operation": "delete",
-            "service-rate": "10G",
-            "service-type": "Ethernet",
-            "ethernet-encoding": "eth encode",
-            "trib-slot": ["1"],
-            "trib-port-number": "1",
-            "nodes": [
-                {"node-id": "SPDR-SA1",
-                 "client-tp": "XPDR1-CLIENT1",
-                 "network-tp": "XPDR1-NETWORK1"}]}}
-        response = test_utils.post_request(url, data)
+        response = test_utils.otn_service_path_request("delete", "service1", "10G", "Ethernet",
+                                                       [{"node-id": "SPDR-SA1", "client-tp": "XPDR1-CLIENT1",
+                                                           "network-tp": "XPDR1-NETWORK1"}],
+                                                       {"ethernet-encoding": "eth encode", "trib-slot": ["1"], "trib-port-number": "1"})
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -384,16 +348,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_21_otn_service_path_delete_ODU4(self):
-        url = "{}/operations/transportpce-device-renderer:otn-service-path"
-        data = {"renderer:input": {
-            "service-name": "service_ODU4",
-            "operation": "delete",
-            "service-rate": "100G",
-            "service-type": "ODU",
-            "nodes": [
-                {"node-id": "SPDR-SA1",
-                 "network-tp": "XPDR1-NETWORK1"}]}}
-        response = test_utils.post_request(url, data)
+        response = test_utils.otn_service_path_request("delete", "service_ODU4", "100G", "ODU",
+                                                       [{"node-id": "SPDR-SA1", "network-tp": "XPDR1-NETWORK1"}])
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -405,16 +361,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.not_found)
 
     def test_23_service_path_delete_OCH_OTU4(self):
-        url = "{}/operations/transportpce-device-renderer:service-path"
-        data = {"renderer:input": {
-            "service-name": "service_OTU4",
-            "wave-number": "1",
-            "modulation-format": "qpsk",
-            "operation": "delete",
-            "nodes": [
-                {"node-id": "SPDR-SA1",
-                 "dest-tp": "XPDR1-NETWORK1"}]}}
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_path_request("delete", "service_OCH_OTU4", "1",
+                                                   [{"node-id": "SPDR-SA1", "dest-tp": "XPDR1-NETWORK1"}])
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
