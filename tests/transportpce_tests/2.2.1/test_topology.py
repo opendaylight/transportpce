@@ -278,36 +278,13 @@ class TransportPCEtesting(unittest.TestCase):
     # Connect the tail XPDRA to ROADMA and vice versa
     def test_10_connect_tail_xpdr_rdm(self):
         # Connect the tail: XPDRA to ROADMA
-        url = "{}/operations/transportpce-networkutils:init-xpdr-rdm-links"
-        data = {"networkutils:input": {
-            "networkutils:links-input": {
-                "networkutils:xpdr-node": "XPDR-A1",
-                "networkutils:xpdr-num": "1",
-                "networkutils:network-num": "1",
-                "networkutils:rdm-node": "ROADM-A1",
-                "networkutils:srg-num": "1",
-                "networkutils:termination-point-num": "SRG1-PP1-TXRX"
-            }
-        }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.connect_xpdr_to_rdm_request("XPDR-A1", "1", "1",
+                                                           "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_11_connect_tail_rdm_xpdr(self):
-        # Connect the tail: ROADMA to XPDRA
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links"
-        data = {"networkutils:input": {
-            "networkutils:links-input": {
-                "networkutils:xpdr-node": "XPDR-A1",
-                "networkutils:xpdr-num": "1",
-                "networkutils:network-num": "1",
-                "networkutils:rdm-node": "ROADM-A1",
-                "networkutils:srg-num": "1",
-                "networkutils:termination-point-num": "SRG1-PP1-TXRX"
-            }
-        }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.connect_rdm_to_xpdr_request("XPDR-A1", "1", "1",
+                                                           "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_12_getLinks_OpenRoadmTopology(self):
