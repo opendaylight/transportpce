@@ -531,22 +531,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     # contains 2 elements
 
     def test_29_delete_eth_service3(self):
-        url = "{}/operations/org-openroadm-service:service-delete"
-        data = {"input": {
-            "sdnc-request-header": {
-                "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                "rpc-action": "service-delete",
-                "request-system-id": "appname",
-                "notification-url":
-                    "http://localhost:8585/NotificationServer/notify"
-            },
-            "service-delete-req-info": {
-                "service-name": "service3",
-                "tail-retention": "no"
-            }
-        }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_delete_request("service3")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Service \'service3\' does not exist in datastore',
@@ -557,22 +542,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(20)
 
     def test_30_delete_eth_service1(self):
-        url = "{}/operations/org-openroadm-service:service-delete"
-        data = {"input": {
-            "sdnc-request-header": {
-                "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                "rpc-action": "service-delete",
-                "request-system-id": "appname",
-                "notification-url":
-                    "http://localhost:8585/NotificationServer/notify"
-            },
-            "service-delete-req-info": {
-                "service-name": "service1",
-                "tail-retention": "no"
-            }
-        }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_delete_request("service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
@@ -581,22 +551,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(20)
 
     def test_31_delete_eth_service2(self):
-        url = "{}/operations/org-openroadm-service:service-delete"
-        data = {"input": {
-            "sdnc-request-header": {
-                "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                "rpc-action": "service-delete",
-                "request-system-id": "appname",
-                "notification-url":
-                    "http://localhost:8585/NotificationServer/notify"
-            },
-            "service-delete-req-info": {
-                "service-name": "service2",
-                "tail-retention": "no"
-            }
-        }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_delete_request("service2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
@@ -809,22 +764,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(3)
 
     def test_44_delete_oc_service1(self):
-        url = "{}/operations/org-openroadm-service:service-delete"
-        data = {"input": {
-            "sdnc-request-header": {
-                "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                "rpc-action": "service-delete",
-                "request-system-id": "appname",
-                "notification-url":
-                    "http://localhost:8585/NotificationServer/notify"
-            },
-            "service-delete-req-info": {
-                "service-name": "service1",
-                "tail-retention": "no"
-            }
-        }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_delete_request("service1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
@@ -833,22 +773,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(20)
 
     def test_45_delete_oc_service2(self):
-        url = "{}/operations/org-openroadm-service:service-delete"
-        data = {"input": {
-            "sdnc-request-header": {
-                "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                "rpc-action": "service-delete",
-                "request-system-id": "appname",
-                "notification-url":
-                    "http://localhost:8585/NotificationServer/notify"
-            },
-            "service-delete-req-info": {
-                "service-name": "service2",
-                "tail-retention": "no"
-            }
-        }
-        }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_delete_request("service2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
@@ -898,22 +823,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_50_loop_create_oc_service(self):
         response = test_utils.get_service_list_request("services/service1")
         if response.status_code != 404:
-            url = "{}/operations/org-openroadm-service:service-delete"
-            data = {"input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-delete",
-                    "request-system-id": "appname",
-                    "notification-url":
-                        "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-delete-req-info": {
-                    "service-name": "service1",
-                    "tail-retention": "no"
-                }
-            }
-            }
-            test_utils.post_request(url, data)
+            response = test_utils.service_delete_request("service1")
             time.sleep(5)
 
         for i in range(1, 6):
