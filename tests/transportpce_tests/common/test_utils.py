@@ -46,6 +46,7 @@ URL_SERV_DELETE = "{}/operations/org-openroadm-service:service-delete"
 URL_SERVICE_PATH = "{}/operations/transportpce-device-renderer:service-path"
 URL_OTN_SERVICE_PATH = "{}/operations/transportpce-device-renderer:otn-service-path"
 URL_CREATE_OTS_OMS = "{}/operations/transportpce-device-renderer:create-ots-oms"
+URL_PATH_COMPUTATION_REQUEST = "{}/operations/transportpce-pce:path-computation-request"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -369,6 +370,22 @@ def create_ots_oms_request(nodeid: str, lcp: str):
             "node-id": nodeid,
             "logical-connection-point": lcp}}
     return post_request(URL_CREATE_OTS_OMS, attr)
+
+def path_computation_request(requestid: str, servicename: str, serviceaend, servicezend,
+                             hardconstraints=None, softconstraints=None, metric="hop-count", other_attr=None):
+    attr =  {"service-name": servicename,
+             "resource-reserve": "true",
+             "service-handler-header": { "request-id": requestid },
+             "service-a-end": serviceaend,
+             "service-z-end": servicezend,
+             "pce-metric": metric}
+    if hardconstraints:
+        attr.update({ "hard-constraints": hardconstraints})
+    if softconstraints:
+        attr.update({ "soft-constraints": softconstraints})
+    if other_attr:
+        attr.update(other_attr)
+    return post_request(URL_PATH_COMPUTATION_REQUEST, {"input": attr })
 
 
 def shutdown_process(process):
