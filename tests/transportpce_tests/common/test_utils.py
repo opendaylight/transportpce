@@ -42,6 +42,7 @@ URL_CONFIG_ORDM_NET = "{}/config/ietf-network:networks/network/openroadm-network
 URL_PORTMAPPING = "{}/config/transportpce-portmapping:network/nodes/"
 URL_OPER_SERV_LIST = "{}/operational/org-openroadm-service:service-list/"
 URL_SERV_CREATE = "{}/operations/org-openroadm-service:service-create"
+URL_SERV_DELETE = "{}/operations/org-openroadm-service:service-delete"
 URL_SERVICE_PATH = "{}/operations/transportpce-device-renderer:service-path"
 URL_OTN_SERVICE_PATH = "{}/operations/transportpce-device-renderer:otn-service-path"
 URL_CREATE_OTS_OMS = "{}/operations/transportpce-device-renderer:create-ots-oms"
@@ -326,6 +327,20 @@ def get_service_list_request(suffix: str):
 
 def service_create_request(attr):
     return post_request(URL_SERV_CREATE, attr)
+
+def service_delete_request(servicename : str,
+                           requestid = "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
+                           notificationurl="http://localhost:8585/NotificationServer/notify"):
+    attr = {"input": {
+                "sdnc-request-header": {
+                     "request-id": requestid,
+                     "rpc-action": "service-delete",
+                     "request-system-id": "appname",
+                     "notification-url": notificationurl},
+                "service-delete-req-info": {
+                     "service-name": servicename,
+                     "tail-retention": "no"}}}
+    return post_request(URL_SERV_DELETE, attr)
 
 
 def service_path_request(operation: str, servicename: str, wavenumber: str, nodes):
