@@ -160,20 +160,6 @@ class TransportPCEFulltesting(unittest.TestCase):
         time.sleep(2)
 
     def test_06_connect_roadmA_PP1_to_xpdrA_N1(self):
-        url = "{}/operations/transportpce-networkutils:init-rdm-xpdr-links"
-        data = {
-            "networkutils:input": {
-                "networkutils:links-input": {
-                    "networkutils:xpdr-node": "XPDRA01",
-                    "networkutils:xpdr-num": "1",
-                    "networkutils:network-num": "1",
-                    "networkutils:rdm-node": "ROADMA01",
-                    "networkutils:srg-num": "1",
-                    "networkutils:termination-point-num": "SRG1-PP1-TXRX"
-                }
-            }
-        }
-        response = test_utils.post_request(url, data)
         response = test_utils.connect_rdm_to_xpdr_request("XPDRA01", "1", "1",
                                                           "ROADMA01", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
