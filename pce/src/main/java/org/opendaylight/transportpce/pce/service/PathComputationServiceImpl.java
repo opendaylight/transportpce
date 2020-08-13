@@ -207,15 +207,17 @@ public class PathComputationServiceImpl implements PathComputationService {
                 AToZDirection atoz = pathDescription.getAToZDirection();
                 if ((atoz != null) && (atoz.getAToZ() != null)) {
                     LOG.debug("Impl AtoZ Notification: [{}] elements in description", atoz.getAToZ().size());
-                    for (int i = 0; i < atoz.getAToZ().size(); i++) {
-                        LOG.debug("Impl AtoZ Notification: [{}] {}", i, atoz.getAToZ().get(i));
+                    for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629
+                            .path.description.atoz.direction.AToZKey key : atoz.getAToZ().keySet()) {
+                        LOG.debug("Impl AtoZ Notification: [{}] {}", key, atoz.getAToZ().get(key));
                     }
                 }
                 ZToADirection ztoa = pathDescription.getZToADirection();
                 if ((ztoa != null) && (ztoa.getZToA() != null)) {
                     LOG.debug("Impl ZtoA Notification: [{}] elements in description", ztoa.getZToA().size());
-                    for (int i = 0; i < ztoa.getZToA().size(); i++) {
-                        LOG.debug("Impl ZtoA Notification: [{}] {}", i, ztoa.getZToA().get(i));
+                    for (org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629
+                            .path.description.ztoa.direction.ZToAKey key : ztoa.getZToA().keySet()) {
+                        LOG.debug("Impl ZtoA Notification: [{}] {}", key, ztoa.getZToA().get(key));
                     }
                 }
                 return output.build();
@@ -243,7 +245,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         (org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.PathCase)
                         responseGnpy.getResponseType();
                 List<org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties
-                    .PathMetric> pathMetricList = pathCase.getPathProperties().getPathMetric();
+                    .PathMetric> pathMetricList = new ArrayList(pathCase.getPathProperties().getPathMetric().values());
                 List<PathMetric> gnpyPathMetricList = new ArrayList<>();
                 for (org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathMetric
                         pathMetricGnpy : pathMetricList) {
