@@ -51,9 +51,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.atoz.direction.AToZ;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.atoz.direction.AToZKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ztoa.direction.ZToA;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ztoa.direction.ZToAKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource.resource.Resource;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -140,9 +138,9 @@ public class GnpyServiceImpl {
         }
 
         // Create explicitRouteObjects
-        Map<AToZKey, AToZ> mapAtoZ = atoz.nonnullAToZ();
-        if (!mapAtoZ.isEmpty()) {
-            extractRouteObjectIcludeAtoZ(mapAtoZ);
+        List<AToZ> listAtoZ = new ArrayList<>(atoz.nonnullAToZ().values());
+        if (!listAtoZ.isEmpty()) {
+            extractRouteObjectIcludeAtoZ(listAtoZ);
         } else {
             extractHardConstraints(pceHardConstraints);
         }
@@ -178,9 +176,9 @@ public class GnpyServiceImpl {
             throw new GnpyException("In GnpyServiceImpl: source and destination should be transmitter nodes");
         }
         // Create explicitRouteObjects
-        @NonNull Map<ZToAKey, ZToA> mapZtoA = ztoa.nonnullZToA();
-        if (!mapZtoA.isEmpty()) {
-            extractRouteObjectIcludeZtoA(mapZtoA);
+        @NonNull List<ZToA> listZtoA = new ArrayList<>(ztoa.nonnullZToA().values());
+        if (!listZtoA.isEmpty()) {
+            extractRouteObjectIcludeZtoA(listZtoA);
         } else {
             extractHardConstraints(pceHardConstraints);
         }
@@ -207,18 +205,18 @@ public class GnpyServiceImpl {
     }
 
     //Extract RouteObjectIncludeExclude list in the case of pre-computed path A-to-Z
-    private void extractRouteObjectIcludeAtoZ(Map<AToZKey, AToZ> mapAtoZ) throws GnpyException {
+    private void extractRouteObjectIcludeAtoZ(List<AToZ> listAtoZ) throws GnpyException {
         Long index = 0L;
-        for (Map.Entry<AToZKey, AToZ> entry : mapAtoZ.entrySet()) {
-            index = createResource(entry.getValue().getResource().getResource(),index);
+        for (AToZ entry : listAtoZ) {
+            index = createResource(entry.getResource().getResource(),index);
         }
     }
 
     //Extract RouteObjectIncludeExclude list in the case of pre-computed path Z-to-A
-    private void extractRouteObjectIcludeZtoA(@NonNull Map<ZToAKey, ZToA> mapZtoA) throws GnpyException {
+    private void extractRouteObjectIcludeZtoA(@NonNull List<ZToA> listZtoA) throws GnpyException {
         Long index = 0L;
-        for (Map.Entry<ZToAKey, ZToA> entry : mapZtoA.entrySet()) {
-            index = createResource(entry.getValue().getResource().getResource(),index);
+        for (ZToA entry : listZtoA) {
+            index = createResource(entry.getResource().getResource(),index);
         }
     }
 

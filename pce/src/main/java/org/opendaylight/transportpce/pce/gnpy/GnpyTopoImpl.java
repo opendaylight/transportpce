@@ -47,7 +47,6 @@ import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.el
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.SpanAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLinkKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.ila.Ila;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
@@ -287,12 +286,11 @@ public class GnpyTopoImpl {
     private IpAddress extractAmplifiedLink(OMSAttributes omsAttributes, String linkId, IpAddress srcIp)
         throws GnpyException {
 
-        Map<AmplifiedLinkKey, AmplifiedLink> amplifiedLinkList = omsAttributes
-                .getAmplifiedLink().nonnullAmplifiedLink();
+        List<AmplifiedLink> amplifiedLinkList = new ArrayList<>(omsAttributes.getAmplifiedLink()
+            .nonnullAmplifiedLink().values());
         IpAddress destIp = null;
         if (!amplifiedLinkList.isEmpty()) {
-            for (Map.Entry<AmplifiedLinkKey, AmplifiedLink> entry: amplifiedLinkList.entrySet()) {
-                AmplifiedLink amplifiedLink =  entry.getValue();
+            for (AmplifiedLink amplifiedLink: amplifiedLinkList) {
                 String secElt = amplifiedLink .getSectionEltNumber().toString();
                 //Case of ILA
                 if (amplifiedLink.getSectionElement().getSectionElement() instanceof Ila) {

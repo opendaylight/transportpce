@@ -101,7 +101,7 @@ public class PceOtnNode implements PceNode {
             = this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                 .ietf.network.topology.rev180226.Node1.class);
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-                .node.TerminationPoint> allTps = nodeTp.getTerminationPoint();
+                .node.TerminationPoint> allTps = new ArrayList(nodeTp.getTerminationPoint().values());
         this.valid = false;
         if (allTps == null) {
             LOG.error("PceOtnNode: initXndrTps: XPONDER TerminationPoint list is empty for node {}", this);
@@ -188,8 +188,8 @@ public class PceOtnNode implements PceNode {
             for (TpId nwTp : netwTps) {
                 for (TpId clTp : clientTps) {
                     @Nullable
-                    List<NonBlockingList> nblList = node.augmentation(Node1.class).getSwitchingPools()
-                        .getOduSwitchingPools().get(0).getNonBlockingList();
+                    List<NonBlockingList> nblList = new ArrayList(node.augmentation(Node1.class).getSwitchingPools()
+                        .getOduSwitchingPools().values().stream().findFirst().get().getNonBlockingList().values());
                     for (NonBlockingList nbl : nblList) {
                         if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
                             usableXpdrClientTps.add(clTp);
@@ -207,8 +207,8 @@ public class PceOtnNode implements PceNode {
         if (clientTps == null && netwTps != null && nbClient == 0 && nbNetw == 2) {
             netwTps.sort(Comparator.comparing(TpId::getValue));
             @Nullable
-            List<NonBlockingList> nblList = node.augmentation(Node1.class).getSwitchingPools().getOduSwitchingPools()
-                .get(0).getNonBlockingList();
+            List<NonBlockingList> nblList = new ArrayList(node.augmentation(Node1.class).getSwitchingPools()
+                .getOduSwitchingPools().values().stream().findFirst().get().getNonBlockingList().values());
             for (NonBlockingList nbl : nblList) {
                 for (TpId nwTp : netwTps) {
                     if (nbl.getTpList().contains(nwTp)) {
@@ -224,7 +224,8 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkTpForOdtuTermination(TerminationPoint1 ontTp1) {
-        for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()) {
+        for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()
+                .values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
             if (sic.getIfCapType().equals(IfOCHOTU4ODU4.class)
                 && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() == null) {
@@ -238,9 +239,11 @@ public class PceOtnNode implements PceNode {
         if (ontTp1.getXpdrTpPortConnectionAttributes() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getTsPool() != null
             && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
-            && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getOdtuType()
+            && ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
+                .stream().findFirst().get().getOdtuType()
                 .equals(ODTU4TsAllocated.class)
-            && !ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0).getTpnPool().isEmpty()
+            && !ontTp1.getXpdrTpPortConnectionAttributes().getOdtuTpnPool().values()
+                .stream().findFirst().get().getTpnPool().isEmpty()
             && (ontTp1.getXpdrTpPortConnectionAttributes().getTsPool().size() >= tsNb)) {
             return true;
         }
@@ -248,7 +251,8 @@ public class PceOtnNode implements PceNode {
     }
 
     private boolean checkClientTp(TerminationPoint1 ontTp1) {
-        for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()) {
+        for (SupportedInterfaceCapability sic : ontTp1.getTpSupportedInterfaces().getSupportedInterfaceCapability()
+                .values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
             switch (otnServiceType) {
                 case "1GE":
@@ -302,9 +306,9 @@ public class PceOtnNode implements PceNode {
             node.augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1.class);
         SwitchingPools sp = node1.getSwitchingPools();
-        List<OduSwitchingPools> osp = sp.getOduSwitchingPools();
+        List<OduSwitchingPools> osp = new ArrayList(sp.getOduSwitchingPools().values());
         for (OduSwitchingPools ospx : osp) {
-            List<NonBlockingList> nbl = ospx.getNonBlockingList();
+            List<NonBlockingList> nbl = new ArrayList(ospx.getNonBlockingList().values());
             for (NonBlockingList nbll : nbl) {
                 if (nbll.getAvailableInterconnectBandwidth().toJava() >= neededBW && nbll.getTpList() != null
                         && nbll.getTpList().contains(tp1.getTpId()) && nbll.getTpList().contains(tp2.getTpId())) {
@@ -340,7 +344,7 @@ public class PceOtnNode implements PceNode {
     public void checkAvailableTribPort() {
         List<TerminationPoint> networkTpList = node.augmentation(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
-            .getTerminationPoint().stream()
+            .getTerminationPoint().values().stream()
             .filter(type -> type
                 .augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class)
@@ -349,11 +353,11 @@ public class PceOtnNode implements PceNode {
 
         for (TerminationPoint tp : networkTpList) {
             if (tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool() != null
-                && tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool().get(0)
-                    .getOdtuType().equals(ODTU4TsAllocated.class)) {
+                && tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes().getOdtuTpnPool()
+                    .values().stream().findFirst().get().getOdtuType().equals(ODTU4TsAllocated.class)) {
                 @Nullable
                 List<Uint16> tpnPool = tp.augmentation(TerminationPoint1.class).getXpdrTpPortConnectionAttributes()
-                    .getOdtuTpnPool().get(0).getTpnPool();
+                    .getOdtuTpnPool().values().stream().findFirst().get().getTpnPool();
                 if (tpnPool != null) {
                     tpAvailableTribPort.put(tp.getTpId().getValue(), tpnPool);
                 }
@@ -364,7 +368,7 @@ public class PceOtnNode implements PceNode {
     public void checkAvailableTribSlot() {
         List<TerminationPoint> networkTpList = node.augmentation(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
-            .getTerminationPoint().stream()
+            .getTerminationPoint().values().stream()
             .filter(type -> type
                 .augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class)
