@@ -106,7 +106,8 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 scPath.getParent(), scPath.getLastComponent().getNamespace(),
                 JsonWriterFactory.createJsonWriter(writer, 2));) {
             // The write part
-            codecRegistry.getSerializer(id.getTargetType()).serialize(object, codecRegistry.newWriter(id, domWriter));
+            //FIXME
+            //codecRegistry.getSerializer(id.getTargetType()).serialize(object, codecRegistry.newWriter(id, domWriter));
         } catch (IOException e) {
             throw new GnpyException("In ServiceDataStoreOperationsImpl: exception during json file creation",e);
         }
