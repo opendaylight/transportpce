@@ -1,0 +1,23 @@
+{
+  "pce:input": {
+    "pce:service-name": "service 1",
+    "pce:resource-reserve": "true",
+    "pce:service-handler-header": {
+      "pce:request-id": "request 1"
+    },
+    "pce:service-a-end": {
+     "pce:service-rate": "0",
+      "pce:node-id": "XPONDER-1-2"
+    },
+    "pce:service-z-end": {
+     "pce:service-rate": "0",
+      "pce:node-id": "XPONDER-3-2"
+    },
+    "pce:hard-constraints": {
+      "pce:exclude_": {
+        "node-id": [ "OpenROADM-2-1","OpenROADM-2-2"]
+       }
+    },
+    "pce:pce-metric": "propagation-delay"
+ }
+}

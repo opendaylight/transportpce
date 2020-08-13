@@ -1,0 +1,1098 @@
+{
+  "output": {
+    "configuration-response-common": {
+      "response-code": "200",
+      "response-message": "Path is calculated",
+      "ack-final-indicator": "Success",
+      "request-id": "request 1"
+    },
+    "response-parameters": {
+      "path-description": {
+        "zToA-direction": {
+          "rate": 0,
+          "zToA-wavelength-number": 9,
+          "zToA": [
+            {
+              "id": "32",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-RX",
+                  "node-id": "OpenROADM-4-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "31",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-4-3-DEG2-DEG2-CTP-TXtoOpenROADM-4-3-DEG3-DEG3-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "30",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-TX",
+                  "node-id": "OpenROADM-4-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "36",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-RX",
+                  "node-id": "OpenROADM-5-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "35",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-4-3-DEG3-to-OpenROADM-5-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "34",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-TX",
+                  "node-id": "OpenROADM-4-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "33",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-4-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "39",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-5-2-DEG3-DEG3-CTP-TXtoOpenROADM-5-2-DEG2-DEG2-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "38",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-TX",
+                  "node-id": "OpenROADM-5-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "37",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-5-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "3",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "XPONDER-3-2XPDR-NW4-TX-toOpenROADM-3-2-SRG1-SRG1-PP4-RX"
+                }
+              }
+            },
+            {
+              "id": "2",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "XPDR-NW4-TX",
+                  "node-id": "XPONDER-3-2"
+                }
+              }
+            },
+            {
+              "id": "1",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "XPONDER-3-2"
+                }
+              }
+            },
+            {
+              "id": "0",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "Client-4",
+                  "node-id": "XPONDER-3-2"
+                }
+              }
+            },
+            {
+              "id": "7",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-3-2-SRG1-SRG1-CP-TXtoOpenROADM-3-2-DEG2-DEG2-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "6",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "SRG1-CP-TX",
+                  "node-id": "OpenROADM-3-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "5",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-3-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "4",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "SRG1-PP4-RX",
+                  "node-id": "OpenROADM-3-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "61",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "XPONDER-1-2"
+                }
+              }
+            },
+            {
+              "id": "60",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "XPDR-NW4-RX",
+                  "node-id": "XPONDER-1-2"
+                }
+              }
+            },
+            {
+              "id": "9",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-3-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "8",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-RX",
+                  "node-id": "OpenROADM-3-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "21",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-4-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "20",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-RX",
+                  "node-id": "OpenROADM-4-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "62",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "Client-4",
+                  "node-id": "XPONDER-1-2"
+                }
+              }
+            },
+            {
+              "id": "25",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-4-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "24",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-RX",
+                  "node-id": "OpenROADM-4-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "23",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-4-2-DEG3-DEG3-CTP-TXtoOpenROADM-4-2-DEG2-DEG2-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "22",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-TX",
+                  "node-id": "OpenROADM-4-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "29",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-4-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "28",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-RX",
+                  "node-id": "OpenROADM-4-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "27",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-4-2-DEG2-to-OpenROADM-4-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "26",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-TX",
+                  "node-id": "OpenROADM-4-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "50",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-TX",
+                  "node-id": "OpenROADM-5-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "10",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-TX",
+                  "node-id": "OpenROADM-3-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "54",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-TX",
+                  "node-id": "OpenROADM-1-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "53",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-1-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "52",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-RX",
+                  "node-id": "OpenROADM-1-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "51",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-5-3-DEG3-to-OpenROADM-1-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "14",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-TX",
+                  "node-id": "OpenROADM-3-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "58",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "SRG1-PP4-TX",
+                  "node-id": "OpenROADM-1-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "13",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-3-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "57",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-1-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "12",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-RX",
+                  "node-id": "OpenROADM-3-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "56",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "SRG1-CP-RX",
+                  "node-id": "OpenROADM-1-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "11",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-3-2-DEG2-to-OpenROADM-3-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "55",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-1-2-DEG3-DEG3-CTP-TXtoOpenROADM-1-2-SRG1-SRG1-CP-RX"
+                }
+              }
+            },
+            {
+              "id": "18",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-TX",
+                  "node-id": "OpenROADM-3-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "17",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-3-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "16",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-RX",
+                  "node-id": "OpenROADM-3-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "15",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-3-3-DEG2-DEG2-CTP-TXtoOpenROADM-3-3-DEG3-DEG3-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "59",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-1-2-SRG1-SRG1-PP4-TX-to-XPONDER-1-2XPDR-NW4-RX"
+                }
+              }
+            },
+            {
+              "id": "19",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-3-3-DEG3-to-OpenROADM-4-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "43",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-5-2-DEG2-to-OpenROADM-5-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "42",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-TX",
+                  "node-id": "OpenROADM-5-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "41",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-5-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "40",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-RX",
+                  "node-id": "OpenROADM-5-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "47",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-5-3-DEG2-DEG2-CTP-TXtoOpenROADM-5-3-DEG3-DEG3-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "46",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-TX",
+                  "node-id": "OpenROADM-5-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "45",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-5-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "44",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-RX",
+                  "node-id": "OpenROADM-5-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "49",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-5-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "48",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-RX",
+                  "node-id": "OpenROADM-5-3-DEG3"
+                }
+              }
+            }
+          ]
+        },
+        "aToZ-direction": {
+          "aToZ": [
+            {
+              "id": "49",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-3-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "48",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-RX",
+                  "node-id": "OpenROADM-3-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "47",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-3-3-DEG3-DEG3-CTP-TXtoOpenROADM-3-3-DEG2-DEG2-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "46",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-TX",
+                  "node-id": "OpenROADM-3-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "52",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-RX",
+                  "node-id": "OpenROADM-3-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "51",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-3-3-DEG2-to-OpenROADM-3-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "50",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-TX",
+                  "node-id": "OpenROADM-3-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "12",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-RX",
+                  "node-id": "OpenROADM-5-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "56",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "SRG1-CP-RX",
+                  "node-id": "OpenROADM-3-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "11",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-1-2-DEG3-to-OpenROADM-5-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "55",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-3-2-DEG2-DEG2-CTP-TXtoOpenROADM-3-2-SRG1-SRG1-CP-RX"
+                }
+              }
+            },
+            {
+              "id": "10",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-TX",
+                  "node-id": "OpenROADM-1-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "54",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-TX",
+                  "node-id": "OpenROADM-3-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "53",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-3-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "16",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-RX",
+                  "node-id": "OpenROADM-5-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "15",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-5-3-DEG3-DEG3-CTP-TXtoOpenROADM-5-3-DEG2-DEG2-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "59",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-3-2-SRG1-SRG1-PP4-TX-to-XPONDER-3-2XPDR-NW4-RX"
+                }
+              }
+            },
+            {
+              "id": "14",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-TX",
+                  "node-id": "OpenROADM-5-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "58",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "SRG1-PP4-TX",
+                  "node-id": "OpenROADM-3-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "13",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-5-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "57",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-3-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "19",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-5-3-DEG2-to-OpenROADM-5-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "18",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-TX",
+                  "node-id": "OpenROADM-5-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "17",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-5-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "1",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "XPONDER-1-2"
+                }
+              }
+            },
+            {
+              "id": "0",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "Client-4",
+                  "node-id": "XPONDER-1-2"
+                }
+              }
+            },
+            {
+              "id": "5",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-1-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "4",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "SRG1-PP4-RX",
+                  "node-id": "OpenROADM-1-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "3",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "XPONDER-1-2XPDR-NW4-TX-toOpenROADM-1-2-SRG1-SRG1-PP4-RX"
+                }
+              }
+            },
+            {
+              "id": "2",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "XPDR-NW4-TX",
+                  "node-id": "XPONDER-1-2"
+                }
+              }
+            },
+            {
+              "id": "9",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-1-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "8",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-RX",
+                  "node-id": "OpenROADM-1-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "7",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-1-2-SRG1-SRG1-CP-TXtoOpenROADM-1-2-DEG3-DEG3-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "6",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "SRG1-CP-TX",
+                  "node-id": "OpenROADM-1-2-SRG1"
+                }
+              }
+            },
+            {
+              "id": "62",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "Client-4",
+                  "node-id": "XPONDER-3-2"
+                }
+              }
+            },
+            {
+              "id": "61",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "XPONDER-3-2"
+                }
+              }
+            },
+            {
+              "id": "60",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "XPDR-NW4-RX",
+                  "node-id": "XPONDER-3-2"
+                }
+              }
+            },
+            {
+              "id": "23",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-5-2-DEG2-DEG2-CTP-TXtoOpenROADM-5-2-DEG3-DEG3-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "22",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-TX",
+                  "node-id": "OpenROADM-5-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "21",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-5-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "20",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-RX",
+                  "node-id": "OpenROADM-5-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "27",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-5-2-DEG3-to-OpenROADM-4-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "26",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-TX",
+                  "node-id": "OpenROADM-5-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "25",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-5-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "24",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-RX",
+                  "node-id": "OpenROADM-5-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "29",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-4-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "28",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-RX",
+                  "node-id": "OpenROADM-4-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "30",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-TX",
+                  "node-id": "OpenROADM-4-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "34",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-TX",
+                  "node-id": "OpenROADM-4-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "33",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-4-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "32",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-RX",
+                  "node-id": "OpenROADM-4-3-DEG2"
+                }
+              }
+            },
+            {
+              "id": "31",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-4-3-DEG3-DEG3-CTP-TXtoOpenROADM-4-3-DEG2-DEG2-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "38",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-CTP-TX",
+                  "node-id": "OpenROADM-4-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "37",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-4-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "36",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG2-TTP-RX",
+                  "node-id": "OpenROADM-4-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "35",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-4-3-DEG2-to-OpenROADM-4-2-DEG2"
+                }
+              }
+            },
+            {
+              "id": "39",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-4-2-DEG2-DEG2-CTP-TXtoOpenROADM-4-2-DEG3-DEG3-CTP-RX"
+                }
+              }
+            },
+            {
+              "id": "41",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-4-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "40",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-CTP-RX",
+                  "node-id": "OpenROADM-4-2-DEG3"
+                }
+              }
+            },
+            {
+              "id": "45",
+              "resource": {
+                "node-identifier": {
+                  "node-id": "OpenROADM-3-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "44",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-RX",
+                  "node-id": "OpenROADM-3-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "43",
+              "resource": {
+                "link-identifier": {
+                  "link-id": "OpenROADM-4-2-DEG3-to-OpenROADM-3-3-DEG3"
+                }
+              }
+            },
+            {
+              "id": "42",
+              "resource": {
+                "termination-point-identifier": {
+                  "tp-id": "DEG3-TTP-TX",
+                  "node-id": "OpenROADM-4-2-DEG3"
+                }
+              }
+            }
+          ],
+          "aToZ-wavelength-number": 9,
+          "rate": 0
+        }
+      }
+    }
+  }
+}

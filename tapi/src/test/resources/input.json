@@ -1,0 +1,59 @@
+{
+  "urn:onf:otcc:yang:tapi-connectivity:input": {
+    "tapi-connectivity:end-point": [
+      {
+        "tapi-connectivity:layer-protocol-name": "ETH",
+        "tapi-connectivity:service-interface-point": {
+          "tapi-connectivity:service-interface-point-id": "aaaaaaaa-1111-1111-1111-aaaaaaaaaaaa"
+        },
+
+        "tapi-connectivity:direction": "BIDIRECTIONAL",
+        "tapi-connectivity:role": "SYMMETRIC",
+        "tapi-connectivity:protection-role": "WORK",
+        "tapi-connectivity:local-id": "local-id1",
+        "tapi-connectivity:administrative-state": "LOCKED"
+      },
+       {
+        "tapi-connectivity:layer-protocol-name": "ETH",
+        "tapi-connectivity:service-interface-point": {
+          "tapi-connectivity:service-interface-point-id": "zzzzzzzz-1111-1111-1111-zzzzzzzzzzzz"
+        },
+        "tapi-connectivity:direction": "BIDIRECTIONAL",
+        "tapi-connectivity:role": "SYMMETRIC",
+        "tapi-connectivity:protection-role": "WORK",
+        "tapi-connectivity:local-id": "local-id2",
+        "tapi-connectivity:name": [
+          {
+            "tapi-connectivity:value-name": "Some value-name",
+            "tapi-connectivity:value": "Some value"
+          }
+        ],
+        "tapi-connectivity:administrative-state": "LOCKED"
+       }
+    ],
+    "tapi-connectivity:conn-constraint": {
+      "tapi-connectivity:service-type": "POINT_TO_POINT_CONNECTIVITY",
+      "tapi-connectivity:service-level": "Some service-level"
+    },
+    "tapi-connectivity:topo-constraint": {},
+    "tapi-connectivity:resilience-constraint": [
+      {
+        "tapi-connectivity:resilience-type": {
+          "tapi-connectivity:restoration-policy": "PER_DOMAIN_RESTORATION",
+          "tapi-connectivity:protection-type": "NO_PROTECTON"
+        },
+        "tapi-connectivity:restoration-coordinate-type": "NO_COORDINATE",
+        "tapi-connectivity:restore-priority": "0",
+        "tapi-connectivity:reversion-mode": "REVERTIVE",
+        "tapi-connectivity:wait-to-revert-time": "15",
+        "tapi-connectivity:hold-off-time": "0",
+        "tapi-connectivity:is-lock-out": "true",
+        "tapi-connectivity:is-frozen": "true",
+        "tapi-connectivity:is-coordinated-switching-both-ends": "true",
+        "tapi-connectivity:max-switch-times": "0",
+        "tapi-connectivity:layer-protocol": "OTSiA"
+      }
+    ],
+    "tapi-connectivity:state": "Some state"
+  }
+}
