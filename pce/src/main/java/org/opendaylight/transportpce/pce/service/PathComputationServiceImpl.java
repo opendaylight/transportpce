@@ -243,7 +243,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         (org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.PathCase)
                         responseGnpy.getResponseType();
                 List<org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties
-                    .PathMetric> pathMetricList = pathCase.getPathProperties().getPathMetric();
+                    .PathMetric> pathMetricList = new ArrayList(pathCase.getPathProperties().getPathMetric().values());
                 List<PathMetric> gnpyPathMetricList = new ArrayList<>();
                 for (org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathMetric
                         pathMetricGnpy : pathMetricList) {
