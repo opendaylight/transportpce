@@ -766,21 +766,7 @@ class TransportPCEtesting(unittest.TestCase):
                         self.assertNotIn(1, xpdrTpPortConAt['odtu-tpn-pool'][0]['tpn-pool'])
 
     def test_41_delete_10GE_service(self):
-        url = "{}/operations/org-openroadm-service:service-delete"
-        data = {"input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-delete",
-                    "request-system-id": "appname",
-                    "notification-url": "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-delete-req-info": {
-                    "service-name": "service1-10GE",
-                    "tail-retention": "no"
-                }
-                }
-                }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_delete_request("service1-10GE")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
@@ -839,21 +825,7 @@ class TransportPCEtesting(unittest.TestCase):
                         self.assertEqual(len(xpdrTpPortConAt['odtu-tpn-pool'][0]['tpn-pool']), 80)
 
     def test_49_delete_ODU4_service(self):
-        url = "{}/operations/org-openroadm-service:service-delete"
-        data = {"input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-delete",
-                    "request-system-id": "appname",
-                    "notification-url": "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-delete-req-info": {
-                    "service-name": "service1-ODU4",
-                    "tail-retention": "no"
-                }
-                }
-                }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_delete_request("service1-ODU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
@@ -887,21 +859,7 @@ class TransportPCEtesting(unittest.TestCase):
                         self.assertNotIn('odtu-tpn-pool', dict.keys(xpdrTpPortConAt))
 
     def test_54_delete_OCH_OTU4_service(self):
-        url = "{}/operations/org-openroadm-service:service-delete"
-        data = {"input": {
-                "sdnc-request-header": {
-                    "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
-                    "rpc-action": "service-delete",
-                    "request-system-id": "appname",
-                    "notification-url": "http://localhost:8585/NotificationServer/notify"
-                },
-                "service-delete-req-info": {
-                    "service-name": "service1-OCH-OTU4",
-                    "tail-retention": "no"
-                }
-                }
-                }
-        response = test_utils.post_request(url, data)
+        response = test_utils.service_delete_request("service1-OCH-OTU4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Renderer service delete in progress',
