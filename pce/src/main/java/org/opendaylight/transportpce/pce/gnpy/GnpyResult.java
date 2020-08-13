@@ -43,7 +43,6 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.IncludeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.include_.OrderedHops;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.include_.OrderedHopsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.include_.OrderedHopsKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ordered.constraints.sp.HopType;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ordered.constraints.sp.HopTypeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.NodeBuilder;
@@ -181,7 +180,7 @@ public class GnpyResult {
         HardConstraints hardConstraints = null;
         // Includes the list of nodes in the GNPy computed path as constraints
         // for the PCE
-        Map<OrderedHopsKey,OrderedHops> orderedHopsList = new HashMap<>();
+        List<OrderedHops> orderedHopsList = new ArrayList<>();
         int counter = 0;
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
@@ -200,7 +199,7 @@ public class GnpyResult {
                         OrderedHops orderedHops = new OrderedHopsBuilder()
                                 .setHopNumber(Uint16.valueOf(counter)).setHopType(hopType)
                             .build();
-                        orderedHopsList.put(orderedHops.key(),orderedHops);
+                        orderedHopsList.add(orderedHops);
                         counter++;
                     }
                 } catch (IllegalArgumentException e) {

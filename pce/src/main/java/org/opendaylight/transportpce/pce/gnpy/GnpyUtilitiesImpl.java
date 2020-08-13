@@ -8,8 +8,8 @@
 
 package org.opendaylight.transportpce.pce.gnpy;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
@@ -18,10 +18,8 @@ import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.gnpy.api.ServiceFile
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.gnpy.api.TopologyFileBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Connections;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Elements;
-import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.ElementsKey;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathRouteObjects;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.service.PathRequest;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.service.PathRequestKey;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.synchronization.info.Synchronization;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.AToZDirection;
@@ -80,12 +78,12 @@ public class GnpyUtilitiesImpl {
 
     public GnpyResult gnpyResponseOneDirection(GnpyServiceImpl gnpySvc) throws GnpyException, Exception {
         requestId = Uint32.valueOf((requestId.toJava()) + 1);
-        Map<PathRequestKey,PathRequest> pathRequestMap = gnpySvc.getPathRequest();
+        List<PathRequest> pathRequestList = new ArrayList(gnpySvc.getPathRequest().values());
         List<Synchronization> synchronizationList = gnpySvc.getSynchronization();
         // Send the computed path to GNPY tool
-        Map<ElementsKey,Elements> elementsMap = gnpyTopo.getElements();
+        List<Elements> elementsList = new ArrayList(gnpyTopo.getElements().values());
         List<Connections> connectionsList = gnpyTopo.getConnections();
-        String gnpyResponse = getGnpyResponse(elementsMap, connectionsList, pathRequestMap,
+        String gnpyResponse = getGnpyResponse(elementsList, connectionsList, pathRequestList,
             synchronizationList);
         // Analyze the response
         if (gnpyResponse == null) {
@@ -116,14 +114,14 @@ public class GnpyUtilitiesImpl {
         return result.computeHardConstraintsFromGnpyPath(pathRouteObjectList);
     }
 
-    public String getGnpyResponse(Map<ElementsKey,Elements> elementsMap, List<Connections> connectionsList,
-        Map<PathRequestKey,PathRequest> pathRequestMap, List<Synchronization> synchronizationList)
+    public String getGnpyResponse(List<Elements> elementsList, List<Connections> connectionsList,
+        List<PathRequest> pathRequestList, List<Synchronization> synchronizationList)
                 throws GnpyException, Exception {
         GnpyApi gnpyApi = new GnpyApiBuilder()
             .setTopologyFile(
-                new TopologyFileBuilder().setElements(elementsMap).setConnections(connectionsList).build())
+                new TopologyFileBuilder().setElements(elementsList).setConnections(connectionsList).build())
             .setServiceFile(
-                new ServiceFileBuilder().setPathRequest(pathRequestMap).build())
+                new ServiceFileBuilder().setPathRequest(pathRequestList).build())
             .build();
         InstanceIdentifier<GnpyApi> idGnpyApi = InstanceIdentifier.builder(GnpyApi.class).build();
         String gnpyJson;
