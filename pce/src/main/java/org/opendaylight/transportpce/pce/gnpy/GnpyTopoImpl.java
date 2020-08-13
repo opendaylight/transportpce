@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce.gnpy;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +41,13 @@ import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Co
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.ConnectionsBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.Elements;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.ElementsBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.ElementsKey;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.elements.Metadata;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.topo.elements.MetadataBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.SpanAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLinkKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.section.element.section.element.ila.Ila;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
@@ -76,7 +79,7 @@ public class GnpyTopoImpl {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyTopoImpl.class);
     private final NetworkTransactionService networkTransactionService;
     //List of elements
-    private List<Elements> elements = new ArrayList<>();
+    private Map<ElementsKey, Elements> elements = new HashMap<>();
     private List<Connections> connections = new ArrayList<>();
     //Mapping elements
     //Mapping between the ord-topo and ord-ntw node
@@ -160,8 +163,8 @@ public class GnpyTopoImpl {
             throw new GnpyException("In gnpyTopoImpl: openRoadmNet or openRoadmTopo is not present");
         }
         // Create the list of nodes
-        List<Node> openRoadmNetNodeList = openRoadmNet.get().getNode();
-        List<Node> openRoadmTopoNodeList = openRoadmTopo.get().getNode();
+        Collection<Node> openRoadmNetNodeList = openRoadmNet.get().nonnullNode().values();
+        Collection<Node> openRoadmTopoNodeList = openRoadmTopo.get().nonnullNode().values();
         List<String> nodesList = new ArrayList<>();
 
         if (openRoadmTopoNodeList.isEmpty() || openRoadmNetNodeList.isEmpty()) {
@@ -170,7 +173,7 @@ public class GnpyTopoImpl {
         // Create elements
         for (Node openRoadmTopoNode : openRoadmTopoNodeList) {
             // Retrieve the supporting node and the type of the node in openRoadm network
-            List<SupportingNode> supportingNodeList = openRoadmTopoNode.getSupportingNode();
+            Collection<SupportingNode> supportingNodeList = openRoadmTopoNode.nonnullSupportingNode().values();
 
             for (SupportingNode supportingNode : supportingNodeList) {
                 if (!supportingNode.getNetworkRef().getValue().equals("openroadm-network")) {
@@ -207,14 +210,14 @@ public class GnpyTopoImpl {
                     if (!nodesList.contains(nodeRef)) {
                         Elements element = createElementsRoadm(LATITUDE, LONGITUTE, nodeRef,
                                 openRoadmNetNode1.getShelf(),TARGET_PCH_OUT_DB, ipAddress.getIpv4Address().getValue());
-                        this.elements.add(element);
+                        this.elements.put(element.key(),element);
                         nodesList.add(nodeRef);
                     }
                 } else if (commonNetworkNode1.getNodeType().getName().equals("XPONDER")) {
                     if (!nodesList.contains(nodeRef)) {
                         Elements element = createElementsTransceiver(LATITUDE, LONGITUTE, nodeRef,
                                 openRoadmNetNode1.getShelf(),ipAddress.getIpv4Address().getValue());
-                        this.elements.add(element);
+                        this.elements.put(element.key(),element);
                         nodesList.add(nodeRef);
                         trxList.add(nodeRef);
                     }
@@ -231,7 +234,7 @@ public class GnpyTopoImpl {
             throw new GnpyException("In gnpyTopoImpl: openroadmTopo is not present");
         }
         Network1 nw1 = openRoadmTopo.get().augmentation(Network1.class);
-        List<Link> linksList = nw1.getLink();
+        Collection<Link> linksList = nw1.nonnullLink().values();
         // 1:EXPRESS-LINK    2:ADD-LINK       3:DROP-LINK
         // 4:ROADM-To-ROADM  5:XPONDER-INPUT  6:XPONDER-OUTPUT
         int[] externalLink = {OpenroadmLinkType.ROADMTOROADM.getIntValue(),OpenroadmLinkType.XPONDERINPUT.getIntValue(),
@@ -284,12 +287,13 @@ public class GnpyTopoImpl {
     private IpAddress extractAmplifiedLink(OMSAttributes omsAttributes, String linkId, IpAddress srcIp)
         throws GnpyException {
 
-        List<AmplifiedLink> amplifiedLinkList = omsAttributes.getAmplifiedLink()
-            .getAmplifiedLink();
+        Map<AmplifiedLinkKey, AmplifiedLink> amplifiedLinkList = omsAttributes
+                .getAmplifiedLink().nonnullAmplifiedLink();
         IpAddress destIp = null;
         if (!amplifiedLinkList.isEmpty()) {
-            for (AmplifiedLink amplifiedLink : amplifiedLinkList) {
-                String secElt = amplifiedLink.getSectionEltNumber().toString();
+            for (Map.Entry<AmplifiedLinkKey, AmplifiedLink> entry: amplifiedLinkList.entrySet()) {
+                AmplifiedLink amplifiedLink =  entry.getValue();
+                String secElt = amplifiedLink .getSectionEltNumber().toString();
                 //Case of ILA
                 if (amplifiedLink.getSectionElement().getSectionElement() instanceof Ila) {
                     Ila ila = (Ila) amplifiedLink.getSectionElement().getSectionElement();
@@ -330,7 +334,7 @@ public class GnpyTopoImpl {
                 ila.getGain().getValue(), ila.getTilt().getValue(),
                 ila.getOutVoaAtt().getValue(), "std_medium_gain",
                 ipEdfa.getIpv4Address().getValue());
-        this.elements.add(element);
+        this.elements.put(element.key(),element);
         return ipEdfa;
     }
 
@@ -338,7 +342,7 @@ public class GnpyTopoImpl {
         IpAddress ipFiber = new IpAddress(fiberId);
 
         if (!mapLinkFiber.containsKey(linkId)) {
-            mapLinkFiber.put(linkId, new ArrayList<String>());
+            mapLinkFiber.put(linkId, new ArrayList<>());
         }
         mapLinkFiber.get(linkId).add(subLinkId);
         mapFiberIp.put(subLinkId, ipFiber);
@@ -349,8 +353,7 @@ public class GnpyTopoImpl {
         String typeVariety = "SSMF";
         double length = 0;
         // Compute the length of the link
-        List<LinkConcatenation> linkConcatenationList = span.getLinkConcatenation();
-        for (LinkConcatenation linkConcatenation : linkConcatenationList) {
+        for (LinkConcatenation linkConcatenation : span.nonnullLinkConcatenation().values()) {
             double srlgLength = linkConcatenation.getSRLGLength().toJava();
             //convert to kilometer
             length += srlgLength / CONVERT_KM_M;
@@ -362,7 +365,7 @@ public class GnpyTopoImpl {
         double lossCoef = span.getSpanlossCurrent().getValue().doubleValue() / length;
         Elements element = createElementsFiber(LATITUDE, LONGITUTE, REGION, CITY,
             ipFiber.getIpv4Address().getValue(), length, attIn, lossCoef, connIn, connOut, typeVariety);
-        this.elements.add(element);
+        this.elements.put(element.key(),element);
         return ipFiber;
 
     }
@@ -492,11 +495,11 @@ public class GnpyTopoImpl {
         return new Ipv4Address(nidString);
     }
 
-    public List<Elements> getElements() {
+    public Map<ElementsKey, Elements> getElements() {
         return elements;
     }
 
-    public void setElements(List<Elements> elements) {
+    public void setElements(Map<ElementsKey, Elements> elements) {
         this.elements = elements;
     }
 
