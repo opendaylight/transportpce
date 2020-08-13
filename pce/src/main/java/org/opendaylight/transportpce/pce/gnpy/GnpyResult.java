@@ -117,7 +117,7 @@ public class GnpyResult {
         } else {
             throw new GnpyException("In GnpyResult: the codec registry from the normalized node is null");
         }
-        List<Response> responses = new ArrayList<>(((Result) dataObject).nonnullResponse().values());
+        List<Response> responses = new ArrayList<>(((Result) dataObject).nonnullResponse());
         if (responses.isEmpty()) {
             throw new GnpyException("In GnpyResult: the response from GNpy is null!");
         }
@@ -150,7 +150,7 @@ public class GnpyResult {
                     && (noPathType.equals("NO_FEASIBLE_MODE"))) && ((noPathType.equals("MODE_NOT_FEASIBLE"))
                         && (noPathType.equals("NO_SPECTRUM")))) {
                     Collection<PathMetric> pathMetricList = noPathCase.getNoPath()
-                            .getPathProperties().nonnullPathMetric().values();
+                            .getPathProperties().nonnullPathMetric();
                     LOG.info("GNPy : path is not feasible : {}", noPathType);
                     for (PathMetric pathMetric : pathMetricList) {
                         String metricType = pathMetric.getMetricType().getSimpleName();
@@ -162,7 +162,7 @@ public class GnpyResult {
                 LOG.info("GNPy : path is feasible");
                 PathCase pathCase = (PathCase) response.getResponseType();
                 Collection<PathMetric> pathMetricList = pathCase
-                        .getPathProperties().nonnullPathMetric().values();
+                        .getPathProperties().nonnullPathMetric();
                 // Path metrics
                 for (PathMetric pathMetric : pathMetricList) {
                     String metricType = pathMetric.getMetricType().getSimpleName();
@@ -181,7 +181,7 @@ public class GnpyResult {
         HardConstraints hardConstraints = null;
         // Includes the list of nodes in the GNPy computed path as constraints
         // for the PCE
-        Map<OrderedHopsKey,OrderedHops> orderedHopsList = new HashMap<>();
+        List<OrderedHops> orderedHopsList = new ArrayList<>();
         int counter = 0;
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
@@ -200,7 +200,7 @@ public class GnpyResult {
                         OrderedHops orderedHops = new OrderedHopsBuilder()
                                 .setHopNumber(Uint16.valueOf(counter)).setHopType(hopType)
                             .build();
-                        orderedHopsList.put(orderedHops.key(),orderedHops);
+                        orderedHopsList.add(orderedHops);
                         counter++;
                     }
                 } catch (IllegalArgumentException e) {

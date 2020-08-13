@@ -136,11 +136,10 @@ public class PceLink implements Serializable {
         try {
             double tmp = 0;
             @NonNull
-            Map<LinkConcatenationKey, LinkConcatenation> linkConcatenationMap =
-                this.omsAttributesSpan.nonnullLinkConcatenation();
-            for (Map.Entry<LinkConcatenationKey, LinkConcatenation> entry : linkConcatenationMap.entrySet()) {
+            List<LinkConcatenation> linkConcatenationList = this.omsAttributesSpan.nonnullLinkConcatenation();
+            for (LinkConcatenation chunk : linkConcatenationList) {
                 //Length is expressed in meter and latency is expressed in ms according to OpenROADM MSA
-                tmp += entry.getValue().getSRLGLength().toJava() / CELERITY;
+                tmp += chunk.getSRLGLength().toJava() / CELERITY;
                 LOG.info("In PceLink: The latency of link {} == {}",link.getLinkId(),tmp);
             }
             tmplatency = (long) Math.ceil(tmp);
@@ -156,7 +155,7 @@ public class PceLink implements Serializable {
         try {
             double pout; //power on the output of the previous ROADM (dBm)
             pout = retrievePower(this.omsAttributesSpan.nonnullLinkConcatenation()
-                    .values().iterator().next().getFiberType());
+                    .iterator().next().getFiberType());
             double spanLoss = this.omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue(); // span loss (dB)
             double pin = pout - spanLoss; //power on the input of the current ROADM (dBm)
             double spanOsnrDb;
