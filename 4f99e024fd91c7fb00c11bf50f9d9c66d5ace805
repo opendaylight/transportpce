@@ -70,6 +70,30 @@
       "revId": "4f99e024fd91c7fb00c11bf50f9d9c66d5ace805",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df872c28_248b280f",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/crossconnect/CrossConnectImpl121Test.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-08-13T08:12:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b1000b4_59d58b0b",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 71
+      },
+      "revId": "4f99e024fd91c7fb00c11bf50f9d9c66d5ace805",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
