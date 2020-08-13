@@ -181,7 +181,7 @@ public class GnpyResult {
         HardConstraints hardConstraints = null;
         // Includes the list of nodes in the GNPy computed path as constraints
         // for the PCE
-        Map<OrderedHopsKey,OrderedHops> orderedHopsList = new HashMap<>();
+        List<OrderedHops> orderedHopsList = new ArrayList<>();
         int counter = 0;
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
@@ -200,7 +200,7 @@ public class GnpyResult {
                         OrderedHops orderedHops = new OrderedHopsBuilder()
                                 .setHopNumber(Uint16.valueOf(counter)).setHopType(hopType)
                             .build();
-                        orderedHopsList.put(orderedHops.key(),orderedHops);
+                        orderedHopsList.add(orderedHops);
                         counter++;
                     }
                 } catch (IllegalArgumentException e) {

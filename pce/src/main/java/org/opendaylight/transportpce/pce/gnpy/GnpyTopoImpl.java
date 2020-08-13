@@ -287,12 +287,11 @@ public class GnpyTopoImpl {
     private IpAddress extractAmplifiedLink(OMSAttributes omsAttributes, String linkId, IpAddress srcIp)
         throws GnpyException {
 
-        Map<AmplifiedLinkKey, AmplifiedLink> amplifiedLinkList = omsAttributes
-                .getAmplifiedLink().nonnullAmplifiedLink();
+        List<AmplifiedLink> amplifiedLinkList = new ArrayList<>(omsAttributes.getAmplifiedLink()
+            .nonnullAmplifiedLink().values());
         IpAddress destIp = null;
         if (!amplifiedLinkList.isEmpty()) {
-            for (Map.Entry<AmplifiedLinkKey, AmplifiedLink> entry: amplifiedLinkList.entrySet()) {
-                AmplifiedLink amplifiedLink =  entry.getValue();
+            for (AmplifiedLink amplifiedLink: amplifiedLinkList) {
                 String secElt = amplifiedLink .getSectionEltNumber().toString();
                 //Case of ILA
                 if (amplifiedLink.getSectionElement().getSectionElement() instanceof Ila) {
