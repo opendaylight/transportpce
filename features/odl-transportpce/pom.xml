@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>6.0.11</version>
+    <version>7.0.5</version>
     <relativePath/>
   </parent>
 
@@ -24,9 +24,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <name>OpenDaylight :: transportpce</name>
 
   <properties>
-    <mdsal.version>1.11.2-SNAPSHOT</mdsal.version>
-    <netconf.version>1.8.2-SNAPSHOT</netconf.version>
-    <restconf.version>1.11.2-SNAPSHOT</restconf.version>
+    <controller.version>2.0.3</controller.version>
+    <netconf.version>1.9.0-SNAPSHOT</netconf.version>
+    <restconf.version>1.12.0-SNAPSHOT</restconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
@@ -90,7 +90,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>odl-mdsal-broker</artifactId>
-      <version>${mdsal.version}</version>
+      <version>${controller.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
