@@ -143,7 +143,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             "T0 - Multi-layer topology",
             topology.getName().get(0).getValue());
 
-        List<Node> nodes = topology.getNode().stream()
+        List<Node> nodes = topology.getNode().values().stream()
             .sorted((n1,n2) -> n1.getUuid().getValue().compareTo(n2.getUuid().getValue()))
             .collect(Collectors.toList());
         Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+DSR".getBytes(Charset.forName("UTF-8")))
@@ -159,7 +159,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             .toString());
         checkOtsiNode(nodes.get(3), node4Uuid, true);
 
-        List<Link> links = topology.getLink().stream()
+        List<Link> links = topology.getLink().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
         checkTransitionalLink(links.get(0), topoUuid, node1Uuid, node3Uuid, "DSR+XPDR1-NETWORK1",
@@ -180,7 +180,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             2, node.getLayerProtocolName().size());
         assertThat("dsr node should manage 2 protocol layers : dsr and odu",
             node.getLayerProtocolName(), hasItems(LayerProtocolName.DSR, LayerProtocolName.ODU));
-        List<OwnedNodeEdgePoint> neps = node.getOwnedNodeEdgePoint().stream()
+        List<OwnedNodeEdgePoint> neps = node.getOwnedNodeEdgePoint().values().stream()
             .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
             .collect(Collectors.toList());
         if (isSwitch) {
@@ -193,7 +193,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             Uuid networkNepUuid = new Uuid(
                     UUID.nameUUIDFromBytes("DSR+XPDR2-NETWORK1".getBytes(Charset.forName("UTF-8"))).toString());
             checkNepNetworkODU4(nep2, networkNepUuid, "XPDR2-NETWORK1", "NodeEdgePoint_N1");
-            List<NodeRuleGroup> nrgList = node.getNodeRuleGroup().stream()
+            List<NodeRuleGroup> nrgList = node.getNodeRuleGroup().values().stream()
                 .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                 .collect(Collectors.toList());
             checkNodeRuleGroupForSwitchDSR(nrgList, client4NepUuid, networkNepUuid, nodeUuid);
@@ -208,7 +208,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             Uuid networkNepUuid = new Uuid(
                     UUID.nameUUIDFromBytes("DSR+XPDR1-NETWORK1".getBytes(Charset.forName("UTF-8"))).toString());
             checkNepNetworkODU4(nep2, networkNepUuid, "XPDR1-NETWORK1", "NodeEdgePoint_N1");
-            List<NodeRuleGroup> nrgList = node.getNodeRuleGroup().stream()
+            List<NodeRuleGroup> nrgList = node.getNodeRuleGroup().values().stream()
                 .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                 .collect(Collectors.toList());
             checkNodeRuleGroupForMuxDSR(nrgList, client4NepUuid, networkNepUuid, nodeUuid);
@@ -227,7 +227,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             1, node.getLayerProtocolName().size());
         assertEquals("otsi node should manage a single protocol layer : PHOTONIC_MEDIA",
             LayerProtocolName.PHOTONICMEDIA, node.getLayerProtocolName().get(0));
-        List<OwnedNodeEdgePoint> neps = node.getOwnedNodeEdgePoint().stream()
+        List<OwnedNodeEdgePoint> neps = node.getOwnedNodeEdgePoint().values().stream()
             .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
             .collect(Collectors.toList());
         if (isSwitch) {
@@ -240,7 +240,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             Uuid enepUuid = new Uuid(
                     UUID.nameUUIDFromBytes("eOTSi+XPDR2-NETWORK2".getBytes(Charset.forName("UTF-8"))).toString());
             checkNepOtsiNode(nep2, enepUuid, "XPDR2-NETWORK2", "eNodeEdgePoint_2");
-            List<NodeRuleGroup> nrgList = node.getNodeRuleGroup().stream()
+            List<NodeRuleGroup> nrgList = node.getNodeRuleGroup().values().stream()
                 .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                 .collect(Collectors.toList());
             checkNodeRuleGroupForSwitchOTSi(nrgList, enepUuid, inepUuid, nodeUuid);
@@ -254,7 +254,7 @@ public class TapiTopologyImplTest extends AbstractTest {
             Uuid inepUuid = new Uuid(
                     UUID.nameUUIDFromBytes("iOTSi+XPDR1-NETWORK1".getBytes(Charset.forName("UTF-8"))).toString());
             checkNepOtsiNode(nep2, inepUuid, "XPDR1-NETWORK1", "iNodeEdgePoint_1");
-            List<NodeRuleGroup> nrgList = node.getNodeRuleGroup().stream()
+            List<NodeRuleGroup> nrgList = node.getNodeRuleGroup().values().stream()
                 .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                 .collect(Collectors.toList());
             checkNodeRuleGroupForMuxOTSi(nrgList, enepUuid, inepUuid, nodeUuid);
@@ -321,7 +321,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         Uuid nodeUuid) {
         assertEquals("Switch-DSR should contain a single node rule group", 1, nrgList.size());
         assertEquals("Switch-DSR node-rule-group should contain 8 NEP", 8, nrgList.get(0).getNodeEdgePoint().size());
-        List<NodeEdgePoint> nrg = nrgList.get(0).getNodeEdgePoint().stream()
+        List<NodeEdgePoint> nrg = nrgList.get(0).getNodeEdgePoint().values().stream()
             .sorted((nrg1, nrg2) -> nrg1.getNodeEdgePointUuid().getValue()
                 .compareTo(nrg2.getNodeEdgePointUuid().getValue()))
             .collect(Collectors.toList());

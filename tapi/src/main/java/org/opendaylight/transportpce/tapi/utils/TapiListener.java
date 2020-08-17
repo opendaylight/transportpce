@@ -7,6 +7,7 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ public class TapiListener implements DataTreeChangeListener<ServiceInterfacePoin
                 case WRITE:
                     LOG.info("onDataTreeChanged in TapiListener : WRITE");
                     ServiceInterfacePoints data = rootSIP.getDataAfter();
-                    List<ServiceEndPoint> listSEP = data.getServiceEndPoint();
+                    List<ServiceEndPoint> listSEP = new ArrayList<>(data.getServiceEndPoint().values());
                     MappingUtils.deleteMap();
                     for (ServiceEndPoint sep : listSEP) {
                         MappingUtils.addMapSEP(sep);
