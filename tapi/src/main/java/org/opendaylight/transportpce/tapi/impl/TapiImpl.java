@@ -8,8 +8,7 @@
 package org.opendaylight.transportpce.tapi.impl;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.opendaylight.transportpce.common.OperationResult;
@@ -44,6 +43,7 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev18121
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.ConnectionBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPoint;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.EndPointKey;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.connectivity.service.end.point.ServiceInterfacePointBuilder;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.connectivity.rev181210.create.connectivity.service.output.ServiceBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -76,12 +76,17 @@ public class TapiImpl implements TapiConnectivityService {
             // check uuid of SIP in the map
             Map<Uuid, GenericServiceEndpoint> map = MappingUtils.getMap();
 
-            if (map.containsKey(input.getEndPoint().get(0).getServiceInterfacePoint().getServiceInterfacePointUuid())
-                && map.containsKey(input.getEndPoint().get(1).getServiceInterfacePoint()
-                    .getServiceInterfacePointUuid())) {
-                ServiceCreateInput sci = TapiUtils.buildServiceCreateInput(map.get(input.getEndPoint().get(0)
+            if (map.containsKey(input.getEndPoint().values().stream().findFirst().get()
+                    .getServiceInterfacePoint().getServiceInterfacePointUuid())
+                && map.containsKey(input.getEndPoint().values().stream().skip(1).findFirst().get()
                     .getServiceInterfacePoint()
-                    .getServiceInterfacePointUuid()), map.get(input.getEndPoint().get(1).getServiceInterfacePoint()
+                    .getServiceInterfacePointUuid())) {
+                ServiceCreateInput sci = TapiUtils.buildServiceCreateInput(
+                    map.get(input.getEndPoint().values().stream().findFirst().get()
+                        .getServiceInterfacePoint()
+                        .getServiceInterfacePointUuid()),
+                    map.get(input.getEndPoint().values().stream().skip(1).findFirst().get()
+                        .getServiceInterfacePoint()
                         .getServiceInterfacePointUuid()));
                 this.serviceHandler.serviceCreate(sci);
             } else {
@@ -90,7 +95,7 @@ public class TapiImpl implements TapiConnectivityService {
 
         }
 
-        List<EndPoint> endPointList = new ArrayList<>();
+        Map<EndPointKey, EndPoint> endPointList = new HashMap<>();
         EndPoint endpoint1 = new EndPointBuilder()
             .setLocalId(UUID.randomUUID().toString())
             .setServiceInterfacePoint(new ServiceInterfacePointBuilder().setServiceInterfacePointUuid(new Uuid(UUID
@@ -101,23 +106,19 @@ public class TapiImpl implements TapiConnectivityService {
             .setServiceInterfacePoint(new ServiceInterfacePointBuilder().setServiceInterfacePointUuid(new Uuid(UUID
                 .randomUUID().toString())).build())
             .build();
-        endPointList.add(endpoint1);
-        endPointList.add(endpoint2);
-        List<Connection> connectionList = new ArrayList<>();
-        Connection connection1 = new ConnectionBuilder().setConnectionUuid(new Uuid(UUID.randomUUID().toString()))
+        endPointList.put(endpoint1.key(), endpoint1);
+        endPointList.put(endpoint2.key(), endpoint2);
+        Connection connection = new ConnectionBuilder().setConnectionUuid(new Uuid(UUID.randomUUID().toString()))
             .build();
-        connectionList.add(connection1);
         ConnectivityService service = new ConnectivityServiceBuilder().build();
-        List<Name> serviceNameList = new ArrayList<>();
         Name serviceName = new NameBuilder().setValueName("Service Name").setValue("SENDATE Service 1").build();
-        serviceNameList.add(serviceName);
         CreateConnectivityServiceOutput output = new CreateConnectivityServiceOutputBuilder()
             .setService(new ServiceBuilder(service)
                 .setUuid(new Uuid(UUID.randomUUID().toString()))
-                .setName(serviceNameList)
-                .setServiceLayer(input.getEndPoint().get(0).getLayerProtocolName())
+                .setName(Map.of(serviceName.key(), serviceName))
+                .setServiceLayer(input.getEndPoint().values().stream().findFirst().get().getLayerProtocolName())
                 .setEndPoint(endPointList)
-                .setConnection(connectionList)
+                .setConnection(Map.of(connection.key(), connection))
                 .build())
             .build();
 
