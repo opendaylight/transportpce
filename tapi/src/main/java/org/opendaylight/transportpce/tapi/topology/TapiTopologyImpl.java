@@ -145,10 +145,10 @@ public class TapiTopologyImpl implements TapiTopologyService {
             return null;
         }
         Network openroadmTopo = optionalOpenroadmTop.get();
-        List<Node> nodeList = openroadmTopo.getNode();
+        List<Node> nodeList = new ArrayList<>(openroadmTopo.getNode().values());
         List<Link> linkList = null;
         if (openroadmTopo.augmentation(Network1.class) != null) {
-            linkList = openroadmTopo.augmentation(Network1.class).getLink();
+            linkList = new ArrayList<>(openroadmTopo.augmentation(Network1.class).getLink().values());
         } else {
             linkList = new ArrayList<>();
         }
@@ -167,9 +167,9 @@ public class TapiTopologyImpl implements TapiTopologyService {
                         .getNodeType().equals(OpenroadmNodeType.XPONDER)).collect(Collectors.toList());
         Map<String, List<String>> clientPortMap = new HashMap<>();
         for (Node node : xpdrNodeList) {
-            String nodeId = node.getSupportingNode().get(0).getNodeRef().getValue();
+            String nodeId = node.getSupportingNode().values().stream().findFirst().get().getNodeRef().getValue();
             List<String> clientPortList = new ArrayList<>();
-            for (TerminationPoint tp : node.augmentation(Node1.class).getTerminationPoint()) {
+            for (TerminationPoint tp : node.augmentation(Node1.class).getTerminationPoint().values()) {
                 if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERCLIENT)
                         && checkTp(node.getNodeId().getValue(), nodeId, tp, xponderOutLinkList, xponderInLinkList)) {
                     clientPortList.add(tp.getTpId().getValue());
@@ -216,7 +216,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 LOG.error("Impossible to retreive otn-topology from mdsal",e);
                 return null;
             }
-            List<Node> nodeList = otnTopo.getNode();
+            List<Node> nodeList = new ArrayList<>(otnTopo.getNode().values());
             List<Node> otnNodeList = nodeList.stream().filter(nt -> nt.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
                 .getNodeType().equals(OpenroadmNodeType.SWITCH) || nt.augmentation(
