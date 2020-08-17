@@ -86,18 +86,19 @@ public class ConvertORTopoObjectToTapiTopoObject {
     public ConvertORTopoObjectToTapiTopoObject(Node ietfNode, Link1 otnLink, Uuid tapiTopoUuid) {
         this.ietfNodeId = ietfNode.getNodeId().getValue();
         this.oorClientPortList = ietfNode.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf
-            .network.topology.rev180226.Node1.class).getTerminationPoint().stream()
+            .network.topology.rev180226.Node1.class).getTerminationPoint().values().stream()
             .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
             == OpenroadmTpType.XPONDERCLIENT.getIntValue())
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
         this.oorNetworkPortList = ietfNode.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf
-            .network.topology.rev180226.Node1.class).getTerminationPoint().stream()
+            .network.topology.rev180226.Node1.class).getTerminationPoint().values().stream()
             .filter(tp -> tp.augmentation(TerminationPoint1.class).getTpType().getIntValue()
             == OpenroadmTpType.XPONDERNETWORK.getIntValue())
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
-        this.oorOduSwitchingPool = ietfNode.augmentation(Node1.class).getSwitchingPools().getOduSwitchingPools().get(0);
+        this.oorOduSwitchingPool = ietfNode.augmentation(Node1.class).getSwitchingPools().getOduSwitchingPools()
+            .values().stream().findFirst().get();
         this.tapiTopoUuid = tapiTopoUuid;
         this.tapiNodes = new ArrayList<>();
         this.tapiLinks = new ArrayList<>();
@@ -280,7 +281,7 @@ public class ConvertORTopoObjectToTapiTopoObject {
             onepl.add(onep);
         }
         // create NodeRuleGroup
-        for (NonBlockingList nbl : this.oorOduSwitchingPool.getNonBlockingList()) {
+        for (NonBlockingList nbl : this.oorOduSwitchingPool.getNonBlockingList().values()) {
             int count = 1;
             List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
                 .NodeEdgePoint> nepList = new ArrayList<>();
@@ -337,9 +338,10 @@ public class ConvertORTopoObjectToTapiTopoObject {
     private List<Class<? extends LAYERPROTOCOLQUALIFIER>> createSupportedCepLayerProtocolQualifier(TerminationPoint tp,
         LayerProtocolName lpn) {
         List<Class<? extends LAYERPROTOCOLQUALIFIER>> sclpqList = new ArrayList<>();
-        List<SupportedInterfaceCapability> sicList = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm
+        List<SupportedInterfaceCapability> sicList = new ArrayList<>(
+            tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm
             .otn.network.topology.rev181130.TerminationPoint1.class).getTpSupportedInterfaces()
-            .getSupportedInterfaceCapability();
+            .getSupportedInterfaceCapability().values());
         for (SupportedInterfaceCapability sic : sicList) {
             switch (lpn.getName()) {
                 case "DSR":
