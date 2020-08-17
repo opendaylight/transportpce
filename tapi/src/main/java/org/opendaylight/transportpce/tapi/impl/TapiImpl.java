@@ -76,12 +76,17 @@ public class TapiImpl implements TapiConnectivityService {
             // check uuid of SIP in the map
             Map<Uuid, GenericServiceEndpoint> map = MappingUtils.getMap();
 
-            if (map.containsKey(input.getEndPoint().get(0).getServiceInterfacePoint().getServiceInterfacePointUuid())
-                && map.containsKey(input.getEndPoint().get(1).getServiceInterfacePoint()
-                    .getServiceInterfacePointUuid())) {
-                ServiceCreateInput sci = TapiUtils.buildServiceCreateInput(map.get(input.getEndPoint().get(0)
+            if (map.containsKey(input.getEndPoint().values().stream().findFirst().get()
+                    .getServiceInterfacePoint().getServiceInterfacePointUuid())
+                && map.containsKey(input.getEndPoint().values().stream().skip(1).findFirst().get()
                     .getServiceInterfacePoint()
-                    .getServiceInterfacePointUuid()), map.get(input.getEndPoint().get(1).getServiceInterfacePoint()
+                    .getServiceInterfacePointUuid())) {
+                ServiceCreateInput sci = TapiUtils.buildServiceCreateInput(
+                    map.get(input.getEndPoint().values().stream().findFirst().get()
+                        .getServiceInterfacePoint()
+                        .getServiceInterfacePointUuid()),
+                    map.get(input.getEndPoint().values().stream().skip(1).findFirst().get()
+                        .getServiceInterfacePoint()
                         .getServiceInterfacePointUuid()));
                 this.serviceHandler.serviceCreate(sci);
             } else {
@@ -115,7 +120,7 @@ public class TapiImpl implements TapiConnectivityService {
             .setService(new ServiceBuilder(service)
                 .setUuid(new Uuid(UUID.randomUUID().toString()))
                 .setName(serviceNameList)
-                .setServiceLayer(input.getEndPoint().get(0).getLayerProtocolName())
+                .setServiceLayer(input.getEndPoint().values().stream().findFirst().get().getLayerProtocolName())
                 .setEndPoint(endPointList)
                 .setConnection(connectionList)
                 .build())
