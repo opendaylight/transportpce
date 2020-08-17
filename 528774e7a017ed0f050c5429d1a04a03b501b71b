@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc53454e_fb1702b5",
+        "filename": "ordmodels/device/pom.xml",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-08-17T13:30:19Z",
+      "side": 1,
+      "message": "according to migration guide and gerrit, this models has been removed\n\nhttps://git.opendaylight.org/gerrit/c/mdsal/+/89095\n\nI got a runtime problem with karaf because of it\neven when using the latest version\n\nUnable to resolve a5a44140-0df8-44ec-b841-d433c5268dfe/0.0.0: missing requ\nirement [a5a44140-0df8-44ec-b841-d433c5268dfe/0.0.0] osgi.identity; osgi.identity\u003dodl-transportpce-inventory; type\u003dkaraf.feature; versi\non\u003d\"[2.0.0.SNAPSHOT,2.0.0.SNAPSHOT]\" [caused by: Unable to resolve odl-transportpce-inventory/2.0.0.SNAPSHOT: missing requirement [odl-\ntransportpce-inventory/2.0.0.SNAPSHOT] osgi.identity; osgi.identity\u003dodl-transportpce; type\u003dkaraf.feature; version\u003d\"[2.0.0.SNAPSHOT,2.0.\n0.SNAPSHOT]\" [caused by: Unable to resolve odl-transportpce/2.0.0.SNAPSHOT: missing requirement [odl-transportpce/2.0.0.SNAPSHOT] osgi.\nidentity; osgi.identity\u003dorg.opendaylight.mdsal.model.iana-afn-safi; type\u003dosgi.bundle; version\u003d\"[2013.7.4.17_14,2013.7.4.17_14]\"; resolu\ntion:\u003dmandatory [caused by: Unable to resolve org.opendaylight.mdsal.model.iana-afn-safi/2013.7.4.17_14: missing requirement [org.opend\naylight.mdsal.model.iana-afn-safi/2013.7.4.17_14] osgi.wiring.package; filter:\u003d\"(\u0026(osgi.wiring.package\u003dcom.google.common.collect)(versi\non\u003e\u003d27.1.0)(!(version\u003e\u003d28.0.0)))\"]]]",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 40
+      },
+      "revId": "528774e7a017ed0f050c5429d1a04a03b501b71b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
