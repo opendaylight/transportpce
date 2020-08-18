@@ -76,11 +76,13 @@ public class PowerMgmtImpl implements PowerMgmt {
                 Nodes inputNode = inputNodeOptional.get();
                 OpenroadmVersion openroadmVersion = inputNode.getNodeInfo().getOpenroadmVersion();
                 LOG.info("Getting data from input node {}", inputNode.getNodeInfo().getNodeType());
-                LOG.info("Getting mapping data for node is {}", inputNode.getMapping().stream().filter(o -> o.key()
+                LOG.info("Getting mapping data for node is {}",
+                        inputNode.nonnullMapping().values().stream().filter(o -> o.key()
                          .equals(new MappingKey(destTpId))).findFirst().toString());
                 // If its A-End transponder
                 if (destTpId.toLowerCase().contains("network")) {
-                    java.util.Optional<Mapping> mappingObject = inputNode.getMapping().stream().filter(o -> o.key()
+                    java.util.Optional<Mapping> mappingObject = inputNode.nonnullMapping()
+                            .values().stream().filter(o -> o.key()
                             .equals(new MappingKey(destTpId))).findFirst();
                     if (mappingObject.isPresent()) {
                         String circuitPackName = mappingObject.get().getSupportingCircuitPackName();
@@ -99,7 +101,7 @@ public class PowerMgmtImpl implements PowerMgmt {
                             String nextNodeId = input.getNodes().get(i + 1).getNodeId();
                             Map<String, Double> rxSRGPowerRangeMap = new HashMap<>();
                             Optional<Mapping> mappingObjectSRG = OlmUtils.getNode(nextNodeId, db)
-                                    .flatMap(node -> node.getMapping()
+                                    .flatMap(node -> node.nonnullMapping().values()
                                             .stream().filter(o -> o.key()
                                                     .equals(new MappingKey(srgId))).findFirst());
                             if (mappingObjectSRG.isPresent()) {
@@ -188,7 +190,8 @@ public class PowerMgmtImpl implements PowerMgmt {
                 String connectionNumber = srcTpId + "-" + destTpId + "-" + input.getWaveNumber();
                 LOG.info("Connection number is {}", connectionNumber);
                 if (destTpId.toLowerCase().contains("deg")) {
-                    Optional<Mapping> mappingObjectOptional = inputNode.getMapping().stream().filter(o -> o.key()
+                    Optional<Mapping> mappingObjectOptional = inputNode.nonnullMapping()
+                            .values().stream().filter(o -> o.key()
                             .equals(new MappingKey(destTpId))).findFirst();
                     if (mappingObjectOptional.isPresent()) {
                         BigDecimal spanLossTx = null;
