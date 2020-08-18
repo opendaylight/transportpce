@@ -169,7 +169,7 @@ public class NetConfTopologyListenerTest {
                         .build())
                 .build();
         final NodeBuilder nn = new NodeBuilder().setNodeId(new NodeId(nodeId))
-                .addAugmentation(NetconfNode.class, netconfNode);
+                .addAugmentation(netconfNode);
         return nn.build();
 
     }

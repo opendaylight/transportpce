@@ -51,7 +51,7 @@ public final class ClliNetwork {
             Node1 clliAugmentation = new Node1Builder()
                 .setClli(nodeInfo.getNodeClli())
                 .build();
-            nodeBldr.addAugmentation(Node1.class, clliAugmentation);
+            nodeBldr.addAugmentation(clliAugmentation);
         } else {
             LOG.warn("No CLLI configured in configuration of {}", deviceId);
         }
