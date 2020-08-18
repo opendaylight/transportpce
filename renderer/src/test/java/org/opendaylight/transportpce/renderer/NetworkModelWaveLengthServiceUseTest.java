@@ -10,8 +10,8 @@ package org.opendaylight.transportpce.renderer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,6 +27,7 @@ import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
 import org.opendaylight.transportpce.renderer.utils.WaveLengthServiceUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengths;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1Builder;
@@ -45,6 +46,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev18113
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescription;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 @Ignore
 @RunWith(Parameterized.class)
@@ -85,25 +87,27 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
             ServiceDeleteDataUtils.createTransactionPathDescription(StringConstants.TTP_TOKEN);
 
         TerminationPoint1Builder terminationPoint1Builder = new TerminationPoint1Builder()
-            .setCtpAttributes((new CtpAttributesBuilder()).setUsedWavelengths(new ArrayList<>()).build())
-            .setCpAttributes((new CpAttributesBuilder()).setUsedWavelengths(new ArrayList<>()).build())
-            .setTxTtpAttributes((new TxTtpAttributesBuilder()).setUsedWavelengths(new ArrayList<>()).build())
-            .setRxTtpAttributes((new RxTtpAttributesBuilder()).setUsedWavelengths(new ArrayList<>()).build())
-            .setPpAttributes((new PpAttributesBuilder()).setUsedWavelength(new ArrayList<>()).build())
+            .setCtpAttributes((new CtpAttributesBuilder()).setUsedWavelengths(Map.of()).build())
+            .setCpAttributes((new CpAttributesBuilder()).setUsedWavelengths(Map.of()).build())
+            .setTxTtpAttributes((new TxTtpAttributesBuilder()).setUsedWavelengths(Map.of()).build())
+            .setRxTtpAttributes((new RxTtpAttributesBuilder()).setUsedWavelengths(Map.of()).build())
+            .setPpAttributes((new PpAttributesBuilder()).setUsedWavelength(Map.of()).build())
             .setXpdrClientAttributes((new XpdrClientAttributesBuilder()).build())
             .setXpdrNetworkAttributes((new XpdrNetworkAttributesBuilder()).build())
             .setXpdrPortAttributes((new XpdrPortAttributesBuilder()).build());
 
+        AvailableWavelengths aval = new AvailableWavelengthsBuilder().setIndex(Uint32.valueOf(20)).build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengths avalSrg =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
+                    .AvailableWavelengthsBuilder().setIndex(Uint32.valueOf(20)).build();
         Node1Builder node1Builder = new Node1Builder()
             .setDegreeAttributes((new DegreeAttributesBuilder())
                 .setAvailableWavelengths(
-                    Collections.singletonList(new AvailableWavelengthsBuilder().setIndex(20L).build()))
+                    Map.of(aval.key(),aval))
                 .build())
             .setSrgAttributes((new SrgAttributesBuilder())
                 .setAvailableWavelengths(
-                    Collections.singletonList(
-                        new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-                            .AvailableWavelengthsBuilder().setIndex(20L).build()))
+                    Map.of(avalSrg.key(),avalSrg))
                 .build());
 
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder
