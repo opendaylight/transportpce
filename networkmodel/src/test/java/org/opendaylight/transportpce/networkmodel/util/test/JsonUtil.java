@@ -12,9 +12,11 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ServiceLoader;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
-import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
-import org.opendaylight.mdsal.binding.generator.util.BindingRuntimeContext;
+import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
+import org.opendaylight.binding.runtime.spi.BindingRuntimeHelpers;
+import org.opendaylight.mdsal.binding.dom.adapter.CurrentAdapterSerializer;
+import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
+import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.YangModelBindingProvider;
 import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
@@ -25,7 +27,7 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
-import org.opendaylight.yangtools.yang.model.api.SchemaContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +37,9 @@ public final class JsonUtil {
     private static final Logger LOG = LoggerFactory.getLogger(JsonUtil.class);
     private static JsonUtil instance;
 
-    private SchemaContext schemaCtx;
+    private EffectiveModelContext schemaCtx;
 
-    private BindingNormalizedNodeCodecRegistry codecRegistry;
+    private BindingNormalizedNodeSerializer codecRegistry;
 
     private JsonUtil() {
         List<YangModuleInfo> moduleInfos = new LinkedList<>();
@@ -46,15 +48,14 @@ public final class JsonUtil {
             moduleInfos.add(yangModelBindingProvider.getModuleInfo());
         }
         /* Create the schema context for loaded models */
-        ModuleInfoBackedContext moduleInfoBackedCntxt = ModuleInfoBackedContext.create();
-        moduleInfoBackedCntxt.addModuleInfos(moduleInfos);
-        schemaCtx = moduleInfoBackedCntxt.getSchemaContext();
+        schemaCtx = BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
         if (schemaCtx == null) {
             throw new IllegalStateException("Failed to load schema context");
         }
         // Create the binding binding normalized node codec registry
-        BindingRuntimeContext bindingRuntimeContext = BindingRuntimeContext.create(moduleInfoBackedCntxt, schemaCtx);
-        codecRegistry = new BindingNormalizedNodeCodecRegistry(bindingRuntimeContext);
+        BindingRuntimeContext bindingContext =
+                BindingRuntimeHelpers.createRuntimeContext();
+        codecRegistry = new CurrentAdapterSerializer(new BindingCodecContext(bindingContext));
     }
 
     public static JsonUtil getInstance() {
