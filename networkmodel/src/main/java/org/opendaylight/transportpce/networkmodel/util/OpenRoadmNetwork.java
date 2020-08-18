@@ -8,10 +8,9 @@
 
 package org.opendaylight.transportpce.networkmodel.util;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev181130.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -86,10 +85,9 @@ public final class OpenRoadmNetwork {
         return new NodeBuilder()
             .setNodeId(new NodeId(nodeId))
             .withKey(new NodeKey(new NodeId(nodeId)))
-            .setSupportingNode(ImmutableList.of(supportingNode))
-            .addAugmentation(Node1.class, node1Bldr.build())
-            .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class,
-                node2Bldr.build())
+            .setSupportingNode(ImmutableMap.of(supportingNode.key(),supportingNode))
+            .addAugmentation(node1Bldr.build())
+            .addAugmentation(node2Bldr.build())
             .build();
     }
 }

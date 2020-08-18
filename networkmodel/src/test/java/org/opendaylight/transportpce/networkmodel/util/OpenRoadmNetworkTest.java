@@ -11,6 +11,8 @@ package org.opendaylight.transportpce.networkmodel.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.NetworkUtils;
@@ -90,6 +92,7 @@ public class OpenRoadmNetworkTest {
     private void supportingNodeTest(String clli, Node createdNode) {
         SupportingNode supportingNode = computeSupportingNode(clli);
         assertEquals(1, createdNode.getSupportingNode().size());
-        assertEquals(supportingNode, createdNode.getSupportingNode().get(0));
+        List<SupportingNode> supportingNodeList = new ArrayList<>(createdNode.nonnullSupportingNode().values());
+        assertEquals(supportingNode, supportingNodeList.get(0));
     }
 }

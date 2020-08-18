@@ -50,6 +50,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.netconf.node.topology.rev150114.NetconfNodeConnectionStatus;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -60,7 +61,6 @@ import org.slf4j.LoggerFactory;
 public class NetworkModelServiceImpl implements NetworkModelService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NetworkModelServiceImpl.class);
-    private static final boolean CREATE_MISSING_PARENTS = true;
 
     private NetworkTransactionService networkTransactionService;
     private final R2RLinkDiscovery linkDiscovery;
@@ -105,8 +105,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .child(Node.class, clliNode.key())
                 .build();
             LOG.info("creating node in {}", NetworkUtils.CLLI_NETWORK_ID);
-            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiClliNode, clliNode,
-                CREATE_MISSING_PARENTS);
+            networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiClliNode, clliNode);
 
             // node creation in openroadm-network
             Node openroadmNetworkNode = OpenRoadmNetwork.createNode(nodeId, nodeInfo);
@@ -116,7 +115,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 .build();
             LOG.info("creating node in {}", NetworkUtils.UNDERLAY_NETWORK_ID);
             networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiopenroadmNetworkNode,
-                openroadmNetworkNode, CREATE_MISSING_PARENTS);
+                openroadmNetworkNode);
 
             // nodes/links creation in openroadm-topology
             TopologyShard topologyShard = OpenRoadmTopology.createTopologyShard(portMapping.getNode(nodeId));
@@ -130,7 +129,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .child(Node.class, openRoadmTopologyNode.key())
                         .build();
                     networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
-                        openRoadmTopologyNode, CREATE_MISSING_PARENTS);
+                        openRoadmTopologyNode);
                 }
                 for (Link openRoadmTopologyLink : topologyShard.getLinks()) {
                     LOG.info("creating link {} in {}", openRoadmTopologyLink.getLinkId().getValue(),
@@ -141,7 +140,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                         .child(Link.class, openRoadmTopologyLink.key())
                         .build();
                     networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyLink,
-                        openRoadmTopologyLink, CREATE_MISSING_PARENTS);
+                        openRoadmTopologyLink);
                 }
             } else {
                 LOG.error("Unable to create openroadm-topology shard for node {}!", nodeId);
@@ -281,15 +280,17 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     .child(Link.class, otnTopologyLink.key())
                     .build();
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink,
-                    otnTopologyLink, CREATE_MISSING_PARENTS);
+                    otnTopologyLink);
             }
         }
         if (otnTopologyShard.getTps() != null) {
             for (TerminationPoint otnTopologyTp : otnTopologyShard.getTps()) {
                 LOG.info("updating otn nodes TP {} in otn-topology", otnTopologyTp.getTpId().getValue());
+                List<SupportingTerminationPoint> supportingTerminationPoint =
+                        new ArrayList<>(otnTopologyTp.nonnullSupportingTerminationPoint().values());
                 InstanceIdentifier<TerminationPoint> iiOtnTopologyTp = InstanceIdentifier.builder(Networks.class)
                     .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                    .child(Node.class, new NodeKey(otnTopologyTp.getSupportingTerminationPoint().get(0).getNodeRef()))
+                    .child(Node.class, new NodeKey(supportingTerminationPoint.get(0).getNodeRef()))
                     .augmentation(Node1.class)
                     .child(TerminationPoint.class, new TerminationPointKey(otnTopologyTp.getTpId()))
                     .build();
@@ -353,16 +354,18 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     .augmentation(Network1.class)
                     .child(Link.class, otnTopologyLink.key())
                     .build();
-                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink, otnTopologyLink,
-                    CREATE_MISSING_PARENTS);
+                networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION,
+                        iiOtnTopologyLink, otnTopologyLink);
             }
         }
         if (otnTopologyShard.getTps() != null) {
             for (TerminationPoint otnTopologyTp : otnTopologyShard.getTps()) {
                 LOG.info("updating otn nodes TP {} in otn-topology", otnTopologyTp.getTpId().getValue());
+                List<SupportingTerminationPoint> supportingTerminationPoint =
+                        new ArrayList<>(otnTopologyTp.nonnullSupportingTerminationPoint().values());
                 InstanceIdentifier<TerminationPoint> iiOtnTopologyTp = InstanceIdentifier.builder(Networks.class)
                     .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                    .child(Node.class, new NodeKey(otnTopologyTp.getSupportingTerminationPoint().get(0).getNodeRef()))
+                    .child(Node.class, new NodeKey(supportingTerminationPoint.get(0).getNodeRef()))
                     .augmentation(Node1.class)
                     .child(TerminationPoint.class, new TerminationPointKey(otnTopologyTp.getTpId()))
                     .build();
@@ -395,15 +398,17 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     .child(Link.class, new LinkKey(new LinkId(otnTopologyLink.getLinkId().getValue())))
                     .build();
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink,
-                    otnTopologyLink, CREATE_MISSING_PARENTS);
+                    otnTopologyLink);
             }
         }
         if (otnTopologyShard.getTps() != null) {
             for (TerminationPoint otnTopologyTp : otnTopologyShard.getTps()) {
                 LOG.info("updating otn nodes TP {} in otn-topology", otnTopologyTp.getTpId().getValue());
+                List<SupportingTerminationPoint> supportingTerminationPoint =
+                        new ArrayList<>(otnTopologyTp.nonnullSupportingTerminationPoint().values());
                 InstanceIdentifier<TerminationPoint> iiOtnTopologyTp = InstanceIdentifier.builder(Networks.class)
                     .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OTN_NETWORK_ID)))
-                    .child(Node.class, new NodeKey(otnTopologyTp.getSupportingTerminationPoint().get(0).getNodeRef()))
+                    .child(Node.class, new NodeKey(supportingTerminationPoint.get(0).getNodeRef()))
                     .augmentation(Node1.class)
                     .child(TerminationPoint.class, new TerminationPointKey(
                         new TpId(otnTopologyTp.getTpId().getValue())))
@@ -585,7 +590,10 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         }
         List<Link> odu4links = null;
         if (netw1Opt.isPresent() && netw1Opt.get().getLink() != null) {
-            odu4links = netw1Opt.get().getLink().stream().filter(lk -> lk.getLinkId().getValue().startsWith("ODU4"))
+            odu4links = netw1Opt
+                    .get()
+                    .nonnullLink().values()
+                    .stream().filter(lk -> lk.getLinkId().getValue().startsWith("ODU4"))
                 .collect(Collectors.toList());
         }
         List<Link> links = new ArrayList<>();
@@ -639,7 +647,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                     .child(Link.class, otnTopologyLink.key())
                     .build();
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOtnTopologyLink,
-                    otnTopologyLink, CREATE_MISSING_PARENTS);
+                    otnTopologyLink);
             }
         } else {
             LOG.error("Unable to create OTN topology shard for node {}!", nodeId);
