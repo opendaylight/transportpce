@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
 import org.opendaylight.transportpce.test.AbstractTest;
 
-
-
+@Ignore
 public class PceConstraintsTest extends AbstractTest {
     private static PceConstraints pceConstraints = new PceConstraints();
 

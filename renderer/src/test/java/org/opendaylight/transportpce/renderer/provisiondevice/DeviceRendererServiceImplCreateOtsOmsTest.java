@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -55,6 +56,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.CreateOtsOmsOutput;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
+@Ignore
 public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
 
     private DeviceRendererService deviceRendererService;

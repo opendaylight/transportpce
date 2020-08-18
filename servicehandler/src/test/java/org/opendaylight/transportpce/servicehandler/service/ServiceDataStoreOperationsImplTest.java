@@ -12,6 +12,7 @@ import static org.opendaylight.transportpce.servicehandler.service.ServiceDataSt
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.OperationResult;
@@ -34,6 +35,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.response.parameters.PathDescriptionBuilder;
 
+@Ignore
 //writeOrModifyOrDeleteServiceList deprecated method should not raise warnings in tests
 @SuppressWarnings("deprecation")
 public class ServiceDataStoreOperationsImplTest extends AbstractTest {
