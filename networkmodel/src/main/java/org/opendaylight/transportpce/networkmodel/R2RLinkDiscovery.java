@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.networkmodel;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -72,7 +72,7 @@ public class R2RLinkDiscovery {
             NbrList nbrList = protocolObject.get().augmentation(Protocols1.class).getLldp().getNbrList();
             LOG.info("LLDP subtree is present. Device has {} neighbours", nbrList.getIfName().size());
             boolean success = true;
-            for (IfName ifName : nbrList.getIfName()) {
+            for (IfName ifName : nbrList.nonnullIfName().values()) {
                 if (ifName.getRemoteSysName() == null) {
                     LOG.warn("LLDP subtree neighbour is empty for nodeId: {}, ifName: {}",
                         nodeId.getValue(),ifName.getIfName());
@@ -117,7 +117,7 @@ public class R2RLinkDiscovery {
             LOG.info("LLDP subtree is present. Device has {} neighbours", nbrList.getIfName().size());
             boolean success = true;
             for (org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.nbr.list.IfName
-                ifName : nbrList.getIfName()) {
+                ifName : nbrList.nonnullIfName().values()) {
                 if (ifName.getRemoteSysName() == null) {
                     LOG.warn("LLDP subtree neighbour is empty for nodeId: {}, ifName: {}",
                         nodeId.getValue(),ifName.getIfName());
@@ -153,7 +153,7 @@ public class R2RLinkDiscovery {
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
             if (nodesObject.isPresent() && (nodesObject.get().getMapping() != null)) {
-                List<Mapping> mappingList = nodesObject.get().getMapping();
+                Collection<Mapping> mappingList = nodesObject.get().nonnullMapping().values();
                 mappingList = mappingList.stream().filter(mp -> mp.getLogicalConnectionPoint().contains("DEG"
                     + degreeCounter)).collect(Collectors.toList());
                 if (mappingList.size() == 1) {
@@ -308,8 +308,8 @@ public class R2RLinkDiscovery {
         try (ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction()) {
             Optional<Nodes> nodesObject = readTx.read(LogicalDatastoreType.CONFIGURATION, nodesIID).get();
             if (nodesObject.isPresent() && (nodesObject.get().getCpToDegree() != null)) {
-                List<CpToDegree> cpToDeg = nodesObject.get().getCpToDegree();
-                Stream cpToDegStream = cpToDeg.stream().filter(cp -> cp.getInterfaceName() != null)
+                Collection<CpToDegree> cpToDeg = nodesObject.get().nonnullCpToDegree().values();
+                Stream<CpToDegree> cpToDegStream = cpToDeg.stream().filter(cp -> cp.getInterfaceName() != null)
                     .filter(cp -> cp.getInterfaceName().equals(interfaceName));
                 if (cpToDegStream != null) {
                     @SuppressWarnings("unchecked") Optional<CpToDegree> firstCpToDegree = cpToDegStream.findFirst();
