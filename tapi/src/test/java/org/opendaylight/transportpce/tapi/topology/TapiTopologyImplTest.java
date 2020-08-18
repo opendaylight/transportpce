@@ -27,6 +27,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.DataStoreContextImpl;
@@ -66,7 +67,7 @@ import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@Ignore
 public class TapiTopologyImplTest extends AbstractTest {
     private static final Logger LOG = LoggerFactory.getLogger(TapiTopologyImplTest.class);
 
