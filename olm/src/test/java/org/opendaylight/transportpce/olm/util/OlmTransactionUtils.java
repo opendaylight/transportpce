@@ -9,9 +9,8 @@
 package org.opendaylight.transportpce.olm.util;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNull;
@@ -28,10 +27,11 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfac
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLinkKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.SectionElementBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.AmplifiedLinkBuilder;
@@ -52,6 +52,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
@@ -65,6 +66,8 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public final class OlmTransactionUtils {
 
@@ -83,64 +86,48 @@ public final class OlmTransactionUtils {
     public static org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks
             .Network getNetworkForSpanLoss() {
 
-        List<LinkConcatenation> linkConcentationValues = new ArrayList<>();
+        Map<LinkConcatenationKey,LinkConcatenation> linkConcentationValues = new HashMap<>();
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
                 .setFiberType(LinkConcatenation.FiberType.Truewave)
                 .setPmd(new FiberPmd(BigDecimal.ONE))
-                .setSRLGId(Long.valueOf(1))
-                .setSRLGLength(Long.valueOf(1))
+                .setSRLGId(Uint32.valueOf(1))
+                .setSRLGLength(Uint32.valueOf(1))
                 .build();
         LinkConcatenation linkConcatenation2 = new LinkConcatenationBuilder()
                 .setFiberType(LinkConcatenation.FiberType.Truewave)
                 .setPmd(new FiberPmd(BigDecimal.ONE))
-                .setSRLGId(Long.valueOf(1))
-                .setSRLGLength(Long.valueOf(1))
+                .setSRLGId(Uint32.valueOf(1))
+                .setSRLGLength(Uint32.valueOf(1))
                 .build();
-        linkConcentationValues.add(linkConcatenation);
-        linkConcentationValues.add(linkConcatenation2);
+        linkConcentationValues.put(linkConcatenation.key(),linkConcatenation);
+        linkConcentationValues.put(linkConcatenation2.key(),linkConcatenation2);
         // create 2 openroadm-topology degree nodes, end points of the link to be
-        // measured
-        List<SupportingNode> supportingNodeListA = new ArrayList<>();
-        supportingNodeListA.add(new SupportingNodeBuilder().setNetworkRef(new NetworkId("openroadm-network"))
-                .setNodeRef(new NodeId("ROADM-A1")).build());
-        Node ietfNodeA = new NodeBuilder().setNodeId(new NodeId("ROADM-A1-DEG2")).setSupportingNode(supportingNodeListA)
+        // measured;
+        SupportingNode supportingNode4RoadmA = new SupportingNodeBuilder()
+                .setNetworkRef(new NetworkId("openroadm-network"))
+                .setNodeRef(new NodeId("ROADM-A1")).build();
+        Node ietfNodeA = new NodeBuilder().setNodeId(new NodeId("ROADM-A1-DEG2"))
+                .setSupportingNode(Map.of(supportingNode4RoadmA.key(),supportingNode4RoadmA))
                 .build();
-        List<SupportingNode> supportingNodeListC = new ArrayList<>();
-        supportingNodeListC.add(new SupportingNodeBuilder().setNetworkRef(new NetworkId("openroadm-network"))
-                .setNodeRef(new NodeId("ROADM-C1")).build());
-        Node ietfNodeC = new NodeBuilder().setNodeId(new NodeId("ROADM-C1-DEG1")).setSupportingNode(supportingNodeListC)
+        SupportingNode supportingNode4RoadmC = new SupportingNodeBuilder()
+                .setNetworkRef(new NetworkId("openroadm-network"))
+                .setNodeRef(new NodeId("ROADM-C1")).build();
+        Node ietfNodeC = new NodeBuilder().setNodeId(new NodeId("ROADM-C1-DEG1"))
+                .setSupportingNode(Map.of(supportingNode4RoadmC.key(),supportingNode4RoadmC))
                 .build();
-        List<Node> ietfNodeList = new ArrayList<>();
-        ietfNodeList.add(ietfNodeA);
-        ietfNodeList.add(ietfNodeC);
-
-        List<AmplifiedLink>
-                amplifiedLinkValues = new ArrayList<>();
+        Map<NodeKey,Node> ietfNodeMap = new HashMap<>();
+        ietfNodeMap.put(ietfNodeA.key(),ietfNodeA);
+        ietfNodeMap.put(ietfNodeC.key(),ietfNodeC);
+        Map<AmplifiedLinkKey,AmplifiedLink>
+                amplifiedLinkValues = new HashMap<>();
         org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
-                        .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
-                        .setSectionElement(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130
-                                .amplified.link.attributes.amplified.link.section.element.section.element
-                                .SpanBuilder().setSpan(new org.opendaylight.yang.gen.v1.http.org.openroadm
-                                .link.rev181130.amplified.link.attributes.amplified.link.section.element.section
-                                .element.span.SpanBuilder().setAdministrativeState(AdminStates.InService)
-                                .setAutoSpanloss(true)
-                                .setClfi("clfi")
-                                .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
-                                .setLinkConcatenation(linkConcentationValues)
-                                .setSpanlossBase(new RatioDB(BigDecimal.ONE))
-                                .setSpanlossCurrent(new RatioDB(BigDecimal.ONE))
-                                .build())
-                                .build())
-                        .build())
-                        .setSectionEltNumber(Integer.valueOf(1)).build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al2 =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
-                    .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
-                    .setSectionElement(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
-                            .attributes.amplified.link.section.element.section.element.SpanBuilder()
-                            .setSpan(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
-                                        .attributes.amplified.link.section.element.section.element.span.SpanBuilder()
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
+            .AmplifiedLinkBuilder()
+                .setSectionElement(new SectionElementBuilder().setSectionElement(
+                            new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
+                            .amplified.link.section.element.section.element.SpanBuilder().setSpan(
+                                    new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
+                                    .attributes.amplified.link.section.element.section.element.span.SpanBuilder()
                                         .setAdministrativeState(AdminStates.InService)
                                         .setAutoSpanloss(true)
                                         .setClfi("clfi")
@@ -151,60 +138,78 @@ public final class OlmTransactionUtils {
                                         .build())
                                 .build())
                         .build())
-                        .setSectionEltNumber(Integer.valueOf(1)).build();
-        amplifiedLinkValues.add(al);
-        amplifiedLinkValues.add(al2);
+                .setSectionEltNumber(Uint16.valueOf(1))
+                .build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al2 =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
+            .AmplifiedLinkBuilder()
+                .setSectionElement(new SectionElementBuilder().setSectionElement(
+                            new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
+                            .amplified.link.section.element.section.element.SpanBuilder().setSpan(
+                                    new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
+                                    .attributes.amplified.link.section.element.section.element.span.SpanBuilder()
+                                        .setAdministrativeState(AdminStates.InService)
+                                        .setAutoSpanloss(true)
+                                        .setClfi("clfi")
+                                        .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
+                                        .setLinkConcatenation(linkConcentationValues)
+                                        .setSpanlossBase(new RatioDB(BigDecimal.ONE))
+                                        .setSpanlossCurrent(new RatioDB(BigDecimal.ONE))
+                                        .build())
+                                .build())
+                        .build())
+                .setSectionEltNumber(Uint16.valueOf(1))
+                .build();
+        amplifiedLinkValues.put(al.key(),al);
+        amplifiedLinkValues.put(al2.key(),al2);
         Map<Class<? extends Augmentation<Link>>, Augmentation<Link>> map = Collections.emptyMap();
-        Augmentation<Link> aug11 = new Link1Builder().setAdministrativeGroup(Long.valueOf(123))
+        Augmentation<Link> aug11 = new Link1Builder().setAdministrativeGroup(Uint32.valueOf(123))
                 .setAdministrativeState(State.InService)
                 .setAmplified(true)
-                .setLinkLatency(Long.valueOf(123))
+                .setLinkLatency(Uint32.valueOf(123))
                 .setLinkLength(BigDecimal.valueOf(123))
                 .setOMSAttributes(new OMSAttributesBuilder()
                         .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
                         .setOppositeLink(new LinkId("link 1"))
                         .setSpan(new SpanBuilder().build())
-                        .setTEMetric(Long.valueOf(123)).build())
+                        .setTEMetric(Uint32.valueOf(123)).build())
                 .setOperationalState(State.InService).build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 aug12 =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
                 .setLinkType(OpenroadmLinkType.ROADMTOROADM).build();
         Augmentation<Link> aug21 = new Link1Builder()
-                .setAdministrativeGroup(Long.valueOf(123))
+                .setAdministrativeGroup(Uint32.valueOf(123))
                 .setAdministrativeState(State.InService)
                 .setAmplified(true)
-                .setLinkLatency(Long.valueOf(123))
+                .setLinkLatency(Uint32.valueOf(123))
                 .setLinkLength(BigDecimal.valueOf(123))
                 .setOMSAttributes(new OMSAttributesBuilder()
                         .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
                         .setOppositeLink(new LinkId("link 1"))
                         .setSpan(new SpanBuilder().build())
-                        .setTEMetric(Long.valueOf(123)).build())
+                        .setTEMetric(Uint32.valueOf(123)).build())
                 .setOperationalState(State.InService).build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 aug22 =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
                 .setLinkType(OpenroadmLinkType.ROADMTOROADM).build();
         // create the roadm-to-roadm link to be measured
-        List<Link> ietfLinkList = new ArrayList<>();
         Link roadm2roadmLink = new LinkBuilder().setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
             .setSource(new SourceBuilder().setSourceNode(ietfNodeA.getNodeId()).setSourceTp("DEG2-TTP-TXRX").build())
             .setDestination(
                 new DestinationBuilder().setDestNode(ietfNodeC.getNodeId()).setDestTp("DEG1-TTP-TXRX").build())
-            .addAugmentation(Link1.class, aug11)
-            .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
-                aug12)
-            .addAugmentation(Link1.class, aug21)
-            .addAugmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class,
-                aug22)
+            .addAugmentation(aug11)
+            .addAugmentation(aug12)
+            .addAugmentation(aug21)
+            .addAugmentation(aug22)
             .build();
-        ietfLinkList.add(roadm2roadmLink);
         // create the ietf network
-        Network1 openroadmAugmToIetfNetwork = new Network1Builder().setLink(ietfLinkList).build();
+        Network1 openroadmAugmToIetfNetwork = new Network1Builder()
+                .setLink(Map.of(roadm2roadmLink.key(),roadm2roadmLink)).build();
         // openroadm Topology builder
         NetworkBuilder ietfNetworkBldr = new NetworkBuilder()
                 .setNetworkId(new NetworkId("openroadm-topology"))
-                .setNode(ietfNodeList)
-                .addAugmentation(Network1.class, openroadmAugmToIetfNetwork);
+                .setNode(ietfNodeMap)
+                .addAugmentation(openroadmAugmToIetfNetwork);
 
         return ietfNetworkBldr.build();
     }
@@ -225,27 +230,22 @@ public final class OlmTransactionUtils {
                 .setPmParameterValue(new PmDataType(new BigDecimal("-3.5")))
                 .setValidity(Validity.Complete)
                 .build();
-        List<Measurement> measurementListA = new ArrayList<>();
-        measurementListA.add(measurementA);
         CurrentPm cpA = new CurrentPmBuilder()
             .setType(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum.OpticalPowerOutput)
-            .setMeasurement(measurementListA)
+            .setMeasurement(Map.of(measurementA.key(),measurementA))
             .build();
-        List<CurrentPm> currentPmListA = new ArrayList<>();
-        currentPmListA.add(cpA);
         InstanceIdentifier<Interface> interfaceIIDA = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey("OTS-DEG2-TTP-TXRX"));
         CurrentPmEntry currentPmEntryA = new CurrentPmEntryBuilder()
-                .setCurrentPm(currentPmListA)
+                .setCurrentPm(Map.of(cpA.key(),cpA))
                 .setPmResourceInstance(interfaceIIDA)
                 .setPmResourceType(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
                 .setPmResourceTypeExtension("")
                 .setRetrievalTime(new DateAndTime("2018-06-07T13:22:58+00:00"))
                 .build();
-        List<CurrentPmEntry> currentPmEntryListA = new ArrayList<>();
-        currentPmEntryListA.add(currentPmEntryA);
-        return Optional.of(new CurrentPmListBuilder().setCurrentPmEntry(currentPmEntryListA).build());
+        return Optional.of(new CurrentPmListBuilder()
+                .setCurrentPmEntry(Map.of(currentPmEntryA.key(),currentPmEntryA)).build());
     }
 
     public static Optional<CurrentPmList> getCurrentPmListC() {
@@ -254,26 +254,21 @@ public final class OlmTransactionUtils {
                 .setPmParameterValue(new PmDataType(new BigDecimal("-18.1")))
                 .setValidity(Validity.Complete)
                 .build();
-        List<Measurement> measurementListC = new ArrayList<>();
-        measurementListC.add(measurementC);
         CurrentPm cpC = new CurrentPmBuilder()
             .setType(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum.OpticalPowerInput)
-            .setMeasurement(measurementListC)
+            .setMeasurement(Map.of(measurementC.key(),measurementC))
             .build();
-        List<CurrentPm> currentPmListC = new ArrayList<>();
-        currentPmListC.add(cpC);
         InstanceIdentifier<Interface> interfaceIIDC = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey("OTS-DEG1-TTP-TXRX"));
         CurrentPmEntry currentPmEntryC = new CurrentPmEntryBuilder()
-                .setCurrentPm(currentPmListC)
+                .setCurrentPm(Map.of(cpC.key(),cpC))
                 .setPmResourceInstance(interfaceIIDC)
                 .setPmResourceType(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181019.ResourceTypeEnum.Interface)
                 .setPmResourceTypeExtension("")
                 .setRetrievalTime(new DateAndTime("2018-06-07T13:22:58+00:00"))
                 .build();
-        List<CurrentPmEntry> currentPmEntryListC = new ArrayList<>();
-        currentPmEntryListC.add(currentPmEntryC);
-        return Optional.of(new CurrentPmListBuilder().setCurrentPmEntry(currentPmEntryListC).build());
+        return Optional.of(new CurrentPmListBuilder()
+                .setCurrentPmEntry(Map.of(currentPmEntryC.key(),currentPmEntryC)).build());
     }
 }

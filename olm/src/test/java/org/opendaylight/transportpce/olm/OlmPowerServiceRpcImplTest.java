@@ -10,7 +10,9 @@ package org.opendaylight.transportpce.olm;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
@@ -61,6 +63,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.M
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.current.pm.measurements.MeasurementBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPmBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev161014.currentpmlist.CurrentPmKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmDataType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmNamesEnum;
@@ -172,8 +175,8 @@ public class OlmPowerServiceRpcImplTest extends AbstractTest {
             .setRetrievalTime(new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715
                 .DateAndTime("2018-11-01T12:00:31.456449+06:00")).build();
 
-        List<CurrentPm> currentPmList = new ArrayList<>();
-        currentPmList.add(currentPm);
+        Map<CurrentPmKey, CurrentPm> currentPmList = new HashMap<>();
+        currentPmList.put(currentPm.key(),currentPm);
 
         Optional<CurrentPmlist> currentPmlistOptional = Optional.of(new CurrentPmlistBuilder()
             .setCurrentPm(currentPmList).build());
