@@ -32,10 +32,11 @@ import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeWriter;
 import org.opendaylight.yangtools.yang.data.codec.xml.XMLStreamNormalizedNodeStreamWriter;
+import org.opendaylight.yangtools.yang.data.codec.xml.XmlCodecFactory;
 import org.opendaylight.yangtools.yang.data.codec.xml.XmlParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
-import org.opendaylight.yangtools.yang.model.api.SchemaContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaNode;
 import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 import org.slf4j.Logger;
@@ -55,7 +56,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      * @param codecRegistry codec registry used for converting
      *
      */
-    private XMLDataObjectConverter(SchemaContext schemaContext, BindingNormalizedNodeSerializer codecRegistry) {
+    private XMLDataObjectConverter(EffectiveModelContext schemaContext, BindingNormalizedNodeSerializer codecRegistry) {
         super(schemaContext, codecRegistry);
         this.xmlInputFactory = XMLInputFactory.newInstance();
         // set external DTD and schema to null to avoid vulnerability (sonar report)
@@ -82,7 +83,7 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
      * @param codecRegistry codec registry used for converting
      * @return new {@link XMLDataObjectConverter}
      */
-    public static XMLDataObjectConverter createWithSchemaContext(@Nonnull SchemaContext schemaContext,
+    public static XMLDataObjectConverter createWithSchemaContext(@Nonnull EffectiveModelContext schemaContext,
             @Nonnull BindingNormalizedNodeSerializer codecRegistry) {
         return new XMLDataObjectConverter(schemaContext, codecRegistry);
     }
@@ -192,7 +193,8 @@ public final class XMLDataObjectConverter extends AbstractDataObjectConverter {
             XMLStreamReader reader, SchemaNode parentSchemaNode) {
         NormalizedNodeResult result = new NormalizedNodeResult();
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
-             XmlParserStream xmlParser = XmlParserStream.create(streamWriter, getSchemaContext(), parentSchemaNode)) {
+             XmlParserStream xmlParser = XmlParserStream
+                     .create(streamWriter, XmlCodecFactory.create(getSchemaContext()), parentSchemaNode)) {
             xmlParser.parse(reader);
         } catch (XMLStreamException | URISyntaxException | IOException | SAXException e) {
             LOG.warn("An error occured during parsing XML input stream", e);
