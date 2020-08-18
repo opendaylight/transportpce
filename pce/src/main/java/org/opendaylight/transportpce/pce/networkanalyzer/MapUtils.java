@@ -10,17 +10,20 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SupportingLink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,14 +79,14 @@ public final class MapUtils {
 
     public static String getCLLI(Node node) {
         // TODO STUB retrieve CLLI from node. for now it is supporting node ID of the first supp node
-        return node.getSupportingNode().get(0).getNodeRef().getValue();
+        return node.nonnullSupportingNode().values().iterator().next().getNodeRef().getValue();
     }
 
     public static List<Long> getSRLG(Link link) {
         List<Long> srlgList = new ArrayList<>();
         try {
-            List<LinkConcatenation> linkList = getOmsAttributesSpan(link).getLinkConcatenation();
-            for (LinkConcatenation lc : linkList) {
+            Map<LinkConcatenationKey, LinkConcatenation> linkList = getOmsAttributesSpan(link).getLinkConcatenation();
+            for (LinkConcatenation lc : linkList.values()) {
                 srlgList.add(lc.getSRLGId().toJava());
             }
         } catch (NullPointerException e) {
@@ -101,12 +104,8 @@ public final class MapUtils {
 
         } else {
             try {
-                List<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.networks.network.link
-                    .LinkConcatenation> linkConcatenation = linkC.getLinkConcatenation();
-
-
                 for (org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.networks.network.link
-                        .LinkConcatenation lc : linkConcatenation) {
+                        .LinkConcatenation lc : linkC.nonnullLinkConcatenation().values()) {
                     srlgList.add(lc.getSRLGId().toJava());
                 }
             } catch (NullPointerException e) {
@@ -117,8 +116,7 @@ public final class MapUtils {
     }
 
     public static String getSupNetworkNode(Node node) {
-        List<SupportingNode> supNodes = node.getSupportingNode();
-        for (SupportingNode snode : supNodes) {
+        for (SupportingNode snode : node.nonnullSupportingNode().values()) {
             if (NetworkUtils.UNDERLAY_NETWORK_ID.equals(snode.getNetworkRef().getValue())) {
                 return snode.getNodeRef().getValue();
             }
@@ -127,8 +125,7 @@ public final class MapUtils {
     }
 
     public static String getSupClliNode(Node node) {
-        List<SupportingNode> supNodes = node.getSupportingNode();
-        for (SupportingNode snode : supNodes) {
+        for (SupportingNode snode : node.nonnullSupportingNode().values()) {
             if (NetworkUtils.CLLI_NETWORK_ID.equals(snode.getNetworkRef().getValue())) {
                 return snode.getNodeRef().getValue();
             }
@@ -138,13 +135,7 @@ public final class MapUtils {
 
     public static TreeMap<String, String> getAllSupNode(Node node) {
         TreeMap<String, String> allSupNodes = new TreeMap<>();
-        List<SupportingNode> supNodes = new ArrayList<>();
-        try {
-            supNodes = node.getSupportingNode();
-        } catch (NullPointerException e) {
-            LOG.debug("No Supporting Node for the node {}", node);
-        }
-        for (SupportingNode supnode :supNodes) {
+        for (SupportingNode supnode : node.nonnullSupportingNode().values()) {
             allSupNodes.put(supnode.getNetworkRef().getValue(),
                     supnode.getNodeRef().getValue());
         }
@@ -152,13 +143,12 @@ public final class MapUtils {
     }
 
     public static String getSupLink(Link link) {
-        String supLink = "";
-        try {
-            supLink = link.getSupportingLink().get(0).getLinkRef().toString();
-        } catch (NullPointerException e) {
-            LOG.debug("No Supporting Link for the link {}", link);
+        SupportingLink first = link.nonnullSupportingLink().values().iterator().next();
+        if (first != null && first.getLinkRef() != null) {
+            return first.getLinkRef().toString();
+        } else {
+            return "";
         }
-        return supLink;
     }
 
 
