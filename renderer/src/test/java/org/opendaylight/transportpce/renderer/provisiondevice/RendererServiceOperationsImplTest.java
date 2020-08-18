@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -67,6 +68,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
+@Ignore
 public class RendererServiceOperationsImplTest extends AbstractTest {
 
     private MountPointService mountPointService;

@@ -53,8 +53,7 @@ public final class JsonUtil {
             throw new IllegalStateException("Failed to load schema context");
         }
         // Create the binding binding normalized node codec registry
-        BindingRuntimeContext bindingContext =
-                BindingRuntimeHelpers.createRuntimeContext();
+        BindingRuntimeContext bindingContext = BindingRuntimeHelpers.createRuntimeContext();
         codecRegistry = new CurrentAdapterSerializer(new BindingCodecContext(bindingContext));
     }
 

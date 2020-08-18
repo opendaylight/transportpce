@@ -10,10 +10,12 @@ package org.opendaylight.transportpce.pce;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
 
+@Ignore
 public class PceComplianceCheckTest extends AbstractTest {
 
 
