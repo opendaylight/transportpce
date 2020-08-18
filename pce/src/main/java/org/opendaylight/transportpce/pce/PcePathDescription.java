@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.pce;
 
 import com.google.common.collect.ImmutableList;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.ResponseCodes;
@@ -52,7 +52,7 @@ public class PcePathDescription {
 
     public PceResult buildDescriptions() {
         LOG.info("In buildDescriptions: AtoZ =  {}", pathAtoZ);
-        List<AToZ> atozList = new ArrayList<>();
+        Map<AToZKey,AToZ> atozList = new HashMap<>();
         if (pathAtoZ == null) {
             rc.setRC(ResponseCodes.RESPONSE_FAILED);
             LOG.error("In buildDescriptions: there is empty AtoZ path");
@@ -81,7 +81,7 @@ public class PcePathDescription {
         pathZtoA = ImmutableList.copyOf(pathAtoZ).reverse();
         LOG.info("In buildDescriptions: ZtoA {}", pathZtoA);
 
-        List<ZToA> ztoaList = new ArrayList<>();
+        Map<ZToAKey,ZToA> ztoaList = new HashMap<>();
         if (pathZtoA == null) {
             rc.setRC(ResponseCodes.RESPONSE_FAILED);
             LOG.error("In buildDescriptions: there is empty ZtoA path");
@@ -110,7 +110,7 @@ public class PcePathDescription {
         return rc;
     }
 
-    private void buildAtoZ(List<AToZ> etoeList, List<PceLink> path) {
+    private void buildAtoZ(Map<AToZKey, AToZ> atozList, List<PceLink> path) {
         Integer index = 0;
         PceLink lastLink = null;
         AToZ lastResource = null;
@@ -125,7 +125,7 @@ public class PcePathDescription {
         AToZKey clientKey = new AToZKey(index.toString());
         Resource clientResource = new ResourceBuilder().setResource(stp).build();
         AToZ firstResource = new AToZBuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
-        etoeList.add(firstResource);
+        atozList.put(firstResource.key(),firstResource);
         index += 1;
         for (PceLink pcelink : path) {
             String srcName = pcelink.getSourceId().getValue();
@@ -140,7 +140,7 @@ public class PcePathDescription {
             Resource nodeResource1 = new ResourceBuilder().setResource(sourceNode).build();
             AToZ srcResource = new AToZBuilder().setId(srcName).withKey(sourceKey).setResource(nodeResource1).build();
             index += 1;
-            etoeList.add(srcResource);
+            atozList.put(srcResource.key(),srcResource);
 
             // source TP
             tpName = pcelink.getSourceTP().toString();
@@ -153,7 +153,7 @@ public class PcePathDescription {
             Resource tpResource1 = new ResourceBuilder().setResource(stp).build();
             AToZ stpResource = new AToZBuilder().setId(tpName).withKey(srcTPKey).setResource(tpResource1).build();
             index += 1;
-            etoeList.add(stpResource);
+            atozList.put(stpResource.key(),stpResource);
 
             String linkName = pcelink.getLinkId().getValue();
             // Link
@@ -167,7 +167,7 @@ public class PcePathDescription {
             Resource nodeResource2 = new ResourceBuilder().setResource(atozLink).build();
             AToZ linkResource = new AToZBuilder().setId(linkName).withKey(linkKey).setResource(nodeResource2).build();
             index += 1;
-            etoeList.add(linkResource);
+            atozList.put(linkResource.key(),linkResource);
 
             String destName = pcelink.getDestId().getValue();
             // target TP
@@ -181,7 +181,7 @@ public class PcePathDescription {
             Resource tpResource2 = new ResourceBuilder().setResource(dtp).build();
             AToZ ttpResource = new AToZBuilder().setId(tpName).withKey(destTPKey).setResource(tpResource2).build();
             index += 1;
-            etoeList.add(ttpResource);
+            atozList.put(ttpResource.key(),ttpResource);
 
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce
                 .resource.resource.resource.Node targetNode = new NodeBuilder()
@@ -196,7 +196,9 @@ public class PcePathDescription {
             lastLink = pcelink;
         }
 
-        etoeList.add(lastResource);
+        if (lastResource != null) {
+            atozList.put(lastResource.key(),lastResource);
+        }
 
         // build Z side Client TP
         tpName = lastLink.getClient();
@@ -209,11 +211,11 @@ public class PcePathDescription {
         clientKey = new AToZKey(index.toString());
         clientResource = new ResourceBuilder().setResource(stp).build();
         lastResource = new AToZBuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
-        etoeList.add(lastResource);
+        atozList.put(lastResource.key(),lastResource);
 
     }
 
-    private void buildZtoA(List<ZToA> etoelist, List<PceLink> path) {
+    private void buildZtoA(Map<ZToAKey, ZToA> ztoaList, List<PceLink> path) {
         Integer index = 0;
         PceLink lastLink = null;
         ZToA lastResource = null;
@@ -229,7 +231,7 @@ public class PcePathDescription {
         ZToAKey clientKey = new ZToAKey(index.toString());
         Resource clientResource = new ResourceBuilder().setResource(stp).build();
         ZToA firstResource = new ZToABuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
-        etoelist.add(firstResource);
+        ztoaList.put(firstResource.key(),firstResource);
         index += 1;
 
         for (PceLink pcelinkAtoZ : path) {
@@ -251,7 +253,7 @@ public class PcePathDescription {
             Resource nodeResource1 = new ResourceBuilder().setResource(sourceNode).build();
             ZToA srcResource = new ZToABuilder().setId(srcName).withKey(sourceKey).setResource(nodeResource1).build();
             index += 1;
-            etoelist.add(srcResource);
+            ztoaList.put(srcResource.key(),srcResource);
 
             // source TP
             tpName = pcelink.getSourceTP().toString();
@@ -264,7 +266,7 @@ public class PcePathDescription {
             Resource tpResource1 = new ResourceBuilder().setResource(stp).build();
             ZToA stpResource = new ZToABuilder().setId(tpName).withKey(srcTPKey).setResource(tpResource1).build();
             index += 1;
-            etoelist.add(stpResource);
+            ztoaList.put(stpResource.key(),stpResource);
 
             String linkName = pcelink.getLinkId().getValue();
             // Link
@@ -277,7 +279,7 @@ public class PcePathDescription {
             Resource nodeResource2 = new ResourceBuilder().setResource(ztoaLink).build();
             ZToA linkResource = new ZToABuilder().setId(linkName).withKey(linkKey).setResource(nodeResource2).build();
             index += 1;
-            etoelist.add(linkResource);
+            ztoaList.put(linkResource.key(),linkResource);
 
             String destName = pcelink.getDestId().getValue();
             // target TP
@@ -290,7 +292,7 @@ public class PcePathDescription {
             Resource tpResource2 = new ResourceBuilder().setResource(ttp).build();
             ZToA ttpResource = new ZToABuilder().setId(tpName).withKey(destTPKey).setResource(tpResource2).build();
             index += 1;
-            etoelist.add(ttpResource);
+            ztoaList.put(ttpResource.key(),ttpResource);
 
 
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce
@@ -303,7 +305,9 @@ public class PcePathDescription {
 
             lastLink = pcelink;
         }
-        etoelist.add(lastResource);
+        if (lastResource != null) {
+            ztoaList.put(lastResource.key(),lastResource);
+        }
 
         // build Z side Client TP
         tpName = lastLink.getClient();
@@ -315,7 +319,7 @@ public class PcePathDescription {
         clientKey = new ZToAKey(index.toString());
         clientResource = new ResourceBuilder().setResource(stp).build();
         lastResource = new ZToABuilder().setId(tpName).withKey(clientKey).setResource(clientResource).build();
-        etoelist.add(lastResource);
+        ztoaList.put(lastResource.key(),lastResource);
     }
 
     public PceResult getReturnStructure() {
