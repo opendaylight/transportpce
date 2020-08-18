@@ -446,12 +446,10 @@ public final class ServiceDataUtils {
         AToZDirection atozDirection = new AToZDirectionBuilder()
             .setRate(azRate)
             .setAToZWavelengthNumber(azWaveLength)
-            .setAToZ(null)
             .build();
         ZToADirection ztoaDirection = new ZToADirectionBuilder()
             .setRate(zaRate)
             .setZToAWavelengthNumber(zaWaveLength)
-            .setZToA(null)
             .build();
         PathDescription pathDescription = new PathDescriptionBuilder()
             .setAToZDirection(atozDirection)
