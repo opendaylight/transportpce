@@ -7,16 +7,18 @@
  */
 package org.opendaylight.transportpce.networkmodel.util.test;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.MappingKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
@@ -25,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.O
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.xpdr.tp.supported.interfaces.SupportedInterfaceCapabilityKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.ODTU4TsAllocated;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.TerminationPoint1;
@@ -36,6 +39,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.If10
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.IfOCH;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.SupportedIfCapability;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev181130.xpdr.otn.tp.attributes.OdtuTpnPool;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev181130.xpdr.otn.tp.attributes.OdtuTpnPoolBuilder;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -50,6 +54,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.termination.point.SupportingTerminationPointKey;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -60,7 +65,7 @@ public final class NetworkmodelTestUtil {
     private static final Logger LOG = LoggerFactory.getLogger(NetworkmodelTestUtil.class);
 
     public static Nodes createMappingForRdm(String nodeId, String clli, int degNb, int srgNb) {
-        List<Mapping> mappingList = new ArrayList<>();
+        Map<MappingKey,Mapping> mappingList = new HashMap<>();
         createDegreeMappings(mappingList, 1, degNb);
         createSrgMappings(mappingList, 1, srgNb);
         Nodes mappingNode = new NodesBuilder()
@@ -73,12 +78,12 @@ public final class NetworkmodelTestUtil {
 
     public static Nodes createMappingForXpdr(String nodeId, String clli, int networkPortNb, int clientPortNb,
         XpdrNodeTypes xpdrNodeType) {
-        List<Mapping> mappingList = new ArrayList<>();
-        createXpdrMappings(mappingList, networkPortNb, clientPortNb, xpdrNodeType);
+        Map<MappingKey,Mapping> mappingMap = new HashMap<>();
+        createXpdrMappings(mappingMap, networkPortNb, clientPortNb, xpdrNodeType);
         Nodes mappingNode = new NodesBuilder()
             .setNodeId(nodeId)
             .setNodeInfo(new NodeInfoBuilder().setNodeType(NodeTypes.Xpdr).setNodeClli(clli).build())
-            .setMapping(mappingList)
+            .setMapping(mappingMap)
             .build();
         LOG.info("mapping = {}", mappingNode.toString());
         return mappingNode;
@@ -100,19 +105,16 @@ public final class NetworkmodelTestUtil {
                     .setDestNode(new NodeId("SPDRZ-XPDR1"))
                     .setDestTp("XPDR1-NETWORK1").build())
             .addAugmentation(
-                Link1.class,
                 new Link1Builder()
                     .setLinkType(OpenroadmLinkType.OTNLINK)
                     .setOppositeLink(new LinkId(prefix + "SPDRZ-XPDR1-XPDR1-NETWORK1toSPDRA-XPDR1-XPDR1-NETWORK1"))
                     .build())
             .addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1.class,
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1Builder()
                     .setAvailableBandwidth(Uint32.valueOf(availBW))
                     .setUsedBandwidth(Uint32.valueOf(100000 - availBW))
                     .build())
             .addAugmentation(
-                org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1.class,
                 new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1Builder()
                     .setOtnLinkType(type)
                     .build())
@@ -126,19 +128,16 @@ public final class NetworkmodelTestUtil {
                     .setDestNode(new NodeId("SPDRA-XPDR1"))
                     .setDestTp("XPDR1-NETWORK1").build())
             .addAugmentation(
-                Link1.class,
                 new Link1Builder()
                     .setLinkType(OpenroadmLinkType.OTNLINK)
                     .setOppositeLink(new LinkId(prefix + "SPDRA-XPDR1-XPDR1-NETWORK1toSPDRZ-XPDR1-XPDR1-NETWORK1"))
                     .build())
             .addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1.class,
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1Builder()
                     .setAvailableBandwidth(Uint32.valueOf(availBW))
                     .setUsedBandwidth(Uint32.valueOf(100000 - availBW))
                     .build())
             .addAugmentation(
-                org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1.class,
                 new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.Link1Builder()
                     .setOtnLinkType(type)
                     .build())
@@ -153,8 +152,9 @@ public final class NetworkmodelTestUtil {
         SupportedInterfaceCapability supCapa = new SupportedInterfaceCapabilityBuilder()
             .setIfCapType(IfOCHOTU4ODU4.class)
             .build();
-        List<SupportedInterfaceCapability> supInterCapaList = new ArrayList<>();
-        supInterCapaList.add(supCapa);
+        Map<SupportedInterfaceCapabilityKey,SupportedInterfaceCapability> supInterCapaList =
+                new HashMap<>();
+        supInterCapaList.put(supCapa.key(),supCapa);
         TpSupportedInterfaces tpSuppInter = new TpSupportedInterfacesBuilder()
             .setSupportedInterfaceCapability(supInterCapaList)
             .build();
@@ -170,9 +170,10 @@ public final class NetworkmodelTestUtil {
             for (int i = 1; i <= 80; i++) {
                 tpnPool.add(Uint16.valueOf(i));
             }
-            xtpcaBldr.setOdtuTpnPool(
-                    ImmutableList.of(
-                        new OdtuTpnPoolBuilder().setOdtuType(ODTU4TsAllocated.class).setTpnPool(tpnPool).build()));
+            OdtuTpnPool odtuTpn = new OdtuTpnPoolBuilder()
+                    .setOdtuType(ODTU4TsAllocated.class)
+                    .setTpnPool(tpnPool).build();
+            xtpcaBldr.setOdtuTpnPool(ImmutableMap.of(odtuTpn.key(),odtuTpn));
         }
         TerminationPoint1 otnTp1 = new TerminationPoint1Builder()
             .setTpSupportedInterfaces(tpSuppInter)
@@ -183,14 +184,13 @@ public final class NetworkmodelTestUtil {
             .setNodeRef(new NodeId("SPDRA-XPDR1"))
             .setTpRef("XPDR1-NETWORK1")
             .build();
-        List<SupportingTerminationPoint> supTermPointListA = new ArrayList<>();
-        supTermPointListA.add(supTermPointA);
+        Map<SupportingTerminationPointKey,SupportingTerminationPoint> supTermPointMapA =
+                Map.of(supTermPointA.key(), supTermPointA);
         TerminationPoint tpA = new TerminationPointBuilder()
             .setTpId(new TpId("XPDR1-NETWORK1"))
-            .setSupportingTerminationPoint(supTermPointListA)
-            .addAugmentation(TerminationPoint1.class, otnTp1)
+            .setSupportingTerminationPoint(supTermPointMapA)
+            .addAugmentation(otnTp1)
             .addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class,
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder()
                 .setTpType(OpenroadmTpType.XPONDERNETWORK)
                 .build())
@@ -200,14 +200,13 @@ public final class NetworkmodelTestUtil {
             .setNodeRef(new NodeId("SPDRZ-XPDR1"))
             .setTpRef("XPDR1-NETWORK1")
             .build();
-        List<SupportingTerminationPoint> supTermPointListZ = new ArrayList<>();
-        supTermPointListZ.add(supTermPointZ);
+        Map<SupportingTerminationPointKey,SupportingTerminationPoint> supTermPointMapZ =
+                Map.of(supTermPointZ.key(), supTermPointZ);
         TerminationPoint tpZ = new TerminationPointBuilder()
             .setTpId(new TpId("XPDR1-NETWORK1"))
-            .setSupportingTerminationPoint(supTermPointListZ)
-            .addAugmentation(TerminationPoint1.class, otnTp1)
+            .setSupportingTerminationPoint(supTermPointMapZ)
+            .addAugmentation(otnTp1)
             .addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class,
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder()
                 .setTpType(OpenroadmTpType.XPONDERNETWORK)
                 .build())
@@ -218,7 +217,8 @@ public final class NetworkmodelTestUtil {
         return tps;
     }
 
-    private static List<Mapping> createDegreeMappings(List<Mapping> mappingList, int degNbStart, int degNbStop) {
+    private static Map<MappingKey,Mapping> createDegreeMappings(Map<MappingKey,Mapping> mappingMap,
+            int degNbStart, int degNbStop) {
         for (int i = degNbStart; i <= degNbStop; i++) {
             Mapping mapping = new MappingBuilder()
                 .setLogicalConnectionPoint("DEG" + i + "-TTP-TXRX")
@@ -228,12 +228,13 @@ public final class NetworkmodelTestUtil {
                 .setSupportingOts("OTS-DEG" + i + "-TTP-TXRX")
                 .setSupportingOms("OMS-DEG" + i + "-TTP-TXRX")
                 .build();
-            mappingList.add(mapping);
+            mappingMap.put(mapping.key(),mapping);
         }
-        return mappingList;
+        return mappingMap;
     }
 
-    private static List<Mapping> createSrgMappings(List<Mapping> mappingList, int srgNbStart, int srgNbStop) {
+    private static Map<MappingKey,Mapping> createSrgMappings(Map<MappingKey,Mapping> mappingMap,
+            int srgNbStart, int srgNbStop) {
         for (int i = srgNbStart; i <= srgNbStop; i++) {
             for (int j = 1; j <= 4; j++) {
                 Mapping mapping = new MappingBuilder()
@@ -242,13 +243,14 @@ public final class NetworkmodelTestUtil {
                     .setSupportingPort("C" + j)
                     .setSupportingCircuitPackName(3 + i + "/0")
                     .build();
-                mappingList.add(mapping);
+                mappingMap.put(mapping.key(),mapping);
             }
         }
-        return mappingList;
+        return mappingMap;
     }
 
-    private static List<Mapping> createXpdrMappings(List<Mapping> mappingList, int networkPortNb, int clientPortNb,
+    private static Map<MappingKey,Mapping> createXpdrMappings(Map<MappingKey,Mapping> mappingMap,
+            int networkPortNb, int clientPortNb,
         XpdrNodeTypes xpdrNodeType) {
         for (int i = 1; i <= networkPortNb; i++) {
             List<Class<? extends SupportedIfCapability>> supportedIntf = new ArrayList<>();
@@ -264,7 +266,8 @@ public final class NetworkmodelTestUtil {
             if (xpdrNodeType != null) {
                 mappingBldr.setXponderType(xpdrNodeType);
             }
-            mappingList.add(mappingBldr.build());
+            Mapping mapping = mappingBldr.build();
+            mappingMap.put(mapping.key(),mapping);
         }
         for (int i = 1; i <= clientPortNb; i++) {
             List<Class<? extends SupportedIfCapability>> supportedIntf = new ArrayList<>();
@@ -278,9 +281,9 @@ public final class NetworkmodelTestUtil {
                 .setPortQual(PortQual.XpdrClient.getName())
                 .setSupportingCircuitPackName("1/0/" + i + "-PLUG-CLIENT")
                 .build();
-            mappingList.add(mapping);
+            mappingMap.put(mapping.key(),mapping);
         }
-        return mappingList;
+        return mappingMap;
     }
 
     private NetworkmodelTestUtil() {
