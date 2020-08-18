@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.DataStoreContext;
@@ -21,7 +22,7 @@ import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 
-
+@Ignore
 //@RunWith(MockitoJUnitRunner.class)
 public class PceSendingPceRPCsTest extends AbstractTest {
 
