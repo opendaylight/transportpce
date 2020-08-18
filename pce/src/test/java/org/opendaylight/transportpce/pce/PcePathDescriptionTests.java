@@ -37,7 +37,6 @@ public class PcePathDescriptionTests extends AbstractTest {
 
     private PcePathDescription pcePathDescription;
     private PceResult pceResult;
-    private static final Long WAVE_LENGTH = 20L;
     private PceLink pceLink = null;
     private Link link = null;
     private Node node = null;
