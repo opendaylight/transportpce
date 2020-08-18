@@ -154,7 +154,7 @@ public class PceConstraintsCalc {
 
         Include include = tmpGeneral.getInclude();
         if (include != null) {
-            List<OrderedHops> listHops = include.getOrderedHops();
+            List<OrderedHops> listHops = new ArrayList<>(include.nonnullOrderedHops().values());
             if (listHops != null) {
                 readIncludeNodes(listHops, constraints);
             }
@@ -265,7 +265,7 @@ public class PceConstraintsCalc {
     }
 
     private List<String> getAToZNodeList(PathDescription pathDescription) {
-        List<AToZ> aendToZList = pathDescription.getAToZDirection().getAToZ();
+        List<AToZ> aendToZList = new ArrayList<>(pathDescription.getAToZDirection().nonnullAToZ().values());
         return aendToZList.stream().filter(aToZ -> {
             if (aToZ.getResource() == null || aToZ.getResource().getResource() == null) {
                 LOG.warn("Diversity constraint: Resource of AToZ node {} is null! Skipping this node!", aToZ.getId());
@@ -286,7 +286,7 @@ public class PceConstraintsCalc {
     }
 
     private List<String> getSRLGList(PathDescription pathDescription) {
-        List<AToZ> aendToZList = pathDescription.getAToZDirection().getAToZ();
+        List<AToZ> aendToZList = new ArrayList<>(pathDescription.getAToZDirection().nonnullAToZ().values());
         return aendToZList.stream().filter(aToZ -> {
             if (aToZ.getResource() == null
                     || aToZ.getResource().getResource() == null) {
