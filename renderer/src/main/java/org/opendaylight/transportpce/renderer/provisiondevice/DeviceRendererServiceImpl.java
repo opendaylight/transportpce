@@ -10,10 +10,13 @@ package org.opendaylight.transportpce.renderer.provisiondevice;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.FluentFuture;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
@@ -97,13 +100,16 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
 
     @Override
     public ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction) {
-        List<Nodes> nodes = input.getNodes();
+        List<Nodes> nodes = new ArrayList<>();
+        if (input.getNodes() != null) {
+            nodes.addAll(input.getNodes());
+        }
         // Register node for suppressing alarms
         if (!alarmSuppressionNodeRegistration(input)) {
             LOG.warn("Alarm suppresion node registration failed!!!!");
         }
         ConcurrentLinkedQueue<String> results = new ConcurrentLinkedQueue<>();
-        Set<NodeInterface> nodeInterfaces = Sets.newConcurrentHashSet();
+        Map<NodeInterfaceKey,NodeInterface> nodeInterfaces = new ConcurrentHashMap<>();
         Set<String> nodesProvisioned = Sets.newConcurrentHashSet();
         CopyOnWriteArrayList<Nodes> otnNodesProvisioned = new CopyOnWriteArrayList<>();
         ServiceListTopology topology = new ServiceListTopology();
@@ -228,7 +234,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                 .setOtuInterfaceId(createdOtuInterfaces)
                 .setOduInterfaceId(createdOduInterfaces)
                 .setOchInterfaceId(createdOchInterfaces);
-            nodeInterfaces.add(nodeInterfaceBuilder.build());
+            NodeInterface nodeInterface = nodeInterfaceBuilder.build();
+            nodeInterfaces.put(nodeInterface.key(),nodeInterface);
         }));
         try {
             forkJoinTask.get();
@@ -251,7 +258,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             LOG.error("Alarm suppresion node removal failed!!!!");
         }
         ServicePathOutputBuilder setServBldr = new ServicePathOutputBuilder()
-            .setNodeInterface(new ArrayList<>(nodeInterfaces))
+            .setNodeInterface(nodeInterfaces)
             .setSuccess(success.get())
             .setResult(String.join("\n", results));
         return setServBldr.build();
@@ -390,8 +397,8 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     @Override
     public RendererRollbackOutput rendererRollback(RendererRollbackInput input) {
         boolean success = true;
-        List<FailedToRollback> failedToRollbackList = new ArrayList<>();
-        for (NodeInterface nodeInterfaces : input.getNodeInterface()) {
+        Map<FailedToRollbackKey,FailedToRollback> failedToRollbackList = new HashMap<>();
+        for (NodeInterface nodeInterfaces : input.nonnullNodeInterface().values()) {
             List<String> failedInterfaces = new ArrayList<>();
             String nodeId = nodeInterfaces.getNodeId();
             for (String connectionId : nodeInterfaces.getConnectionId()) {
@@ -434,8 +441,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                     failedInterfaces.add(interfaceId);
                 }
             }
-            failedToRollbackList.add(new FailedToRollbackBuilder().withKey(new FailedToRollbackKey(nodeId))
-                    .setNodeId(nodeId).setInterface(failedInterfaces).build());
+            FailedToRollback failedToRollack = new FailedToRollbackBuilder().withKey(new FailedToRollbackKey(nodeId))
+                    .setNodeId(nodeId).setInterface(failedInterfaces).build();
+            failedToRollbackList.put(failedToRollack.key(),failedToRollack);
         }
         return new RendererRollbackOutputBuilder().setSuccess(success).setFailedToRollback(failedToRollbackList)
                 .build();
@@ -445,22 +453,26 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
         NodelistBuilder nodeListBuilder = new NodelistBuilder()
             .withKey(new NodelistKey(input.getServiceName()))
             .setServiceName(input.getServiceName());
-        List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service
+        Map<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service
+            .nodelist.nodelist.NodesKey,
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service
             .nodelist.nodelist.Nodes> nodeList =
-                new ArrayList<>();
-        for (Nodes node : input.getNodes()) {
-            nodeList.add(
-                    new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
-                    .service.nodelist.nodelist.NodesBuilder()
-                            .setNodeId(node.getNodeId()).build());
+                new HashMap<>();
+        if (input.getNodes() != null) {
+            for (Nodes node : input.getNodes()) {
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
+                    .service.nodelist.nodelist.Nodes nodes =
+                        new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
+                            .service.nodelist.nodelist.NodesBuilder().setNodeId(node.getNodeId()).build();
+                nodeList.put(nodes.key(),nodes);
+            }
         }
         nodeListBuilder.setNodes(nodeList);
         InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
             .service.nodelist.Nodelist> nodeListIID =
-                        InstanceIdentifier.create(ServiceNodelist.class).child(
-                                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression
-                                    .rev171102.service.nodelist.Nodelist.class,
-                                new NodelistKey(input.getServiceName()));
+                 InstanceIdentifier.create(ServiceNodelist.class)
+                     .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
+                         .service.nodelist.Nodelist.class, new NodelistKey(input.getServiceName()));
         final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodeListIID, nodeListBuilder.build());
         FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
@@ -477,10 +489,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
     private boolean alarmSuppressionNodeRemoval(String serviceName) {
         InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
             .service.nodelist.Nodelist> nodeListIID =
-                        InstanceIdentifier.create(ServiceNodelist.class).child(
-                                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression
-                                    .rev171102.service.nodelist.Nodelist.class,
-                                new NodelistKey(serviceName));
+                InstanceIdentifier.create(ServiceNodelist.class)
+                    .child(org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
+                        .service.nodelist.Nodelist.class, new NodelistKey(serviceName));
         final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
         writeTransaction.delete(LogicalDatastoreType.CONFIGURATION, nodeListIID);
         FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
