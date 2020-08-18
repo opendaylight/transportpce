@@ -196,8 +196,7 @@ public class OpenRoadmTopologyTest {
             .setLinkId(linkId)
             .setSource(new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(srcTp).build())
             .setDestination(new DestinationBuilder().setDestNode(new NodeId(dstNode)).setDestTp(destTp).build())
-            .addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1.class, link1)
+            .addAugmentation(link1)
             .build();
         InstanceIdentifier<Link> linkIID = InstanceIdentifier.builder(Networks.class).child(Network.class,
             new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).augmentation(Network1.class)
@@ -259,7 +258,7 @@ public class OpenRoadmTopologyTest {
 
     private void checkDegreeNode(String nodeNb, Node node) {
         assertEquals("ROADMA01-DEG" + nodeNb, node.getNodeId().getValue());
-        List<SupportingNode> supportingNodes = node.getSupportingNode().stream()
+        List<SupportingNode> supportingNodes = node.nonnullSupportingNode().values().stream()
             .sorted((sn1, sn2) -> sn1.getNetworkRef().getValue().compareTo(sn2.getNetworkRef().getValue()))
             .collect(Collectors.toList());
         assertEquals(2, supportingNodes.size());
@@ -276,7 +275,7 @@ public class OpenRoadmTopologyTest {
             .getDegreeAttributes().getAvailableWavelengths().size());
         List<TerminationPoint> tps = node.augmentation(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
-            .getTerminationPoint().stream()
+            .nonnullTerminationPoint().values().stream()
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
         assertEquals(2, tps.size());
@@ -288,7 +287,7 @@ public class OpenRoadmTopologyTest {
 
     private void checkSrgNode(String nodeNb, Node node) {
         assertEquals("ROADMA01-SRG" + nodeNb, node.getNodeId().getValue());
-        List<SupportingNode> supportingNodes = node.getSupportingNode().stream()
+        List<SupportingNode> supportingNodes = node.nonnullSupportingNode().values().stream()
             .sorted((sn1, sn2) -> sn1.getNetworkRef().getValue().compareTo(sn2.getNetworkRef().getValue()))
             .collect(Collectors.toList());
         assertEquals(2, supportingNodes.size());
@@ -302,7 +301,7 @@ public class OpenRoadmTopologyTest {
             .getSrgAttributes().getAvailableWavelengths().size());
         List<TerminationPoint> tps = node.augmentation(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
-            .getTerminationPoint().stream()
+            .nonnullTerminationPoint().values().stream()
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
         assertEquals(5, tps.size());
@@ -314,7 +313,7 @@ public class OpenRoadmTopologyTest {
 
     private void checkTpdrNode(Node node) {
         assertEquals("XPDRA01-XPDR1", node.getNodeId().getValue());
-        List<SupportingNode> supportingNodes = node.getSupportingNode().stream()
+        List<SupportingNode> supportingNodes = node.nonnullSupportingNode().values().stream()
             .sorted((sn1, sn2) -> sn1.getNetworkRef().getValue().compareTo(sn2.getNetworkRef().getValue()))
             .collect(Collectors.toList());
         assertEquals(2, supportingNodes.size());
@@ -325,7 +324,7 @@ public class OpenRoadmTopologyTest {
         assertEquals(OpenroadmNodeType.XPONDER, node.augmentation(Node1.class).getNodeType());
         List<TerminationPoint> tps = node.augmentation(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
-            .getTerminationPoint().stream()
+            .nonnullTerminationPoint().values().stream()
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
         assertEquals(4, tps.size());
@@ -343,7 +342,7 @@ public class OpenRoadmTopologyTest {
 
     private void checkOtnXpdrNode(Node node) {
         assertEquals("XPDRA01-XPDR1", node.getNodeId().getValue());
-        List<SupportingNode> supportingNodes = node.getSupportingNode().stream()
+        List<SupportingNode> supportingNodes = node.nonnullSupportingNode().values().stream()
             .sorted((sn1, sn2) -> sn1.getNetworkRef().getValue().compareTo(sn2.getNetworkRef().getValue()))
             .collect(Collectors.toList());
         assertEquals(2, supportingNodes.size());
@@ -354,7 +353,7 @@ public class OpenRoadmTopologyTest {
         assertEquals(OpenroadmNodeType.XPONDER, node.augmentation(Node1.class).getNodeType());
         List<TerminationPoint> tps = node.augmentation(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
-            .getTerminationPoint().stream()
+            .nonnullTerminationPoint().values().stream()
             .sorted((tp1, tp2) -> tp1.getTpId().getValue().compareTo(tp2.getTpId().getValue()))
             .collect(Collectors.toList());
         assertEquals(2, tps.size());
