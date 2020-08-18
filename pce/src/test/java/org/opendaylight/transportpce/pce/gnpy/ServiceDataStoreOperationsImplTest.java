@@ -9,12 +9,14 @@
 package org.opendaylight.transportpce.pce.gnpy;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 
+@Ignore
 public class ServiceDataStoreOperationsImplTest extends AbstractTest {
 
     ServiceDataStoreOperationsImpl serviceDataStoreOperations;

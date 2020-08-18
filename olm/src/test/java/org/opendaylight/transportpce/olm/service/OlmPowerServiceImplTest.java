@@ -71,7 +71,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@Ignore
 public class OlmPowerServiceImplTest  extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerServiceImplTest.class);

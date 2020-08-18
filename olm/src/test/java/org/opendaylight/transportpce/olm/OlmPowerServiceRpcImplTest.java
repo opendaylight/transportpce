@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.MountPoint;
@@ -76,7 +77,7 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.opendaylight.yangtools.yang.common.Uint64;
 
-
+@Ignore
 public class OlmPowerServiceRpcImplTest extends AbstractTest {
 
     private MountPoint mountPoint;
