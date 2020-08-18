@@ -446,12 +446,14 @@ public final class ServiceDataUtils {
         AToZDirection atozDirection = new AToZDirectionBuilder()
             .setRate(azRate)
             .setAToZWavelengthNumber(azWaveLength)
-            .setAToZ(null)
+            .setAToZ((java.util.List<org.opendaylight.yang.gen.v1.http.org
+                .transportpce.b.c._interface.pathdescription.rev200629.path.description.atoz.direction.AToZ>)null)
             .build();
         ZToADirection ztoaDirection = new ZToADirectionBuilder()
             .setRate(zaRate)
             .setZToAWavelengthNumber(zaWaveLength)
-            .setZToA(null)
+            .setZToA((java.util.List<org.opendaylight.yang.gen.v1.http.org
+                .transportpce.b.c._interface.pathdescription.rev200629.path.description.ztoa.direction.ZToA>)null)
             .build();
         PathDescription pathDescription = new PathDescriptionBuilder()
             .setAToZDirection(atozDirection)
