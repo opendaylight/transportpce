@@ -7,8 +7,9 @@
  */
 package org.opendaylight.transportpce.renderer.provisiondevice.servicepath;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.Topology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.TopologyBuilder;
@@ -21,23 +22,17 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev181130.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.Hop.HopType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.AToZBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.AToZKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.ZToABuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.topology.rev190531.topology.ZToAKey;
 
 public class ServiceListTopology {
 
 
-    private List<AToZ> a2zTopologyList;
-    private List<ZToA> z2aTopologyList;
-    private TopologyBuilder serviceTopology;
-
-    public ServiceListTopology() {
-
-        this.a2zTopologyList = new ArrayList<>();
-        this.z2aTopologyList = new ArrayList<>();
-        this.serviceTopology = new TopologyBuilder();
-
-    }
+    private Map<AToZKey,AToZ> a2zTopologyList = new HashMap<>();
+    private Map<ZToAKey,ZToA> z2aTopologyList = new HashMap<>();
+    private TopologyBuilder serviceTopology = new TopologyBuilder();
 
     public void updateAtoZTopologyList(List<Ports> ports, String nodeId) {
 
@@ -90,7 +85,8 @@ public class ServiceListTopology {
             a2zBldr.setResource(rsrcBldr.build());
 
             //Add port resource to the list
-            this.a2zTopologyList.add(a2zBldr.build());
+            AToZ a2z = a2zBldr.build();
+            this.a2zTopologyList.put(a2z.key(),a2z);
 
         }
 
@@ -149,7 +145,8 @@ public class ServiceListTopology {
             z2aBldr.setResource(rsrcBldr.build());
 
             //Add port resource to the list
-            this.z2aTopologyList.add(z2aBldr.build());
+            ZToA z2a = z2aBldr.build();
+            this.z2aTopologyList.put(z2a.key(),z2a);
 
         }
 
