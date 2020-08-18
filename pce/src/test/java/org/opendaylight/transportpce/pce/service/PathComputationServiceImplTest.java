@@ -8,7 +8,7 @@
 package org.opendaylight.transportpce.pce.service;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,6 +27,7 @@ import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.PathBandwidth;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.PathPropertiesBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathMetric;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathMetricBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.no.path.info.NoPathBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.Response;
@@ -77,10 +78,11 @@ public class PathComputationServiceImplTest extends AbstractTest {
 
     @Test
     public void testPathComputationRequestPathCase() {
-        Response response = new ResponseBuilder().setResponseType(new PathCaseBuilder()
-                .setPathProperties(new PathPropertiesBuilder().setPathMetric(Arrays.asList(new PathMetricBuilder()
+        PathMetric pathMetric = new PathMetricBuilder()
                 .setAccumulativeValue(new BigDecimal(21))
-                        .setMetricType(PathBandwidth.class).build()))
+                .setMetricType(PathBandwidth.class).build();
+        Response response = new ResponseBuilder().setResponseType(new PathCaseBuilder()
+                .setPathProperties(new PathPropertiesBuilder().setPathMetric(Map.of(pathMetric.key(),pathMetric))
                 .build()).build()).build();
 
         pathComputationServiceImpl.generateGnpyResponse(response,"path");

@@ -15,15 +15,19 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
-import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
-import org.opendaylight.mdsal.binding.generator.util.BindingRuntimeContext;
+import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
+import org.opendaylight.binding.runtime.spi.BindingRuntimeHelpers;
+import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
+import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
 import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.Result;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
@@ -33,7 +37,7 @@ import org.opendaylight.yangtools.yang.data.api.schema.stream.NormalizedNodeStre
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonWriterFactory;
-import org.opendaylight.yangtools.yang.model.api.SchemaContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,15 +83,16 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 .transform(input -> BindingReflections.findQName(input.getType())), true);
 
         // Prepare the variables
-        final ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
-        Iterable<? extends YangModuleInfo> moduleInfos = Collections
-                .singleton(BindingReflections.getModuleInfo(object.getClass()));
-        moduleContext.addModuleInfos(moduleInfos);
-        SchemaContext schemaContext = moduleContext.tryToCreateSchemaContext().get();
-        BindingRuntimeContext bindingContext;
-        bindingContext = BindingRuntimeContext.create(moduleContext, schemaContext);
-        final BindingNormalizedNodeCodecRegistry codecRegistry =
-            new BindingNormalizedNodeCodecRegistry(bindingContext);
+        // Create the schema context
+        Collection<? extends YangModuleInfo> moduleInfos = Collections.singleton(BindingReflections
+                .getModuleInfo(Result.class));
+        @NonNull
+        EffectiveModelContext schemaContext = BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
+
+        // Create the binding binding normalized node codec registry
+        BindingRuntimeContext bindingContext =
+                BindingRuntimeHelpers.createRuntimeContext();
+        final BindingNormalizedNodeSerializer codecRegistry = new BindingCodecContext(bindingContext);
 
         /*
          * This function needs : - context - scPath.getParent() -
