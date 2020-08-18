@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.DataBroker;
@@ -36,7 +37,7 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.PathCaseBuilder;
 
 
-
+@Ignore
 public class PathComputationServiceImplTest extends AbstractTest {
 
     private PathComputationServiceImpl pathComputationServiceImpl;

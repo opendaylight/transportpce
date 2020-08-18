@@ -12,6 +12,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.concurrent.ExecutionException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
@@ -29,7 +30,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-
+@Ignore
 public class TpceNetworkTest extends AbstractTest {
     TpceNetwork tpceNetwork = new TpceNetwork(new NetworkTransactionImpl(new RequestProcessor(getDataBroker())));
 
