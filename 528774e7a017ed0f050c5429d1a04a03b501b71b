@@ -22,6 +22,30 @@
       "revId": "528774e7a017ed0f050c5429d1a04a03b501b71b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db1065ce_06137740",
+        "filename": "ordmodels/device/pom.xml",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-08-18T14:35:35Z",
+      "side": 1,
+      "message": "fix in next change 92173\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/92173/",
+      "parentUuid": "bc53454e_fb1702b5",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 40
+      },
+      "revId": "528774e7a017ed0f050c5429d1a04a03b501b71b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
