@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.pce.gnpy;
 
-//import com.google.common.base.Preconditions;
 import com.google.gson.stream.JsonReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -17,6 +16,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,10 +25,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import javax.annotation.Nonnull;
+import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
+import org.opendaylight.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
-import org.opendaylight.mdsal.binding.generator.impl.ModuleInfoBackedContext;
-import org.opendaylight.mdsal.binding.generator.util.BindingRuntimeContext;
+import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
 import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.Result;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type.NumUnnumHop;
@@ -43,6 +43,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.IncludeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.include_.OrderedHops;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.include_.OrderedHopsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.include_.OrderedHopsKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ordered.constraints.sp.HopType;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ordered.constraints.sp.HopTypeBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.ordered.constraints.sp.hop.type.hop.type.NodeBuilder;
@@ -53,6 +54,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
 import org.opendaylight.yangtools.yang.common.QName;
+import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
 import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
@@ -83,17 +85,14 @@ public class GnpyResult {
     public GnpyResult(String gnpyResponseString, GnpyTopoImpl gnpyTopo) throws GnpyException, Exception {
         this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
         // Create the schema context
-        final ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
-        Iterable<? extends YangModuleInfo> moduleInfos;
-
-        moduleInfos = Collections.singleton(BindingReflections.getModuleInfo(Result.class));
-        moduleContext.addModuleInfos(moduleInfos);
-        SchemaContext schemaContext = moduleContext.tryToCreateSchemaContext().get();
+        Collection<? extends YangModuleInfo> moduleInfos = Collections.singleton(BindingReflections
+                .getModuleInfo(Result.class));
+        BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
 
         // Create the binding binding normalized node codec registry
-        BindingRuntimeContext bindingRuntimeContext = BindingRuntimeContext.create(moduleContext, schemaContext);
-        final BindingNormalizedNodeCodecRegistry codecRegistry =
-            new BindingNormalizedNodeCodecRegistry(bindingRuntimeContext);
+        BindingRuntimeContext bindingContext =
+                BindingRuntimeHelpers.createRuntimeContext();
+        final BindingNormalizedNodeSerializer codecRegistry = new BindingCodecContext(bindingContext);
 
         // Create the data object
         QName pathQname = QName.create("gnpy:path", "2020-02-02", "result");
@@ -118,9 +117,8 @@ public class GnpyResult {
         } else {
             throw new GnpyException("In GnpyResult: the codec registry from the normalized node is null");
         }
-        List<Response> responses = null;
-        responses = ((Result) dataObject).getResponse();
-        if (responses == null) {
+        List<Response> responses = new ArrayList<>(((Result) dataObject).nonnullResponse().values());
+        if (responses.isEmpty()) {
             throw new GnpyException("In GnpyResult: the response from GNpy is null!");
         }
         LOG.info("The response id is {}; ", responses.get(0).getResponseId());
@@ -151,7 +149,8 @@ public class GnpyResult {
                 if (((noPathType.equals("NO_FEASIBLE_BAUDRATE_WITH_SPACING"))
                     && (noPathType.equals("NO_FEASIBLE_MODE"))) && ((noPathType.equals("MODE_NOT_FEASIBLE"))
                         && (noPathType.equals("NO_SPECTRUM")))) {
-                    List<PathMetric> pathMetricList = noPathCase.getNoPath().getPathProperties().getPathMetric();
+                    Collection<PathMetric> pathMetricList = noPathCase.getNoPath()
+                            .getPathProperties().nonnullPathMetric().values();
                     LOG.info("GNPy : path is not feasible : {}", noPathType);
                     for (PathMetric pathMetric : pathMetricList) {
                         String metricType = pathMetric.getMetricType().getSimpleName();
@@ -162,7 +161,8 @@ public class GnpyResult {
             } else if (response.getResponseType() instanceof PathCase) {
                 LOG.info("GNPy : path is feasible");
                 PathCase pathCase = (PathCase) response.getResponseType();
-                List<PathMetric> pathMetricList = pathCase.getPathProperties().getPathMetric();
+                Collection<PathMetric> pathMetricList = pathCase
+                        .getPathProperties().nonnullPathMetric().values();
                 // Path metrics
                 for (PathMetric pathMetric : pathMetricList) {
                     String metricType = pathMetric.getMetricType().getSimpleName();
@@ -181,7 +181,7 @@ public class GnpyResult {
         HardConstraints hardConstraints = null;
         // Includes the list of nodes in the GNPy computed path as constraints
         // for the PCE
-        List<OrderedHops> orderedHopsList = new ArrayList<>();
+        Map<OrderedHopsKey,OrderedHops> orderedHopsList = new HashMap<>();
         int counter = 0;
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
@@ -197,9 +197,10 @@ public class GnpyResult {
                             .ordered.constraints.sp.hop.type.hop.type.Node node = new NodeBuilder().setNodeId(nodeId)
                             .build();
                         HopType hopType = new HopTypeBuilder().setHopType(node).build();
-                        OrderedHops orderedHops = new OrderedHopsBuilder().setHopNumber(counter).setHopType(hopType)
+                        OrderedHops orderedHops = new OrderedHopsBuilder()
+                                .setHopNumber(Uint16.valueOf(counter)).setHopType(hopType)
                             .build();
-                        orderedHopsList.add(orderedHops);
+                        orderedHopsList.put(orderedHops.key(),orderedHops);
                         counter++;
                     }
                 } catch (IllegalArgumentException e) {
@@ -246,14 +247,9 @@ public class GnpyResult {
     }
 
     private SchemaContext getSchemaContext(Class<? extends DataObject> objectClass) throws GnpyException, Exception {
-
-        final ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
-        Iterable<? extends YangModuleInfo> moduleInfos;
-        SchemaContext schemaContext = null;
-        moduleInfos = Collections.singleton(BindingReflections.getModuleInfo(objectClass));
-        moduleContext.addModuleInfos(moduleInfos);
-        schemaContext = moduleContext.tryToCreateSchemaContext().get();
-        return schemaContext;
+        Collection<? extends YangModuleInfo> moduleInfos = Collections.singleton(BindingReflections
+                .getModuleInfo(objectClass));
+        return BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
     }
 
     /**
