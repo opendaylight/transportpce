@@ -18,7 +18,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import javax.annotation.Nonnull;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingNormalizedNodeCodecRegistry;
+import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.converter.api.DataObjectConverter;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -33,7 +33,7 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONNormalizedNodeStreamW
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
-import org.opendaylight.yangtools.yang.model.api.SchemaContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,8 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JSONDataObjectConverter.class);
 
-    private JSONDataObjectConverter(SchemaContext schemaContext, BindingNormalizedNodeCodecRegistry codecRegistry) {
+    private JSONDataObjectConverter(EffectiveModelContext schemaContext,
+            BindingNormalizedNodeSerializer codecRegistry) {
         super(schemaContext, codecRegistry);
     }
 
@@ -64,8 +65,8 @@ public final class JSONDataObjectConverter extends AbstractDataObjectConverter {
      * @param codecRegistry codec registry used for converting
      * @return converter
      */
-    public static DataObjectConverter createWithSchemaContext(@Nonnull SchemaContext schemaContext,
-            @Nonnull BindingNormalizedNodeCodecRegistry codecRegistry) {
+    public static DataObjectConverter createWithSchemaContext(@Nonnull EffectiveModelContext schemaContext,
+            @Nonnull BindingNormalizedNodeSerializer codecRegistry) {
         return new JSONDataObjectConverter(schemaContext, codecRegistry);
     }
 
