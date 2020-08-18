@@ -23,7 +23,7 @@ import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNodes;
-import org.opendaylight.yangtools.yang.model.api.SchemaContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractDataObjectConverter.class);
 
-    private final SchemaContext schemaContext;
+    private final EffectiveModelContext schemaContext;
     private final BindingNormalizedNodeSerializer codecRegistry;
 
     /**
@@ -46,12 +46,13 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
      * @param codecRegistry codec registry used for converting
      *
      */
-    protected AbstractDataObjectConverter(SchemaContext schemaContext, BindingNormalizedNodeSerializer codecRegistry) {
+    protected AbstractDataObjectConverter(EffectiveModelContext schemaContext,
+            BindingNormalizedNodeSerializer codecRegistry) {
         this.schemaContext = schemaContext;
         this.codecRegistry = codecRegistry;
     }
 
-    public SchemaContext getSchemaContext() {
+    public EffectiveModelContext getSchemaContext() {
         return schemaContext;
     }
 
