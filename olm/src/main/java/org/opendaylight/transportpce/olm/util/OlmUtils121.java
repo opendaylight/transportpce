@@ -132,7 +132,7 @@ final class OlmUtils121 {
             location, org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.Direction direction) {
         List<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.Measurements>
             measurements = new ArrayList<>();
-        for (CurrentPm pm : currentPmList.getCurrentPm()) {
+        for (CurrentPm pm : currentPmList.nonnullCurrentPm().values()) {
             ResourceTypeEnum currentResourceType = pm.getResource().getResourceType().getType();
             if (currentResourceType.equals(resourceTypeEnum)) {
                 Resource currentResource = pm.getResource().getResource().getResource();

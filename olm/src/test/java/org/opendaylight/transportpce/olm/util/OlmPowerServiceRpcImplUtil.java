@@ -30,6 +30,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.renderer.input.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.renderer.input.NodesBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public final class OlmPowerServiceRpcImplUtil {
 
@@ -51,7 +52,7 @@ public final class OlmPowerServiceRpcImplUtil {
         nodes.add(node2);
         ServicePowerSetupInput input = new ServicePowerSetupInputBuilder().setNodes(nodes)
             .setServiceName("service 1")
-            .setWaveNumber(Long.valueOf("1234")).build();
+            .setWaveNumber(Uint32.valueOf("1234")).build();
         return input;
     }
 
@@ -63,7 +64,7 @@ public final class OlmPowerServiceRpcImplUtil {
         nodes.add(node2);
         ServicePowerSetupInput input = new ServicePowerSetupInputBuilder().setNodes(nodes)
             .setServiceName("service 1")
-            .setWaveNumber(Long.valueOf("1234")).build();
+            .setWaveNumber(Uint32.valueOf("1234")).build();
         return input;
     }
 
@@ -75,7 +76,7 @@ public final class OlmPowerServiceRpcImplUtil {
         nodes.add(node2);
         ServicePowerSetupInput input = new ServicePowerSetupInputBuilder().setNodes(nodes)
             .setServiceName("service 1")
-            .setWaveNumber(Long.valueOf("1234")).build();
+            .setWaveNumber(Uint32.valueOf("1234")).build();
         return input;
     }
 
@@ -87,7 +88,7 @@ public final class OlmPowerServiceRpcImplUtil {
         nodes.add(node2);
         ServicePowerSetupInput input = new ServicePowerSetupInputBuilder().setNodes(nodes)
             .setServiceName("service 1")
-            .setWaveNumber(Long.valueOf("1234")).build();
+            .setWaveNumber(Uint32.valueOf("1234")).build();
         return input;
     }
 
@@ -100,7 +101,7 @@ public final class OlmPowerServiceRpcImplUtil {
         ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
                 .setNodes(nodes)
                 .setServiceName("service 1")
-                .setWaveNumber(Long.valueOf("1234")).build();
+                .setWaveNumber(Uint32.valueOf("1234")).build();
 
         return input;
     }
@@ -114,7 +115,7 @@ public final class OlmPowerServiceRpcImplUtil {
         ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
                 .setNodes(nodes)
                 .setServiceName("service 1")
-                .setWaveNumber(Long.valueOf("1234")).build();
+                .setWaveNumber(Uint32.valueOf("1234")).build();
 
         return input;
     }
@@ -128,7 +129,7 @@ public final class OlmPowerServiceRpcImplUtil {
         ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
                 .setNodes(nodes)
                 .setServiceName("service 1")
-                .setWaveNumber(Long.valueOf("1234")).build();
+                .setWaveNumber(Uint32.valueOf("1234")).build();
 
         return input;
     }
@@ -142,7 +143,7 @@ public final class OlmPowerServiceRpcImplUtil {
         ServicePowerTurndownInput input = new ServicePowerTurndownInputBuilder()
                 .setNodes(nodes)
                 .setServiceName("service 1")
-                .setWaveNumber(Long.valueOf("1234")).build();
+                .setWaveNumber(Uint32.valueOf("1234")).build();
 
         return input;
     }
@@ -151,7 +152,7 @@ public final class OlmPowerServiceRpcImplUtil {
         CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
                 .setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
                 .setSrcType(CalculateSpanlossBaseInput.SrcType.Link)
-                .addAugmentation(null, null).build();
+                .build();
         return input;
     }
 
@@ -159,7 +160,7 @@ public final class OlmPowerServiceRpcImplUtil {
         CalculateSpanlossBaseInput input = new CalculateSpanlossBaseInputBuilder()
                 .setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
                 .setSrcType(CalculateSpanlossBaseInput.SrcType.All)
-                .addAugmentation(null, null).build();
+                .build();
         return input;
     }
 
@@ -173,7 +174,7 @@ public final class OlmPowerServiceRpcImplUtil {
 
     public static CalculateSpanlossCurrentInput getCalculateSpanlossCurrentInput() {
         CalculateSpanlossCurrentInput input = new CalculateSpanlossCurrentInputBuilder()
-            .addAugmentation(null, null).build();
+            .build();
         return input;
     }
 

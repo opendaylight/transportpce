@@ -10,10 +10,11 @@ package org.opendaylight.transportpce.olm.util;
 import com.google.common.base.Strings;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
@@ -51,6 +52,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.PmNamesEnum;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.get.pm.input.ResourceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.Uint16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,15 +97,16 @@ final class OlmUtils22 {
         if (currentPmListOpt.isPresent()) {
             CurrentPmList  currentPmList = currentPmListOpt.get();
 
-            @Nullable
-            List<CurrentPmEntry> currentPmEntryList = currentPmList.getCurrentPmEntry();
+            @NonNull
+            Map<CurrentPmEntryKey, CurrentPmEntry> currentPmEntryList = currentPmList.nonnullCurrentPmEntry();
             LOG.info("Current PM list exists for node {} and contains {} entries.", input.getNodeId(),
                 currentPmEntryList.size());
-            for (CurrentPmEntry cpe : currentPmEntryList) {
+            for (Map.Entry<CurrentPmEntryKey, CurrentPmEntry> entry : currentPmEntryList.entrySet()) {
+                CurrentPmEntry cpe = entry.getValue();
                 CurrentPmEntryKey cpek = new CurrentPmEntryKey(cpe.getPmResourceInstance(), cpe.getPmResourceType(),
                     cpe.getPmResourceTypeExtension());
                 if (resourceKey.equals(cpek)) {
-                    List<CurrentPm> currentPMList = cpe.getCurrentPm();
+                    List<CurrentPm> currentPMList = new ArrayList<>(cpe.nonnullCurrentPm().values());
                     Stream<CurrentPm> currentPMStream = currentPMList.stream();
                     if (input.getPmNameType() != null) {
                         currentPMStream = currentPMStream.filter(pm -> pm.getType().getIntValue()
@@ -162,7 +165,7 @@ final class OlmUtils22 {
         org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity wantedGranularity) {
         List<Measurements> olmMeasurements = new ArrayList<>();
         for (CurrentPm pm : currentPmList) {
-            for (Measurement measurements: pm.getMeasurement()) {
+            for (Measurement measurements: pm.nonnullMeasurement().values()) {
                 if (measurements.getGranularity().getIntValue() == org.opendaylight.yang.gen.v1.http.org.openroadm.pm
                     .types.rev171215.PmGranularity.forValue(wantedGranularity.getIntValue()).getIntValue()) {
                     MeasurementsBuilder pmMeasureBuilder = new MeasurementsBuilder();
@@ -182,11 +185,11 @@ final class OlmUtils22 {
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class);
             case Degree:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                    .child(Degree.class, new DegreeKey(Integer.parseInt(wantedResourceIdentifier.getResourceName())));
+                    .child(Degree.class, new DegreeKey(Uint16.valueOf(wantedResourceIdentifier.getResourceName())));
             case SharedRiskGroup:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
                     .child(SharedRiskGroup.class,
-                        new SharedRiskGroupKey(Integer.parseInt(wantedResourceIdentifier.getResourceName())));
+                        new SharedRiskGroupKey(Uint16.valueOf(wantedResourceIdentifier.getResourceName())));
             case Connection:
                 return InstanceIdentifier.create(OrgOpenroadmDevice.class)
                     .child(RoadmConnections.class, new RoadmConnectionsKey(wantedResourceIdentifier.getResourceName()));
