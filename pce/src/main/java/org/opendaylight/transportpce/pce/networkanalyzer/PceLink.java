@@ -13,8 +13,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation.FiberType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.Span;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.OtnLinkType;
@@ -131,9 +135,12 @@ public class PceLink implements Serializable {
 
         try {
             double tmp = 0;
-            for (int i = 0; i < this.omsAttributesSpan.getLinkConcatenation().size(); i++) {
+            @NonNull
+            Map<LinkConcatenationKey, LinkConcatenation> linkConcatenationMap =
+                this.omsAttributesSpan.nonnullLinkConcatenation();
+            for (Map.Entry<LinkConcatenationKey, LinkConcatenation> entry : linkConcatenationMap.entrySet()) {
                 //Length is expressed in meter and latency is expressed in ms according to OpenROADM MSA
-                tmp += this.omsAttributesSpan.getLinkConcatenation().get(i).getSRLGLength().toJava() / CELERITY;
+                tmp += entry.getValue().getSRLGLength().toJava() / CELERITY;
                 LOG.info("In PceLink: The latency of link {} == {}",link.getLinkId(),tmp);
             }
             tmplatency = (long) Math.ceil(tmp);
@@ -148,7 +155,8 @@ public class PceLink implements Serializable {
     public double calcSpanOSNR() {
         try {
             double pout; //power on the output of the previous ROADM (dBm)
-            pout = retrievePower(this.omsAttributesSpan.getLinkConcatenation().get(0).getFiberType());
+            pout = retrievePower(this.omsAttributesSpan.nonnullLinkConcatenation()
+                    .values().iterator().next().getFiberType());
             double spanLoss = this.omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue(); // span loss (dB)
             double pin = pout - spanLoss; //power on the input of the current ROADM (dBm)
             double spanOsnrDb;

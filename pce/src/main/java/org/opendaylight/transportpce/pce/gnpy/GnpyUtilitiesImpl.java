@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.gnpy;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
@@ -77,10 +78,10 @@ public class GnpyUtilitiesImpl {
 
     public GnpyResult gnpyResponseOneDirection(GnpyServiceImpl gnpySvc) throws GnpyException, Exception {
         requestId = Uint32.valueOf((requestId.toJava()) + 1);
-        List<PathRequest> pathRequestList = gnpySvc.getPathRequest();
+        List<PathRequest> pathRequestList = new ArrayList(gnpySvc.getPathRequest().values());
         List<Synchronization> synchronizationList = gnpySvc.getSynchronization();
         // Send the computed path to GNPY tool
-        List<Elements> elementsList = gnpyTopo.getElements();
+        List<Elements> elementsList = new ArrayList(gnpyTopo.getElements().values());
         List<Connections> connectionsList = gnpyTopo.getConnections();
         String gnpyResponse = getGnpyResponse(elementsList, connectionsList, pathRequestList,
             synchronizationList);
@@ -98,7 +99,6 @@ public class GnpyUtilitiesImpl {
 
         AToZDirection atoztmp = new AToZDirectionBuilder()
             .setRate(input.getServiceAEnd().getServiceRate())
-            .setAToZ(null)
             .build();
         GnpyServiceImpl gnpySvc = new GnpyServiceImpl(input, atoztmp, requestId, gnpyTopo, pceHardConstraints);
         GnpyResult result = gnpyResponseOneDirection(gnpySvc);
@@ -115,7 +115,8 @@ public class GnpyUtilitiesImpl {
     }
 
     public String getGnpyResponse(List<Elements> elementsList, List<Connections> connectionsList,
-        List<PathRequest> pathRequestList, List<Synchronization> synchronizationList) throws GnpyException, Exception {
+        List<PathRequest> pathRequestList, List<Synchronization> synchronizationList)
+                throws GnpyException, Exception {
         GnpyApi gnpyApi = new GnpyApiBuilder()
             .setTopologyFile(
                 new TopologyFileBuilder().setElements(elementsList).setConnections(connectionsList).build())
