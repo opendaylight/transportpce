@@ -10,7 +10,9 @@ package org.opendaylight.transportpce.renderer.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.RendererRollbackInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.RendererRollbackInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInput;
@@ -46,6 +48,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.renderer.input.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.renderer.input.NodesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.renderer.input.NodesKey;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 
 public final class ServiceDataUtils {
@@ -62,7 +65,7 @@ public final class ServiceDataUtils {
     public static ServicePathInput buildServicePathInputs(List<Nodes> nodes) {
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder();
         servicePathInputBuilder.setNodes(nodes);
-        servicePathInputBuilder.setServiceName("Service 1").setWaveNumber(20L);
+        servicePathInputBuilder.setServiceName("Service 1").setWaveNumber(Uint32.valueOf(20));
         return servicePathInputBuilder.build();
     }
 
@@ -71,13 +74,13 @@ public final class ServiceDataUtils {
         List<Nodes> nodes = new ArrayList<>();
         nodes.add(ServiceDataUtils.createNode("node1", "src", "dst"));
         servicePathInputBuilder.setNodes(nodes);
-        servicePathInputBuilder.setServiceName("Service 1").setWaveNumber(20L);
+        servicePathInputBuilder.setServiceName("Service 1").setWaveNumber(Uint32.valueOf(20));
         return servicePathInputBuilder.build();
     }
 
     public static RendererRollbackInput buildRendererRollbackInput() {
         RendererRollbackInputBuilder rendererRollbackInputBuilder = new RendererRollbackInputBuilder();
-        rendererRollbackInputBuilder.setNodeInterface(new ArrayList<>());
+        rendererRollbackInputBuilder.setNodeInterface(Map.of());
         return rendererRollbackInputBuilder.build();
     }
 
@@ -111,7 +114,7 @@ public final class ServiceDataUtils {
     }*/
 
     private static PathDescription createPathDescriptionInvalidResource() {
-        List<AToZ> atoZList = new ArrayList<AToZ>();
+        Map<AToZKey,AToZ> atoZMap = new HashMap<>();
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource
             .resource.resource.NodeBuilder nodesBuilder = new NodeBuilder();
         org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource
@@ -124,24 +127,24 @@ public final class ServiceDataUtils {
             .setResource(node1).build()).build();
         AToZ atoZ2 = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
             .setResource(node2).build()).build();
-        atoZList.add(atoZ);
-        atoZList.add(atoZ2);
+        atoZMap.put(atoZ.key(),atoZ);
+        atoZMap.put(atoZ2.key(),atoZ2);
         AToZDirection atozDirection = new AToZDirectionBuilder()
-            .setRate(20L)
-            .setAToZWavelengthNumber(20L)
-            .setAToZ(atoZList)
+            .setRate(Uint32.valueOf(20))
+            .setAToZWavelengthNumber(Uint32.valueOf(32))
+            .setAToZ(atoZMap)
             .build();
-        List<ZToA> ztoAList = new ArrayList<ZToA>();
+        Map<ZToAKey,ZToA> ztoAMap = new HashMap<>();
         ZToA ztoA = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
             .setResource(node1).build()).build();
         ZToA ztoA2 = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
             .setResource(node2).build()).build();
-        ztoAList.add(ztoA);
-        ztoAList.add(ztoA2);
+        ztoAMap.put(ztoA.key(),ztoA);
+        ztoAMap.put(ztoA2.key(),ztoA2);
         ZToADirection ztoaDirection = new ZToADirectionBuilder()
-            .setRate(20L)
-            .setZToAWavelengthNumber(20L)
-            .setZToA(ztoAList)
+            .setRate(Uint32.valueOf(20))
+            .setZToAWavelengthNumber(Uint32.valueOf(20))
+            .setZToA(ztoAMap)
             .build();
         PathDescriptionBuilder builder = new PathDescriptionBuilder()
             .setAToZDirection(atozDirection)
@@ -150,7 +153,7 @@ public final class ServiceDataUtils {
     }
 
     public static PathDescription createPathDescriptionTerminationPointResource(String tpId) {
-        List<AToZ> atoZList = new ArrayList<AToZ>();
+        Map<AToZKey,AToZ> atoZMap = new HashMap<>();
         TerminationPointBuilder terminationPointBuilder = new TerminationPointBuilder();
         List<String> nodeIds = Arrays.asList("XPONDER-1-2", "XPONDER-2-3");
         Integer atozId = 1;
@@ -164,17 +167,17 @@ public final class ServiceDataUtils {
                     .withKey(new AToZKey(atozId.toString())).setResource(new ResourceBuilder()
                         .setResource(terminationPoint).build()).build();
                 atozId++;
-                atoZList.add(atoZ);
+                atoZMap.put(atoZ.key(),atoZ);
             }
         }
         AToZDirection atozDirection = new AToZDirectionBuilder()
-            .setRate(20L)
-            .setAToZWavelengthNumber(20L)
-            .setAToZ(atoZList)
+            .setRate(Uint32.valueOf(20))
+            .setAToZWavelengthNumber(Uint32.valueOf(20))
+            .setAToZ(atoZMap)
             .build();
 
         Collections.reverse(nodeIds);
-        List<ZToA> ztoAList = new ArrayList<ZToA>();
+        Map<ZToAKey,ZToA> ztoAMap = new HashMap<>();
         Integer ztoaId = 1;
         for (String nodeId : nodeIds) {
             for (String otherNodeId : nodeIds) {
@@ -186,13 +189,13 @@ public final class ServiceDataUtils {
                     .withKey(new ZToAKey(ztoaId.toString())).setResource(new ResourceBuilder()
                         .setResource(terminationPoint).build()).build();
                 ztoaId++;
-                ztoAList.add(ztoA);
+                ztoAMap.put(ztoA.key(),ztoA);
             }
         }
         ZToADirection ztoaDirection = new ZToADirectionBuilder()
-            .setRate(20L)
-            .setZToAWavelengthNumber(20L)
-            .setZToA(ztoAList)
+            .setRate(Uint32.valueOf(20))
+            .setZToAWavelengthNumber(Uint32.valueOf(20))
+            .setZToA(ztoAMap)
             .build();
         PathDescriptionBuilder builder = new PathDescriptionBuilder()
             .setAToZDirection(atozDirection)
@@ -201,33 +204,31 @@ public final class ServiceDataUtils {
     }
 
     private static PathDescription createPathDescriptionLinkResource() {
-        List<AToZ> atoZList = new ArrayList<AToZ>();
-//        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource
-//            .resource.resource.NodeBuilder nodesBuilder = new NodeBuilder();
+        Map<AToZKey,AToZ> atoZMap = new HashMap<>();
         Link link1 = new LinkBuilder().setLinkId("link 1").build();
         Link link2 = new LinkBuilder().setLinkId("link 2").build();
         AToZ atoZ = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
             .setResource(link1).build()).build();
         AToZ atoZ2 = new AToZBuilder().setId("1").withKey(new AToZKey("1")).setResource(new ResourceBuilder()
             .setResource(link2).build()).build();
-        atoZList.add(atoZ);
-        atoZList.add(atoZ2);
+        atoZMap.put(atoZ.key(),atoZ);
+        atoZMap.put(atoZ2.key(),atoZ2);
         AToZDirection atozDirection = new AToZDirectionBuilder()
-            .setRate(20L)
-            .setAToZWavelengthNumber(20L)
-            .setAToZ(atoZList)
+            .setRate(Uint32.valueOf(20))
+            .setAToZWavelengthNumber(Uint32.valueOf(20))
+            .setAToZ(atoZMap)
             .build();
-        List<ZToA> ztoAList = new ArrayList<ZToA>();
+        Map<ZToAKey,ZToA> ztoAMap = new HashMap<>();
         ZToA ztoA = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
             .setResource(link1).build()).build();
         ZToA ztoA2 = new ZToABuilder().setId("1").withKey(new ZToAKey("1")).setResource(new ResourceBuilder()
             .setResource(link2).build()).build();
-        ztoAList.add(ztoA);
-        ztoAList.add(ztoA2);
+        ztoAMap.put(ztoA.key(),ztoA);
+        ztoAMap.put(ztoA2.key(),ztoA2);
         ZToADirection ztoaDirection = new ZToADirectionBuilder()
-            .setRate(20L)
-            .setZToAWavelengthNumber(20L)
-            .setZToA(ztoAList)
+            .setRate(Uint32.valueOf(20))
+            .setZToAWavelengthNumber(Uint32.valueOf(20))
+            .setZToA(ztoAMap)
             .build();
         PathDescriptionBuilder builder = new PathDescriptionBuilder()
             .setAToZDirection(atozDirection)
@@ -237,7 +238,8 @@ public final class ServiceDataUtils {
 
     public static ServiceAEndBuilder getServiceAEndBuild(String tpId) {
         return new ServiceAEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-1-2-"
+            .setClli("clli").setServiceFormat(ServiceFormat.OC)
+            .setServiceRate(Uint32.valueOf(1)).setNodeId("XPONDER-1-2-"
                     + tpId)
             .setTxDirection(
                 new TxDirectionBuilder()
@@ -251,13 +253,14 @@ public final class ServiceDataUtils {
                         .setPortRack("port rack").setPortShelf("port shelf").setPortSlot("port slot")
                         .setPortSubSlot("port subslot").setPortType("port type").build())
                     .build())
-            .setServiceRate(Long.valueOf(100))
+            .setServiceRate(Uint32.valueOf(100))
                 .setServiceFormat(ServiceFormat.Ethernet);
     }
 
     public static ServiceZEndBuilder getServiceZEndBuild(String tpId) {
         return new ServiceZEndBuilder()
-            .setClli("clli").setServiceFormat(ServiceFormat.OC).setServiceRate((long) 1).setNodeId("XPONDER-2-3-"
+            .setClli("clli").setServiceFormat(ServiceFormat.OC)
+            .setServiceRate(Uint32.valueOf(1)).setNodeId("XPONDER-2-3-"
                     + tpId)
             .setTxDirection(
                 new TxDirectionBuilder()
