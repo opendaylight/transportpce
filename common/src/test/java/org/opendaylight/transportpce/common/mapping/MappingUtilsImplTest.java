@@ -13,6 +13,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.concurrent.ExecutionException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
@@ -28,7 +29,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-
+@Ignore
 public class MappingUtilsImplTest {
 
     private DataBroker dataBroker = null;
