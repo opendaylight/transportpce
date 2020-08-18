@@ -17,43 +17,67 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import javax.sql.DataSource;
+import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.inventory.query.Queries;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CpSlots;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.CpSlotsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.Ports;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.pack.PortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacks;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.packs.CircuitPacksKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPorts;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.ConnectionPortsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.external.links.ExternalLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.external.links.ExternalLinkKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.Interface;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.links.InternalLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.internal.links.InternalLinkKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.ConnectionMap;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.ConnectionMapKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Degree;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.DegreeKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Info;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.Protocols;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnections;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.RoadmConnectionsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroup;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.org.openroadm.device.SharedRiskGroupKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.physical.links.PhysicalLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.physical.links.PhysicalLinkKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.shelf.Slots;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.shelf.SlotsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.shelves.Shelves;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.shelves.ShelvesKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev161014.Interface1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.ethernet.interfaces.rev161014.ethernet.container.EthernetBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfig;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.PortConfigKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.nbr.list.IfName;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev161014.lldp.container.lldp.nbr.list.IfNameKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.och.container.OchBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.transport.interfaces.rev161014.ots.container.OtsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.odu.attributes.Tcm;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.odu.attributes.TcmKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.odu.container.OduBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.ExpMsi;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.ExpMsiKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.RxMsi;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.RxMsiKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.TxMsi;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.odu.interfaces.rev161014.opu.opu.msi.TxMsiKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.otu.container.OtuBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.wavelength.map.rev161014.wavelength.map.g.Wavelengths;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.wavelength.map.rev161014.wavelength.map.g.WavelengthsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -179,25 +203,26 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
                 LogicalDatastoreType.OPERATIONAL, deviceIID, Timeouts.DEVICE_READ_TIMEOUT,
                 Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (deviceObject.isPresent()) {
+            Map<ShelvesKey, Shelves> shelvesMap = deviceObject.get().nonnullShelves();
+            LOG.info("Shelves size {}", shelvesMap.size());
+            try (Connection connection = requireNonNull(dataSource.getConnection())) {
+                for (Map.Entry<ShelvesKey, Shelves> shelveEntry : shelvesMap.entrySet()) {
+                    Shelves shelve = shelveEntry.getValue();
+                    String shelfName = shelve.getShelfName();
+                    LOG.info("Getting Shelve Details of {}", shelfName);
+                    if (shelve.getSlots() != null) {
+                        LOG.info("Slot Size {} ", shelve.getSlots().size());
+                        persistShelveSlots(nodeId, shelve, connection);
+                    } else {
+                        LOG.info("No Slots for shelf {}", shelfName);
+                    }
 
-        LOG.info("Shelves size {}", deviceObject.get().getShelves().size());
-        try (Connection connection = requireNonNull(dataSource.getConnection())) {
-            for (int i = 0; i < deviceObject.get().getShelves().size(); i++) {
-                Shelves shelve = deviceObject.get().getShelves().get(i);
-                String shelfName = shelve.getShelfName();
-
-                LOG.info("Getting Shelve Details of {}", shelfName);
-                if (shelve.getSlots() != null) {
-                    LOG.info("Slot Size {} ", shelve.getSlots().size());
-                    persistShelveSlots(nodeId, shelve, connection);
-                } else {
-                    LOG.info("No Slots for shelf {}", shelfName);
+                    persistShelves(nodeId, connection, shelve);
                 }
-
-                persistShelves(nodeId, connection, shelve);
+            } catch (SQLException e1) {
+                LOG.error("Something wrong when fetching ROADM shelves in DB", e1);
             }
-        } catch (SQLException e1) {
-            LOG.error("Something wrong when fetching ROADM shelves in DB", e1);
         }
     }
 
@@ -210,11 +235,12 @@ public class INode121 {
             LOG.warn("Device object {} was not found", nodeId);
             return;
         }
-        LOG.info("Circuit pack size {}", deviceObject.get().getCircuitPacks().size());
+        Map<CircuitPacksKey, CircuitPacks> circuitPacksMap = deviceObject.get().nonnullCircuitPacks();
+        LOG.info("Circuit pack size {}", circuitPacksMap.size());
 
         try (Connection connection = requireNonNull(dataSource.getConnection())) {
-            for (int i = 0; i < deviceObject.get().getCircuitPacks().size(); i++) {
-                CircuitPacks cp = deviceObject.get().getCircuitPacks().get(i);
+            for (Map.Entry<CircuitPacksKey, CircuitPacks> circuitPackEntry : circuitPacksMap.entrySet()) {
+                CircuitPacks cp = circuitPackEntry.getValue();
 
                 if (cp.getCpSlots() != null) {
                     persistCircuitPacksSlots(nodeId, cp, connection);
@@ -265,8 +291,9 @@ public class INode121 {
 
     private void persistShelveSlots(String nodeId, Shelves shelves, Connection connection) {
         String startTimetampStr = getCurrentTimestamp();
-        for (int i = 0; i < shelves.getSlots().size(); i++) {
-            Slots slot = shelves.getSlots().get(i);
+        Map<SlotsKey, Slots> slotsMap = shelves.nonnullSlots();
+        for (Map.Entry<SlotsKey, Slots> slotEntry : slotsMap.entrySet()) {
+            Slots slot = slotEntry.getValue();
             LOG.info("Getting Slot Details of {}", slot.getSlotName());
             Object[] parameters = new Object[]{nodeId,
                 shelves.getShelfName(),
@@ -293,8 +320,9 @@ public class INode121 {
 
     private void persistCircuitPacksSlots(String nodeId, CircuitPacks circuitPacks, Connection connection) {
         String startTimetampStr = getCurrentTimestamp();
-        for (int i = 0; i < circuitPacks.getCpSlots().size(); i++) {
-            CpSlots cpSlot = circuitPacks.getCpSlots().get(i);
+        Map<CpSlotsKey, CpSlots> cpSlotsMap = circuitPacks.nonnullCpSlots();
+        for (Map.Entry<CpSlotsKey, CpSlots> cpSlotEntry: cpSlotsMap.entrySet()) {
+            CpSlots cpSlot = cpSlotEntry.getValue();
 
             Object[] parameters = new Object[]{nodeId,
                 circuitPacks.getCircuitPackName(),
@@ -596,9 +624,10 @@ public class INode121 {
 
 
     private void persistCPPorts(String nodeId, Connection connection, CircuitPacks circuitPacks) {
-
-        for (int i = 0; i < circuitPacks.getPorts().size(); i++) {
-            Object[] cpPortsParameters = prepareCPPortsParameters(nodeId, circuitPacks, circuitPacks.getPorts().get(i));
+        @NonNull
+        Map<PortsKey, Ports> nonnullPorts = circuitPacks.nonnullPorts();
+        for (Map.Entry<PortsKey, Ports> entry : nonnullPorts.entrySet()) {
+            Object[] cpPortsParameters = prepareCPPortsParameters(nodeId, circuitPacks, entry.getValue());
             String query = Queries.getQuery().deviceCPPortInsert().get();
             LOG.info("Running {} query ", query);
             try (PreparedStatement preparedStmt = connection.prepareStatement(query)) {
@@ -1001,35 +1030,23 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (deviceObject.isPresent()) {
+            Map<InterfaceKey, Interface> interfaceMap = deviceObject.get().nonnullInterface();
+            for (Map.Entry<InterfaceKey, Interface> interfaceEntrySet : interfaceMap.entrySet()) {
+                Interface deviceInterface = interfaceEntrySet.getValue();
+                Object[] parameters = prepareDevInterfaceParameters(nodeId, deviceInterface, connection);
 
-        /*InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-           .child(Interface.class);
-        Optional<Interface> interfaceOpt =
-                deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, interfaceIID,
-                        Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT); */
-
-        for (int i = 0; i < deviceObject.get().getInterface().size(); i++) {
-            Interface deviceInterface;
-
-            deviceInterface = deviceObject.get().getInterface().get(i);
-        /*if (interfaceOpt.isPresent()) {
-            deviceInterface = interfaceOpt.get();
-        } else {
-            LOG.warn("Could not get interface info");
-            return false;
-        }*/
-            Object[] parameters = prepareDevInterfaceParameters(nodeId, deviceInterface, connection);
-
-            String query = Queries.getQuery().deviceInterfacesInsert().get();
-            LOG.info("Running {} query ", query);
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                for (int j = 0; j < parameters.length; j++) {
-                    stmt.setObject(j + 1, parameters[j]);
+                String query = Queries.getQuery().deviceInterfacesInsert().get();
+                LOG.info("Running {} query ", query);
+                try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                    for (int j = 0; j < parameters.length; j++) {
+                        stmt.setObject(j + 1, parameters[j]);
+                    }
+                    stmt.execute();
+                    stmt.clearParameters();
+                } catch (SQLException e) {
+                    LOG.error("Something wrong when storing devices interfaces in DB", e);
                 }
-                stmt.execute();
-                stmt.clearParameters();
-            } catch (SQLException e) {
-                LOG.error("Something wrong when storing devices interfaces in DB", e);
             }
         }
     }
@@ -1087,12 +1104,15 @@ public class INode121 {
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class) == null) {
             LOG.error("LLDP subtree is missing");
+            return;
 
         }
         String startTimestamp = getCurrentTimestamp();
-        for (int i = 0; i < protocolObject.get().augmentation(Protocols1.class).getLldp().getPortConfig().size(); i++) {
-            PortConfig portConfig =
-                protocolObject.get().augmentation(Protocols1.class).getLldp().getPortConfig().get(i);
+        @NonNull
+        Map<PortConfigKey, PortConfig> portConfigMap = protocolObject.get()
+            .augmentation(Protocols1.class).getLldp().nonnullPortConfig();
+        for (Map.Entry<PortConfigKey, PortConfig> entry : portConfigMap.entrySet()) {
+            PortConfig portConfig = entry.getValue();
             String ifName = portConfig.getIfName();
             String adminStatusEnu = portConfig.getAdminStatus().getName();
 
@@ -1126,6 +1146,11 @@ public class INode121 {
         Optional<Protocols> protocolObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, protocolsIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (!protocolObject.isPresent()) {
+            LOG.error("Protocols is missing");
+            return;
+
+        }
         if (protocolObject.get().augmentation(Protocols1.class).getLldp().getNbrList() == null) {
             protocolObject =
                     deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, protocolsIID,
@@ -1137,11 +1162,11 @@ public class INode121 {
 
         } else {
             String startTimestamp = getCurrentTimestamp();
-            for (int i = 0; i < protocolObject.get()
-                .augmentation(Protocols1.class).getLldp().getNbrList().getIfName().size(); i++) {
+            Map<IfNameKey, IfName> ifNameMap =
+                    protocolObject.get().augmentation(Protocols1.class).getLldp().getNbrList().nonnullIfName();
+            for (Map.Entry<IfNameKey, IfName> ifNameEntry : ifNameMap.entrySet()) {
 
-                IfName ifNameObj = protocolObject.get().augmentation(Protocols1.class).getLldp().getNbrList()
-                    .getIfName().get(i);
+                IfName ifNameObj = ifNameEntry.getValue();
                 String ifName = ifNameObj.getIfName();
                 String remotesysname = ifNameObj.getRemoteSysName();
                 String remotemgmtaddresssubtype = ifNameObj.getRemoteMgmtAddressSubType().getName();
@@ -1186,47 +1211,40 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (deviceObject.get().getInternalLink() == null) {
-            deviceObject =
-                    deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, deviceIID,
-                            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        }
-        if (deviceObject.get().getInternalLink() == null) {
-            LOG.info("External links not found for {}", nodeId);
-        } else {
+        if (deviceObject.isPresent()) {
+            if (deviceObject.get().getInternalLink() == null) {
+                deviceObject = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+                        deviceIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            }
+            if (deviceObject.get().getInternalLink() == null) {
+                LOG.info("External links not found for {}", nodeId);
+            } else {
+                @NonNull
+                Map<InternalLinkKey, InternalLink> internalLinkMap = deviceObject.get().nonnullInternalLink();
+                String startTimestamp = getCurrentTimestamp();
+                for (Map.Entry<InternalLinkKey, InternalLink> internalLinkEntry: internalLinkMap.entrySet()) {
+                    InternalLink internalLink = internalLinkEntry.getValue();
+                    String internalLinkName = internalLink.getInternalLinkName();
+                    String sourceCircuitPackName = internalLink.getSource().getCircuitPackName();
+                    String sourcePortName = internalLink.getSource().getPortName().toString();
+                    String destinationCircuitPackName = internalLink.getDestination().getCircuitPackName();
+                    String destinationPortName = internalLink.getDestination().getPortName().toString();
 
-
-            String startTimestamp = getCurrentTimestamp();
-            for (int i = 0; i < deviceObject.get().getInternalLink().size(); i++) {
-                InternalLink internalLink = deviceObject.get().getInternalLink().get(i);
-                String internalLinkName = internalLink.getInternalLinkName();
-                String sourceCircuitPackName = internalLink.getSource().getCircuitPackName();
-                String sourcePortName = internalLink.getSource().getPortName().toString();
-                String destinationCircuitPackName = internalLink.getDestination().getCircuitPackName();
-                String destinationPortName = internalLink.getDestination().getPortName().toString();
-
-                Object[] parameters = {nodeId,
-                    internalLinkName,
-                    sourceCircuitPackName,
-                    sourcePortName,
-                    destinationCircuitPackName,
-                    destinationPortName,
-                    startTimestamp,
-                    startTimestamp
-                };
-
-                String query = Queries.getQuery().deviceInternalLinkInsert().get();
-                LOG.info("Running {} query ", query);
-                try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                    for (int j = 0; j < parameters.length; j++) {
-                        stmt.setObject(j + 1, parameters[j]);
+                    Object[] parameters = { nodeId, internalLinkName, sourceCircuitPackName, sourcePortName,
+                        destinationCircuitPackName, destinationPortName, startTimestamp, startTimestamp };
+                    String query = Queries.getQuery().deviceInternalLinkInsert().get();
+                    LOG.info("Running {} query ", query);
+                    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                        for (int j = 0; j < parameters.length; j++) {
+                            stmt.setObject(j + 1, parameters[j]);
+                        }
+                        stmt.execute();
+                        stmt.clearParameters();
+                    } catch (SQLException e) {
+                        LOG.error("Something wrong when storing devices internal links", e);
                     }
-                    stmt.execute();
-                    stmt.clearParameters();
-                } catch (SQLException e) {
-                    LOG.error("Something wrong when storing devices internal links", e);
-                }
 
+                }
             }
         }
     }
@@ -1238,50 +1256,44 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (deviceObject.isPresent()) {
+            if (deviceObject.get().getExternalLink() == null) {
+                deviceObject = deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION,
+                        deviceIID, Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            }
+            if (deviceObject.get().getExternalLink() == null) {
+                LOG.info("External links not found for {}", nodeId);
+            } else {
+                String startTimestamp = getCurrentTimestamp();
+                @NonNull
+                Map<ExternalLinkKey, ExternalLink> externalLinkMap = deviceObject.get().nonnullExternalLink();
+                for (Map.Entry<ExternalLinkKey, ExternalLink> externalLinkEntry: externalLinkMap.entrySet()) {
+                    ExternalLink externalLink = externalLinkEntry.getValue();
+                    String externalLinkName = externalLink.getExternalLinkName();
+                    String sourceNodeId = externalLink.getSource().getNodeId();
+                    String sourceCircuitPackName = externalLink.getSource().getCircuitPackName();
+                    String sourcePortName = externalLink.getSource().getPortName();
+                    String destinationNodeId = externalLink.getDestination().getNodeId();
+                    String destinationCircuitPackName = externalLink.getDestination().getCircuitPackName();
+                    String destinationPortName = externalLink.getDestination().getPortName();
 
-        if (deviceObject.get().getExternalLink() == null) {
-            deviceObject =
-                    deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, deviceIID,
-                            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        }
-        if (deviceObject.get().getExternalLink() == null) {
-            LOG.info("External links not found for {}", nodeId);
-        } else {
-            String startTimestamp = getCurrentTimestamp();
-            for (int i = 0; i < deviceObject.get().getExternalLink().size(); i++) {
-                ExternalLink externalLink = deviceObject.get().getExternalLink().get(i);
-                String externalLinkName = externalLink.getExternalLinkName();
-                String sourceNodeId = externalLink.getSource().getNodeId();
-                String sourceCircuitPackName = externalLink.getSource().getCircuitPackName();
-                String sourcePortName = externalLink.getSource().getPortName();
-                String destinationNodeId = externalLink.getDestination().getNodeId();
-                String destinationCircuitPackName = externalLink.getDestination().getCircuitPackName();
-                String destinationPortName = externalLink.getDestination().getPortName();
+                    Object[] parameters = { nodeId, externalLinkName, sourceNodeId, sourceCircuitPackName,
+                        sourcePortName, destinationNodeId, destinationCircuitPackName, destinationPortName,
+                        startTimestamp, startTimestamp };
 
-                Object[] parameters = {nodeId,
-                    externalLinkName,
-                    sourceNodeId,
-                    sourceCircuitPackName,
-                    sourcePortName,
-                    destinationNodeId,
-                    destinationCircuitPackName,
-                    destinationPortName,
-                    startTimestamp,
-                    startTimestamp
-                };
-
-                String query = Queries.getQuery().deviceExternalLinkInsert().get();
-                LOG.info("Running {} query ", query);
-                try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                    for (int j = 0; j < parameters.length; j++) {
-                        stmt.setObject(j + 1, parameters[j]);
+                    String query = Queries.getQuery().deviceExternalLinkInsert().get();
+                    LOG.info("Running {} query ", query);
+                    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                        for (int j = 0; j < parameters.length; j++) {
+                            stmt.setObject(j + 1, parameters[j]);
+                        }
+                        stmt.execute();
+                        stmt.clearParameters();
+                    } catch (SQLException e) {
+                        LOG.error("Something wrong when storing devices external links", e);
                     }
-                    stmt.execute();
-                    stmt.clearParameters();
-                } catch (SQLException e) {
-                    LOG.error("Something wrong when storing devices external links", e);
-                }
 
+                }
             }
         }
     }
@@ -1292,18 +1304,28 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (!deviceObject.isPresent()) {
+            LOG.error("No device with node Id {}", nodeId);
+            return;
+        }
         if (deviceObject.get().getPhysicalLink() == null) {
             deviceObject =
                     deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, deviceIID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        }
+        if (!deviceObject.isPresent()) {
+            LOG.error("No device with node Id {}", nodeId);
+            return;
         }
         if (deviceObject.get().getPhysicalLink() == null) {
             LOG.info("Physical links not found for {}", nodeId);
         } else {
 
             String startTimestamp = getCurrentTimestamp();
-            for (int i = 0; i < deviceObject.get().getPhysicalLink().size(); i++) {
-                PhysicalLink physicalLink = deviceObject.get().getPhysicalLink().get(i);
+            @NonNull
+            Map<PhysicalLinkKey, PhysicalLink> physicalLinkMap = deviceObject.get().nonnullPhysicalLink();
+            for (Map.Entry<PhysicalLinkKey, PhysicalLink> physicalLinkEntry : physicalLinkMap.entrySet()) {
+                PhysicalLink physicalLink = physicalLinkEntry.getValue();
                 String physicalLinkName = physicalLink.getPhysicalLinkName();
                 String sourceCircuitPackName = physicalLink.getSource().getCircuitPackName();
                 String sourcePortName = physicalLink.getSource().getPortName().toString();
@@ -1349,53 +1371,47 @@ public class INode121 {
                     deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, deviceIID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         } */
-        if (deviceObject.get().getDegree() == null) {
-            LOG.warn("Degree info not found for {}", nodeId);
-        } else {
-
-            String startTimestamp = getCurrentTimestamp();
-            for (int i = 0; i < deviceObject.get().getDegree().size(); i++) {
-                Degree degree = deviceObject.get().getDegree().get(i);
-                String degreeNumber = degree.getDegreeNumber().toString();
-                String maxWavelengths = degree.getMaxWavelengths().toString();
-                String otdrPortCircuitPackName =
+        if (!deviceObject.isPresent()) {
+            LOG.error("Cannot get device for node {}", nodeId);
+            return;
+        }
+        String startTimestamp = getCurrentTimestamp();
+        @NonNull
+        Map<DegreeKey, Degree> degreeMap = deviceObject.get().nonnullDegree();
+        for (Map.Entry<DegreeKey, Degree> degreeEntry : degreeMap.entrySet()) {
+            Degree degree = degreeEntry.getValue();
+            String degreeNumber = degree.getDegreeNumber().toString();
+            String maxWavelengths = degree.getMaxWavelengths().toString();
+            String otdrPortCircuitPackName =
                     (degree.getOtdrPort() == null ? "" : degree.getOtdrPort().getCircuitPackName());
-                String otdrPortPortName =
+            String otdrPortPortName =
                     (degree.getOtdrPort() == null ? "" : degree.getOtdrPort().getPortName().toString());
-                //String mcCapabilitiesSlotWidthGranularity = "";
-                //String mcCapabilitiesCenterFreqGranularity = "";
-                //String mcCapabilitiesMinSlots = "-1";
-                //String mcCapabilitiesMaxSlots = "-1";
-                persistDevDegreeCircuitPack(nodeId, degree, degreeNumber, connection);
-                persistDevDegreeConnectionPort(nodeId, degree, degreeNumber, connection);
+            // String mcCapabilitiesSlotWidthGranularity = "";
+            // String mcCapabilitiesCenterFreqGranularity = "";
+            // String mcCapabilitiesMinSlots = "-1";
+            // String mcCapabilitiesMaxSlots = "-1";
+            persistDevDegreeCircuitPack(nodeId, degree, degreeNumber, connection);
+            persistDevDegreeConnectionPort(nodeId, degree, degreeNumber, connection);
 
-                Object[] parameters = {nodeId,
-                    degreeNumber,
-                    maxWavelengths,
-                    otdrPortCircuitPackName,
-                    otdrPortPortName,
-                    //mcCapabilitiesSlotWidthGranularity,
-                    //mcCapabilitiesCenterFreqGranularity,
-                    //mcCapabilitiesMinSlots,
-                    //mcCapabilitiesMaxSlots,
-                    "", "", "-1", "-1",
-                    startTimestamp,
-                    startTimestamp
-                };
+            Object[] parameters = { nodeId, degreeNumber, maxWavelengths, otdrPortCircuitPackName, otdrPortPortName,
+                    // mcCapabilitiesSlotWidthGranularity,
+                    // mcCapabilitiesCenterFreqGranularity,
+                    // mcCapabilitiesMinSlots,
+                    // mcCapabilitiesMaxSlots,
+                "", "", "-1", "-1", startTimestamp, startTimestamp };
 
-                String query = Queries.getQuery().deviceDegreeInsert().get();
-                LOG.info("Running {} query ", query);
-                try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                    for (int j = 0; j < parameters.length; j++) {
-                        stmt.setObject(j + 1, parameters[j]);
-                    }
-                    stmt.execute();
-                    stmt.clearParameters();
-                } catch (SQLException e) {
-                    LOG.error("Something wrong when storing devices degrees", e);
+            String query = Queries.getQuery().deviceDegreeInsert().get();
+            LOG.info("Running {} query ", query);
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                for (int j = 0; j < parameters.length; j++) {
+                    stmt.setObject(j + 1, parameters[j]);
                 }
-
+                stmt.execute();
+                stmt.clearParameters();
+            } catch (SQLException e) {
+                LOG.error("Something wrong when storing devices degrees", e);
             }
+
         }
     }
 
@@ -1403,10 +1419,16 @@ public class INode121 {
     private void persistDevDegreeCircuitPack(String nodeId, Degree degree, String degreeNumber, Connection connection) {
 
         String startTimestamp = getCurrentTimestamp();
-        for (int i = 0; i < degree.getCircuitPacks().size(); i++) {
+        @NonNull
+        Map<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksKey,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks>
+            circuitPacksMap = degree.nonnullCircuitPacks();
+        for (Map.Entry<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksKey,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks> circuitPackEntry :
+                    circuitPacksMap.entrySet()) {
 
-            String circuitPackIndex = degree.getCircuitPacks().get(i).getIndex().toString();
-            String circuitPackName = degree.getCircuitPacks().get(i).getCircuitPackName();
+            String circuitPackIndex = circuitPackEntry.getValue().getIndex().toString();
+            String circuitPackName = circuitPackEntry.getValue().getCircuitPackName();
 
             Object[] parameters = {nodeId,
                 degreeNumber,
@@ -1435,11 +1457,12 @@ public class INode121 {
         Connection connection) {
 
         String startTimestamp = getCurrentTimestamp();
-        for (int i = 0; i < degree.getConnectionPorts().size(); i++) {
-
-            String connectionPortIndex = degree.getConnectionPorts().get(i).getIndex().toString();
-            String circuitPackName = degree.getConnectionPorts().get(i).getCircuitPackName();
-            String portName = degree.getConnectionPorts().get(i).getPortName().toString();
+        @NonNull
+        Map<ConnectionPortsKey, ConnectionPorts> connectionPortsMap = degree.nonnullConnectionPorts();
+        for (Map.Entry<ConnectionPortsKey, ConnectionPorts> portEntry : connectionPortsMap.entrySet()) {
+            String connectionPortIndex = portEntry.getValue().getIndex().toString();
+            String circuitPackName = portEntry.getValue().getCircuitPackName();
+            String portName = portEntry.getValue().getPortName().toString();
 
             Object[] parameters = {nodeId,
                 degreeNumber,
@@ -1472,18 +1495,29 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (!deviceObject.isPresent()) {
+            LOG.error("No device found in operational datastore for node {}", nodeId);
+            return;
+        }
 
         if (deviceObject.get().getSharedRiskGroup() == null) {
             deviceObject =
                     deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, deviceIID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            if (!deviceObject.isPresent()) {
+                LOG.error("No device found in configuration datastore for node {}", nodeId);
+                return;
+            }
         }
-        if (deviceObject.get().getSharedRiskGroup() == null) {
+
+        @NonNull
+        Map<SharedRiskGroupKey, SharedRiskGroup> sharedRiskGroupMap = deviceObject.get().nonnullSharedRiskGroup();
+        if (sharedRiskGroupMap.isEmpty()) {
             LOG.info("no srg found for node {} ", nodeId);
         } else {
             String startTimestamp = getCurrentTimestamp();
-            for (int i = 0; i < deviceObject.get().getSharedRiskGroup().size(); i++) {
-                SharedRiskGroup sharedRiskGroup = deviceObject.get().getSharedRiskGroup().get(i);
+            for (Map.Entry<SharedRiskGroupKey, SharedRiskGroup> groupEntry : sharedRiskGroupMap.entrySet()) {
+                SharedRiskGroup sharedRiskGroup = groupEntry.getValue();
                 //String currentProvisionedAddDropPorts = "-1";
                 //String mcCapSlotWidthGranularity = "";
                 //String mcCapCenterFreqGranularity = "";
@@ -1530,10 +1564,16 @@ public class INode121 {
         Connection connection) {
 
         String startTimestamp = getCurrentTimestamp();
-        for (int i = 0; i < sharedRiskGroup.getCircuitPacks().size(); i++) {
+        @NonNull
+        Map<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksKey,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks>
+                circuitPacksMap = sharedRiskGroup.nonnullCircuitPacks();
+        for (Map.Entry<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksKey,
+                org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks> entry :
+                    circuitPacksMap.entrySet()) {
 
-            String circuitPackindex = sharedRiskGroup.getCircuitPacks().get(i).getIndex().toString();
-            String circuitPackName = sharedRiskGroup.getCircuitPacks().get(i).getCircuitPackName();
+            String circuitPackindex = entry.getValue().getIndex().toString();
+            String circuitPackName = entry.getValue().getCircuitPackName();
 
             Object[] parameters = {nodeId,
                 srgNumber,
@@ -1566,17 +1606,26 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-
+        if (!deviceObject.isPresent()) {
+            LOG.error("No device found in operational datastore for node {}", nodeId);
+            return;
+        }
         if (deviceObject.get().getRoadmConnections() == null) {
             deviceObject =
                     deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.CONFIGURATION, deviceIID,
                             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            if (!deviceObject.isPresent()) {
+                LOG.error("No device found in configuration datastore for node {}", nodeId);
+                return;
+            }
         }
 
-        if (deviceObject.get().getRoadmConnections() != null) {
+        @NonNull
+        Map<RoadmConnectionsKey, RoadmConnections> connectionsMap = deviceObject.get().nonnullRoadmConnections();
+        if (!connectionsMap.isEmpty()) {
             String startTimestamp = getCurrentTimestamp();
-            for (int i = 0; i < deviceObject.get().getRoadmConnections().size(); i++) {
-                RoadmConnections roadmConnections = deviceObject.get().getRoadmConnections().get(i);
+            for (Map.Entry<RoadmConnectionsKey, RoadmConnections> entry : connectionsMap.entrySet()) {
+                RoadmConnections roadmConnections = entry.getValue();
                 String connectionNumber = roadmConnections.getConnectionNumber();
                 //String connectionName = "";
                 String wavelengthNumber = roadmConnections.getWavelengthNumber().toString();
@@ -1623,10 +1672,15 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-
+        if (!deviceObject.isPresent()) {
+            LOG.error("No device found in operational datastore for node {}", nodeId);
+            return;
+        }
         String startTimestamp = getCurrentTimestamp();
-        for (int i = 0; i < deviceObject.get().getConnectionMap().size(); i++) {
-            ConnectionMap connectionMap = deviceObject.get().getConnectionMap().get(i);
+        @NonNull
+        Map<ConnectionMapKey, ConnectionMap> connectionsMap = deviceObject.get().nonnullConnectionMap();
+        for (Map.Entry<ConnectionMapKey, ConnectionMap> entry : connectionsMap.entrySet()) {
+            ConnectionMap connectionMap = entry.getValue();
             String connectionMapNumber = connectionMap.getConnectionMapNumber().toString();
             String sourceCircuitPackName = connectionMap.getSource().getCircuitPackName();
             String sourcePortName = connectionMap.getSource().getCircuitPackName();
@@ -1661,10 +1715,16 @@ public class INode121 {
         Optional<OrgOpenroadmDevice> deviceObject =
                 deviceTransactionManager.getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, deviceIID,
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+        if (!deviceObject.isPresent()) {
+            LOG.error("No device found in operational datastore for node {}", nodeId);
+            return;
+        }
 
         String startTimestamp = getCurrentTimestamp();
-        for (int i = 0; i < deviceObject.get().getWavelengthMap().getWavelengths().size(); i++) {
-            Wavelengths wavelengths = deviceObject.get().getWavelengthMap().getWavelengths().get(i);
+        @NonNull
+        Map<WavelengthsKey, Wavelengths> wavelengthsMap = deviceObject.get().getWavelengthMap().nonnullWavelengths();
+        for (Map.Entry<WavelengthsKey, Wavelengths> entry : wavelengthsMap.entrySet()) {
+            Wavelengths wavelengths = entry.getValue();
             String wavelengthNumber = wavelengths.getWavelengthNumber().toString();
             String centerFrequency = wavelengths.getCenterFrequency().toString();
             String wavelength = wavelengths.getWavelength().toString();
@@ -1697,10 +1757,9 @@ public class INode121 {
     private void persistDevInterfaceTcm(String nodeId, String interfaceName, OduBuilder oduBuilder,
         Connection connection) {
 
-        for (int i = 0; i < oduBuilder.getTcm().size(); i++) {
-            Tcm tcm;
-
-            tcm = oduBuilder.getTcm().get(i);
+        Map<TcmKey, Tcm> tcmMap = oduBuilder.getTcm();
+        for (Map.Entry<TcmKey, Tcm> entry :  tcmMap.entrySet()) {
+            Tcm tcm = entry.getValue();
 
             Object[] parameters = prepareDevInterfaceTcmParameters(nodeId, interfaceName, tcm);
 
@@ -1721,10 +1780,10 @@ public class INode121 {
     private void persistDevInterfaceOtnOduTxMsi(String nodeId, String interfaceName, OduBuilder oduBuilder,
         Connection connection) {
 
-        for (int i = 0; i < oduBuilder.getTcm().size(); i++) {
-            TxMsi txMsi;
+        Map<TxMsiKey, TxMsi> txMsiMap = oduBuilder.getOpu().getMsi().nonnullTxMsi();
+        for (Map.Entry<TxMsiKey, TxMsi> entry :  txMsiMap.entrySet()) {
 
-            txMsi = oduBuilder.getOpu().getMsi().getTxMsi().get(i);
+            TxMsi txMsi = entry.getValue();
 
             Object[] parameters = prepareDevInterfaceOtnOduTxMsiParameters(nodeId, interfaceName, txMsi);
 
@@ -1745,11 +1804,9 @@ public class INode121 {
 
     private void persistDevInterfaceOtnOduRxMsi(String nodeId, String interfaceName, OduBuilder oduBuilder,
         Connection connection) {
-
-        for (int i = 0; i < oduBuilder.getTcm().size(); i++) {
-            RxMsi rxMsi;
-
-            rxMsi = oduBuilder.getOpu().getMsi().getRxMsi().get(i);
+        Map<RxMsiKey, RxMsi> rxMsiMap = oduBuilder.getOpu().getMsi().nonnullRxMsi();
+        for (Map.Entry<RxMsiKey, RxMsi> entry : rxMsiMap.entrySet()) {
+            RxMsi rxMsi = entry.getValue();
 
             Object[] parameters = prepareDevInterfaceOtnOduRxMsiParameters(nodeId, interfaceName, rxMsi);
 
@@ -1770,11 +1827,10 @@ public class INode121 {
 
     private void persistDevInterfaceOtnOduExpMsi(String nodeId, String interfaceName, OduBuilder oduBuilder,
         Connection connection) {
-
-        for (int i = 0; i < oduBuilder.getTcm().size(); i++) {
-            ExpMsi expMsi;
-
-            expMsi = oduBuilder.getOpu().getMsi().getExpMsi().get(i);
+        @NonNull
+        Map<ExpMsiKey, ExpMsi> expMsiMap = oduBuilder.getOpu().getMsi().nonnullExpMsi();
+        for (Map.Entry<ExpMsiKey, ExpMsi> entry : expMsiMap.entrySet()) {
+            ExpMsi expMsi = entry.getValue();
 
             Object[] parameters = prepareDevInterfaceOtnOduExpMsiParameters(nodeId, interfaceName, expMsi);
 
