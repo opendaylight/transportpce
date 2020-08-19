@@ -25,10 +25,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import javax.annotation.Nonnull;
-import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
+//import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
 import org.opendaylight.binding.runtime.spi.BindingRuntimeHelpers;
+import org.opendaylight.mdsal.binding.dom.adapter.AdapterContext;
+import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
+//import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
 import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.Result;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type.NumUnnumHop;
@@ -80,6 +82,7 @@ public class GnpyResult {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyResult.class);
     private Response response = null;
     private Map<String, IpAddress> mapNodeRefIp = new HashMap<>();
+    private final AdapterContext adapterContext = new ConstantAdapterContext();
 
     public GnpyResult(String gnpyResponseString, GnpyTopoImpl gnpyTopo) throws GnpyException, Exception {
         this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
@@ -89,9 +92,7 @@ public class GnpyResult {
         BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
 
         // Create the binding binding normalized node codec registry
-        BindingRuntimeContext bindingContext =
-                BindingRuntimeHelpers.createRuntimeContext();
-        final BindingNormalizedNodeSerializer codecRegistry = new BindingCodecContext(bindingContext);
+        final BindingNormalizedNodeSerializer codecRegistry = adapterContext.currentSerializer();
 
         // Create the data object
         QName pathQname = QName.create("gnpy:path", "2020-02-02", "result");
