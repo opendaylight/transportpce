@@ -19,10 +19,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNull;
-import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
 import org.opendaylight.binding.runtime.spi.BindingRuntimeHelpers;
-import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
 import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
@@ -91,11 +88,6 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 .getModuleInfo(Result.class));
         @NonNull
         EffectiveModelContext schemaContext = BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
-
-        // Create the binding binding normalized node codec registry
-        BindingRuntimeContext bindingContext =
-                BindingRuntimeHelpers.createRuntimeContext();
-        final BindingNormalizedNodeSerializer codecRegistry = new BindingCodecContext(bindingContext);
 
         /*
          * This function needs : - context - scPath.getParent() -
