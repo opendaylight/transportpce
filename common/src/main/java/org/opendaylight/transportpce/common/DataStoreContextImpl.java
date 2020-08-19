@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.Executors;
 import org.eclipse.jdt.annotation.NonNull;
-import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
+//import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
 import org.opendaylight.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -28,9 +28,9 @@ import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMDataBrokerAdapter;
 import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMNotificationPublishServiceAdapter;
 import org.opendaylight.mdsal.binding.dom.adapter.BindingDOMNotificationServiceAdapter;
 import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
-import org.opendaylight.mdsal.binding.dom.adapter.CurrentAdapterSerializer;
+//import org.opendaylight.mdsal.binding.dom.adapter.CurrentAdapterSerializer;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
-import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
+//import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 import org.opendaylight.mdsal.dom.api.DOMSchemaService;
@@ -103,7 +103,7 @@ public class DataStoreContextImpl implements DataStoreContext {
 
     @Override
     public BindingNormalizedNodeSerializer getBindingToNormalizedNodeCodec() {
-        return this.mockedSchemaContext.bindingStreamCodecs;
+        return this.mockedSchemaContext.adapterContext.currentSerializer();
     }
 
     @Override
@@ -151,19 +151,18 @@ public class DataStoreContextImpl implements DataStoreContext {
 
         private final EffectiveModelContext schemaContext;
         private final ListenerRegistry<EffectiveModelContextListener> listeners;
-        private final BindingNormalizedNodeSerializer bindingStreamCodecs;
-        private final CurrentAdapterSerializer bindingToNormalized;
+        //private final BindingNormalizedNodeSerializer bindingStreamCodecs;
+        //private final CurrentAdapterSerializer bindingToNormalized;
         private final AdapterContext adapterContext;
 
         private SchemaContextHolder() {
             List<YangModuleInfo> moduleInfos = loadModuleInfos();
             this.schemaContext = BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
             this.listeners = ListenerRegistry.create();
-            BindingRuntimeContext bindingContext =
-                    BindingRuntimeHelpers.createRuntimeContext();
-            this.bindingStreamCodecs = new BindingCodecContext(bindingContext);
-            this.bindingToNormalized = new CurrentAdapterSerializer(new BindingCodecContext(bindingContext));
-            adapterContext = new ConstantAdapterContext(this.bindingToNormalized);
+            //BindingRuntimeContext bindingContext = BindingRuntimeHelpers.createRuntimeContext();
+            //this.bindingStreamCodecs = new BindingCodecContext(bindingContext);
+            //this.bindingToNormalized = new CurrentAdapterSerializer(new BindingCodecContext(bindingContext));
+            this.adapterContext = new ConstantAdapterContext();
         }
 
         @Override
