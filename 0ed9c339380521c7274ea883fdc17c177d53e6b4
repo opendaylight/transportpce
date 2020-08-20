@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "2a72f092_becd821b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/DataStoreContextImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-08-20T19:58:45Z",
+      "side": 1,
+      "message": "schemacontext is being retired\naccording to https://docs.opendaylight.org/en/latest/release-notes/upgrade-process.html#schemacontext-is-being-retired",
+      "range": {
+        "startLine": 150,
+        "startChar": 1,
+        "endLine": 166,
+        "endChar": 9
+      },
+      "revId": "0ed9c339380521c7274ea883fdc17c177d53e6b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15c30857_2c8d6b26",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImpl.java",
         "patchSetId": 4
