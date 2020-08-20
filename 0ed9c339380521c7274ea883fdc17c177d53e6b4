@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b857805_ad86795e",
+        "filename": "common/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-08-20T12:53:01Z",
+      "side": 1,
+      "message": "not sure this is needed",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 21
+      },
+      "revId": "0ed9c339380521c7274ea883fdc17c177d53e6b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15c30857_2c8d6b26",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-08-20T12:53:01Z",
+      "side": 1,
+      "message": "this whole part should be reworked",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 112
+      },
+      "revId": "0ed9c339380521c7274ea883fdc17c177d53e6b4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
