@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b27d6925_2222e28b",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_renderer.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-08-24T13:50:07Z",
+      "side": 1,
+      "message": "quick fix but the right way to do that would probably be to ignore in the test the order of the port types listed here",
+      "range": {
+        "startLine": 55,
+        "startChar": 15,
+        "endLine": 57,
+        "endChar": 57
+      },
+      "revId": "0220c3f2b72e4936b0fe61fe624f919ba486db0c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
