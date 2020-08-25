@@ -49,19 +49,21 @@ class TransportPCEtesting(unittest.TestCase):
     def test_02_get_portmapping_CLIENT1(self):
         response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-CLIENT1")
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertIn(
-            {'supported-interface-capability': [
-                'org-openroadm-port-types:if-10GE-ODU2e',
-                'org-openroadm-port-types:if-10GE-ODU2',
-                'org-openroadm-port-types:if-10GE'],
-             'supporting-port': 'CP1-SFP4-P1',
-             'supporting-circuit-pack-name': 'CP1-SFP4',
-             'logical-connection-point': 'XPDR1-CLIENT1',
-             'port-direction': 'bidirectional',
-             'port-qual': 'xpdr-client',
-             'lcp-hash-val': 'FqlcrxV7p30='},
-            res['mapping'])
+        res_mapping = (response.json())['mapping'][0]
+        self.assertSetEqual({'org-openroadm-port-types:if-10GE-ODU2e',
+                         'org-openroadm-port-types:if-10GE-ODU2',
+                         'org-openroadm-port-types:if-10GE'},
+                        set(res_mapping['supported-interface-capability']))
+        self.assertDictEqual(
+            dict(
+                {'supporting-port': 'CP1-SFP4-P1',
+                 'supporting-circuit-pack-name': 'CP1-SFP4',
+                 'logical-connection-point': 'XPDR1-CLIENT1',
+                 'port-direction': 'bidirectional',
+                 'port-qual': 'xpdr-client',
+                 'lcp-hash-val': 'FqlcrxV7p30='},
+                **res_mapping),
+            res_mapping)
 
     def test_03_get_portmapping_NETWORK1(self):
         response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-NETWORK1")
