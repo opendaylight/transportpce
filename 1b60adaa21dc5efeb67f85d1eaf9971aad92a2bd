@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacabddf_7ba4af56",
+        "filename": "api/src/main/yang/transportpce-portmapping@2020-07-14.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-08-26T14:00:12Z",
+      "side": 1,
+      "message": "copied/pasted to line 112",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 11
+      },
+      "revId": "1b60adaa21dc5efeb67f85d1eaf9971aad92a2bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
