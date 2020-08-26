@@ -109,6 +109,32 @@ module transportpce-portmapping {
           description
             "Current IP Address of device";
         }
+        leaf grid-implementation {
+          type enumeration {
+            enum fixed-grid {
+              value 1;
+              description
+                "fixed-grid";
+            }
+            enum flex-grid {
+              value 2;
+              description
+                "flex-grid";
+            }
+          }
+        }
+        leaf slot-width-granularity {
+          type org-openroadm-common-types:frequency-GHz;
+            default "50";
+            description
+              "Width of a slot measured in GHz.";
+        }
+        leaf center-freq-granularity {
+            type org-openroadm-common-types:frequency-GHz;
+            default "50";
+            description
+              "Width of a slot measured in GHz.";
+        }
       }
       list mapping {
         key "logical-connection-point";
