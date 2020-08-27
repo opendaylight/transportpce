@@ -214,8 +214,8 @@ public class ConvertORTopoObjectToTapiTopoObject {
             onepl.add(onep);
         }
         // create NodeRuleGroup
+        int count = 1;
         for (TerminationPoint tp : this.oorNetworkPortList) {
-            int count = 1;
             List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
                 .NodeEdgePoint> nepList = new ArrayList<>();
             org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
@@ -236,7 +236,8 @@ public class ConvertORTopoObjectToTapiTopoObject {
             nepList.add(enep);
             NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
                 .setUuid(new Uuid(
-                    UUID.nameUUIDFromBytes(("node rule group " + count).getBytes(Charset.forName("UTF-8"))).toString()))
+                        UUID.nameUUIDFromBytes(("otsi node rule group " + count).getBytes(Charset.forName("UTF-8")))
+                    .toString()))
                 .setRule(ruleList)
                 .setNodeEdgePoint(nepList)
                 .build();
@@ -281,8 +282,8 @@ public class ConvertORTopoObjectToTapiTopoObject {
             onepl.add(onep);
         }
         // create NodeRuleGroup
+        int count = 1;
         for (NonBlockingList nbl : this.oorOduSwitchingPool.getNonBlockingList().values()) {
-            int count = 1;
             List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group
                 .NodeEdgePoint> nepList = new ArrayList<>();
             for (TpId tp : nbl.getTpList()) {
@@ -297,7 +298,8 @@ public class ConvertORTopoObjectToTapiTopoObject {
             }
             NodeRuleGroup nodeRuleGroup = new NodeRuleGroupBuilder()
                 .setUuid(new Uuid(
-                    UUID.nameUUIDFromBytes(("node rule group " + count).getBytes(Charset.forName("UTF-8"))).toString()))
+                        UUID.nameUUIDFromBytes(("dsr node rule group " + count).getBytes(Charset.forName("UTF-8")))
+                    .toString()))
                 .setRule(ruleList)
                 .setNodeEdgePoint(nepList)
                 .build();

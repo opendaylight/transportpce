@@ -58,6 +58,9 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                 case 3 :
                     if (serviceRpcResultSp.getStatus() == RpcStatusEx.Successful) {
                         LOG.info("Service implemented !");
+                        if (serviceDataStoreOperations == null) {
+                            return;
+                        }
                         OperationResult operationResult = null;
                         if (tempService) {
                             operationResult = this.serviceDataStoreOperations.modifyTempService(
