@@ -21,12 +21,10 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
           odl:type="default" />
 
     <reference id="notificationService"
-          interface="org.opendaylight.mdsal.binding.api.NotificationService"
-          odl:type="default" />
+          interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
 
     <reference id="notificationPublishService"
-          interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"
-          odl:type="default" />
+          interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
 
     <reference id="pathComputationService"
           interface="org.opendaylight.transportpce.pce.service.PathComputationService"/>

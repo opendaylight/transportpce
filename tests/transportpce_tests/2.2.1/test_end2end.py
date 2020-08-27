@@ -699,7 +699,7 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_46_get_no_oc_services(self):
         print("start test")
         response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",

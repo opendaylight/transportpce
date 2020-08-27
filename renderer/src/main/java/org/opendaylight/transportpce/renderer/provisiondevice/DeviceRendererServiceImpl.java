@@ -100,7 +100,10 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
 
     @Override
     public ServicePathOutput setupServicePath(ServicePathInput input, ServicePathDirection direction) {
-        List<Nodes> nodes = input.getNodes();
+        List<Nodes> nodes = new ArrayList<>();
+        if (input.getNodes() != null) {
+            nodes.addAll(input.getNodes());
+        }
         // Register node for suppressing alarms
         if (!alarmSuppressionNodeRegistration(input)) {
             LOG.warn("Alarm suppresion node registration failed!!!!");
@@ -455,13 +458,15 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102.service
             .nodelist.nodelist.Nodes> nodeList =
                 new HashMap<>();
-        for (Nodes node : input.getNodes()) {
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression
-                .rev171102.service.nodelist.nodelist.Nodes nodes =
-                    new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
-                    .service.nodelist.nodelist.NodesBuilder()
-                            .setNodeId(node.getNodeId()).build();
-            nodeList.put(nodes.key(),nodes);
+        if (input.getNodes() != null) {
+            for (Nodes node : input.getNodes()) {
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression
+                    .rev171102.service.nodelist.nodelist.Nodes nodes =
+                        new org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
+                        .service.nodelist.nodelist.NodesBuilder()
+                                .setNodeId(node.getNodeId()).build();
+                nodeList.put(nodes.key(),nodes);
+            }
         }
         nodeListBuilder.setNodes(nodeList);
         InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.alarmsuppression.rev171102
