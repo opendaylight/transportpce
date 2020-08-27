@@ -187,6 +187,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
              'port-qual': 'xpdr-client', 'lcp-hash-val': 'AO9UFkY/TLYy'},
             res['mapping'])
 
+    def test_15_xpdr_portmapping_CLIENT4(self):
         response = test_utils.portmapping_request("XPDRA01/mapping/XPDR1-CLIENT4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -203,7 +204,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_17_xpdr_device_disconnected(self):
         response = test_utils.get_netconf_oper_request("XPDRA01")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -212,7 +213,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_18_xpdr_device_not_connected(self):
         response = test_utils.portmapping_request("XPDRA01")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -225,7 +226,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_20_rdm_device_disconnected(self):
         response = test_utils.get_netconf_oper_request("ROADMA01")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -234,7 +235,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_21_rdm_device_not_connected(self):
         response = test_utils.portmapping_request("ROADMA01")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
