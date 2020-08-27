@@ -180,7 +180,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_16_xpdr_device_disconnected(self):
         response = test_utils.get_netconf_oper_request("XPDR-A1")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -189,7 +189,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_17_xpdr_device_not_connected(self):
         response = test_utils.portmapping_request("XPDR-A1")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -202,7 +202,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_19_rdm_device_disconnected(self):
         response = test_utils.get_netconf_oper_request("ROADM-A1")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -211,7 +211,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
 
     def test_20_rdm_device_not_connected(self):
         response = test_utils.portmapping_request("ROADM-A1")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
