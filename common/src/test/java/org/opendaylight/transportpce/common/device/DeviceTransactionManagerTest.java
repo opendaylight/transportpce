@@ -11,7 +11,6 @@ package org.opendaylight.transportpce.common.device;
 import static org.mockito.ArgumentMatchers.any;
 
 import com.google.common.util.concurrent.FluentFuture;
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.util.LinkedList;
@@ -300,16 +299,6 @@ public class DeviceTransactionManagerTest {
     @Test
     @Ignore
     public void submitTxTimeoutTransactionTest() {
-        ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newSingleThreadExecutor());
-        Mockito.when(rwTransactionMock.commit()).then(invocation -> Futures.makeChecked(executor.submit(() -> {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                Assert.fail("Exception catched in future! " + e);
-            }
-            return null;
-        }), input -> input));
-
         Future<java.util.Optional<DeviceTransaction>> deviceTxFuture =
                 transactionManager.getDeviceTransaction(defaultDeviceId);
         DeviceTransaction deviceTx;
@@ -351,7 +340,8 @@ public class DeviceTransactionManagerTest {
 
         Mockito.verify(rwTransactionMock, Mockito.times(2)).put(defaultDatastore, defaultIid, defaultData);
         Mockito.verify(rwTransactionMock, Mockito.times(2)).commit();
-
+        ListeningExecutorService executor = MoreExecutors
+                .listeningDecorator(Executors.newSingleThreadExecutor());
         executor.shutdown();
     }
 

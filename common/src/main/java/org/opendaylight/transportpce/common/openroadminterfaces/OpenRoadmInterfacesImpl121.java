@@ -110,7 +110,7 @@ public class OpenRoadmInterfacesImpl121 {
                     odu.setMaintTestsignal(maintSignalBuilder.build());
                 }
                 oduBuilder.setOdu(odu.build());
-                ifBuilder.addAugmentation(Interface1.class, oduBuilder.build());
+                ifBuilder.addAugmentation(oduBuilder.build());
             } else if (ifBuilder.getType() == OtnOtu.class) {
                 org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1Builder
                     otuBuilder =
@@ -125,9 +125,7 @@ public class OpenRoadmInterfacesImpl121 {
                     otu.setMaintLoopback(maintLoopBackBuilder.build());
                 }
                 otuBuilder.setOtu(otu.build());
-                ifBuilder.addAugmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.otu.interfaces.rev161014.Interface1.class,
-                    otuBuilder.build());
+                ifBuilder.addAugmentation(otuBuilder.build());
             }
             ifBuilder.setAdministrativeState(AdminStates.OutOfService);
             // post interface with updated admin state
