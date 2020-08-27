@@ -61,14 +61,6 @@ public class RequestProcessor {
         rwTx.delete(store, path);
     }
 
-    @Deprecated
-    public <T extends DataObject> void put(LogicalDatastoreType store,
-        InstanceIdentifier<T> path, T data, boolean createMissingParents) {
-
-        acquireLock();
-        LOG.debug("Number of put requests waiting in queue :{}", lock.getQueueLength());
-        rwTx.put(store, path, data, createMissingParents);
-    }
 
     public <T extends DataObject> void put(LogicalDatastoreType store,
         InstanceIdentifier<T> path, T data) {
@@ -78,14 +70,6 @@ public class RequestProcessor {
         rwTx.put(store, path, data);
     }
 
-    @Deprecated
-    public <T extends DataObject> void merge(LogicalDatastoreType store,
-        InstanceIdentifier<T> path, T data, boolean createMissingParents) {
-
-        acquireLock();
-        LOG.debug("Number of merge requests waiting in queue :{}", lock.getQueueLength());
-        rwTx.merge(store, path, data, createMissingParents);
-    }
 
     public <T extends DataObject> void merge(LogicalDatastoreType store,
         InstanceIdentifier<T> path, T data) {
