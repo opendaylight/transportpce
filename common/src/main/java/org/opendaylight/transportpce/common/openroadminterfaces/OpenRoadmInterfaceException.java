@@ -10,6 +10,8 @@ package org.opendaylight.transportpce.common.openroadminterfaces;
 
 public class OpenRoadmInterfaceException extends Exception {
 
+    private static final long serialVersionUID = 4744656737951407684L;
+
     public OpenRoadmInterfaceException(String message) {
         super(message);
     }
