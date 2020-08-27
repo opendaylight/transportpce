@@ -142,7 +142,7 @@ class TransportPCERendererTesting(unittest.TestCase):
     # -mc supporting interfaces must not be created for SRG, only degrees
     def test_09_service_path_create_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-mc-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -282,7 +282,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_18_service_path_delete_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-mc-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -291,7 +291,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_19_service_path_delete_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADM-A1", "interface/DEG1-TTP-TXRX-nmc-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -300,7 +300,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_20_service_path_delete_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-mc-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
             "error-type": "application",
@@ -310,7 +310,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_21_service_path_delete_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-nmc-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
             "error-type": "application",
@@ -320,7 +320,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_22_service_path_delete_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADM-A1", "interface/SRG1-PP3-TXRX-DEG1-TTP-TXRX-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
             "error-type": "application",
@@ -330,7 +330,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_23_service_path_delete_xpdr_check(self):
         response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
             "error-type": "application",
@@ -340,7 +340,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_24_service_path_delete_xpdr_check(self):
         response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-OTU")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
             "error-type": "application",
@@ -350,7 +350,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_25_service_path_delete_xpdr_check(self):
         response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-NETWORK1-ODU")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
             "error-type": "application",
@@ -360,7 +360,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_26_service_path_delete_xpdr_check(self):
         response = test_utils.check_netconf_node_request("XPDR-A1", "interface/XPDR1-CLIENT1-ETHERNET")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn({
             "error-type": "application",
