@@ -62,21 +62,10 @@ public class DeviceTransaction {
         rwTx.put(store, path, data);
     }
 
-    @Deprecated
-    public <T extends DataObject> void put(LogicalDatastoreType store, InstanceIdentifier<T> path, T data,
-            boolean createMissingParents) {
-        rwTx.put(store, path, data, createMissingParents);
-    }
-
     public <T extends DataObject> void merge(LogicalDatastoreType store, InstanceIdentifier<T> path, T data) {
         rwTx.merge(store, path, data);
     }
 
-    @Deprecated
-    public <T extends DataObject> void merge(LogicalDatastoreType store, InstanceIdentifier<T> path, T data,
-            boolean createMissingParents) {
-        rwTx.merge(store, path, data, createMissingParents);
-    }
 
     public void delete(LogicalDatastoreType store, InstanceIdentifier<?> path) {
         rwTx.delete(store, path);
