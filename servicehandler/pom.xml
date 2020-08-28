@@ -15,7 +15,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>4.0.14</version>
+    <version>4.0.17</version>
     <relativePath/>
   </parent>
 
