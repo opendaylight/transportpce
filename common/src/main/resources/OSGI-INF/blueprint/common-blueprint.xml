@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
            odl:use-default-for-reference-types="true">
 
     <reference id="mountPointService" interface="org.opendaylight.mdsal.binding.api.MountPointService" />
-    <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker" odl:type="default" />
+    <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker" />
 
     <bean id="deviceTransactionManager" class="org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl"
           destroy-method="preDestroy" >
