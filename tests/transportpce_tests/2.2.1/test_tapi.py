@@ -27,7 +27,8 @@ class TransportTapitesting(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.init_failed = False
-
+        os.environ['JAVA_MIN_MEM'] = '1024M'
+        os.environ['JAVA_MAX_MEM'] = '4069M'
         cls.processes = test_utils.start_tpce()
         # TAPI feature is not installed by default in Karaf
         if "USE_LIGHTY" not in os.environ or os.environ['USE_LIGHTY'] != 'True':

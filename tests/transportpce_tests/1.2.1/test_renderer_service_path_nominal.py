@@ -252,7 +252,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_15_service_path_delete_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADMA01", "interface/DEG1-TTP-TXRX-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -261,7 +261,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_16_service_path_delete_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADMA01", "interface/SRG1-PP7-TXRX-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -270,7 +270,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_17_service_path_delete_rdm_check(self):
         response = test_utils.check_netconf_node_request("ROADMA01", "roadm-connections/SRG1-PP7-TXRX-DEG1-TTP-TXRX-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -279,7 +279,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_18_service_path_delete_xpdr_check(self):
         response = test_utils.check_netconf_node_request("XPDRA01", "interface/XPDR1-NETWORK1-7")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -288,7 +288,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_19_service_path_delete_xpdr_check(self):
         response = test_utils.check_netconf_node_request("XPDRA01", "interface/XPDR1-NETWORK1-OTU")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -297,7 +297,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_20_service_path_delete_xpdr_check(self):
         response = test_utils.check_netconf_node_request("XPDRA01", "interface/XPDR1-NETWORK1-ODU")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -306,7 +306,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     def test_21_service_path_delete_xpdr_check(self):
         response = test_utils.check_netconf_node_request("XPDRA01", "interface/XPDR1-CLIENT1-ETHERNET")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
