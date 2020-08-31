@@ -331,7 +331,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_18_check_no_interface_ODU4_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-ODU4")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -789,15 +789,15 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_44_check_no_interface_ODU2E_NETWORK_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-ODU2e-service1")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_45_check_no_interface_ODU2E_CLIENT_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-CLIENT1-ODU2e-service1")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_46_check_no_interface_10GE_CLIENT_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-CLIENT1-ETHERNET10G")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_47_check_otn_topo_links(self):
         response = test_utils.get_otn_topo_request()
@@ -841,7 +841,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_51_check_no_interface_ODU4_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-ODU4")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_52_check_otn_topo_links(self):
         self.test_22_check_otn_topo_otu4_links()
@@ -868,7 +868,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_55_get_no_service(self):
         response = test_utils.get_service_list_request("")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
@@ -878,11 +878,11 @@ class TransportPCEtesting(unittest.TestCase):
 
     def test_56_check_no_interface_OTU4_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-OTU")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_57_check_no_interface_OCH_spdra(self):
         response = test_utils.check_netconf_node_request("SPDR-SA1", "interface/XPDR1-NETWORK1-1")
-        self.assertEqual(response.status_code, requests.codes.not_found)
+        self.assertEqual(response.status_code, requests.codes.conflict)
 
     def test_58_getLinks_OtnTopology(self):
         response = test_utils.get_otn_topo_request()
