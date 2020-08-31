@@ -167,7 +167,10 @@ public class TapiTopologyImpl implements TapiTopologyService {
                         .getNodeType().equals(OpenroadmNodeType.XPONDER)).collect(Collectors.toList());
         Map<String, List<String>> clientPortMap = new HashMap<>();
         for (Node node : xpdrNodeList) {
-            String nodeId = node.getSupportingNode().values().stream().findFirst().get().getNodeRef().getValue();
+            String nodeId = node.getSupportingNode().values().stream()
+                .filter(sn -> sn.getNetworkRef().getValue().equals(NetworkUtils.UNDERLAY_NETWORK_ID))
+                .findFirst()
+                .get().getNodeRef().getValue();
             List<String> clientPortList = new ArrayList<>();
             for (TerminationPoint tp : node.augmentation(Node1.class).getTerminationPoint().values()) {
                 if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERCLIENT)
