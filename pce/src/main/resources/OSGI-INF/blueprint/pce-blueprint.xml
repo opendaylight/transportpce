@@ -23,8 +23,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         interface="org.opendaylight.mdsal.binding.api.RpcProviderService"/>
 
   <reference id="notificationPublishService"
-        interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"
-        odl:type="default" />
+        interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
 
   <bean id="pceServiceImpl"
         class="org.opendaylight.transportpce.pce.service.PathComputationServiceImpl"

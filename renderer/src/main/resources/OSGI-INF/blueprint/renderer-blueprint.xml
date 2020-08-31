@@ -14,8 +14,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
  <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker"
         odl:type="default" />
   <reference id="notificationPublishService"
-        interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"
-        odl:type="default" />
+        interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
   <reference id="rpcProviderService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService" />
   <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
   <reference id="openRoadmInterfaces" interface="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces" />
