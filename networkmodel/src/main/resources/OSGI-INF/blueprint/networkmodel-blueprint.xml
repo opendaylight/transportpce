@@ -6,7 +6,7 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
     odl:use-default-for-reference-types="true">
 
-    <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker" odl:type="default" />
+    <reference id="dataBroker" interface="org.opendaylight.mdsal.binding.api.DataBroker" />
     <reference id="rpcProviderService" interface="org.opendaylight.mdsal.binding.api.RpcProviderService" />
     <reference id="deviceTransactionManager" interface="org.opendaylight.transportpce.common.device.DeviceTransactionManager" />
     <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
