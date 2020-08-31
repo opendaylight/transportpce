@@ -124,7 +124,7 @@ class TransportPCEtesting(unittest.TestCase):
     # Test deleted topology
     def test_07_test_topology_simple_bi_deleted(self):
         response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         time.sleep(1)
 
     # Load simple bidirectional topology
@@ -196,7 +196,7 @@ class TransportPCEtesting(unittest.TestCase):
     # Test deleted topology
     def test_14_test_topology_simple_deleted(self):
         response = test_utils.get_ordm_topo_request("node/XPONDER-1-2")
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         time.sleep(1)
 
     # Load complex topology
@@ -363,7 +363,7 @@ class TransportPCEtesting(unittest.TestCase):
     # Test deleted complex topology
     def test_25_test_topology_complex_deleted(self):
         response = test_utils.get_ordm_topo_request("node/XPONDER-3-2")
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, requests.codes.conflict)
         time.sleep(1)
 
 
