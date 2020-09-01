@@ -22,6 +22,30 @@
       "revId": "1b60adaa21dc5efeb67f85d1eaf9971aad92a2bd",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd3c8bd8_7256fb5a",
+        "filename": "api/src/main/yang/transportpce-portmapping@2020-07-14.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-09-01T03:17:06Z",
+      "side": 1,
+      "message": "Guillaume, the model file is changed, with the revision dated 2020-08-27. This is the old one. I have changed this, based on the comments received in the TPCE meeting.",
+      "parentUuid": "bacabddf_7ba4af56",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 11
+      },
+      "revId": "1b60adaa21dc5efeb67f85d1eaf9971aad92a2bd",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
