@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee896343_2264d3d4",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-02T12:50:00Z",
+      "side": 1,
+      "message": "might be dealt separately if possible",
+      "range": {
+        "startLine": 90,
+        "startChar": 8,
+        "endLine": 95,
+        "endChar": 102
+      },
+      "revId": "2b9ab918f9669d5df6100cd03318911d496a6a7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "776a5825_1994814f",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNodeTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-02T12:50:00Z",
+      "side": 1,
+      "message": "should stay sticked to ease revision update",
+      "range": {
+        "startLine": 401,
+        "startChar": 46,
+        "endLine": 402,
+        "endChar": 26
+      },
+      "revId": "2b9ab918f9669d5df6100cd03318911d496a6a7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83d6037a_8ac5fd43",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/JsonUtil.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-02T12:50:00Z",
+      "side": 1,
+      "message": "might be dealt separately if possible",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 69
+      },
+      "revId": "2b9ab918f9669d5df6100cd03318911d496a6a7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfc3ee94_a36f3a3f",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-02T12:50:00Z",
+      "side": 1,
+      "message": "should stay sticked to ease revision update",
+      "range": {
+        "startLine": 315,
+        "startChar": 43,
+        "endLine": 316,
+        "endChar": 22
+      },
+      "revId": "2b9ab918f9669d5df6100cd03318911d496a6a7f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
