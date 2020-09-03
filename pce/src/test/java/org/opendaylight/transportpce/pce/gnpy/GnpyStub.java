@@ -23,7 +23,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import org.opendaylight.transportpce.pce.utils.JsonUtil;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.service.PathRequest;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.service.PathRequest;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
