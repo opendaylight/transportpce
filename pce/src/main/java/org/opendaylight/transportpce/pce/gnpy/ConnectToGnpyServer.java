@@ -34,7 +34,7 @@ public class ConnectToGnpyServer {
 
     public String returnGnpyResponse(String jsonTxt) throws GnpyException  {
         String jsonRespTxt = null;
-
+        LOG.debug("Sending request {}",jsonTxt);
         try {
             // Send the request to the GNPy
             HttpURLConnection conn = connectToGNPy("POST");
@@ -53,6 +53,7 @@ public class ConnectToGnpyServer {
         } catch (IOException e) {
             throw new GnpyException("In connectToGnpyServer: excpetion",e);
         }
+        LOG.debug("Receiving response {}",jsonRespTxt);
         return jsonRespTxt;
     }
 

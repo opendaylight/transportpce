@@ -26,15 +26,15 @@ import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.PathBandwidth;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.PathPropertiesBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathMetric;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathMetricBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.no.path.info.NoPathBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.Response;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.ResponseBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.NoPathCaseBuilder;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.PathCaseBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.PathBandwidth;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.PathPropertiesBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathMetric;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathMetricBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.no.path.info.NoPathBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.Response;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.ResponseBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.NoPathCaseBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.PathCaseBuilder;
 
 
 @Ignore
@@ -54,7 +54,7 @@ public class PathComputationServiceImplTest extends AbstractTest {
         gnpyResult = Mockito.mock(GnpyResult.class);
         pathComputationServiceImpl = new PathComputationServiceImpl(
                 networkTransactionService,
-                this.getNotificationPublishService());
+                this.getNotificationPublishService(), null, null);
         pathComputationServiceImpl.init();
     }
 
@@ -98,7 +98,7 @@ public class PathComputationServiceImplTest extends AbstractTest {
         GnpyResult gnpyResult2 =
                 new GnpyResult("A-to-Z",
                         new GnpyTopoImpl(new NetworkTransactionImpl(
-                                new RequestProcessor(dataBroker))));
+                                new RequestProcessor(dataBroker))), null, null);
         pathComputationServiceImpl.generateGnpyResponse(gnpyResult2.getResponse(), "A-to-Z");
     }
 
