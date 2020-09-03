@@ -24,8 +24,8 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     OrgOpenroadmDevice orgOpenroadmDevice = Mockito.mock(OrgOpenroadmDevice.class);
 
     @Before
-    public void setUp() {
-        serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(networkTransaction);
+    public void setUp() throws GnpyException {
+        serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(null, null);
     }
 
     // TODO: fix augmentation issue

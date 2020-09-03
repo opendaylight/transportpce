@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce;
 
+import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
@@ -26,6 +27,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
+import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +60,8 @@ public class PceSendingPceRPCs {
     private Boolean success;
     private String message;
     private String responseCode;
+    private YangParserFactory parserFactory;
+    private BindingDOMCodecServices bindingDOMCodecServices;
 
     public PceSendingPceRPCs() {
         setPathDescription(null);
@@ -66,12 +70,15 @@ public class PceSendingPceRPCs {
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input,
-        NetworkTransactionService networkTransaction) {
+        NetworkTransactionService networkTransaction, YangParserFactory parserFactory,
+        BindingDOMCodecServices bindingDOMCodecServices) {
         setPathDescription(null);
 
         // TODO compliance check to check that input is not empty
         this.input = input;
         this.networkTransaction = networkTransaction;
+        this.parserFactory = parserFactory;
+        this.bindingDOMCodecServices = bindingDOMCodecServices;
     }
 
     public void cancelResourceReserve() {
@@ -154,7 +161,8 @@ public class PceSendingPceRPCs {
         try {
             ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
             if (connectToGnpy.isGnpyURLExist()) {
-                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input);
+                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input,
+                        parserFactory, bindingDOMCodecServices);
                 if (rc.getStatus() && gnpyToCheckFeasiblity(atoz,ztoa,gnpy)) {
                     setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
                     return;
