@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
 import org.opendaylight.transportpce.pce.PceComplianceCheckResult;
@@ -49,6 +50,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,13 +60,19 @@ public class PathComputationServiceImpl implements PathComputationService {
     private final NotificationPublishService notificationPublishService;
     private NetworkTransactionService networkTransactionService;
     private final ListeningExecutorService executor;
-    ServicePathRpcResult notification = null;
+    private ServicePathRpcResult notification = null;
+    private YangParserFactory parserFactory;
+    private BindingDOMCodecServices bindingDOMCodecServices;
 
     public PathComputationServiceImpl(NetworkTransactionService networkTransactionService,
-                                      NotificationPublishService notificationPublishService) {
+                                      NotificationPublishService notificationPublishService,
+                                      YangParserFactory parserFactory,
+                                      BindingDOMCodecServices bindingDOMCodecServices) {
         this.notificationPublishService = notificationPublishService;
         this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
+        this.parserFactory = parserFactory;
+        this.bindingDOMCodecServices = bindingDOMCodecServices;
     }
 
     public void init() {
@@ -152,7 +160,8 @@ public class PathComputationServiceImpl implements PathComputationService {
                         RpcStatusEx.Pending, "Service compliant, submitting pathComputation Request ...", null);
                 String message = "";
                 String responseCode = "";
-                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, networkTransactionService);
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, networkTransactionService,
+                        parserFactory, bindingDOMCodecServices);
                 sendingPCE.pathComputation();
                 message = sendingPCE.getMessage();
                 responseCode = sendingPCE.getResponseCode();

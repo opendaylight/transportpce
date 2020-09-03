@@ -42,7 +42,8 @@ public class PceServiceRPCImplTest extends AbstractTest {
                 TransactionUtils.getNetworkForSpanLoss());
         notificationPublishService = new NotificationPublishServiceMock();
         networkTransaction =  new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
-        pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService);
+        pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
+                null, null);
         pceServiceRPC = new PceServiceRPCImpl(pathComputationService);
 
     }

@@ -38,7 +38,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
         networkTransaction = new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
         PceTestUtils.writeNetworkInDataStore(this.getDataBroker());
         pceSendingPceRPCs =
-                new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(), networkTransaction);
+                new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(), networkTransaction, null, null);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class PceSendingPceRPCsTest extends AbstractTest {
         jerseyServer.setUp();
         pceSendingPceRPCs =
                 new PceSendingPceRPCs(PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
-                        networkTransaction);
+                        networkTransaction, null, null);
 
         pceSendingPceRPCs.pathComputation();
         ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();

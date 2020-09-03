@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce.gnpy;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
@@ -28,6 +29,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,8 +49,12 @@ public class GnpyUtilitiesImpl {
     private GnpyResult gnpyAtoZ;
     private GnpyResult gnpyZtoA;
     private Uint32 requestId;
+    private YangParserFactory parserFactory;
+    private BindingDOMCodecServices bindingDOMCodecServices;
 
-    public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input)
+
+    public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input,
+            YangParserFactory parserFactory, BindingDOMCodecServices bindingDOMCodecServices)
         throws GnpyException {
 
         this.networkTransaction = networkTransaction;
@@ -57,6 +63,8 @@ public class GnpyUtilitiesImpl {
         this.gnpyAtoZ = null;
         this.gnpyZtoA = null;
         this.requestId = Uint32.valueOf(0);
+        this.parserFactory = parserFactory;
+        this.bindingDOMCodecServices = bindingDOMCodecServices;
     }
 
     public boolean verifyComputationByGnpy(AToZDirection atoz, ZToADirection ztoa, PceConstraints pceHardConstraints)
@@ -89,7 +97,7 @@ public class GnpyUtilitiesImpl {
         if (gnpyResponse == null) {
             throw new GnpyException("In GnpyUtilities: no response from GNPy server");
         }
-        GnpyResult result = new GnpyResult(gnpyResponse, gnpyTopo);
+        GnpyResult result = new GnpyResult(gnpyResponse, gnpyTopo, bindingDOMCodecServices, parserFactory);
         result.analyzeResult();
         return result;
     }
@@ -125,7 +133,7 @@ public class GnpyUtilitiesImpl {
             .build();
         InstanceIdentifier<GnpyApi> idGnpyApi = InstanceIdentifier.builder(GnpyApi.class).build();
         String gnpyJson;
-        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(networkTransaction);
+        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(parserFactory, bindingDOMCodecServices);
         gnpyJson = sd.createJsonStringFromDataObject(idGnpyApi, gnpyApi);
         LOG.debug("GNPy Id: {} / json created : {}", idGnpyApi, gnpyJson);
         ConnectToGnpyServer connect = new ConnectToGnpyServer();
