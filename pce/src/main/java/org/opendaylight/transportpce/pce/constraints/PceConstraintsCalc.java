@@ -8,6 +8,8 @@
 package org.opendaylight.transportpce.pce.constraints;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -45,6 +47,8 @@ import org.slf4j.LoggerFactory;
 public class PceConstraintsCalc {
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceConstraintsCalc.class);
+    private static final Comparator<OrderedHops> ORDERED_HOP_COMPARATOR =
+            Comparator.comparing(OrderedHops::getHopNumber);
 
     private PceConstraints pceHardConstraints = new PceConstraints();
     private PceConstraints pceSoftConstraints = new PceConstraints();
@@ -184,6 +188,7 @@ public class PceConstraintsCalc {
     }
 
     private void readIncludeNodes(List<OrderedHops> listHops, PceConstraints constraints) {
+        Collections.sort(listHops, ORDERED_HOP_COMPARATOR);
         for (int i = 0; i < listHops.size(); i++) {
             HopType hoptype = listHops.get(i).getHopType().getHopType();
 

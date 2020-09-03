@@ -44,7 +44,8 @@ public class PceProviderTest extends AbstractTest {
         notificationPublishService = new NotificationPublishServiceMock();
         requestProcessor = Mockito.mock(RequestProcessor.class);
         networkTransaction = new NetworkTransactionImpl(requestProcessor);
-        pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService);
+        pathComputationService = new PathComputationServiceImpl(networkTransaction, notificationPublishService,
+                null);
         pceProvider = new PceProvider(rpcService, pathComputationService);
     }
 

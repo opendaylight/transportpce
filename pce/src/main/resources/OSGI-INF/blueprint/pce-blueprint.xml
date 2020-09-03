@@ -15,6 +15,9 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
 
   <reference id="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
 
+  <reference id="bindingDOMCodecServices" interface="org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices" />
+
+
   <reference id="dataBroker"
         interface="org.opendaylight.mdsal.binding.api.DataBroker"/>
 
@@ -29,6 +32,7 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         init-method="init" destroy-method="close">
     <argument ref="networkTransactionImpl"/>
     <argument ref="notificationPublishService" />
+    <argument ref="bindingDOMCodecServices" />
   </bean>
 
   <bean id="provider"
