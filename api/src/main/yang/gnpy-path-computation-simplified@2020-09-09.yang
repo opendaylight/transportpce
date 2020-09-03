@@ -22,6 +22,10 @@ module gnpy-path-computation-simplified {
 
   description "YANG model for gnpy path computation simplified for transportPCE";
 
+  revision "2020-09-09" {
+    description "remove key from route-object-include-exclude";
+  }
+
   revision "2020-02-02" {
     description "second draft with detailed blocking reasons";
     reference "YANG model for path computation with gnpy inputs";
@@ -306,7 +310,6 @@ module gnpy-path-computation-simplified {
       description
         "Container for the route object list";
       list route-object-include-exclude {
-        key index;
         description
           "List of explicit route objects to include or
            exclude in path computation";

@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,20 +24,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import javax.annotation.Nonnull;
-//import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
-import org.opendaylight.binding.runtime.spi.BindingRuntimeHelpers;
-import org.opendaylight.mdsal.binding.dom.adapter.AdapterContext;
-import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
-//import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
-import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.Result;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type.NumUnnumHop;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathMetric;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.generic.path.properties.path.properties.PathRouteObjects;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.Response;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.NoPathCase;
-import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.result.response.response.type.PathCase;
+import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.Result;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.explicit.route.hop.type.NumUnnumHop;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathMetric;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathRouteObjects;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.Response;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.NoPathCase;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.PathCase;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.General;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.GeneralBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.constraints.sp.co.routing.or.general.general.Include;
@@ -53,7 +47,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yangtools.yang.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
+import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
@@ -66,7 +60,7 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
-import org.opendaylight.yangtools.yang.model.api.SchemaContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,20 +76,15 @@ public class GnpyResult {
     private static final Logger LOG = LoggerFactory.getLogger(GnpyResult.class);
     private Response response = null;
     private Map<String, IpAddress> mapNodeRefIp = new HashMap<>();
-    private final AdapterContext adapterContext = new ConstantAdapterContext();
+    private EffectiveModelContext effectiveModelcontext;
 
-    public GnpyResult(String gnpyResponseString, GnpyTopoImpl gnpyTopo) throws GnpyException, Exception {
+    public GnpyResult(String gnpyResponseString, GnpyTopoImpl gnpyTopo,
+            BindingDOMCodecServices bindingDOMCodecServices) throws GnpyException {
         this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
-        // Create the schema context
-        Collection<? extends YangModuleInfo> moduleInfos = Collections.singleton(BindingReflections
-                .getModuleInfo(Result.class));
-        BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
-
-        // Create the binding binding normalized node codec registry
-        final BindingNormalizedNodeSerializer codecRegistry = adapterContext.currentSerializer();
+        effectiveModelcontext = bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext();
 
         // Create the data object
-        QName pathQname = QName.create("gnpy:path", "2020-02-02", "result");
+        QName pathQname = QName.create("gnpy:path", "2020-09-09", "result");
         LOG.debug("the Qname is {} / namesapce {} ; module {}; ", pathQname, pathQname.getNamespace(),
             pathQname.getModule());
         YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
@@ -111,9 +100,11 @@ public class GnpyResult {
             throw new GnpyException("In GnpyResult: the Normalized Node is not present");
         }
         NormalizedNode<? extends PathArgument, ?> normalizedNode = transformIntoNormalizedNode.get();
+        Entry<InstanceIdentifier<?>, DataObject> fromNormalizedNode = bindingDOMCodecServices
+                .fromNormalizedNode(yangId, normalizedNode);
 
-        if (codecRegistry.fromNormalizedNode(yangId, normalizedNode) != null) {
-            dataObject = codecRegistry.fromNormalizedNode(yangId, normalizedNode).getValue();
+        if (fromNormalizedNode != null) {
+            dataObject = fromNormalizedNode.getValue();
         } else {
             throw new GnpyException("In GnpyResult: the codec registry from the normalized node is null");
         }
@@ -185,7 +176,7 @@ public class GnpyResult {
         int counter = 0;
         for (PathRouteObjects pathRouteObjects : pathRouteObjectList) {
             if (pathRouteObjects.getPathRouteObject().getType() instanceof NumUnnumHop) {
-                NumUnnumHop numUnnumHop = (org.opendaylight.yang.gen.v1.gnpy.path.rev200202.explicit.route.hop.type
+                NumUnnumHop numUnnumHop = (org.opendaylight.yang.gen.v1.gnpy.path.rev200909.explicit.route.hop.type
                     .NumUnnumHop) pathRouteObjects.getPathRouteObject().getType();
                 String nodeIp = numUnnumHop.getNumUnnumHop().getNodeId();
                 try {
@@ -231,13 +222,12 @@ public class GnpyResult {
      * @throws Exception exception
      */
     private Optional<NormalizedNode<? extends YangInstanceIdentifier.PathArgument, ?>> parseInputJSON(JsonReader reader,
-        Class<? extends DataObject> objectClass) throws Exception {
+        Class<? extends DataObject> objectClass) {
         NormalizedNodeResult result = new NormalizedNodeResult();
-        SchemaContext schemaContext = getSchemaContext(objectClass);
         try (NormalizedNodeStreamWriter streamWriter = ImmutableNormalizedNodeStreamWriter.from(result);
             JsonParserStream jsonParser = JsonParserStream.create(streamWriter,
-                JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.getShared(schemaContext),
-                schemaContext);) {
+                JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02.getShared(effectiveModelcontext),
+                effectiveModelcontext);) {
             jsonParser.parse(reader);
         } catch (IOException e) {
             LOG.warn("GNPy: exception {} occured during parsing Json input stream", e.getMessage());
@@ -246,11 +236,6 @@ public class GnpyResult {
         return Optional.ofNullable(result.getResult());
     }
 
-    private SchemaContext getSchemaContext(Class<? extends DataObject> objectClass) throws GnpyException, Exception {
-        Collection<? extends YangModuleInfo> moduleInfos = Collections.singleton(BindingReflections
-                .getModuleInfo(objectClass));
-        return BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
-    }
 
     /**
      * Transforms the given input {@link NormalizedNode} into the given {@link DataObject}.
