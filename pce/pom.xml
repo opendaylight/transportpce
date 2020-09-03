@@ -101,6 +101,11 @@
             <version>1.2.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

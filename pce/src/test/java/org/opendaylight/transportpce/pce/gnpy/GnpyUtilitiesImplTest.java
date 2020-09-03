@@ -126,7 +126,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     @Test
     public void askNewPathFromGnpyNullResultTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
-                PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"));
+                PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"), null);
         assertNull("No hard constraints should be available", gnpyUtilitiesImpl.askNewPathFromGnpy(null));
 
     }
@@ -134,7 +134,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     @Test
     public void askNewPathFromGnpyTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
-                PceTestData.getGnpyPCERequest("XPONDER-3", "XPONDER-4"));
+                PceTestData.getGnpyPCERequest("XPONDER-3", "XPONDER-4"), null);
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
@@ -151,7 +151,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
         ZToADirectionBuilder ztoADirectionBldr = buildZtoA();
 
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
-                PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"));
+                PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"), null);
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
