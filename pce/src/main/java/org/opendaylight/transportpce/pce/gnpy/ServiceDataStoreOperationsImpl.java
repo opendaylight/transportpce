@@ -26,7 +26,6 @@ import org.opendaylight.binding.runtime.spi.BindingRuntimeHelpers;
 import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
 import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
-import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200202.Result;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -39,6 +38,7 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONNormalizedNodeStreamW
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonWriterFactory;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaPath;
+import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +48,21 @@ import org.slf4j.LoggerFactory;
 public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperations {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServiceDataStoreOperationsImpl.class);
+    private EffectiveModelContext schemaContext;
 
-    public ServiceDataStoreOperationsImpl(NetworkTransactionService networkTransactionService) {
+    public ServiceDataStoreOperationsImpl(YangParserFactory parserFactory) throws GnpyException {
+        // Prepare the variables
+        // Create the schema context
+        Collection<? extends YangModuleInfo> moduleInfos;
+        try {
+            moduleInfos = Collections.singleton(BindingReflections
+                    .getModuleInfo(Result.class));
+            schemaContext = BindingRuntimeHelpers.createEffectiveModel(parserFactory, moduleInfos);
+        } catch (Exception e) {
+            LOG.error("Cannot create ServiceDataStoreOperations", e);
+            throw new GnpyException("Something went wrong while init ServiceDataStoreOperations");
+        }
+   
     }
 
     @Override
@@ -85,12 +98,7 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
                 .from(id.getPathArguments())
                 .transform(input -> BindingReflections.findQName(input.getType())), true);
 
-        // Prepare the variables
-        // Create the schema context
-        Collection<? extends YangModuleInfo> moduleInfos = Collections.singleton(BindingReflections
-                .getModuleInfo(Result.class));
-        @NonNull
-        EffectiveModelContext schemaContext = BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
+
 
         // Create the binding binding normalized node codec registry
         //BindingRuntimeContext bindingContext = BindingRuntimeHelpers.createRuntimeContext();

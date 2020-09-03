@@ -49,6 +49,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.ServicePathNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParametersBuilder;
+import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,13 +59,15 @@ public class PathComputationServiceImpl implements PathComputationService {
     private final NotificationPublishService notificationPublishService;
     private NetworkTransactionService networkTransactionService;
     private final ListeningExecutorService executor;
-    ServicePathRpcResult notification = null;
+    private ServicePathRpcResult notification = null;
+    private YangParserFactory parserFactory;
 
     public PathComputationServiceImpl(NetworkTransactionService networkTransactionService,
-                                      NotificationPublishService notificationPublishService) {
+                                      NotificationPublishService notificationPublishService, YangParserFactory parserFactory) {
         this.notificationPublishService = notificationPublishService;
         this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
+        this.parserFactory = parserFactory;
     }
 
     public void init() {
@@ -152,7 +155,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         RpcStatusEx.Pending, "Service compliant, submitting pathComputation Request ...", null);
                 String message = "";
                 String responseCode = "";
-                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, networkTransactionService);
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, networkTransactionService, parserFactory);
                 sendingPCE.pathComputation();
                 message = sendingPCE.getMessage();
                 responseCode = sendingPCE.getResponseCode();

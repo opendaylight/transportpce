@@ -28,6 +28,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,8 +48,9 @@ public class GnpyUtilitiesImpl {
     private GnpyResult gnpyAtoZ;
     private GnpyResult gnpyZtoA;
     private Uint32 requestId;
+    private YangParserFactory parserFactory;
 
-    public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input)
+    public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input, YangParserFactory parserFactory)
         throws GnpyException {
 
         this.networkTransaction = networkTransaction;
@@ -57,6 +59,7 @@ public class GnpyUtilitiesImpl {
         this.gnpyAtoZ = null;
         this.gnpyZtoA = null;
         this.requestId = Uint32.valueOf(0);
+        this.parserFactory = parserFactory;
     }
 
     public boolean verifyComputationByGnpy(AToZDirection atoz, ZToADirection ztoa, PceConstraints pceHardConstraints)
@@ -125,7 +128,7 @@ public class GnpyUtilitiesImpl {
             .build();
         InstanceIdentifier<GnpyApi> idGnpyApi = InstanceIdentifier.builder(GnpyApi.class).build();
         String gnpyJson;
-        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(networkTransaction);
+        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(parserFactory);
         gnpyJson = sd.createJsonStringFromDataObject(idGnpyApi, gnpyApi);
         LOG.debug("GNPy Id: {} / json created : {}", idGnpyApi, gnpyJson);
         ConnectToGnpyServer connect = new ConnectToGnpyServer();

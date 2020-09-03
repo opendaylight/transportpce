@@ -26,6 +26,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp.PceMetric;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraints;
+import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +59,7 @@ public class PceSendingPceRPCs {
     private Boolean success;
     private String message;
     private String responseCode;
+    private YangParserFactory parserFactory;
 
     public PceSendingPceRPCs() {
         setPathDescription(null);
@@ -66,12 +68,17 @@ public class PceSendingPceRPCs {
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input,
-        NetworkTransactionService networkTransaction) {
+        NetworkTransactionService networkTransaction, YangParserFactory parserFactory) {
         setPathDescription(null);
 
         // TODO compliance check to check that input is not empty
         this.input = input;
         this.networkTransaction = networkTransaction;
+        this.parserFactory = parserFactory;
+    }
+
+    public PceSendingPceRPCs(YangParserFactory parserFactory) {
+        // TODO Auto-generated constructor stub
     }
 
     public void cancelResourceReserve() {
@@ -154,7 +161,7 @@ public class PceSendingPceRPCs {
         try {
             ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
             if (connectToGnpy.isGnpyURLExist()) {
-                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input);
+                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input, parserFactory);
                 if (rc.getStatus() && gnpyToCheckFeasiblity(atoz,ztoa,gnpy)) {
                     setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
                     return;
