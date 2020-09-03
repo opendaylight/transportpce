@@ -9,6 +9,7 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -143,12 +144,15 @@ public final class MapUtils {
     }
 
     public static String getSupLink(Link link) {
-        SupportingLink first = link.nonnullSupportingLink().values().iterator().next();
-        if (first != null && first.getLinkRef() != null) {
-            return first.getLinkRef().toString();
-        } else {
+        Iterator<SupportingLink> supportingLinkIterator = link.nonnullSupportingLink().values().iterator();
+        if (!supportingLinkIterator.hasNext()) {
             return "";
         }
+        SupportingLink first = supportingLinkIterator.next();
+        if (first == null || first.getLinkRef() == null) {
+            return "";
+        }
+        return first.getLinkRef().toString();
     }
 
 

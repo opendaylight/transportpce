@@ -24,15 +24,8 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
     OrgOpenroadmDevice orgOpenroadmDevice = Mockito.mock(OrgOpenroadmDevice.class);
 
     @Before
-    public void setUp() {
-        serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(networkTransaction);
-    }
-
-    // TODO: fix augmentation issue
-    @Test
-    public void createXMLFromDeviceTest() throws GnpyException {
-        serviceDataStoreOperations.createXMLFromDevice(this.getDataStoreContextUtil(),
-                orgOpenroadmDevice, "some-output");
+    public void setUp() throws GnpyException {
+        serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(null);
     }
 
     @Test
