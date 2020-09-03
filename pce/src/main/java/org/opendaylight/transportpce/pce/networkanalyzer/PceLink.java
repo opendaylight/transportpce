@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
@@ -153,21 +154,23 @@ public class PceLink implements Serializable {
 
     //Compute the OSNR of a span
     public double calcSpanOSNR() {
-        try {
-            double pout; //power on the output of the previous ROADM (dBm)
-            pout = retrievePower(this.omsAttributesSpan.nonnullLinkConcatenation()
-                    .values().iterator().next().getFiberType());
+        Iterator<LinkConcatenation> linkConcatenationiterator = this.omsAttributesSpan.nonnullLinkConcatenation()
+                .values().iterator();
+        if (linkConcatenationiterator.hasNext()) {
+            // power on the output of the previous ROADM (dBm)
+            double pout = retrievePower(linkConcatenationiterator.next().getFiberType());
+
             double spanLoss = this.omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue(); // span loss (dB)
-            double pin = pout - spanLoss; //power on the input of the current ROADM (dBm)
+            double pin = pout - spanLoss; // power on the input of the current ROADM (dBm)
             double spanOsnrDb;
             spanOsnrDb = NOISE_MASK_A * pin + NOISE_MASK_B;
             if (spanOsnrDb > UPPER_BOUND_OSNR) {
-                spanOsnrDb =  UPPER_BOUND_OSNR;
+                spanOsnrDb = UPPER_BOUND_OSNR;
             } else if (spanOsnrDb < LOWER_BOUND_OSNR) {
                 spanOsnrDb = LOWER_BOUND_OSNR;
             }
             return spanOsnrDb;
-        } catch (NullPointerException e) {
+        } else {
             LOG.error("in PceLink : Null field in the OmsAttrubtesSpan");
             return 0L;
         }
