@@ -279,12 +279,12 @@ class TransportPCEtesting(unittest.TestCase):
     def test_10_connect_tail_xpdr_rdm(self):
         # Connect the tail: XPDRA to ROADMA
         response = test_utils.connect_xpdr_to_rdm_request("XPDR-A1", "1", "1",
-                                                           "ROADM-A1", "1", "SRG1-PP1-TXRX")
+                                                          "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_11_connect_tail_rdm_xpdr(self):
         response = test_utils.connect_rdm_to_xpdr_request("XPDR-A1", "1", "1",
-                                                           "ROADM-A1", "1", "SRG1-PP1-TXRX")
+                                                          "ROADM-A1", "1", "SRG1-PP1-TXRX")
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_12_getLinks_OpenRoadmTopology(self):

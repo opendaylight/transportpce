@@ -329,18 +329,19 @@ def get_service_list_request(suffix: str):
 def service_create_request(attr):
     return post_request(URL_SERV_CREATE, attr)
 
-def service_delete_request(servicename : str,
-                           requestid = "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
+
+def service_delete_request(servicename: str,
+                           requestid="e3028bae-a90f-4ddd-a83f-cf224eba0e58",
                            notificationurl="http://localhost:8585/NotificationServer/notify"):
     attr = {"input": {
-                "sdnc-request-header": {
-                     "request-id": requestid,
-                     "rpc-action": "service-delete",
-                     "request-system-id": "appname",
-                     "notification-url": notificationurl},
-                "service-delete-req-info": {
-                     "service-name": servicename,
-                     "tail-retention": "no"}}}
+        "sdnc-request-header": {
+            "request-id": requestid,
+            "rpc-action": "service-delete",
+            "request-system-id": "appname",
+            "notification-url": notificationurl},
+        "service-delete-req-info": {
+            "service-name": servicename,
+            "tail-retention": "no"}}}
     return post_request(URL_SERV_DELETE, attr)
 
 
@@ -371,21 +372,22 @@ def create_ots_oms_request(nodeid: str, lcp: str):
             "logical-connection-point": lcp}}
     return post_request(URL_CREATE_OTS_OMS, attr)
 
+
 def path_computation_request(requestid: str, servicename: str, serviceaend, servicezend,
                              hardconstraints=None, softconstraints=None, metric="hop-count", other_attr=None):
-    attr =  {"service-name": servicename,
-             "resource-reserve": "true",
-             "service-handler-header": { "request-id": requestid },
-             "service-a-end": serviceaend,
-             "service-z-end": servicezend,
-             "pce-metric": metric}
+    attr = {"service-name": servicename,
+            "resource-reserve": "true",
+            "service-handler-header": {"request-id": requestid},
+            "service-a-end": serviceaend,
+            "service-z-end": servicezend,
+            "pce-metric": metric}
     if hardconstraints:
-        attr.update({ "hard-constraints": hardconstraints})
+        attr.update({"hard-constraints": hardconstraints})
     if softconstraints:
-        attr.update({ "soft-constraints": softconstraints})
+        attr.update({"soft-constraints": softconstraints})
     if other_attr:
         attr.update(other_attr)
-    return post_request(URL_PATH_COMPUTATION_REQUEST, {"input": attr })
+    return post_request(URL_PATH_COMPUTATION_REQUEST, {"input": attr})
 
 
 def shutdown_process(process):

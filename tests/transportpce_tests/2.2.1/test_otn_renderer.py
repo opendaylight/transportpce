@@ -220,7 +220,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertTrue(res["output"]["success"])
         self.assertEqual('SPDR-SA1', res["output"]['node-interface'][0]['node-id'])
         self.assertIn('XPDR1-CLIENT4-ODU2e-service1-x-XPDR1-NETWORK1-ODU2e-service1',
-                         res["output"]['node-interface'][0]['connection-id'])
+                      res["output"]['node-interface'][0]['connection-id'])
         self.assertIn('XPDR1-CLIENT4-ETHERNET10G', res["output"]['node-interface'][0]['eth-interface-id'])
         self.assertIn('XPDR1-NETWORK1-ODU2e-service1', res["output"]['node-interface'][0]['odu-interface-id'])
         self.assertIn('XPDR1-CLIENT4-ODU2e-service1', res["output"]['node-interface'][0]['odu-interface-id'])
