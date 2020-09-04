@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 ##############################################################################
 # Copyright (c) 2020 Orange, Inc. and others.  All rights reserved.
 #
@@ -7,6 +8,9 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
+
+# pylint: disable=no-member
+
 import json
 import os
 import sys
