@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3aa5637_3af8f5e1",
+        "filename": "tests/transportpce_tests/1.2.1/test_topology.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-04T12:11:36Z",
+      "side": 0,
+      "message": "bug fixed",
+      "range": {
+        "startLine": 860,
+        "startChar": 58,
+        "endLine": 860,
+        "endChar": 60
+      },
+      "revId": "e2834c636701200f4a9491862afb9e42dafcb2b7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "55069139_f6b90b20",
+        "filename": "tests/transportpce_tests/2.2.1/test_topology.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-04T12:11:36Z",
+      "side": 0,
+      "message": "bug fixed",
+      "range": {
+        "startLine": 927,
+        "startChar": 58,
+        "endLine": 927,
+        "endChar": 59
+      },
+      "revId": "e2834c636701200f4a9491862afb9e42dafcb2b7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
