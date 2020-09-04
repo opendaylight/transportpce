@@ -89,8 +89,9 @@ class TransportGNPYtesting(unittest.TestCase):
     # Path computed by PCE is feasible according to Gnpy
     def test_04_path_computation_FeasibleWithPCE(self):
         response = test_utils.path_computation_request("request-1", "service-1",
-                {"node-id": "XPONDER-1", "service-rate": "100", "service-format": "Ethernet", "clli": "Node1"},
-                {"node-id": "XPONDER-5", "service-rate": "100", "service-format": "Ethernet", "clli": "Node5"})
+                                                       {"node-id": "XPONDER-1", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "Node1"},
+                                                       {"node-id": "XPONDER-5", "service-rate": "100", "service-format": "Ethernet", "clli": "Node5"})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -110,12 +111,14 @@ class TransportGNPYtesting(unittest.TestCase):
     # another one (low SNR)
     def test_05_path_computation_FoundByPCE_NotFeasibleByGnpy(self):
         response = test_utils.path_computation_request("request-2", "service-2",
-            {"node-id": "XPONDER-1", "service-rate": "100", "service-format": "Ethernet", "clli": "Node1"},
-            {"node-id": "XPONDER-5", "service-rate": "100", "service-format": "Ethernet", "clli": "Node5"},
-            {"include_": { "ordered-hops": [
-              {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
-              {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}},
-              {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-4"}}]}})
+                                                       {"node-id": "XPONDER-1", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "Node1"},
+                                                       {"node-id": "XPONDER-5", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "Node5"},
+                                                       {"include_": {"ordered-hops": [
+                                                           {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
+                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}},
+                                                           {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-4"}}]}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -136,11 +139,13 @@ class TransportGNPYtesting(unittest.TestCase):
     # #PCE cannot find a path while GNPy finds a feasible one
     def test_06_path_computation_NotFoundByPCE_FoundByGNPy(self):
         response = test_utils.path_computation_request("request-3", "service-3",
-            {"node-id": "XPONDER-1", "service-rate": "100", "service-format": "Ethernet", "clli": "Node1"},
-            {"node-id": "XPONDER-4", "service-rate": "100", "service-format": "Ethernet", "clli": "Node5"},
-            {"include_": {"ordered-hops": [
-               {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
-               {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}}]}})
+                                                       {"node-id": "XPONDER-1", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "Node1"},
+                                                       {"node-id": "XPONDER-4", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "Node5"},
+                                                       {"include_": {"ordered-hops": [
+                                                           {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
+                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}}]}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -159,13 +164,15 @@ class TransportGNPYtesting(unittest.TestCase):
     # Not found path by PCE and GNPy cannot find another one
     def test_07_path_computation_FoundByPCE_NotFeasibleByGnpy(self):
         response = test_utils.path_computation_request("request-4", "service-4",
-            {"node-id": "XPONDER-1", "service-rate": "100", "service-format": "Ethernet", "clli": "Node1"},
-            {"node-id": "XPONDER-4", "service-rate": "100", "service-format": "Ethernet", "clli": "Node5"},
-            {"include_": {"ordered-hops": [
-                {"hop-number": "0","hop-type": {"node-id": "OpenROADM-2"}},
-                {"hop-number": "1","hop-type": {"node-id": "OpenROADM-3"}},
-                {"hop-number": "2","hop-type": {"node-id": "OpenROADM-4"}},
-                {"hop-number": "3","hop-type": {"node-id": "OpenROADM-3"}}]}})
+                                                       {"node-id": "XPONDER-1", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "Node1"},
+                                                       {"node-id": "XPONDER-4", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "Node5"},
+                                                       {"include_": {"ordered-hops": [
+                                                           {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
+                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}},
+                                                           {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-4"}},
+                                                           {"hop-number": "3", "hop-type": {"node-id": "OpenROADM-3"}}]}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
