@@ -7,6 +7,10 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
+
+# pylint: disable=no-member
+# pylint: disable=too-many-public-methods
+
 import os
 import sys
 import time
