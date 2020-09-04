@@ -96,8 +96,9 @@ class TransportPCEtesting(unittest.TestCase):
     # Path Computation success
     def test_04_path_computation_xpdr_bi(self):
         response = test_utils.path_computation_request("request-1", "service-1",
-                {"node-id": "XPDRA01", "service-rate": "100", "service-format": "Ethernet", "clli": "nodeA"},
-                {"node-id": "XPDRC01", "service-rate": "100", "service-format": "Ethernet", "clli": "nodeC"})
+                                                       {"node-id": "XPDRA01", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "nodeA"},
+                                                       {"node-id": "XPDRC01", "service-rate": "100", "service-format": "Ethernet", "clli": "nodeC"})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -107,8 +108,9 @@ class TransportPCEtesting(unittest.TestCase):
     # Path Computation success
     def test_05_path_computation_rdm_bi(self):
         response = test_utils.path_computation_request("request-1", "service-1",
-                {"node-id": "ROADMA01", "service-rate": "100", "service-format": "Ethernet", "clli": "NodeA"},
-                {"node-id": "ROADMC01", "service-rate": "100", "service-format": "Ethernet", "clli": "NodeC"})
+                                                       {"node-id": "ROADMA01", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "NodeA"},
+                                                       {"node-id": "ROADMC01", "service-rate": "100", "service-format": "Ethernet", "clli": "NodeC"})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -156,8 +158,9 @@ class TransportPCEtesting(unittest.TestCase):
     # Path Computation success
     def test_11_path_computation_xpdr_uni(self):
         response = test_utils.path_computation_request("request-1", "service-1",
-                {"node-id": "XPONDER-1-2", "service-rate": "100", "service-format": "Ethernet", "clli": "ORANGE1"},
-                {"node-id": "XPONDER-3-2", "service-rate": "100", "service-format": "Ethernet", "clli": "ORANGE3"})
+                                                       {"node-id": "XPONDER-1-2", "service-rate": "100",
+                                                           "service-format": "Ethernet", "clli": "ORANGE1"},
+                                                       {"node-id": "XPONDER-3-2", "service-rate": "100", "service-format": "Ethernet", "clli": "ORANGE3"})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -167,8 +170,9 @@ class TransportPCEtesting(unittest.TestCase):
     # Path Computation success
     def test_12_path_computation_rdm_uni(self):
         response = test_utils.path_computation_request("request1", "service1",
-                {"service-rate": "100", "service-format": "Ethernet", "clli": "cll21", "node-id": "OpenROADM-2-1"},
-                {"service-rate": "100", "service-format": "Ethernet", "clli": "ncli22", "node-id": "OpenROADM-2-2"})
+                                                       {"service-rate": "100", "service-format": "Ethernet",
+                                                           "clli": "cll21", "node-id": "OpenROADM-2-1"},
+                                                       {"service-rate": "100", "service-format": "Ethernet", "clli": "ncli22", "node-id": "OpenROADM-2-2"})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -218,7 +222,7 @@ class TransportPCEtesting(unittest.TestCase):
     # Test failed path computation
     def test_17_fail_path_computation(self):
         response = test_utils.post_request(test_utils.URL_PATH_COMPUTATION_REQUEST,
-                {"input": { "service-handler-header": { "request-id": "request-1" }}})
+                                           {"input": {"service-handler-header": {"request-id": "request-1"}}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Service Name is not set',
@@ -228,47 +232,49 @@ class TransportPCEtesting(unittest.TestCase):
     # Test1 success path computation
     def test_18_success1_path_computation(self):
         response = test_utils.path_computation_request("request1", "service1",
-                {"service-format": "Ethernet","service-rate": "100", "clli": "ORANGE2", "node-id": "XPONDER-2-2",
-                    "tx-direction": {"port": {
-                            "port-device-name": "Some port-device-name",
-                            "port-type": "Some port-type",
-                            "port-name": "Some port-name",
-                            "port-rack": "Some port-rack",
-                            "port-shelf": "Some port-shelf",
-                            "port-slot": "Some port-slot",
-                            "port-sub-slot": "Some port-sub-slot"
-                        }},
-                    "rx-direction": {"port": {
-                            "port-device-name": "Some port-device-name",
-                            "port-type": "Some port-type",
-                            "port-name": "Some port-name",
-                            "port-rack": "Some port-rack",
-                            "port-shelf": "Some port-shelf",
-                            "port-slot": "Some port-slot",
-                            "port-sub-slot": "Some port-sub-slot"
-                        }}},
-                {"service-format": "Ethernet", "service-rate": "100", "clli": "ORANGE1", "node-id": "XPONDER-1-2",
-                    "tx-direction": {"port": {
-                            "port-device-name": "Some port-device-name",
-                            "port-type": "Some port-type",
-                            "port-name": "Some port-name",
-                            "port-rack": "Some port-rack",
-                            "port-shelf": "Some port-shelf",
-                            "port-slot": "Some port-slot",
-                            "port-sub-slot": "Some port-sub-slot"
-                        }},
-                    "rx-direction": {"port": {
-                            "port-device-name": "Some port-device-name",
-                            "port-type": "Some port-type",
-                            "port-name": "Some port-name",
-                            "port-rack": "Some port-rack",
-                            "port-shelf": "Some port-shelf",
-                            "port-slot": "Some port-slot",
-                            "port-sub-slot": "Some port-sub-slot"
-                        }}},
-                {"customer-code": ["Some customer-code"], "co-routing": {"existing-service": ["Some existing-service"]}},
-                {"customer-code": ["Some customer-code"], "co-routing": {"existing-service": ["Some existing-service"]}},
-                "hop-count", {"locally-protected-links": "true"})
+                                                       {"service-format": "Ethernet", "service-rate": "100", "clli": "ORANGE2", "node-id": "XPONDER-2-2",
+                                                        "tx-direction": {"port": {
+                                                            "port-device-name": "Some port-device-name",
+                                                            "port-type": "Some port-type",
+                                                            "port-name": "Some port-name",
+                                                            "port-rack": "Some port-rack",
+                                                            "port-shelf": "Some port-shelf",
+                                                            "port-slot": "Some port-slot",
+                                                            "port-sub-slot": "Some port-sub-slot"
+                                                        }},
+                                                           "rx-direction": {"port": {
+                                                               "port-device-name": "Some port-device-name",
+                                                               "port-type": "Some port-type",
+                                                               "port-name": "Some port-name",
+                                                               "port-rack": "Some port-rack",
+                                                               "port-shelf": "Some port-shelf",
+                                                               "port-slot": "Some port-slot",
+                                                               "port-sub-slot": "Some port-sub-slot"
+                                                           }}},
+                                                       {"service-format": "Ethernet", "service-rate": "100", "clli": "ORANGE1", "node-id": "XPONDER-1-2",
+                                                           "tx-direction": {"port": {
+                                                               "port-device-name": "Some port-device-name",
+                                                               "port-type": "Some port-type",
+                                                               "port-name": "Some port-name",
+                                                               "port-rack": "Some port-rack",
+                                                               "port-shelf": "Some port-shelf",
+                                                               "port-slot": "Some port-slot",
+                                                               "port-sub-slot": "Some port-sub-slot"
+                                                           }},
+                                                           "rx-direction": {"port": {
+                                                               "port-device-name": "Some port-device-name",
+                                                               "port-type": "Some port-type",
+                                                               "port-name": "Some port-name",
+                                                               "port-rack": "Some port-rack",
+                                                               "port-shelf": "Some port-shelf",
+                                                               "port-slot": "Some port-slot",
+                                                               "port-sub-slot": "Some port-sub-slot"
+                                                           }}},
+                                                       {"customer-code": ["Some customer-code"],
+                                                           "co-routing": {"existing-service": ["Some existing-service"]}},
+                                                       {"customer-code": ["Some customer-code"],
+                                                           "co-routing": {"existing-service": ["Some existing-service"]}},
+                                                       "hop-count", {"locally-protected-links": "true"})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -278,8 +284,9 @@ class TransportPCEtesting(unittest.TestCase):
     # Test2 success path computation with path description
     def test_19_success2_path_computation(self):
         response = test_utils.path_computation_request("request 1", "service 1",
-                {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-1-2", "clli": "ORANGE1"},
-                {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-3-2", "clli": "ORANGE3"})
+                                                       {"service-rate": "100", "service-format": "Ethernet",
+                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1"},
+                                                       {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-3-2", "clli": "ORANGE3"})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -293,9 +300,11 @@ class TransportPCEtesting(unittest.TestCase):
     # Test3 success path computation with hard-constraints exclude
     def test_20_success3_path_computation(self):
         response = test_utils.path_computation_request("request 1", "service 1",
-                {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-1-2", "clli": "ORANGE1"},
-                {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-3-2", "clli": "ORANGE3"},
-                {"exclude_": { "node-id": ["OpenROADM-2-1", "OpenROADM-2-2"] }})
+                                                       {"service-rate": "100", "service-format": "Ethernet",
+                                                           "node-id": "XPONDER-1-2", "clli": "ORANGE1"},
+                                                       {"service-rate": "100", "service-format": "Ethernet",
+                                                           "node-id": "XPONDER-3-2", "clli": "ORANGE3"},
+                                                       {"exclude_": {"node-id": ["OpenROADM-2-1", "OpenROADM-2-2"]}})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -309,8 +318,9 @@ class TransportPCEtesting(unittest.TestCase):
     # Path computation before deleting oms-attribute of the link :openroadm1-3 to openroadm1-2
     def test_21_path_computation_before_oms_attribute_deletion(self):
         response = test_utils.path_computation_request("request 1", "service 1",
-                {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-2-2", "clli": "ORANGE2"},
-                {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-1-2", "clli": "ORANGE1"})
+                                                       {"service-rate": "100", "service-format": "Ethernet",
+                                                           "node-id": "XPONDER-2-2", "clli": "ORANGE2"},
+                                                       {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-1-2", "clli": "ORANGE1"})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
@@ -336,8 +346,9 @@ class TransportPCEtesting(unittest.TestCase):
     # Path computation after deleting oms-attribute of the link :openroadm1-3 to openroadm1-2
     def test_23_path_computation_after_oms_attribute_deletion(self):
         response = test_utils.path_computation_request("request 1", "service 1",
-                {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-2-2", "clli": "ORANGE2"},
-                {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-1-2", "clli": "ORANGE1"})
+                                                       {"service-rate": "100", "service-format": "Ethernet",
+                                                           "node-id": "XPONDER-2-2", "clli": "ORANGE2"},
+                                                       {"service-rate": "100", "service-format": "Ethernet", "node-id": "XPONDER-1-2", "clli": "ORANGE1"})
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Path is calculated',
