@@ -79,9 +79,11 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_05_service_path_create(self):
         response = test_utils.service_path_request("create", "service_test", "7",
                                                    [{"renderer:node-id": "ROADMA01",
-                                                     "renderer:src-tp": "SRG1-PP7-TXRX", "renderer:dest-tp": "DEG1-TTP-TXRX"},
+                                                     "renderer:src-tp": "SRG1-PP7-TXRX",
+                                                     "renderer:dest-tp": "DEG1-TTP-TXRX"},
                                                     {"renderer:node-id": "XPDRA01",
-                                                     "renderer:src-tp": "XPDR1-CLIENT1", "renderer:dest-tp": "XPDR1-NETWORK1"}])
+                                                     "renderer:src-tp": "XPDR1-CLIENT1",
+                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}])
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes: ROADMA01', res["output"]["result"])
@@ -245,9 +247,11 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_14_service_path_delete(self):
         response = test_utils.service_path_request("delete", "service_test", "7",
                                                    [{"renderer:node-id": "ROADMA01",
-                                                     "renderer:src-tp": "SRG1-PP7-TXRX", "renderer:dest-tp": "DEG1-TTP-TXRX"},
+                                                     "renderer:src-tp": "SRG1-PP7-TXRX",
+                                                     "renderer:dest-tp": "DEG1-TTP-TXRX"},
                                                     {"renderer:node-id": "XPDRA01",
-                                                     "renderer:src-tp": "XPDR1-CLIENT1", "renderer:dest-tp": "XPDR1-NETWORK1"}])
+                                                     "renderer:src-tp": "XPDR1-CLIENT1",
+                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}])
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertEqual(response.json(), {
             'output': {'result': 'Request processed', 'success': True}})
@@ -267,7 +271,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
-                "error-message": "Request could not be completed because the relevant data model content does not exist"},
+                "error-message":
+                    "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
     def test_17_service_path_delete_rdm_check(self):
@@ -276,7 +281,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
-                "error-message": "Request could not be completed because the relevant data model content does not exist"},
+                "error-message":
+                    "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
     def test_18_service_path_delete_xpdr_check(self):
@@ -285,7 +291,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
-                "error-message": "Request could not be completed because the relevant data model content does not exist"},
+                "error-message":
+                    "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
     def test_19_service_path_delete_xpdr_check(self):
@@ -294,7 +301,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
-                "error-message": "Request could not be completed because the relevant data model content does not exist"},
+                "error-message":
+                    "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
     def test_20_service_path_delete_xpdr_check(self):
@@ -303,7 +311,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
-                "error-message": "Request could not be completed because the relevant data model content does not exist"},
+                "error-message":
+                    "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
     def test_21_service_path_delete_xpdr_check(self):
@@ -312,7 +321,8 @@ class TransportPCERendererTesting(unittest.TestCase):
         res = response.json()
         self.assertIn(
             {"error-type": "application", "error-tag": "data-missing",
-                "error-message": "Request could not be completed because the relevant data model content does not exist"},
+                "error-message":
+                    "Request could not be completed because the relevant data model content does not exist"},
             res['errors']['error'])
 
     def test_22_service_path_delete_xpdr_check(self):
