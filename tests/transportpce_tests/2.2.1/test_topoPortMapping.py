@@ -61,10 +61,10 @@ class TransportPCEtesting(unittest.TestCase):
             nbMapCurrent = 0
             for j in range(0, nbTp):
                 tpId = resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
-                if((not "CP" in tpId) and (not "CTP" in tpId)):
+                if (not "CP" in tpId) and (not "CTP" in tpId):
                     responseMap = test_utils.portmapping_request(nodeMapId+"/mapping/"+tpId)
                     self.assertEqual(responseMap.status_code, requests.codes.ok)
-                    if(responseMap.status_code == requests.codes.ok):
+                    if responseMap.status_code == requests.codes.ok:
                         nbMapCurrent += 1
             nbMapCumul += nbMapCurrent
         nbMappings -= nbMapCurrent
