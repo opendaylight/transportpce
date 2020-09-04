@@ -12,7 +12,6 @@
 # pylint: disable=no-member
 
 import unittest
-import json
 #from unittest.result import failfast
 import requests
 from common import test_utils

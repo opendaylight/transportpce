@@ -99,7 +99,6 @@ class TransportPCEtesting(unittest.TestCase):
                     network = 0
                     for j in range(0, nbTps):
                         tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-common-network:tp-type']
-                        tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                         if (tpType == 'XPONDER-CLIENT'):
                             client += 1
                         elif (tpType == 'XPONDER-NETWORK'):
@@ -118,7 +117,6 @@ class TransportPCEtesting(unittest.TestCase):
                     network = 0
                     for j in range(0, nbTps):
                         tpType = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['org-openroadm-common-network:tp-type']
-                        tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                         if (tpType == 'XPONDER-CLIENT'):
                             client += 1
                         elif (tpType == 'XPONDER-NETWORK'):

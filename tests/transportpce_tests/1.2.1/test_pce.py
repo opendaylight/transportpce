@@ -11,7 +11,6 @@
 # pylint: disable=no-member
 
 import unittest
-import json
 import os
 import sys
 import time
