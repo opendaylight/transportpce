@@ -187,9 +187,9 @@ class TransportPCEtesting(unittest.TestCase):
         for i in range(0, 15):
             atoz = res['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]
             ztoa = res['output']['response-parameters']['path-description']['zToA-direction']['zToA'][i]
-            if (atoz['id'] == '14'):
+            if atoz['id'] == '14':
                 self.assertEqual(atoz['resource']['tp-id'], 'SRG1-PP1-TX')
-            if (ztoa['id'] == '0'):
+            if ztoa['id'] == '0':
                 self.assertEqual(ztoa['resource']['tp-id'], 'SRG1-PP1-RX')
         time.sleep(5)
 
@@ -335,7 +335,7 @@ class TransportPCEtesting(unittest.TestCase):
         for i in range(0, nbElmPath):
             resource_i = (res['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]
                              ['resource'])
-            if(resource_i == link):
+            if resource_i == link:
                 find = True
         self.assertEqual(find, True)
         time.sleep(5)
@@ -364,7 +364,7 @@ class TransportPCEtesting(unittest.TestCase):
         for i in range(0, nbElmPath):
             resource_i = (res['output']['response-parameters']['path-description']['aToZ-direction']['aToZ'][i]
                              ['resource'])
-            if (resource_i == link):
+            if resource_i == link:
                 find = True
         self.assertNotEqual(find, True)
         time.sleep(5)

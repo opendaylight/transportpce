@@ -517,10 +517,10 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
-            if (node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1'):
+            if node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1':
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
-                    if (tp['tp-id'] == 'XPDR1-NETWORK1'):
+                    if tp['tp-id'] == 'XPDR1-NETWORK1':
                         xpdrTpPortConAt = tp['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']
                         self.assertEqual(len(xpdrTpPortConAt['ts-pool']), 80)
                         self.assertEqual(len(xpdrTpPortConAt['odtu-tpn-pool'][0]['tpn-pool']), 80)
@@ -757,10 +757,10 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
-            if (node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1'):
+            if node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1':
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
-                    if (tp['tp-id'] == 'XPDR1-NETWORK1'):
+                    if tp['tp-id'] == 'XPDR1-NETWORK1':
                         xpdrTpPortConAt = tp['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']
                         self.assertEqual(len(xpdrTpPortConAt['ts-pool']), 72)
                         tsPoolList = [i for i in range(1, 9)]
@@ -822,7 +822,7 @@ class TransportPCEtesting(unittest.TestCase):
             if (node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1'):
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
-                    if (tp['tp-id'] == 'XPDR1-NETWORK1'):
+                    if tp['tp-id'] == 'XPDR1-NETWORK1':
                         xpdrTpPortConAt = tp['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']
                         self.assertEqual(len(xpdrTpPortConAt['ts-pool']), 80)
                         self.assertEqual(len(xpdrTpPortConAt['odtu-tpn-pool'][0]['tpn-pool']), 80)
@@ -853,10 +853,10 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_otn_topo_request()
         res = response.json()
         for node in res['network'][0]['node']:
-            if (node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1'):
+            if node['node-id'] == 'SPDR-SA1-XPDR1' or 'SPDR-SC1-XPDR1':
                 tpList = node['ietf-network-topology:termination-point']
                 for tp in tpList:
-                    if (tp['tp-id'] == 'XPDR1-NETWORK1'):
+                    if tp['tp-id'] == 'XPDR1-NETWORK1':
                         xpdrTpPortConAt = tp['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']
                         self.assertNotIn('ts-pool', dict.keys(xpdrTpPortConAt))
                         self.assertNotIn('odtu-tpn-pool', dict.keys(xpdrTpPortConAt))
