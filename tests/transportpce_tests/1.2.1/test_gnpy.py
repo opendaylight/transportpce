@@ -119,7 +119,8 @@ class TransportGNPYtesting(unittest.TestCase):
                                                        {"include_": {"ordered-hops": [
                                                            {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
                                                            {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}},
-                                                           {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-4"}}]}})
+                                                           {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-4"}}]}
+                                                        })
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -146,7 +147,8 @@ class TransportGNPYtesting(unittest.TestCase):
                                                            "service-format": "Ethernet", "clli": "Node5"},
                                                        {"include_": {"ordered-hops": [
                                                            {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
-                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}}]}})
+                                                           {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}}]}
+                                                        })
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
@@ -173,7 +175,8 @@ class TransportGNPYtesting(unittest.TestCase):
                                                            {"hop-number": "0", "hop-type": {"node-id": "OpenROADM-2"}},
                                                            {"hop-number": "1", "hop-type": {"node-id": "OpenROADM-3"}},
                                                            {"hop-number": "2", "hop-type": {"node-id": "OpenROADM-4"}},
-                                                           {"hop-number": "3", "hop-type": {"node-id": "OpenROADM-3"}}]}})
+                                                           {"hop-number": "3", "hop-type": {"node-id": "OpenROADM-3"}}]}
+                                                        })
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(res['output']['configuration-response-common'][
