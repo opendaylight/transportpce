@@ -218,7 +218,8 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.otn_service_path_request("create", "service1", "10G", "Ethernet",
                                                        [{"node-id": "SPDR-SA1", "client-tp": "XPDR1-CLIENT1",
                                                            "network-tp": "XPDR1-NETWORK1"}],
-                                                       {"ethernet-encoding": "eth encode", "trib-slot": ["1"], "trib-port-number": "1"})
+                                                       {"ethernet-encoding": "eth encode",
+                                                        "trib-slot": ["1"], "trib-port-number": "1"})
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -325,7 +326,8 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.otn_service_path_request("delete", "service1", "10G", "Ethernet",
                                                        [{"node-id": "SPDR-SA1", "client-tp": "XPDR1-CLIENT1",
                                                            "network-tp": "XPDR1-NETWORK1"}],
-                                                       {"ethernet-encoding": "eth encode", "trib-slot": ["1"], "trib-port-number": "1"})
+                                                       {"ethernet-encoding": "eth encode",
+                                                        "trib-slot": ["1"], "trib-port-number": "1"})
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
