@@ -12,7 +12,6 @@
 # pylint: disable=too-many-public-methods
 
 import unittest
-import json
 import os
 import sys
 import time

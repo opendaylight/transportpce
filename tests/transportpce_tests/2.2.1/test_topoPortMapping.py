@@ -13,7 +13,6 @@
 # pylint: disable=too-many-public-methods
 
 import unittest
-import json
 import time
 import requests
 from common import test_utils

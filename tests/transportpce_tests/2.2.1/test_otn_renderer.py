@@ -13,7 +13,6 @@
 # pylint: disable=too-many-public-methods
 
 import unittest
-import json
 import time
 import requests
 from common import test_utils
@@ -52,16 +51,16 @@ class TransportPCEtesting(unittest.TestCase):
     def test_02_get_portmapping_CLIENT4(self):
         response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-CLIENT4")
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual('CP1-SFP4-P1', res['mapping'][0]['supporting-port'])
-        self.assertEqual('CP1-SFP4', res['mapping'][0]['supporting-circuit-pack-name'])
-        self.assertEqual('XPDR1-CLIENT4', res['mapping'][0]['logical-connection-point'])
-        self.assertEqual('bidirectional', res['mapping'][0]['port-direction'])
-        self.assertEqual('xpdr-client', res['mapping'][0]['port-qual'])
-        self.assertEqual('FqlcrxV7p3g=', res['mapping'][0]['lcp-hash-val'])
-        self.assertIn('org-openroadm-port-types:if-10GE-ODU2e', res['mapping'][0]['supported-interface-capability'])
-        self.assertIn('org-openroadm-port-types:if-10GE-ODU2', res['mapping'][0]['supported-interface-capability'])
-        self.assertIn('org-openroadm-port-types:if-10GE', res['mapping'][0]['supported-interface-capability'])
+        res_mapping = (response.json())['mapping'][0]
+        self.assertEqual('CP1-SFP4-P1', res_mapping['supporting-port'])
+        self.assertEqual('CP1-SFP4', res_mapping['supporting-circuit-pack-name'])
+        self.assertEqual('XPDR1-CLIENT4', res_mapping['logical-connection-point'])
+        self.assertEqual('bidirectional', res_mapping['port-direction'])
+        self.assertEqual('xpdr-client', res_mapping['port-qual'])
+        self.assertEqual('FqlcrxV7p3g=', res_mapping['lcp-hash-val'])
+        self.assertIn('org-openroadm-port-types:if-10GE-ODU2e', res_mapping['supported-interface-capability'])
+        self.assertIn('org-openroadm-port-types:if-10GE-ODU2', res_mapping['supported-interface-capability'])
+        self.assertIn('org-openroadm-port-types:if-10GE', res_mapping['supported-interface-capability'])
 
     def test_03_get_portmapping_NETWORK1(self):
         response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-NETWORK1")
