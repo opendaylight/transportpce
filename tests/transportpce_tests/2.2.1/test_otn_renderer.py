@@ -13,7 +13,6 @@
 # pylint: disable=too-many-public-methods
 
 import unittest
-import json
 import time
 import requests
 from common import test_utils
@@ -49,8 +48,8 @@ class TransportPCEtesting(unittest.TestCase):
             res['node'][0]['netconf-node-topology:connection-status'],
             'connected')
 
-    def test_02_get_portmapping_CLIENT1(self):
-        response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-CLIENT1")
+    def test_02_get_portmapping_CLIENT4(self):
+        response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-CLIENT4")
         self.assertEqual(response.status_code, requests.codes.ok)
         res_mapping = (response.json())['mapping'][0]
         self.assertSetEqual({'org-openroadm-port-types:if-10GE-ODU2e',

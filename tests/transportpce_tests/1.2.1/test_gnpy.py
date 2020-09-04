@@ -13,7 +13,6 @@
 # pylint: disable=too-many-public-methods
 
 import unittest
-import json
 import os
 import sys
 import time
@@ -22,13 +21,6 @@ from common import test_utils
 
 
 class TransportGNPYtesting(unittest.TestCase):
-
-    @classmethod
-    def __init_logfile(cls):
-        GNPY_LOGFILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                    "..", "..", "transportpce_tests", "gnpy.log")
-        if os.path.isfile(GNPY_LOFGILE):
-            os.remove(GNPY_LOFGILE)
 
     topo_cllinet_data = None
     topo_ordnet_data = None
