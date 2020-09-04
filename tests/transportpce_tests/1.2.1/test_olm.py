@@ -13,7 +13,6 @@
 
 import unittest
 import time
-import json
 import requests
 from common import test_utils
 

@@ -11,7 +11,6 @@
 
 # pylint: disable=no-member
 
-import json
 import time
 import unittest
 import requests
@@ -471,7 +470,6 @@ class TransportPCETopologyTesting(unittest.TestCase):
         R2RLink = ['ROADMA01-DEG1-DEG1-TTP-TXRXtoROADMC01-DEG2-DEG2-TTP-TXRX',
                    'ROADMC01-DEG2-DEG2-TTP-TXRXtoROADMA01-DEG1-DEG1-TTP-TXRX']
         for i in range(0, nbLink):
-            nodeType = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type']
             link_id = res['network'][0]['ietf-network-topology:link'][i]['link-id']
             if(link_id in R2RLink):
                 find = False
@@ -732,7 +730,6 @@ class TransportPCETopologyTesting(unittest.TestCase):
                    'ROADMB01-DEG1-DEG1-TTP-TXRXtoROADMA01-DEG2-DEG2-TTP-TXRX',
                    'ROADMB01-DEG2-DEG2-TTP-TXRXtoROADMC01-DEG1-DEG1-TTP-TXRX']
         for i in range(0, nbLink):
-            nodeType = res['network'][0]['ietf-network-topology:link'][i]['org-openroadm-common-network:link-type']
             link_id = res['network'][0]['ietf-network-topology:link'][i]['link-id']
             if(link_id in R2RLink):
                 find = False
@@ -857,7 +854,7 @@ class TransportPCETopologyTesting(unittest.TestCase):
         nbNode = len(res['network'][0]['node'])
         self.assertEqual(nbNode, 1)
         for i in range(0, nbNode-1):
-            self.assertNotEqual(res['network'][0]['node'][1]['org-openroadm-clli-network:clli'], 'NodeC')
+            self.assertNotEqual(res['network'][0]['node'][i]['org-openroadm-clli-network:clli'], 'NodeC')
 
     def test_35_disconnect_XPDRA(self):
         response = test_utils.unmount_device("XPDRA01")
