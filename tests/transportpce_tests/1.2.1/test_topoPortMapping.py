@@ -46,20 +46,15 @@ class TransportPCEtesting(unittest.TestCase):
         responseTopo = test_utils.get_ordm_topo_request("")
         resTopo = responseTopo.json()
         nbNode = len(resTopo['network'][0]['node'])
-        nbMapCumul = 0
-        nbMappings = 0
         for i in range(0, nbNode):
             nodeId = resTopo['network'][0]['node'][i]['node-id']
             nodeMapId = nodeId.split("-")[0]
-            responseMapList = test_utils.portmapping_request(nodeMapId)
-            resMapList = responseMapList.json()
-            nbMappings = len(resMapList['nodes'][0]['mapping']) - nbMapCumul
+            test_utils.portmapping_request(nodeMapId)
             nbTp = len(resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-            nbMapCurrent = 0
             for j in range(0, nbTp):
                 tpId = resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                 if((not "CP" in tpId) and (not "CTP" in tpId)):
-                    responseMap = test_utils.portmapping_request(nodeMapId+"/mapping/"+tpId)
+                    test_utils.portmapping_request(nodeMapId+"/mapping/"+tpId)
 
     # Disconnect the ROADMA
     def test_03_disconnect_rdm(self):
