@@ -515,7 +515,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-CLIENT':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
-            elif (ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK'):
+            elif ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK':
                 self.assertIn(u'tail-equipment-id',
                               dict.keys(ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
                 self.assertNotIn('wavelength', dict.keys(
