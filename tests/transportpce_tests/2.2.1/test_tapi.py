@@ -10,6 +10,9 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
+# some pylint false positives specific to tapi test
+# pylint: disable=unsubscriptable-object
+# pylint: disable=unsupported-assignment-operation
 
 import os
 import sys
@@ -53,6 +56,7 @@ class TransportTapitesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
