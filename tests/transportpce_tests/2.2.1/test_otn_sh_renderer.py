@@ -29,6 +29,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
