@@ -11,6 +11,7 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
+# pylint: disable=too-many-lines
 
 import unittest
 import time
@@ -60,6 +61,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-network:model'], 'model2')
 
     def test_04_getLinks_OpenroadmTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -100,6 +102,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(dropLink), 0)
 
     def test_05_getNodes_OpenRoadmTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
@@ -178,6 +181,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(res['network'][0]['node'][0]['org-openroadm-clli-network:clli'], 'NodeA')
 
     def test_08_getOpenRoadmNetwork(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -197,6 +201,7 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertFalse(True)
 
     def test_09_getNodes_OpenRoadmTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
@@ -294,6 +299,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
 
     def test_12_getLinks_OpenRoadmTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -392,6 +398,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_17_getOpenRoadmNetwork(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_net_request()
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -421,6 +428,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(len(listNode), 0)
 
     def test_18_getROADMLinkOpenRoadmTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_topo_request("")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -500,13 +508,14 @@ class TransportPCEtesting(unittest.TestCase):
                     'org-openroadm-network-topology:OMS-attributes']['span']["engineered-spanloss"]
                 length = res['network'][0]['ietf-network-topology:link'][i][
                     'org-openroadm-network-topology:OMS-attributes']['span']['link-concatenation'][0]['SRLG-length']
-                if (spanLoss != None) & (length != None):
+                if (spanLoss is not None) & (length is not None):
                     find = True
                 self.assertTrue(find)
                 R2RLink.remove(link_id)
         self.assertEqual(len(R2RLink), 0)
 
     def test_20_getNodes_OpenRoadmTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
@@ -772,7 +781,7 @@ class TransportPCEtesting(unittest.TestCase):
                     'org-openroadm-network-topology:OMS-attributes']['span']["engineered-spanloss"]
                 length = res['network'][0]['ietf-network-topology:link'][i][
                     'org-openroadm-network-topology:OMS-attributes']['span']['link-concatenation'][0]['SRLG-length']
-                if (spanLoss != None) & (length != None):
+                if (spanLoss is not None) & (length is not None):
                     find = True
                 self.assertTrue(find)
                 R2RLink.remove(link_id)
@@ -859,6 +868,7 @@ class TransportPCEtesting(unittest.TestCase):
 #                                'ROADMC-DEG2-DEG2-CTP-TXRXtoROADMC-DEG1-DEG1-CTP-TXRX')
 
     def test_32_getNodes_OpenRoadmTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
@@ -979,6 +989,7 @@ class TransportPCEtesting(unittest.TestCase):
             self.assertNotEqual(res['network'][0]['node'][i]['node-id'], 'XPDR-A1')
 
     def test_38_getNodes_OpenRoadmTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes

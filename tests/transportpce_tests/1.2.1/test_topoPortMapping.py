@@ -11,6 +11,8 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
+## a pylint false positive due to unittest
+# pylint: disable=no-self-use
 
 import time
 import unittest
@@ -42,7 +44,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     # Verify the termination points of the ROADMA
-    def test_02_compareOpenroadmTopologyPortMapping_rdm(self):
+    def test_02_compare_Openroadm_topology_portMapping_rdm(self):
         responseTopo = test_utils.get_ordm_topo_request("")
         resTopo = responseTopo.json()
         nbNode = len(resTopo['network'][0]['node'])
