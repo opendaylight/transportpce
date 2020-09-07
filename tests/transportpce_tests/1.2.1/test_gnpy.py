@@ -29,6 +29,7 @@ class TransportGNPYtesting(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # pylint: disable=bare-except
         try:
             sample_files_parsed = False
             TOPO_CLLINET_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
@@ -63,6 +64,7 @@ class TransportGNPYtesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
