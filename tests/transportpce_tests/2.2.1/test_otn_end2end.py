@@ -497,12 +497,12 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(nb_links, 4)
         for link in res['network'][0]['ietf-network-topology:link']:
             linkId = link['link-id']
-            if (linkId == 'OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1' or
-                    linkId == 'OTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1'):
+            if (linkId in ('OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
+                           'OTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1')):
                 self.assertEqual(link['org-openroadm-otn-network-topology:available-bandwidth'], 0)
                 self.assertEqual(link['org-openroadm-otn-network-topology:used-bandwidth'], 100000)
-            elif (linkId == 'ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1' or
-                  linkId == 'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1'):
+            elif (linkId in ('ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
+                             'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1')):
                 self.assertEqual(link['org-openroadm-otn-network-topology:available-bandwidth'], 100000)
                 self.assertEqual(link['org-openroadm-otn-network-topology:used-bandwidth'], 0)
                 self.assertEqual(link['transportpce-topology:otn-link-type'], 'ODTU4')
@@ -748,8 +748,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(nb_links, 4)
         for link in res['network'][0]['ietf-network-topology:link']:
             linkId = link['link-id']
-            if (linkId == 'ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1' or
-                    linkId == 'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1'):
+            if (linkId in ('ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
+                           'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1')):
                 self.assertEqual(link['org-openroadm-otn-network-topology:available-bandwidth'], 90000)
                 self.assertEqual(link['org-openroadm-otn-network-topology:used-bandwidth'], 10000)
 
@@ -763,7 +763,7 @@ class TransportPCEtesting(unittest.TestCase):
                     if tp['tp-id'] == 'XPDR1-NETWORK1':
                         xpdrTpPortConAt = tp['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']
                         self.assertEqual(len(xpdrTpPortConAt['ts-pool']), 72)
-                        tsPoolList = [i for i in range(1, 9)]
+                        tsPoolList = list(range(1, 9))
                         self.assertNotIn(tsPoolList, xpdrTpPortConAt['ts-pool'])
                         self.assertEqual(len(xpdrTpPortConAt['odtu-tpn-pool'][0]['tpn-pool']), 79)
                         self.assertNotIn(1, xpdrTpPortConAt['odtu-tpn-pool'][0]['tpn-pool'])
@@ -810,8 +810,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual(nb_links, 4)
         for link in res['network'][0]['ietf-network-topology:link']:
             linkId = link['link-id']
-            if (linkId == 'ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1' or
-                    linkId == 'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1'):
+            if (linkId in ('ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1',
+                           'ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1')):
                 self.assertEqual(link['org-openroadm-otn-network-topology:available-bandwidth'], 100000)
                 self.assertEqual(link['org-openroadm-otn-network-topology:used-bandwidth'], 0)
 

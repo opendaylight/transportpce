@@ -10,6 +10,9 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
+##some pylint false positives specific to tapi test
+# pylint: disable=unsubscriptable-object
+# pylint: disable=unsupported-assignment-operation
 
 import os
 import sys
