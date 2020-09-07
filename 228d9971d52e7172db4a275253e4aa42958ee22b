@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09f26edb_53bac1f0",
+        "filename": "tests/transportpce_tests/2.2.1/simulators.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-07T07:22:49Z",
+      "side": 1,
+      "message": "OK, modification to report into docker sims scripts.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 94
+      },
+      "revId": "228d9971d52e7172db4a275253e4aa42958ee22b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
