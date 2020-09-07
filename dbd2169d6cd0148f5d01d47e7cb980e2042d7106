@@ -22,6 +22,30 @@
       "revId": "dbd2169d6cd0148f5d01d47e7cb980e2042d7106",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1f58b7e_81002c4d",
+        "filename": "tests/transportpce_tests/2.2.1/test_portmapping.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-07T08:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f572643_404999c4",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 66
+      },
+      "revId": "dbd2169d6cd0148f5d01d47e7cb980e2042d7106",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
