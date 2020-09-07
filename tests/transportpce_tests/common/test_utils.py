@@ -136,7 +136,7 @@ def install_karaf_feature(feature_name: str):
         "..", "..", "..", "karaf", "target", "assembly", "bin", "client")
     return subprocess.run([executable],
                           input='feature:install ' + feature_name + '\n feature:list | grep tapi \n logout \n',
-                          universal_newlines=True)
+                          universal_newlines=True, check=False)
 
 
 def get_request(url):
@@ -153,11 +153,11 @@ def post_request(url, data):
             data=json.dumps(data),
             headers=TYPE_APPLICATION_JSON,
             auth=(ODL_LOGIN, ODL_PWD))
-    else:
-        return requests.request(
-            "POST", url.format(RESTCONF_BASE_URL),
-            headers=TYPE_APPLICATION_JSON,
-            auth=(ODL_LOGIN, ODL_PWD))
+
+    return requests.request(
+        "POST", url.format(RESTCONF_BASE_URL),
+        headers=TYPE_APPLICATION_JSON,
+        auth=(ODL_LOGIN, ODL_PWD))
 
 
 def post_xmlrequest(url, data):
@@ -167,6 +167,7 @@ def post_xmlrequest(url, data):
             data=data,
             headers=TYPE_APPLICATION_XML,
             auth=(ODL_LOGIN, ODL_PWD))
+    return None
 
 
 def put_request(url, data):
@@ -351,11 +352,11 @@ def service_delete_request(servicename: str,
 
 def service_path_request(operation: str, servicename: str, wavenumber: str, nodes):
     attr = {"renderer:input": {
-            "renderer:service-name": servicename,
-            "renderer:wave-number": wavenumber,
-            "renderer:modulation-format": "qpsk",
-            "renderer:operation": operation,
-            "renderer:nodes": nodes}}
+        "renderer:service-name": servicename,
+        "renderer:wave-number": wavenumber,
+        "renderer:modulation-format": "qpsk",
+        "renderer:operation": operation,
+        "renderer:nodes": nodes}}
     return post_request(URL_SERVICE_PATH, attr)
 
 
@@ -373,8 +374,8 @@ def otn_service_path_request(operation: str, servicename: str, servicerate: str,
 
 def create_ots_oms_request(nodeid: str, lcp: str):
     attr = {"input": {
-            "node-id": nodeid,
-            "logical-connection-point": lcp}}
+        "node-id": nodeid,
+        "logical-connection-point": lcp}}
     return post_request(URL_CREATE_OTS_OMS, attr)
 
 
@@ -409,9 +410,11 @@ def start_honeynode(log_file: str, node_port: str, node_config_file_name: str):
             return subprocess.Popen(
                 [HONEYNODE_EXECUTABLE, node_port, os.path.join(SAMPLES_DIRECTORY, node_config_file_name)],
                 stdout=outfile, stderr=outfile)
+    return None
 
 
 def wait_until_log_contains(log_file, regexp, time_to_wait=20):
+    # pylint: disable=lost-exception
     stringfound = False
     filefound = False
     line = None
@@ -457,4 +460,5 @@ class TimeOut:
         signal.alarm(self.seconds)
 
     def __exit__(self, type, value, traceback):
+        # pylint: disable=W0622
         signal.alarm(0)

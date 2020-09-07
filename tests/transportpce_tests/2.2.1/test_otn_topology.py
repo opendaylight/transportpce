@@ -30,6 +30,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
@@ -77,6 +78,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
 
     def test_05_getNodes_OpenRoadmTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_ordm_topo_request("")
         res = response.json()
         # Tests related to nodes
@@ -138,6 +140,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertNotIn('ietf-network-topology:link', res['network'][0])
 
     def test_07_getNodes_OtnTopology(self):
+        # pylint: disable=redundant-unittest-assert
         response = test_utils.get_otn_topo_request()
         res = response.json()
         self.assertEqual(response.status_code, requests.codes.ok)
