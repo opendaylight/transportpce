@@ -10,7 +10,7 @@
 
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
-##some pylint false positives specific to tapi test
+# some pylint false positives specific to tapi test
 # pylint: disable=unsubscriptable-object
 # pylint: disable=unsupported-assignment-operation
 
