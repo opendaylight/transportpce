@@ -23,6 +23,45 @@ from common import test_utils
 class TransportPCEtesting(unittest.TestCase):
 
     processes = None
+    CHECK_DICT1 = {
+        'ROADM-A1-SRG1': {
+            'node_type': 'SRG',
+            'checks_tp': [({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'}),
+                          ({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'})]
+        },
+        'ROADM-A1-SRG3': {
+            'node_type': 'SRG',
+            'checks_tp': [({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'}),
+                          ({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'})]
+        },
+        'ROADM-A1-DEG1': {
+            'node_type': 'DEGREE',
+            'checks_tp': [({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'}),
+                          ({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'})]
+        },
+        'ROADM-A1-DEG2': {
+            'node_type': 'DEGREE',
+            'checks_tp': [({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'}),
+                          ({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'})]
+        }
+    }
+    CHECK_DICT2 = {
+        'ROADM-C1-SRG1': {
+            'node_type': 'SRG',
+            'checks_tp': [({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'}),
+                          ({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'})]
+        },
+        'ROADM-C1-DEG1': {
+            'node_type': 'DEGREE',
+            'checks_tp': [({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'}),
+                          ({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'})]
+        },
+        'ROADM-C1-DEG2': {
+            'node_type': 'DEGREE',
+            'checks_tp': [({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'}),
+                          ({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'})]
+        }
+    }
 
     @classmethod
     def setUpClass(cls):
@@ -116,51 +155,12 @@ class TransportPCEtesting(unittest.TestCase):
                           res['network'][0]['node'][i]['supporting-node'])
             nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
             nodeId = res['network'][0]['node'][i]['node-id']
-            if nodeId == 'ROADM-A1-SRG1':
-                # Test related to SRG1
-                self.assertEqual(nodeType, 'SRG')
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-SRG3':
-                # Test related to SRG1
-                self.assertEqual(nodeType, 'SRG')
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG1':
-                # Test related to DEG1
-                self.assertEqual(nodeType, 'DEGREE')
-                self.assertIn({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG2':
-                # Test related to DEG2
-                self.assertEqual(nodeType, 'DEGREE')
-                self.assertIn({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+            if nodeId in self.CHECK_DICT1:
+                self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
+                if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
+                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
+                for item in self.CHECK_DICT1[nodeId]['checks_tp']:
+                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
                               res['network'][0]['node'][i]['supporting-node'])
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
@@ -241,45 +241,14 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertTrue(client == 2)
                 self.assertTrue(network == 2)
                 listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-SRG1':
-                # Test related to SRG1
-                self.assertEqual(nodeType, 'SRG')
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+            elif nodeId in self.CHECK_DICT1:
+                self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
+                if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
+                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
+                for item in self.CHECK_DICT1[nodeId]['checks_tp']:
+                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
                               res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-SRG3':
-                # Test related to SRG1
-                self.assertEqual(nodeType, 'SRG')
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG1':
-                # Test related to DEG1
-                self.assertEqual(nodeType, 'DEGREE')
-                self.assertIn({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG2':
-                # Test related to DEG2
-                self.assertEqual(nodeType, 'DEGREE')
-                self.assertIn({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
                               res['network'][0]['node'][i]['supporting-node'])
                 listNode.remove(nodeId)
@@ -548,81 +517,32 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertTrue(client == 2)
                 self.assertTrue(network == 2)
                 listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-SRG1':
-                # Test related to SRG1
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+            elif nodeId in self.CHECK_DICT1:
+                self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
+                if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
+                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
+                for item in self.CHECK_DICT1[nodeId]['checks_tp']:
+                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
+                              res['network'][0]['node'][i]['supporting-node'])
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
                               res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'], 'SRG')
+                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'],
+                                 self.CHECK_DICT1[nodeId]['node_type'])
                 listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-SRG3':
-                # Test related to SRG1
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+            elif nodeId in self.CHECK_DICT2:
+                self.assertEqual(nodeType, self.CHECK_DICT2[nodeId]['node_type'])
+                if self.CHECK_DICT2[nodeId]['node_type'] == 'SRG':
+                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
+                for item in self.CHECK_DICT2[nodeId]['checks_tp']:
+                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeC'},
                               res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'], 'SRG')
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG1':
-                # Test related to DEG1
-                self.assertIn({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'], 'DEGREE')
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG2':
-                # Test related to DEG2
-                self.assertIn({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'], 'DEGREE')
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-C1-SRG1':
-                # Test related to SRG1
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-C1'},
                               res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'], 'SRG')
+                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'],
+                                 self.CHECK_DICT2[nodeId]['node_type'])
                 listNode.remove(nodeId)
-            elif nodeId == 'ROADM-C1-DEG1':
-                # Test related to DEG1
-                self.assertIn({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-C1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'], 'DEGREE')
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-C1-DEG2':
-                # Test related to DEG1
-                self.assertIn({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-C1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]['org-openroadm-common-network:node-type'], 'DEGREE')
-                listNode.remove(nodeId)
-            else:
-                self.assertFalse(True)
         self.assertEqual(len(listNode), 0)
 
     def test_21_connect_ROADMB(self):
@@ -898,45 +818,14 @@ class TransportPCEtesting(unittest.TestCase):
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'XPDR-A1'},
                               res['network'][0]['node'][i]['supporting-node'])
                 listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-SRG1':
-                # Test related to SRG1
-                self.assertEqual(nodeType, 'SRG')
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+            elif nodeId in self.CHECK_DICT1:
+                self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
+                if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
+                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
+                for item in self.CHECK_DICT1[nodeId]['checks_tp']:
+                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
                               res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-SRG3':
-                # Test related to SRG1
-                self.assertEqual(nodeType, 'SRG')
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG1':
-                # Test related to DEG1
-                self.assertEqual(nodeType, 'DEGREE')
-                self.assertIn({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG2':
-                # Test related to DEG2
-                self.assertEqual(nodeType, 'DEGREE')
-                self.assertIn({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
                               res['network'][0]['node'][i]['supporting-node'])
                 listNode.remove(nodeId)
@@ -1003,39 +892,16 @@ class TransportPCEtesting(unittest.TestCase):
                           res['network'][0]['node'][i]['supporting-node'])
             nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
             nodeId = res['network'][0]['node'][i]['node-id']
-            if nodeId == 'ROADM-A1-SRG1':
-                # Test related to SRG1
-                self.assertEqual(nodeType, 'SRG')
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-SRG3':
-                # Test related to SRG1
-                self.assertEqual(nodeType, 'SRG')
-                self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
-                self.assertIn({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG1':
-                # Test related to DEG1
-                self.assertEqual(nodeType, 'DEGREE')
-                self.assertIn({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                listNode.remove(nodeId)
-            elif nodeId == 'ROADM-A1-DEG2':
-                # Test related to DEG2
-                self.assertEqual(nodeType, 'DEGREE')
-                self.assertIn({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                self.assertIn({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'},
-                              res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+            if nodeId in self.CHECK_DICT1:
+                self.assertEqual(nodeType, self.CHECK_DICT1[nodeId]['node_type'])
+                if self.CHECK_DICT1[nodeId]['node_type'] == 'SRG':
+                    self.assertEqual(len(res['network'][0]['node'][i]['ietf-network-topology:termination-point']), 5)
+                for item in self.CHECK_DICT1[nodeId]['checks_tp']:
+                    self.assertIn(item, res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeA'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'ROADM-A1'},
+                              res['network'][0]['node'][i]['supporting-node'])
                 listNode.remove(nodeId)
             else:
                 self.assertFalse(True)
