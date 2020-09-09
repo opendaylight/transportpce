@@ -91,46 +91,31 @@ class TransportPCEtesting(unittest.TestCase):
             for i in range(0, nbNode):
                 nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
                 nodeId = res['network'][0]['node'][i]['node-id']
-                if nodeId == 'SPDR-SA1-XPDR1':
-                    self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
-                                  res['network'][0]['node'][i]['supporting-node'])
-                    self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
-                                  res['network'][0]['node'][i]['supporting-node'])
-                    self.assertEqual(nodeType, 'XPONDER')
-                    nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                    client = 0
-                    network = 0
-                    for j in range(0, nbTps):
-                        tpType = (res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                     ['org-openroadm-common-network:tp-type'])
-                        if tpType == 'XPONDER-CLIENT':
-                            client += 1
-                        elif tpType == 'XPONDER-NETWORK':
-                            network += 1
-                    self.assertTrue(client == 0)
-                    self.assertTrue(network == 1)
-                    listNode.remove(nodeId)
-                elif nodeId == 'SPDR-SA1-XPDR2':
-                    self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
-                                  res['network'][0]['node'][i]['supporting-node'])
-                    self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
-                                  res['network'][0]['node'][i]['supporting-node'])
-                    self.assertEqual(nodeType, 'XPONDER')
-                    nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                    client = 0
-                    network = 0
-                    for j in range(0, nbTps):
-                        tpType = (res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                     ['org-openroadm-common-network:tp-type'])
-                        if tpType == 'XPONDER-CLIENT':
-                            client += 1
-                        elif tpType == 'XPONDER-NETWORK':
-                            network += 1
-                    self.assertTrue(client == 0)
-                    self.assertTrue(network == 4)
-                    listNode.remove(nodeId)
-                else:
+                if nodeId not in listNode:
                     self.assertFalse(True)
+                    continue
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertEqual(nodeType, 'XPONDER')
+                nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                client = 0
+                network = 0
+                for j in range(0, nbTps):
+                    tpType = (res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                 ['org-openroadm-common-network:tp-type'])
+                    if tpType == 'XPONDER-CLIENT':
+                        client += 1
+                    elif tpType == 'XPONDER-NETWORK':
+                        network += 1
+                self.assertTrue(client == 0)
+                if nodeId == 'SPDR-SA1-XPDR1':
+                    self.assertTrue(network == 1)
+                else:
+                    # elif nodeId == 'SPDR-SA1-XPDR2':
+                    self.assertTrue(network == 4)
+                listNode.remove(nodeId)
             self.assertEqual(len(listNode), 0)
 
     def test_06_getLinks_OtnTopology(self):
@@ -147,19 +132,43 @@ class TransportPCEtesting(unittest.TestCase):
         nbNode = len(res['network'][0]['node'])
         self.assertEqual(nbNode, 2)
         listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2']
+        CHECK_LIST = {
+            'SPDR-SA1-XPDR1': {
+                'node-type': 'MUXPDR',
+                'xpdr-number': 1,
+                'port-types': 'org-openroadm-port-types:if-10GE-ODU2e',
+                'otn-common-types': 'org-openroadm-otn-common-types:ODU2e',
+                'network_nb': 1,
+                'nbl_nb': 4,
+                'tp-checklist': ['XPDR1-NETWORK1', 'XPDR1-CLIENT1'],
+                'tp-unchecklist': ['XPDR1-CLIENT2']
+            },
+            'SPDR-SA1-XPDR2': {
+                'node-type': 'SWITCH',
+                'xpdr-number': 2,
+                'port-types': 'org-openroadm-port-types:if-100GE-ODU4',
+                'otn-common-types': 'org-openroadm-otn-common-types:ODU4',
+                'network_nb': 4,
+                'nbl_nb': 1,
+                'tp-checklist': ['XPDR2-NETWORK4', 'XPDR2-CLIENT1', 'XPDR2-NETWORK3', 'XPDR2-CLIENT4',
+                                 'XPDR2-CLIENT2', 'XPDR2-NETWORK2', 'XPDR2-CLIENT3', 'XPDR2-NETWORK1'],
+                'tp-unchecklist': []
+            }
+        }
         for i in range(0, nbNode):
             nodeId = res['network'][0]['node'][i]['node-id']
-            if nodeId == 'SPDR-SA1-XPDR1':
+            if nodeId in CHECK_LIST:
                 nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
-                self.assertEqual(nodeType, 'MUXPDR')
+                self.assertEqual(nodeType, CHECK_LIST[nodeId]['node-type'])
                 self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
                               res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-topology', 'node-ref': 'SPDR-SA1-XPDR1'},
+                self.assertIn({'network-ref': 'openroadm-topology', 'node-ref': nodeId},
                               res['network'][0]['node'][i]['supporting-node'])
                 self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
                               res['network'][0]['node'][i]['supporting-node'])
                 self.assertEqual(res['network'][0]['node'][i]
-                                 ['org-openroadm-otn-network-topology:xpdr-attributes']['xpdr-number'], 1)
+                                    ['org-openroadm-otn-network-topology:xpdr-attributes']['xpdr-number'],
+                                 CHECK_LIST[nodeId]['xpdr-number'])
                 nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
                 client = 0
                 network = 0
@@ -172,11 +181,11 @@ class TransportPCEtesting(unittest.TestCase):
                         self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
                                              ['org-openroadm-otn-network-topology:tp-supported-interfaces']
                                              ['supported-interface-capability'][0]['if-cap-type']),
-                                         'org-openroadm-port-types:if-10GE-ODU2e')
+                                         CHECK_LIST[nodeId]['port-types'])
                         self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
                                              ['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']
                                              ['rate']),
-                                         'org-openroadm-otn-common-types:ODU2e')
+                                         CHECK_LIST[nodeId]['otn-common-types'])
                     elif tpType == 'XPONDER-NETWORK':
                         network += 1
                         self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
@@ -190,84 +199,26 @@ class TransportPCEtesting(unittest.TestCase):
                         self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
                                              ['supporting-termination-point'][0]['network-ref']), 'openroadm-topology')
                         self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['supporting-termination-point'][0]['node-ref']), 'SPDR-SA1-XPDR1')
+                                             ['supporting-termination-point'][0]['node-ref']), nodeId)
                         self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['supporting-termination-point'][0]['tp-ref']), 'XPDR1-NETWORK1')
+                                             ['supporting-termination-point'][0]['tp-ref']), tpId)
                 self.assertTrue(client == 4)
-                self.assertTrue(network == 1)
+                self.assertTrue(network == CHECK_LIST[nodeId]['network_nb'])
                 listNode.remove(nodeId)
                 nbNbl = len(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']
                             ['odu-switching-pools'][0]['non-blocking-list'])
-                self.assertEqual(nbNbl, 4)
+                self.assertEqual(nbNbl, CHECK_LIST[nodeId]['nbl_nb'])
                 for k in range(0, nbNbl):
                     nbl = (res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']
                               ['odu-switching-pools'][0]['non-blocking-list'][k])
                     if nbl['nbl-number'] == 1:
-                        self.assertEqual(nbl['available-interconnect-bandwidth'], 10)
-                        self.assertEqual(nbl['interconnect-bandwidth-unit'], 1000000000)
-                        self.assertIn('XPDR1-NETWORK1', nbl['tp-list'])
-                        self.assertIn('XPDR1-CLIENT1', nbl['tp-list'])
-                        self.assertNotIn('XPDR1-CLIENT2', nbl['tp-list'])
-            elif nodeId == 'SPDR-SA1-XPDR2':
-                nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
-                self.assertEqual(nodeType, 'SWITCH')
-                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'openroadm-topology', 'node-ref': 'SPDR-SA1-XPDR2'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
-                              res['network'][0]['node'][i]['supporting-node'])
-                self.assertEqual(res['network'][0]['node'][i]
-                                 ['org-openroadm-otn-network-topology:xpdr-attributes']['xpdr-number'], 2)
-                nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                client = 0
-                network = 0
-                for j in range(0, nbTps):
-                    tpType = (res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                 ['org-openroadm-common-network:tp-type'])
-                    tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
-                    if tpType == 'XPONDER-CLIENT':
-                        client += 1
-                        self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                          ['org-openroadm-otn-network-topology:tp-supported-interfaces']
-                                          ['supported-interface-capability'][0]['if-cap-type']),
-                                         'org-openroadm-port-types:if-100GE-ODU4')
-                        self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']
-                                             ['rate']),
-                                         'org-openroadm-otn-common-types:ODU4')
-                    elif tpType == 'XPONDER-NETWORK':
-                        network += 1
-                        self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['org-openroadm-otn-network-topology:tp-supported-interfaces']
-                                             ['supported-interface-capability'][0]['if-cap-type']),
-                                         'org-openroadm-port-types:if-OCH-OTU4-ODU4')
-                        self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']
-                                             ['rate']),
-                                         'org-openroadm-otn-common-types:ODU4')
-                        self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['supporting-termination-point'][0]['network-ref']), 'openroadm-topology')
-                        self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['supporting-termination-point'][0]['node-ref']), 'SPDR-SA1-XPDR2')
-                        self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['supporting-termination-point'][0]['tp-ref']), tpId)
-                self.assertTrue(client == 4)
-                self.assertTrue(network == 4)
-                listNode.remove(nodeId)
-                nbNbl = len(res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']
-                            ['odu-switching-pools'][0]['non-blocking-list'])
-                self.assertEqual(nbNbl, 1)
-                nbl = (res['network'][0]['node'][i]['org-openroadm-otn-network-topology:switching-pools']
-                          ['odu-switching-pools'][0]['non-blocking-list'][0])
-                self.assertIn('XPDR2-NETWORK1', nbl['tp-list'])
-                self.assertIn('XPDR2-CLIENT1', nbl['tp-list'])
-                self.assertIn('XPDR2-NETWORK2', nbl['tp-list'])
-                self.assertIn('XPDR2-CLIENT2', nbl['tp-list'])
-                self.assertIn('XPDR2-NETWORK3', nbl['tp-list'])
-                self.assertIn('XPDR2-CLIENT3', nbl['tp-list'])
-                self.assertIn('XPDR2-NETWORK4', nbl['tp-list'])
-                self.assertIn('XPDR2-CLIENT4', nbl['tp-list'])
+                        if nodeId == 'SPDR-SA1-XPDR1':
+                            self.assertEqual(nbl['available-interconnect-bandwidth'], 10)
+                            self.assertEqual(nbl['interconnect-bandwidth-unit'], 1000000000)
+                        for tp in CHECK_LIST[nodeId]['tp-checklist']:
+                            self.assertIn(tp, nbl['tp-list'])
+                        for tp in CHECK_LIST[nodeId]['tp-unchecklist']:
+                            self.assertNotIn(tp, nbl['tp-list'])
             else:
                 self.assertFalse(True)
         self.assertEqual(len(listNode), 0)
