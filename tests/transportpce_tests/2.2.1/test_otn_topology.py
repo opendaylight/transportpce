@@ -91,46 +91,31 @@ class TransportPCEtesting(unittest.TestCase):
             for i in range(0, nbNode):
                 nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
                 nodeId = res['network'][0]['node'][i]['node-id']
-                if nodeId == 'SPDR-SA1-XPDR1':
-                    self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
-                                  res['network'][0]['node'][i]['supporting-node'])
-                    self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
-                                  res['network'][0]['node'][i]['supporting-node'])
-                    self.assertEqual(nodeType, 'XPONDER')
-                    nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                    client = 0
-                    network = 0
-                    for j in range(0, nbTps):
-                        tpType = (res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                     ['org-openroadm-common-network:tp-type'])
-                        if tpType == 'XPONDER-CLIENT':
-                            client += 1
-                        elif tpType == 'XPONDER-NETWORK':
-                            network += 1
-                    self.assertTrue(client == 0)
-                    self.assertTrue(network == 1)
-                    listNode.remove(nodeId)
-                elif nodeId == 'SPDR-SA1-XPDR2':
-                    self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
-                                  res['network'][0]['node'][i]['supporting-node'])
-                    self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
-                                  res['network'][0]['node'][i]['supporting-node'])
-                    self.assertEqual(nodeType, 'XPONDER')
-                    nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
-                    client = 0
-                    network = 0
-                    for j in range(0, nbTps):
-                        tpType = (res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                     ['org-openroadm-common-network:tp-type'])
-                        if tpType == 'XPONDER-CLIENT':
-                            client += 1
-                        elif tpType == 'XPONDER-NETWORK':
-                            network += 1
-                    self.assertTrue(client == 0)
-                    self.assertTrue(network == 4)
-                    listNode.remove(nodeId)
-                else:
+                if nodeId not in listNode:
                     self.assertFalse(True)
+                    continue
+                self.assertIn({'network-ref': 'openroadm-network', 'node-ref': 'SPDR-SA1'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertIn({'network-ref': 'clli-network', 'node-ref': 'NodeSA'},
+                              res['network'][0]['node'][i]['supporting-node'])
+                self.assertEqual(nodeType, 'XPONDER')
+                nbTps = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'])
+                client = 0
+                network = 0
+                for j in range(0, nbTps):
+                    tpType = (res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                 ['org-openroadm-common-network:tp-type'])
+                    if tpType == 'XPONDER-CLIENT':
+                        client += 1
+                    elif tpType == 'XPONDER-NETWORK':
+                        network += 1
+                self.assertTrue(client == 0)
+                if nodeId == 'SPDR-SA1-XPDR1':
+                    self.assertTrue(network == 1)
+                else:
+                    # elif nodeId == 'SPDR-SA1-XPDR2':
+                    self.assertTrue(network == 4)
+                listNode.remove(nodeId)
             self.assertEqual(len(listNode), 0)
 
     def test_06_getLinks_OtnTopology(self):
