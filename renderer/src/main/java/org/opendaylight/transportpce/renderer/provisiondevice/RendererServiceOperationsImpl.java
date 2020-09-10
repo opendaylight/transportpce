@@ -54,8 +54,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSpBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.ODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.OTU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev161014.PmGranularity;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.resource.types.rev161014.ResourceTypeEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
@@ -189,6 +189,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                             // For the service of OTU4 infrastructure
                             // First create the OCH and OTU interfaces
                             String serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
+
                             if (!createServicepathInput(input)) {
                                 return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
                                     OPERATION_FAILED);
@@ -197,7 +198,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                         if ((input.getServiceAEnd().getOduServiceRate() != null)
                             && (input.getServiceAEnd().getOduServiceRate().equals(ODU4.class))) {
                             // For the service of OTU4 infrastructure
-                            // First create the OCH and OTU interfaces
                             String serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
                             LOG.info("Service format for {} is {} and rate is {}", input.getServiceName(),
                                 input.getServiceAEnd().getOduServiceRate(), serviceRate);
@@ -575,6 +575,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         value = "UPM_UNCALLED_PRIVATE_METHOD",
         justification = "call in call() method")
     private boolean createServicepathInput(ServiceImplementationRequestInput input) {
+        // LOG.info("Is this working? at createServicepathInput");
         ServicePathInputData servicePathInputDataAtoZ = ModelMappingUtils
             .rendererCreateServiceInputAToZ(input.getServiceName(), input.getPathDescription());
         ServicePathInputData servicePathInputDataZtoA = ModelMappingUtils
