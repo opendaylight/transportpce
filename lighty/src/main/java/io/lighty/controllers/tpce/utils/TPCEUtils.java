@@ -199,7 +199,7 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.$YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128
                     .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.$YangModuleInfoImpl
                     .getInstance(),

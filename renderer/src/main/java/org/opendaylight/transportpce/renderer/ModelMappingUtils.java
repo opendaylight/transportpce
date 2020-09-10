@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import org.opendaylight.transportpce.common.StringConstants;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.OtnServicePathInputBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.ServicePathInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.ServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerSetupInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.OtnServicePathInputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestInput;
@@ -95,6 +95,7 @@ public final class ModelMappingUtils {
     public static ServicePathInputData rendererCreateServiceInputAToZ(String serviceName,
             PathDescription pathDescription) {
         NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
+        LOG.info("This the node lists {} A-Z", nodeLists);
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setServiceName(serviceName)
             .setOperation(ServicePathInput.Operation.Create)
@@ -109,6 +110,7 @@ public final class ModelMappingUtils {
     public static ServicePathInputData rendererCreateServiceInputZToA(String serviceName,
             PathDescription pathDescription) {
         NodeLists nodeLists = getNodesListZtoA(pathDescription.getZToADirection().getZToA().iterator());
+        LOG.info("This the node lists {} Z-A", nodeLists);
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setOperation(ServicePathInput.Operation.Create)
             .setServiceName(serviceName)
