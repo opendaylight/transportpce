@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "21640c23_7bc3f397",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-09-10T07:36:36Z",
+      "side": 1,
+      "message": "here you can use directly Collection\nCollection\u003cConnectionMap\u003e connectionMap \u003d deviceObject.get().nonnullConnectionMap().values();",
+      "range": {
+        "startLine": 304,
+        "startChar": 6,
+        "endLine": 304,
+        "endChar": 112
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56fa4883_83e6b547",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-09-10T07:36:36Z",
+      "side": 1,
+      "message": "You can use Collection and iterator instead",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 314,
+        "endChar": 52
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f352084b_2efb8001",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-09-10T07:36:36Z",
+      "side": 1,
+      "message": "Collection use instead of List",
+      "range": {
+        "startLine": 417,
+        "startChar": 11,
+        "endLine": 417,
+        "endChar": 116
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8ce4234_bb91a5ff",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-09-10T07:36:36Z",
+      "side": 1,
+      "message": "Collection and iterator use instead of List",
+      "range": {
+        "startLine": 425,
+        "startChar": 1,
+        "endLine": 427,
+        "endChar": 56
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d74773e_8418f1e9",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-09-10T07:36:36Z",
+      "side": 1,
+      "message": "Collection use instead of List",
+      "range": {
+        "startLine": 443,
+        "startChar": 0,
+        "endLine": 443,
+        "endChar": 116
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9c175c2_3bcab2a6",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/device/DeviceTransactionManagerTest.java",
         "patchSetId": 5
