@@ -22,13 +22,13 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.ServicePathOutputBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.TransportpceDeviceRendererService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.TransportpceRendererDeviceService;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DeviceRendererRPCImpl implements TransportpceDeviceRendererService {
+public class DeviceRendererRPCImpl implements TransportpceRendererDeviceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceRendererRPCImpl.class);
     private DeviceRendererService deviceRenderer;

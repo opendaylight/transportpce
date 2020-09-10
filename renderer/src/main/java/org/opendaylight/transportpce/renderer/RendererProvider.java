@@ -11,7 +11,7 @@ import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.renderer.rpcs.TransportPCEServicePathRPCImpl;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.TransportpceDeviceRendererService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.TransportpceRendererDeviceService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.TransportpceRendererService;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class RendererProvider {
         TransportPCEServicePathRPCImpl transportPCEServicePathRPCImpl =
             new TransportPCEServicePathRPCImpl(this.rendererServiceOperations);
         this.deviceRendererRegistration = this.rpcProviderService
-                .registerRpcImplementation(TransportpceDeviceRendererService.class, deviceRendererRPCImpl);
+                .registerRpcImplementation(TransportpceRendererDeviceService.class, deviceRendererRPCImpl);
         this.tpceServiceRegistry = this.rpcProviderService
                 .registerRpcImplementation(TransportpceRendererService.class, transportPCEServicePathRPCImpl);
     }

@@ -95,6 +95,7 @@ public final class ModelMappingUtils {
     public static ServicePathInputData rendererCreateServiceInputAToZ(String serviceName,
             PathDescription pathDescription) {
         NodeLists nodeLists = getNodesListAToZ(pathDescription.getAToZDirection().getAToZ().iterator());
+        LOG.info("This the node lists {} A-Z", nodeLists);
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setServiceName(serviceName)
             .setOperation(ServicePathInput.Operation.Create)
@@ -109,6 +110,7 @@ public final class ModelMappingUtils {
     public static ServicePathInputData rendererCreateServiceInputZToA(String serviceName,
             PathDescription pathDescription) {
         NodeLists nodeLists = getNodesListZtoA(pathDescription.getZToADirection().getZToA().iterator());
+        LOG.info("This the node lists {} Z-A", nodeLists);
         ServicePathInputBuilder servicePathInputBuilder = new ServicePathInputBuilder()
             .setOperation(ServicePathInput.Operation.Create)
             .setServiceName(serviceName)

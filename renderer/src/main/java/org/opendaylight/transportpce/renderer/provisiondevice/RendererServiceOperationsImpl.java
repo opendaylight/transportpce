@@ -184,11 +184,15 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                         break;
                     case Infrastructure:
                         LOG.info("RPC implementation for {}", input.getConnectionType());
+                        LOG.info("OTU service rate {}", input.getServiceAEnd().getOtuServiceRate());
+                        // LOG.info("This is the rendere input {}", input);
                         if ((input.getServiceAEnd().getOtuServiceRate() != null)
                             && (input.getServiceAEnd().getOtuServiceRate().equals(OTU4.class))) {
                             // For the service of OTU4 infrastructure
                             // First create the OCH and OTU interfaces
+                            // LOG.info("Is this printing? case infrastructure");
                             String serviceRate = "100G"; // For OtnDeviceRendererServiceImpl
+
                             if (!createServicepathInput(input)) {
                                 return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_FAILED,
                                     OPERATION_FAILED);
@@ -575,6 +579,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
         value = "UPM_UNCALLED_PRIVATE_METHOD",
         justification = "call in call() method")
     private boolean createServicepathInput(ServiceImplementationRequestInput input) {
+        // LOG.info("Is this working? at createServicepathInput");
         ServicePathInputData servicePathInputDataAtoZ = ModelMappingUtils
             .rendererCreateServiceInputAToZ(input.getServiceName(), input.getPathDescription());
         ServicePathInputData servicePathInputDataZtoA = ModelMappingUtils

@@ -1,4 +1,4 @@
-module transportpce-device-renderer {
+module transportpce-renderer-device {
   namespace "http://org/opendaylight/transportpce/renderer/device";
   prefix org-opendaylight-transportpce-renderer-device;
 
