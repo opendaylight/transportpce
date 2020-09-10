@@ -47,6 +47,7 @@ import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.utils.CreateOtsOmsDataUtils;
 import org.opendaylight.transportpce.renderer.utils.MountPointUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+<<<<<<< HEAD
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.Network;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.NodesBuilder;
@@ -56,6 +57,10 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.CreateOtsOmsInput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.device.rev200128.CreateOtsOmsOutput;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+=======
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.CreateOtsOmsInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.CreateOtsOmsOutput;
+>>>>>>> a267c3a8... Update device model to 7.1.0
 
 @Ignore
 public class DeviceRendererServiceImplCreateOtsOmsTest extends AbstractTest {
