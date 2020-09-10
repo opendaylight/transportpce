@@ -1,10 +1,7 @@
-module transportpce-servicepath {
+module transportpce-service-path {
   namespace "http://org/transportpce/B-C-interface/servicepath";
-  prefix transportpce-servicepath;
+  prefix transportpce-service-path;
 
-  import ietf-yang-types {
-    prefix yang;
-  }
   import transportpce-common-service-path-types {
     prefix transportpce-common-service-path-types;
   }

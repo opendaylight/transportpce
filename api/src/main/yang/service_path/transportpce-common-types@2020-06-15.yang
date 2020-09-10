@@ -10,10 +10,6 @@ module transportpce-common-types {
     prefix org-openroadm-pm-types;
     revision-date 2016-10-14;
   }
-  import org-openroadm-otn-common-types {
-    prefix org-openroadm-otn-common-types;
-    revision-date 2018-11-30;
-  }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
     revision-date 2018-10-19;
