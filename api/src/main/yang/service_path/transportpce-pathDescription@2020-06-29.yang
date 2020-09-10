@@ -2,10 +2,6 @@ module transportpce-pathDescription {
   namespace "http://org/transportpce/B-C-interface/pathDescription";
   prefix transportpce-pathDescription;
 
-  import org-openroadm-resource {
-    prefix org-openroadm-resource;
-  }
-
   organization
     "transportPCE";
   contact
@@ -41,18 +37,19 @@ module transportpce-pathDescription {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2020-06-29 {
+        description
+          "Version 1.6.1. To manage otn services";
+  }
+  revision 2017-10-17 {
+      description
+        "Version 1.6";
+  }
   revision 2017-04-26 {
     description
       "Version 1.5";
   }
-  revision 2017-10-17 {
-    description
-      "Version 1.6";
-  }
-  revision 2020-06-29 {
-      description
-        "Version 1.6.1. To manage otn services";
-    }
+
 
   grouping PCE-resource {
     description
