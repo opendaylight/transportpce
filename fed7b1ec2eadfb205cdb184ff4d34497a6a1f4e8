@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1d78997_e9347fdb",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-types@2020-05-29.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-09-10T10:28:00Z",
+      "side": 1,
+      "message": "scfec, rsfec and ofec have additional identities (by name sc-fec, rs-fec, o-fec) that are deprecated in the original 7.1.0 model file. Because of this MD-SAL is generating java classes that were different from file name and code was not compiling. For now, those deprecated classes have been removed in this file. \n\nSC-FEC\nhttps://github.com/OpenROADM/OpenROADM_MSA_Public/blob/aaa5a0e103e0e69c9b7c823e02bdca40257a0048/model/Common/org-openroadm-common-types.yang#L343\n\nRS-FEC\nhttps://github.com/OpenROADM/OpenROADM_MSA_Public/blob/aaa5a0e103e0e69c9b7c823e02bdca40257a0048/model/Common/org-openroadm-common-types.yang#L356\n\nO-FEC https://github.com/OpenROADM/OpenROADM_MSA_Public/blob/aaa5a0e103e0e69c9b7c823e02bdca40257a0048/model/Common/org-openroadm-common-types.yang#L369",
+      "revId": "fed7b1ec2eadfb205cdb184ff4d34497a6a1f4e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
