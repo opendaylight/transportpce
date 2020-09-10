@@ -1,0 +1,342 @@
+module org-openroadm-port-capability {
+  namespace "http://org/openroadm/port-capability";
+  prefix org-openroadm-port-capability;
+
+  import org-openroadm-device {
+    prefix org-openroadm-device;
+    revision-date 2020-05-29;
+  }
+  import org-openroadm-port-types {
+    prefix org-openroadm-port-types;
+    revision-date 2020-03-27;
+  }
+
+  organization
+    "Open ROADM MSA";
+  contact
+    "OpenROADM.org";
+  description
+    "YANG definitions for port capabilities.
+
+     Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
+     All other rights reserved.
+
+     Redistribution and use in source and binary forms, with or without modification,
+     are permitted provided that the following conditions are met:
+
+     * Redistributions of source code must retain the above copyright notice, this
+       list of conditions and the following disclaimer.
+     * Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation and/or
+       other materials provided with the distribution.
+     * Neither the Members of the Open ROADM MSA Agreement nor the names of its
+       contributors may be used to endorse or promote products derived from this software
+       without specific prior written permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT ''AS IS''
+     AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+     WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+     IN NO EVENT THE MEMBERS OF THE OPEN ROADM MSA  AGREEMENT BE LIABLE FOR ANY DIRECT,
+     INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;  LOSS OF USE, DATA,
+     OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+     WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+     POSSIBILITY OF SUCH DAMAGE.
+
+     Also contains code components extracted from IETF Interfaces.  These code components
+     are copyrighted and licensed as follows:
+
+     Copyright (c) 2017 IETF Trust and the persons identified as the document authors.
+     All rights reserved.
+
+     This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating
+     to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of
+     publication of this document. Please review these documents carefully, as they
+     describe your rights and restrictions with respect to this document. Code Components
+     extracted from this document must include Simplified BSD License text as described in
+     Section 4.e of the Trust Legal Provisions and are provided without warranty as
+     described in the Simplified BSD License.";
+
+  revision 2020-05-29 {
+    description
+      "Version 7.1.0";
+  }
+  revision 2020-03-27 {
+    description
+      "Version 7.0.0";
+  }
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
+  revision 2019-09-27 {
+    description
+      "Version 6.0.0";
+  }
+  revision 2019-05-31 {
+    description
+      "Version 5.1.0";
+  }
+  revision 2019-03-29 {
+    description
+      "Version 5.0.0";
+  }
+  revision 2018-11-30 {
+    description
+      "Version 4.1.0";
+  }
+  revision 2018-09-28 {
+    description
+      "Version 4.0.0";
+  }
+  revision 2018-05-30 {
+    description
+      "Version 3.1.0";
+  }
+  revision 2018-03-30 {
+    description
+      "Version 3.0.0";
+  }
+  revision 2017-12-15 {
+    description
+      "Version 2.2";
+  }
+  revision 2017-09-29 {
+    description
+      "Version 2.1";
+  }
+
+  grouping port-id-grp {
+    leaf circuit-pack-name {
+      type leafref {
+        path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:circuit-packs/org-openroadm-device:circuit-pack-name";
+      }
+      description
+        "Circuit-Pack identifier. Unique within the context of a device.";
+    }
+    leaf port-name {
+      type leafref {
+        path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:circuit-packs/org-openroadm-device:ports/org-openroadm-device:port-name";
+      }
+      description
+        "Port index identifier. Unique within the context of a circuit-pack.";
+    }
+  }
+
+  grouping slot-id-grp {
+    leaf circuit-pack-name {
+      type leafref {
+        path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:circuit-packs/org-openroadm-device:circuit-pack-name";
+      }
+      description
+        "Circuit-Pack identifier. Unique within the context of a device.";
+    }
+    leaf slot-name {
+      type leafref {
+        path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:circuit-packs/org-openroadm-device:cp-slots/org-openroadm-device:slot-name";
+      }
+      description
+        "cp-slot name. Unique within the context of a circuit-pack.";
+    }
+  }
+
+  grouping optical-operational-modes-grp-for-capability {
+    leaf-list optical-operational-mode-profile-name {
+      type leafref {
+        path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:optical-operational-mode-profile/org-openroadm-device:profile-name";
+      }
+      config false;
+      description
+        "Optical operation capabilities leaf list";
+    }
+    description
+      "Optical operational modes grouping";
+  }
+
+  grouping port-capability-grp {
+    description
+      "OpenROADM port capability parameters.";
+    container port-capabilities {
+      config false;
+      list supported-interface-capability {
+        key "if-cap-type";
+        description
+          "Supported interface capability on the port.";
+        leaf if-cap-type {
+          type identityref {
+            base org-openroadm-port-types:supported-if-capability;
+          }
+          description
+            "Interface type/hierarchy/rate supported on this port";
+        }
+        leaf-list split-lambda-profile-name {
+          type leafref {
+            path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:split-lambda-profile/org-openroadm-device:profile-name";
+          }
+          description
+            "Split lambda mode capabilities";
+        }
+        leaf-list otsigroup-capability-profile-name {
+          type leafref {
+             path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:otsigroup-capability-profile/org-openroadm-device:profile-name";
+          }
+          description
+            "OTSI group capabilities";
+        }
+        uses optical-operational-modes-grp-for-capability;
+        container otn-capability {
+          description
+            "OTN capability";
+          leaf otn-capability-profile-name {
+            type leafref {
+              path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:otn-capability-profile/org-openroadm-device:profile-name";
+            }
+          }
+          list mpdr-client-restriction {
+            description
+              "Restriction rules for how LO ODUs are multiplexed into HO ODU
+               and the relation with mapped client ports.";
+            leaf network-ho-odu-circuit-pack-name {
+              type string;
+              mandatory true;
+              description
+                "Circuit-Pack identifier. Unique within the context of a device.";
+            }
+            leaf network-ho-odu-port-name {
+              type string;
+              mandatory true;
+              description
+                "port identifier.";
+            }
+            leaf-list muxp-profile-name {
+              type leafref {
+                path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:muxp-profile/org-openroadm-device:profile-name";
+              }
+            }
+          }
+          leaf otn-odu-mux-hierarchy-profile-name {
+            type leafref {
+              path "/org-openroadm-device:org-openroadm-device/org-openroadm-device:otn-odu-mux-hierarchy-profile/org-openroadm-device:profile-name";
+            }
+            description
+              "OTN ODU Mux hierarchy capabilities";
+          }
+        }
+        container logical-port {
+          leaf circuit-pack-name {
+            type string;
+            description
+              "The circuit pack supporting the logical port";
+          }
+          leaf port-name {
+            type string;
+            description
+              "Port name for logical-port";
+          }
+          description
+            "Logical port container";
+        }
+      }
+    }
+  }
+
+  grouping port-group-restriction-grp {
+    container port-group-restriction {
+      config false;
+      list port-bandwidth-sharing {
+        key "port-sharing-id";
+        leaf port-sharing-id {
+          type uint16;
+        }
+        list port-list {
+          key "circuit-pack-name port-name";
+          uses port-id-grp;
+        }
+        list pluggable-optics-holder-list {
+          key "circuit-pack-name slot-name";
+          uses slot-id-grp;
+        }
+        leaf shared-bandwidth {
+          type uint16;
+          units "Gbps";
+        }
+        list possible-port-config {
+          key "config-id";
+          leaf config-id {
+            type uint16;
+          }
+          list port-if-type-config {
+            key "circuit-pack-name port-name";
+            uses port-id-grp;
+            leaf-list port-if-type {
+              type identityref {
+                base org-openroadm-port-types:supported-if-capability;
+              }
+            }
+            leaf otsi-rate {
+              type uint16;
+              units "Gbps";
+              description
+                "Optical Tributary Signal (OTSi) rate in Gbps";
+            }
+          }
+          list slot-if-type-config {
+            key "circuit-pack-name slot-name port-name";
+            uses slot-id-grp;
+            leaf port-name {
+              type string;
+            }
+            leaf-list port-if-type {
+              type identityref {
+                base org-openroadm-port-types:supported-if-capability;
+              }
+            }
+            leaf-list port-module-type {
+              type org-openroadm-port-types:port-module-types;
+            }
+            leaf otsi-rate {
+              type uint16;
+              units "Gbps";
+              description
+                "Optical Tributary Signal (OTSi) rate in Gbps";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping provisioned-port-grp {
+    container provisioned-port-grp {
+      list port-bandwidth-sharing {
+        key "port-sharing-id";
+        leaf port-sharing-id {
+          type uint16;
+        }
+        leaf provisioned-port-config {
+          type uint16;
+          default "1";
+        }
+      }
+    }
+  }
+
+  augment "/org-openroadm-device:org-openroadm-device/org-openroadm-device:circuit-packs/org-openroadm-device:ports" {
+    description
+      "augment for port capability";
+    uses port-capability-grp;
+  }
+
+  augment "/org-openroadm-device:org-openroadm-device" {
+    description
+      "augment for port group restriction";
+    uses port-group-restriction-grp;
+  }
+
+  augment "/org-openroadm-device:org-openroadm-device" {
+    description
+      "augment for provisioned port group";
+    uses provisioned-port-grp;
+  }
+}
