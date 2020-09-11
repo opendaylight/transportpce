@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9bfd777e_988f97e1",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOtnNodeTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T08:11:39Z",
+      "side": 1,
+      "message": "would better stay sticked",
+      "range": {
+        "startLine": 401,
+        "startChar": 46,
+        "endLine": 402,
+        "endChar": 26
+      },
+      "revId": "24e15f079b62170e776c995898b978ad97a1ddd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6c1f546_a18f94ec",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/TransactionUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T08:11:39Z",
+      "side": 1,
+      "message": "would better stay sticked",
+      "range": {
+        "startLine": 315,
+        "startChar": 42,
+        "endLine": 316,
+        "endChar": 22
+      },
+      "revId": "24e15f079b62170e776c995898b978ad97a1ddd4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
