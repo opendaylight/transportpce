@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
@@ -21,7 +20,6 @@ import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
 
-@Ignore
 public class PceCalculationTest extends AbstractTest {
 
     private PceCalculation pceCalculation;
