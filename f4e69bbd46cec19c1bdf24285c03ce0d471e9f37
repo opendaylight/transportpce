@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32c00abf_63501a9a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/converter/JSONDataObjectConverter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T07:48:27Z",
+      "side": 1,
+      "message": "too many empty lines\n2 is enough here",
+      "revId": "f4e69bbd46cec19c1bdf24285c03ce0d471e9f37",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
