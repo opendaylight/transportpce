@@ -25,7 +25,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -42,6 +41,9 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.atoz.direction.AToZBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.atoz.direction.AToZKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ztoa.direction.ZToA;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ztoa.direction.ZToABuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ztoa.direction.ZToAKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource.Resource;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource.ResourceBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource.resource.resource.TerminationPoint;
@@ -56,7 +58,6 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Ignore
 public class GnpyUtilitiesImplTest extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(GnpyUtilitiesImplTest.class);
@@ -76,13 +77,13 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
             networkReader = new JsonReader(gnpyNetwork);
             Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader,
                     QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
-            saveOpenRoadmNetwork(networks.getNetwork().get(0), NetworkUtils.UNDERLAY_NETWORK_ID);
+            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.UNDERLAY_NETWORK_ID);
             // load openroadm-topology
             Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json");
             topoReader = new JsonReader(gnpyTopo);
             networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader,
                     QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
-            saveOpenRoadmNetwork(networks.getNetwork().get(0), NetworkUtils.OVERLAY_NETWORK_ID);
+            saveOpenRoadmNetwork(networks.getNetwork().values().iterator().next(), NetworkUtils.OVERLAY_NETWORK_ID);
         } catch (FileNotFoundException | InterruptedException | ExecutionException e) {
             LOG.error("Cannot init test ", e);
             fail("Cannot init test ");
@@ -126,7 +127,8 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     @Test
     public void askNewPathFromGnpyNullResultTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
-                PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"), null);
+                PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
+                JsonUtil.getInstance().getBindingDOMCodecServices());
         assertNull("No hard constraints should be available", gnpyUtilitiesImpl.askNewPathFromGnpy(null));
 
     }
@@ -134,7 +136,8 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     @Test
     public void askNewPathFromGnpyTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
-                PceTestData.getGnpyPCERequest("XPONDER-3", "XPONDER-4"), null);
+                PceTestData.getGnpyPCERequest("XPONDER-3", "XPONDER-4"),
+                JsonUtil.getInstance().getBindingDOMCodecServices());
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
@@ -151,7 +154,8 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
         ZToADirectionBuilder ztoADirectionBldr = buildZtoA();
 
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
-                PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"), null);
+                PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
+                JsonUtil.getInstance().getBindingDOMCodecServices());
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
@@ -177,9 +181,15 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     }
 
     private ZToADirectionBuilder buildZtoA() {
+        ZToAKey clientKey = new ZToAKey("key");
+        TerminationPoint stp = new TerminationPointBuilder()
+                .setTpId("tpName").setTpNodeId("xname")
+                .build();
+        Resource clientResource = new ResourceBuilder().setResource(stp).build();
+        ZToA firstResource = new ZToABuilder().setId("tpName").withKey(clientKey).setResource(clientResource).build();
         return new ZToADirectionBuilder()
                 .setRate(Uint32.valueOf(100))
-                .setZToA(Map.of())
+                .setZToA(Map.of(firstResource.key(),firstResource))
                 .setZToAWavelengthNumber(Uint32.valueOf(0));
 
     }
