@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "7adf2673_9abf7a62",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/utils/AToZComparator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T09:05:14Z",
+      "side": 1,
+      "message": "is it useful ?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 71
+      },
+      "revId": "55ab9569bb1350ac12aae4e18b4fe14c747659cf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6539634e_72373ecd",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/utils/ZToAComparator.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T09:05:14Z",
+      "side": 1,
+      "message": "is it useful ?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 71
+      },
+      "revId": "55ab9569bb1350ac12aae4e18b4fe14c747659cf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcd98f70_dec572f9",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T09:05:14Z",
+      "side": 1,
+      "message": "reversing the logic here would ease the reading\n\n        if (!supportingLinkIterator.hasNext()) {\n            return \"\";\n        }\n        SupportingLink first \u003d supportingLinkIterator.next();\n        if (first \u003d\u003d null || first.getLinkRef() \u003d\u003d null) {\n            return \"\";\n        }\n        return first.getLinkRef().toString();",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 9
+      },
+      "revId": "55ab9569bb1350ac12aae4e18b4fe14c747659cf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6dfc389_870e98b3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T09:05:14Z",
+      "side": 1,
+      "message": "reversing the logic is more efficient here\n\n        if (this.omsAttributesSpan \u003d\u003d null) {\n            return 0L;\n        }\n        Collection\u003cLinkConcatenation\u003e linkConcatenationList \u003d\n            this.omsAttributesSpan.nonnullLinkConcatenation().values();\n        if (linkConcatenationList \u003d\u003d null) {\n            LOG.error(\"in PceLink : Null field in the OmsAttrubtesSpan\");\n            return 0L;\n        }\n\n        Iterator\u003cLinkConcatenation\u003e linkConcatenationiterator \u003d linkConcatenationList.iterator();\n        if (!linkConcatenationiterator.hasNext()) {\n            return 0L;\n        }\n        // power on the output of the previous ROADM (dBm)\n        double pout \u003d retrievePower(linkConcatenationiterator.next().getFiberType());\n        // span loss (dB)\n        double spanLoss \u003d this.omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue();\n        double pin \u003d pout - spanLoss; // power on the input of the current ROADM (dBm)\n        double spanOsnrDb \u003d NOISE_MASK_A * pin + NOISE_MASK_B;\n        if (spanOsnrDb \u003e UPPER_BOUND_OSNR) {\n            spanOsnrDb \u003d UPPER_BOUND_OSNR;\n        } else if (spanOsnrDb \u003c LOWER_BOUND_OSNR) {\n            spanOsnrDb \u003d LOWER_BOUND_OSNR;\n        }\n        return spanOsnrDb;",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 181,
+        "endChar": 26
+      },
+      "revId": "55ab9569bb1350ac12aae4e18b4fe14c747659cf",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "481a8289_16fdaa6a",
         "filename": "pce/src/main/resources/OSGI-INF/blueprint/pce-blueprint.xml",
         "patchSetId": 9
