@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1041bede_ffdfb9b1",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T07:55:33Z",
+      "side": 1,
+      "message": "Map.copyOf is replaced by putAll in https://git.opendaylight.org/gerrit/c/transportpce/+/92348/\n\nIt would be more coherent to do it directly here (and in changes)",
+      "range": {
+        "startLine": 246,
+        "startChar": 24,
+        "endLine": 246,
+        "endChar": 34
+      },
+      "revId": "23c87aa8ca708d671f7150b1be5bde10e22888c5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a24d364a_8f3cbd9f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T07:55:33Z",
+      "side": 1,
+      "message": "idem etc.",
+      "range": {
+        "startLine": 266,
+        "startChar": 65,
+        "endLine": 266,
+        "endChar": 76
+      },
+      "revId": "23c87aa8ca708d671f7150b1be5bde10e22888c5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
