@@ -139,6 +139,30 @@
       "revId": "6836cfeb637193942eeda15b83216ae8588e5a5a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff5623d1_6476ae53",
+        "filename": "ordmodels/device/pom.xml",
+        "patchSetId": 14
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-09-11T13:14:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aae43977_e6e8a590",
+      "range": {
+        "startLine": 49,
+        "startChar": 1,
+        "endLine": 53,
+        "endChar": 17
+      },
+      "revId": "6836cfeb637193942eeda15b83216ae8588e5a5a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
