@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.pce.graph;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceOpticalNode;
@@ -21,7 +20,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 
-@Ignore
 public class PceGraphEdgeTest {
 
     private Link link = null;

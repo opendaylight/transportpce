@@ -14,6 +14,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -301,7 +302,7 @@ public class PortMappingVersion121 {
                 }
             }
         }
-        List<ConnectionMap> connectionMap = new ArrayList<>(deviceObject.get().nonnullConnectionMap().values());
+        Collection<ConnectionMap> connectionMap = deviceObject.get().nonnullConnectionMap().values();
         String slcp = null;
         String dlcp = null;
         for (ConnectionMap cm : connectionMap) {

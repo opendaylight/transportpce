@@ -14,6 +14,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -414,7 +415,7 @@ public class PortMappingVersion221 {
         }
 
         if (device.getConnectionMap() != null) {
-            List<ConnectionMap> connectionMap = new ArrayList<>(deviceObject.get().nonnullConnectionMap().values());
+            Collection<ConnectionMap> connectionMap = deviceObject.get().nonnullConnectionMap().values();
             String slcp = null;
             String dlcp = null;
             for (ConnectionMap cm : connectionMap) {
@@ -440,7 +441,7 @@ public class PortMappingVersion221 {
             LOG.warn("No connection-map inside device configuration");
         }
         if (device.getOduSwitchingPools() != null) {
-            List<OduSwitchingPools> oduSwithcingPools = new ArrayList<>(device.nonnullOduSwitchingPools().values());
+            Collection<OduSwitchingPools> oduSwithcingPools = device.nonnullOduSwitchingPools().values();
             List<SwitchingPoolLcp> switchingPoolList = new ArrayList<>();
             for (OduSwitchingPools odp : oduSwithcingPools) {
                 Map<NonBlockingListKey,NonBlockingList> nbMap = new HashMap<>();

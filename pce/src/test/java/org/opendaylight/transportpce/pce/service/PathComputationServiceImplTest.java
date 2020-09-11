@@ -12,11 +12,9 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
@@ -26,6 +24,7 @@ import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.PathBandwidth;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.PathPropertiesBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathMetric;
@@ -37,7 +36,6 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.PathCaseBuilder;
 
 
-@Ignore
 public class PathComputationServiceImplTest extends AbstractTest {
 
     private PathComputationServiceImpl pathComputationServiceImpl;
