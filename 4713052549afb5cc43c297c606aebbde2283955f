@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0a704b1_3528cb7d",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/OlmTransactionUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T08:03:54Z",
+      "side": 1,
+      "message": "would better stay sticked",
+      "range": {
+        "startLine": 128,
+        "startChar": 93,
+        "endLine": 129,
+        "endChar": 47
+      },
+      "revId": "4713052549afb5cc43c297c606aebbde2283955f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97e32f7d_744d6808",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/TransactionUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T08:03:54Z",
+      "side": 1,
+      "message": "I assume this dead code from the previous migration can now be safely removed.",
+      "range": {
+        "startLine": 84,
+        "startChar": 29,
+        "endLine": 84,
+        "endChar": 107
+      },
+      "revId": "4713052549afb5cc43c297c606aebbde2283955f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b5a290f_262d60cc",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/util/TransactionUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-11T08:03:54Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 7
+      },
+      "revId": "4713052549afb5cc43c297c606aebbde2283955f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
