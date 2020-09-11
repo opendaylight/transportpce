@@ -16,8 +16,8 @@ import java.util.Optional;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.DataStoreContext;
-import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
+import org.opendaylight.transportpce.test.DataStoreContext;
+import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200429.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
@@ -70,7 +70,8 @@ public final class TopologyDataUtils {
         } else {
             LOG.error("xml file {} not found at {}", topoFile.getName(), topoFile.getAbsolutePath());
         }
-        writeTransaction(dataStoreContextUtil.getDataBroker(), ii, networks.getNetwork().get(0));
+        writeTransaction(dataStoreContextUtil.getDataBroker(), ii,
+                networks.nonnullNetwork().values().stream().findFirst().get());
         LOG.info("extraction from {} stored with success in datastore", topoFile.getName());
     }
 
