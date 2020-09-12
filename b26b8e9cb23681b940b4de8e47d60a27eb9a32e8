@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "598163a2_5bff8d78",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-12T09:00:40Z",
+      "side": 1,
+      "message": "the sort would better be placed in the else-block.\nwhen listAtoZ is empty, it is not worth trying to sort it.",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 9
+      },
+      "revId": "b26b8e9cb23681b940b4de8e47d60a27eb9a32e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecdff33c_ff8b0f02",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyServiceImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-12T09:00:40Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 191,
+        "startChar": 7,
+        "endLine": 192,
+        "endChar": 34
+      },
+      "revId": "b26b8e9cb23681b940b4de8e47d60a27eb9a32e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
