@@ -21,10 +21,8 @@ import javax.ws.rs.core.Application;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class ConnectToGnpyServerTest extends JerseyTest {
     static {
         //we must hardcode port because it's hardcoded in ConnectToGnpyServer

@@ -14,7 +14,6 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -39,7 +38,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInputBuilder;
 
-@Ignore
 public class PCEServiceWrapperTest extends AbstractTest {
 
     @Mock
