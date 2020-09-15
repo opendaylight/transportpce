@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.gnpy.ConnectToGnpyServer;
@@ -21,6 +20,7 @@ import org.opendaylight.transportpce.pce.gnpy.JerseyServer;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.test.DataStoreContext;
 
 @Ignore
 //@RunWith(MockitoJUnitRunner.class)

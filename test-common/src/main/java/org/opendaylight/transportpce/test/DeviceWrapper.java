@@ -23,8 +23,6 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 import org.opendaylight.mdsal.dom.api.DOMDataTreeWriteTransaction;
-import org.opendaylight.transportpce.common.DataStoreContext;
-import org.opendaylight.transportpce.common.DataStoreContextImpl;
 import org.opendaylight.transportpce.common.converter.XMLDataObjectConverter;
 import org.opendaylight.transportpce.common.converter.api.DataObjectConverter;
 import org.opendaylight.yangtools.yang.common.QName;
