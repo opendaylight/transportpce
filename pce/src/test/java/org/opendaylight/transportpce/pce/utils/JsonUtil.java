@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.ServiceLoader;
 import org.opendaylight.binding.runtime.api.BindingRuntimeContext;
 import org.opendaylight.binding.runtime.spi.BindingRuntimeHelpers;
-import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
 import org.opendaylight.mdsal.binding.dom.codec.impl.BindingCodecContext;
+import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.YangModelBindingProvider;
 import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
@@ -26,7 +26,7 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonParserStream;
 import org.opendaylight.yangtools.yang.data.impl.schema.ImmutableNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.impl.schema.NormalizedNodeResult;
-import org.opendaylight.yangtools.yang.model.api.SchemaContext;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +36,8 @@ public final class JsonUtil {
     private static final Logger LOG = LoggerFactory.getLogger(JsonUtil.class);
     private static JsonUtil instance;
 
-    private SchemaContext schemaCtx;
-
-    private BindingNormalizedNodeSerializer codecRegistry;
+    private EffectiveModelContext schemaCtx;
+    private BindingDOMCodecServices bindingDOMCodecServices;
 
     private JsonUtil() {
         List<YangModuleInfo> moduleInfos = new LinkedList<>();
@@ -48,13 +47,8 @@ public final class JsonUtil {
         }
         /* Create the schema context for loaded models */
         this.schemaCtx = BindingRuntimeHelpers.createEffectiveModel(moduleInfos);
-        if (schemaCtx == null) {
-            throw new IllegalStateException("Failed to load schema context");
-        }
-        // Create the binding binding normalized node codec registry
-        BindingRuntimeContext bindingContext =
-                BindingRuntimeHelpers.createRuntimeContext();
-        this.codecRegistry = new BindingCodecContext(bindingContext);
+        BindingRuntimeContext bindingContext = BindingRuntimeHelpers.createRuntimeContext();
+        bindingDOMCodecServices = new BindingCodecContext(bindingContext);
     }
 
     public static JsonUtil getInstance() {
@@ -71,8 +65,8 @@ public final class JsonUtil {
                         JSONCodecFactorySupplier.RFC7951.getShared(schemaCtx), schemaCtx);) {
             jsonParser.parse(reader);
             YangInstanceIdentifier yangId = YangInstanceIdentifier.of(pathQname);
-            if (codecRegistry.fromNormalizedNode(yangId, result.getResult()) != null) {
-                return codecRegistry.fromNormalizedNode(yangId, result.getResult()).getValue();
+            if (bindingDOMCodecServices.fromNormalizedNode(yangId, result.getResult()) != null) {
+                return bindingDOMCodecServices.fromNormalizedNode(yangId, result.getResult()).getValue();
             } else {
                 return null;
             }
@@ -81,5 +75,9 @@ public final class JsonUtil {
             return null;
         }
 
+    }
+
+    public BindingDOMCodecServices getBindingDOMCodecServices() {
+        return bindingDOMCodecServices;
     }
 }
