@@ -9,7 +9,6 @@
 package org.opendaylight.transportpce.pce.constraints;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.transportpce.common.DataStoreContext;
@@ -21,11 +20,9 @@ import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 
-@Ignore
 public class PceConstraintsCalcTest extends AbstractTest {
-    private static PceConstraintsCalc pceConstraintsCalc = null;
+    private static PceConstraintsCalc pceConstraintsCalc;
     private static NetworkTransactionService networkTransactionService = null;
-    private DataStoreContext dataStoreContext = this.getDataStoreContextUtil();
     private DataBroker dataBroker = this.getDataBroker();
 
     @Before

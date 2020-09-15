@@ -10,18 +10,13 @@ package org.opendaylight.transportpce.common.device;
 
 import static org.mockito.ArgumentMatchers.any;
 
-import com.google.common.util.concurrent.FluentFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,7 +30,6 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.mdsal.binding.api.ReadWriteTransaction;
-import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkBuilder;
@@ -47,10 +41,15 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 @RunWith(MockitoJUnitRunner.class)
 public class DeviceTransactionManagerTest {
 
-    @Mock private MountPointService mountPointServiceMock;
-    @Mock private MountPoint mountPointMock;
-    @Mock private DataBroker dataBrokerMock;
-    @Mock private ReadWriteTransaction rwTransactionMock;
+    @Mock
+    private MountPointService mountPointServiceMock;
+    @Mock
+    private MountPoint mountPointMock;
+    @Mock
+    private DataBroker dataBrokerMock;
+    @Mock
+    private ReadWriteTransaction rwTransactionMock;
+
 
     private DeviceTransactionManagerImpl transactionManager;
     private String defaultDeviceId = "device-id";
@@ -294,55 +293,6 @@ public class DeviceTransactionManagerTest {
 
         Mockito.verify(rwTransactionMock, Mockito.times(1)).put(defaultDatastore, defaultIid, defaultData);
         Mockito.verify(rwTransactionMock, Mockito.times(1)).commit();
-    }
-
-    @Test
-    @Ignore
-    public void submitTxTimeoutTransactionTest() {
-        Future<java.util.Optional<DeviceTransaction>> deviceTxFuture =
-                transactionManager.getDeviceTransaction(defaultDeviceId);
-        DeviceTransaction deviceTx;
-        try {
-            deviceTx = deviceTxFuture.get().get();
-        } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
-            return;
-        }
-
-        deviceTx.put(defaultDatastore, defaultIid, defaultData);
-
-        Exception throwedException = null;
-
-        FluentFuture<? extends @NonNull CommitInfo> submitFuture = deviceTx.commit(200, defaultTimeUnit);
-        try {
-            submitFuture.get();
-        } catch (InterruptedException e) {
-            Assert.fail("Exception catched! " + e);
-        } catch (ExecutionException e) {
-            throwedException = e;
-        }
-
-        if (throwedException == null
-                || !throwedException.getMessage().contains(TimeoutException.class.getName())) {
-            Assert.fail("TimeoutException inside of should be thrown!");
-            return;
-        }
-
-
-        Mockito.doReturn(FluentFutures.immediateNullFluentFuture()).when(rwTransactionMock.commit());
-
-        try {
-            putAndSubmit(transactionManager, defaultDeviceId, defaultDatastore, defaultIid, defaultData);
-        } catch (InterruptedException | ExecutionException e) {
-            Assert.fail("Exception catched! " + e);
-            return;
-        }
-
-        Mockito.verify(rwTransactionMock, Mockito.times(2)).put(defaultDatastore, defaultIid, defaultData);
-        Mockito.verify(rwTransactionMock, Mockito.times(2)).commit();
-        ListeningExecutorService executor = MoreExecutors
-                .listeningDecorator(Executors.newSingleThreadExecutor());
-        executor.shutdown();
     }
 
     private <T extends DataObject> void putAndSubmit(DeviceTransactionManagerImpl deviceTxManager, String deviceId,
