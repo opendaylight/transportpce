@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "777979c0_049351b0",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T14:57:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21640c23_7bc3f397",
+      "range": {
+        "startLine": 304,
+        "startChar": 6,
+        "endLine": 304,
+        "endChar": 112
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56fa4883_83e6b547",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
         "patchSetId": 5
@@ -68,6 +92,30 @@
       "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "088adc63_b9b7b864",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T14:57:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f352084b_2efb8001",
+      "range": {
+        "startLine": 417,
+        "startChar": 11,
+        "endLine": 417,
+        "endChar": 116
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "8940c715_408138af",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T14:57:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d74773e_8418f1e9",
+      "range": {
+        "startLine": 443,
+        "startChar": 0,
+        "endLine": 443,
+        "endChar": 116
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f9c175c2_3bcab2a6",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/device/DeviceTransactionManagerTest.java",
         "patchSetId": 5
@@ -140,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "e28f31c0_b8fd5f21",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/device/DeviceTransactionManagerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T14:57:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9c175c2_3bcab2a6",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 51
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "633f7d42_2685c715",
         "filename": "common/src/test/java/org/opendaylight/transportpce/common/device/DeviceTransactionManagerTest.java",
         "patchSetId": 5
@@ -160,6 +256,30 @@
       "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "533db3b0_c431bf57",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/device/DeviceTransactionManagerTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T14:57:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "633f7d42_2685c715",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 31
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
