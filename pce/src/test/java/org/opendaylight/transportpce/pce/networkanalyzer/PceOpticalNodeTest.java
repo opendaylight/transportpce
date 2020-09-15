@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.pce.utils.TransactionUtils;
@@ -49,7 +48,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
-@Ignore
 public class PceOpticalNodeTest extends AbstractTest {
 
     private PceOpticalNode pceOpticalNode;
