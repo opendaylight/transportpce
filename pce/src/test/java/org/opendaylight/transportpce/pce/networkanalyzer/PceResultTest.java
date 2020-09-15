@@ -9,11 +9,9 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.test.AbstractTest;
 
-@Ignore
 public class PceResultTest extends AbstractTest {
 
     private PceResult pceResult = null;
