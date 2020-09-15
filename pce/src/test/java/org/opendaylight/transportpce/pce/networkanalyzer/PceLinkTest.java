@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
@@ -49,7 +48,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 
-@Ignore
 public class PceLinkTest extends AbstractTest {
 
     private static final String LINK_ID_FORMAT = "%1$s-%2$sto%3$s-%4$s";

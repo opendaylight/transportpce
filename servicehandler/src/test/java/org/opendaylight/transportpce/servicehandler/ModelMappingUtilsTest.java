@@ -20,7 +20,6 @@ import java.util.concurrent.Executors;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.servicehandler.utils.ServiceDataUtils;
@@ -67,7 +66,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
-@Ignore
 public class ModelMappingUtilsTest extends AbstractTest {
 
     private ListeningExecutorService executorService;
