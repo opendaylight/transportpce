@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.olm.service;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
@@ -71,7 +70,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Ignore
 public class OlmPowerServiceImplTest  extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(OlmPowerServiceImplTest.class);
