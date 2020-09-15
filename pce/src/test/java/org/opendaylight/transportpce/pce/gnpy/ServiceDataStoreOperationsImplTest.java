@@ -12,20 +12,18 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
+import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.org.openroadm.device.container.OrgOpenroadmDevice;
 
 @Ignore
 public class ServiceDataStoreOperationsImplTest extends AbstractTest {
 
-    ServiceDataStoreOperationsImpl serviceDataStoreOperations;
-    NetworkTransactionImpl networkTransaction = Mockito.mock(NetworkTransactionImpl.class);
-    OrgOpenroadmDevice orgOpenroadmDevice = Mockito.mock(OrgOpenroadmDevice.class);
+    private ServiceDataStoreOperationsImpl serviceDataStoreOperations;
+    private BindingDOMCodecServices bindingDOMCodecServices = Mockito.mock(BindingDOMCodecServices.class);
 
     @Before
     public void setUp() throws GnpyException {
-        serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(null);
+        serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(bindingDOMCodecServices);
     }
 
     @Test
