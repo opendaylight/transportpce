@@ -73,6 +73,12 @@
             <version>3.0.2</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>test-common</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>
