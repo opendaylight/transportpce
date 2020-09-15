@@ -37,13 +37,13 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.Service
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteInputBuilder;
 
+@Ignore
 /**
  * Test RendererServiceWrapper class.
  *
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
-@Ignore
 public class RendererServiceWrapperTest extends AbstractTest {
     @Mock
     private RendererServiceOperations rendererServiceOperationsMock;

@@ -12,7 +12,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.opendaylight.mdsal.binding.api.DataBroker;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.gnpy.ConnectToGnpyServer;
@@ -20,16 +23,18 @@ import org.opendaylight.transportpce.pce.gnpy.JerseyServer;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.transportpce.test.DataStoreContext;
+import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 
 @Ignore
-//@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class PceSendingPceRPCsTest extends AbstractTest {
 
     private PceSendingPceRPCs pceSendingPceRPCs;
     private NetworkTransactionImpl networkTransaction;
-    private DataStoreContext dataStoreContext = this.getDataStoreContextUtil();
-    private DataBroker dataBroker = this.getDataBroker();
+    @Mock
+    private YangParserFactory yangParserFactory;
+    @Mock
+    private BindingDOMCodecServices bindingDOMCodecServices;
     private JerseyServer jerseyServer = new JerseyServer();
 
 
@@ -37,8 +42,8 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     public void setUp() {
         networkTransaction = new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
         PceTestUtils.writeNetworkInDataStore(this.getDataBroker());
-        pceSendingPceRPCs =
-                new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(), networkTransaction, null);
+        pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(),
+                        networkTransaction, bindingDOMCodecServices);
     }
 
     @Test

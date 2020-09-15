@@ -23,7 +23,6 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.mdsal.dom.api.DOMDataBroker;
 import org.opendaylight.mdsal.dom.api.DOMDataTreeWriteTransaction;
-import org.opendaylight.transportpce.test.converter.DataObjectConverter;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
@@ -117,14 +116,14 @@ public final class DeviceWrapper {
         Preconditions.checkArgument(initialData != null && !initialData.isEmpty(),
                 "Initial data cannot be null or empty");
         DataStoreContext dsContext = new DataStoreContextImpl();
-        DataObjectConverter xmlConverter = XMLDataObjectConverter.createWithDataStoreUtil(dsContext);
+        XMLDataObjectConverter xmlConverter = XMLDataObjectConverter.createWithDataStoreUtil(dsContext);
         for (Entry<QName, InputStream> entryData : initialData) {
             insertDataIntoDS(xmlConverter, entryData.getValue(), entryData.getKey(), dsContext.getDOMDataBroker());
         }
         return new DeviceWrapper(key, dsContext.getDataBroker(), dsContext.getDOMDataBroker());
     }
 
-    private static void insertDataIntoDS(DataObjectConverter xmlConverter, InputStream xmlDataInputStream,
+    private static void insertDataIntoDS(XMLDataObjectConverter xmlConverter, InputStream xmlDataInputStream,
             QName dataQName, DOMDataBroker domDataBroker) {
         Optional<NormalizedNode<? extends PathArgument, ?>> initialDataNormalizedNodes =
                 xmlConverter.transformIntoNormalizedNode(xmlDataInputStream);
