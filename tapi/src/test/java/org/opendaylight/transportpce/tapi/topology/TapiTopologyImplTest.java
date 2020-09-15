@@ -29,8 +29,6 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Before;
 import org.junit.Test;
-import org.opendaylight.transportpce.common.DataStoreContext;
-import org.opendaylight.transportpce.common.DataStoreContextImpl;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.tapi.utils.TopologyDataUtils;

@@ -11,8 +11,6 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.dom.api.DOMDataBroker;
-import org.opendaylight.transportpce.common.DataStoreContext;
-import org.opendaylight.transportpce.common.DataStoreContextImpl;
 
 public abstract class AbstractTest {
 

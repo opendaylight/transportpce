@@ -74,8 +74,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.opendaylight.mdsal</groupId>
-            <artifactId>mdsal-binding-generator-impl</artifactId>
+            <groupId>org.opendaylight.transportpce</groupId>
+            <artifactId>test-common</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

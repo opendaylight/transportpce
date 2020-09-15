@@ -11,7 +11,6 @@ package org.opendaylight.transportpce.pce.constraints;
 import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.DataBroker;
-import org.opendaylight.transportpce.common.DataStoreContext;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
