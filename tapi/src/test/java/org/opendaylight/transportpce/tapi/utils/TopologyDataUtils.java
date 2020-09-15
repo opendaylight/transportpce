@@ -70,7 +70,8 @@ public final class TopologyDataUtils {
         } else {
             LOG.error("xml file {} not found at {}", topoFile.getName(), topoFile.getAbsolutePath());
         }
-        writeTransaction(dataStoreContextUtil.getDataBroker(), ii, networks.getNetwork().get(0));
+        writeTransaction(dataStoreContextUtil.getDataBroker(), ii,
+                networks.nonnullNetwork().values().stream().findFirst().get());
         LOG.info("extraction from {} stored with success in datastore", topoFile.getName());
     }
 
