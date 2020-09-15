@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "71299c5a_d6e98274",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T14:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb7cb562_ff28f499",
+      "revId": "69091086b7df940b689cc6048534f0e8e0c500e5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c710b164_2e0600fd",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "69091086b7df940b689cc6048534f0e8e0c500e5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8faaff77_84a1bcda",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T14:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c710b164_2e0600fd",
+      "revId": "69091086b7df940b689cc6048534f0e8e0c500e5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "69091086b7df940b689cc6048534f0e8e0c500e5",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77b9cf48_4a5755e5",
+        "filename": "test-common/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T14:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eafb1b4_982f44a7",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 103
+      },
+      "revId": "69091086b7df940b689cc6048534f0e8e0c500e5",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
