@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "15c6d1f3_57755c86",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T14:53:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8d00c5f_8bc5332c",
+      "revId": "ef803309d79ce93eea02c1d430cd8b2bf1d82efa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13e3e831_f2eb5aeb",
         "filename": "pce/src/main/resources/OSGI-INF/blueprint/pce-blueprint.xml",
         "patchSetId": 2
