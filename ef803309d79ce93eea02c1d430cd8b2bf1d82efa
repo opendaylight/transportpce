@@ -39,6 +39,30 @@
       "revId": "ef803309d79ce93eea02c1d430cd8b2bf1d82efa",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22fae3b5_571b689c",
+        "filename": "pce/src/main/resources/OSGI-INF/blueprint/pce-blueprint.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T13:14:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "13e3e831_f2eb5aeb",
+      "range": {
+        "startLine": 18,
+        "startChar": 114,
+        "endLine": 19,
+        "endChar": 2
+      },
+      "revId": "ef803309d79ce93eea02c1d430cd8b2bf1d82efa",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
