@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a2182f3_94dc2316",
+        "filename": "tapi/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T15:03:15Z",
+      "side": 1,
+      "message": "not sure if we need this.\nMaybe in ht next change.",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 17
+      },
+      "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42073b78_5bed5af7",
+        "filename": "test-common/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-15T15:03:15Z",
+      "side": 1,
+      "message": "not sure if we need this\nnor if it is the right place for it",
+      "range": {
+        "startLine": 24,
+        "startChar": 1,
+        "endLine": 78,
+        "endChar": 21
+      },
+      "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
