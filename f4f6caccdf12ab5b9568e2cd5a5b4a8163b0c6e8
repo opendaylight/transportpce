@@ -25,6 +25,52 @@
     },
     {
       "key": {
+        "uuid": "8a7e115e_2264d1e7",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TopologyDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T06:01:33Z",
+      "side": 1,
+      "message": "should be in next change",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 79
+      },
+      "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "609e516d_f3481af1",
+        "filename": "test-common/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T06:01:33Z",
+      "side": 1,
+      "message": "pointless change probably due to editor misconfiguration",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 0
+      },
+      "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42073b78_5bed5af7",
         "filename": "test-common/pom.xml",
         "patchSetId": 1
@@ -42,6 +88,23 @@
         "endLine": 78,
         "endChar": 21
       },
+      "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2261bf18_377a1ed2",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/DataStoreContextImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T06:01:33Z",
+      "side": 1,
+      "message": "This file is not recognized by Git/Gerrit as a file rename/directory change, what makes the review in Gerrit , if not impossible, quite complicated.\nThe many modifications brought here should be reported in the next change to allow a smoother review...",
       "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true

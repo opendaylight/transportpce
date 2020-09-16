@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "879bac32_cac81b6b",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/AbstractTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T06:01:33Z",
+      "side": 0,
+      "message": "not reported",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 0
+      },
+      "revId": "96b0b7dcd396f79b4751cb608fdcdb7c9ff440c2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43276e89_82d0a12f",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/DeviceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T06:01:33Z",
+      "side": 0,
+      "message": "not reported",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 65
+      },
+      "revId": "96b0b7dcd396f79b4751cb608fdcdb7c9ff440c2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d003967b_a2217629",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/converter/AbstractDataObjectConverter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T06:01:33Z",
+      "side": 0,
+      "message": "not reported",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 77
+      },
+      "revId": "96b0b7dcd396f79b4751cb608fdcdb7c9ff440c2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea2c7904_03ab2b3e",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/converter/JSONDataObjectConverter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T06:01:33Z",
+      "side": 0,
+      "message": "not reported",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 78
+      },
+      "revId": "96b0b7dcd396f79b4751cb608fdcdb7c9ff440c2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
