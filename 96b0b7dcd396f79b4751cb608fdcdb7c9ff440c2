@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fb852f19_3fcb5641",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T09:21:12Z",
+      "side": 1,
+      "message": "GNPy",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 5
+      },
+      "revId": "96b0b7dcd396f79b4751cb608fdcdb7c9ff440c2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8abbdfb9_00249ad4",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImpl.java",
         "patchSetId": 12
