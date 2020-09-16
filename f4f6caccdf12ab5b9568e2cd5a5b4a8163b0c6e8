@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a2ed7c4c_83c626fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T06:05:18Z",
+      "side": 1,
+      "message": "rather \"DataStoreContext and co\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 32
+      },
+      "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a2182f3_94dc2316",
         "filename": "tapi/pom.xml",
         "patchSetId": 1
