@@ -213,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "7acdb5d9_f414283e",
+        "filename": "test-common/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T13:42:50Z",
+      "side": 1,
+      "message": "reversing the order of the 2 changes will help to clarify the situation here",
+      "parentUuid": "42073b78_5bed5af7",
+      "range": {
+        "startLine": 24,
+        "startChar": 1,
+        "endLine": 78,
+        "endChar": 21
+      },
+      "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2261bf18_377a1ed2",
         "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/DataStoreContextImpl.java",
         "patchSetId": 1
