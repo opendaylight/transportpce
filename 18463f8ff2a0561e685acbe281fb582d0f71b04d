@@ -16,6 +16,24 @@
       "revId": "18463f8ff2a0561e685acbe281fb582d0f71b04d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63669764_f22ed4ee",
+        "filename": "tests/transportpce_tests/common/__init__.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T15:09:32Z",
+      "side": 1,
+      "message": "according to me it\u0027s completely superfluous but without this empty file, pylint3 raises an error\n\nhttps://stackoverflow.com/questions/48024049/pylint-raises-error-if-directory-doesnt-contain-init-py-file",
+      "parentUuid": "1da1c8a3_98a960b2",
+      "revId": "18463f8ff2a0561e685acbe281fb582d0f71b04d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
