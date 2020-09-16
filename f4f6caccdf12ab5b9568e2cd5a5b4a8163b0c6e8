@@ -22,6 +22,30 @@
       "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aafc1344_b6986085",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/DeviceWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-16T07:01:37Z",
+      "side": 0,
+      "message": "oups",
+      "parentUuid": "2b0d7758_0d876ad3",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 78
+      },
+      "revId": "f4f6caccdf12ab5b9568e2cd5a5b4a8163b0c6e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
