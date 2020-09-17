@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "8cb167d7_c806f3c1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion121.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-17T08:32:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56fa4883_83e6b547",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 314,
+        "endChar": 52
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f352084b_2efb8001",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 5
@@ -139,6 +163,30 @@
       "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9abbe94b_0c628e5d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-17T08:32:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8ce4234_bb91a5ff",
+      "range": {
+        "startLine": 425,
+        "startChar": 1,
+        "endLine": 427,
+        "endChar": 56
+      },
+      "revId": "7c2c5b506e3afe99221f5e4bba551acbcd9ba6c6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
