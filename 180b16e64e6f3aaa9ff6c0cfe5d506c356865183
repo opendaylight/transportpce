@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "66f3d2f1_ca40ac37",
+        "filename": "inventory/src/main/java/org/opendaylight/transportpce/inventory/INode121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-17T08:33:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "95f4d076_96f46539",
+      "range": {
+        "startLine": 1322,
+        "startChar": 0,
+        "endLine": 1322,
+        "endChar": 16
+      },
+      "revId": "180b16e64e6f3aaa9ff6c0cfe5d506c356865183",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3d314ca_e305a6d2",
         "filename": "inventory/src/main/java/org/opendaylight/transportpce/inventory/INode121.java",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "180b16e64e6f3aaa9ff6c0cfe5d506c356865183",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce9e9ba3_fbf91aa4",
+        "filename": "inventory/src/main/java/org/opendaylight/transportpce/inventory/INode121.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-17T08:33:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f3d314ca_e305a6d2",
+      "range": {
+        "startLine": 1517,
+        "startChar": 0,
+        "endLine": 1517,
+        "endChar": 16
+      },
+      "revId": "180b16e64e6f3aaa9ff6c0cfe5d506c356865183",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
