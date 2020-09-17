@@ -953,7 +953,7 @@ public class INode221 {
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class) == null) {
             LOG.error("LLDP subtree is missing");
-
+            return;
         }
         int adminstatusEnu =
             protocolObject.get().augmentation(Protocols1.class).getLldp().getGlobalConfig().getAdminStatus()
@@ -1000,7 +1000,7 @@ public class INode221 {
                         Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class) == null) {
             LOG.error("LLDP subtree is missing");
-
+            return;
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
@@ -1045,7 +1045,6 @@ public class INode221 {
         if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class) == null) {
             LOG.error("LLDP subtree is missing");
             return;
-
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
@@ -1100,7 +1099,6 @@ public class INode221 {
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
-
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
@@ -1148,7 +1146,6 @@ public class INode221 {
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
-
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
@@ -1246,7 +1243,6 @@ public class INode221 {
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
-
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
@@ -1474,7 +1470,6 @@ public class INode221 {
         if (!deviceObject.isPresent()) {
             LOG.error("Device with node id {} not found", nodeId);
             return;
-
         }
         String startTimestamp = getCurrentTimestamp();
         @NonNull
