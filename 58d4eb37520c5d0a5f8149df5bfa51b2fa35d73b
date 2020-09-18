@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb829c7d_72442120",
+        "filename": "olm/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-18T13:05:11Z",
+      "side": 1,
+      "message": "I understand this was inherited initially from test-common whose scope was improperly declared.\nIt\u0027s probably worth to mention it in the commit message.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 17
+      },
+      "revId": "58d4eb37520c5d0a5f8149df5bfa51b2fa35d73b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8337cce_f0e6a7c5",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-18T13:05:11Z",
+      "side": 1,
+      "message": "looks more than a bug correction or an error...\nThis should probably be in another change.",
+      "range": {
+        "startLine": 96,
+        "startChar": 65,
+        "endLine": 96,
+        "endChar": 84
+      },
+      "revId": "58d4eb37520c5d0a5f8149df5bfa51b2fa35d73b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
