@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "f0821650_0f519a6d",
+        "filename": "common/src/test/java/org/opendaylight/transportpce/common/device/DeviceTransactionManagerTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-18T14:00:32Z",
+      "side": 0,
+      "message": "OK\nThe dead code removal must be mentioned in the commit message",
+      "range": {
+        "startLine": 299,
+        "startChar": 1,
+        "endLine": 346,
+        "endChar": 5
+      },
+      "revId": "fc2f017df79ae05075aaad741197d4bfda12eaa8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc2b9e45_1fae2160",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/impl/PceServiceRPCImplTest.java",
         "patchSetId": 9

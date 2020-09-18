@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4154e841_b745e929",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImplTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-18T14:00:32Z",
+      "side": 1,
+      "message": "should we remove this dead code? if yes here or in another change ?",
+      "range": {
+        "startLine": 198,
+        "startChar": 1,
+        "endLine": 248,
+        "endChar": 6
+      },
+      "revId": "d0ce56a83e88628c79e4bc6744314dc4126b8e5a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ddec173_84692abb",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImplTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-18T14:00:32Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 366,
+        "endChar": 7
+      },
+      "revId": "d0ce56a83e88628c79e4bc6744314dc4126b8e5a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
