@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e99ca238_12b3666d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/DataStoreContextImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-18T14:10:11Z",
+      "side": 1,
+      "message": "this dependency was removed in \nhttps://git.opendaylight.org/gerrit/c/transportpce/+/92194/13/common/src/main/java/org/opendaylight/transportpce/common/DataStoreContextImpl.java\n\nto avoid karaf start-up issue",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 73
+      },
+      "revId": "d0ce56a83e88628c79e4bc6744314dc4126b8e5a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4154e841_b745e929",
         "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImplTest.java",
         "patchSetId": 9
