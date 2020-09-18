@@ -22,6 +22,30 @@
       "revId": "fc2f017df79ae05075aaad741197d4bfda12eaa8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "179a13fb_75b53b1c",
+        "filename": "lighty/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-18T08:45:35Z",
+      "side": 1,
+      "message": "seems OK",
+      "parentUuid": "96107ce5_9fc088d7",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "fc2f017df79ae05075aaad741197d4bfda12eaa8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
