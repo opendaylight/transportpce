@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c5e474a0_6e97c8eb",
+        "filename": "olm/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-21T14:44:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eb829c7d_72442120",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 17
+      },
+      "revId": "58d4eb37520c5d0a5f8149df5bfa51b2fa35d73b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8337cce_f0e6a7c5",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestUtils.java",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "58d4eb37520c5d0a5f8149df5bfa51b2fa35d73b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d22e3c83_ff2574d2",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-21T14:44:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e8337cce_f0e6a7c5",
+      "range": {
+        "startLine": 96,
+        "startChar": 65,
+        "endLine": 96,
+        "endChar": 84
+      },
+      "revId": "58d4eb37520c5d0a5f8149df5bfa51b2fa35d73b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
