@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "92e240c1_fb823744",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/DeviceWrapper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-21T12:19:49Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "43276e89_82d0a12f",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 65
+      },
+      "revId": "96b0b7dcd396f79b4751cb608fdcdb7c9ff440c2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d003967b_a2217629",
         "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/converter/AbstractDataObjectConverter.java",
         "patchSetId": 1
@@ -139,6 +163,30 @@
       "revId": "96b0b7dcd396f79b4751cb608fdcdb7c9ff440c2",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86fd5ac5_6cc373f5",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/converter/JSONDataObjectConverter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-21T12:19:49Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "ea2c7904_03ab2b3e",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 78
+      },
+      "revId": "96b0b7dcd396f79b4751cb608fdcdb7c9ff440c2",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
