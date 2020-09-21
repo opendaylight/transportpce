@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "a1d7b00d_42c4bea1",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImplTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-21T08:19:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4154e841_b745e929",
+      "range": {
+        "startLine": 198,
+        "startChar": 1,
+        "endLine": 248,
+        "endChar": 6
+      },
+      "revId": "d0ce56a83e88628c79e4bc6744314dc4126b8e5a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ddec173_84692abb",
         "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImplTest.java",
         "patchSetId": 9
@@ -68,6 +92,30 @@
       "revId": "d0ce56a83e88628c79e4bc6744314dc4126b8e5a",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0f95816_a28e1ba3",
+        "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImplTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-21T08:19:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5ddec173_84692abb",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 366,
+        "endChar": 7
+      },
+      "revId": "d0ce56a83e88628c79e4bc6744314dc4126b8e5a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
