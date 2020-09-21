@@ -195,57 +195,6 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
         Assert.assertEquals("Failed", output.getResult());
     }
 
-    /*
-    @Test
-    public void testCalculateSpanlossBase() {
-        CalculateSpanlossBaseInput input = OlmPowerServiceRpcImplUtil.getCalculateSpanlossBaseInput();
-        //TODO
-        Mockito.when(this.olmPowerServiceMock.calculateSpanlossBase(Mockito.any()))
-                .thenReturn(new CalculateSpanlossBaseOutputBuilder().setResult("Failed").build());
-        CalculateSpanlossBaseOutput output = this.olmPowerServiceMock.calculateSpanlossBase(input);
-        Assert.assertEquals("Failed", output.getResult());
-
-    }
-    */
-
-    /*
-    @Test
-    public void testCalculateSpanlossBase2() {
-        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
-<<<<<<< HEAD
-        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Networks.class)
-            .child(Network.class, overlayTopologyKey)
-=======
-        InstanceIdentifier<Network1> networkTopoIID = InstanceIdentifier.builder(Networks.class)
-                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-                                .ietf.network.rev180226.networks.Network.class,
-                        overlayTopologyKey)
->>>>>>> 87d8bf0... Retrieve OLM modifs from change 80051
-            .augmentation(Network1.class)
-            .build();
-        InstanceIdentifier<Network> networkIID = InstanceIdentifier.builder(Networks.class)
-                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
-                                .ietf.network.rev180226.networks.Network.class,
-                        overlayTopologyKey)
-                .build();
-        Network1 network = TransactionUtils.getNetwork();
-        Network ietfNetwork = TransactionUtils.getOverLayNetwork();
-        TransactionUtils.writeTransaction(this.getDataBroker(), networkIID, ietfNetwork);
-        TransactionUtils.writeTransaction(this.getDataBroker(), networkTopoIID, network);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            LOG.error("Write transaction failed !",e);
-        }
-        CalculateSpanlossBaseInput input = OlmPowerServiceRpcImplUtil.getCalculateSpanlossBaseInput();
-        //TODO
-        Mockito.when(this.olmPowerServiceMock.calculateSpanlossBase(Mockito.any()))
-                .thenReturn(new CalculateSpanlossBaseOutputBuilder().setResult("Failed").build());
-        CalculateSpanlossBaseOutput output = this.olmPowerServiceMock.calculateSpanlossBase(input);
-        Assert.assertEquals("Failed", output.getResult());
-
-    }
-    */
     @Ignore
     @Test
     public void testCalculateSpanlossBase3() {
@@ -312,60 +261,6 @@ public class OlmPowerServiceImplTest  extends AbstractTest {
         Assert.assertEquals("Failed", output.getResult());
 
     }
-
-//    @Test
-//    public void testCalculateSpanlossBase4() throws InterruptedException {
-//        NetworkKey overlayTopologyKey = new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID));
-//        InstanceIdentifier<Network1> networkIID = InstanceIdentifier.builder(Network.class, overlayTopologyKey)
-//            .augmentation(Network1.class)
-//            .build();
-//        Network1 network = TransactionUtils.getNetwork2();
-//        TransactionUtils.writeTransaction(this.getDataBroker(), networkIID, network);
-//
-//        Thread.sleep(500);
-//
-//        List<NodeId> nodes = TransactionUtils.getNodes();
-//        Node n;
-//        SupportingNode sn;
-//
-//        List<SupportingNode> snl;
-//        NodeId n5 = new NodeId("node 5");
-//        KeyedInstanceIdentifier<Node, NodeKey> mappedNodeII2 =
-//            InstanceIdentifiers.UNDERLAY_NETWORK_II.child(Node.class, new NodeKey(n5));
-//
-//        sn = new SupportingNodeBuilder().setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
-//            .setNodeRef(n5).build();
-//        snl = new ArrayList<>();
-//        snl.add(sn);
-//        n = new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608
-//            .network.NodeBuilder().setNodeId(n5).build();
-//        TransactionUtils.writeTransaction(this.getDataBroker(), mappedNodeII2, n);
-//        Thread.sleep(500);
-//
-//        for(int i=0; i < nodes.size(); i++) {
-//            KeyedInstanceIdentifier<Node, NodeKey> mappedNodeII =
-//                InstanceIdentifiers.OVERLAY_NETWORK_II.child(Node.class, new NodeKey(nodes.get(i)));
-//            if (i != 0){
-//                sn = new SupportingNodeBuilder().setNetworkRef(new NetworkId(NetworkUtils.UNDERLAY_NETWORK_ID))
-//                    .setNodeRef(nodes.get(i-1)).build();
-//            }else {
-//                sn = new SupportingNodeBuilder().setNodeRef(n5).build();
-//            }
-//            snl = new ArrayList<>();
-//            snl.add(sn);
-//            n = new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev150608
-//                .network.NodeBuilder().setNodeId(nodes.get(i)).setSupportingNode(snl).build();
-//            TransactionUtils.writeTransaction(this.getDataBroker(), mappedNodeII, n);
-//            Thread.sleep(500);
-//        }
-//
-//        Thread.sleep(1000);
-//
-//        CalculateSpanlossBaseInput input = OlmPowerServiceRpcImplUtil.getCalculateSpanlossBaseInput2();
-//        CalculateSpanlossBaseOutput output = this.olmPowerService.calculateSpanlossBase(input);
-//        Assert.assertEquals("Failed", output.getResult());
-//
-//    }
 
     @Test
     public void testCalculateSpanlossCurrent1() {
