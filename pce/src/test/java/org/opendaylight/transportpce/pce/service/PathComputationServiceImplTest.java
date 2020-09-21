@@ -36,7 +36,6 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.ResponseBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.NoPathCaseBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.PathCaseBuilder;
 
-
 @Ignore
 public class PathComputationServiceImplTest extends AbstractTest {
 
