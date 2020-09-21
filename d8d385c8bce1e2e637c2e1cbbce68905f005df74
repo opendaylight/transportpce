@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29488d13_9c0e413b",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/service/RendererServiceWrapperTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-09-21T10:09:32Z",
+      "side": 1,
+      "message": "should be in next change",
+      "revId": "d8d385c8bce1e2e637c2e1cbbce68905f005df74",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
