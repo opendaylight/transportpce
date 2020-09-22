@@ -16,9 +16,10 @@ import java.util.Comparator;
  * @author Martial Coulibaly ( martial.coulibaly@gfi.com ) on behalf of Orange
  *
  */
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    value = "SE_NO_SERIALVERSIONID",
+    justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
 public class SortPortsByName implements Comparator<String>, Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     @Override
     public int compare(String port1, String port2) {
