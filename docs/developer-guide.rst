@@ -47,15 +47,18 @@ Initial design of TransportPCE leverages OpenROADM Multi-Source-Agreement (MSA)
 which defines interoperability specifications, consisting of both Optical
 interoperability and Yang data models.
 
-Experimental support of OTN layer is introduced in Magnesium release of
-OpenDaylight. By experimental, we mean not all features can be accessed through
-northbound API based on RESTCONF encoded OpenROADM Service model. In the meanwhile,
-"east/west" APIs shall be used to trigger a path computation in the PCE (using
-path-computation-request RPC) and to create services (using otn-service-path RPC).
-With Magnesium SR2, TransportPCE starts to manage some end-to-end OTN services, as for example,
-OCH-OTU4, structured ODU4 or again 10GE-ODU2e services.
-OTN support will continue to be improved in the following releases.
+End to end OTN services such as OCH-OTU4, structured ODU4 or 10GE-ODU2e
+services are supported since Magnesium SR2. OTN support will continue to be
+improved in the following releases of Magnesium and Aluminium.
 
+An experimental support of Flexgrid is introduced in Aluminium. Depending on
+OpenROADM device models, optical interfaces can be created according to the
+initial fixed grid (for R1.2.1, 96 channels regularly spaced of 50 GHz), or to
+a flexgrid (for R2.2.1 use of specific number of subsequent frequency slots of
+6.25 GHz depending on one side of ROADMs and transponders capabilities and on
+the other side of the rate of the channel. The full support of Flexgrid,
+including path computation and the creation of B100G (Beyond 100 Gbps) higher
+rate interfaces will be added in the following releases of Aluminium.
 
 
 Module description
@@ -81,7 +84,7 @@ It concerns the management of OCH-OTU4 (also part of the optical infrastructure)
 HO-ODU4 services. Moreover, once these two kinds of OTN infrastructure service created, it is
 possible to manage some LO-ODU services (for the time being, only 10GE-ODU2e services).
 The full support of OTN services, including 1GE-ODU0 or 100GE, will be introduced along next
-releases.
+releases (Mg/Al).
 
 PCE
 ^^^
@@ -97,10 +100,14 @@ allows keeping PCE aligned with the latest changes in the topology. Information
 about current and planned services is available in the MD-SAL data store.
 
 Current implementation of PCE allows finding the shortest path, minimizing either the hop
-count (default) or the propagation delay. Wavelength is assigned considering a fixed grid of
-96 wavelengths. In Neon SR0, the PCE calculates the OSNR, on the base of incremental
-noise specifications provided in Open ROADM MSA. The support of unidirectional ports is
-also added. PCE handles the following constraints as hard constraints:
+count (default) or the propagation delay. Central wavelength is assigned considering a fixed
+grid of 96 wavelengths 50 GHz spaced. The assignment of wavelengths according to a flexible
+grid considering 768 subsequent slots of 6,25 GHz (total spectrum of 4.8 Thz), and their
+occupation by existing services is planned for later releases.
+In Neon SR0, the PCE calculates the OSNR, on the base of incremental noise specifications
+provided in Open ROADM MSA. The support of unidirectional ports is also added.
+
+PCE handles the following constraints as hard constraints:
 
 -   **Node exclusion**
 -   **SRLG exclusion**
@@ -139,8 +146,8 @@ It includes several network layers:
    Add/Drop modules ("SRGs") are separated from the degrees which includes line
    amplifiers and WSS that switch wavelengths from one to another degree**
 -  **OTN layer introduced in Magnesium includes transponders as well as switch-ponders and
-   mux-ponders having the ability to switch OTN containers from client to line cards. SR0 release
-   includes creation of the switching pool (used to model cross-connect matrices),
+   mux-ponders having the ability to switch OTN containers from client to line cards. Mg SR0
+   release includes creation of the switching pool (used to model cross-connect matrices),
    tributary-ports and tributary-slots at the initial connection of NETCONF devices.
    The population of OTN links (OTU4 and ODU4), and the adjustment of the tributary ports/slots
    pool occupancy when OTN services are created is supported since Magnesium SR2.**
