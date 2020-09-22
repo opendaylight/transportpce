@@ -24,9 +24,11 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    value = "SE_NO_SERIALVERSIONID",
+    justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
 public class PceLink implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(PceLink.class);
     ///////////////////////// LINKS ////////////////////

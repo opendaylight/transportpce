@@ -7,12 +7,10 @@
  */
 package io.lighty.controllers.tpce.exception;
 
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    value = "SE_NO_SERIALVERSIONID",
+    justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
 public class TechnicalException extends RuntimeException {
-
-    /**
-     * serial id.
-     */
-    private static final long serialVersionUID = 1359762809539335449L;
 
     /**
      * Default constructor.
