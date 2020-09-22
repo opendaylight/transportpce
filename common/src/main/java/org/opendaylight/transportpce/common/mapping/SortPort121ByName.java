@@ -18,9 +18,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.Port;
  * @author Martial Coulibaly (martial.coulibaly@gfi.com) on behalf of Orange
  *
  */
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    value = "SE_NO_SERIALVERSIONID",
+    justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
 public class SortPort121ByName implements Comparator<Port>, Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     @Override
     public int compare(Port port1, Port port2) {
