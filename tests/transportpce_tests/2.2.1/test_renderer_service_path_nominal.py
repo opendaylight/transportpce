@@ -9,8 +9,10 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 #############################################################################
 
+# pylint: disable=no-member
+# pylint: disable=too-many-public-methods
+
 import unittest
-import json
 #from unittest.result import failfast
 import requests
 from common import test_utils
@@ -27,6 +29,7 @@ class TransportPCERendererTesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
@@ -75,9 +78,11 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_05_service_path_create(self):
         response = test_utils.service_path_request("create", "service_test", "7",
                                                    [{"renderer:node-id": "ROADM-A1",
-                                                     "renderer:src-tp": "SRG1-PP3-TXRX", "renderer:dest-tp": "DEG1-TTP-TXRX"},
+                                                     "renderer:src-tp": "SRG1-PP3-TXRX",
+                                                     "renderer:dest-tp": "DEG1-TTP-TXRX"},
                                                     {"renderer:node-id": "XPDR-A1",
-                                                     "renderer:src-tp": "XPDR1-CLIENT1", "renderer:dest-tp": "XPDR1-NETWORK1"}])
+                                                     "renderer:src-tp": "XPDR1-CLIENT1",
+                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}])
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn('Roadm-connection successfully created for nodes: ROADM-A1', res["output"]["result"])
@@ -273,9 +278,11 @@ class TransportPCERendererTesting(unittest.TestCase):
     def test_17_service_path_delete(self):
         response = test_utils.service_path_request("delete", "service_test", "7",
                                                    [{"renderer:node-id": "ROADM-A1",
-                                                     "renderer:src-tp": "SRG1-PP3-TXRX", "renderer:dest-tp": "DEG1-TTP-TXRX"},
+                                                     "renderer:src-tp": "SRG1-PP3-TXRX",
+                                                     "renderer:dest-tp": "DEG1-TTP-TXRX"},
                                                     {"renderer:node-id": "XPDR-A1",
-                                                     "renderer:src-tp": "XPDR1-CLIENT1", "renderer:dest-tp": "XPDR1-NETWORK1"}])
+                                                     "renderer:src-tp": "XPDR1-CLIENT1",
+                                                     "renderer:dest-tp": "XPDR1-NETWORK1"}])
         self.assertEqual(response.status_code, requests.codes.ok)
         self.assertEqual(response.json(), {
             'output': {'result': 'Request processed', 'success': True}})

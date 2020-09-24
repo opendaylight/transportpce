@@ -7,6 +7,13 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
+
+# pylint: disable=no-member
+# pylint: disable=too-many-public-methods
+# some pylint false positives specific to tapi test
+# pylint: disable=unsubscriptable-object
+# pylint: disable=unsupported-assignment-operation
+
 import os
 import sys
 import time
@@ -50,6 +57,7 @@ class TransportTapitesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")

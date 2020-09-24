@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 ##############################################################################
 # Copyright (c) 2020 Orange, Inc. and others.  All rights reserved.
 #
@@ -7,6 +8,9 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
+
+# pylint: disable=no-member
+
 import json
 import os
 import sys
@@ -132,7 +136,7 @@ def install_karaf_feature(feature_name: str):
         "..", "..", "..", "karaf", "target", "assembly", "bin", "client")
     return subprocess.run([executable],
                           input='feature:install ' + feature_name + '\n feature:list | grep tapi \n logout \n',
-                          universal_newlines=True)
+                          universal_newlines=True, check=False)
 
 
 def get_request(url):
@@ -149,11 +153,11 @@ def post_request(url, data):
             data=json.dumps(data),
             headers=TYPE_APPLICATION_JSON,
             auth=(ODL_LOGIN, ODL_PWD))
-    else:
-        return requests.request(
-            "POST", url.format(RESTCONF_BASE_URL),
-            headers=TYPE_APPLICATION_JSON,
-            auth=(ODL_LOGIN, ODL_PWD))
+
+    return requests.request(
+        "POST", url.format(RESTCONF_BASE_URL),
+        headers=TYPE_APPLICATION_JSON,
+        auth=(ODL_LOGIN, ODL_PWD))
 
 
 def post_xmlrequest(url, data):
@@ -163,6 +167,7 @@ def post_xmlrequest(url, data):
             data=data,
             headers=TYPE_APPLICATION_XML,
             auth=(ODL_LOGIN, ODL_PWD))
+    return None
 
 
 def put_request(url, data):
@@ -329,32 +334,34 @@ def get_service_list_request(suffix: str):
 def service_create_request(attr):
     return post_request(URL_SERV_CREATE, attr)
 
-def service_delete_request(servicename : str,
-                           requestid = "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
+
+def service_delete_request(servicename: str,
+                           requestid="e3028bae-a90f-4ddd-a83f-cf224eba0e58",
                            notificationurl="http://localhost:8585/NotificationServer/notify"):
     attr = {"input": {
-                "sdnc-request-header": {
-                     "request-id": requestid,
-                     "rpc-action": "service-delete",
-                     "request-system-id": "appname",
-                     "notification-url": notificationurl},
-                "service-delete-req-info": {
-                     "service-name": servicename,
-                     "tail-retention": "no"}}}
+        "sdnc-request-header": {
+            "request-id": requestid,
+            "rpc-action": "service-delete",
+            "request-system-id": "appname",
+            "notification-url": notificationurl},
+        "service-delete-req-info": {
+            "service-name": servicename,
+            "tail-retention": "no"}}}
     return post_request(URL_SERV_DELETE, attr)
 
 
 def service_path_request(operation: str, servicename: str, wavenumber: str, nodes):
     attr = {"renderer:input": {
-            "renderer:service-name": servicename,
-            "renderer:wave-number": wavenumber,
-            "renderer:modulation-format": "qpsk",
-            "renderer:operation": operation,
-            "renderer:nodes": nodes}}
+        "renderer:service-name": servicename,
+        "renderer:wave-number": wavenumber,
+        "renderer:modulation-format": "qpsk",
+        "renderer:operation": operation,
+        "renderer:nodes": nodes}}
     return post_request(URL_SERVICE_PATH, attr)
 
 
-def otn_service_path_request(operation: str, servicename: str, servicerate: str, servicetype: str, nodes, eth_attr=None):
+def otn_service_path_request(operation: str, servicename: str, servicerate: str, servicetype: str, nodes,
+                             eth_attr=None):
     attr = {"service-name": servicename,
             "operation": operation,
             "service-rate": servicerate,
@@ -367,25 +374,26 @@ def otn_service_path_request(operation: str, servicename: str, servicerate: str,
 
 def create_ots_oms_request(nodeid: str, lcp: str):
     attr = {"input": {
-            "node-id": nodeid,
-            "logical-connection-point": lcp}}
+        "node-id": nodeid,
+        "logical-connection-point": lcp}}
     return post_request(URL_CREATE_OTS_OMS, attr)
+
 
 def path_computation_request(requestid: str, servicename: str, serviceaend, servicezend,
                              hardconstraints=None, softconstraints=None, metric="hop-count", other_attr=None):
-    attr =  {"service-name": servicename,
-             "resource-reserve": "true",
-             "service-handler-header": { "request-id": requestid },
-             "service-a-end": serviceaend,
-             "service-z-end": servicezend,
-             "pce-metric": metric}
+    attr = {"service-name": servicename,
+            "resource-reserve": "true",
+            "service-handler-header": {"request-id": requestid},
+            "service-a-end": serviceaend,
+            "service-z-end": servicezend,
+            "pce-metric": metric}
     if hardconstraints:
-        attr.update({ "hard-constraints": hardconstraints})
+        attr.update({"hard-constraints": hardconstraints})
     if softconstraints:
-        attr.update({ "soft-constraints": softconstraints})
+        attr.update({"soft-constraints": softconstraints})
     if other_attr:
         attr.update(other_attr)
-    return post_request(URL_PATH_COMPUTATION_REQUEST, {"input": attr })
+    return post_request(URL_PATH_COMPUTATION_REQUEST, {"input": attr})
 
 
 def shutdown_process(process):
@@ -402,9 +410,11 @@ def start_honeynode(log_file: str, node_port: str, node_config_file_name: str):
             return subprocess.Popen(
                 [HONEYNODE_EXECUTABLE, node_port, os.path.join(SAMPLES_DIRECTORY, node_config_file_name)],
                 stdout=outfile, stderr=outfile)
+    return None
 
 
 def wait_until_log_contains(log_file, regexp, time_to_wait=20):
+    # pylint: disable=lost-exception
     stringfound = False
     filefound = False
     line = None
@@ -450,4 +460,5 @@ class TimeOut:
         signal.alarm(self.seconds)
 
     def __exit__(self, type, value, traceback):
+        # pylint: disable=W0622
         signal.alarm(0)

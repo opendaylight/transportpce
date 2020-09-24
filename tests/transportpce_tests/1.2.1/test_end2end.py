@@ -8,8 +8,9 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+# pylint: disable=no-member
+# pylint: disable=too-many-public-methods
 
-import json
 import time
 import unittest
 
@@ -126,6 +127,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")

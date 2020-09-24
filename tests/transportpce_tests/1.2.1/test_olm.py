@@ -9,9 +9,11 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 #############################################################################
 
+# pylint: disable=no-member
+# pylint: disable=too-many-public-methods
+
 import unittest
 import time
-import json
 import requests
 from common import test_utils
 
@@ -27,6 +29,7 @@ class TransportOlmTesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
@@ -426,7 +429,7 @@ class TransportOlmTesting(unittest.TestCase):
         self.assertIn('Request processed', res["output"]["result"])
         time.sleep(10)
 
-    """to test case where SRG where the xpdr is connected to has no optical range data"""
+    #"""to test case where SRG where the xpdr is connected to has no optical range data"""
 
     def test_31_connect_xprdA_to_roadmA(self):
         response = test_utils.connect_xpdr_to_rdm_request("XPDRA01", "1", "2",
