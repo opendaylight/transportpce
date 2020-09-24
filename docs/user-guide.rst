@@ -81,6 +81,13 @@ if you need TAPI limited support, then run::
 
    feature:install odl-transportpce-tapi
 
+When installing the TAPI feature, you might encounter a heap memory size problem in Karaf.
+In that case, consider increasing Karaf heap memory size.
+For example by modifying the environment variables JAVA_MIN_MEM and JAVA_MAX_MEM before starting Karaf::
+
+   export JAVA_MIN_MEM=1024M
+   export JAVA_MAX_MEM=4069M
+
 if you need the inventory external connector support limited to 1.2.1 OpenROADM devices, then run::
 
    feature:install odl-transportpce-inventory
