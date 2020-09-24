@@ -93,7 +93,7 @@ public final class PceTestUtils {
             saveOpenRoadmNetwork(networkMap.get(0), NetworkUtils.UNDERLAY_NETWORK_ID, dataBroker);
             networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader,
                     QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
-            saveOpenRoadmNetwork(networkMap.get(0), NetworkUtils.OVERLAY_NETWORK_ID, dataBroker);
+            saveOpenRoadmNetwork(networkMap.get(0), NetworkUtils.UNDERLAY_NETWORK_ID, dataBroker);
         } catch (IOException | ExecutionException | InterruptedException e) {
             LOG.error("Cannot init test ", e);
             Assert.fail("Cannot init test ");
