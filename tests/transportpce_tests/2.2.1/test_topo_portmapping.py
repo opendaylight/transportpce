@@ -9,8 +9,11 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import time
+# pylint: disable=no-member
+# pylint: disable=too-many-public-methods
+
 import unittest
+import time
 import requests
 from common import test_utils
 
@@ -26,6 +29,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
@@ -35,7 +39,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Connect the ROADMA
     def test_01_connect_rdm(self):
-        response = test_utils.mount_device("ROADMA01", 'roadma')
+        response = test_utils.mount_device("ROADM-A1", 'roadma')
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
     # Verify the termination points of the ROADMA
@@ -47,25 +51,34 @@ class TransportPCEtesting(unittest.TestCase):
         nbMappings = 0
         for i in range(0, nbNode):
             nodeId = resTopo['network'][0]['node'][i]['node-id']
-            nodeMapId = nodeId.split("-")[0]
+            print("nodeId={}".format(nodeId))
+            nodeMapId = nodeId.split("-")[0] + "-" + nodeId.split("-")[1]
+            print("nodeMapId={}".format(nodeMapId))
             responseMapList = test_utils.portmapping_request(nodeMapId)
             resMapList = responseMapList.json()
+
             nbMappings = len(resMapList['nodes'][0]['mapping']) - nbMapCumul
             nbTp = len(resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'])
             nbMapCurrent = 0
             for j in range(0, nbTp):
                 tpId = resTopo['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
-                if((not "CP" in tpId) and (not "CTP" in tpId)):
+                if (not "CP" in tpId) and (not "CTP" in tpId):
                     responseMap = test_utils.portmapping_request(nodeMapId+"/mapping/"+tpId)
+                    self.assertEqual(responseMap.status_code, requests.codes.ok)
+                    if responseMap.status_code == requests.codes.ok:
+                        nbMapCurrent += 1
+            nbMapCumul += nbMapCurrent
+        nbMappings -= nbMapCurrent
+        self.assertEqual(nbMappings, 0)
 
     # Disconnect the ROADMA
     def test_03_disconnect_rdm(self):
-        response = test_utils.unmount_device("ROADMA01")
+        response = test_utils.unmount_device("ROADM-A1")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
 #     #Connect the XPDRA
     def test_04_connect_xpdr(self):
-        response = test_utils.mount_device("XPDRA01", 'xpdra')
+        response = test_utils.mount_device("XPDR-A1", 'xpdra')
         self.assertEqual(response.status_code, requests.codes.created, test_utils.CODE_SHOULD_BE_201)
 
 #     #Verify the termination points related to XPDR
@@ -74,7 +87,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     # Disconnect the XPDRA
     def test_06_disconnect_device(self):
-        response = test_utils.unmount_device("XPDRA01")
+        response = test_utils.unmount_device("XPDR-A1")
         self.assertEqual(response.status_code, requests.codes.ok, test_utils.CODE_SHOULD_BE_200)
 
 

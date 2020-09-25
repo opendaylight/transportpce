@@ -8,9 +8,10 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+# pylint: disable=no-member
+# pylint: disable=too-many-public-methods
 
 import unittest
-import json
 import time
 import requests
 from common import test_utils
@@ -117,6 +118,7 @@ class TransportPCEFulltesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
@@ -514,7 +516,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-CLIENT':
                 self.assertNotIn('org-openroadm-network-topology:xpdr-client-attributes', dict.keys(ele))
-            elif (ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK'):
+            elif ele[u'org-openroadm-common-network:tp-type'] == 'XPONDER-NETWORK':
                 self.assertIn(u'tail-equipment-id',
                               dict.keys(ele[u'org-openroadm-network-topology:xpdr-network-attributes']))
                 self.assertNotIn('wavelength', dict.keys(

@@ -9,8 +9,10 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+# pylint: disable=no-member
+# pylint: disable=too-many-public-methods
+
 import unittest
-import json
 import time
 import requests
 from common import test_utils
@@ -27,6 +29,7 @@ class TransportPCEtesting(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # pylint: disable=not-an-iterable
         for process in cls.processes:
             test_utils.shutdown_process(process)
         print("all processes killed")
@@ -49,16 +52,16 @@ class TransportPCEtesting(unittest.TestCase):
     def test_02_get_portmapping_CLIENT4(self):
         response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-CLIENT4")
         self.assertEqual(response.status_code, requests.codes.ok)
-        res = response.json()
-        self.assertEqual('CP1-SFP4-P1', res['mapping'][0]['supporting-port'])
-        self.assertEqual('CP1-SFP4', res['mapping'][0]['supporting-circuit-pack-name'])
-        self.assertEqual('XPDR1-CLIENT4', res['mapping'][0]['logical-connection-point'])
-        self.assertEqual('bidirectional', res['mapping'][0]['port-direction'])
-        self.assertEqual('xpdr-client', res['mapping'][0]['port-qual'])
-        self.assertEqual('FqlcrxV7p3g=', res['mapping'][0]['lcp-hash-val'])
-        self.assertIn('org-openroadm-port-types:if-10GE-ODU2e', res['mapping'][0]['supported-interface-capability'])
-        self.assertIn('org-openroadm-port-types:if-10GE-ODU2', res['mapping'][0]['supported-interface-capability'])
-        self.assertIn('org-openroadm-port-types:if-10GE', res['mapping'][0]['supported-interface-capability'])
+        res_mapping = (response.json())['mapping'][0]
+        self.assertEqual('CP1-SFP4-P1', res_mapping['supporting-port'])
+        self.assertEqual('CP1-SFP4', res_mapping['supporting-circuit-pack-name'])
+        self.assertEqual('XPDR1-CLIENT4', res_mapping['logical-connection-point'])
+        self.assertEqual('bidirectional', res_mapping['port-direction'])
+        self.assertEqual('xpdr-client', res_mapping['port-qual'])
+        self.assertEqual('FqlcrxV7p3g=', res_mapping['lcp-hash-val'])
+        self.assertIn('org-openroadm-port-types:if-10GE-ODU2e', res_mapping['supported-interface-capability'])
+        self.assertIn('org-openroadm-port-types:if-10GE-ODU2', res_mapping['supported-interface-capability'])
+        self.assertIn('org-openroadm-port-types:if-10GE', res_mapping['supported-interface-capability'])
 
     def test_03_get_portmapping_NETWORK1(self):
         response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-NETWORK1")
@@ -212,7 +215,8 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.otn_service_path_request("create", "service1", "10G", "Ethernet",
                                                        [{"node-id": "SPDR-SA1", "client-tp": "XPDR1-CLIENT4",
                                                            "network-tp": "XPDR1-NETWORK1"}],
-                                                       {"ethernet-encoding": "eth encode", "trib-slot": ["1"], "trib-port-number": "1"})
+                                                       {"ethernet-encoding": "eth encode",
+                                                        "trib-slot": ["1"], "trib-port-number": "1"})
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
@@ -220,7 +224,7 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertTrue(res["output"]["success"])
         self.assertEqual('SPDR-SA1', res["output"]['node-interface'][0]['node-id'])
         self.assertIn('XPDR1-CLIENT4-ODU2e-service1-x-XPDR1-NETWORK1-ODU2e-service1',
-                         res["output"]['node-interface'][0]['connection-id'])
+                      res["output"]['node-interface'][0]['connection-id'])
         self.assertIn('XPDR1-CLIENT4-ETHERNET10G', res["output"]['node-interface'][0]['eth-interface-id'])
         self.assertIn('XPDR1-NETWORK1-ODU2e-service1', res["output"]['node-interface'][0]['odu-interface-id'])
         self.assertIn('XPDR1-CLIENT4-ODU2e-service1', res["output"]['node-interface'][0]['odu-interface-id'])
@@ -320,7 +324,8 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.otn_service_path_request("delete", "service1", "10G", "Ethernet",
                                                        [{"node-id": "SPDR-SA1", "client-tp": "XPDR1-CLIENT4",
                                                            "network-tp": "XPDR1-NETWORK1"}],
-                                                       {"ethernet-encoding": "eth encode", "trib-slot": ["1"], "trib-port-number": "1"})
+                                                       {"ethernet-encoding": "eth encode",
+                                                        "trib-slot": ["1"], "trib-port-number": "1"})
         time.sleep(3)
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
