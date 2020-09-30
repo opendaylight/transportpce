@@ -103,8 +103,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         networkTransaction = new NetworkTransactionImpl(requestProcessor);
 
         LOG.info("Creating PCE beans ...");
-        PathComputationService pathComputationService = new PathComputationServiceImpl(networkTransaction,
-                lightyServices.getBindingNotificationPublishService());
+        PathComputationService pathComputationService = new PathComputationServiceImpl(
+                networkTransaction,
+                lightyServices.getBindingNotificationPublishService()
+                );
         pceProvider = new PceProvider(lightyServices.getRpcProviderService(), pathComputationService);
 
         LOG.info("Creating network-model beans ...");
@@ -146,8 +148,8 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
 
         LOG.info("Creating service-handler beans ...");
         RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(deviceRendererService,
-                olmPowerServiceRpc, lightyServices.getBindingDataBroker(), networkModelWavelengthService,
-                lightyServices.getBindingNotificationPublishService());
+                otnDeviceRendererService, olmPowerServiceRpc, lightyServices.getBindingDataBroker(),
+                networkModelWavelengthService, lightyServices.getBindingNotificationPublishService());
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(), pathComputationService,
                 rendererServiceOperations, networkModelWavelengthService,
@@ -235,8 +237,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         DeviceRendererRPCImpl deviceRendererRPC = new DeviceRendererRPCImpl(deviceRendererService,
                 otnDeviceRendererService);
         RendererServiceOperationsImpl rendererServiceOperations = new RendererServiceOperationsImpl(
-                deviceRendererService, olmPowerServiceRpc, lightyServices.getBindingDataBroker(),
-                networkModelWavelengthService, lightyServices.getBindingNotificationPublishService());
+                deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
+                lightyServices.getBindingDataBroker(), networkModelWavelengthService,
+                lightyServices.getBindingNotificationPublishService());
         return new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererRPC,
                 rendererServiceOperations);
     }

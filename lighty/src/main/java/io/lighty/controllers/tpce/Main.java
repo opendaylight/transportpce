@@ -102,12 +102,11 @@ public class Main {
         lightyController.start().get();
 
         // 2. start RestConf server
-        CommunityRestConfBuilder communityRestConfBuilder = new CommunityRestConfBuilder();
         LightyServerBuilder jettyServerBuilder = new LightyServerBuilder(
                 new InetSocketAddress(restConfConfiguration.getInetAddress(), restConfConfiguration.getHttpPort()));
-        CommunityRestConf communityRestConf = communityRestConfBuilder.from(
-                RestConfConfigUtils.getRestConfConfiguration(restConfConfiguration, lightyController.getServices()))
-                .withLightyServer(jettyServerBuilder).build();
+        CommunityRestConfBuilder communityRestConfBuilder = CommunityRestConfBuilder.from(
+                RestConfConfigUtils.getRestConfConfiguration(restConfConfiguration, lightyController.getServices()));
+        CommunityRestConf communityRestConf = communityRestConfBuilder.withLightyServer(jettyServerBuilder).build();
         communityRestConf.start().get();
         communityRestConf.startServer();
 
@@ -115,7 +114,8 @@ public class Main {
         NetconfSBPlugin netconfSouthboundPlugin;
         netconfSBPConfiguration = NetconfConfigUtils.injectServicesToTopologyConfig(netconfSBPConfiguration,
                 lightyController.getServices());
-        NetconfTopologyPluginBuilder netconfSBPBuilder = new NetconfTopologyPluginBuilder();
+        NetconfTopologyPluginBuilder netconfSBPBuilder = new NetconfTopologyPluginBuilder(
+                lightyController.getServices(), netconfSBPConfiguration);
         netconfSouthboundPlugin = netconfSBPBuilder.from(netconfSBPConfiguration, lightyController.getServices())
                 .build();
         netconfSouthboundPlugin.start().get();
