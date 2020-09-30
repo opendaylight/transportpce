@@ -13,9 +13,8 @@
         <artifactId>lighty-app-parent</artifactId>
         <version>13.0.0</version>
         <!--
-        13.0.0 correspond to the master branch version on the official repo
-        that is advised for Aluminium.
-        At that date 08/2020, it seems not yet published on Nexus
+        lighty-core is usually released a few days before the official Opendaylight release.
+        13.0.0 = Aluminium release of 2020/09/18
         -->
         <relativePath />
     </parent>
