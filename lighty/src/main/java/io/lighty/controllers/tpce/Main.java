@@ -15,6 +15,7 @@ import io.lighty.controllers.tpce.utils.TpceBanner;
 import io.lighty.core.controller.api.LightyController;
 import io.lighty.core.controller.api.LightyModule;
 import io.lighty.core.controller.impl.LightyControllerBuilder;
+//import io.lighty.core.controller.impl.LightyControllerImpl;
 import io.lighty.core.controller.impl.config.ConfigurationException;
 import io.lighty.core.controller.impl.config.ControllerConfiguration;
 import io.lighty.core.controller.impl.util.ControllerConfigUtils;
@@ -99,15 +100,15 @@ public class Main {
         // Akka)
         LightyControllerBuilder lightyControllerBuilder = new LightyControllerBuilder();
         LightyController lightyController = lightyControllerBuilder.from(controllerConfiguration).build();
+        //LightyControllerImpl lightyControllerImpl =  lightyController;
         lightyController.start().get();
 
         // 2. start RestConf server
-        CommunityRestConfBuilder communityRestConfBuilder = new CommunityRestConfBuilder();
         LightyServerBuilder jettyServerBuilder = new LightyServerBuilder(
                 new InetSocketAddress(restConfConfiguration.getInetAddress(), restConfConfiguration.getHttpPort()));
-        CommunityRestConf communityRestConf = communityRestConfBuilder.from(
-                RestConfConfigUtils.getRestConfConfiguration(restConfConfiguration, lightyController.getServices()))
-                .withLightyServer(jettyServerBuilder).build();
+        CommunityRestConfBuilder communityRestConfBuilder = CommunityRestConfBuilder.from(
+                RestConfConfigUtils.getRestConfConfiguration(restConfConfiguration, lightyController.getServices()));
+        CommunityRestConf communityRestConf = communityRestConfBuilder.withLightyServer(jettyServerBuilder).build();
         communityRestConf.start().get();
         communityRestConf.startServer();
 
@@ -115,7 +116,8 @@ public class Main {
         NetconfSBPlugin netconfSouthboundPlugin;
         netconfSBPConfiguration = NetconfConfigUtils.injectServicesToTopologyConfig(netconfSBPConfiguration,
                 lightyController.getServices());
-        NetconfTopologyPluginBuilder netconfSBPBuilder = new NetconfTopologyPluginBuilder();
+        NetconfTopologyPluginBuilder netconfSBPBuilder = new NetconfTopologyPluginBuilder(
+                lightyController.getServices(), netconfSBPConfiguration);
         netconfSouthboundPlugin = netconfSBPBuilder.from(netconfSBPConfiguration, lightyController.getServices())
                 .build();
         netconfSouthboundPlugin.start().get();
