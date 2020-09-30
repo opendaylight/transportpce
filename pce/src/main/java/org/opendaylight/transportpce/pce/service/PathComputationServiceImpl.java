@@ -74,6 +74,14 @@ public class PathComputationServiceImpl implements PathComputationService {
         this.adapterContext = new ConstantAdapterContext(bindingDOMCodecServices);
     }
 
+    public PathComputationServiceImpl(NetworkTransactionService networkTransactionService,
+                                      NotificationPublishService notificationPublishService) {
+        this.notificationPublishService = notificationPublishService;
+        this.networkTransactionService = networkTransactionService;
+        this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
+        this.adapterContext = new ConstantAdapterContext();
+    }
+
     public void init() {
         LOG.info("init ...");
     }
