@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3f8f1daa_83069dc1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/DataStoreContextImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-02T15:27:15Z",
+      "side": 1,
+      "message": "After looking at the examples in others project, I think there is no way to avoid this dependency in Junit. Most examples found were not using BindingRuntimeHelpers.createRuntimeContext() but they all call BindingCodecContext() to retrieve a BindingDOMCodecServices at some stage. So it does not seem to make a big difference.\nI was also expecting a possibility to retrieve more or less directly a BindingDOMCodecServices compatible context from one of the .*Factory and similar classes but when possible, the available methods are all protected or private...",
+      "parentUuid": "e99ca238_12b3666d",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 73
+      },
+      "revId": "d0ce56a83e88628c79e4bc6744314dc4126b8e5a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4154e841_b745e929",
         "filename": "olm/src/test/java/org/opendaylight/transportpce/olm/service/OlmPowerServiceImplTest.java",
         "patchSetId": 9
