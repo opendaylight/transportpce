@@ -10,7 +10,6 @@ package org.opendaylight.transportpce.pce;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -25,7 +24,6 @@ import org.opendaylight.transportpce.pce.utils.PceTestUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yangtools.yang.model.parser.api.YangParserFactory;
 
-@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class PceSendingPceRPCsTest extends AbstractTest {
 
