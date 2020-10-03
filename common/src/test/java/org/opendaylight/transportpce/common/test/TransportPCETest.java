@@ -7,7 +7,6 @@
  */
 package org.opendaylight.transportpce.common.test;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ public class TransportPCETest {
 
     private static final Logger LOG = LoggerFactory.getLogger(TransportPCETest.class);
 
-    @Ignore
     @Test
     public void test() {
         LOG.info("test");
