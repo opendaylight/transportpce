@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13cbaeff_5c98b310",
+        "filename": "api/src/main/yang/gnpy-path-computation-simplified@2020-09-09.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-05T09:35:53Z",
+      "side": 0,
+      "message": "It\u0027s easier for the review to apply pyang clean-up modification in a separate change.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f8f6047_d1d01afc",
+        "filename": "api/src/main/yang/service_path/transportpce-common-service-path-types@2020-01-28.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-05T09:35:53Z",
+      "side": 0,
+      "message": "idem etc",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 3
+      },
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18b2b970_b3724dcd",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-05T09:35:53Z",
+      "side": 0,
+      "message": "is this related to the model evolution?\nor is it a temporary fix ? \u003d\u003e If yes, it\u0027s probably better to comment out those lines with a FIXME",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 54
+      },
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ae38e5b_1c2599f5",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-05T09:35:53Z",
+      "side": 0,
+      "message": "idem",
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
