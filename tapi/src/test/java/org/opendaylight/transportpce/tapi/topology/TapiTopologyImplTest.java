@@ -165,10 +165,10 @@ public class TapiTopologyImplTest extends AbstractTest {
         List<Link> links = topology.nonnullLink().values().stream()
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        checkTransitionalLink(links.get(0), topoUuid, node1Uuid, node3Uuid, "DSR+XPDR1-NETWORK1",
-            "iOTSi+XPDR1-NETWORK1");
-        checkTransitionalLink(links.get(1), topoUuid, node2Uuid, node4Uuid, "DSR+XPDR2-NETWORK1",
-            "iOTSi+XPDR2-NETWORK1");
+        checkTransitionalLink(links.get(1), topoUuid, node1Uuid, node3Uuid, "DSR+XPDR1-NETWORK1",
+            "iOTSi+XPDR1-NETWORK1", "SPDR-SA1-XPDR1");
+        checkTransitionalLink(links.get(4), topoUuid, node2Uuid, node4Uuid, "DSR+XPDR2-NETWORK1",
+            "iOTSi+XPDR2-NETWORK1", "SPDR-SA1-XPDR2");
     }
 
     private void checkDsrNode(Node node, Uuid nodeUuid, boolean isSwitch) {
@@ -459,9 +459,9 @@ public class TapiTopologyImplTest extends AbstractTest {
     }
 
     private void checkTransitionalLink(Link link, Uuid topoUuid, Uuid node1Uuid, Uuid node2Uuid, String tp1,
-        String tp2) {
-        Uuid linkUuid = new Uuid(UUID.nameUUIDFromBytes((tp1 + "--" + tp2).getBytes(Charset.forName("UTF-8")))
-            .toString());
+        String tp2, String ietfNodeId) {
+        Uuid linkUuid = new Uuid(UUID.nameUUIDFromBytes((ietfNodeId + "-" + tp1 + "--" + tp2)
+            .getBytes(Charset.forName("UTF-8"))).toString());
         assertEquals("bad uuid for link between DSR node " + tp1 + " and iOTSI port " + tp2, linkUuid, link.getUuid());
         assertEquals("Available capacity unit should be GBPS",
             CapacityUnit.GBPS, link.getAvailableCapacity().getTotalSize().getUnit());

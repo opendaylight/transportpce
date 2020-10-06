@@ -390,10 +390,15 @@ public class ConvertORTopoObjectToTapiTopoObject {
                 .setNodeEdgePointUuid(destUuidTp)
                 .build();
             nepList.put(destNep.key(), destNep);
+            Name linkName = new NameBuilder().setValueName("transitional link name")
+                .setValue(this.ietfNodeId + "-" + sourceKey + "--" + destKey)
+                .build();
             Link transiLink = new LinkBuilder()
                 .setUuid(new Uuid(
-                        UUID.nameUUIDFromBytes((sourceKey + "--" + destKey).getBytes(Charset.forName("UTF-8")))
+                        UUID.nameUUIDFromBytes((this.ietfNodeId + "-" + sourceKey + "--" + destKey)
+                            .getBytes(Charset.forName("UTF-8")))
                     .toString()))
+                .setName(Map.of(linkName.key(), linkName))
                 .setTransitionedLayerProtocolName(Arrays.asList(LayerProtocolName.ODU.getName(),
                     LayerProtocolName.PHOTONICMEDIA.getName()))
                 .setNodeEdgePoint(nepList)
