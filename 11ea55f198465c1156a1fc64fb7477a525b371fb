@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd8c743f_39b7cd20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-06T09:10:22Z",
+      "side": 1,
+      "message": "you can add the explanation taken from the JIRA ticket here.\n\nUUID of transitional links were identical for SPDR-SA1 and SPDR-SC1. To solve it, we can consider the node id to create a per-device unique UUID.",
+      "revId": "11ea55f198465c1156a1fc64fb7477a525b371fb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
