@@ -34,6 +34,24 @@
       "revId": "11ea55f198465c1156a1fc64fb7477a525b371fb",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8d167ba9_09cfcefe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-06T13:04:06Z",
+      "side": 1,
+      "message": "See https://wiki.openstack.org/wiki/GitCommitMessages#Example_3\n\nEven with the JIRA ID, the commit message must describe a minimum  the nature of the bug (especially when it\u0027s not obvious by only reading the commit title and the code)",
+      "parentUuid": "f98237f4_2fbd4bac",
+      "revId": "11ea55f198465c1156a1fc64fb7477a525b371fb",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
