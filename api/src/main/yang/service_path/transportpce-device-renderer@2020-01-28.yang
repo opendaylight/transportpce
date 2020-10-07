@@ -1,6 +1,6 @@
 module transportpce-device-renderer {
-  namespace "http://org/opendaylight/transportpce/renderer/device";
-  prefix org-opendaylight-transportpce-renderer-device;
+  namespace "http://org/opendaylight/transportpce/device/renderer";
+  prefix org-opendaylight-transportpce-device-renderer;
 
   import transportpce-common-types {
     prefix org-transportpce-common-types;
