@@ -2,14 +2,12 @@ module transportpce-pce {
   namespace "http://org/opendaylight/transportpce/pce";
   prefix org-opendaylight-transportpce-pce;
 
-  import ietf-yang-types {
-    prefix yang;
-  }
   import transportpce-routing-constraints {
     prefix transportpce-routing-constraints;
   }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
+    revision-date 2019-05-31;
   }
   import transportpce-common-service-path-types {
     prefix transportpce-common-service-path-types;

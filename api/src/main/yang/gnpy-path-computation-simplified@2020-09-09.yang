@@ -4,10 +4,6 @@ module gnpy-path-computation-simplified {
 
   prefix "gnpypc";
 
-  import ietf-yang-types {
-    prefix "yang-types";
-  }
-
   import ietf-inet-types {
     prefix inet;
   }
