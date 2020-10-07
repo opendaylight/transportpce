@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "76f6e73b_7b72a6cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc183d0d_1e8fec32",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 28
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37187e27_43587a66",
         "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2020-01-28.yang",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2020-10-05T09:35:53Z",
       "side": 1,
       "message": "this would be easier to review in a separate change too (different from pyang modifications).",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 55
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1258c6d2_41cc0fef",
+        "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2020-01-28.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Separated this change here: https://git.opendaylight.org/gerrit/c/transportpce/+/92940/1",
+      "parentUuid": "37187e27_43587a66",
       "range": {
         "startLine": 2,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2911dc6b_5007ca36",
+        "filename": "api/src/main/yang/service_path/transportpce-pce@2020-01-28.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Until we start using the new versions TPCE (when the code changes happen to support 7.1.0), we want to enforce to use older models. That\u0027s why we have revision date here",
+      "parentUuid": "78a07dd2_fe3381d7",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 29
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9037927f_216c119b",
         "filename": "api/src/main/yang/service_path/transportpce-renderer@2020-05-20.yang",
         "patchSetId": 7
@@ -82,6 +154,30 @@
       "writtenOn": "2020-10-05T09:35:53Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8985dd77_bbb67a90",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer@2020-05-20.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "idem",
+      "parentUuid": "9037927f_216c119b",
       "range": {
         "startLine": 7,
         "startChar": 4,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "fd997af3_7b3bb55d",
+        "filename": "api/src/main/yang/service_path/transportpce-service-path@2017-10-17.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "I have created a separate change: https://git.opendaylight.org/gerrit/c/transportpce/+/92969/1, which combines the fixes for all the warnings occurred in pyang",
+      "parentUuid": "727bf47b_560ab42a",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 34
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d3a3c5e5_46e86345",
         "filename": "api/src/main/yang/service_path/transportpce-servicehandler@2017-10-17.yang",
         "patchSetId": 7
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "1d7b9dfc_8169c3ab",
+        "filename": "api/src/main/yang/service_path/transportpce-servicehandler@2017-10-17.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3a3c5e5_46e86345",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5823aae_b9ba60a5",
         "filename": "ordmodels/common/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/pm/types/rev200327/PmDataTypeBuilder.java",
         "patchSetId": 7
@@ -154,6 +298,24 @@
       "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ea78fa8_e39a6d10",
+        "filename": "ordmodels/common/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/pm/types/rev200327/PmDataTypeBuilder.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5823aae_b9ba60a5",
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +336,24 @@
     },
     {
       "key": {
+        "uuid": "b9ddd592_48ae625f",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/openconfig/net/yang/types/inet/rev170824/HostBuilder.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8930b300_30c97dca",
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c07b6c7c_093dc1e8",
         "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/openconfig/net/yang/types/inet/rev170824/IpAddressBuilder.java",
         "patchSetId": 7
@@ -188,6 +368,24 @@
       "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "318dc998_5d26e6d6",
+        "filename": "ordmodels/device/src/main/java/org/opendaylight/yang/gen/v1/http/openconfig/net/yang/types/inet/rev170824/IpAddressBuilder.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c07b6c7c_093dc1e8",
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -208,6 +406,24 @@
     },
     {
       "key": {
+        "uuid": "183ad66c_0bf32993",
+        "filename": "ordmodels/device/src/main/yang/openconfig-extensions@2017-04-11.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bb5ba84_0d5ba2e6",
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "855c735c_7e26cd8e",
         "filename": "ordmodels/device/src/main/yang/openconfig-inet-types@2017-08-24.yang",
         "patchSetId": 7
@@ -222,6 +438,24 @@
       "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d55d78b_96ab94ce",
+        "filename": "ordmodels/device/src/main/yang/openconfig-inet-types@2017-08-24.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "855c735c_7e26cd8e",
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -242,6 +476,24 @@
     },
     {
       "key": {
+        "uuid": "86c53d4f_3289c457",
+        "filename": "ordmodels/device/src/main/yang/openconfig-telemetry-types@2017-08-24.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74cd2ce3_278bc218",
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "173d1ae9_673ac360",
         "filename": "ordmodels/device/src/main/yang/openconfig-telemetry@2017-08-24.yang",
         "patchSetId": 7
@@ -256,6 +508,24 @@
       "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8087ff59_2e73d06f",
+        "filename": "ordmodels/device/src/main/yang/openconfig-telemetry@2017-08-24.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "173d1ae9_673ac360",
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -279,6 +549,30 @@
       "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38805bd7_6946687f",
+        "filename": "renderer/src/test/java/org/opendaylight/transportpce/renderer/provisiondevice/DeviceRendererServiceImplCreateOtsOmsTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6913ae5b_72f54920",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 0
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }

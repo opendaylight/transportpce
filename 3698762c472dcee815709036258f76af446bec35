@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7777a307_c25703c0",
+        "filename": "api/src/main/yang/gnpy-path-computation-simplified@2020-09-09.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 0,
+      "message": "Separated this change here: https://git.opendaylight.org/gerrit/c/transportpce/+/92969/1",
+      "parentUuid": "13cbaeff_5c98b310",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8f8f6047_d1d01afc",
         "filename": "api/src/main/yang/service_path/transportpce-common-service-path-types@2020-01-28.yang",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "3698762c472dcee815709036258f76af446bec35",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1783a58_4ca285f0",
+        "filename": "api/src/main/yang/service_path/transportpce-common-service-path-types@2020-01-28.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "8f8f6047_d1d01afc",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 3
+      },
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3e37f5f3_b4980d58",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 0,
+      "message": "Separated this change https://git.opendaylight.org/gerrit/c/transportpce/+/92938/1",
+      "parentUuid": "18b2b970_b3724dcd",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 54
+      },
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ae38e5b_1c2599f5",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
         "patchSetId": 7
@@ -85,6 +157,24 @@
       "revId": "3698762c472dcee815709036258f76af446bec35",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfaaacf5_34e79ae4",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-07T22:18:24Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1ae38e5b_1c2599f5",
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
