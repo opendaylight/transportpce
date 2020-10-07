@@ -93,9 +93,6 @@ public final class ModelMappingUtils {
             .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate())
             .setOduServiceRate(input.getServiceAEnd().getOduServiceRate())
             .setClli(input.getServiceAEnd().getClli())
-            .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate()) // set otu and odu
-            .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
-            .setClli(input.getServiceAEnd().getClli())
             .setNodeId(new NodeIdType(input.getServiceAEnd().getNodeId().getValue()).getValue())
             .setTxDirection(new org.opendaylight.yang.gen.v1.http.org
                 .transportpce.b.c._interface.service.types.rev200128.service.endpoint.sp.TxDirectionBuilder()
@@ -109,9 +106,6 @@ public final class ModelMappingUtils {
         serviceZEnd.setServiceFormat(input.getServiceZEnd().getServiceFormat())
             .setServiceRate(input.getServiceZEnd().getServiceRate())
             .setOtuServiceRate(input.getServiceZEnd().getOtuServiceRate())
-            .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
-            .setClli(input.getServiceZEnd().getClli())
-            .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate()) // set otu and odu
             .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
             .setClli(input.getServiceZEnd().getClli())
             .setNodeId(new NodeIdType(input.getServiceZEnd().getNodeId().getValue()).getValue())
