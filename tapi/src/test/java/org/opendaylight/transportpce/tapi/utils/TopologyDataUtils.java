@@ -7,14 +7,16 @@
  */
 package org.opendaylight.transportpce.tapi.utils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import com.google.common.util.concurrent.FluentFuture;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
+import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
@@ -33,6 +35,7 @@ public final class TopologyDataUtils {
     private static final Logger LOG = LoggerFactory.getLogger(TopologyDataUtils.class);
     public static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/openroadm-topology2.xml";
     public static final String OTN_TOPOLOGY_FILE = "src/test/resources/otn-topology.xml";
+    public static final String OTN_TOPOLOGY_WITH_OTN_LINKS_FILE = "src/test/resources/otn-topology-with-otn-links.xml";
     public static final String PORTMAPPING_FILE = "src/test/resources/portmapping-example.xml";
 
     public static GetTopologyDetailsInput buildGetTopologyDetailsInput(String topoName) {
@@ -42,7 +45,7 @@ public final class TopologyDataUtils {
     }
 
     public static <T> void writeTopologyFromFileToDatastore(DataStoreContext dataStoreContextUtil, String file,
-        InstanceIdentifier ii) {
+        InstanceIdentifier ii) throws InterruptedException, ExecutionException {
         Networks networks = null;
         File topoFile = new File(file);
         if (topoFile.exists()) {
@@ -70,22 +73,22 @@ public final class TopologyDataUtils {
         } else {
             LOG.error("xml file {} not found at {}", topoFile.getName(), topoFile.getAbsolutePath());
         }
-        writeTransaction(dataStoreContextUtil.getDataBroker(), ii,
+        FluentFuture<? extends CommitInfo> commitFuture = writeTransaction(dataStoreContextUtil.getDataBroker(), ii,
                 networks.nonnullNetwork().values().stream().findFirst().get());
+        commitFuture.get();
         LOG.info("extraction from {} stored with success in datastore", topoFile.getName());
     }
 
     @SuppressWarnings("unchecked")
-    private static boolean writeTransaction(DataBroker dataBroker, InstanceIdentifier instanceIdentifier,
-        DataObject object) {
-        @NonNull
+    private static FluentFuture<? extends CommitInfo> writeTransaction(DataBroker dataBroker,
+        InstanceIdentifier instanceIdentifier, DataObject object) {
         WriteTransaction transaction = dataBroker.newWriteOnlyTransaction();
         transaction.put(LogicalDatastoreType.CONFIGURATION, instanceIdentifier, object);
-        transaction.commit();
-        return true;
+        return transaction.commit();
     }
 
-    public static void writePortmappingFromFileToDatastore(DataStoreContext dataStoreContextUtil) {
+    public static void writePortmappingFromFileToDatastore(DataStoreContext dataStoreContextUtil)
+        throws InterruptedException, ExecutionException {
         Network result = null;
         File portmappingFile = new File(PORTMAPPING_FILE);
         if (portmappingFile.exists()) {
@@ -114,7 +117,9 @@ public final class TopologyDataUtils {
             LOG.error("xml file {} not found at {}", portmappingFile.getName(), portmappingFile.getAbsolutePath());
         }
         InstanceIdentifier<Network> portmappingIID = InstanceIdentifier.builder(Network.class).build();
-        writeTransaction(dataStoreContextUtil.getDataBroker(), portmappingIID, result);
+        FluentFuture<? extends CommitInfo> writeTransaction = writeTransaction(dataStoreContextUtil.getDataBroker(),
+            portmappingIID, result);
+        writeTransaction.get();
         LOG.info("portmapping-example stored with success in datastore");
     }
 
