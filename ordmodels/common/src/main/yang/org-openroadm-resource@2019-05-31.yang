@@ -220,39 +220,39 @@ module org-openroadm-resource {
         "The type of the interface.";
     }
     container ethernet {
-      when "type = 'ethernetCsmacd'";
+      when "../type = 'ethernetCsmacd'";
       description
         "Ethernet Interfaces";
       uses eth-attributes;
     }
     container mc-ttp {
-      when "type = 'mediaChannelTrailTerminationPoint'";
+      when "../type = 'mediaChannelTrailTerminationPoint'";
       description
         "Media Channel Trail Termination Point (MC-TTP)";
       uses mc-ttp-attributes;
     }
     container nmc-ctp {
-      when "type = 'networkMediaChannelConnectionTerminationPoint'";
+      when "../type = 'networkMediaChannelConnectionTerminationPoint'";
       description
         "Network Media Channel Connection Termination Point (NMC-CTP)";
       uses nmc-ctp-attributes;
     }
     container och {
-      when "type = 'opticalChannel'";
+      when "../type = 'opticalChannel'";
       description
         "Optical Channel (OCh):
          Models the optical channel interfaces for an Optical White Box.";
       uses och-attributes;
     }
     container odu {
-      when "type = 'otnOdu'";
+      when "../type = 'otnOdu'";
       presence "Attribute Nodes for Optical Data Unit (ODU)";
       description
         "Optical Channel Data Unit (ODU)";
       uses odu-attributes;
     }
     container otu {
-      when "type = 'otnOtu'";
+      when "../type = 'otnOtu'";
       description
         "Optical Channel Transport Unit (OTU)";
       uses otu-attributes;

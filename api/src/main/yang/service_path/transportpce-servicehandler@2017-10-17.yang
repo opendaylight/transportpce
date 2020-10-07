@@ -2,29 +2,12 @@ module transportpce-servicehandler {
   namespace "http://org/opendaylight/transportpce/servicehandler";
   prefix org-opendaylight-transportpce-servicehandler;
 
-  import ietf-yang-types {
-    prefix yang;
-  }
-  import transportpce-routing-constraints {
-    prefix transportpce-routing-constraints;
-  }
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-  }
-  import org-openroadm-resource-types {
-    prefix org-openroadm-resource-types;
-  }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
+    revision-date 2019-05-31;
   }
   import transportpce-common-service-path-types {
     prefix transportpce-common-service-path-types;
-  }
-  import transportpce-pathDescription {
-    prefix transportpce-pathDescription;
-  }
-  import org-openroadm-topology {
-    prefix org-openroadm-topology;
   }
 
   organization
