@@ -1,0 +1,968 @@
+<data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<networks xmlns="urn:ietf:params:xml:ns:yang:ietf-network">
+<network>
+  <network-id>otn-topology</network-id>
+  <network-types>
+    <openroadm-common-network xmlns="http://org/openroadm/common/network" />
+  </network-types>
+  <node>
+    <node-id>SPDR-SA1-XPDR1</node-id>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-CLIENT1</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU2e</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-CLIENT3</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU2e</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-CLIENT2</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU2e</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-NETWORK1</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SA1-XPDR1</node-ref>
+        <tp-ref>XPDR1-NETWORK1</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <odtu-tpn-pool>
+          <odtu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODTU4.ts-Allocated</odtu-type>
+          <tpn-pool>2</tpn-pool>
+          <tpn-pool>1</tpn-pool>
+          <tpn-pool>12</tpn-pool>
+          <tpn-pool>11</tpn-pool>
+          <tpn-pool>14</tpn-pool>
+          <tpn-pool>13</tpn-pool>
+          <tpn-pool>16</tpn-pool>
+          <tpn-pool>15</tpn-pool>
+          <tpn-pool>18</tpn-pool>
+          <tpn-pool>17</tpn-pool>
+          <tpn-pool>4</tpn-pool>
+          <tpn-pool>3</tpn-pool>
+          <tpn-pool>6</tpn-pool>
+          <tpn-pool>5</tpn-pool>
+          <tpn-pool>8</tpn-pool>
+          <tpn-pool>7</tpn-pool>
+          <tpn-pool>10</tpn-pool>
+          <tpn-pool>9</tpn-pool>
+          <tpn-pool>28</tpn-pool>
+          <tpn-pool>27</tpn-pool>
+          <tpn-pool>30</tpn-pool>
+          <tpn-pool>29</tpn-pool>
+          <tpn-pool>32</tpn-pool>
+          <tpn-pool>31</tpn-pool>
+          <tpn-pool>34</tpn-pool>
+          <tpn-pool>33</tpn-pool>
+          <tpn-pool>20</tpn-pool>
+          <tpn-pool>19</tpn-pool>
+          <tpn-pool>22</tpn-pool>
+          <tpn-pool>21</tpn-pool>
+          <tpn-pool>24</tpn-pool>
+          <tpn-pool>23</tpn-pool>
+          <tpn-pool>26</tpn-pool>
+          <tpn-pool>25</tpn-pool>
+          <tpn-pool>44</tpn-pool>
+          <tpn-pool>43</tpn-pool>
+          <tpn-pool>46</tpn-pool>
+          <tpn-pool>45</tpn-pool>
+          <tpn-pool>48</tpn-pool>
+          <tpn-pool>47</tpn-pool>
+          <tpn-pool>50</tpn-pool>
+          <tpn-pool>49</tpn-pool>
+          <tpn-pool>36</tpn-pool>
+          <tpn-pool>35</tpn-pool>
+          <tpn-pool>38</tpn-pool>
+          <tpn-pool>37</tpn-pool>
+          <tpn-pool>40</tpn-pool>
+          <tpn-pool>39</tpn-pool>
+          <tpn-pool>42</tpn-pool>
+          <tpn-pool>41</tpn-pool>
+          <tpn-pool>60</tpn-pool>
+          <tpn-pool>59</tpn-pool>
+          <tpn-pool>62</tpn-pool>
+          <tpn-pool>61</tpn-pool>
+          <tpn-pool>64</tpn-pool>
+          <tpn-pool>63</tpn-pool>
+          <tpn-pool>66</tpn-pool>
+          <tpn-pool>65</tpn-pool>
+          <tpn-pool>52</tpn-pool>
+          <tpn-pool>51</tpn-pool>
+          <tpn-pool>54</tpn-pool>
+          <tpn-pool>53</tpn-pool>
+          <tpn-pool>56</tpn-pool>
+          <tpn-pool>55</tpn-pool>
+          <tpn-pool>58</tpn-pool>
+          <tpn-pool>57</tpn-pool>
+          <tpn-pool>76</tpn-pool>
+          <tpn-pool>75</tpn-pool>
+          <tpn-pool>78</tpn-pool>
+          <tpn-pool>77</tpn-pool>
+          <tpn-pool>80</tpn-pool>
+          <tpn-pool>79</tpn-pool>
+          <tpn-pool>68</tpn-pool>
+          <tpn-pool>67</tpn-pool>
+          <tpn-pool>70</tpn-pool>
+          <tpn-pool>69</tpn-pool>
+          <tpn-pool>72</tpn-pool>
+          <tpn-pool>71</tpn-pool>
+          <tpn-pool>74</tpn-pool>
+          <tpn-pool>73</tpn-pool>
+        </odtu-tpn-pool>
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+        <ts-pool>48</ts-pool>
+        <ts-pool>49</ts-pool>
+        <ts-pool>46</ts-pool>
+        <ts-pool>47</ts-pool>
+        <ts-pool>52</ts-pool>
+        <ts-pool>53</ts-pool>
+        <ts-pool>50</ts-pool>
+        <ts-pool>51</ts-pool>
+        <ts-pool>40</ts-pool>
+        <ts-pool>41</ts-pool>
+        <ts-pool>38</ts-pool>
+        <ts-pool>39</ts-pool>
+        <ts-pool>44</ts-pool>
+        <ts-pool>45</ts-pool>
+        <ts-pool>42</ts-pool>
+        <ts-pool>43</ts-pool>
+        <ts-pool>64</ts-pool>
+        <ts-pool>65</ts-pool>
+        <ts-pool>62</ts-pool>
+        <ts-pool>63</ts-pool>
+        <ts-pool>68</ts-pool>
+        <ts-pool>69</ts-pool>
+        <ts-pool>66</ts-pool>
+        <ts-pool>67</ts-pool>
+        <ts-pool>56</ts-pool>
+        <ts-pool>57</ts-pool>
+        <ts-pool>54</ts-pool>
+        <ts-pool>55</ts-pool>
+        <ts-pool>60</ts-pool>
+        <ts-pool>61</ts-pool>
+        <ts-pool>58</ts-pool>
+        <ts-pool>59</ts-pool>
+        <ts-pool>80</ts-pool>
+        <ts-pool>78</ts-pool>
+        <ts-pool>79</ts-pool>
+        <ts-pool>72</ts-pool>
+        <ts-pool>73</ts-pool>
+        <ts-pool>70</ts-pool>
+        <ts-pool>71</ts-pool>
+        <ts-pool>76</ts-pool>
+        <ts-pool>77</ts-pool>
+        <ts-pool>74</ts-pool>
+        <ts-pool>75</ts-pool>
+        <ts-pool>1</ts-pool>
+        <ts-pool>4</ts-pool>
+        <ts-pool>5</ts-pool>
+        <ts-pool>2</ts-pool>
+        <ts-pool>3</ts-pool>
+        <ts-pool>16</ts-pool>
+        <ts-pool>17</ts-pool>
+        <ts-pool>14</ts-pool>
+        <ts-pool>15</ts-pool>
+        <ts-pool>20</ts-pool>
+        <ts-pool>21</ts-pool>
+        <ts-pool>18</ts-pool>
+        <ts-pool>19</ts-pool>
+        <ts-pool>8</ts-pool>
+        <ts-pool>9</ts-pool>
+        <ts-pool>6</ts-pool>
+        <ts-pool>7</ts-pool>
+        <ts-pool>12</ts-pool>
+        <ts-pool>13</ts-pool>
+        <ts-pool>10</ts-pool>
+        <ts-pool>11</ts-pool>
+        <ts-pool>32</ts-pool>
+        <ts-pool>33</ts-pool>
+        <ts-pool>30</ts-pool>
+        <ts-pool>31</ts-pool>
+        <ts-pool>36</ts-pool>
+        <ts-pool>37</ts-pool>
+        <ts-pool>34</ts-pool>
+        <ts-pool>35</ts-pool>
+        <ts-pool>24</ts-pool>
+        <ts-pool>25</ts-pool>
+        <ts-pool>22</ts-pool>
+        <ts-pool>23</ts-pool>
+        <ts-pool>28</ts-pool>
+        <ts-pool>29</ts-pool>
+        <ts-pool>26</ts-pool>
+        <ts-pool>27</ts-pool>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-CLIENT4</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU2e</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>SPDR-SA1</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeSA</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>openroadm-topology</network-ref>
+      <node-ref>SPDR-SA1-XPDR1</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">MUXPDR</node-type>
+    <switching-pools xmlns="http://org/openroadm/otn/network/topology">
+      <odu-switching-pools>
+        <switching-pool-number>1</switching-pool-number>
+        <non-blocking-list>
+          <nbl-number>4</nbl-number>
+          <available-interconnect-bandwidth>10
+          </available-interconnect-bandwidth>
+          <interconnect-bandwidth-unit>1000000000
+          </interconnect-bandwidth-unit>
+          <tp-list>XPDR1-CLIENT4</tp-list>
+          <tp-list>XPDR1-NETWORK1</tp-list>
+        </non-blocking-list>
+        <non-blocking-list>
+          <nbl-number>1</nbl-number>
+          <available-interconnect-bandwidth>10
+          </available-interconnect-bandwidth>
+          <interconnect-bandwidth-unit>1000000000
+          </interconnect-bandwidth-unit>
+          <tp-list>XPDR1-CLIENT1</tp-list>
+          <tp-list>XPDR1-NETWORK1</tp-list>
+        </non-blocking-list>
+        <non-blocking-list>
+          <nbl-number>2</nbl-number>
+          <available-interconnect-bandwidth>10
+          </available-interconnect-bandwidth>
+          <interconnect-bandwidth-unit>1000000000
+          </interconnect-bandwidth-unit>
+          <tp-list>XPDR1-NETWORK1</tp-list>
+          <tp-list>XPDR1-CLIENT2</tp-list>
+        </non-blocking-list>
+        <non-blocking-list>
+          <nbl-number>3</nbl-number>
+          <available-interconnect-bandwidth>10
+          </available-interconnect-bandwidth>
+          <interconnect-bandwidth-unit>1000000000
+          </interconnect-bandwidth-unit>
+          <tp-list>XPDR1-NETWORK1</tp-list>
+          <tp-list>XPDR1-CLIENT3</tp-list>
+        </non-blocking-list>
+        <switching-pool-type>non-blocking</switching-pool-type>
+      </odu-switching-pools>
+    </switching-pools>
+    <tp-bandwidth-sharing xmlns="http://org/openroadm/otn/network/topology" />
+    <xpdr-attributes xmlns="http://org/openroadm/otn/network/topology">
+      <xpdr-number>1</xpdr-number>
+    </xpdr-attributes>
+  </node>
+  <node>
+    <node-id>SPDR-SC1-XPDR1</node-id>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-CLIENT1</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU2e</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-CLIENT3</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU2e</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-CLIENT2</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU2e</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-NETWORK1</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SC1-XPDR1</node-ref>
+        <tp-ref>XPDR1-NETWORK1</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <odtu-tpn-pool>
+          <odtu-type xmlns:x="http://org/openroadm/otn-common-types">x:ODTU4.ts-Allocated</odtu-type>
+          <tpn-pool>2</tpn-pool>
+          <tpn-pool>1</tpn-pool>
+          <tpn-pool>12</tpn-pool>
+          <tpn-pool>11</tpn-pool>
+          <tpn-pool>14</tpn-pool>
+          <tpn-pool>13</tpn-pool>
+          <tpn-pool>16</tpn-pool>
+          <tpn-pool>15</tpn-pool>
+          <tpn-pool>18</tpn-pool>
+          <tpn-pool>17</tpn-pool>
+          <tpn-pool>4</tpn-pool>
+          <tpn-pool>3</tpn-pool>
+          <tpn-pool>6</tpn-pool>
+          <tpn-pool>5</tpn-pool>
+          <tpn-pool>8</tpn-pool>
+          <tpn-pool>7</tpn-pool>
+          <tpn-pool>10</tpn-pool>
+          <tpn-pool>9</tpn-pool>
+          <tpn-pool>28</tpn-pool>
+          <tpn-pool>27</tpn-pool>
+          <tpn-pool>30</tpn-pool>
+          <tpn-pool>29</tpn-pool>
+          <tpn-pool>32</tpn-pool>
+          <tpn-pool>31</tpn-pool>
+          <tpn-pool>34</tpn-pool>
+          <tpn-pool>33</tpn-pool>
+          <tpn-pool>20</tpn-pool>
+          <tpn-pool>19</tpn-pool>
+          <tpn-pool>22</tpn-pool>
+          <tpn-pool>21</tpn-pool>
+          <tpn-pool>24</tpn-pool>
+          <tpn-pool>23</tpn-pool>
+          <tpn-pool>26</tpn-pool>
+          <tpn-pool>25</tpn-pool>
+          <tpn-pool>44</tpn-pool>
+          <tpn-pool>43</tpn-pool>
+          <tpn-pool>46</tpn-pool>
+          <tpn-pool>45</tpn-pool>
+          <tpn-pool>48</tpn-pool>
+          <tpn-pool>47</tpn-pool>
+          <tpn-pool>50</tpn-pool>
+          <tpn-pool>49</tpn-pool>
+          <tpn-pool>36</tpn-pool>
+          <tpn-pool>35</tpn-pool>
+          <tpn-pool>38</tpn-pool>
+          <tpn-pool>37</tpn-pool>
+          <tpn-pool>40</tpn-pool>
+          <tpn-pool>39</tpn-pool>
+          <tpn-pool>42</tpn-pool>
+          <tpn-pool>41</tpn-pool>
+          <tpn-pool>60</tpn-pool>
+          <tpn-pool>59</tpn-pool>
+          <tpn-pool>62</tpn-pool>
+          <tpn-pool>61</tpn-pool>
+          <tpn-pool>64</tpn-pool>
+          <tpn-pool>63</tpn-pool>
+          <tpn-pool>66</tpn-pool>
+          <tpn-pool>65</tpn-pool>
+          <tpn-pool>52</tpn-pool>
+          <tpn-pool>51</tpn-pool>
+          <tpn-pool>54</tpn-pool>
+          <tpn-pool>53</tpn-pool>
+          <tpn-pool>56</tpn-pool>
+          <tpn-pool>55</tpn-pool>
+          <tpn-pool>58</tpn-pool>
+          <tpn-pool>57</tpn-pool>
+          <tpn-pool>76</tpn-pool>
+          <tpn-pool>75</tpn-pool>
+          <tpn-pool>78</tpn-pool>
+          <tpn-pool>77</tpn-pool>
+          <tpn-pool>80</tpn-pool>
+          <tpn-pool>79</tpn-pool>
+          <tpn-pool>68</tpn-pool>
+          <tpn-pool>67</tpn-pool>
+          <tpn-pool>70</tpn-pool>
+          <tpn-pool>69</tpn-pool>
+          <tpn-pool>72</tpn-pool>
+          <tpn-pool>71</tpn-pool>
+          <tpn-pool>74</tpn-pool>
+          <tpn-pool>73</tpn-pool>
+        </odtu-tpn-pool>
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+        <ts-pool>48</ts-pool>
+        <ts-pool>49</ts-pool>
+        <ts-pool>46</ts-pool>
+        <ts-pool>47</ts-pool>
+        <ts-pool>52</ts-pool>
+        <ts-pool>53</ts-pool>
+        <ts-pool>50</ts-pool>
+        <ts-pool>51</ts-pool>
+        <ts-pool>40</ts-pool>
+        <ts-pool>41</ts-pool>
+        <ts-pool>38</ts-pool>
+        <ts-pool>39</ts-pool>
+        <ts-pool>44</ts-pool>
+        <ts-pool>45</ts-pool>
+        <ts-pool>42</ts-pool>
+        <ts-pool>43</ts-pool>
+        <ts-pool>64</ts-pool>
+        <ts-pool>65</ts-pool>
+        <ts-pool>62</ts-pool>
+        <ts-pool>63</ts-pool>
+        <ts-pool>68</ts-pool>
+        <ts-pool>69</ts-pool>
+        <ts-pool>66</ts-pool>
+        <ts-pool>67</ts-pool>
+        <ts-pool>56</ts-pool>
+        <ts-pool>57</ts-pool>
+        <ts-pool>54</ts-pool>
+        <ts-pool>55</ts-pool>
+        <ts-pool>60</ts-pool>
+        <ts-pool>61</ts-pool>
+        <ts-pool>58</ts-pool>
+        <ts-pool>59</ts-pool>
+        <ts-pool>80</ts-pool>
+        <ts-pool>78</ts-pool>
+        <ts-pool>79</ts-pool>
+        <ts-pool>72</ts-pool>
+        <ts-pool>73</ts-pool>
+        <ts-pool>70</ts-pool>
+        <ts-pool>71</ts-pool>
+        <ts-pool>76</ts-pool>
+        <ts-pool>77</ts-pool>
+        <ts-pool>74</ts-pool>
+        <ts-pool>75</ts-pool>
+        <ts-pool>1</ts-pool>
+        <ts-pool>4</ts-pool>
+        <ts-pool>5</ts-pool>
+        <ts-pool>2</ts-pool>
+        <ts-pool>3</ts-pool>
+        <ts-pool>16</ts-pool>
+        <ts-pool>17</ts-pool>
+        <ts-pool>14</ts-pool>
+        <ts-pool>15</ts-pool>
+        <ts-pool>20</ts-pool>
+        <ts-pool>21</ts-pool>
+        <ts-pool>18</ts-pool>
+        <ts-pool>19</ts-pool>
+        <ts-pool>8</ts-pool>
+        <ts-pool>9</ts-pool>
+        <ts-pool>6</ts-pool>
+        <ts-pool>7</ts-pool>
+        <ts-pool>12</ts-pool>
+        <ts-pool>13</ts-pool>
+        <ts-pool>10</ts-pool>
+        <ts-pool>11</ts-pool>
+        <ts-pool>32</ts-pool>
+        <ts-pool>33</ts-pool>
+        <ts-pool>30</ts-pool>
+        <ts-pool>31</ts-pool>
+        <ts-pool>36</ts-pool>
+        <ts-pool>37</ts-pool>
+        <ts-pool>34</ts-pool>
+        <ts-pool>35</ts-pool>
+        <ts-pool>24</ts-pool>
+        <ts-pool>25</ts-pool>
+        <ts-pool>22</ts-pool>
+        <ts-pool>23</ts-pool>
+        <ts-pool>28</ts-pool>
+        <ts-pool>29</ts-pool>
+        <ts-pool>26</ts-pool>
+        <ts-pool>27</ts-pool>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-CLIENT4</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU2e</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>SPDR-SC1</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeSC</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>openroadm-topology</network-ref>
+      <node-ref>SPDR-SC1-XPDR1</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">MUXPDR</node-type>
+    <switching-pools xmlns="http://org/openroadm/otn/network/topology">
+      <odu-switching-pools>
+        <switching-pool-number>1</switching-pool-number>
+        <non-blocking-list>
+          <nbl-number>4</nbl-number>
+          <available-interconnect-bandwidth>10
+          </available-interconnect-bandwidth>
+          <interconnect-bandwidth-unit>1000000000
+          </interconnect-bandwidth-unit>
+          <tp-list>XPDR1-CLIENT4</tp-list>
+          <tp-list>XPDR1-NETWORK1</tp-list>
+        </non-blocking-list>
+        <non-blocking-list>
+          <nbl-number>1</nbl-number>
+          <available-interconnect-bandwidth>10
+          </available-interconnect-bandwidth>
+          <interconnect-bandwidth-unit>1000000000
+          </interconnect-bandwidth-unit>
+          <tp-list>XPDR1-CLIENT1</tp-list>
+          <tp-list>XPDR1-NETWORK1</tp-list>
+        </non-blocking-list>
+        <non-blocking-list>
+          <nbl-number>2</nbl-number>
+          <available-interconnect-bandwidth>10
+          </available-interconnect-bandwidth>
+          <interconnect-bandwidth-unit>1000000000
+          </interconnect-bandwidth-unit>
+          <tp-list>XPDR1-NETWORK1</tp-list>
+          <tp-list>XPDR1-CLIENT2</tp-list>
+        </non-blocking-list>
+        <non-blocking-list>
+          <nbl-number>3</nbl-number>
+          <available-interconnect-bandwidth>10
+          </available-interconnect-bandwidth>
+          <interconnect-bandwidth-unit>1000000000
+          </interconnect-bandwidth-unit>
+          <tp-list>XPDR1-NETWORK1</tp-list>
+          <tp-list>XPDR1-CLIENT3</tp-list>
+        </non-blocking-list>
+        <switching-pool-type>non-blocking</switching-pool-type>
+      </odu-switching-pools>
+    </switching-pools>
+    <tp-bandwidth-sharing xmlns="http://org/openroadm/otn/network/topology" />
+    <xpdr-attributes xmlns="http://org/openroadm/otn/network/topology">
+      <xpdr-number>1</xpdr-number>
+    </xpdr-attributes>
+  </node>
+  <node>
+    <node-id>SPDR-SA1-XPDR2</node-id>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK1</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SA1-XPDR2</node-ref>
+        <tp-ref>XPDR2-NETWORK1</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK3</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SA1-XPDR2</node-ref>
+        <tp-ref>XPDR2-NETWORK3</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK2</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SA1-XPDR2</node-ref>
+        <tp-ref>XPDR2-NETWORK2</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK4</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SA1-XPDR2</node-ref>
+        <tp-ref>XPDR2-NETWORK4</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-CLIENT3</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-CLIENT4</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-CLIENT1</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-CLIENT2</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>SPDR-SA1</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeSA</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>openroadm-topology</network-ref>
+      <node-ref>SPDR-SA1-XPDR2</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">SWITCH</node-type>
+    <switching-pools xmlns="http://org/openroadm/otn/network/topology">
+      <odu-switching-pools>
+        <switching-pool-number>1</switching-pool-number>
+        <non-blocking-list>
+          <nbl-number>1</nbl-number>
+          <tp-list>XPDR2-CLIENT1</tp-list>
+          <tp-list>XPDR2-NETWORK4</tp-list>
+          <tp-list>XPDR2-CLIENT2</tp-list>
+          <tp-list>XPDR2-NETWORK1</tp-list>
+          <tp-list>XPDR2-CLIENT3</tp-list>
+          <tp-list>XPDR2-NETWORK2</tp-list>
+          <tp-list>XPDR2-CLIENT4</tp-list>
+          <tp-list>XPDR2-NETWORK3</tp-list>
+        </non-blocking-list>
+        <switching-pool-type>non-blocking</switching-pool-type>
+      </odu-switching-pools>
+    </switching-pools>
+    <tp-bandwidth-sharing xmlns="http://org/openroadm/otn/network/topology" />
+    <xpdr-attributes xmlns="http://org/openroadm/otn/network/topology">
+      <xpdr-number>2</xpdr-number>
+    </xpdr-attributes>
+  </node>
+  <node>
+    <node-id>SPDR-SC1-XPDR2</node-id>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK1</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SC1-XPDR2</node-ref>
+        <tp-ref>XPDR2-NETWORK1</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK3</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SC1-XPDR2</node-ref>
+        <tp-ref>XPDR2-NETWORK3</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK2</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SC1-XPDR2</node-ref>
+        <tp-ref>XPDR2-NETWORK2</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK4</tp-id>
+      <supporting-termination-point>
+        <network-ref>openroadm-topology</network-ref>
+        <node-ref>SPDR-SC1-XPDR2</node-ref>
+        <tp-ref>XPDR2-NETWORK4</tp-ref>
+      </supporting-termination-point>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-CLIENT3</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-CLIENT4</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-CLIENT1</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-CLIENT2</tp-id>
+      <xpdr-tp-port-connection-attributes xmlns="http://org/openroadm/otn/network/topology">
+        <rate xmlns:x="http://org/openroadm/otn-common-types">x:ODU4</rate>
+      </xpdr-tp-port-connection-attributes>
+      <tp-supported-interfaces xmlns="http://org/openroadm/otn/network/topology">
+        <supported-interface-capability>
+          <if-cap-type xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</if-cap-type>
+        </supported-interface-capability>
+      </tp-supported-interfaces>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
+    </termination-point>
+    <supporting-node>
+      <network-ref>openroadm-topology</network-ref>
+      <node-ref>SPDR-SC1-XPDR2</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>SPDR-SC1</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeSC</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">SWITCH</node-type>
+    <switching-pools xmlns="http://org/openroadm/otn/network/topology">
+      <odu-switching-pools>
+        <switching-pool-number>1</switching-pool-number>
+        <non-blocking-list>
+          <nbl-number>1</nbl-number>
+          <tp-list>XPDR2-CLIENT1</tp-list>
+          <tp-list>XPDR2-NETWORK4</tp-list>
+          <tp-list>XPDR2-CLIENT2</tp-list>
+          <tp-list>XPDR2-NETWORK1</tp-list>
+          <tp-list>XPDR2-CLIENT3</tp-list>
+          <tp-list>XPDR2-NETWORK2</tp-list>
+          <tp-list>XPDR2-CLIENT4</tp-list>
+          <tp-list>XPDR2-NETWORK3</tp-list>
+        </non-blocking-list>
+        <switching-pool-type>non-blocking</switching-pool-type>
+      </odu-switching-pools>
+    </switching-pools>
+    <tp-bandwidth-sharing xmlns="http://org/openroadm/otn/network/topology" />
+    <xpdr-attributes xmlns="http://org/openroadm/otn/network/topology">
+      <xpdr-number>2</xpdr-number>
+    </xpdr-attributes>
+  </node>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>OTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1
+    </link-id>
+    <source>
+      <source-node>SPDR-SC1-XPDR1</source-node>
+      <source-tp>XPDR1-NETWORK1</source-tp>
+    </source>
+    <otn-link-type xmlns="http://transportpce/topology">OTU4</otn-link-type>
+    <destination>
+      <dest-tp>XPDR1-NETWORK1</dest-tp>
+      <dest-node>SPDR-SA1-XPDR1</dest-node>
+    </destination>
+    <available-bandwidth xmlns="http://org/openroadm/otn/network/topology">0</available-bandwidth>
+    <used-bandwidth xmlns="http://org/openroadm/otn/network/topology">100000</used-bandwidth>
+    <opposite-link xmlns="http://org/openroadm/common/network">OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">OTN-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1
+    </link-id>
+    <source>
+      <source-node>SPDR-SA1-XPDR1</source-node>
+      <source-tp>XPDR1-NETWORK1</source-tp>
+    </source>
+    <otn-link-type xmlns="http://transportpce/topology">OTU4</otn-link-type>
+    <destination>
+      <dest-tp>XPDR1-NETWORK1</dest-tp>
+      <dest-node>SPDR-SC1-XPDR1</dest-node>
+    </destination>
+    <available-bandwidth xmlns="http://org/openroadm/otn/network/topology">0</available-bandwidth>
+    <used-bandwidth xmlns="http://org/openroadm/otn/network/topology">100000</used-bandwidth>
+    <opposite-link xmlns="http://org/openroadm/common/network">OTU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">OTN-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1
+    </link-id>
+    <source>
+      <source-node>SPDR-SC1-XPDR1</source-node>
+      <source-tp>XPDR1-NETWORK1</source-tp>
+    </source>
+    <otn-link-type xmlns="http://transportpce/topology">ODTU4</otn-link-type>
+    <destination>
+      <dest-tp>XPDR1-NETWORK1</dest-tp>
+      <dest-node>SPDR-SA1-XPDR1</dest-node>
+    </destination>
+    <available-bandwidth xmlns="http://org/openroadm/otn/network/topology">100000</available-bandwidth>
+    <used-bandwidth xmlns="http://org/openroadm/otn/network/topology">0</used-bandwidth>
+    <opposite-link xmlns="http://org/openroadm/common/network">ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">OTN-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1
+    </link-id>
+    <source>
+      <source-node>SPDR-SA1-XPDR1</source-node>
+      <source-tp>XPDR1-NETWORK1</source-tp>
+    </source>
+    <otn-link-type xmlns="http://transportpce/topology">ODTU4</otn-link-type>
+    <destination>
+      <dest-tp>XPDR1-NETWORK1</dest-tp>
+      <dest-node>SPDR-SC1-XPDR1</dest-node>
+    </destination>
+    <available-bandwidth xmlns="http://org/openroadm/otn/network/topology">100000</available-bandwidth>
+    <used-bandwidth xmlns="http://org/openroadm/otn/network/topology">0</used-bandwidth>
+    <opposite-link xmlns="http://org/openroadm/common/network">ODU4-SPDR-SC1-XPDR1-XPDR1-NETWORK1toSPDR-SA1-XPDR1-XPDR1-NETWORK1
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">OTN-LINK</link-type>
+  </link>
+</network>
+</networks>
+</data>
