@@ -11,6 +11,7 @@ import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -238,11 +239,18 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 tapiLinkList = new HashMap<>();
             Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(T0_MULTI_LAYER_TOPO.getBytes(Charset.forName("UTF-8")))
                 .toString());
+            ConvertORTopoObjectToTapiTopoObject tapiFactory = new ConvertORTopoObjectToTapiTopoObject(topoUuid);
             for (Node node : otnNodeList) {
-                ConvertORTopoObjectToTapiTopoObject tapiFactory =
-                    new ConvertORTopoObjectToTapiTopoObject(node, null, topoUuid);
-                tapiFactory.convertNode();
+                tapiFactory.convertNode(node);
                 tapiNodeList.putAll(tapiFactory.getTapiNodes());
+                tapiLinkList.putAll(tapiFactory.getTapiLinks());
+            }
+
+            if (otnTopo.augmentation(Network1.class) != null) {
+                List<Link> otnLinkList = new ArrayList<>(otnTopo.augmentation(Network1.class).getLink().values());
+                Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkId().getValue()
+                    .compareTo(l2.getLinkId().getValue()));
+                tapiFactory.convertLinks(otnLinkList);
                 tapiLinkList.putAll(tapiFactory.getTapiLinks());
             }
             Name name = new NameBuilder().setValue(T0_MULTI_LAYER_TOPO).setValueName("TAPI Topology Name").build();
