@@ -2,24 +2,11 @@ module transportpce-common-service-path-types {
   namespace "http://org/transportpce/B-C-interface/service/types";
   prefix transportpce-common-service-path-types;
 
-  import ietf-yang-types {
-    prefix yang;
-  }
-  import ietf-inet-types {
-    prefix inet;
-  }
   import transportpce-routing-constraints {
     prefix transportpce-routing-constraints;
   }
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
-  }
-  import transportpce-common-types {
-    prefix transportpce-common-types;
-  }
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-    revision-date 2019-05-31;
   }
   import org-openroadm-otn-common-types {
     prefix org-openroadm-otn-common-types;
