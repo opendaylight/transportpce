@@ -2,17 +2,16 @@ module transportpce-renderer {
   namespace "http://org/opendaylight/transportpce/renderer";
   prefix org-opendaylight-transportpce-renderer;
 
-  import ietf-yang-types {
-    prefix yang;
-  }
   import org-openroadm-common-service-types {
     prefix org-openroadm-common-service-types;
+    revision-date 2019-05-31;
   }
   import transportpce-common-service-path-types {
     prefix transportpce-common-service-path-types;
   }
   import org-openroadm-topology {
     prefix org-openroadm-topology;
+    revision-date 2019-05-31;
   }
   import transportpce-pathDescription {
     prefix transportpce-pathDescription;
