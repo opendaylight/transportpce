@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "6a0aa1bc_a00d57b6",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-08T16:10:03Z",
+      "side": 1,
+      "message": "OK, Done",
+      "parentUuid": "7386f283_14207ec0",
+      "range": {
+        "startLine": 125,
+        "startChar": 57,
+        "endLine": 125,
+        "endChar": 78
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4dc0963a_881e5b27",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
         "patchSetId": 2
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "0b4c1036_ede7fd3d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-08T16:10:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "952b9494_99dd6298",
+      "range": {
+        "startLine": 414,
+        "startChar": 5,
+        "endLine": 419,
+        "endChar": 100
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6a2399b_5230976e",
         "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
         "patchSetId": 2
@@ -187,6 +235,30 @@
       "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25de720f_1d311115",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-08T16:10:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92ba59dd_733fe4bf",
+      "range": {
+        "startLine": 529,
+        "startChar": 40,
+        "endLine": 530,
+        "endChar": 94
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
