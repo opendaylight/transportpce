@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7386f283_14207ec0",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-08T13:54:27Z",
+      "side": 1,
+      "message": "I don\u0027t see why the string that serves to compute the uuid could not end by the \"+\" character provided that it assures its uniqueness.",
+      "parentUuid": "b2fa0c17_672af940",
+      "range": {
+        "startLine": 125,
+        "startChar": 57,
+        "endLine": 125,
+        "endChar": 78
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4dc0963a_881e5b27",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "76f05297_6ef33320",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-08T13:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4dc0963a_881e5b27",
+      "range": {
+        "startLine": 150,
+        "startChar": 91,
+        "endLine": 151,
+        "endChar": 18
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab9ca285_6158053d",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2020-10-08T09:47:53Z",
       "side": 1,
       "message": "another seed change here.",
+      "range": {
+        "startLine": 414,
+        "startChar": 5,
+        "endLine": 419,
+        "endChar": 100
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "952b9494_99dd6298",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-08T13:54:27Z",
+      "side": 1,
+      "message": "Yes and so? A minimum of refacto in this class was necessary to add OTN links. That required to modify the management of uuids to give them a more global value than before.",
+      "parentUuid": "ab9ca285_6158053d",
       "range": {
         "startLine": 414,
         "startChar": 5,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "92ba59dd_733fe4bf",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-08T13:54:27Z",
+      "side": 1,
+      "message": "??",
+      "parentUuid": "e6a2399b_5230976e",
+      "range": {
+        "startLine": 529,
+        "startChar": 40,
+        "endLine": 530,
+        "endChar": 94
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5f17bf5_972bde04",
         "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TopologyDataUtils.java",
         "patchSetId": 2
@@ -108,6 +204,24 @@
       "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "361c562c_7ea26c8f",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TopologyDataUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-08T13:54:27Z",
+      "side": 1,
+      "message": "Yes that\u0027s it.",
+      "parentUuid": "c5f17bf5_972bde04",
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
