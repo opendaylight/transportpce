@@ -77,6 +77,7 @@ import org.slf4j.LoggerFactory;
 
 
 public class DeviceRendererServiceImpl implements DeviceRendererService {
+    private static final String IS_NOT_MOUNTED_ON_THE_CONTROLLER = " is not mounted on the controller";
     private static final String ODU4 = "-ODU4";
     private static final Logger LOG = LoggerFactory.getLogger(DeviceRendererServiceImpl.class);
     private final DataBroker dataBroker;
@@ -259,7 +260,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         }
                     }
                 } else {
-                    processErrorMessage(nodeId + " is not mounted on the controller", forkJoinPool, results);
+                    processErrorMessage(nodeId + IS_NOT_MOUNTED_ON_THE_CONTROLLER, forkJoinPool, results);
                     success.set(false);
                 }
             } catch (OpenRoadmInterfaceException ex) {
@@ -345,7 +346,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
             if (this.deviceTransactionManager.isDeviceMounted(nodeId)) {
                 interfacesToDelete.addAll(getInterfaces2delete(nodeId, srcTp, destTp, waveNumber));
             } else {
-                String result = nodeId + " is not mounted on the controller";
+                String result = nodeId + IS_NOT_MOUNTED_ON_THE_CONTROLLER;
                 results.add(result);
                 success.set(false);
                 LOG.warn(result);
@@ -621,7 +622,7 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         + input.getNodeId();
             }
         } else {
-            result = input.getNodeId() + " is not mounted on the controller";
+            result = input.getNodeId() + IS_NOT_MOUNTED_ON_THE_CONTROLLER;
             LOG.warn("{} is not mounted on the controller",input.getNodeId());
         }
         return output.setResult(result).setSuccess(success).build();

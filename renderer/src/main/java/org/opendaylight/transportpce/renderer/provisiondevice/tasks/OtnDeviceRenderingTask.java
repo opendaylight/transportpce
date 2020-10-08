@@ -37,7 +37,8 @@ public class OtnDeviceRenderingTask implements Callable<OtnDeviceRenderingResult
             LOG.info("Device rendering finished successfully.");
             return OtnDeviceRenderingResult.ok(new ArrayList<>(output.nonnullNodeInterface().values()));
 
-        } else { //false or null case
+        } else {
+            //false or null case
             LOG.warn("Device rendering not successfully finished.");
             return OtnDeviceRenderingResult.failed("Operation Failed");
         }
