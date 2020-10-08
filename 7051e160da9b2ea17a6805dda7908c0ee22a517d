@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2fa0c17_672af940",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-08T09:47:53Z",
+      "side": 1,
+      "message": "since DSR \u003d\"+DSR+\" now, the nameUUID seed string ends with a \"+\".\nI don\u0027t think it is wishable.\nIf this is just a matter of using less constants, maybe we can use DSR \u003d \"DSR\" and String.join() or something equivalent...\nidem for OTSI etc",
+      "range": {
+        "startLine": 125,
+        "startChar": 57,
+        "endLine": 125,
+        "endChar": 78
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dc0963a_881e5b27",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-08T09:47:53Z",
+      "side": 1,
+      "message": "should better stay sticked",
+      "range": {
+        "startLine": 150,
+        "startChar": 91,
+        "endLine": 151,
+        "endChar": 18
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab9ca285_6158053d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoObjectToTapiTopoObject.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-08T09:47:53Z",
+      "side": 1,
+      "message": "another seed change here.",
+      "range": {
+        "startLine": 414,
+        "startChar": 5,
+        "endLine": 419,
+        "endChar": 100
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a2399b_5230976e",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-08T09:47:53Z",
+      "side": 1,
+      "message": "see src/main",
+      "range": {
+        "startLine": 529,
+        "startChar": 40,
+        "endLine": 530,
+        "endChar": 94
+      },
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5f17bf5_972bde04",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TopologyDataUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-08T09:47:53Z",
+      "side": 1,
+      "message": "why not. I guess it is needed because the new tests need to catch those exceptions but I am not sure.\nMore explanations would be welcome in the commessage.",
+      "revId": "7051e160da9b2ea17a6805dda7908c0ee22a517d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
