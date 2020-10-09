@@ -90,42 +90,8 @@ public class RendererServiceWrapper {
                 .setStatus(RpcStatusEx.Pending)
                 .setStatusMessage("Service compliant, submitting temp service delete Request ...").build();
         sendNotifications(notification);
-        FutureCallback<ServiceDeleteOutput> rendererCallback = new FutureCallback<ServiceDeleteOutput>() {
-
-            String message = "";
-            ServiceRpcResultSh notification = null;
-
-            @Override
-            public void onSuccess(ServiceDeleteOutput response) {
-                if (response != null) {
-                    /**
-                     * If PCE reply is received before timer expiration with a positive result, a
-                     * service is created with admin and operational status 'down'.
-                     */
-                    message = "Renderer replied to service delete Request !";
-                    LOG.info("Renderer replied to service delete Request : {}", response);
-                    notification =
-                            new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName(serviceName)
-                                    .setStatus(RpcStatusEx.Successful).setStatusMessage(message).build();
-                    sendNotifications(notification);
-                } else {
-                    message = "Renderer service delete failed ";
-                    notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName("")
-                            .setStatus(RpcStatusEx.Failed).setStatusMessage(message).build();
-                    sendNotifications(notification);
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable arg0) {
-                LOG.error("Renderer service delete failed !");
-                notification = new ServiceRpcResultShBuilder().setNotificationType(notifType)
-                        .setServiceName(serviceName)
-                        .setStatus(RpcStatusEx.Failed)
-                        .setStatusMessage("Renderer service delete request failed  : " + arg0.getMessage()).build();
-                sendNotifications(notification);
-            }
-        };
+        FutureCallback<ServiceDeleteOutput> rendererCallback =
+                new ServiceDeleteOutputFutureCallback(notifType, serviceName);
         ServiceDeleteInput serviceDeleteInput = createRendererRequestInput(serviceName, serviceHandlerHeader);
         ListenableFuture<ServiceDeleteOutput> renderer =
                 this.rendererServiceOperations.serviceDelete(serviceDeleteInput, service);
@@ -166,6 +132,48 @@ public class RendererServiceWrapper {
 
     private static boolean checkString(String value) {
         return ((value != null) && (value.compareTo("") != 0));
+    }
+
+    private final class ServiceDeleteOutputFutureCallback implements FutureCallback<ServiceDeleteOutput> {
+        private final ServiceNotificationTypes notifType;
+        private final String serviceName;
+        String message = "";
+        ServiceRpcResultSh notification = null;
+
+        private ServiceDeleteOutputFutureCallback(ServiceNotificationTypes notifType, String serviceName) {
+            this.notifType = notifType;
+            this.serviceName = serviceName;
+        }
+
+        @Override
+        public void onSuccess(ServiceDeleteOutput response) {
+            if (response != null) {
+                /**
+                 * If PCE reply is received before timer expiration with a positive result, a
+                 * service is created with admin and operational status 'down'.
+                 */
+                message = "Renderer replied to service delete Request !";
+                LOG.info("Renderer replied to service delete Request : {}", response);
+                notification = new ServiceRpcResultShBuilder().setNotificationType(notifType)
+                        .setServiceName(serviceName).setStatus(RpcStatusEx.Successful).setStatusMessage(message)
+                        .build();
+                sendNotifications(notification);
+            } else {
+                message = "Renderer service delete failed ";
+                notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName("")
+                        .setStatus(RpcStatusEx.Failed).setStatusMessage(message).build();
+                sendNotifications(notification);
+            }
+        }
+
+        @Override
+        public void onFailure(Throwable arg0) {
+            LOG.error("Renderer service delete failed !");
+            notification = new ServiceRpcResultShBuilder().setNotificationType(notifType).setServiceName(serviceName)
+                    .setStatus(RpcStatusEx.Failed)
+                    .setStatusMessage("Renderer service delete request failed  : " + arg0.getMessage()).build();
+            sendNotifications(notification);
+        }
     }
 }
 

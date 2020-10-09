@@ -87,92 +87,10 @@ public class MappingConstraints {
      * @return ConstraintsSp HardConstraintsSp or HardConstraintsSp
      */
     private <T> ConstraintsSp getConstraints(T input) {
-        CoRoutingOrGeneral coRoutingOrGeneral = null;
         HardConstraintsBuilder tempHard = new HardConstraintsBuilder();
         SoftConstraintsBuilder tempSoft = new SoftConstraintsBuilder();
         if ((input  !=  null) && (input instanceof Constraints)) {
-            Constraints constraints = (Constraints)input;
-            coRoutingOrGeneral = constraints.getCoRoutingOrGeneral();
-            General tmpGeneral = null;
-            CoRouting tmpCoRouting = null;
-            if (coRoutingOrGeneral  !=  null) {
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder finalGeneral =
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder();
-                org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder finalCoRouting =
-                    new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
-                    .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder();
-                if (coRoutingOrGeneral instanceof General) {
-                    tmpGeneral = (General) coRoutingOrGeneral;
-                    if (tmpGeneral  !=  null) {
-                        Diversity tmpDiversity =  tmpGeneral.getDiversity();
-                        if (tmpDiversity  !=  null) {
-                            finalGeneral.setDiversity(
-                                    new DiversityBuilder()
-                                    .setExistingService(tmpDiversity.getExistingService())
-                                    .setExistingServiceApplicability(
-                                            new ExistingServiceApplicabilityBuilder()
-                                            .setClli(tmpDiversity.getExistingServiceApplicability().isSite())
-                                            .setNode(tmpDiversity.getExistingServiceApplicability().isNode())
-                                            .setSrlg(tmpDiversity.getExistingServiceApplicability().isSrlg())
-                                            .build())
-                                    .build());
-                        }
-                        Exclude tmpExclude = tmpGeneral.getExclude();
-                        if (tmpExclude  !=  null) {
-                            List<String> nodeIdList = new ArrayList<>();
-                            for (NodeIdType nodeId : tmpExclude.getNodeId()) {
-                                nodeIdList.add(nodeId.getValue());
-                            }
-                            finalGeneral.setExclude(
-                                    new ExcludeBuilder()
-                                    .setSupportingServiceName(tmpExclude.getSupportingServiceName())
-                                    .setClli(tmpExclude.getSite())
-                                    .setNodeId(nodeIdList)
-                                    //.setAffinity(value)
-                                    //.setSRLG(value)
-                                    .build());
-                        }
-                        Include tmpInclude = tmpGeneral.getInclude();
-                        if (tmpInclude  !=  null) {
-                            finalGeneral.setInclude(
-                                    new IncludeBuilder()
-                                    //.setOrderedHops()
-                                    .build());
-                        }
-                        Latency tmpLatency = tmpGeneral.getLatency();
-                        if (tmpLatency != null) {
-                            finalGeneral.setLatency(
-                                    new LatencyBuilder()
-                                    .setMaxLatency(tmpLatency.getMaxLatency())
-                                    .build());
-                        }
-                    }
-                    tempHard.setCoRoutingOrGeneral(finalGeneral.build())
-                        .setCustomerCode(constraints.getCustomerCode());
-                    tempSoft.setCoRoutingOrGeneral(finalGeneral.build())
-                        .setCustomerCode(constraints.getCustomerCode());
-                } else if (coRoutingOrGeneral instanceof CoRouting) {
-                    tmpCoRouting = (CoRouting)coRoutingOrGeneral;
-                    if (tmpCoRouting  !=  null) {
-                        org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329
-                            .constraints.co.routing.or.general.co.routing.CoRouting tmpCoRoutingCoRouting =
-                            tmpCoRouting.getCoRouting();
-                        if (tmpCoRoutingCoRouting  !=  null) {
-                            finalCoRouting.setCoRouting(
-                                    new CoRoutingBuilder()
-                                    .setExistingService(tmpCoRoutingCoRouting.getExistingService())
-                                    .build());
-                        }
-                    }
-                    tempHard.setCoRoutingOrGeneral(finalCoRouting.build())
-                        .setCustomerCode(constraints.getCustomerCode());
-                    tempSoft.setCoRoutingOrGeneral(finalCoRouting.build())
-                        .setCustomerCode(constraints.getCustomerCode());
-                }
-            }
+            updateConstraintBuilders(input, tempHard, tempSoft);
         }
         if (input instanceof HardConstraints) {
             return tempHard.build();
@@ -181,6 +99,117 @@ public class MappingConstraints {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Update hardConstraintsBuilder and softConstraintsBuilder regarding input.
+     * @param <T> T
+     * @param input T
+     * @param hardConstraintsBuilder HardConstraintsBuilder
+     * @param softConstraintsBuilder SoftConstraintsBuilder
+     */
+    private <T> void updateConstraintBuilders(T input,
+            HardConstraintsBuilder hardConstraintsBuilder,
+            SoftConstraintsBuilder softConstraintsBuilder) {
+        Constraints constraints = (Constraints)input;
+        CoRoutingOrGeneral coRoutingOrGeneral = constraints.getCoRoutingOrGeneral();
+        if (coRoutingOrGeneral  !=  null) {
+            if (coRoutingOrGeneral instanceof General) {
+                updateConstraintBuilders4General(hardConstraintsBuilder, softConstraintsBuilder, constraints);
+            } else if (coRoutingOrGeneral instanceof CoRouting) {
+                updateConstraintBuilders4Corouting(hardConstraintsBuilder, softConstraintsBuilder, constraints);
+            }
+        }
+    }
+
+    /**
+     * Update hardConstraintsBuilder and softConstraintsBuilder for corouting constraints.
+     * @param hardConstraintsBuilder HardConstraintsBuilder
+     * @param softConstraintsBuilder SoftConstraintsBuilder
+     * @param constraints Constraints
+     */
+    private void updateConstraintBuilders4Corouting(HardConstraintsBuilder hardConstraintsBuilder,
+            SoftConstraintsBuilder softConstraintsBuilder, Constraints constraints) {
+        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+            .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder finalCoRouting =
+            new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+            .rev171017.constraints.sp.co.routing.or.general.CoRoutingBuilder();
+        CoRouting tmpCoRouting = (CoRouting)constraints.getCoRoutingOrGeneral();
+        if (tmpCoRouting  !=  null) {
+            org.opendaylight.yang.gen.v1.http.org.openroadm.routing.constrains.rev190329
+                .constraints.co.routing.or.general.co.routing.CoRouting tmpCoRoutingCoRouting =
+                tmpCoRouting.getCoRouting();
+            if (tmpCoRoutingCoRouting  !=  null) {
+                finalCoRouting.setCoRouting(
+                        new CoRoutingBuilder()
+                        .setExistingService(tmpCoRoutingCoRouting.getExistingService())
+                        .build());
+            }
+        }
+        hardConstraintsBuilder.setCoRoutingOrGeneral(finalCoRouting.build())
+            .setCustomerCode(constraints.getCustomerCode());
+        softConstraintsBuilder.setCoRoutingOrGeneral(finalCoRouting.build())
+            .setCustomerCode(constraints.getCustomerCode());
+    }
+
+    /**
+     * Update hardConstraintsBuilder and softConstraintsBuilder for general constraints.
+     * @param hardConstraintsBuilder HardConstraintsBuilder
+     * @param softConstraintsBuilder SoftConstraintsBuilder
+     * @param constraints Constraints
+     */
+    private void updateConstraintBuilders4General(HardConstraintsBuilder hardConstraintsBuilder,
+            SoftConstraintsBuilder softConstraintsBuilder, Constraints constraints) {
+        org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+            .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder finalGeneral =
+            new org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints
+            .rev171017.constraints.sp.co.routing.or.general.GeneralBuilder();
+        General tmpGeneral = (General) constraints.getCoRoutingOrGeneral();
+        if (tmpGeneral  !=  null) {
+            Diversity tmpDiversity =  tmpGeneral.getDiversity();
+            if (tmpDiversity  !=  null) {
+                finalGeneral.setDiversity(
+                        new DiversityBuilder()
+                        .setExistingService(tmpDiversity.getExistingService())
+                        .setExistingServiceApplicability(
+                                new ExistingServiceApplicabilityBuilder()
+                                .setClli(tmpDiversity.getExistingServiceApplicability().isSite())
+                                .setNode(tmpDiversity.getExistingServiceApplicability().isNode())
+                                .setSrlg(tmpDiversity.getExistingServiceApplicability().isSrlg())
+                                .build())
+                        .build());
+            }
+            Exclude tmpExclude = tmpGeneral.getExclude();
+            if (tmpExclude  !=  null) {
+                List<String> nodeIdList = new ArrayList<>();
+                for (NodeIdType nodeId : tmpExclude.getNodeId()) {
+                    nodeIdList.add(nodeId.getValue());
+                }
+                finalGeneral.setExclude(
+                        new ExcludeBuilder()
+                        .setSupportingServiceName(tmpExclude.getSupportingServiceName())
+                        .setClli(tmpExclude.getSite())
+                        .setNodeId(nodeIdList)
+                        .build());
+            }
+            Include tmpInclude = tmpGeneral.getInclude();
+            if (tmpInclude  !=  null) {
+                finalGeneral.setInclude(
+                        new IncludeBuilder()
+                        .build());
+            }
+            Latency tmpLatency = tmpGeneral.getLatency();
+            if (tmpLatency != null) {
+                finalGeneral.setLatency(
+                        new LatencyBuilder()
+                        .setMaxLatency(tmpLatency.getMaxLatency())
+                        .build());
+            }
+        }
+        hardConstraintsBuilder.setCoRoutingOrGeneral(finalGeneral.build())
+            .setCustomerCode(constraints.getCustomerCode());
+        softConstraintsBuilder.setCoRoutingOrGeneral(finalGeneral.build())
+            .setCustomerCode(constraints.getCustomerCode());
     }
 
     /**
