@@ -20,6 +20,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev1
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.lgx.LgxBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.port.PortBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public class ServicehandlerTxRxCheckTest {
 
@@ -155,7 +156,7 @@ public class ServicehandlerTxRxCheckTest {
     @Test
     public void checkForServiceRateEquals0() {
         ComplianceCheckResult result = ServicehandlerTxRxCheck.check(
-            new ServiceAEndBuilder().setServiceRate(0L).build(), ServiceEndpointType.SERVICEAEND);
+            new ServiceAEndBuilder().setServiceRate(Uint32.valueOf(0)).build(), ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
         Assert.assertEquals(LogMessages.rateNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
@@ -164,7 +165,7 @@ public class ServicehandlerTxRxCheckTest {
     @Test
     public void checkForServiceFormatNull() {
         ComplianceCheckResult result = ServicehandlerTxRxCheck.check(
-            new ServiceAEndBuilder().setServiceRate(3L).build(), ServiceEndpointType.SERVICEAEND);
+            new ServiceAEndBuilder().setServiceRate(Uint32.valueOf(3)).build(), ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
         Assert.assertEquals(LogMessages.formatNotSet(ServiceEndpointType.SERVICEAEND), result.getMessage());
@@ -173,7 +174,7 @@ public class ServicehandlerTxRxCheckTest {
     @Test
     public void checkForClliEmpty() {
         ComplianceCheckResult result = ServicehandlerTxRxCheck.check(new ServiceAEndBuilder()
-            .setServiceRate(3L).setClli("").setServiceFormat(ServiceFormat.Ethernet).build(),
+            .setServiceRate(Uint32.valueOf(3)).setClli("").setServiceFormat(ServiceFormat.Ethernet).build(),
             ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
@@ -183,7 +184,7 @@ public class ServicehandlerTxRxCheckTest {
     @Test
     public void checkForFailTxOrRx() {
         ComplianceCheckResult result = ServicehandlerTxRxCheck.check(new ServiceAEndBuilder()
-            .setServiceRate(3L).setClli("cc").setServiceFormat(ServiceFormat.Ethernet).build(),
+            .setServiceRate(Uint32.valueOf(3)).setClli("cc").setServiceFormat(ServiceFormat.Ethernet).build(),
             ServiceEndpointType.SERVICEAEND);
 
         Assert.assertFalse(result.hasPassed());
