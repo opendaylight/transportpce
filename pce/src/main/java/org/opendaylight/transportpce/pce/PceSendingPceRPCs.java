@@ -175,7 +175,7 @@ public class PceSendingPceRPCs {
     }
 
     private boolean gnpyToCheckFeasiblity(AToZDirection atoz, ZToADirection ztoa, GnpyUtilitiesImpl gnpy)
-            throws GnpyException, Exception {
+            throws GnpyException {
 
         //Call GNPy for path verification
         if (gnpy.verifyComputationByGnpy(atoz, ztoa, pceHardConstraints)) {
@@ -187,7 +187,7 @@ public class PceSendingPceRPCs {
         return false;
     }
 
-    private void callGnpyToComputeNewPath(GnpyUtilitiesImpl gnpy) throws GnpyException, Exception {
+    private void callGnpyToComputeNewPath(GnpyUtilitiesImpl gnpy) throws GnpyException {
 
         //Call GNPy in the case of non feasibility
         LOG.info("In pceSendingPceRPC: the path is not feasible according to Gnpy");

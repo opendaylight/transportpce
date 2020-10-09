@@ -102,12 +102,12 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(res['output']['configuration-response-common'][
             'response-message'],
             'Path is calculated by PCE')
-        self.assertEqual(res['output']['gnpy-response'][0]['path-dir'],
-                         'A-to-Z')
-        self.assertEqual(res['output']['gnpy-response'][0]['feasibility'], True)
         self.assertEqual(res['output']['gnpy-response'][1]['path-dir'],
-                         'Z-to-A')
+                         'A-to-Z')
         self.assertEqual(res['output']['gnpy-response'][1]['feasibility'], True)
+        self.assertEqual(res['output']['gnpy-response'][0]['path-dir'],
+                         'Z-to-A')
+        self.assertEqual(res['output']['gnpy-response'][0]['feasibility'], True)
         time.sleep(5)
 
     # Path computed by PCE is not feasible by GNPy and GNPy cannot find
@@ -130,13 +130,13 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(res['output']['configuration-response-common'][
             'response-message'],
             'No path available by PCE and GNPy ')
-        self.assertEqual(res['output']['gnpy-response'][0]['path-dir'],
-                         'A-to-Z')
-        self.assertEqual(res['output']['gnpy-response'][0]['feasibility'],
-                         False)
         self.assertEqual(res['output']['gnpy-response'][1]['path-dir'],
-                         'Z-to-A')
+                         'A-to-Z')
         self.assertEqual(res['output']['gnpy-response'][1]['feasibility'],
+                         False)
+        self.assertEqual(res['output']['gnpy-response'][0]['path-dir'],
+                         'Z-to-A')
+        self.assertEqual(res['output']['gnpy-response'][0]['feasibility'],
                          False)
         time.sleep(5)
 
@@ -158,12 +158,12 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(res['output']['configuration-response-common'][
             'response-message'],
             'Path is calculated by GNPy')
-        self.assertEqual(res['output']['gnpy-response'][0]['path-dir'],
-                         'A-to-Z')
-        self.assertEqual(res['output']['gnpy-response'][0]['feasibility'], True)
         self.assertEqual(res['output']['gnpy-response'][1]['path-dir'],
-                         'Z-to-A')
+                         'A-to-Z')
         self.assertEqual(res['output']['gnpy-response'][1]['feasibility'], True)
+        self.assertEqual(res['output']['gnpy-response'][0]['path-dir'],
+                         'Z-to-A')
+        self.assertEqual(res['output']['gnpy-response'][0]['feasibility'], True)
         time.sleep(5)
 
     # Not found path by PCE and GNPy cannot find another one
