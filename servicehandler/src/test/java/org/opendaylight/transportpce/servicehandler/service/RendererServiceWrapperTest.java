@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.servicehandler.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import org.junit.Assert;
@@ -68,7 +67,7 @@ public class RendererServiceWrapperTest extends AbstractTest {
                 response.getConfigurationResponseCommon().getAckFinalIndicator());
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 response.getConfigurationResponseCommon().getResponseCode());
-        verifyZeroInteractions(this.rendererServiceOperationsMock);
+        Mockito.verifyNoInteractions(this.rendererServiceOperationsMock);
     }
 
     @Test
@@ -84,7 +83,7 @@ public class RendererServiceWrapperTest extends AbstractTest {
                 response.getConfigurationResponseCommon().getAckFinalIndicator());
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 response.getConfigurationResponseCommon().getResponseCode());
-        verifyZeroInteractions(this.rendererServiceOperationsMock);
+        Mockito.verifyNoInteractions(this.rendererServiceOperationsMock);
     }
 
     @Test
@@ -97,7 +96,7 @@ public class RendererServiceWrapperTest extends AbstractTest {
                 response.getConfigurationResponseCommon().getAckFinalIndicator());
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 response.getConfigurationResponseCommon().getResponseCode());
-        verifyZeroInteractions(this.rendererServiceOperationsMock);
+        Mockito.verifyNoInteractions(this.rendererServiceOperationsMock);
     }
 
 
