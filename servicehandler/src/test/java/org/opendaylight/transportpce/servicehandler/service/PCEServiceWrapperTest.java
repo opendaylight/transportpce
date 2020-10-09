@@ -9,7 +9,6 @@ package org.opendaylight.transportpce.servicehandler.service;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import org.junit.Assert;
@@ -61,7 +60,7 @@ public class PCEServiceWrapperTest extends AbstractTest {
                 pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 pceResponse.getConfigurationResponseCommon().getResponseCode());
-        verifyZeroInteractions(this.pathComputationServiceMock);
+        Mockito.verifyNoInteractions(this.pathComputationServiceMock);
     }
 
     @Test
@@ -73,7 +72,7 @@ public class PCEServiceWrapperTest extends AbstractTest {
                 pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 pceResponse.getConfigurationResponseCommon().getResponseCode());
-        verifyZeroInteractions(this.pathComputationServiceMock);
+        Mockito.verifyNoInteractions(this.pathComputationServiceMock);
     }
 
     @Test
@@ -85,7 +84,7 @@ public class PCEServiceWrapperTest extends AbstractTest {
                 pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 pceResponse.getConfigurationResponseCommon().getResponseCode());
-        verifyZeroInteractions(this.pathComputationServiceMock);
+        Mockito.verifyNoInteractions(this.pathComputationServiceMock);
     }
 
 
@@ -97,7 +96,7 @@ public class PCEServiceWrapperTest extends AbstractTest {
                 pceResponse.getConfigurationResponseCommon().getAckFinalIndicator());
         Assert.assertEquals(ResponseCodes.RESPONSE_FAILED,
                 pceResponse.getConfigurationResponseCommon().getResponseCode());
-        verifyZeroInteractions(this.pathComputationServiceMock);
+        Mockito.verifyNoInteractions(this.pathComputationServiceMock);
     }
 
     @Test
