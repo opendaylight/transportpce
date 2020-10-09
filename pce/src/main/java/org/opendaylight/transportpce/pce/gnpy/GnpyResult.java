@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
@@ -199,7 +200,10 @@ public class GnpyResult {
                 }
             }
         }
-        Include include = new IncludeBuilder().setOrderedHops(orderedHopsList).build();
+        Include include = new IncludeBuilder()
+                .setOrderedHops(orderedHopsList.stream()
+                        .collect(Collectors.toMap(OrderedHops::key, orderedHops -> orderedHops)))
+                .build();
         General general = new GeneralBuilder().setInclude(include).build();
         hardConstraints = new HardConstraintsBuilder().setCoRoutingOrGeneral(general).build();
         return hardConstraints;

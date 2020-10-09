@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce.graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 
+@SuppressWarnings("serial")
 @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
     value = "SE_NO_SERIALVERSIONID",
     justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
