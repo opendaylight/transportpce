@@ -101,9 +101,9 @@ public class PceOtnNode implements PceNode {
             = this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                 .ietf.network.topology.rev180226.Node1.class);
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-                .node.TerminationPoint> allTps = new ArrayList(nodeTp.getTerminationPoint().values());
+                .node.TerminationPoint> allTps = new ArrayList<>(nodeTp.nonnullTerminationPoint().values());
         this.valid = false;
-        if (allTps == null) {
+        if (allTps.isEmpty()) {
             LOG.error("PceOtnNode: initXndrTps: XPONDER TerminationPoint list is empty for node {}", this);
             return;
         }
@@ -188,8 +188,8 @@ public class PceOtnNode implements PceNode {
             for (TpId nwTp : netwTps) {
                 for (TpId clTp : clientTps) {
                     @Nullable
-                    List<NonBlockingList> nblList = new ArrayList(node.augmentation(Node1.class).getSwitchingPools()
-                        .getOduSwitchingPools().values().stream().findFirst().get().getNonBlockingList().values());
+                    List<NonBlockingList> nblList = new ArrayList<>(node.augmentation(Node1.class).getSwitchingPools()
+                        .nonnullOduSwitchingPools().values().stream().findFirst().get().getNonBlockingList().values());
                     for (NonBlockingList nbl : nblList) {
                         if (nbl.getTpList().contains(clTp) && nbl.getTpList().contains(nwTp)) {
                             usableXpdrClientTps.add(clTp);
@@ -207,8 +207,8 @@ public class PceOtnNode implements PceNode {
         if (clientTps == null && netwTps != null && nbClient == 0 && nbNetw == 2) {
             netwTps.sort(Comparator.comparing(TpId::getValue));
             @Nullable
-            List<NonBlockingList> nblList = new ArrayList(node.augmentation(Node1.class).getSwitchingPools()
-                .getOduSwitchingPools().values().stream().findFirst().get().getNonBlockingList().values());
+            List<NonBlockingList> nblList = new ArrayList<>(node.augmentation(Node1.class).getSwitchingPools()
+                .nonnullOduSwitchingPools().values().stream().findFirst().get().getNonBlockingList().values());
             for (NonBlockingList nbl : nblList) {
                 for (TpId nwTp : netwTps) {
                     if (nbl.getTpList().contains(nwTp)) {
@@ -306,9 +306,9 @@ public class PceOtnNode implements PceNode {
             node.augmentation(
                     org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1.class);
         SwitchingPools sp = node1.getSwitchingPools();
-        List<OduSwitchingPools> osp = new ArrayList(sp.getOduSwitchingPools().values());
+        List<OduSwitchingPools> osp = new ArrayList<>(sp.nonnullOduSwitchingPools().values());
         for (OduSwitchingPools ospx : osp) {
-            List<NonBlockingList> nbl = new ArrayList(ospx.getNonBlockingList().values());
+            List<NonBlockingList> nbl = new ArrayList<>(ospx.nonnullNonBlockingList().values());
             for (NonBlockingList nbll : nbl) {
                 if (nbll.getAvailableInterconnectBandwidth().toJava() >= neededBW && nbll.getTpList() != null
                         && nbll.getTpList().contains(tp1.getTpId()) && nbll.getTpList().contains(tp2.getTpId())) {
