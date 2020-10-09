@@ -22,7 +22,7 @@ public final class InjectField {
     public static void inject(final Object injectable, final String fieldname, final Object value) {
         try {
             final java.lang.reflect.Field field = injectable.getClass().getDeclaredField(fieldname);
-            final boolean origionalValue = field.isAccessible();
+            final boolean origionalValue = field.canAccess(injectable);
             field.setAccessible(true);
             field.set(injectable, value);
             field.setAccessible(origionalValue);
