@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1bb218a_4adc0357",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T13:01:43Z",
+      "side": 1,
+      "message": "commit body and title are redundant.\nIt is OK to keep only one formulation in the title",
+      "revId": "351f9eaa51f12c3e02c78858b542c0807d582b06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf816d19_192017e5",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T13:01:43Z",
+      "side": 1,
+      "message": "optimization proposal\n\n        Span omsAttributesSpan \u003d getOmsAttributesSpan(link);\n        if (omsAttributesSpan \u003d\u003d null) {\n            LOG.debug(\"No concatenation for this link\");\n            return new ArrayList\u003c\u003e();\n        }\n\n        List\u003cLong\u003e srlgList \u003d new ArrayList\u003c\u003e();\n        Map\u003cLinkConcatenationKey, LinkConcatenation\u003e linkList \u003d omsAttributesSpan.nonnullLinkConcatenation();\n        for (LinkConcatenation lc : linkList.values()) {\n            if (lc !\u003d null \u0026\u0026 lc.getSRLGId() !\u003d null) {\n                srlgList.add(lc.getSRLGId().toJava());\n            }\n        }\n        return srlgList;",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 24
+      },
+      "revId": "351f9eaa51f12c3e02c78858b542c0807d582b06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a37c388_be4d5b75",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T13:01:43Z",
+      "side": 1,
+      "message": "returning  new ArrayList\u003c\u003e() here  would avoid the else-block and the allocation of \"List\u003cLong\u003e srlgList \u003d new ArrayList\u003c\u003e();\" before the if-block",
+      "range": {
+        "startLine": 113,
+        "startChar": 9,
+        "endLine": 113,
+        "endChar": 16
+      },
+      "revId": "351f9eaa51f12c3e02c78858b542c0807d582b06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44bee137_46dc8cd3",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T13:01:43Z",
+      "side": 1,
+      "message": "to confirm but I this message needs either to be precised or reformulated",
+      "range": {
+        "startLine": 119,
+        "startChar": 20,
+        "endLine": 119,
+        "endChar": 64
+      },
+      "revId": "351f9eaa51f12c3e02c78858b542c0807d582b06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bd75bf1_d2b03efa",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/MapUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T13:01:43Z",
+      "side": 1,
+      "message": "optimization proposal\n\n        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1 link1 \u003d \n            link.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1.class);\n\n        if (link1 \u003d\u003d null) {\n            LOG.error(MAP_UTILS_NO_LINK_AUGMENTATION_AVAILABLE_MSG, link.getLinkId().getValue());\n            return null;\n        }\n        if (link1.getOMSAttributes() \u003d\u003d null) {\n            LOG.error(\"MapUtils: No Link getOMSAttributes available. {}\", link.getLinkId().getValue());\n            return null;\n        }\n        return  link1.getOMSAttributes().getSpan();",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 225,
+        "endChar": 24
+      },
+      "revId": "351f9eaa51f12c3e02c78858b542c0807d582b06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "322790f7_278587ab",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceLink.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T13:01:43Z",
+      "side": 1,
+      "message": "optimization proposal\n\n        Link1 link1 \u003d link.augmentation(Link1.class);\n        if (link1.getLinkLatency() !\u003d null) {\n            return link1.getLinkLatency().toJava();\n        }\n        if (this.omsAttributesSpan \u003d\u003d null) {\n            return 1L;\n        }\n        double tmp \u003d 0;\n        Map\u003cLinkConcatenationKey, LinkConcatenation\u003e linkConcatenationMap \u003d this.omsAttributesSpan\n                .nonnullLinkConcatenation();\n        for (Map.Entry\u003cLinkConcatenationKey, LinkConcatenation\u003e entry : linkConcatenationMap.entrySet()) {\n            // Length is expressed in meter and latency is expressed in ms according to OpenROADM MSA\n            if (entry \u003d\u003d null || entry.getValue() \u003d\u003d null || entry.getValue().getSRLGLength() \u003d\u003d null) {\n                LOG.debug(\"In PceLink: cannot compute the latency for the link {}\", link.getLinkId().getValue());\n                return 1L;\n            }\n            tmp +\u003d entry.getValue().getSRLGLength().toJava() / CELERITY;\n            LOG.info(\"In PceLink: The latency of link {} \u003d\u003d {}\", link.getLinkId(), tmp);\n        }\n        return (long) Math.ceil(tmp);",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 26
+      },
+      "revId": "351f9eaa51f12c3e02c78858b542c0807d582b06",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
