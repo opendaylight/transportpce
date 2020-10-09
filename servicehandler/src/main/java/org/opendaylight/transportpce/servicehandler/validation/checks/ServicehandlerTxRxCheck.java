@@ -25,6 +25,7 @@ public final class ServicehandlerTxRxCheck {
     // This is class is public so that these messages can be accessed from Junit (avoid duplications).
     public static final class LogMessages {
 
+        private static final String SERVICE = "Service ";
         public static final String TXDIR_NOT_SET;
         public static final String TXDIR_PORT_NOT_SET;
         public static final String TXDIR_LGX_NOT_SET;
@@ -43,19 +44,19 @@ public final class ServicehandlerTxRxCheck {
         }
 
         public static String endpointTypeNotSet(ServiceEndpointType endpointType) {
-            return "Service " + endpointType + " is not set";
+            return SERVICE + endpointType + " is not set";
         }
 
         public static String rateNotSet(ServiceEndpointType endpointType) {
-            return "Service " + endpointType + " rate is not set";
+            return SERVICE + endpointType + " rate is not set";
         }
 
         public static String formatNotSet(ServiceEndpointType endpointType) {
-            return "Service " + endpointType + " format is not set";
+            return SERVICE + endpointType + " format is not set";
         }
 
         public static String clliNotSet(ServiceEndpointType endpointType) {
-            return "Service " + endpointType + " clli is not set";
+            return SERVICE + endpointType + " clli is not set";
         }
 
         private LogMessages() {
@@ -71,7 +72,7 @@ public final class ServicehandlerTxRxCheck {
      * @return true if String ok false if not
      */
     public static boolean checkString(String value) {
-        return ((value != null) && (value.compareTo("") != 0));
+        return (value != null && !value.isEmpty());
     }
 
     /**
@@ -81,6 +82,9 @@ public final class ServicehandlerTxRxCheck {
      *            port info
      * @return true if String ok false if not
      */
+    @SuppressWarnings("java:S1067")
+    //sonar issue Reduce the number of conditional operators (4) used in the expression (maximum allowed 3)
+    //won't be fixed because of functional checks needed
     public static boolean checkPort(Port port) {
         boolean result = false;
         if (port != null) {
@@ -90,10 +94,11 @@ public final class ServicehandlerTxRxCheck {
             String portRack = port.getPortRack();
             String portShelf = port.getPortShelf();
 
-            if (checkString(portDeviceName) && checkString(portType) && checkString(portName) && checkString(portRack)
-                    && checkString(portShelf)) {
-                result = true;
-            }
+            return checkString(portDeviceName)
+                    && checkString(portType)
+                    && checkString(portName)
+                    && checkString(portRack)
+                    && checkString(portShelf);
         }
         return result;
     }
@@ -164,18 +169,14 @@ public final class ServicehandlerTxRxCheck {
             return new ComplianceCheckResult(false, LogMessages.endpointTypeNotSet(endpointType));
         }
 
-//TODO check if an expected bug was justifying this NPE handling
-//        try {
+        if (serviceEnd.getServiceRate() == null) {
+            String message = "Something wrong when accessing Service " + endpointType + " rate, format or clli";
+            return new ComplianceCheckResult(false, message);
+        }
         Long serviceRate = serviceEnd.getServiceRate().toJava();
         ServiceFormat serviceformat = serviceEnd.getServiceFormat();
         String clli = serviceEnd.getClli();
-//        } catch (NullPointerException e) {
-//            String message = "Something wrong when accessing Service " + endpointType + " rate, format or clli";
-//            LOG.error("Service TxRx info check: {}",message, e);
-//            return new ComplianceCheckResult(false, message);
-//        }
-
-        if ((serviceRate == null) || (serviceRate <= 0)) {
+        if (serviceRate <= 0) {
             return new ComplianceCheckResult(false, LogMessages.rateNotSet(endpointType));
         }
         if (serviceformat == null) {
