@@ -56,70 +56,99 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             switch (notifType) {
                 /* service-implementation-request. */
                 case 3 :
-                    if (serviceRpcResultSp.getStatus() == RpcStatusEx.Successful) {
-                        LOG.info("Service implemented !");
-                        if (serviceDataStoreOperations == null) {
-                            return;
-                        }
-                        OperationResult operationResult = null;
-                        if (tempService) {
-                            operationResult = this.serviceDataStoreOperations.modifyTempService(
-                                    serviceRpcResultSp.getServiceName(),
-                                    State.InService, AdminStates.InService);
-                            if (!operationResult.isSuccess()) {
-                                LOG.warn("Temp Service status not updated in datastore !");
-                            }
-                        } else {
-                            operationResult = this.serviceDataStoreOperations.modifyService(
-                                    serviceRpcResultSp.getServiceName(),
-                                    State.InService, AdminStates.InService);
-                            if (!operationResult.isSuccess()) {
-                                LOG.warn("Service status not updated in datastore !");
-                            }
-                        }
-                    } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Failed) {
-                        LOG.error("Renderer implementation failed !");
-                        OperationResult deleteServicePathOperationResult =
-                                this.serviceDataStoreOperations.deleteServicePath(serviceName);
-                        if (!deleteServicePathOperationResult.isSuccess()) {
-                            LOG.warn("Service path was not removed from datastore!");
-                        }
-                        if (tempService) {
-                            OperationResult deleteServiceOperationResult =
-                                    this.serviceDataStoreOperations.deleteTempService(serviceName);
-                            if (!deleteServiceOperationResult.isSuccess()) {
-                                LOG.warn("Temp Service was not removed from datastore!");
-                            }
-                        } else {
-                            OperationResult deleteServiceOperationResult =
-                                    this.serviceDataStoreOperations.deleteService(serviceName);
-                            if (!deleteServiceOperationResult.isSuccess()) {
-                                LOG.warn("Service was not removed from datastore!");
-                            }
-                        }
-                    }
+                    onServiceImplementationResult(serviceName);
                     break;
                 /* service-delete. */
                 case 4 :
-                    if (serviceRpcResultSp.getStatus() == RpcStatusEx.Successful) {
-                        LOG.info("Service '{}' deleted !", serviceName);
-                        if (this.input != null) {
-                            LOG.info("sending PCE cancel resource reserve for '{}'",  this.input.getServiceName());
-                            this.pceServiceWrapper.cancelPCEResource(this.input.getServiceName(),
-                                    ServiceNotificationTypes.ServiceDeleteResult);
-                        } else {
-                            LOG.error("ServiceInput parameter is null !");
-                        }
-                    } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Failed) {
-                        LOG.error("Renderer service delete failed !");
-                        return;
-                    }
+                    onServiceDeleteResult(serviceName);
                     break;
                 default:
                     break;
             }
         } else {
             LOG.warn("ServiceRpcResultSp already wired !");
+        }
+    }
+
+    /**
+     * Process service delete result for serviceName.
+     * @param serviceName String
+     */
+    private void onServiceDeleteResult(String serviceName) {
+        if (serviceRpcResultSp.getStatus() == RpcStatusEx.Successful) {
+            LOG.info("Service '{}' deleted !", serviceName);
+            if (this.input != null) {
+                LOG.info("sending PCE cancel resource reserve for '{}'",  this.input.getServiceName());
+                this.pceServiceWrapper.cancelPCEResource(this.input.getServiceName(),
+                        ServiceNotificationTypes.ServiceDeleteResult);
+            } else {
+                LOG.error("ServiceInput parameter is null !");
+            }
+        } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Failed) {
+            LOG.error("Renderer service delete failed !");
+        }
+    }
+
+    /**
+     * Process service implementation result for serviceName.
+     * @param serviceName String
+     * @param serviceName String
+     */
+    private void onServiceImplementationResult(String serviceName) {
+        if (serviceRpcResultSp.getStatus() == RpcStatusEx.Successful) {
+            onSuccededServiceImplementation();
+        } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Failed) {
+            onFailedServiceImplementation(serviceName);
+        }
+    }
+
+    /**
+     * Process succeeded service implementation for service.
+     */
+    private void onSuccededServiceImplementation() {
+        LOG.info("Service implemented !");
+        if (serviceDataStoreOperations != null) {
+            OperationResult operationResult = null;
+            if (tempService) {
+                operationResult = this.serviceDataStoreOperations.modifyTempService(
+                        serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
+                if (!operationResult.isSuccess()) {
+                    LOG.warn("Temp Service status not updated in datastore !");
+                }
+            } else {
+                operationResult = this.serviceDataStoreOperations
+                        .modifyService(serviceRpcResultSp.getServiceName(),
+                                State.InService, AdminStates.InService);
+                if (!operationResult.isSuccess()) {
+                    LOG.warn("Service status not updated in datastore !");
+                }
+            }
+        }
+    }
+
+    /**
+     * Process failed service implementation for serviceName.
+     * @param serviceName String
+     */
+    private void onFailedServiceImplementation(String serviceName) {
+        LOG.error("Renderer implementation failed !");
+        OperationResult deleteServicePathOperationResult =
+                this.serviceDataStoreOperations.deleteServicePath(serviceName);
+        if (!deleteServicePathOperationResult.isSuccess()) {
+            LOG.warn("Service path was not removed from datastore!");
+        }
+        if (tempService) {
+            OperationResult deleteServiceOperationResult =
+                    this.serviceDataStoreOperations.deleteTempService(serviceName);
+            if (!deleteServiceOperationResult.isSuccess()) {
+                LOG.warn("Temp Service was not removed from datastore!");
+            }
+        } else {
+            OperationResult deleteServiceOperationResult =
+                    this.serviceDataStoreOperations.deleteService(serviceName);
+            if (!deleteServiceOperationResult.isSuccess()) {
+                LOG.warn("Service was not removed from datastore!");
+            }
         }
     }
 
