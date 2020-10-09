@@ -63,14 +63,8 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class ModelMappingUtils {
-
-    private static final Logger LOG =
-        LoggerFactory.getLogger(org.opendaylight.transportpce.servicehandler.ModelMappingUtils.class);
-    private static final String TERMINATION_POINT = "TerminationPoint";
 
     private ModelMappingUtils() {
     }
@@ -93,7 +87,8 @@ public final class ModelMappingUtils {
             .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate())
             .setOduServiceRate(input.getServiceAEnd().getOduServiceRate())
             .setClli(input.getServiceAEnd().getClli())
-            .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate()) // set otu and odu
+            // set otu and odu
+            .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate())
             .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
             .setClli(input.getServiceAEnd().getClli())
             .setNodeId(new NodeIdType(input.getServiceAEnd().getNodeId().getValue()).getValue())
@@ -111,7 +106,8 @@ public final class ModelMappingUtils {
             .setOtuServiceRate(input.getServiceZEnd().getOtuServiceRate())
             .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
             .setClli(input.getServiceZEnd().getClli())
-            .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate()) // set otu and odu
+            // set otu and odu
+            .setOtuServiceRate(input.getServiceAEnd().getOtuServiceRate())
             .setOduServiceRate(input.getServiceZEnd().getOduServiceRate())
             .setClli(input.getServiceZEnd().getClli())
             .setNodeId(new NodeIdType(input.getServiceZEnd().getNodeId().getValue()).getValue())
