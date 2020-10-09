@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5df60342_124c26c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T12:25:49Z",
+      "side": 1,
+      "message": "OK but not needed, the fact it only concerns there renderer is more relevant.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "820eca66ed285bd85a68c738c82b2f2cd5ba1f5b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0103d95_58f29565",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T12:25:49Z",
+      "side": 1,
+      "message": "misspelling. the letter \"a\" is missing after p\nmcCapbilities -\u003e mcCapabilities",
+      "range": {
+        "startLine": 310,
+        "startChar": 23,
+        "endLine": 310,
+        "endChar": 36
+      },
+      "revId": "820eca66ed285bd85a68c738c82b2f2cd5ba1f5b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee38067f_4d3000e8",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T12:25:49Z",
+      "side": 1,
+      "message": "returning directly nmcInterfaceBldr.getName() here would avoid the else-block here.",
+      "range": {
+        "startLine": 315,
+        "startChar": 7,
+        "endLine": 315,
+        "endChar": 15
+      },
+      "revId": "820eca66ed285bd85a68c738c82b2f2cd5ba1f5b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dca9704_b58769fc",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/openroadminterface/OpenRoadmInterface221.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-09T12:25:49Z",
+      "side": 1,
+      "message": "these 2 comments both apply to deadband and can be put on the same line",
+      "range": {
+        "startLine": 317,
+        "startChar": 0,
+        "endLine": 318,
+        "endChar": 21
+      },
+      "revId": "820eca66ed285bd85a68c738c82b2f2cd5ba1f5b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
