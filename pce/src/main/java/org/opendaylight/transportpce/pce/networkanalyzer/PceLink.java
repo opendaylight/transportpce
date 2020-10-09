@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation.FiberType;
@@ -30,6 +29,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("serial")
 @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
     value = "SE_NO_SERIALVERSIONID",
     justification = "https://github.com/rzwitserloot/lombok/wiki/WHY-NOT:-serialVersionUID")
@@ -43,7 +43,6 @@ public class PceLink implements Serializable {
      */
     double weight = 0;
     private boolean isValid = true;
-    private boolean isOtnValid = true;
 
     // this member is for XPONDER INPUT/OUTPUT links.
     // it keeps name of client corresponding to NETWORK TP
@@ -65,7 +64,8 @@ public class PceLink implements Serializable {
     private final List<Long> srlgList;
     private final double osnr;
     private final transient Span omsAttributesSpan;
-    private static final double CELERITY = 2.99792458 * 1e5; //meter per ms
+    //meter per ms
+    private static final double CELERITY = 2.99792458 * 1e5;
     private static final double NOISE_MASK_A = 0.571429;
     private static final double NOISE_MASK_B = 39.285714;
     private static final double UPPER_BOUND_OSNR = 33;
@@ -110,7 +110,8 @@ public class PceLink implements Serializable {
             this.omsAttributesSpan = null;
             this.srlgList = null;
             this.latency = 0L;
-            this.osnr = 100L; //infinite OSNR in DB
+            //infinite OSNR in DB
+            this.osnr = 100L;
             this.availableBandwidth = 0L;
             this.usedBandwidth = 0L;
         }
@@ -136,22 +137,23 @@ public class PceLink implements Serializable {
             tmplatency = link1.getLinkLatency().toJava();
             return tmplatency;
         }
-
-        try {
-            double tmp = 0;
-            @NonNull
-            Map<LinkConcatenationKey, LinkConcatenation> linkConcatenationMap =
-                this.omsAttributesSpan.nonnullLinkConcatenation();
-            for (Map.Entry<LinkConcatenationKey, LinkConcatenation> entry : linkConcatenationMap.entrySet()) {
-                //Length is expressed in meter and latency is expressed in ms according to OpenROADM MSA
-                tmp += entry.getValue().getSRLGLength().toJava() / CELERITY;
-                LOG.info("In PceLink: The latency of link {} == {}",link.getLinkId(),tmp);
-            }
-            tmplatency = (long) Math.ceil(tmp);
-        } catch (NullPointerException e) {
-            LOG.debug("In PceLink: cannot compute the latency for the link {}",link.getLinkId().getValue());
-            tmplatency = 1L;
+        double tmp = 0;
+        if (this.omsAttributesSpan == null) {
+            return 1L;
         }
+        Map<LinkConcatenationKey, LinkConcatenation> linkConcatenationMap = this.omsAttributesSpan
+                .nonnullLinkConcatenation();
+        for (Map.Entry<LinkConcatenationKey, LinkConcatenation> entry : linkConcatenationMap.entrySet()) {
+            // Length is expressed in meter and latency is expressed in ms according to
+            // OpenROADM MSA
+            if (entry == null || entry.getValue() == null || entry.getValue().getSRLGLength() == null) {
+                LOG.debug("In PceLink: cannot compute the latency for the link {}", link.getLinkId().getValue());
+                return 1L;
+            }
+            tmp += entry.getValue().getSRLGLength().toJava() / CELERITY;
+            LOG.info("In PceLink: The latency of link {} == {}", link.getLinkId(), tmp);
+        }
+        tmplatency = (long) Math.ceil(tmp);
         return tmplatency;
     }
 
@@ -174,7 +176,8 @@ public class PceLink implements Serializable {
         double pout = retrievePower(linkConcatenationiterator.next().getFiberType());
         // span loss (dB)
         double spanLoss = this.omsAttributesSpan.getSpanlossCurrent().getValue().doubleValue();
-        double pin = pout - spanLoss; // power on the input of the current ROADM (dBm)
+        // power on the input of the current ROADM (dBm)
+        double pin = pout - spanLoss;
         double spanOsnrDb = NOISE_MASK_A * pin + NOISE_MASK_B;
         if (spanOsnrDb > UPPER_BOUND_OSNR) {
             spanOsnrDb = UPPER_BOUND_OSNR;
@@ -286,19 +289,7 @@ public class PceLink implements Serializable {
             isValid = false;
             LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
         }
-        if ((this.sourceId == null) || (this.destId == null) || (this.sourceTP == null) || (this.destTP == null)) {
-            isValid = false;
-            LOG.error("PceLink: No Link source or destination is available. Link is ignored {}", linkId);
-        }
-        if ((this.sourceNetworkSupNodeId.equals("")) || (this.destNetworkSupNodeId.equals(""))) {
-            isValid = false;
-            LOG.error("PceLink: No Link source SuppNodeID or destination SuppNodeID is available. Link is ignored {}",
-                linkId);
-        }
-        if ((this.sourceCLLI.equals("")) || (this.destCLLI.equals(""))) {
-            isValid = false;
-            LOG.error("PceLink: No Link source CLLI or destination CLLI is available. Link is ignored {}", linkId);
-        }
+        isValid = checkParams();
         if ((this.omsAttributesSpan == null) && (this.linkType == OpenroadmLinkType.ROADMTOROADM)) {
             isValid = false;
             LOG.error("PceLink: Error reading Span for OMS link. Link is ignored {}", linkId);
@@ -365,6 +356,10 @@ public class PceLink implements Serializable {
                 linkId, serviceType);
         }
 
+        return checkParams();
+    }
+
+    private boolean checkParams() {
         if ((this.linkId == null) || (this.linkType == null) || (this.oppositeLink == null)) {
             LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
             return false;

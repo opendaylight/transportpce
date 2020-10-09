@@ -8,7 +8,6 @@
 
 package org.opendaylight.transportpce.pce.impl;
 
-import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.ArgumentMatchers.eq;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -61,11 +60,9 @@ public class PceProviderTest extends AbstractTest {
 
             }
         };
-
-
         Mockito
                 .when(rpcService
-                        .registerRpcImplementation(eq(TransportpcePceService.class), anyObject()))
+                        .registerRpcImplementation(eq(TransportpcePceService.class), Mockito.any()))
                 .thenReturn(rpcRegistration);
         pceProvider.init();
         pceProvider.close();
