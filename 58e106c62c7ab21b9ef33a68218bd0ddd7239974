@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd6e854a_ed2fcb52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-12T13:02:17Z",
+      "side": 1,
+      "message": "Fix tpce internal YANG models syntax\n\n- garbage/superflous \"}\" are no more tolerated by yangtools",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "58e106c62c7ab21b9ef33a68218bd0ddd7239974",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
