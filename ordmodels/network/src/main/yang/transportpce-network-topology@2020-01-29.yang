@@ -74,6 +74,5 @@ module transportpce-topology {
           description
               "type of otn link, to help link management inside transportpce";
           }
-        }
     }
 }
