@@ -12,13 +12,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>7.0.5</version>
+    <version>7.0.6</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.transportpce</groupId>
   <artifactId>odl-transportpce-tapi</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>2.1.0-SNAPSHOT</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: transportpce :: tapi</name>
