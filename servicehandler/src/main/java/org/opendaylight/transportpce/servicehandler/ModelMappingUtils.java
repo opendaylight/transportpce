@@ -51,6 +51,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceDeleteOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.HardConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.routing.constraints.sp.SoftConstraintsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.endpoint.sp.RxDirection;
@@ -61,10 +62,14 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ModelMappingUtils {
+    private static final Logger LOG = LoggerFactory.getLogger(ModelMappingUtils.class);
 
     private ModelMappingUtils() {
     }
@@ -336,6 +341,13 @@ public final class ModelMappingUtils {
                 .setHardConstraints(serviceReconfigureInput.getHardConstraints())
                 .setSoftConstraints(serviceReconfigureInput.getSoftConstraints())
                 .setLifecycleState(LifecycleState.Planned).setServiceAEnd(aend).setServiceZEnd(zend);
+        } else {
+            //FIXME: Because of Silicon, we cannot have empty key.
+            //it's this case possible ? There is a Junit test covering null
+            //temporary workaround as now there is a null key check done by yangtools.
+            //Functional review is needed
+            LOG.warn("ServiceCreateInput and ServiceReconfigureInput are null");
+            service.withKey(new ServicesKey("unknown"));
         }
         return service.build();
     }
@@ -419,6 +431,13 @@ public final class ModelMappingUtils {
                     new PathDescriptionBuilder(output.getResponseParameters().getPathDescription());
                 servicePathBuilder.setPathDescription(pathDescBuilder.build());
             }
+        } else {
+            //FIXME: Because of Silicon, we cannot have empty key.
+            //it's this case possible ? There is a Junit test covering null
+            //temporary workaround as now there is a null key check done by yangtools.
+            //Functional review is needed
+            LOG.warn("ServiceInput is null");
+            servicePathBuilder.withKey(new ServicePathsKey("unknown"));
         }
 
         return servicePathBuilder.build();
