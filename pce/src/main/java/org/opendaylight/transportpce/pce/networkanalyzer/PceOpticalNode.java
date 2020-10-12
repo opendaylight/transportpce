@@ -71,8 +71,8 @@ public class PceOpticalNode implements PceNode {
                 this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                     .ietf.network.topology.rev180226.Node1.class);
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-            .node.TerminationPoint> allTps = new ArrayList(nodeTp.getTerminationPoint().values());
-        if (allTps == null) {
+            .node.TerminationPoint> allTps = new ArrayList<>(nodeTp.nonnullTerminationPoint().values());
+        if (allTps.isEmpty()) {
             LOG.error("initSrgTpList: ROADM TerminationPoint list is empty for node {}", this);
             this.valid = false;
             return;
@@ -100,7 +100,7 @@ public class PceOpticalNode implements PceNode {
                     LOG.info("initSrgTpList: SRG-PP tp = {} found", tp.getTpId().getValue());
                     try {
                         List<UsedWavelength> usedWavelengths =
-                            new ArrayList(nttp1.getPpAttributes().getUsedWavelength().values());
+                            new ArrayList<>(nttp1.getPpAttributes().getUsedWavelength().values());
                         if (usedWavelengths.isEmpty()) {
                             used = false;
                         }
@@ -138,8 +138,8 @@ public class PceOpticalNode implements PceNode {
             case SRG :
                 List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
                     .AvailableWavelengths> srgAvailableWL =
-                        new ArrayList(node1.getSrgAttributes().getAvailableWavelengths().values());
-                if (srgAvailableWL == null) {
+                        new ArrayList<>(node1.getSrgAttributes().nonnullAvailableWavelengths().values());
+                if (srgAvailableWL.isEmpty()) {
                     this.valid = false;
                     LOG.error("initWLlist: SRG AvailableWavelengths is empty for node  {}", this);
                     return;
@@ -153,8 +153,8 @@ public class PceOpticalNode implements PceNode {
             case DEGREE :
                 List<org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes
                         .AvailableWavelengths> degAvailableWL =
-                    new ArrayList(node1.getDegreeAttributes().getAvailableWavelengths().values());
-                if (degAvailableWL == null) {
+                    new ArrayList<>(node1.getDegreeAttributes().nonnullAvailableWavelengths().values());
+                if (degAvailableWL.isEmpty()) {
                     this.valid = false;
                     LOG.error("initWLlist: DEG AvailableWavelengths is empty for node  {}", this);
                     return;
@@ -191,8 +191,8 @@ public class PceOpticalNode implements PceNode {
                 this.node.augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                     .ietf.network.topology.rev180226.Node1.class);
         List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
-            .node.TerminationPoint> allTps = new ArrayList(nodeTp.getTerminationPoint().values());
-        if (allTps == null) {
+            .node.TerminationPoint> allTps = new ArrayList<>(nodeTp.nonnullTerminationPoint().values());
+        if (allTps.isEmpty()) {
             this.valid = false;
             LOG.error("initXndrTps: XPONDER TerminationPoint list is empty for node {}", this);
             return;
