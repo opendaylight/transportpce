@@ -49,13 +49,6 @@ public class ClliNetworkTest {
         assertEquals("Node id should be equals to NodeClliId ", new NodeId("NodeClliId"), createdNode.getNodeId());
     }
 
-    @Test
-    public void createNodeWithNullClliTest() {
-        NodeInfoBuilder nodeBldr = computeNodeInfoBuilderWithoutClli();
-        Node createdNode = ClliNetwork.createNode("XPDRA01", nodeBldr.build());
-        assertNull("Node id should be null", createdNode.getNodeId());
-    }
-
     private NodeInfoBuilder computeNodeInfoBuilder() {
         NodeInfoBuilder nodeBldr = new NodeInfoBuilder()
             .setNodeClli("NodeClliId")

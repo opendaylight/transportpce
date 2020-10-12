@@ -856,7 +856,7 @@ public class OpenRoadmOtnTopologyTest {
                 assertThat(
                     nbl.getTpList(),
                     containsInAnyOrder(new TpId("XPDR1-NETWORK1"),
-                    new TpId("XPDR1-CLIENT" + nb)));
+                        new TpId("XPDR1-CLIENT" + nb)));
             }
         } else if (xpdrNb.equals(Uint16.valueOf(2))) {
             assertEquals(
