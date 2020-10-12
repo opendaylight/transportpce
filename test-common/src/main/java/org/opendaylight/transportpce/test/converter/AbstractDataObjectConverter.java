@@ -7,6 +7,8 @@
  */
 package org.opendaylight.transportpce.test.converter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -23,6 +25,7 @@ import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNodes;
 import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaPath;
+import org.opendaylight.yangtools.yang.model.api.stmt.SchemaNodeIdentifier.Absolute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,7 +109,10 @@ public abstract class AbstractDataObjectConverter implements DataObjectConverter
                     normalizedNode.getClass().getSimpleName());
             return Optional.empty();
         }
-        T rpcDataObject = (T) codecRegistry.fromNormalizedNodeRpcData(rpcSchemaPath, (ContainerNode) normalizedNode);
+        List<QName> qnameList = new ArrayList<>();
+        rpcSchemaPath.getPathFromRoot().forEach(qnameList::add);
+        T rpcDataObject = (T) codecRegistry
+                .fromNormalizedNodeRpcData(Absolute.of(qnameList), (ContainerNode) normalizedNode);
         return Optional.ofNullable(rpcDataObject);
     }
 
