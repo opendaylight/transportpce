@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> {
     /* Logging. */
     private static final Logger LOG = LoggerFactory.getLogger(InAlgoPathValidator.class);
+    private static final String IN_CHECK_PATH_DROPPED_MSG = "in checkPath dropped {} {} ";
 
     public InAlgoPathValidator() {
         super();
@@ -34,35 +35,38 @@ public class InAlgoPathValidator implements PathValidator<String, PceGraphEdge> 
         return (checkTurn(partialPath.getEdgeList().get(size - 1).link().getlinkType(), edge.link().getlinkType()));
     }
 
+    @SuppressWarnings("java:S1541")
+    //sonar issue The Cyclomatic Complexity of this method "checkTurn" is 13 which is greater than 10 authorized.
+    //here we have clear conditional, so for the moment no need to manage this issue
     private boolean checkTurn(OpenroadmLinkType prevType, OpenroadmLinkType nextType) {
 
         if (nextType == OpenroadmLinkType.ADDLINK && prevType != OpenroadmLinkType.XPONDEROUTPUT) {
-            LOG.debug("in checkPath dropped {} {} ", prevType, nextType);
+            LOG.debug(IN_CHECK_PATH_DROPPED_MSG, prevType, nextType);
             return false;
         }
 
         if (nextType == OpenroadmLinkType.EXPRESSLINK && prevType != OpenroadmLinkType.ROADMTOROADM) {
-            LOG.debug("in checkPath dropped {} {} ", prevType, nextType);
+            LOG.debug(IN_CHECK_PATH_DROPPED_MSG, prevType, nextType);
             return false;
         }
 
         if (nextType == OpenroadmLinkType.DROPLINK && prevType != OpenroadmLinkType.ROADMTOROADM) {
-            LOG.debug("in checkPath dropped {} {} ", prevType, nextType);
+            LOG.debug(IN_CHECK_PATH_DROPPED_MSG, prevType, nextType);
             return false;
         }
 
         if (nextType == OpenroadmLinkType.XPONDERINPUT && prevType != OpenroadmLinkType.DROPLINK) {
-            LOG.debug("in checkPath dropped {} {} ", prevType, nextType);
+            LOG.debug(IN_CHECK_PATH_DROPPED_MSG, prevType, nextType);
             return false;
         }
 
         if (prevType == OpenroadmLinkType.EXPRESSLINK && nextType != OpenroadmLinkType.ROADMTOROADM) {
-            LOG.debug("in checkPath dropped {} {} ", prevType, nextType);
+            LOG.debug(IN_CHECK_PATH_DROPPED_MSG, prevType, nextType);
             return false;
         }
 
         if (prevType == OpenroadmLinkType.ADDLINK && nextType != OpenroadmLinkType.ROADMTOROADM) {
-            LOG.debug("in checkPath dropped {} {} ", prevType, nextType);
+            LOG.debug(IN_CHECK_PATH_DROPPED_MSG, prevType, nextType);
             return false;
         }
 

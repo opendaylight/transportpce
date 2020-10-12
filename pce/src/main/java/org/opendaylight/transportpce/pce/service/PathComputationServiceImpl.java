@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -177,7 +178,8 @@ public class PathComputationServiceImpl implements PathComputationService {
                     GnpyResponse respZtoA = generateGnpyResponse(gnpyZtoA.getResponse(),"Z-to-A");
                     listResponse.add(respZtoA);
                 }
-                output.setGnpyResponse(listResponse);
+                output.setGnpyResponse(listResponse.stream()
+                        .collect(Collectors.toMap(GnpyResponse::key, gnpyResponse -> gnpyResponse)));
 
                 if (Boolean.FALSE.equals(sendingPCE.getSuccess()) || (path == null)) {
                     configurationResponseCommon.setAckFinalIndicator("Yes")
@@ -259,7 +261,10 @@ public class PathComputationServiceImpl implements PathComputationService {
                             .setAccumulativeValue(pathMetricGnpy.getAccumulativeValue()).build();
                     gnpyPathMetricList.add(pathMetric);
                 }
-                PathProperties pathProperties = new PathPropertiesBuilder().setPathMetric(gnpyPathMetricList).build();
+                PathProperties pathProperties = new PathPropertiesBuilder()
+                        .setPathMetric(gnpyPathMetricList.stream()
+                                .collect(Collectors.toMap(PathMetric::key, pathMetric -> pathMetric)))
+                        .build();
                 PathCase gnpyPathCase = new PathCaseBuilder().setPathProperties(pathProperties).build();
                 respType = gnpyPathCase;
                 feasible = true;
