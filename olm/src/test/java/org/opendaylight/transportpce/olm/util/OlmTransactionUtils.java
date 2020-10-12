@@ -22,6 +22,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev181130.FiberPmd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev181130.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Location;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
@@ -41,11 +43,15 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmLis
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.group.CurrentPm;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.group.CurrentPmBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.group.CurrentPmKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntry;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.list.CurrentPmEntryBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.val.group.Measurement;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.val.group.MeasurementBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.val.group.MeasurementKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmDataType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmGranularity;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.Validity;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -55,6 +61,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNode;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.node.SupportingNodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1Builder;
@@ -88,12 +95,14 @@ public final class OlmTransactionUtils {
 
         Map<LinkConcatenationKey,LinkConcatenation> linkConcentationValues = new HashMap<>();
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
+                .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
                 .setFiberType(LinkConcatenation.FiberType.Truewave)
                 .setPmd(new FiberPmd(BigDecimal.ONE))
                 .setSRLGId(Uint32.valueOf(1))
                 .setSRLGLength(Uint32.valueOf(1))
                 .build();
         LinkConcatenation linkConcatenation2 = new LinkConcatenationBuilder()
+                .withKey(new LinkConcatenationKey(Uint32.valueOf(2)))
                 .setFiberType(LinkConcatenation.FiberType.Truewave)
                 .setPmd(new FiberPmd(BigDecimal.ONE))
                 .setSRLGId(Uint32.valueOf(1))
@@ -104,12 +113,16 @@ public final class OlmTransactionUtils {
         // create 2 openroadm-topology degree nodes, end points of the link to be
         // measured;
         SupportingNode supportingNode4RoadmA = new SupportingNodeBuilder()
+                .withKey(new SupportingNodeKey(new NetworkId("openroadm-network"),
+                        new NodeId("ROADM-A1")))
                 .setNetworkRef(new NetworkId("openroadm-network"))
                 .setNodeRef(new NodeId("ROADM-A1")).build();
         Node ietfNodeA = new NodeBuilder().setNodeId(new NodeId("ROADM-A1-DEG2"))
                 .setSupportingNode(Map.of(supportingNode4RoadmA.key(),supportingNode4RoadmA))
                 .build();
         SupportingNode supportingNode4RoadmC = new SupportingNodeBuilder()
+                .withKey(new SupportingNodeKey(new NetworkId("openroadm-network"),
+                        new NodeId("ROADM-C1")))
                 .setNetworkRef(new NetworkId("openroadm-network"))
                 .setNodeRef(new NodeId("ROADM-C1")).build();
         Node ietfNodeC = new NodeBuilder().setNodeId(new NodeId("ROADM-C1-DEG1"))
@@ -226,11 +239,14 @@ public final class OlmTransactionUtils {
 
     public static Optional<CurrentPmList> getCurrentPmListA() {
         Measurement measurementA = new MeasurementBuilder()
+                .withKey(new MeasurementKey(PmGranularity._15min))
                 .setGranularity(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmGranularity._15min)
                 .setPmParameterValue(new PmDataType(new BigDecimal("-3.5")))
                 .setValidity(Validity.Complete)
                 .build();
         CurrentPm cpA = new CurrentPmBuilder()
+                .withKey(new CurrentPmKey(Direction.Bidirectional,
+                        "", Location.NotApplicable, PmNamesEnum.OpticalPowerOutput))
             .setType(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum.OpticalPowerOutput)
             .setMeasurement(Map.of(measurementA.key(),measurementA))
             .build();
@@ -255,6 +271,8 @@ public final class OlmTransactionUtils {
                 .setValidity(Validity.Complete)
                 .build();
         CurrentPm cpC = new CurrentPmBuilder()
+                .withKey(new CurrentPmKey(Direction.Bidirectional,
+                        "", Location.NotApplicable, PmNamesEnum.OpticalPowerInput))
             .setType(org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmNamesEnum.OpticalPowerInput)
             .setMeasurement(Map.of(measurementC.key(),measurementC))
             .build();
