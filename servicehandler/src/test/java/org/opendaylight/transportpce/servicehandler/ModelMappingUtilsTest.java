@@ -55,6 +55,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.AToZDirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ZToADirectionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.ResponseParameters;
@@ -62,6 +63,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.response.parameters.sp.response.parameters.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.DateAndTime;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -134,9 +136,10 @@ public class ModelMappingUtilsTest extends AbstractTest {
     }
 
     @Test
+    //TODO : is this unit test relevant ?
     public void mappingServicesNullServiceCreateInput() {
         Services services = ModelMappingUtils.mappingServices(null, null);
-        Assert.assertEquals(new ServicesBuilder().build(), services);
+        Assert.assertEquals(new ServicesBuilder().withKey(new ServicesKey("unknown")).build(), services);
     }
 
     @Test
@@ -153,9 +156,10 @@ public class ModelMappingUtilsTest extends AbstractTest {
     }
 
     @Test
+    //TODO : is this unit test relevant ?
     public void mappingServicesPathNullServiceCreateInput() {
         ServicePaths services = ModelMappingUtils.mappingServicePaths(null, buildPathComputationOutput());
-        Assert.assertEquals(new ServicePathsBuilder().build(), services);
+        Assert.assertEquals(new ServicePathsBuilder().withKey(new ServicePathsKey("unknown")).build(), services);
     }
 
     @Test
@@ -180,7 +184,8 @@ public class ModelMappingUtilsTest extends AbstractTest {
     public void createServiceDeleteInputWithServiceRerouteInput() {
         ServiceRerouteInput serviceRerouteinput = new ServiceRerouteInputBuilder().setServiceName("reroute").build();
         Services services = new ServicesBuilder()
-            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build()).build();
+                .withKey(new ServicesKey("reroute"))
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build()).build();
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteInput
             serviceDeleteInput =
                     ModelMappingUtils.createServiceDeleteInput(serviceRerouteinput, services);
@@ -202,7 +207,8 @@ public class ModelMappingUtilsTest extends AbstractTest {
     @Test
     public void createServiceDeleteInputWithServiceRestorationInput() {
         Services services = new ServicesBuilder()
-            .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build()).build();
+                .withKey(new ServicesKey("rest"))
+                .setSdncRequestHeader(new SdncRequestHeaderBuilder().setRequestId("123").build()).build();
         ServiceRestorationInput serviceRestorationInput =
             new ServiceRestorationInputBuilder().setServiceName("rest").build();
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteInput
