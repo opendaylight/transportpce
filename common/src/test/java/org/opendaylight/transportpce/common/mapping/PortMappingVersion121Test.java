@@ -194,6 +194,8 @@ public class PortMappingVersion121Test {
         // mock one degree with bidirectional port
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks circuitPacks =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksBuilder()
+                .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
+                        .degree.CircuitPacksKey(Uint32.valueOf(1)))
                         .setCircuitPackName("c1").build();
         Map<
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksKey,
@@ -207,6 +209,8 @@ public class PortMappingVersion121Test {
         // mock one srg with bidirectional port
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks srgCircuitPacks =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksBuilder()
+                .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
+                        .srg.CircuitPacksKey(Uint32.valueOf(2)))
                         .setCircuitPackName("c2").build();
         Map<
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksKey,
@@ -220,6 +224,8 @@ public class PortMappingVersion121Test {
         // mock one degree with 2 unidirectional ports
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks circuitPacks3 =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksBuilder()
+                .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
+                        .degree.CircuitPacksKey(Uint32.valueOf(3)))
                         .setCircuitPackName("c3").build();
         List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks> circuitPacksList3 =
                 new ArrayList<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks>();
@@ -237,6 +243,8 @@ public class PortMappingVersion121Test {
         // mock one srg with 2 unidirectional ports
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks srgCircuitPacks4 =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksBuilder()
+                .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
+                        .srg.CircuitPacksKey(Uint32.valueOf(4)))
                         .setCircuitPackName("c4").build();
         Map<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksKey,
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks>
@@ -249,6 +257,8 @@ public class PortMappingVersion121Test {
         // mock one degree with unidirectional ports, reverse direction
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks circuitPacks5 =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacksBuilder()
+                .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
+                        .degree.CircuitPacksKey(Uint32.valueOf(5)))
                         .setCircuitPackName("c5").build();
         List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks> circuitPacksList5 =
                 new ArrayList<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.degree.CircuitPacks>();
@@ -263,6 +273,8 @@ public class PortMappingVersion121Test {
         // mock one srg with 2 unidirectional ports, reverse direction
         org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacks srgCircuitPacks6 =
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksBuilder()
+                .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206
+                        .srg.CircuitPacksKey(Uint32.valueOf(6)))
                         .setCircuitPackName("c6").build();
         Map<
                 org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.srg.CircuitPacksKey,
@@ -318,7 +330,8 @@ public class PortMappingVersion121Test {
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, protocoliid,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT)).thenReturn(Optional.of(protocols));
 
-        Interface interfaceObject = new InterfaceBuilder().setSupportingCircuitPackName("sc1").build();
+        Interface interfaceObject = new InterfaceBuilder().withKey(new InterfaceKey("itf1"))
+                .setSupportingCircuitPackName("sc1").build();
         InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
         when(deviceTransactionManager.getDataFromDevice("node", LogicalDatastoreType.OPERATIONAL, interfaceIID,
@@ -425,8 +438,10 @@ public class PortMappingVersion121Test {
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT))
                         .thenReturn(Optional.of(ordmSrgObject6));
 
-        Interface ifc1 = new InterfaceBuilder().setType(OpticalTransport.class).build();
-        Interface ifc2 = new InterfaceBuilder().setType(OpenROADMOpticalMultiplex.class).build();
+        Interface ifc1 = new InterfaceBuilder().withKey(new InterfaceKey("ifc1"))
+                .setType(OpticalTransport.class).build();
+        Interface ifc2 = new InterfaceBuilder().withKey(new InterfaceKey("ifc2"))
+                .setType(OpenROADMOpticalMultiplex.class).build();
         try {
             when(openRoadmInterfaces.getInterface("node", "i1")).thenReturn(Optional.of(ifc1));
             when(openRoadmInterfaces.getInterface("node", "i2")).thenReturn(Optional.of(ifc2));
@@ -494,13 +509,15 @@ public class PortMappingVersion121Test {
         final Info info = getInfo();
 
         // mock 1 bidirectional port for network
-        Ports ports = new PortsBuilder().setPortName("p1").setPortQual(Port.PortQual.XpdrNetwork)
+        Ports ports = new PortsBuilder().withKey(new PortsKey("p1")).setPortName("p1")
+                .setPortQual(Port.PortQual.XpdrNetwork)
                 .setPortDirection(Direction.Bidirectional).build();
         List<Ports> portsList = new ArrayList<>();
         portsList.add(ports);
 
         // mock 1 bidirectional port for client
-        Ports ports11 = new PortsBuilder().setPortName("p11").setPortQual(Port.PortQual.XpdrClient)
+        Ports ports11 = new PortsBuilder().withKey(new PortsKey("p11")).setPortName("p11")
+                .setPortQual(Port.PortQual.XpdrClient)
                 .setPortDirection(Direction.Bidirectional).build();
         List<Ports> portsList11 = new ArrayList<>();
         portsList11.add(ports11);
@@ -520,7 +537,8 @@ public class PortMappingVersion121Test {
         portsList4.add(ports5);
 
         // mock connection map
-        Destination destination = new DestinationBuilder().setCircuitPackName("c2").setPortName("p11").build();
+        Destination destination = new DestinationBuilder()
+                .setCircuitPackName("c2").setPortName("p11").build();
         List<Destination> destinationList = new ArrayList<>();
         destinationList.add(destination);
         ConnectionMap connectionMap = getConnectionMap(destinationList);

@@ -23,6 +23,7 @@ import com.google.gson.stream.JsonReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +77,7 @@ public class OpenRoadmOtnTopologyTest {
     private Nodes portMappingBad;
 
     public OpenRoadmOtnTopologyTest() {
-        try (Reader reader = new FileReader("src/test/resources/portMapping.json");
+        try (Reader reader = new FileReader("src/test/resources/portMapping.json", StandardCharsets.UTF_8);
                 JsonReader portMappingReader = new JsonReader(reader)) {
             Network portMapping = (Network) JsonUtil.getInstance().getDataObjectFromJson(portMappingReader,
                     QName.create("http://org/opendaylight/transportpce/portmapping", "2020-08-27", "network"));
