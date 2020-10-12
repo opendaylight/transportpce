@@ -39,7 +39,7 @@ public final class ClliNetwork {
          * with nodeId equal to the clli attribute in the device
          * model's info subtree
          */
-        NodeBuilder nodeBldr = new NodeBuilder();
+        NodeBuilder nodeBldr = new NodeBuilder().withKey(new NodeKey(new NodeId("node1")));
         /*
          * create clli node augmentation
          * defined in openroadm-clli-network.yang
