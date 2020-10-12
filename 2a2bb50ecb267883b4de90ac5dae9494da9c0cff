@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "12a90f73_b093e17e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-12T07:40:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d327c03_657af61f",
+      "range": {
+        "startLine": 133,
+        "startChar": 46,
+        "endLine": 134,
+        "endChar": 22
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de0e150b_a7cda6b9",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af0b983b_9cea54ee",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-12T07:40:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de0e150b_a7cda6b9",
+      "range": {
+        "startLine": 135,
+        "startChar": 54,
+        "endLine": 136,
+        "endChar": 22
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a14b5772_07bd69fd",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-12T07:40:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5f54c56_08039c24",
+      "range": {
+        "startLine": 163,
+        "startChar": 46,
+        "endLine": 164,
+        "endChar": 22
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "389652b0_d53fb9ad",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99d5f725_de34fed1",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-12T07:40:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "389652b0_d53fb9ad",
+      "range": {
+        "startLine": 165,
+        "startChar": 54,
+        "endLine": 166,
+        "endChar": 22
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
