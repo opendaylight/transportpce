@@ -159,9 +159,7 @@ public final class PowerMgmtVersion121 {
                 org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
                         .Interface1.class).getOch());
         ochBuilder.setTransmitPower(new PowerDBm(txPower));
-        ochInterfaceBuilder.addAugmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014
-                        .Interface1.class, new Interface1Builder().setOch(ochBuilder.build()).build());
+        ochInterfaceBuilder.addAugmentation(new Interface1Builder().setOch(ochBuilder.build()).build());
         Future<Optional<DeviceTransaction>> deviceTxFuture = deviceTransactionManager.getDeviceTransaction(nodeId);
         DeviceTransaction deviceTx;
         try {
