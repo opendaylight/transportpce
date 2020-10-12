@@ -32,8 +32,10 @@ import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.no.path.info.NoPathBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.Response;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.ResponseBuilder;
+import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.ResponseKey;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.NoPathCaseBuilder;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.result.response.response.type.PathCaseBuilder;
+import org.opendaylight.yangtools.yang.common.Uint32;
 
 public class PathComputationServiceImplTest extends AbstractTest {
 
@@ -65,7 +67,8 @@ public class PathComputationServiceImplTest extends AbstractTest {
 
     @Test
     public void testPathComputationRequestNoPath() {
-        Response response = new ResponseBuilder().setResponseType(new NoPathCaseBuilder()
+        Response response = new ResponseBuilder()
+                .withKey(new ResponseKey(Uint32.valueOf(1))).setResponseType(new NoPathCaseBuilder()
                 .setNoPath(new NoPathBuilder().setNoPath("no path").build()).build()).build();
 
         pathComputationServiceImpl.generateGnpyResponse(response,"path");
@@ -79,7 +82,8 @@ public class PathComputationServiceImplTest extends AbstractTest {
         PathMetric pathMetric = new PathMetricBuilder()
                 .setAccumulativeValue(new BigDecimal(21))
                 .setMetricType(PathBandwidth.class).build();
-        Response response = new ResponseBuilder().setResponseType(new PathCaseBuilder()
+        Response response = new ResponseBuilder()
+                .withKey(new ResponseKey(Uint32.valueOf(1))).setResponseType(new PathCaseBuilder()
                 .setPathProperties(new PathPropertiesBuilder().setPathMetric(Map.of(pathMetric.key(),pathMetric))
                 .build()).build()).build();
 
