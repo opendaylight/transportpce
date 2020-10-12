@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d327c03_657af61f",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-12T07:23:30Z",
+      "side": 1,
+      "message": "revision should stay sticked",
+      "range": {
+        "startLine": 133,
+        "startChar": 46,
+        "endLine": 134,
+        "endChar": 22
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de0e150b_a7cda6b9",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-12T07:23:30Z",
+      "side": 1,
+      "message": "revision should stay sticked",
+      "range": {
+        "startLine": 135,
+        "startChar": 54,
+        "endLine": 136,
+        "endChar": 22
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5f54c56_08039c24",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-12T07:23:30Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 163,
+        "startChar": 46,
+        "endLine": 164,
+        "endChar": 22
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "389652b0_d53fb9ad",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/MappingConstraints.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-12T07:23:30Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 165,
+        "startChar": 54,
+        "endLine": 166,
+        "endChar": 22
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65404655_22822f2a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-12T07:23:30Z",
+      "side": 1,
+      "message": "optimization proposal\n\ncascaded if-else-blocks can be avoided by using \"return;\" inside an if-block with the reverse condition.",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 9
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eef51c5_3036969c",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-12T07:23:30Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 9
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d56bac1_13803820",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-12T07:23:30Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 78,
+        "startChar": 1,
+        "endLine": 89,
+        "endChar": 9
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f36a67b2_bb84d442",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/validation/checks/ServicehandlerTxRxCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-12T07:23:30Z",
+      "side": 1,
+      "message": "this variable can be easily avoided too\nif (port \u003d\u003d null){\n    return false;\n}\n\nString portDeviceName \u003d port.getPortDeviceName();\nString portType \u003d port.getPortType();\n...",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 31
+      },
+      "revId": "2a2bb50ecb267883b4de90ac5dae9494da9c0cff",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
