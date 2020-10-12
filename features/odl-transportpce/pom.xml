@@ -12,7 +12,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>7.0.7</version>
+    <version>8.0.0</version>
     <relativePath/>
   </parent>
 
@@ -24,10 +24,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <name>OpenDaylight :: transportpce</name>
 
   <properties>
-    <netconf.version>1.9.1-SNAPSHOT</netconf.version>
+    <netconf.version>1.10.0-SNAPSHOT</netconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
-
 
     <dependencyManagement>
         <dependencies>
