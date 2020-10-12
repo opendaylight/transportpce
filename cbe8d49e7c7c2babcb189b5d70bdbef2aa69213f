@@ -81,6 +81,24 @@
       "revId": "cbe8d49e7c7c2babcb189b5d70bdbef2aa69213f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ebb0236_eb36d23f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-12T07:50:53Z",
+      "side": 1,
+      "message": "done by Olivier TRNSPRTPCE-334\ncommit message updated",
+      "parentUuid": "0f40d2dd_5804e7a5",
+      "revId": "cbe8d49e7c7c2babcb189b5d70bdbef2aa69213f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
