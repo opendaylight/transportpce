@@ -21,6 +21,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.OMSAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.oms.attributes.SpanBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
@@ -38,6 +39,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.LinkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1Builder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.LinkKey;
@@ -45,6 +47,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.link.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPoint;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointBuilder;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.node.TerminationPointKey;
 import org.opendaylight.yangtools.yang.common.Uint32;
 
 
@@ -129,7 +132,7 @@ public class PceLinkTest extends AbstractTest {
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
         Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
         Assert.assertNotNull(pceLink.calcSpanOSNR());
-        Assert.assertEquals(0, pceLink.getsrlgList().size());
+        Assert.assertEquals(1, pceLink.getsrlgList().size());
         Assert.assertTrue(7.857119000000001 == pceLink.calcSpanOSNR());
         Assert.assertNull(pceLink.getOppositeLink());
         Assert.assertNull(pceLink.getOppositeLink());
@@ -196,6 +199,7 @@ public class PceLinkTest extends AbstractTest {
 
         //For setting up attributes for openRoadm augment
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
+                .withKey(new LinkConcatenationKey(Uint32.valueOf(1)))
                 .setSRLGLength(Uint32.valueOf(20))
                 .setFiberType(LinkConcatenation.FiberType.Dsf)
                 .build();
@@ -265,7 +269,8 @@ public class PceLinkTest extends AbstractTest {
 
 
         //update tp of nodes
-        TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder();
+        TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder()
+                .withKey(new TerminationPointKey(new TpId("xpdr")));
         TerminationPoint1Builder tp1Bldr = new TerminationPoint1Builder();
 
         tp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);

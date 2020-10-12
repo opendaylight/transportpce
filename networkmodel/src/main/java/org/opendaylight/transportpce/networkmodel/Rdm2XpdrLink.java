@@ -96,7 +96,7 @@ final class Rdm2XpdrLink {
         Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, true, xpdrTp).build();
         InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID =
             InstanceIdentifier.builder(Networks.class).child(Network.class,
-            new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
+                new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
         wrtx.merge(LogicalDatastoreType.CONFIGURATION, nwIID.build(), topoNetowkLayer);
         FluentFuture<? extends @NonNull CommitInfo> commit = wrtx.commit();
