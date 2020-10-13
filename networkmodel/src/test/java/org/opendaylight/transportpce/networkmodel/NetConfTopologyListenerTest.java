@@ -40,6 +40,7 @@ import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.networkmodel.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.networkmodel.stub.MountPointStub;
@@ -93,10 +94,12 @@ public class NetConfTopologyListenerTest {
                 new OpenRoadmInterfacesImpl121(deviceTransactionManager);
         OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221 =
                 new OpenRoadmInterfacesImpl221(deviceTransactionManager);
+        OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710 =
+            new OpenRoadmInterfacesImpl710(deviceTransactionManager);
         MappingUtils mappingUtils = new MappingUtilsImpl(dataBroker);
         OpenRoadmInterfacesImpl openRoadmInterfaces =
                 new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils,
-                openRoadmInterfacesImpl121, openRoadmInterfacesImpl221);
+                openRoadmInterfacesImpl121, openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
         PortMappingVersion121 p1 = new PortMappingVersion121(dataBroker, deviceTransactionManager, openRoadmInterfaces);
         PortMappingVersion221 p2 = new PortMappingVersion221(dataBroker, deviceTransactionManager, openRoadmInterfaces);
         PortMapping portMapping = new PortMappingImpl(dataBroker, p2, p1);

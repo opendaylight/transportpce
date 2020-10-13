@@ -7,8 +7,7 @@
  */
 
 package org.opendaylight.transportpce.common.mapping;
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
-import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1_0;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -18,42 +17,37 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilitiesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.McCapabilitiesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class PortMappingImpl implements PortMapping {
+public class PortMappingImpl710 implements PortMapping710 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PortMappingImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PortMappingImpl710.class);
 
     private final DataBroker dataBroker;
-    private final PortMappingVersion221 portMappingVersion22;
-    private final PortMappingVersion121 portMappingVersion121;
+    private final PortMappingVersion710 portMappingVersion710;
 
-    public PortMappingImpl(DataBroker dataBroker, PortMappingVersion221 portMappingVersion22,
-        PortMappingVersion121 portMappingVersion121) {
+    public PortMappingImpl710(DataBroker dataBroker, PortMappingVersion710 portMappingVersion710) {
 
         this.dataBroker = dataBroker;
-        this.portMappingVersion22 = portMappingVersion22;
-        this.portMappingVersion121 = portMappingVersion121;
+        this.portMappingVersion710 = portMappingVersion710;
     }
 
     @Override
     public boolean createMappingData(String nodeId, String nodeVersion) {
-        if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
-            return portMappingVersion121.createMappingData(nodeId);
-        } else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
-            return portMappingVersion22.createMappingData(nodeId);
+        if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_7_1_0)) {
+            return portMappingVersion710.createMappingData(nodeId);
         }
         LOG.error("Unable to create mapping data for unmanaged openroadm device version");
         return false;
@@ -128,11 +122,8 @@ public class PortMappingImpl implements PortMapping {
     @Override
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
         OpenroadmVersion openROADMversion = getNode(nodeId).getNodeInfo().getOpenroadmVersion();
-        if (openROADMversion.getIntValue() == 1) {
-            return portMappingVersion121.updateMapping(nodeId,oldMapping);
-        } else if (openROADMversion.getIntValue() == 2) {
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes
-                .MappingBuilder oldMapping2Bldr = new MappingBuilder().setLogicalConnectionPoint(oldMapping
+        if (openROADMversion.getIntValue() == 3) {
+            MappingBuilder oldMapping2Bldr = new MappingBuilder().setLogicalConnectionPoint(oldMapping
                 .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
             if (oldMapping.getConnectionMapLcp() != null) {
                 oldMapping2Bldr.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
@@ -155,7 +146,7 @@ public class PortMappingImpl implements PortMapping {
             if (oldMapping.getSupportingPort() != null) {
                 oldMapping2Bldr.setSupportingPort(oldMapping.getSupportingPort());
             }
-            return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr.build());
+            return portMappingVersion710.updateMapping(nodeId, oldMapping2Bldr.build());
         }
         return false;
     }

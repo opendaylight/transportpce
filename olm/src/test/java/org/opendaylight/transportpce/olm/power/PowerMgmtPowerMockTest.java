@@ -39,6 +39,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
 import org.opendaylight.transportpce.olm.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.olm.stub.MountPointStub;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
@@ -85,6 +86,7 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
     private MappingUtils mappingUtils;
     private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
     private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl22;
+    private OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710;
     private PortMappingVersion221 portMappingVersion22;
     private PortMappingVersion121 portMappingVersion121;
 
@@ -103,8 +105,10 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
                 this.crossConnectImpl22);
         this.openRoadmInterfacesImpl121 = new OpenRoadmInterfacesImpl121(deviceTransactionManager);
         this.openRoadmInterfacesImpl22 = new OpenRoadmInterfacesImpl221(deviceTransactionManager);
+        this.openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(deviceTransactionManager);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl((this.deviceTransactionManager),
-                this.mappingUtils,this.openRoadmInterfacesImpl121,this.openRoadmInterfacesImpl22);
+                this.mappingUtils,this.openRoadmInterfacesImpl121,this.openRoadmInterfacesImpl22,
+            this.openRoadmInterfacesImpl710);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
         this.portMappingVersion22 =
                 new PortMappingVersion221(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
@@ -233,7 +237,8 @@ public class PowerMgmtPowerMockTest extends AbstractTest {
     private PowerMgmtImpl getNewPowerMgmt(OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121Spy,
             CrossConnect crossConnectMock) {
         OpenRoadmInterfacesImpl openRoadmInterfacesSpy = new OpenRoadmInterfacesImpl((this.deviceTransactionManager),
-                this.mappingUtils, openRoadmInterfacesImpl121Spy, this.openRoadmInterfacesImpl22);
+                this.mappingUtils, openRoadmInterfacesImpl121Spy, this.openRoadmInterfacesImpl22,
+            this.openRoadmInterfacesImpl710);
         openRoadmInterfacesSpy = PowerMockito.spy(openRoadmInterfacesSpy);
         return new PowerMgmtImpl(this.getDataBroker(), openRoadmInterfacesSpy, crossConnectMock,
                 this.deviceTransactionManager);
