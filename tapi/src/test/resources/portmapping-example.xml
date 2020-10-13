@@ -6,7 +6,7 @@
       <openroadm-version>2.2.1</openroadm-version>
       <node-model>model2</node-model>
       <node-clli>NodeA</node-clli>
-      <node-type>xpdr</node-type>
+      <node-type-onetwo>xpdr</node-type-onetwo>
       <node-vendor>vendorA</node-vendor>
       <node-ip-address>1.2.3.4</node-ip-address>
     </node-info>
@@ -16,7 +16,7 @@
       <connection-map-lcp>XPDR1-CLIENT2</connection-map-lcp>
       <supporting-circuit-pack-name>1/0/2-PLUG-NET</supporting-circuit-pack-name>
       <supporting-port>1</supporting-port>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
+      <supported-if-cap-onetwo xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-if-cap-onetwo>
       <port-direction>bidirectional</port-direction>
     </mapping>
     <mapping>
@@ -25,7 +25,7 @@
       <connection-map-lcp>XPDR1-CLIENT1</connection-map-lcp>
       <supporting-circuit-pack-name>1/0/1-PLUG-NET</supporting-circuit-pack-name>
       <supporting-port>1</supporting-port>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
+      <supported-if-cap-onetwo xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-if-cap-onetwo>
       <port-direction>bidirectional</port-direction>
     </mapping>
     <mapping>
@@ -34,7 +34,7 @@
       <connection-map-lcp>XPDR1-NETWORK1</connection-map-lcp>
       <supporting-circuit-pack-name>1/0/1-PLUG-CLIENT</supporting-circuit-pack-name>
       <supporting-port>C1</supporting-port>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-if-cap-onetwo xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-if-cap-onetwo>
       <port-direction>bidirectional</port-direction>
     </mapping>
     <mapping>
@@ -43,7 +43,7 @@
       <connection-map-lcp>XPDR1-NETWORK2</connection-map-lcp>
       <supporting-circuit-pack-name>1/0/2-PLUG-CLIENT</supporting-circuit-pack-name>
       <supporting-port>C1</supporting-port>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-if-cap-onetwo xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-if-cap-onetwo>
       <port-direction>bidirectional</port-direction>
     </mapping>
   </nodes>
@@ -53,7 +53,7 @@
       <openroadm-version>2.2.1</openroadm-version>
       <node-model>model2</node-model>
       <node-clli>NodeA</node-clli>
-      <node-type>rdm</node-type>
+      <node-type-onetwo>rdm</node-type-onetwo>
       <node-vendor>vendorA</node-vendor>
       <node-ip-address>127.0.0.11</node-ip-address>
     </node-info>
@@ -146,7 +146,7 @@
       <openroadm-version>2.2.1</openroadm-version>
       <node-model>model2</node-model>
       <node-clli>NodeC</node-clli>
-      <node-type>xpdr</node-type>
+      <node-type-onetwo>xpdr</node-type-onetwo>
       <node-vendor>vendorA</node-vendor>
       <node-ip-address>1.2.3.4</node-ip-address>
     </node-info>
@@ -156,7 +156,7 @@
       <connection-map-lcp>XPDR1-CLIENT2</connection-map-lcp>
       <supporting-circuit-pack-name>1/0/2-PLUG-NET</supporting-circuit-pack-name>
       <supporting-port>1</supporting-port>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
+      <supported-if-cap-onetwo xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-if-cap-onetwo>
       <port-direction>bidirectional</port-direction>
     </mapping>
     <mapping>
@@ -165,7 +165,7 @@
       <connection-map-lcp>XPDR1-CLIENT1</connection-map-lcp>
       <supporting-circuit-pack-name>1/0/1-PLUG-NET</supporting-circuit-pack-name>
       <supporting-port>1</supporting-port>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
+      <supported-if-cap-onetwo xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-if-cap-onetwo>
       <port-direction>bidirectional</port-direction>
     </mapping>
     <mapping>
@@ -174,7 +174,7 @@
       <connection-map-lcp>XPDR1-NETWORK1</connection-map-lcp>
       <supporting-circuit-pack-name>1/0/1-PLUG-CLIENT</supporting-circuit-pack-name>
       <supporting-port>C1</supporting-port>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-if-cap-onetwo xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-if-cap-onetwo>
       <port-direction>bidirectional</port-direction>
     </mapping>
     <mapping>
@@ -183,7 +183,7 @@
       <connection-map-lcp>XPDR1-NETWORK2</connection-map-lcp>
       <supporting-circuit-pack-name>1/0/2-PLUG-CLIENT</supporting-circuit-pack-name>
       <supporting-port>C1</supporting-port>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-if-cap-onetwo xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-if-cap-onetwo>
       <port-direction>bidirectional</port-direction>
     </mapping>
   </nodes>
@@ -193,7 +193,7 @@
       <openroadm-version>2.2.1</openroadm-version>
       <node-model>model2</node-model>
       <node-clli>NodeC</node-clli>
-      <node-type>rdm</node-type>
+      <node-type-onetwo>rdm</node-type-onetwo>
       <node-vendor>vendorA</node-vendor>
       <node-ip-address>127.0.0.11</node-ip-address>
     </node-info>

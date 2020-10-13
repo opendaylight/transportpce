@@ -21,8 +21,8 @@ import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
@@ -83,7 +83,15 @@ public final class OpenRoadmTopology {
         List<Link> links = new ArrayList<>();
 
         // Check if node is ROADM
-        if (NodeTypes.Rdm.getIntValue() == mappingNode.getNodeInfo().getNodeType().getIntValue()) {
+        int nodeTypeValue;
+        if (mappingNode.getNodeInfo().getNodeTypeOnetwo() != null) {
+            nodeTypeValue = mappingNode.getNodeInfo().getNodeTypeOnetwo().getIntValue();
+        }
+        else {
+            nodeTypeValue = mappingNode.getNodeInfo().getNodeTypeBeyondh().getIntValue();
+        }
+
+        if (NodeTypes.Rdm.getIntValue() == nodeTypeValue) {
             LOG.info("creating rdm node in openroadmtopology for node {}", mappingNode.getNodeId());
             // transform flat mapping list to per degree and per srg mapping lists
             Map<String, List<Mapping>> mapDeg = new HashMap<>();
@@ -129,33 +137,55 @@ public final class OpenRoadmTopology {
             links.addAll(createNewLinks(nodes));
             LOG.info("created nodes/links: {}/{}", nodes.size(), links.size());
             return new TopologyShard(nodes, links);
-        } else if (NodeTypes.Xpdr.getIntValue() ==  mappingNode.getNodeInfo().getNodeType().getIntValue()) {
+        } else if (NodeTypes.Xpdr.getIntValue() ==  nodeTypeValue) {
             // Check if node is Xpdr is a Transponder
             List<Mapping> networkMappings = mappingNode.nonnullMapping().values()
                     .stream().filter(k -> k.getLogicalConnectionPoint()
                 .contains("NETWORK")).collect(Collectors.toList());
             List<Integer> tpdrList = new ArrayList<>();
+            //Intialize
+            int xpdrType = 0;
+            String xpdrName = null;
             for (Mapping mapping : networkMappings) {
                 List<Mapping> extractedMappings = null;
                 Integer xpdrNb = Integer.parseInt(mapping.getLogicalConnectionPoint().split("XPDR")[1].split("-")[0]);
+                // Added for support to 7.1.0 devices
+
+                if ((mapping.getXponderTypeOnetwo() != null)
+                    && (mapping.getXponderTypeBeyondh() == null)) {
+                    xpdrType = mapping.getXponderTypeOnetwo().getIntValue();
+                    xpdrName =  mapping.getXponderTypeOnetwo().getName();
+                } else if ((mapping.getXponderTypeOnetwo() == null)
+                    && (mapping.getXponderTypeBeyondh() != null)) {
+                    xpdrType = mapping.getXponderTypeBeyondh().getIntValue();
+                    xpdrName =  mapping.getXponderTypeBeyondh().getName();
+                }
                 if (!tpdrList.contains(xpdrNb)) {
                     tpdrList.add(xpdrNb);
                     extractedMappings = mappingNode.nonnullMapping().values().stream().filter(lcp -> lcp
                         .getLogicalConnectionPoint().contains("XPDR" + xpdrNb)).collect(Collectors.toList());
                     NodeBuilder ietfNode;
-                    if (mapping.getXponderType() == null
-                        || XpdrNodeTypes.Tpdr.getIntValue() == mapping.getXponderType().getIntValue()) {
+                    // If both Xpondertypes are null, means that we need to create the XponderType
+                    if (mapping.getXponderTypeOnetwo() == null && mapping.getXponderTypeBeyondh() == null) {
                         LOG.info("creating xpdr node {} of type Tpdr in openroadm-topology",
                             mappingNode.getNodeId() + "-XPDR" + xpdrNb);
                         ietfNode = createXpdr(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
                             extractedMappings, false);
                         nodes.add(ietfNode.build());
-                    } else if (XpdrNodeTypes.Mpdr.getIntValue() == mapping.getXponderType().getIntValue()
-                        || XpdrNodeTypes.Switch.getIntValue() == mapping.getXponderType().getIntValue()) {
+                    } else if (XpdrNodeTypes.Tpdr.getIntValue() == xpdrType) {
+                        LOG.info("creating xpdr node {} of type Tpdr in openroadm-topology",
+                            mappingNode.getNodeId() + "-XPDR" + xpdrNb);
+                        ietfNode =
+                            createXpdr(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
+                                extractedMappings, false);
+                        nodes.add(ietfNode.build());
+                    } else if (XpdrNodeTypes.Mpdr.getIntValue() == xpdrType
+                        || XpdrNodeTypes.Switch.getIntValue() == xpdrType) {
                         LOG.info("creating xpdr node {} of type {} in openroadm-topology",
-                            mappingNode.getNodeId() + "-XPDR" + xpdrNb, mapping.getXponderType().getName());
-                        ietfNode = createXpdr(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
-                            extractedMappings, true);
+                            mappingNode.getNodeId() + "-XPDR" + xpdrNb, xpdrName);
+                        ietfNode =
+                            createXpdr(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
+                                extractedMappings, true);
                         nodes.add(ietfNode.build());
                     }
                 }

@@ -32,13 +32,13 @@ import org.junit.Test;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.JsonUtil;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPools;
@@ -79,7 +79,7 @@ public class OpenRoadmOtnTopologyTest {
         try (Reader reader = new FileReader("src/test/resources/portMapping.json");
                 JsonReader portMappingReader = new JsonReader(reader)) {
             Network portMapping = (Network) JsonUtil.getInstance().getDataObjectFromJson(portMappingReader,
-                    QName.create("http://org/opendaylight/transportpce/portmapping", "2020-08-27", "network"));
+                    QName.create("http://org/opendaylight/transportpce/portmapping", "2020-10-12", "network"));
             for (Nodes nodes : portMapping.nonnullNodes().values()) {
                 if (nodes.getNodeId().equals("XPDR-A1")) {
                     this.portMappingTpdr = nodes;
@@ -92,7 +92,8 @@ public class OpenRoadmOtnTopologyTest {
             mappingList.put(mapping.key(),mapping);
             this.portMappingBad = new NodesBuilder()
                 .setNodeId(this.portMappingTpdr.getNodeId())
-                .setNodeInfo(new NodeInfoBuilder(this.portMappingTpdr.getNodeInfo()).setNodeType(NodeTypes.Ila).build())
+                .setNodeInfo(new NodeInfoBuilder(this.portMappingTpdr.getNodeInfo())
+                .setNodeTypeOnetwo(NodeTypes.Ila).build())
                 .setMapping(mappingList)
                 .build();
             LOG.info("tpdr portMapping = {}", this.portMappingTpdr.toString());

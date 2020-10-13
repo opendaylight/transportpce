@@ -26,20 +26,21 @@ import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.transportpce.test.DataStoreContextImpl;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public class PortMappingImplTest {
 
     DataBroker dataBroker = null;
+    private PortMappingVersion710 portMappingVersion710;
     private PortMappingVersion221 portMappingVersion221;
     private PortMappingVersion121 portMappingVersion121;
     private PortMapping portMapping;
@@ -48,9 +49,11 @@ public class PortMappingImplTest {
     public void setUp() throws Exception {
         DataStoreContext dataStoreContext = new DataStoreContextImpl();
         dataBroker = dataStoreContext.getDataBroker();
+        portMappingVersion710 = mock(PortMappingVersion710.class);
         portMappingVersion221 = mock(PortMappingVersion221.class);
         portMappingVersion121 = mock(PortMappingVersion121.class);
-        portMapping = new PortMappingImpl(dataBroker, portMappingVersion221, portMappingVersion121);
+        portMapping = new PortMappingImpl(dataBroker, portMappingVersion710,
+            portMappingVersion221, portMappingVersion121);
     }
 
     @Test

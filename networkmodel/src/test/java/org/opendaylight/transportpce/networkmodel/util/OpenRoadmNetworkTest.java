@@ -16,9 +16,9 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo.OpenroadmVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
@@ -75,7 +75,7 @@ public class OpenRoadmNetworkTest {
         return new NodeInfoBuilder()
             .setNodeModel("NodeModel")
             .setNodeIpAddress(new IpAddress(new Ipv4Address("127.0.0.1")))
-            .setNodeType(nodeType)
+            .setNodeTypeOnetwo(nodeType)
             .setNodeClli(clli)
             .setNodeVendor("VendorA")
             .setOpenroadmVersion(OpenroadmVersion._121)

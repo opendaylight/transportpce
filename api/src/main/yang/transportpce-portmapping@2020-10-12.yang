@@ -3,21 +3,17 @@ module transportpce-portmapping {
   namespace "http://org/opendaylight/transportpce/portmapping";
   prefix org-opendaylight-transportpce-portmapping;
 
-  import org-openroadm-common-types {
-    prefix org-openroadm-common-types;
-    revision-date 2018-10-19;
-  }
-  import org-openroadm-switching-pool-types {
-    prefix org-openroadm-switching-pool-types;
-    revision-date 2017-12-15;
-  }
-  import org-openroadm-port-types {
-    prefix org-openroadm-port-types;
-    revision-date 2018-10-19;
-  }
   import ietf-inet-types {
     prefix ietf-inet-types;
     revision-date 2013-07-15;
+  }
+  import transportpce-portmapping-common-oneandtwo {
+    prefix transportpce-portmapping-common-oneandtwo;
+    revision-date 2020-10-13;
+  }
+  import transportpce-portmapping-common-beyondh {
+    prefix transportpce-portmapping-common-beyondh;
+    revision-date 2020-10-13;
   }
 
   organization
@@ -28,6 +24,11 @@ module transportpce-portmapping {
     "YANG definitions of RPCs supported by OLM. Copyright (c) 2017
      AT&T and others. All rights reserved. authors: Dhruv Bhardwaj
      ( db929a@att.com ) Shweta Vachhani ( sv111y@att.com )";
+
+  revision 2020-10-12 {
+      description
+      "Upgrading to 7.1.0 models";
+    }
 
   revision 2020-08-27 {
     description
@@ -70,11 +71,8 @@ module transportpce-portmapping {
           "Unique identifier for node in the network";
       }
       container node-info {
-        leaf node-type {
-          type org-openroadm-common-types:node-types;
-          description
-            "Identifier for node-type e.g Roadm, xponder";
-        }
+        uses transportpce-portmapping-common-oneandtwo:node-type-onetwo;
+        uses transportpce-portmapping-common-beyondh:node-type-beyondh;
         leaf openroadm-version {
           type enumeration {
             enum 1.2.1 {
@@ -86,6 +84,11 @@ module transportpce-portmapping {
               value 2;
               description
                 "Version 2.2.1";
+            }
+            enum 7.1.0 {
+              value 3;
+              description
+                "Version 7.1.0";
             }
           }
         }
@@ -165,14 +168,10 @@ module transportpce-portmapping {
           description
             "Rate supported by the port";
         }
-        leaf-list supported-interface-capability {
-          type identityref {
-            base org-openroadm-port-types:supported-if-capability;
-          }
-        }
-        leaf xponder-type {
-          type org-openroadm-common-types:xpdr-node-types;
-        }
+        uses transportpce-portmapping-common-oneandtwo:supported-if-cap-onetwo;
+        uses transportpce-portmapping-common-beyondh:supported-if-cap-beyondh;
+        uses transportpce-portmapping-common-oneandtwo:xponder-type-onetwo;
+        uses transportpce-portmapping-common-beyondh:xponder-type-beyondh;
         leaf connection-map-lcp {
           type string;
           description
@@ -194,27 +193,19 @@ module transportpce-portmapping {
       }
       list mc-capabilities {
           key mc-node-name;
-          when "../node-info/node-type = 'rdm'";
+          when "../node-info/node-type-onetwo = 'rdm' or ../node-info/node-type-beyondh = 'rdm'" {
           description
             "Capabilities of the media channel associated with a degree or a SRG.";
+          }
           leaf mc-node-name {
             type string;
             description
-              "Name of the node, it has the format of DEGi-TTP or SRGj-PP
+              "Name of the node, it has the format of DEGi-TTP (for 2.2.1 models) or
+              DEGi-TTP-profileName (for 7.1.0) and  SRGj-PP (for 2.2.1) SRGj-PP-profileName (for 7.1.0)
               Where i, and j are the degree and SRG numbers respectively";
           }
-          leaf slot-width-granularity {
-            type org-openroadm-common-types:frequency-GHz;
-            default "50";
-            description
-              "Width of a slot measured in GHz.";
-          }
-          leaf center-freq-granularity {
-            type org-openroadm-common-types:frequency-GHz;
-            default "50";
-            description
-              "Width of a slot measured in GHz.";
-          }
+          uses transportpce-portmapping-common-oneandtwo:mc-frequency-g;
+          uses transportpce-portmapping-common-beyondh:mc-frequency-g;
       }
       list cp-to-degree {
         key "circuit-pack-name";
@@ -240,9 +231,8 @@ module transportpce-portmapping {
           description
             "Unique identifier for this odu-switching-pool";
         }
-        leaf switching-pool-type {
-          type org-openroadm-switching-pool-types:switching-pool-types;
-        }
+        uses transportpce-portmapping-common-oneandtwo:switching-pool-type-g;
+        uses transportpce-portmapping-common-beyondh:switching-pool-type-g;
         list non-blocking-list {
           key "nbl-number";
           leaf nbl-number {

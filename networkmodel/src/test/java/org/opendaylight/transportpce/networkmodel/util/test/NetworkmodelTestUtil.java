@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
@@ -70,7 +70,7 @@ public final class NetworkmodelTestUtil {
         createSrgMappings(mappingList, 1, srgNb);
         Nodes mappingNode = new NodesBuilder()
             .setNodeId(nodeId)
-            .setNodeInfo(new NodeInfoBuilder().setNodeType(NodeTypes.Rdm).setNodeClli(clli).build())
+            .setNodeInfo(new NodeInfoBuilder().setNodeTypeOnetwo(NodeTypes.Rdm).setNodeClli(clli).build())
             .setMapping(mappingList)
             .build();
         return mappingNode;
@@ -82,7 +82,7 @@ public final class NetworkmodelTestUtil {
         createXpdrMappings(mappingMap, networkPortNb, clientPortNb, xpdrNodeType);
         Nodes mappingNode = new NodesBuilder()
             .setNodeId(nodeId)
-            .setNodeInfo(new NodeInfoBuilder().setNodeType(NodeTypes.Xpdr).setNodeClli(clli).build())
+            .setNodeInfo(new NodeInfoBuilder().setNodeTypeOnetwo(NodeTypes.Xpdr).setNodeClli(clli).build())
             .setMapping(mappingMap)
             .build();
         LOG.info("mapping = {}", mappingNode.toString());
@@ -259,12 +259,12 @@ public final class NetworkmodelTestUtil {
                 .setLogicalConnectionPoint("XPDR1-NETWORK" + i)
                 .setPortDirection("bidirectional")
                 .setSupportingPort("1")
-                .setSupportedInterfaceCapability(supportedIntf)
+                .setSupportedIfCapOnetwo(supportedIntf)
                 .setConnectionMapLcp("XPDR1-CLIENT" + i)
                 .setPortQual(PortQual.XpdrNetwork.getName())
                 .setSupportingCircuitPackName("1/0/" + i + "-PLUG-NET");
             if (xpdrNodeType != null) {
-                mappingBldr.setXponderType(xpdrNodeType);
+                mappingBldr.setXponderTypeOnetwo(xpdrNodeType);
             }
             Mapping mapping = mappingBldr.build();
             mappingMap.put(mapping.key(),mapping);
@@ -276,7 +276,7 @@ public final class NetworkmodelTestUtil {
                 .setLogicalConnectionPoint("XPDR1-CLIENT" + i)
                 .setPortDirection("bidirectional")
                 .setSupportingPort("C1")
-                .setSupportedInterfaceCapability(supportedIntf)
+                .setSupportedIfCapOnetwo(supportedIntf)
                 .setConnectionMapLcp("XPDR1-NETWORK" + i)
                 .setPortQual(PortQual.XpdrClient.getName())
                 .setSupportingCircuitPackName("1/0/" + i + "-PLUG-CLIENT")

@@ -53,7 +53,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
-            {u'node-info': {u'node-type': u'rdm',
+            {u'node-info': {u'node-type-onetwo': u'rdm',
                             u'node-ip-address': u'127.0.0.14',
                             u'node-clli': u'NodeD',
                             u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorD',
@@ -71,8 +71,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
               "mc-capabilities": [
                 {
                   "mc-node-name": "DEG1-TTP",
-                  "center-freq-granularity": 6.25,
-                  "slot-width-granularity": 12.5
+                  "center-freq-granularity-onetwo": 6.25,
+                  "slot-width-granularity-onetwo": 12.5
                 }
               ]
             }, res)
@@ -87,8 +87,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
               "mc-capabilities": [
                 {
                   "mc-node-name": "DEG2-TTP",
-                  "center-freq-granularity": 6.25,
-                  "slot-width-granularity": 12.5
+                  "center-freq-granularity-onetwo": 6.25,
+                  "slot-width-granularity-onetwo": 12.5
                 }
               ]
             }, res)
@@ -103,8 +103,8 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
               "mc-capabilities": [
                 {
                   "mc-node-name": "SRG1-PP",
-                  "center-freq-granularity": 6.25,
-                  "slot-width-granularity": 12.5
+                  "center-freq-granularity-onetwo": 6.25,
+                  "slot-width-granularity-onetwo": 12.5
                 }
               ]
             }, res)

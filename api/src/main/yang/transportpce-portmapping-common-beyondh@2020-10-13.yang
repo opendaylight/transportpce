@@ -1,0 +1,83 @@
+module transportpce-portmapping-common-beyondh {
+  yang-version 1;
+  namespace "http://org/opendaylight/transportpce/portmapping/common/beyondh";
+  prefix transportpce-portmapping-common-beyondh;
+
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+    revision-date 2020-05-29;
+  }
+  import org-openroadm-device-types {
+     prefix org-openroadm-device-types;
+     revision-date 2019-11-29;
+  }
+  import org-openroadm-switching-pool-types {
+    prefix org-openroadm-switching-pool-types;
+    revision-date 2019-11-29;
+  }
+  import org-openroadm-port-types {
+    prefix org-openroadm-port-types;
+    revision-date 2020-03-27;
+  }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions of RPCs supported by OLM. Copyright (c) 2020
+     AT&T and others.";
+
+  revision 2020-10-13 {
+    description
+    "Common data for 7.1.0 models";
+  }
+
+  grouping node-type-beyondh {
+    leaf node-type-beyondh {
+      description
+        "Identifier for node-type e.g Roadm, xponder.
+        Populated only for 7.1.0 models";
+      type org-openroadm-device-types:node-types;
+    }
+  }
+  grouping supported-if-cap-beyondh {
+    leaf-list supported-if-cap-beyondh {
+      description
+        "Populated only for 7.1.0 models";
+      type identityref {
+        base org-openroadm-port-types:supported-if-capability;
+      }
+    }
+  }
+  grouping xponder-type-beyondh {
+    leaf xponder-type-beyondh {
+      description
+        "Populated only for 7.1.0 models";
+      type org-openroadm-device-types:xpdr-node-types;
+    }
+  }
+  grouping mc-frequency-g {
+    leaf slot-width-granularity-beyondh {
+      description
+        "Width of a slot measured in GHz.
+        Populated only for 7.1.0 models";
+      type org-openroadm-common-optical-channel-types:frequency-GHz;
+      default "50";
+    }
+    leaf center-freq-granularity-beyondh {
+      description
+        "Width of a slot measured in GHz.
+        Populated only for 7.1.0 models";
+      type org-openroadm-common-optical-channel-types:frequency-GHz;
+      default "50";
+    }
+  }
+  grouping switching-pool-type-g {
+    leaf switching-pool-type-beyondh {
+      description
+        "Populated only for 7.1.0 models";
+      type org-openroadm-switching-pool-types:switching-pool-types;
+    }
+  }
+}

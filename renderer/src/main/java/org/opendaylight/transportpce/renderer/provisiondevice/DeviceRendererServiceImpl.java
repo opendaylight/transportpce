@@ -59,7 +59,7 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.re
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.renderer.rollback.output.FailedToRollback;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.renderer.rollback.output.FailedToRollbackBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128.renderer.rollback.output.FailedToRollbackKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.service.Topology;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.optical.channel.interfaces.rev161014.OchAttributes.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceList;
@@ -201,9 +201,9 @@ public class DeviceRendererServiceImpl implements DeviceRendererService {
                         createdOduInterfaces.add(this.openRoadmInterfaceFactory.createOpenRoadmOdu4Interface(nodeId,
                                 srcTp, supportingOtuInterface));
                         Mapping mapping = this.portMapping.getMapping(nodeId,srcTp);
-                        if (mapping != null && mapping.getXponderType() != null
-                            && (mapping.getXponderType().getIntValue() == 3
-                            || mapping.getXponderType().getIntValue() == 2)) {
+                        if (mapping != null && mapping.getXponderTypeOnetwo() != null
+                            && (mapping.getXponderTypeOnetwo().getIntValue() == 3
+                            || mapping.getXponderTypeOnetwo().getIntValue() == 2)) {
                             createdOduInterfaces.add(this.openRoadmInterfaceFactory
                                 .createOpenRoadmOtnOdu4Interface(nodeId, destTp, supportingOtuInterface));
                         } else {

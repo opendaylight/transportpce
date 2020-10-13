@@ -29,8 +29,8 @@ import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmOtnTopology;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.TerminationPoint1;
@@ -95,7 +95,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 return;
             }
             NodeInfo nodeInfo = portMapping.getNode(nodeId).getNodeInfo();
-            if (nodeInfo.getNodeType().getIntValue() == 1) {
+            if (nodeInfo.getNodeTypeOnetwo().getIntValue() == 1) {
                 this.linkDiscovery.readLLDP(new NodeId(nodeId), openRoadmVersion);
             }
             // node creation in clli-network
@@ -147,7 +147,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             }
 
             // nodes/links creation in otn-topology
-            if (nodeInfo.getNodeType().getIntValue() == 2 && (nodeInfo.getOpenroadmVersion().getIntValue() != 1)) {
+            if (nodeInfo.getNodeTypeOnetwo().getIntValue() == 2
+                && (nodeInfo.getOpenroadmVersion().getIntValue() != 1)) {
                 createOpenRoadmOtnNode(nodeId);
             }
             networkTransactionService.commit().get();
@@ -211,7 +212,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
             @Nullable
             OpenroadmVersion deviceVersion = this.portMapping.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
             @Nullable
-            NodeTypes nodeType = this.portMapping.getNode(nodeId).getNodeInfo().getNodeType();
+            NodeTypes nodeType = this.portMapping.getNode(nodeId).getNodeInfo().getNodeTypeOnetwo();
             if (nodeType.getIntValue() == 2 && deviceVersion.getIntValue() != 1) {
                 TopologyShard otnTopologyShard = this.otnTopologyShardMountedDevice.get(nodeId);
                 if (otnTopologyShard != null) {
