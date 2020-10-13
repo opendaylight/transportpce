@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "afeb71f0_78f76676",
+        "filename": "api/src/main/yang/service_path/transportpce-device-renderer@2020-01-28.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-13T14:58:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1258c6d2_41cc0fef",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 55
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78a07dd2_fe3381d7",
         "filename": "api/src/main/yang/service_path/transportpce-pce@2020-01-28.yang",
         "patchSetId": 7
@@ -140,6 +164,30 @@
       "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "680bcca7_18a7ec20",
+        "filename": "api/src/main/yang/service_path/transportpce-pce@2020-01-28.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-13T14:58:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2911dc6b_5007ca36",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 29
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "518f613e_181dc372",
+        "filename": "api/src/main/yang/service_path/transportpce-renderer@2020-05-20.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-13T14:58:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8985dd77_bbb67a90",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "727bf47b_560ab42a",
         "filename": "api/src/main/yang/service_path/transportpce-service-path@2017-10-17.yang",
         "patchSetId": 7
@@ -234,6 +306,30 @@
       "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc16ec08_80224b6f",
+        "filename": "api/src/main/yang/service_path/transportpce-service-path@2017-10-17.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-13T14:58:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd997af3_7b3bb55d",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 34
+      },
+      "revId": "e4ddfcba3b721ecba149b432c0e38d21dccd5562",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {

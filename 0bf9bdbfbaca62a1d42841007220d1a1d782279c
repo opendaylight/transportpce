@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "745e93b2_74f861f7",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-13T14:58:14Z",
+      "side": 1,
+      "message": "useless empty line",
+      "revId": "0bf9bdbfbaca62a1d42841007220d1a1d782279c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c40a99f5_28829e2c",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-13T14:58:14Z",
+      "side": 1,
+      "message": "not needed",
+      "range": {
+        "startLine": 578,
+        "startChar": 8,
+        "endLine": 578,
+        "endChar": 66
+      },
+      "revId": "0bf9bdbfbaca62a1d42841007220d1a1d782279c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

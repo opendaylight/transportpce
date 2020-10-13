@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21d507c4_dd9d0c7f",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-13T14:58:14Z",
+      "side": 0,
+      "message": "looks right. Shouldn\u0027t we remove the previous line too ?",
+      "range": {
+        "startLine": 200,
+        "startChar": 28,
+        "endLine": 200,
+        "endChar": 70
+      },
+      "revId": "4a98a8d64428a0e75988a001c8467b4da9957268",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

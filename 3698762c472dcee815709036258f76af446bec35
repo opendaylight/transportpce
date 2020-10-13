@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "bb35c21d_5e76126b",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-13T14:58:14Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3e37f5f3_b4980d58",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 54
+      },
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae38e5b_1c2599f5",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
         "patchSetId": 7
