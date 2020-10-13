@@ -55,7 +55,7 @@ module gnpy-eqpt-config {
       }
       description "a unique name to ID the fiber in the JSON or Excel template topology input file" ;
     }
-  }
+
 
   list Transceiver{
     key type_variety ;
@@ -71,7 +71,6 @@ module gnpy-eqpt-config {
         description "unique name of the mode" ;
       }
     }
-  }
 
   container Spans {
 
