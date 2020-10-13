@@ -72,7 +72,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
-            {u'node-info': {u'node-type': u'rdm',
+            {u'node-info': {u'node-type-onetwo': u'rdm',
                             u'node-ip-address': u'127.0.0.12',
                             u'node-clli': u'NodeA',
                             u'openroadm-version': u'1.2.1', u'node-vendor': u'vendorA',
@@ -125,7 +125,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
-            {u'node-info': {u'node-type': u'xpdr',
+            {u'node-info': {u'node-type-onetwo': u'xpdr',
                             u'node-ip-address': u'127.0.0.10',
                             u'node-clli': u'NodeA',
                             u'openroadm-version': u'1.2.1', u'node-vendor': u'vendorA',

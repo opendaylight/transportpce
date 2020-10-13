@@ -31,6 +31,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
 import org.opendaylight.transportpce.olm.power.PowerMgmt;
 import org.opendaylight.transportpce.olm.power.PowerMgmtImpl;
 import org.opendaylight.transportpce.olm.util.OlmPowerServiceRpcImplUtil;
@@ -67,6 +68,7 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     private MappingUtils mappingUtils;
     private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221;
     private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
+    private OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710;
     private OlmPowerService olmPowerService;
     private DataBroker dataBroker;
 
@@ -74,12 +76,13 @@ public class OlmPowerServiceImplSpanLossBaseTest extends AbstractTest {
     public void setUp() throws OpenRoadmInterfaceException {
         this.openRoadmInterfacesImpl121 = Mockito.mock(OpenRoadmInterfacesImpl121.class);
         this.openRoadmInterfacesImpl221 = Mockito.mock(OpenRoadmInterfacesImpl221.class);
+        this.openRoadmInterfacesImpl710 = Mockito.mock(OpenRoadmInterfacesImpl710.class);
         this.mappingUtils = Mockito.mock(MappingUtilsImpl.class);
         this.portMapping = Mockito.mock(PortMappingImpl.class);
         this.deviceTransactionManager = Mockito.mock(DeviceTransactionManagerImpl.class);
         this.powerMgmt = Mockito.mock(PowerMgmtImpl.class);
         this.openRoadmInterfaces = new OpenRoadmInterfacesImpl(this.deviceTransactionManager, this.mappingUtils,
-                this.openRoadmInterfacesImpl121, this.openRoadmInterfacesImpl221);
+                this.openRoadmInterfacesImpl121, this.openRoadmInterfacesImpl221, this.openRoadmInterfacesImpl710);
         this.olmPowerService = new OlmPowerServiceImpl(this.getDataBroker(), this.powerMgmt,
                 this.deviceTransactionManager, this.portMapping, this.mappingUtils, this.openRoadmInterfaces);
         this.dataBroker = this.getDataBroker();

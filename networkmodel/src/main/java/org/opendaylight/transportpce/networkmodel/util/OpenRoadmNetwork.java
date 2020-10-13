@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.networkmodel.util;
 
 import com.google.common.collect.ImmutableMap;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev181130.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -47,10 +47,18 @@ public final class OpenRoadmNetwork {
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node2Bldr =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
 
+        // Added to differenciate whenther the node is 1.2.1/2.2.1 vs 7.1.0
+        int nodeInfoValue;
+        if (nodeInfo.getNodeTypeOnetwo() != null) {
+            nodeInfoValue = nodeInfo.getNodeTypeOnetwo().getIntValue();
+        }
+        else {
+            nodeInfoValue = nodeInfo.getNodeTypeBeyondh().getIntValue();
+        }
         /*
          * Recognize the node type: 1:ROADM, 2:XPONDER
          */
-        switch (nodeInfo.getNodeType().getIntValue()) {
+        switch (nodeInfoValue) {
             case 1:
                 node2Bldr.setNodeType(OpenroadmNodeType.ROADM);
                 break;
@@ -58,7 +66,7 @@ public final class OpenRoadmNetwork {
                 node2Bldr.setNodeType(OpenroadmNodeType.XPONDER);
                 break;
             default:
-                LOG.error("No correponsding type for the value: {}", nodeInfo.getNodeType().getName());
+                LOG.error("No corresponding type for the value: {}", nodeInfo.getNodeTypeOnetwo().getName());
                 break;
         }
 

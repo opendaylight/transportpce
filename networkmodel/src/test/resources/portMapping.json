@@ -10,7 +10,7 @@
                         "port-direction": "bidirectional",
                         "supporting-port": "1",
                         "connection-map-lcp": "XPDR1-CLIENT2",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-OCH"
                         ],
                         "lcp-hash-val": "AMkDwQ7xTmRL",
@@ -22,7 +22,7 @@
                         "port-direction": "bidirectional",
                         "supporting-port": "1",
                         "connection-map-lcp": "XPDR1-CLIENT1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-OCH"
                         ],
                         "lcp-hash-val": "AMkDwQ7xTmRI",
@@ -34,7 +34,7 @@
                         "port-direction": "bidirectional",
                         "supporting-port": "C1",
                         "connection-map-lcp": "XPDR1-NETWORK1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-100GE"
                         ],
                         "lcp-hash-val": "AJUUr6I5fALj",
@@ -46,7 +46,7 @@
                         "port-direction": "bidirectional",
                         "supporting-port": "C1",
                         "connection-map-lcp": "XPDR1-NETWORK2",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-100GE"
                         ],
                         "lcp-hash-val": "AJUUr6I5fALg",
@@ -57,7 +57,7 @@
                     "node-clli": "NodeA",
                     "openroadm-version": "2.2.1",
                     "node-model": "model2",
-                    "node-type": "xpdr",
+                    "node-type-onetwo": "xpdr",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.4"
                 }
@@ -68,14 +68,14 @@
                     "node-clli": "NodeSA",
                     "openroadm-version": "2.2.1",
                     "node-model": "universal-switchponder",
-                    "node-type": "xpdr",
+                    "node-type-onetwo": "xpdr",
                     "node-vendor": "vendorA",
                     "node-ip-address": "1.2.3.4"
                 },
                 "switching-pool-lcp": [
                     {
                         "switching-pool-number": 1,
-                        "switching-pool-type": "non-blocking",
+                        "switching-pool-type-onetwo": "non-blocking",
                         "non-blocking-list": [
                             {
                                 "nbl-number": 11,
@@ -117,7 +117,7 @@
                     },
                     {
                         "switching-pool-number": 2,
-                        "switching-pool-type": "non-blocking",
+                        "switching-pool-type-onetwo": "non-blocking",
                         "non-blocking-list": [
                             {
                                 "nbl-number": 2,
@@ -143,11 +143,11 @@
                         "port-qual": "xpdr-network",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP1-CFP0-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "Swfw02qXGyI=",
-                        "xponder-type": "mpdr",
+                        "xponder-type-onetwo": "mpdr",
                         "supporting-circuit-pack-name": "CP1-CFP0"
                     },
                     {
@@ -155,7 +155,7 @@
                         "port-qual": "switch-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP2-QSFP4-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-100GE-ODU4",
                             "org-openroadm-port-types:if-100GE"
                         ],
@@ -167,7 +167,7 @@
                         "port-qual": "switch-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP2-QSFP2-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-100GE-ODU4",
                             "org-openroadm-port-types:if-100GE"
                         ],
@@ -179,7 +179,7 @@
                         "port-qual": "switch-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP2-QSFP3-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-100GE-ODU4",
                             "org-openroadm-port-types:if-100GE"
                         ],
@@ -191,7 +191,7 @@
                         "port-qual": "switch-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP2-QSFP1-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-100GE-ODU4",
                             "org-openroadm-port-types:if-100GE"
                         ],
@@ -203,7 +203,7 @@
                         "port-qual": "xpdr-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP1-SFP2-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-10GE-ODU2e",
                             "org-openroadm-port-types:if-10GE-ODU2"
                         ],
@@ -215,7 +215,7 @@
                         "port-qual": "xpdr-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP1-SFP3-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-10GE-ODU2e",
                             "org-openroadm-port-types:if-10GE-ODU2",
                             "org-openroadm-port-types:if-10GE"
@@ -228,7 +228,7 @@
                         "port-qual": "xpdr-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP1-SFP4-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-10GE-ODU2e",
                             "org-openroadm-port-types:if-10GE-ODU2",
                             "org-openroadm-port-types:if-10GE"
@@ -241,7 +241,7 @@
                         "port-qual": "xpdr-client",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP1-SFP1-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-10GE-ODU2e",
                             "org-openroadm-port-types:if-10GE-ODU2"
                         ],
@@ -253,11 +253,11 @@
                         "port-qual": "switch-network",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP6-CFP-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "exT821pFtOQ=",
-                        "xponder-type": "switch",
+                        "xponder-type-onetwo": "switch",
                         "supporting-circuit-pack-name": "CP6-CFP"
                     },
                     {
@@ -265,11 +265,11 @@
                         "port-qual": "switch-network",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP5-CFP-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "exT821pFtOc=",
-                        "xponder-type": "switch",
+                        "xponder-type-onetwo": "switch",
                         "supporting-circuit-pack-name": "CP5-CFP"
                     },
                     {
@@ -277,11 +277,11 @@
                         "port-qual": "switch-network",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP8-CFP-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "exT821pFtOI=",
-                        "xponder-type": "switch",
+                        "xponder-type-onetwo": "switch",
                         "supporting-circuit-pack-name": "CP8-CFP"
                     },
                     {
@@ -289,11 +289,11 @@
                         "port-qual": "switch-network",
                         "port-direction": "bidirectional",
                         "supporting-port": "CP7-CFP-P1",
-                        "supported-interface-capability": [
+                        "supported-if-cap-onetwo": [
                             "org-openroadm-port-types:if-OCH-OTU4-ODU4"
                         ],
                         "lcp-hash-val": "exT821pFtOU=",
-                        "xponder-type": "switch",
+                        "xponder-type-onetwo": "switch",
                         "supporting-circuit-pack-name": "CP7-CFP"
                     }
                 ]

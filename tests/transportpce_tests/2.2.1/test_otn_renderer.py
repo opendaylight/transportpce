@@ -59,9 +59,9 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertEqual('bidirectional', res_mapping['port-direction'])
         self.assertEqual('xpdr-client', res_mapping['port-qual'])
         self.assertEqual('FqlcrxV7p3g=', res_mapping['lcp-hash-val'])
-        self.assertIn('org-openroadm-port-types:if-10GE-ODU2e', res_mapping['supported-interface-capability'])
-        self.assertIn('org-openroadm-port-types:if-10GE-ODU2', res_mapping['supported-interface-capability'])
-        self.assertIn('org-openroadm-port-types:if-10GE', res_mapping['supported-interface-capability'])
+        self.assertIn('org-openroadm-port-types:if-10GE-ODU2e', res_mapping['supported-if-cap-onetwo'])
+        self.assertIn('org-openroadm-port-types:if-10GE-ODU2', res_mapping['supported-if-cap-onetwo'])
+        self.assertIn('org-openroadm-port-types:if-10GE', res_mapping['supported-if-cap-onetwo'])
 
     def test_03_get_portmapping_NETWORK1(self):
         response = test_utils.portmapping_request("SPDR-SA1/mapping/XPDR1-NETWORK1")
@@ -70,13 +70,13 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn(
             {"logical-connection-point": "XPDR1-NETWORK1",
              "supporting-port": "CP1-CFP0-P1",
-             "supported-interface-capability": [
+             "supported-if-cap-onetwo": [
                  "org-openroadm-port-types:if-OCH-OTU4-ODU4"
              ],
                 "port-direction": "bidirectional",
                 "port-qual": "xpdr-network",
                 "supporting-circuit-pack-name": "CP1-CFP0",
-                "xponder-type": "mpdr",
+                "xponder-type-onetwo": "mpdr",
              'lcp-hash-val': 'Swfw02qXGyI='},
             res['mapping'])
 
@@ -100,13 +100,13 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn(
             {"logical-connection-point": "XPDR1-NETWORK1",
              "supporting-port": "CP1-CFP0-P1",
-             "supported-interface-capability": [
+             "supported-if-cap-onetwo": [
                  "org-openroadm-port-types:if-OCH-OTU4-ODU4"
              ],
                 "port-direction": "bidirectional",
                 "port-qual": "xpdr-network",
                 "supporting-circuit-pack-name": "CP1-CFP0",
-                "xponder-type": "mpdr",
+                "xponder-type-onetwo": "mpdr",
                 "lcp-hash-val": "Swfw02qXGyI="},
             res['mapping'])
 
@@ -173,13 +173,13 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn(
             {"logical-connection-point": "XPDR1-NETWORK1",
              "supporting-port": "CP1-CFP0-P1",
-             "supported-interface-capability": [
+             "supported-if-cap-onetwo": [
                  "org-openroadm-port-types:if-OCH-OTU4-ODU4"
              ],
                 "port-direction": "bidirectional",
                 "port-qual": "xpdr-network",
                 "supporting-circuit-pack-name": "CP1-CFP0",
-                "xponder-type": "mpdr",
+                "xponder-type-onetwo": "mpdr",
                 "supporting-odu4": "XPDR1-NETWORK1-ODU4",
                 "lcp-hash-val": "Swfw02qXGyI="
              },

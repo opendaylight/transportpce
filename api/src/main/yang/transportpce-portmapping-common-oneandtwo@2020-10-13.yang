@@ -1,0 +1,79 @@
+module transportpce-portmapping-common-oneandtwo {
+  yang-version 1;
+  namespace "http://org/opendaylight/transportpce/portmapping/common/oneandtwo";
+  prefix transportpce-portmapping-common-oneandtwo;
+
+  import org-openroadm-common-types {
+    prefix org-openroadm-common-types;
+    revision-date 2018-10-19;
+  }
+  import org-openroadm-switching-pool-types {
+    prefix org-openroadm-switching-pool-types;
+    revision-date 2017-12-15;
+  }
+  import org-openroadm-port-types {
+    prefix org-openroadm-port-types;
+    revision-date 2018-10-19;
+  }
+
+  organization
+    "transportPCE";
+  contact
+    "transportPCE committers - ODL";
+  description
+    "YANG definitions of RPCs supported by OLM. Copyright (c) 2020
+     AT&T and others.";
+
+  revision 2020-10-13 {
+    description
+    "Common models for device 1.2.1 and 2.2.1";
+  }
+  
+  grouping node-type-onetwo {
+    leaf node-type-onetwo {
+      description
+        "Identifier for node-type e.g Roadm, xponder.
+        Populated only for 1.2.1 and 2.2.1 models";
+      type org-openroadm-common-types:node-types;
+    }
+  }
+  grouping supported-if-cap-onetwo {
+    leaf-list supported-if-cap-onetwo {
+      description
+        "Populated only for 1.2.1 and 2.2.1 models";
+      type identityref {
+        base org-openroadm-port-types:supported-if-capability;
+      }
+    }
+  }
+  grouping xponder-type-onetwo {
+    leaf xponder-type-onetwo {
+      description
+        "Populated only for 1.2.1 and 2.2.1 models";
+      type org-openroadm-common-types:xpdr-node-types;
+    }
+  }
+  grouping mc-frequency-g {
+    leaf slot-width-granularity-onetwo {
+      description
+        "Width of a slot measured in GHz.
+        Populated only for 1.2.1 and 2.2.1 models";
+      type org-openroadm-common-types:frequency-GHz;
+      default "50";
+    }
+    leaf center-freq-granularity-onetwo {
+      description
+        "Width of a slot measured in GHz.
+        Populated only for 1.2.1 and 2.2.1 models";
+      type org-openroadm-common-types:frequency-GHz;
+      default "50";
+    }
+  }
+  grouping switching-pool-type-g {
+    leaf switching-pool-type-onetwo {
+      description
+          "Populated only for 1.2.1 and 2.2.1 models";
+      type org-openroadm-switching-pool-types:switching-pool-types;
+    }
+  }
+}
