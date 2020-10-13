@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.JsonUtil;
@@ -68,6 +69,7 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore
 public class OpenRoadmOtnTopologyTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenRoadmOtnTopologyTest.class);
