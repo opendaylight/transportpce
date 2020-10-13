@@ -21,8 +21,8 @@ import org.opendaylight.transportpce.common.fixedflex.FlexGridInterface;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.McCapabilities;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
@@ -308,13 +308,14 @@ public class OpenRoadmInterface221 {
             mcLcp = logicalConnPoint.substring(0, logicalConnPoint.indexOf("-")) + "-TTP";
         }
         McCapabilities mcCapabilities = portMapping.getMcCapbilities(nodeId, mcLcp);
-        if (mcCapabilities == null || mcCapabilities.getSlotWidthGranularity() == null
-                || mcCapabilities.getSlotWidthGranularity().getValue() == null) {
+        // This is the interface file for 221, so we use respective data type from port-mapping
+        if (mcCapabilities == null || mcCapabilities.getSlotWidthGranularityOnetwo() == null
+                || mcCapabilities.getSlotWidthGranularityOnetwo().getValue() == null) {
             LOG.warn("Port mapping could not find {}", mcLcp);
             LOG.warn("Check the port mapping to verify {}", mcLcp);
             return nmcInterfaceBldr.getName();
         }
-        double slotWidthGran = mcCapabilities.getSlotWidthGranularity().getValue().doubleValue();
+        double slotWidthGran = mcCapabilities.getSlotWidthGranularityOnetwo().getValue().doubleValue();
         // Dead-band is constant (Ref: WP) In GHz
         double deadBand = 8;
         double guardBand = Math.ceil(deadBand / slotWidthGran) * slotWidthGran;

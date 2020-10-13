@@ -18,8 +18,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.dto.OtnTopoNode;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
@@ -367,9 +367,11 @@ public final class OpenRoadmOtnTopology {
                         .stream().filter(k -> k.getLogicalConnectionPoint()
                     .contains("XPDR" + xpdrNb + CLIENT)).collect(Collectors.toList());
                 OtnTopoNode otnNode = null;
-                if (mapping.getXponderType() != null) {
+                // TODO: Here it needs to change I guess
+                if (mapping.getXponderTypeOnetwo() != null) {
                     otnNode = new OtnTopoNode(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
-                        mapping.getXponderType(), fillConnectionMapLcp(xpdrNetMaps), fillConnectionMapLcp(xpdrClMaps));
+                        mapping.getXponderTypeOnetwo(), fillConnectionMapLcp(xpdrNetMaps),
+                        fillConnectionMapLcp(xpdrClMaps));
                 } else {
                     otnNode = new OtnTopoNode(mappingNode.getNodeId(), mappingNode.getNodeInfo().getNodeClli(), xpdrNb,
                         XpdrNodeTypes.Tpdr, fillConnectionMapLcp(xpdrNetMaps), fillConnectionMapLcp(xpdrClMaps));

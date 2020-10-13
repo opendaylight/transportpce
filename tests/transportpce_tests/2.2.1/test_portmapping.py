@@ -56,7 +56,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
-            {u'node-info': {u'node-type': u'rdm',
+            {u'node-info': {u'node-type-onetwo': u'rdm',
                             u'node-ip-address': u'127.0.0.11',
                             u'node-clli': u'NodeA',
                             u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
@@ -120,7 +120,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertEqual(
-            {u'node-info': {u'node-type': u'xpdr',
+            {u'node-info': {u'node-type-onetwo': u'xpdr',
                             u'node-ip-address': u'1.2.3.4',
                             u'node-clli': u'NodeA',
                             u'openroadm-version': u'2.2.1', u'node-vendor': u'vendorA',
@@ -133,7 +133,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
+            {'supported-if-cap-onetwo': ['org-openroadm-port-types:if-OCH'],
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/1-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK1', 'port-qual': 'xpdr-network',
              'port-direction': 'bidirectional', 'connection-map-lcp': 'XPDR1-CLIENT1',
@@ -145,7 +145,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supported-interface-capability': ['org-openroadm-port-types:if-OCH'],
+            {'supported-if-cap-onetwo': ['org-openroadm-port-types:if-OCH'],
              'supporting-port': '1', 'supporting-circuit-pack-name': '1/0/2-PLUG-NET',
              'logical-connection-point': 'XPDR1-NETWORK2', 'port-direction': 'bidirectional',
              'connection-map-lcp': 'XPDR1-CLIENT2', 'port-qual': 'xpdr-network',
@@ -157,7 +157,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
+            {'supported-if-cap-onetwo': ['org-openroadm-port-types:if-100GE'],
              'supporting-port': 'C1',
              'supporting-circuit-pack-name': '1/0/1-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT1', 'port-direction': 'bidirectional',
@@ -170,7 +170,7 @@ class TransportPCEPortMappingTesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
         self.assertIn(
-            {'supported-interface-capability': ['org-openroadm-port-types:if-100GE'],
+            {'supported-if-cap-onetwo': ['org-openroadm-port-types:if-100GE'],
              'supporting-port': 'C1',
              'supporting-circuit-pack-name': '1/0/2-PLUG-CLIENT',
              'logical-connection-point': 'XPDR1-CLIENT2', 'port-direction': 'bidirectional',

@@ -11,9 +11,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo.OpenroadmVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfoBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
@@ -61,7 +61,7 @@ public class ClliNetworkTest {
             .setNodeClli("NodeClliId")
             .setNodeModel("NodeModel")
             .setNodeIpAddress(new IpAddress(new Ipv4Address("127.0.0.1")))
-            .setNodeType(NodeTypes.Xpdr)
+            .setNodeTypeOnetwo(NodeTypes.Xpdr)
             .setNodeVendor("VendorA")
             .setOpenroadmVersion(OpenroadmVersion._121);
         return nodeBldr;
@@ -71,7 +71,7 @@ public class ClliNetworkTest {
         NodeInfoBuilder nodeBldr = new NodeInfoBuilder()
             .setNodeModel("NodeModel")
             .setNodeIpAddress(new IpAddress(new Ipv4Address("127.0.0.1")))
-            .setNodeType(NodeTypes.Xpdr)
+            .setNodeTypeOnetwo(NodeTypes.Xpdr)
             .setNodeVendor("VendorA")
             .setOpenroadmVersion(OpenroadmVersion._121);
         return nodeBldr;
