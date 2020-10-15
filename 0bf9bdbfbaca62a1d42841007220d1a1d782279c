@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ca85481c_5d0cee51",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-15T12:58:12Z",
+      "side": 1,
+      "message": "Still present in PS16, I reopen it to ease issues tracking.",
+      "parentUuid": "c123b05f_4bb0514f",
+      "revId": "0bf9bdbfbaca62a1d42841007220d1a1d782279c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c40a99f5_28829e2c",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
         "patchSetId": 11
@@ -81,6 +99,30 @@
       "revId": "0bf9bdbfbaca62a1d42841007220d1a1d782279c",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8d73c51c_94ffc8d6",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/provisiondevice/RendererServiceOperationsImpl.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-15T12:58:12Z",
+      "side": 1,
+      "message": "I reopen it to ease tracking.",
+      "parentUuid": "6af0d03d_c4d8838e",
+      "range": {
+        "startLine": 578,
+        "startChar": 8,
+        "endLine": 578,
+        "endChar": 66
+      },
+      "revId": "0bf9bdbfbaca62a1d42841007220d1a1d782279c",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }

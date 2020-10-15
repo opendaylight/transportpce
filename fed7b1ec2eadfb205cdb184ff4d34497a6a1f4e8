@@ -16,6 +16,24 @@
       "revId": "fed7b1ec2eadfb205cdb184ff4d34497a6a1f4e8",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7478b1a_465e4855",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-types@2020-05-29.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-15T12:58:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b1d78997_e9347fdb",
+      "revId": "fed7b1ec2eadfb205cdb184ff4d34497a6a1f4e8",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
