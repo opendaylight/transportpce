@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89e84d6d_c7785fdc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-15T15:02:01Z",
+      "side": 1,
+      "message": "Those optimizations were proposed in\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/93007\n\nWe should probably create a JIRA ticket for that.",
+      "revId": "ce538472098c43f31568415acd2703baf78c9836",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
