@@ -22,6 +22,30 @@
       "revId": "a0794e0ed4e88b7d68427ccc771cddafdc205318",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e8a7cf3_6c2fa7c0",
+        "filename": "ordmodels/device/NOTICE",
+        "patchSetId": 15
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-15T08:03:11Z",
+      "side": 1,
+      "message": "with the spelling \"mentioned\" indeed, this is probably the best option",
+      "parentUuid": "91063664_e7a8be03",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "a0794e0ed4e88b7d68427ccc771cddafdc205318",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
