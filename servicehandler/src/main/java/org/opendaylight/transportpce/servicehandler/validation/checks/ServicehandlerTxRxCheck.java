@@ -86,21 +86,20 @@ public final class ServicehandlerTxRxCheck {
     //sonar issue Reduce the number of conditional operators (4) used in the expression (maximum allowed 3)
     //won't be fixed because of functional checks needed
     public static boolean checkPort(Port port) {
-        boolean result = false;
-        if (port != null) {
-            String portDeviceName = port.getPortDeviceName();
-            String portType = port.getPortType();
-            String portName = port.getPortName();
-            String portRack = port.getPortRack();
-            String portShelf = port.getPortShelf();
-
-            return checkString(portDeviceName)
-                    && checkString(portType)
-                    && checkString(portName)
-                    && checkString(portRack)
-                    && checkString(portShelf);
+        if (port == null) {
+            return false;
         }
-        return result;
+        String portDeviceName = port.getPortDeviceName();
+        String portType = port.getPortType();
+        String portName = port.getPortName();
+        String portRack = port.getPortRack();
+        String portShelf = port.getPortShelf();
+
+        return checkString(portDeviceName)
+                && checkString(portType)
+                && checkString(portName)
+                && checkString(portRack)
+                && checkString(portShelf);
     }
 
     /**
@@ -111,18 +110,17 @@ public final class ServicehandlerTxRxCheck {
      * @return true if String ok false if not
      */
     public static boolean checkLgx(Lgx lgx) {
-        boolean result = false;
-        if (lgx != null) {
-            String lgxDeviceName = lgx.getLgxDeviceName();
-            String lgxPortName = lgx.getLgxPortName();
-            String lgxPortRack = lgx.getLgxPortRack();
-            String lgxPortShelf = lgx.getLgxPortShelf();
-            if (checkString(lgxDeviceName) && checkString(lgxPortName) && checkString(lgxPortRack)
-                    && checkString(lgxPortShelf)) {
-                result = true;
-            }
+        if (lgx == null) {
+            return false;
         }
-        return result;
+        String lgxDeviceName = lgx.getLgxDeviceName();
+        String lgxPortName = lgx.getLgxPortName();
+        String lgxPortRack = lgx.getLgxPortRack();
+        String lgxPortShelf = lgx.getLgxPortShelf();
+        return checkString(lgxDeviceName)
+                && checkString(lgxPortName)
+                && checkString(lgxPortRack)
+                && checkString(lgxPortShelf);
     }
 
     /**
