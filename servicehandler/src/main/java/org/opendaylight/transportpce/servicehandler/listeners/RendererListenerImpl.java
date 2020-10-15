@@ -47,26 +47,26 @@ public class RendererListenerImpl implements TransportpceRendererListener {
 
     @Override
     public void onServiceRpcResultSp(ServiceRpcResultSp notification) {
-        if (!compareServiceRpcResultSp(notification)) {
-            serviceRpcResultSp = notification;
-            String serviceName = serviceRpcResultSp.getServiceName();
-            int notifType = serviceRpcResultSp.getNotificationType().getIntValue();
-            LOG.info("Renderer '{}' Notification received : {}", serviceRpcResultSp.getNotificationType().getName(),
-                    notification);
-            switch (notifType) {
-                /* service-implementation-request. */
-                case 3 :
-                    onServiceImplementationResult(serviceName);
-                    break;
-                /* service-delete. */
-                case 4 :
-                    onServiceDeleteResult(serviceName);
-                    break;
-                default:
-                    break;
-            }
-        } else {
+        if (compareServiceRpcResultSp(notification)) {
             LOG.warn("ServiceRpcResultSp already wired !");
+            return;
+        }
+        serviceRpcResultSp = notification;
+        String serviceName = serviceRpcResultSp.getServiceName();
+        int notifType = serviceRpcResultSp.getNotificationType().getIntValue();
+        LOG.info("Renderer '{}' Notification received : {}", serviceRpcResultSp.getNotificationType().getName(),
+                notification);
+        switch (notifType) {
+            /* service-implementation-request. */
+            case 3 :
+                onServiceImplementationResult(serviceName);
+                break;
+            /* service-delete. */
+            case 4 :
+                onServiceDeleteResult(serviceName);
+                break;
+            default:
+                break;
         }
     }
 
@@ -75,18 +75,24 @@ public class RendererListenerImpl implements TransportpceRendererListener {
      * @param serviceName String
      */
     private void onServiceDeleteResult(String serviceName) {
-        if (serviceRpcResultSp.getStatus() == RpcStatusEx.Successful) {
-            LOG.info("Service '{}' deleted !", serviceName);
-            if (this.input != null) {
-                LOG.info("sending PCE cancel resource reserve for '{}'",  this.input.getServiceName());
-                this.pceServiceWrapper.cancelPCEResource(this.input.getServiceName(),
-                        ServiceNotificationTypes.ServiceDeleteResult);
-            } else {
-                LOG.error("ServiceInput parameter is null !");
-            }
-        } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Failed) {
+        if (serviceRpcResultSp.getStatus() == RpcStatusEx.Failed) {
             LOG.error("Renderer service delete failed !");
+            return;
+        } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Pending) {
+            LOG.warn("Renderer service delete returned a Penging RpcStatusEx code!");
+            return;
+        } else if (serviceRpcResultSp.getStatus() != RpcStatusEx.Successful) {
+            LOG.error("Renderer service delete returned an unknown RpcStatusEx code!");
+            return;
         }
+        LOG.info("Service '{}' deleted !", serviceName);
+        if (this.input == null) {
+            LOG.error("ServiceInput parameter is null !");
+            return;
+        }
+        LOG.info("sending PCE cancel resource reserve for '{}'",  this.input.getServiceName());
+        this.pceServiceWrapper.cancelPCEResource(this.input.getServiceName(),
+                ServiceNotificationTypes.ServiceDeleteResult);
     }
 
     /**
@@ -99,7 +105,12 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             onSuccededServiceImplementation();
         } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Failed) {
             onFailedServiceImplementation(serviceName);
+        } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Pending) {
+            LOG.warn("Service Implementation still pending according to RpcStatusEx");
+        } else {
+            LOG.warn("Service Implementation has an unknown RpcStatusEx code");
         }
+
     }
 
     /**
@@ -107,21 +118,24 @@ public class RendererListenerImpl implements TransportpceRendererListener {
      */
     private void onSuccededServiceImplementation() {
         LOG.info("Service implemented !");
-        if (serviceDataStoreOperations != null) {
-            OperationResult operationResult = null;
-            if (tempService) {
-                operationResult = this.serviceDataStoreOperations.modifyTempService(
-                        serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
-                if (!operationResult.isSuccess()) {
-                    LOG.warn("Temp Service status not updated in datastore !");
-                }
-            } else {
-                operationResult = this.serviceDataStoreOperations
-                        .modifyService(serviceRpcResultSp.getServiceName(),
-                                State.InService, AdminStates.InService);
-                if (!operationResult.isSuccess()) {
-                    LOG.warn("Service status not updated in datastore !");
-                }
+        if (serviceDataStoreOperations == null) {
+            LOG.debug("serviceDataStoreOperations is null");
+            return;
+        }
+        OperationResult operationResult = null;
+        if (tempService) {
+            operationResult = this.serviceDataStoreOperations.modifyTempService(
+                    serviceRpcResultSp.getServiceName(), State.InService, AdminStates.InService);
+            if (!operationResult.isSuccess()) {
+                LOG.warn("Temp Service status not updated in datastore !");
+            }
+        } else {
+            operationResult = this.serviceDataStoreOperations.modifyService(
+                    serviceRpcResultSp.getServiceName(),
+                    State.InService,
+                    AdminStates.InService);
+            if (!operationResult.isSuccess()) {
+                LOG.warn("Service status not updated in datastore !");
             }
         }
     }
@@ -156,24 +170,22 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         value = "ES_COMPARING_STRINGS_WITH_EQ",
         justification = "false positives, not strings but real object references comparisons")
     private Boolean compareServiceRpcResultSp(ServiceRpcResultSp notification) {
-        Boolean result = true;
         if (serviceRpcResultSp == null) {
-            result = false;
-        } else {
-            if (serviceRpcResultSp.getNotificationType() != notification.getNotificationType()) {
-                result = false;
-            }
-            if (serviceRpcResultSp.getServiceName() != notification.getServiceName()) {
-                result = false;
-            }
-            if (serviceRpcResultSp.getStatus() != notification.getStatus()) {
-                result = false;
-            }
-            if (serviceRpcResultSp.getStatusMessage() != notification.getStatusMessage()) {
-                result = false;
-            }
+            return false;
         }
-        return result;
+        if (serviceRpcResultSp.getNotificationType() != notification.getNotificationType()) {
+            return false;
+        }
+        if (serviceRpcResultSp.getServiceName() != notification.getServiceName()) {
+            return false;
+        }
+        if (serviceRpcResultSp.getStatus() != notification.getStatus()) {
+            return false;
+        }
+        if (serviceRpcResultSp.getStatusMessage() != notification.getStatusMessage()) {
+            return false;
+        }
+        return true;
     }
 
     public void setServiceInput(ServiceInput serviceInput) {
