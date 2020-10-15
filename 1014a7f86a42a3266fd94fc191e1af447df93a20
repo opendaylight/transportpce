@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "923d4635_aed54ec1",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-types@2020-05-29.yang",
+        "patchSetId": 16
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-15T11:48:07Z",
+      "side": 1,
+      "message": "Removed sc-fec, rs-fec, and o-fec identities (differs from original model) file.",
+      "revId": "1014a7f86a42a3266fd94fc191e1af447df93a20",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
