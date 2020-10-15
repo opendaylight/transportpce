@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bdc2b769_358c92b8",
+        "filename": "api/src/main/yang/gnpy-path-computation-simplified@2020-09-09.yang",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-15T08:09:26Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "7777a307_c25703c0",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "3698762c472dcee815709036258f76af446bec35",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f8f6047_d1d01afc",
         "filename": "api/src/main/yang/service_path/transportpce-common-service-path-types@2020-01-28.yang",
         "patchSetId": 7
