@@ -16,6 +16,29 @@
       "revId": "ce538472098c43f31568415acd2703baf78c9836",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a804c7f5_34c75f38",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-16T07:02:54Z",
+      "side": 1,
+      "message": "note I added here (and in other places) an extra protection not originally present in case that an unexpected exit code pops up. This way, we will have at least a trace of it in logs.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 9
+      },
+      "revId": "ce538472098c43f31568415acd2703baf78c9836",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
