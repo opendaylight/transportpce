@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c361799f_c3f8cfcb",
+        "filename": "lighty/pom.xml",
+        "patchSetId": 14
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-16T13:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c8144af_753afcea",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 11
+      },
+      "revId": "6836cfeb637193942eeda15b83216ae8588e5a5a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aae43977_e6e8a590",
         "filename": "ordmodels/device/pom.xml",
         "patchSetId": 14
