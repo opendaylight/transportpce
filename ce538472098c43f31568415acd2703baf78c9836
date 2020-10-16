@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7819d5e5_d710cd10",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-16T09:11:57Z",
+      "side": 1,
+      "message": "Fixed.\nIn such cases, don\u0027t hesitate to edit the commit message directly in place within Gerrit.\n\nNB: the ticket didn\u0027t exist at the time I pushed the change. I was expecting you to create this ticket and to add it here since you closed the remarks on change 93007 where those optimizations were initially proposed. (It\u0027s a best practice to ensure they are not forgotten)",
+      "parentUuid": "89c22475_52025914",
+      "revId": "ce538472098c43f31568415acd2703baf78c9836",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a804c7f5_34c75f38",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
         "patchSetId": 1
@@ -84,6 +102,30 @@
     },
     {
       "key": {
+        "uuid": "c5f5d9d1_d796026d",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-16T09:11:57Z",
+      "side": 1,
+      "message": "Agreed, this is not the right way to handle the \"pending\" status.\n-\u003e so how should we handle \"pending\" ? I need more feedback about that.\n\nOnce that done and except if we are sure it will never happen, I guess the extra protection can be kept in case additional values are added to RpcStatusEx.",
+      "parentUuid": "00bb6929_32786add",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 9
+      },
+      "revId": "ce538472098c43f31568415acd2703baf78c9836",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71d3267c_ab005e40",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
         "patchSetId": 1
@@ -118,6 +160,30 @@
       "writtenOn": "2020-10-16T07:33:49Z",
       "side": 1,
       "message": "I don\u0027t see the optimization here. Check null with a \"return and no log\" is the same as checking the non null directly and running action.",
+      "range": {
+        "startLine": 113,
+        "startChar": 1,
+        "endLine": 132,
+        "endChar": 5
+      },
+      "revId": "ce538472098c43f31568415acd2703baf78c9836",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b7e40f7_523eb5a0",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-16T09:11:57Z",
+      "side": 1,
+      "message": "From an efficiency perspective there is none.\nIt concerns the indentation and the style coherency across the whole class and its (maybe subjective) readability.\n\nI\u0027ve hesitated to mutualize the operationResut.isSuccess if-block\n             if (!operationResult.isSuccess()) {\n                LOG.warn(\"(Temp) Service status not updated in datastore !\");\n             }\n\nWhat\u0027s your opinion about that ?",
+      "parentUuid": "b9c7949c_881cb05d",
       "range": {
         "startLine": 113,
         "startChar": 1,
