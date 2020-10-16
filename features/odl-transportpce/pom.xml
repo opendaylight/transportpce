@@ -26,9 +26,21 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <properties>
     <controller.version>2.0.4</controller.version>
     <netconf.version>1.9.1-SNAPSHOT</netconf.version>
-    <restconf.version>1.12.1-SNAPSHOT</restconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.opendaylight.netconf</groupId>
+                <artifactId>netconf-artifacts</artifactId>
+                <version>${netconf.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -86,7 +98,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <artifactId>transportpce-servicehandler</artifactId>
       <version>${project.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>odl-mdsal-broker</artifactId>
@@ -97,21 +108,18 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>odl-restconf-all</artifactId>
-      <version>${restconf.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>odl-netconf-all</artifactId>
-      <version>${netconf.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
       <artifactId>odl-netconf-connector-all</artifactId>
-      <version>${netconf.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
