@@ -26,7 +26,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <properties>
     <controller.version>2.0.4</controller.version>
     <netconf.version>1.9.1-SNAPSHOT</netconf.version>
-    <restconf.version>1.12.1-SNAPSHOT</restconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
@@ -91,13 +90,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>odl-mdsal-broker</artifactId>
       <version>${controller.version}</version>
-      <classifier>features</classifier>
-      <type>xml</type>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>odl-restconf-all</artifactId>
-      <version>${restconf.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
     </dependency>
