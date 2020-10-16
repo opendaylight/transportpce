@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "89c22475_52025914",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-16T07:29:57Z",
+      "side": 1,
+      "message": "Lacks the JIRA ticket (TRNSPRTPCE-342)",
+      "parentUuid": "89e84d6d_c7785fdc",
+      "revId": "ce538472098c43f31568415acd2703baf78c9836",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a804c7f5_34c75f38",
         "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/PceListenerImpl.java",
         "patchSetId": 1
