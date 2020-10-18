@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f72e5b4_2e2175a0",
+        "filename": "tox.ini",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-18T21:48:27Z",
+      "side": 1,
+      "message": "that\u0027s a bit radical. Can we limit the variables to pass to the usual suspects ?\nWhat about beginning by JAVA_HOME for example ?",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 12
+      },
+      "revId": "37a6d6ad9cc3ffa467f4895d4301266828c37944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
