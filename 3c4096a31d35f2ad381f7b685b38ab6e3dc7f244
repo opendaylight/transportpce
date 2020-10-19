@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "10b497dd_10586734",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-19T11:27:36Z",
+      "side": 1,
+      "message": "I am not fond of this solution as it is proposed here because\n*-onetwo-* strcutures names do not really reflect the problem they address. I am not sure to understand what this brings.   Is it aimed for dealing with flexGrid or B100G specific capalibities ? Or because the YANG structure have too much evolved ?\nMaybe this deserves a separate commit.\n\u003d\u003e put this change in  WIP",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 42
+      },
+      "revId": "3c4096a31d35f2ad381f7b685b38ab6e3dc7f244",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2206ce8d_a378ad5c",
+        "filename": "api/src/main/yang/transportpce-portmapping-common-oneandtwo@2020-10-13.yang",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-19T11:27:36Z",
+      "side": 1,
+      "message": "trailing blank",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 2
+      },
+      "revId": "3c4096a31d35f2ad381f7b685b38ab6e3dc7f244",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ccdc8bec_83a5640d",
         "filename": "api/src/main/yang/transportpce-portmapping@2020-10-12.yang",
         "patchSetId": 4
