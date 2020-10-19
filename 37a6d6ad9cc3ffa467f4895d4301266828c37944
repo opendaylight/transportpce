@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "48d9fa74_317605be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-19T06:46:06Z",
+      "side": 1,
+      "message": "it\u0027s a more an affirmation to put in the body than a title.\nA title scuh as \"pass more environment variables to tox\" would be more appropriate.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "37a6d6ad9cc3ffa467f4895d4301266828c37944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31dec3b5_032d99da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-19T06:46:06Z",
+      "side": 1,
+      "message": "You can remove \"Reference:\" which is normally more for internal projects references (\u003dJIRA here)",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "37a6d6ad9cc3ffa467f4895d4301266828c37944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4f72e5b4_2e2175a0",
         "filename": "tox.ini",
         "patchSetId": 1
