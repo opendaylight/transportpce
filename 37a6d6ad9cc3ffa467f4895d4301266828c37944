@@ -22,6 +22,30 @@
       "revId": "37a6d6ad9cc3ffa467f4895d4301266828c37944",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f305574_2f9aaeba",
+        "filename": "tox.ini",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-19T04:02:30Z",
+      "side": 1,
+      "message": "Yes, that might work as well. I will try with that and see. If it works then I will update this accordingly.",
+      "parentUuid": "4f72e5b4_2e2175a0",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 12
+      },
+      "revId": "37a6d6ad9cc3ffa467f4895d4301266828c37944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
