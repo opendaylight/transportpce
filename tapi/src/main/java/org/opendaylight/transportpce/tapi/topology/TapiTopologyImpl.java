@@ -13,9 +13,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -35,6 +36,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
@@ -102,55 +104,31 @@ public class TapiTopologyImpl implements TapiTopologyService {
 
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
-        LOG.info("Building TAPI Topology abstraction from {}", input.getTopologyIdOrName());
-        Topology topology = null;
-        switch (input.getTopologyIdOrName()) {
-            case NetworkUtils.OVERLAY_NETWORK_ID:
-                topology = createAbstractedOpenroadmTopology();
-                break;
-            case NetworkUtils.OTN_NETWORK_ID:
-                topology = createAbstractedOtnTopology();
-                break;
-            default:
-                LOG.error("{} unknown - can not be abstracted", input.getTopologyIdOrName());
-                break;
-        }
-        if (topology != null) {
+        try {
+            LOG.info("Building TAPI Topology abstraction from {}", input.getTopologyIdOrName());
+            Topology topology = null;
+            switch (input.getTopologyIdOrName()) {
+                case NetworkUtils.OVERLAY_NETWORK_ID:
+                    topology = createAbstractedOpenroadmTopology();
+                    break;
+                case NetworkUtils.OTN_NETWORK_ID:
+                    topology = createAbstractedOtnTopology();
+                    break;
+                default:
+                    LOG.error("{} unknown - can not be abstracted", input.getTopologyIdOrName());
+                    break;
+            }
             return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder().setTopology(topology).build())
                 .buildFuture();
-        } else {
+        } catch (TapiTopologyException e) {
             return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder().build()).buildFuture();
         }
     }
 
-    private Topology createAbstractedOpenroadmTopology() {
+    private Topology createAbstractedOpenroadmTopology() throws TapiTopologyException {
         // read openroadm-topology
-        @NonNull
-        FluentFuture<Optional<Network>> openroadmTopoOpt = dataBroker.newReadOnlyTransaction()
-                .read(LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OVERLAY_NETWORK_II);
-        if (!openroadmTopoOpt.isDone()) {
-            LOG.warn("Cannot get openroadm topology, returning null");
-            return null;
-        }
-        Optional<Network> optionalOpenroadmTop = null;
-        try {
-            optionalOpenroadmTop = openroadmTopoOpt.get();
-        } catch (InterruptedException e) {
-            //sonar : "InterruptedException" should not be ignored (java:S2142)
-            //https://www.ibm.com/developerworks/java/library/j-jtp05236/index.html?ca=drs-#2.1
-            Thread.currentThread().interrupt();
-            return null;
-        } catch (ExecutionException | NoSuchElementException e) {
-            LOG.error("Impossible to retrieve openroadm-topology from mdsal", e);
-            return null;
-        }
-
-        if (!optionalOpenroadmTop.isPresent()) {
-            LOG.warn("Openroadm topology is not present, returning null");
-            return null;
-        }
-        Network openroadmTopo = optionalOpenroadmTop.get();
-        List<Node> nodeList = new ArrayList<>(openroadmTopo.getNode().values());
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
+        List<Node> xpdrNodeList = pruneOpenroadmNodes(openroadmTopo);
         List<Link> linkList = null;
         if (openroadmTopo.augmentation(Network1.class) != null) {
             linkList = new ArrayList<>(openroadmTopo.augmentation(Network1.class).getLink().values());
@@ -163,13 +141,6 @@ public class TapiTopologyImpl implements TapiTopologyService {
         List<Link> xponderInLinkList = linkList.stream()
                 .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDERINPUT))
                 .collect(Collectors.toList());
-
-        List<Node> xpdrNodeList = nodeList
-                .stream()
-                .filter(nt -> nt
-                        .augmentation(org.opendaylight.yang.gen.v1
-                                .http.org.openroadm.common.network.rev181130.Node1.class)
-                        .getNodeType().equals(OpenroadmNodeType.XPONDER)).collect(Collectors.toList());
         Map<String, List<String>> clientPortMap = new HashMap<>();
         for (Node node : xpdrNodeList) {
             String nodeId = node.getSupportingNode().values().stream()
@@ -199,7 +170,27 @@ public class TapiTopologyImpl implements TapiTopologyService {
             = createTapiNode(goodTpList);
         tapiNodeList.put(node.key(), node);
         return new TopologyBuilder().setName(names).setUuid(uuid).setNode(tapiNodeList).build();
+    }
 
+    private Network readTopology(InstanceIdentifier<Network> networkIID)
+        throws TapiTopologyException {
+        Network topology = null;
+        FluentFuture<Optional<Network>> topologyFuture = dataBroker.newReadOnlyTransaction()
+            .read(LogicalDatastoreType.CONFIGURATION, networkIID);
+        try {
+            topology = topologyFuture.get().get();
+        } catch (InterruptedException | ExecutionException e) {
+            Thread.currentThread().interrupt();
+            throw new TapiTopologyException("Unable to get from mdsal topology: " + networkIID
+                .firstKeyOf(Network.class).getNetworkId().getValue(), e);
+        }
+        return topology;
+    }
+
+    private List<Node> pruneOpenroadmNodes(Network openroadmTopo) {
+        return openroadmTopo.getNode().values().stream().filter(nt -> nt
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+                .getNodeType().equals(OpenroadmNodeType.XPONDER)).collect(Collectors.toList());
     }
 
     private List<String> extractGoodTpList(Map<String, List<String>> clientPortMap) {
@@ -214,53 +205,88 @@ public class TapiTopologyImpl implements TapiTopologyService {
         return goodTpList;
     }
 
-    private Topology createAbstractedOtnTopology() {
-        // read otn-topology
-        @NonNull
-        FluentFuture<Optional<Network>> otnTopoOpt = dataBroker.newReadOnlyTransaction().read(
-            LogicalDatastoreType.CONFIGURATION, InstanceIdentifiers.OTN_NETWORK_II);
-        if (otnTopoOpt.isDone()) {
-            Network otnTopo = null;
-            try {
-                otnTopo = otnTopoOpt.get().get();
-            } catch (InterruptedException | ExecutionException | NoSuchElementException e) {
-                LOG.error("Impossible to retreive otn-topology from mdsal",e);
-                return null;
-            }
-            List<Node> nodeList = new ArrayList<>(otnTopo.getNode().values());
-            List<Node> otnNodeList = nodeList.stream().filter(nt -> nt.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
-                .getNodeType().equals(OpenroadmNodeType.SWITCH) || nt.augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
-                    .getNodeType().equals(OpenroadmNodeType.MUXPDR)).collect(Collectors.toList());
-            Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
-                tapiNodeList = new HashMap<>();
-            Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link>
-                tapiLinkList = new HashMap<>();
-            Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(T0_MULTI_LAYER_TOPO.getBytes(Charset.forName("UTF-8")))
-                .toString());
-            ConvertORTopoObjectToTapiTopoObject tapiFactory = new ConvertORTopoObjectToTapiTopoObject(topoUuid);
-            for (Node node : otnNodeList) {
-                tapiFactory.convertNode(node);
-                tapiNodeList.putAll(tapiFactory.getTapiNodes());
-                tapiLinkList.putAll(tapiFactory.getTapiLinks());
-            }
-            if (otnTopo.augmentation(Network1.class) != null) {
-                List<Link> otnLinkList = new ArrayList<>(otnTopo.augmentation(Network1.class).getLink().values());
-                Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkId().getValue()
-                    .compareTo(l2.getLinkId().getValue()));
-                tapiFactory.convertLinks(otnLinkList);
-                tapiLinkList.putAll(tapiFactory.getTapiLinks());
-            }
-            Name name = new NameBuilder().setValue(T0_MULTI_LAYER_TOPO).setValueName("TAPI Topology Name").build();
-            return new TopologyBuilder()
-                    .setName(Map.of(name.key(), name))
-                    .setUuid(topoUuid)
-                    .setNode(tapiNodeList)
-                    .setLink(tapiLinkList).build();
+    private Topology createAbstractedOtnTopology() throws TapiTopologyException {
+        // read openroadm-topology
+        Network openroadmTopo = readTopology(InstanceIdentifiers.OVERLAY_NETWORK_II);
+        List<Link> linkList = null;
+        if (openroadmTopo.augmentation(Network1.class) != null) {
+            linkList = new ArrayList<>(openroadmTopo.augmentation(Network1.class).getLink().values());
         } else {
-            return null;
+            linkList = new ArrayList<>();
         }
+        List<Link> xponderOutLinkList = linkList.stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDEROUTPUT))
+                .collect(Collectors.toList());
+        List<Link> xponderInLinkList = linkList.stream()
+                .filter(lk -> lk.augmentation(Link1.class).getLinkType().equals(OpenroadmLinkType.XPONDERINPUT))
+                .collect(Collectors.toList());
+        // read otn-topology
+        Network otnTopo = readTopology(InstanceIdentifiers.OTN_NETWORK_II);
+        Map<NodeId, Node> otnNodeMap = otnTopo.nonnullNode().values().stream().filter(nt -> nt.augmentation(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+            .getNodeType().equals(OpenroadmNodeType.SWITCH) || nt.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+                .getNodeType().equals(OpenroadmNodeType.MUXPDR))
+            .collect(Collectors.toMap(Node::getNodeId, node -> node));
+
+        Map<String, List<String>> networkPortMap = new HashMap<>();
+        Iterator<Entry<NodeId, Node>> itOtnNodeMap = otnNodeMap.entrySet().iterator();
+        while (itOtnNodeMap.hasNext()) {
+            Entry<NodeId, Node> entry = itOtnNodeMap.next();
+            String portMappingNodeId = entry.getValue().getSupportingNode().values().stream()
+                .filter(sn -> sn.getNetworkRef().getValue().equals(NetworkUtils.UNDERLAY_NETWORK_ID))
+                .findFirst()
+                .get().getNodeRef().getValue();
+            List<String> networkPortList = new ArrayList<>();
+            for (TerminationPoint tp : entry.getValue().augmentation(Node1.class).getTerminationPoint().values()) {
+                if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)
+                    &&
+                    checkTp(entry.getKey().getValue(), portMappingNodeId, tp, xponderOutLinkList, xponderInLinkList)) {
+                    networkPortList.add(tp.getTpId().getValue());
+                }
+            }
+            if (!networkPortList.isEmpty()) {
+                networkPortMap.put(entry.getKey().getValue(), networkPortList);
+            }
+        }
+        Map<NodeKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node>
+            tapiNodeList = new HashMap<>();
+        Map<LinkKey, org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link>
+            tapiLinkList = new HashMap<>();
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(T0_MULTI_LAYER_TOPO.getBytes(Charset.forName("UTF-8")))
+            .toString());
+        ConvertORTopoToTapiTopo tapiFactory = new ConvertORTopoToTapiTopo(topoUuid);
+        Iterator<Entry<String, List<String>>> it = networkPortMap.entrySet().iterator();
+        while (it.hasNext()) {
+            String nodeId = it.next().getKey();
+            tapiFactory.convertNode(otnNodeMap.get(new NodeId(nodeId)), networkPortMap.get(nodeId));
+            tapiNodeList.putAll(tapiFactory.getTapiNodes());
+            tapiLinkList.putAll(tapiFactory.getTapiLinks());
+        }
+        if (openroadmTopo.nonnullNode().values().stream().filter(nt ->
+                nt.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
+                .getNodeType().equals(OpenroadmNodeType.SRG)).count() > 0) {
+            tapiFactory.convertRoadmInfrastructure();
+            tapiNodeList.putAll(tapiFactory.getTapiNodes());
+            tapiLinkList.putAll(tapiFactory.getTapiLinks());
+        } else {
+            LOG.warn("Unable to abstract an ROADM infrasctructure from openroadm-topology");
+        }
+        if (otnTopo.augmentation(Network1.class) != null) {
+            List<Link> otnLinkList = new ArrayList<>(otnTopo.augmentation(Network1.class).getLink().values());
+            otnLinkList.forEach(link -> LOG.info("\notn links non triés = {}", link.getLinkId().getValue()));
+            Collections.sort(otnLinkList, (l1, l2) -> l1.getLinkId().getValue()
+                .compareTo(l2.getLinkId().getValue()));
+            otnLinkList.forEach(link -> LOG.info("\notn links triés = {}", link.getLinkId().getValue()));
+            tapiFactory.convertLinks(otnLinkList);
+            tapiLinkList.putAll(tapiFactory.getTapiLinks());
+        }
+        Name name = new NameBuilder().setValue(T0_MULTI_LAYER_TOPO).setValueName("TAPI Topology Name").build();
+        return new TopologyBuilder()
+                .setName(Map.of(name.key(), name))
+                .setUuid(topoUuid)
+                .setNode(tapiNodeList)
+                .setLink(tapiLinkList).build();
     }
 
     @Override
@@ -326,10 +352,14 @@ public class TapiTopologyImpl implements TapiTopologyService {
 
     private boolean checkTp(String nodeIdTopo, String nodeIdPortMap, TerminationPoint tp, List<Link> xpdOut, List<
         Link> xpdIn) {
-        @Nullable
-        String networkLcp = tp.augmentation(
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1.class)
-            .getAssociatedConnectionMapPort();
+        String networkLcp;
+        if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERCLIENT)) {
+            networkLcp = tp.augmentation(
+                org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1.class)
+                .getAssociatedConnectionMapPort();
+        } else {
+            networkLcp = tp.getTpId().getValue();
+        }
         @NonNull
         KeyedInstanceIdentifier<Mapping, MappingKey> pmIID = InstanceIdentifier.create(
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.Network.class)
