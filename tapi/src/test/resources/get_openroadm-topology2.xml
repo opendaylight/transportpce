@@ -3,931 +3,620 @@
 <network>
   <network-id>openroadm-topology</network-id>
   <network-types>
-    <openroadm-common-network xmlns="http://org/openroadm/common/network"/>
+    <openroadm-common-network xmlns="http://org/openroadm/common/network" />
   </network-types>
   <node>
     <node-id>ROADM-A1-SRG3</node-id>
     <srg-attributes xmlns="http://org/openroadm/network/topology">
       <available-wavelengths>
-        <index>94</index>
+        <index>95</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>93</index>
+        <index>94</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>96</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>95</index>
+        <index>43</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>42</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>41</index>
+        <index>45</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>44</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>43</index>
+        <index>39</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>38</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>37</index>
+        <index>41</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>40</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>39</index>
+        <index>35</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>34</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>33</index>
+        <index>37</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>36</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>35</index>
+        <index>31</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>30</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>29</index>
+        <index>33</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>32</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>31</index>
+        <index>59</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>58</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>57</index>
+        <index>61</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>60</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>59</index>
+        <index>55</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>54</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>53</index>
+        <index>57</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>56</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>55</index>
+        <index>51</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>50</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>49</index>
+        <index>53</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>52</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>51</index>
+        <index>47</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>46</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>45</index>
+        <index>49</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>48</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>47</index>
+        <index>75</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>74</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>73</index>
+        <index>77</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>76</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>75</index>
+        <index>71</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>70</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>69</index>
+        <index>73</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>72</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>71</index>
+        <index>67</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>66</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>65</index>
+        <index>69</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>68</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>67</index>
+        <index>63</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>62</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>61</index>
+        <index>65</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>64</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>63</index>
+        <index>91</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>90</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>89</index>
+        <index>93</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>92</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>91</index>
+        <index>87</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>86</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>85</index>
+        <index>89</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>88</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>87</index>
+        <index>83</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>82</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>81</index>
+        <index>85</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>84</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>83</index>
+        <index>79</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>78</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>77</index>
+        <index>81</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>80</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>79</index>
+        <index>11</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>10</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>9</index>
+        <index>13</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>12</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>11</index>
+        <index>7</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>6</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>5</index>
+        <index>9</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>8</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>7</index>
+        <index>3</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>2</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>1</index>
+        <index>5</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>4</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>3</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>26</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>25</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>28</index>
+        <index>1</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>27</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>22</index>
+        <index>26</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>21</index>
+        <index>29</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>24</index>
+        <index>28</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>23</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>18</index>
+        <index>22</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>17</index>
+        <index>25</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>20</index>
+        <index>24</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>19</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>14</index>
+        <index>18</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>13</index>
+        <index>21</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>16</index>
+        <index>20</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>15</index>
       </available-wavelengths>
+      <available-wavelengths>
+        <index>14</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>17</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>16</index>
+      </available-wavelengths>
     </srg-attributes>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>SRG3-CP-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-CP</tp-type>
+      <tp-id>SRG3-PP3-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>SRG3-PP2-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>SRG3-PP4-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
+      <tp-id>SRG3-CP-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-CP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>SRG3-PP1-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>SRG3-PP3-TXRX</tp-id>
+      <tp-id>SRG3-PP4-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
-    <node-type xmlns="http://org/openroadm/common/network">SRG</node-type>
-    <supporting-node>
-      <network-ref>openroadm-network</network-ref>
-      <node-ref>ROADM-A1</node-ref>
-    </supporting-node>
     <supporting-node>
       <network-ref>clli-network</network-ref>
       <node-ref>NodeA</node-ref>
     </supporting-node>
-  </node>
-  <node>
-    <node-id>ROADM-C1-DEG2</node-id>
-    <degree-attributes xmlns="http://org/openroadm/network/topology">
-      <degree-number>2</degree-number>
-      <available-wavelengths>
-        <index>94</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>93</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>96</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>95</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>42</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>41</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>44</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>43</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>38</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>37</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>40</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>39</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>34</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>33</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>36</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>35</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>30</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>29</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>32</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>31</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>58</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>57</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>60</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>59</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>54</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>53</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>56</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>55</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>50</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>49</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>52</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>51</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>46</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>45</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>48</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>47</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>74</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>73</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>76</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>75</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>70</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>69</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>72</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>71</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>66</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>65</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>68</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>67</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>62</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>61</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>64</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>63</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>90</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>89</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>92</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>91</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>86</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>85</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>88</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>87</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>82</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>81</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>84</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>83</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>78</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>77</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>80</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>79</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>10</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>9</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>12</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>11</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>6</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>5</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>8</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>7</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>2</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>1</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>4</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>3</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>26</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>25</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>28</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>27</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>22</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>21</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>24</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>23</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>18</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>17</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>20</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>19</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>14</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>13</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>16</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>15</index>
-      </available-wavelengths>
-    </degree-attributes>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>DEG2-CTP-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-CTP</tp-type>
-    </termination-point>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>DEG2-TTP-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-TTP</tp-type>
-    </termination-point>
-    <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
     <supporting-node>
       <network-ref>openroadm-network</network-ref>
-      <node-ref>ROADM-C1</node-ref>
+      <node-ref>ROADM-A1</node-ref>
     </supporting-node>
-    <supporting-node>
-      <network-ref>clli-network</network-ref>
-      <node-ref>NodeC</node-ref>
-    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">SRG</node-type>
   </node>
   <node>
     <node-id>ROADM-C1-SRG1</node-id>
     <srg-attributes xmlns="http://org/openroadm/network/topology">
       <available-wavelengths>
-        <index>94</index>
+        <index>95</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>93</index>
+        <index>94</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>96</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>95</index>
+        <index>43</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>42</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>41</index>
+        <index>45</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>44</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>43</index>
+        <index>39</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>38</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>37</index>
+        <index>41</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>40</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>39</index>
+        <index>35</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>34</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>33</index>
+        <index>37</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>36</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>35</index>
+        <index>31</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>30</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>29</index>
+        <index>33</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>32</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>31</index>
+        <index>59</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>58</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>57</index>
+        <index>61</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>60</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>59</index>
+        <index>55</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>54</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>53</index>
+        <index>57</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>56</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>55</index>
+        <index>51</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>50</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>49</index>
+        <index>53</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>52</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>51</index>
+        <index>47</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>46</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>45</index>
+        <index>49</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>48</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>47</index>
+        <index>75</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>74</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>73</index>
+        <index>77</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>76</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>75</index>
+        <index>71</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>70</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>69</index>
+        <index>73</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>72</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>71</index>
+        <index>67</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>66</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>65</index>
+        <index>69</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>68</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>67</index>
+        <index>63</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>62</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>61</index>
+        <index>65</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>64</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>63</index>
+        <index>91</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>90</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>89</index>
+        <index>93</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>92</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>91</index>
+        <index>87</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>86</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>85</index>
+        <index>89</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>88</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>87</index>
+        <index>83</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>82</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>81</index>
+        <index>85</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>84</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>83</index>
+        <index>79</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>78</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>77</index>
+        <index>81</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>80</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>79</index>
+        <index>11</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>10</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>9</index>
+        <index>13</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>12</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>11</index>
+        <index>7</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>6</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>5</index>
+        <index>9</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>8</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>7</index>
+        <index>3</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>2</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>1</index>
+        <index>5</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>4</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>3</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>26</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>25</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>28</index>
+        <index>1</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>27</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>22</index>
+        <index>26</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>21</index>
+        <index>29</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>24</index>
+        <index>28</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>23</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>18</index>
+        <index>22</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>17</index>
+        <index>25</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>20</index>
+        <index>24</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>19</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>14</index>
+        <index>18</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>13</index>
+        <index>21</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>16</index>
+        <index>20</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>15</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>14</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>17</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>16</index>
       </available-wavelengths>
     </srg-attributes>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
@@ -935,321 +624,321 @@
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>SRG1-CP-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-CP</tp-type>
+      <tp-id>SRG1-PP1-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>SRG1-PP2-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>SRG1-PP1-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
-    </termination-point>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>SRG1-PP3-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
-    <node-type xmlns="http://org/openroadm/common/network">SRG</node-type>
-    <supporting-node>
-      <network-ref>openroadm-network</network-ref>
-      <node-ref>ROADM-C1</node-ref>
-    </supporting-node>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>SRG1-CP-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-CP</tp-type>
+    </termination-point>
     <supporting-node>
       <network-ref>clli-network</network-ref>
       <node-ref>NodeC</node-ref>
     </supporting-node>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>ROADM-C1</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">SRG</node-type>
   </node>
   <node>
     <node-id>ROADM-A1-SRG1</node-id>
     <srg-attributes xmlns="http://org/openroadm/network/topology">
       <available-wavelengths>
-        <index>94</index>
+        <index>95</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>93</index>
+        <index>94</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>96</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>95</index>
+        <index>43</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>42</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>41</index>
+        <index>45</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>44</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>43</index>
+        <index>39</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>38</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>37</index>
+        <index>41</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>40</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>39</index>
+        <index>35</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>34</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>33</index>
+        <index>37</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>36</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>35</index>
+        <index>31</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>30</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>29</index>
+        <index>33</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>32</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>31</index>
+        <index>59</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>58</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>57</index>
+        <index>61</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>60</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>59</index>
+        <index>55</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>54</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>53</index>
+        <index>57</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>56</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>55</index>
+        <index>51</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>50</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>49</index>
+        <index>53</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>52</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>51</index>
+        <index>47</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>46</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>45</index>
+        <index>49</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>48</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>47</index>
+        <index>75</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>74</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>73</index>
+        <index>77</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>76</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>75</index>
+        <index>71</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>70</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>69</index>
+        <index>73</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>72</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>71</index>
+        <index>67</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>66</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>65</index>
+        <index>69</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>68</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>67</index>
+        <index>63</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>62</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>61</index>
+        <index>65</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>64</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>63</index>
+        <index>91</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>90</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>89</index>
+        <index>93</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>92</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>91</index>
+        <index>87</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>86</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>85</index>
+        <index>89</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>88</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>87</index>
+        <index>83</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>82</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>81</index>
+        <index>85</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>84</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>83</index>
+        <index>79</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>78</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>77</index>
+        <index>81</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>80</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>79</index>
+        <index>11</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>10</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>9</index>
+        <index>13</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>12</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>11</index>
+        <index>7</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>6</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>5</index>
+        <index>9</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>8</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>7</index>
+        <index>3</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>2</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>1</index>
+        <index>5</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>4</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>3</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>26</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>25</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>28</index>
+        <index>1</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>27</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>22</index>
+        <index>26</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>21</index>
+        <index>29</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>24</index>
+        <index>28</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>23</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>18</index>
+        <index>22</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>17</index>
+        <index>25</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>20</index>
+        <index>24</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>19</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>14</index>
+        <index>18</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>13</index>
+        <index>21</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>16</index>
+        <index>20</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>15</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>14</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>17</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>16</index>
       </available-wavelengths>
     </srg-attributes>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
@@ -1257,1325 +946,1850 @@
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>SRG1-CP-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-CP</tp-type>
+      <tp-id>SRG1-PP1-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>SRG1-PP2-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>SRG1-PP1-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
-    </termination-point>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>SRG1-PP3-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-PP</tp-type>
     </termination-point>
-    <node-type xmlns="http://org/openroadm/common/network">SRG</node-type>
-    <supporting-node>
-      <network-ref>openroadm-network</network-ref>
-      <node-ref>ROADM-A1</node-ref>
-    </supporting-node>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>SRG1-CP-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">SRG-TXRX-CP</tp-type>
+    </termination-point>
     <supporting-node>
       <network-ref>clli-network</network-ref>
       <node-ref>NodeA</node-ref>
     </supporting-node>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>ROADM-A1</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">SRG</node-type>
   </node>
   <node>
-    <node-id>XPDR-A1-XPDR1</node-id>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>XPDR1-CLIENT2</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK2</associated-connection-map-port>
-      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
-    </termination-point>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>XPDR1-NETWORK2</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT2</associated-connection-map-port>
-      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-    </termination-point>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>XPDR1-CLIENT1</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK1</associated-connection-map-port>
-      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
-    </termination-point>
+    <node-id>SPDR-SA1-XPDR1</node-id>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
       <tp-id>XPDR1-NETWORK1</tp-id>
-      <xpdr-network-attributes xmlns="http://org/openroadm/network/topology">
-        <tail-equipment-id>ROADM-A1-SRG1--SRG1-PP1-TXRX</tail-equipment-id>
-      </xpdr-network-attributes>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT1</associated-connection-map-port>
       <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+      <xpdr-network-attributes
+        xmlns="http://org/openroadm/network/topology">
+        <tail-equipment-id>ROADM-A1-SRG1--SRG1-PP2-TXRX
+        </tail-equipment-id>
+      </xpdr-network-attributes>
     </termination-point>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>SPDR-SA1</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeSA</node-ref>
+    </supporting-node>
     <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
-    <supporting-node>
-      <network-ref>openroadm-network</network-ref>
-      <node-ref>XPDR-A1</node-ref>
-    </supporting-node>
-    <supporting-node>
-      <network-ref>clli-network</network-ref>
-      <node-ref>NodeA</node-ref>
-    </supporting-node>
-  </node>
-  <node>
-    <node-id>ROADM-A1-DEG2</node-id>
-    <degree-attributes xmlns="http://org/openroadm/network/topology">
-      <degree-number>2</degree-number>
-      <available-wavelengths>
-        <index>94</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>93</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>96</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>95</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>42</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>41</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>44</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>43</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>38</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>37</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>40</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>39</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>34</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>33</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>36</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>35</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>30</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>29</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>32</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>31</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>58</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>57</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>60</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>59</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>54</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>53</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>56</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>55</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>50</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>49</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>52</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>51</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>46</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>45</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>48</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>47</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>74</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>73</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>76</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>75</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>70</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>69</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>72</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>71</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>66</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>65</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>68</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>67</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>62</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>61</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>64</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>63</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>90</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>89</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>92</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>91</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>86</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>85</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>88</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>87</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>82</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>81</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>84</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>83</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>78</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>77</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>80</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>79</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>10</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>9</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>12</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>11</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>6</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>5</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>8</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>7</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>2</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>1</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>4</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>3</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>26</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>25</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>28</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>27</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>22</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>21</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>24</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>23</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>18</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>17</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>20</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>19</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>14</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>13</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>16</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>15</index>
-      </available-wavelengths>
-    </degree-attributes>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>DEG2-CTP-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-CTP</tp-type>
-    </termination-point>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>DEG2-TTP-TXRX</tp-id>
-      <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-TTP</tp-type>
-    </termination-point>
-    <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
-    <supporting-node>
-      <network-ref>openroadm-network</network-ref>
-      <node-ref>ROADM-A1</node-ref>
-    </supporting-node>
-    <supporting-node>
-      <network-ref>clli-network</network-ref>
-      <node-ref>NodeA</node-ref>
-    </supporting-node>
   </node>
   <node>
     <node-id>ROADM-A1-DEG1</node-id>
     <degree-attributes xmlns="http://org/openroadm/network/topology">
       <degree-number>1</degree-number>
       <available-wavelengths>
-        <index>94</index>
+        <index>95</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>93</index>
+        <index>94</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>96</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>95</index>
+        <index>43</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>42</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>41</index>
+        <index>45</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>44</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>43</index>
+        <index>39</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>38</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>37</index>
+        <index>41</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>40</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>39</index>
+        <index>35</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>34</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>33</index>
+        <index>37</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>36</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>35</index>
+        <index>31</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>30</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>29</index>
+        <index>33</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>32</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>31</index>
+        <index>59</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>58</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>57</index>
+        <index>61</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>60</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>59</index>
+        <index>55</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>54</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>53</index>
+        <index>57</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>56</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>55</index>
+        <index>51</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>50</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>49</index>
+        <index>53</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>52</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>51</index>
+        <index>47</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>46</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>45</index>
+        <index>49</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>48</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>47</index>
+        <index>75</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>74</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>73</index>
+        <index>77</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>76</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>75</index>
+        <index>71</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>70</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>69</index>
+        <index>73</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>72</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>71</index>
+        <index>67</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>66</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>65</index>
+        <index>69</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>68</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>67</index>
+        <index>63</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>62</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>61</index>
+        <index>65</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>64</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>63</index>
+        <index>91</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>90</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>89</index>
+        <index>93</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>92</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>91</index>
+        <index>87</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>86</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>85</index>
+        <index>89</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>88</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>87</index>
+        <index>83</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>82</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>81</index>
+        <index>85</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>84</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>83</index>
+        <index>79</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>78</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>77</index>
+        <index>81</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>80</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>79</index>
+        <index>11</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>10</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>9</index>
+        <index>13</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>12</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>11</index>
+        <index>7</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>6</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>5</index>
+        <index>9</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>8</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>7</index>
+        <index>3</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>2</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>1</index>
+        <index>5</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>4</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>3</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>26</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>25</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>28</index>
+        <index>1</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>27</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>22</index>
+        <index>26</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>21</index>
+        <index>29</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>24</index>
+        <index>28</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>23</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>18</index>
+        <index>22</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>17</index>
+        <index>25</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>20</index>
+        <index>24</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>19</index>
       </available-wavelengths>
       <available-wavelengths>
+        <index>18</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>21</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>20</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>15</index>
+      </available-wavelengths>
+      <available-wavelengths>
         <index>14</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>17</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>16</index>
+      </available-wavelengths>
+    </degree-attributes>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>DEG1-CTP-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-CTP</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>DEG1-TTP-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-TTP</tp-type>
+    </termination-point>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeA</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>ROADM-A1</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
+  </node>
+  <node>
+    <node-id>ROADM-A1-DEG2</node-id>
+    <degree-attributes xmlns="http://org/openroadm/network/topology">
+      <degree-number>2</degree-number>
+      <available-wavelengths>
+        <index>95</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>94</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>96</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>43</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>42</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>45</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>44</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>39</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>38</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>41</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>40</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>35</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>34</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>37</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>36</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>31</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>30</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>33</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>32</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>59</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>58</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>61</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>60</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>55</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>54</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>57</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>56</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>51</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>50</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>53</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>52</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>47</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>46</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>49</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>48</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>75</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>74</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>77</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>76</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>71</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>70</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>73</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>72</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>67</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>66</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>69</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>68</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>63</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>62</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>65</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>64</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>91</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>90</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>93</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>92</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>87</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>86</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>89</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>88</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>83</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>82</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>85</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>84</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>79</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>78</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>81</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>80</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>11</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>10</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>13</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>16</index>
+        <index>12</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>7</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>6</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>9</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>8</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>3</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>2</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>5</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>4</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>1</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>27</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>26</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>29</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>28</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>23</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>22</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>25</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>24</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>19</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>18</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>21</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>20</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>15</index>
       </available-wavelengths>
+      <available-wavelengths>
+        <index>14</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>17</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>16</index>
+      </available-wavelengths>
     </degree-attributes>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>DEG1-TTP-TXRX</tp-id>
+      <tp-id>DEG2-TTP-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-TTP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>DEG1-CTP-TXRX</tp-id>
+      <tp-id>DEG2-CTP-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-CTP</tp-type>
     </termination-point>
-    <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
-    <supporting-node>
-      <network-ref>openroadm-network</network-ref>
-      <node-ref>ROADM-A1</node-ref>
-    </supporting-node>
     <supporting-node>
       <network-ref>clli-network</network-ref>
       <node-ref>NodeA</node-ref>
     </supporting-node>
-  </node>
-  <node>
-    <node-id>XPDR-C1-XPDR1</node-id>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>XPDR1-CLIENT2</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK2</associated-connection-map-port>
-      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
-    </termination-point>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>XPDR1-NETWORK2</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT2</associated-connection-map-port>
-      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-    </termination-point>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>XPDR1-CLIENT1</tp-id>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-NETWORK1</associated-connection-map-port>
-      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-CLIENT</tp-type>
-    </termination-point>
-    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>XPDR1-NETWORK1</tp-id>
-      <xpdr-network-attributes xmlns="http://org/openroadm/network/topology">
-        <tail-equipment-id>ROADM-C1-SRG1--SRG1-PP1-TXRX</tail-equipment-id>
-      </xpdr-network-attributes>
-      <associated-connection-map-port xmlns="http://transportpce/topology">XPDR1-CLIENT1</associated-connection-map-port>
-      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
-    </termination-point>
-    <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
     <supporting-node>
       <network-ref>openroadm-network</network-ref>
-      <node-ref>XPDR-C1</node-ref>
+      <node-ref>ROADM-A1</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
+  </node>
+  <node>
+    <node-id>SPDR-SC1-XPDR1</node-id>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR1-NETWORK1</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+      <xpdr-network-attributes
+        xmlns="http://org/openroadm/network/topology">
+        <tail-equipment-id>ROADM-C1-SRG1--SRG1-PP2-TXRX
+        </tail-equipment-id>
+      </xpdr-network-attributes>
+    </termination-point>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>SPDR-SC1</node-ref>
     </supporting-node>
     <supporting-node>
       <network-ref>clli-network</network-ref>
-      <node-ref>NodeC</node-ref>
+      <node-ref>NodeSC</node-ref>
     </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
   </node>
   <node>
     <node-id>ROADM-C1-DEG1</node-id>
     <degree-attributes xmlns="http://org/openroadm/network/topology">
       <degree-number>1</degree-number>
       <available-wavelengths>
-        <index>94</index>
+        <index>95</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>93</index>
+        <index>94</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>96</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>95</index>
+        <index>43</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>42</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>41</index>
+        <index>45</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>44</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>43</index>
+        <index>39</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>38</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>37</index>
+        <index>41</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>40</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>39</index>
+        <index>35</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>34</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>33</index>
+        <index>37</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>36</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>35</index>
+        <index>31</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>30</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>29</index>
+        <index>33</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>32</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>31</index>
+        <index>59</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>58</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>57</index>
+        <index>61</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>60</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>59</index>
+        <index>55</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>54</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>53</index>
+        <index>57</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>56</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>55</index>
+        <index>51</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>50</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>49</index>
+        <index>53</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>52</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>51</index>
+        <index>47</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>46</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>45</index>
+        <index>49</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>48</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>47</index>
+        <index>75</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>74</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>73</index>
+        <index>77</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>76</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>75</index>
+        <index>71</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>70</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>69</index>
+        <index>73</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>72</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>71</index>
+        <index>67</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>66</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>65</index>
+        <index>69</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>68</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>67</index>
+        <index>63</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>62</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>61</index>
+        <index>65</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>64</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>63</index>
+        <index>91</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>90</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>89</index>
+        <index>93</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>92</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>91</index>
+        <index>87</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>86</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>85</index>
+        <index>89</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>88</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>87</index>
+        <index>83</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>82</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>81</index>
+        <index>85</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>84</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>83</index>
+        <index>79</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>78</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>77</index>
+        <index>81</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>80</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>79</index>
+        <index>11</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>10</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>9</index>
+        <index>13</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>12</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>11</index>
+        <index>7</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>6</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>5</index>
+        <index>9</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>8</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>7</index>
+        <index>3</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>2</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>1</index>
+        <index>5</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>4</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>3</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>26</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>25</index>
-      </available-wavelengths>
-      <available-wavelengths>
-        <index>28</index>
+        <index>1</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>27</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>22</index>
+        <index>26</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>21</index>
+        <index>29</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>24</index>
+        <index>28</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>23</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>18</index>
+        <index>22</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>17</index>
+        <index>25</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>20</index>
+        <index>24</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>19</index>
       </available-wavelengths>
       <available-wavelengths>
+        <index>18</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>21</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>20</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>15</index>
+      </available-wavelengths>
+      <available-wavelengths>
         <index>14</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>17</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>16</index>
+      </available-wavelengths>
+    </degree-attributes>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>DEG1-CTP-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-CTP</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>DEG1-TTP-TXRX</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-TTP</tp-type>
+    </termination-point>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeC</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>ROADM-C1</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
+  </node>
+  <node>
+    <node-id>ROADM-C1-DEG2</node-id>
+    <degree-attributes xmlns="http://org/openroadm/network/topology">
+      <degree-number>2</degree-number>
+      <available-wavelengths>
+        <index>95</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>94</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>96</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>43</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>42</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>45</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>44</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>39</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>38</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>41</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>40</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>35</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>34</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>37</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>36</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>31</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>30</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>33</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>32</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>59</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>58</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>61</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>60</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>55</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>54</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>57</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>56</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>51</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>50</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>53</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>52</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>47</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>46</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>49</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>48</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>75</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>74</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>77</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>76</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>71</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>70</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>73</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>72</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>67</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>66</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>69</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>68</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>63</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>62</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>65</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>64</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>91</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>90</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>93</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>92</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>87</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>86</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>89</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>88</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>83</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>82</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>85</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>84</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>79</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>78</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>81</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>80</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>11</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>10</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>13</index>
       </available-wavelengths>
       <available-wavelengths>
-        <index>16</index>
+        <index>12</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>7</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>6</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>9</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>8</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>3</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>2</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>5</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>4</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>1</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>27</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>26</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>29</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>28</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>23</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>22</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>25</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>24</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>19</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>18</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>21</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>20</index>
       </available-wavelengths>
       <available-wavelengths>
         <index>15</index>
       </available-wavelengths>
+      <available-wavelengths>
+        <index>14</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>17</index>
+      </available-wavelengths>
+      <available-wavelengths>
+        <index>16</index>
+      </available-wavelengths>
     </degree-attributes>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>DEG1-TTP-TXRX</tp-id>
+      <tp-id>DEG2-TTP-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-TTP</tp-type>
     </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-      <tp-id>DEG1-CTP-TXRX</tp-id>
+      <tp-id>DEG2-CTP-TXRX</tp-id>
       <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TXRX-CTP</tp-type>
     </termination-point>
-    <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
-    <supporting-node>
-      <network-ref>openroadm-network</network-ref>
-      <node-ref>ROADM-C1</node-ref>
-    </supporting-node>
     <supporting-node>
       <network-ref>clli-network</network-ref>
       <node-ref>NodeC</node-ref>
     </supporting-node>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>ROADM-C1</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">DEGREE</node-type>
+  </node>
+  <node>
+    <node-id>SPDR-SA1-XPDR2</node-id>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK1</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK3</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+      <xpdr-network-attributes
+        xmlns="http://org/openroadm/network/topology">
+        <tail-equipment-id>ROADM-A1-SRG1--SRG1-PP4-TXRX
+        </tail-equipment-id>
+      </xpdr-network-attributes>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK2</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+      <xpdr-network-attributes
+        xmlns="http://org/openroadm/network/topology">
+        <tail-equipment-id>ROADM-A1-SRG1--SRG1-PP3-TXRX
+        </tail-equipment-id>
+      </xpdr-network-attributes>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK4</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>SPDR-SA1</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeSA</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
+  </node>
+  <node>
+    <node-id>SPDR-SC1-XPDR2</node-id>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK1</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK3</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+      <xpdr-network-attributes
+        xmlns="http://org/openroadm/network/topology">
+        <tail-equipment-id>ROADM-C1-SRG1--SRG1-PP4-TXRX
+        </tail-equipment-id>
+      </xpdr-network-attributes>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK2</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+      <xpdr-network-attributes
+        xmlns="http://org/openroadm/network/topology">
+        <tail-equipment-id>ROADM-C1-SRG1--SRG1-PP3-TXRX
+        </tail-equipment-id>
+      </xpdr-network-attributes>
+    </termination-point>
+    <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+      <tp-id>XPDR2-NETWORK4</tp-id>
+      <tp-type xmlns="http://org/openroadm/common/network">XPONDER-NETWORK</tp-type>
+    </termination-point>
+    <supporting-node>
+      <network-ref>openroadm-network</network-ref>
+      <node-ref>SPDR-SC1</node-ref>
+    </supporting-node>
+    <supporting-node>
+      <network-ref>clli-network</network-ref>
+      <node-ref>NodeSC</node-ref>
+    </supporting-node>
+    <node-type xmlns="http://org/openroadm/common/network">XPONDER</node-type>
   </node>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX</link-id>
+    <link-id>ROADM-C1-SRG1-SRG1-PP2-TXRXtoSPDR-SC1-XPDR1-XPDR1-NETWORK1
+    </link-id>
     <source>
-      <source-node>ROADM-A1-DEG1</source-node>
-      <source-tp>DEG1-CTP-TXRX</source-tp>
+      <source-node>ROADM-C1-SRG1</source-node>
+      <source-tp>SRG1-PP2-TXRX</source-tp>
     </source>
     <destination>
-      <dest-node>ROADM-A1-SRG3</dest-node>
-      <dest-tp>SRG3-CP-TXRX</dest-tp>
+      <dest-tp>XPDR1-NETWORK1</dest-tp>
+      <dest-node>SPDR-SC1-XPDR1</dest-node>
     </destination>
-    <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX</opposite-link>
+    <opposite-link xmlns="http://org/openroadm/common/network">SPDR-SC1-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP2-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-INPUT</link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX</link-id>
-    <source>
-      <source-node>ROADM-A1-SRG3</source-node>
-      <source-tp>SRG3-CP-TXRX</source-tp>
-    </source>
-    <destination>
-      <dest-node>ROADM-A1-DEG2</dest-node>
-      <dest-tp>DEG2-CTP-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX</link-id>
-    <source>
-      <source-node>ROADM-C1-DEG1</source-node>
-      <source-tp>DEG1-TTP-TXRX</source-tp>
-    </source>
-    <OMS-attributes xmlns="http://org/openroadm/network/topology">
-      <opposite-link>ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX</opposite-link>
-    </OMS-attributes>
-    <destination>
-      <dest-node>ROADM-A1-DEG2</dest-node>
-      <dest-tp>DEG2-TTP-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX</link-id>
-    <source>
-      <source-node>ROADM-C1-DEG2</source-node>
-      <source-tp>DEG2-CTP-TXRX</source-tp>
-    </source>
-    <destination>
-      <dest-node>ROADM-C1-SRG1</dest-node>
-      <dest-tp>SRG1-CP-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX</link-id>
+    <link-id>ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX
+    </link-id>
     <source>
       <source-node>ROADM-A1-DEG2</source-node>
       <source-tp>DEG2-TTP-TXRX</source-tp>
     </source>
     <OMS-attributes xmlns="http://org/openroadm/network/topology">
-      <opposite-link>ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX</opposite-link>
+      <opposite-link>ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX
+      </opposite-link>
     </OMS-attributes>
     <destination>
-      <dest-node>ROADM-C1-DEG1</dest-node>
       <dest-tp>DEG1-TTP-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX</link-id>
-    <source>
-      <source-node>ROADM-C1-DEG2</source-node>
-      <source-tp>DEG2-CTP-TXRX</source-tp>
-    </source>
-    <destination>
       <dest-node>ROADM-C1-DEG1</dest-node>
-      <dest-tp>DEG1-CTP-TXRX</dest-tp>
     </destination>
-    <link-type xmlns="http://org/openroadm/common/network">EXPRESS-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX</opposite-link>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX</link-id>
-    <source>
-      <source-node>XPDR-A1-XPDR1</source-node>
-      <source-tp>XPDR1-NETWORK1</source-tp>
-    </source>
-    <destination>
-      <dest-node>ROADM-A1-SRG1</dest-node>
-      <dest-tp>SRG1-PP1-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">XPONDER-OUTPUT</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>XPDR-C1-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP1-TXRX</link-id>
-    <source>
-      <source-node>XPDR-C1-XPDR1</source-node>
-      <source-tp>XPDR1-NETWORK1</source-tp>
-    </source>
-    <destination>
-      <dest-node>ROADM-C1-SRG1</dest-node>
-      <dest-tp>SRG1-PP1-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">XPONDER-OUTPUT</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-SRG1-SRG1-PP1-TXRXtoXPDR-C1-XPDR1-XPDR1-NETWORK1</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-C1-SRG1-SRG1-PP1-TXRXtoXPDR-C1-XPDR1-XPDR1-NETWORK1</link-id>
+    <link-id>ROADM-C1-SRG1-SRG1-PP3-TXRXtoSPDR-SC1-XPDR2-XPDR2-NETWORK2
+    </link-id>
     <source>
       <source-node>ROADM-C1-SRG1</source-node>
-      <source-tp>SRG1-PP1-TXRX</source-tp>
+      <source-tp>SRG1-PP3-TXRX</source-tp>
     </source>
     <destination>
-      <dest-node>XPDR-C1-XPDR1</dest-node>
-      <dest-tp>XPDR1-NETWORK1</dest-tp>
+      <dest-tp>XPDR2-NETWORK2</dest-tp>
+      <dest-node>SPDR-SC1-XPDR2</dest-node>
     </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">SPDR-SC1-XPDR2-XPDR2-NETWORK2toROADM-C1-SRG1-SRG1-PP3-TXRX
+    </opposite-link>
     <link-type xmlns="http://org/openroadm/common/network">XPONDER-INPUT</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">XPDR-C1-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP1-TXRX</opposite-link>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX</link-id>
+    <link-id>ROADM-A1-SRG1-SRG1-PP4-TXRXtoSPDR-SA1-XPDR2-XPDR2-NETWORK3
+    </link-id>
     <source>
-      <source-node>ROADM-A1-DEG2</source-node>
-      <source-tp>DEG2-CTP-TXRX</source-tp>
+      <source-node>ROADM-A1-SRG1</source-node>
+      <source-tp>SRG1-PP4-TXRX</source-tp>
     </source>
     <destination>
-      <dest-node>ROADM-A1-SRG1</dest-node>
-      <dest-tp>SRG1-CP-TXRX</dest-tp>
+      <dest-tp>XPDR2-NETWORK3</dest-tp>
+      <dest-node>SPDR-SA1-XPDR2</dest-node>
     </destination>
-    <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX</opposite-link>
+    <opposite-link xmlns="http://org/openroadm/common/network">SPDR-SA1-XPDR2-XPDR2-NETWORK3toROADM-A1-SRG1-SRG1-PP4-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-INPUT</link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX</link-id>
+    <link-id>ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX
+    </link-id>
     <source>
       <source-node>ROADM-C1-DEG1</source-node>
       <source-tp>DEG1-CTP-TXRX</source-tp>
     </source>
     <destination>
-      <dest-node>ROADM-C1-DEG2</dest-node>
-      <dest-tp>DEG2-CTP-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">EXPRESS-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX</link-id>
-    <source>
-      <source-node>ROADM-A1-DEG2</source-node>
-      <source-tp>DEG2-CTP-TXRX</source-tp>
-    </source>
-    <destination>
-      <dest-node>ROADM-A1-SRG3</dest-node>
-      <dest-tp>SRG3-CP-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX</link-id>
-    <source>
-      <source-node>ROADM-A1-DEG2</source-node>
-      <source-tp>DEG2-CTP-TXRX</source-tp>
-    </source>
-    <destination>
-      <dest-node>ROADM-A1-DEG1</dest-node>
-      <dest-tp>DEG1-CTP-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">EXPRESS-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX</link-id>
-    <source>
-      <source-node>ROADM-A1-SRG1</source-node>
-      <source-tp>SRG1-CP-TXRX</source-tp>
-    </source>
-    <destination>
-      <dest-node>ROADM-A1-DEG1</dest-node>
-      <dest-tp>DEG1-CTP-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX</link-id>
-    <source>
-      <source-node>ROADM-C1-DEG1</source-node>
-      <source-tp>DEG1-CTP-TXRX</source-tp>
-    </source>
-    <destination>
-      <dest-node>ROADM-C1-SRG1</dest-node>
       <dest-tp>SRG1-CP-TXRX</dest-tp>
+      <dest-node>ROADM-C1-SRG1</dest-node>
     </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX
+    </opposite-link>
     <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX</opposite-link>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX</link-id>
+    <link-id>SPDR-SA1-XPDR2-XPDR2-NETWORK3toROADM-A1-SRG1-SRG1-PP4-TXRX
+    </link-id>
     <source>
-      <source-node>ROADM-C1-SRG1</source-node>
-      <source-tp>SRG1-CP-TXRX</source-tp>
+      <source-node>SPDR-SA1-XPDR2</source-node>
+      <source-tp>XPDR2-NETWORK3</source-tp>
     </source>
     <destination>
-      <dest-node>ROADM-C1-DEG2</dest-node>
-      <dest-tp>DEG2-CTP-TXRX</dest-tp>
+      <dest-tp>SRG1-PP4-TXRX</dest-tp>
+      <dest-node>ROADM-A1-SRG1</dest-node>
     </destination>
-    <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX</opposite-link>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG1-SRG1-PP4-TXRXtoSPDR-SA1-XPDR2-XPDR2-NETWORK3
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-OUTPUT</link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX</link-id>
+    <link-id>SPDR-SC1-XPDR1-XPDR1-NETWORK1toROADM-C1-SRG1-SRG1-PP2-TXRX
+    </link-id>
     <source>
-      <source-node>ROADM-A1-SRG1</source-node>
-      <source-tp>SRG1-CP-TXRX</source-tp>
+      <source-node>SPDR-SC1-XPDR1</source-node>
+      <source-tp>XPDR1-NETWORK1</source-tp>
     </source>
     <destination>
-      <dest-node>ROADM-A1-DEG2</dest-node>
-      <dest-tp>DEG2-CTP-TXRX</dest-tp>
+      <dest-tp>SRG1-PP2-TXRX</dest-tp>
+      <dest-node>ROADM-C1-SRG1</dest-node>
     </destination>
-    <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX</opposite-link>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-SRG1-SRG1-PP2-TXRXtoSPDR-SC1-XPDR1-XPDR1-NETWORK1
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-OUTPUT</link-type>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-SRG1-SRG1-PP1-TXRXtoXPDR-A1-XPDR1-XPDR1-NETWORK1</link-id>
-    <source>
-      <source-node>ROADM-A1-SRG1</source-node>
-      <source-tp>SRG1-PP1-TXRX</source-tp>
-    </source>
-    <destination>
-      <dest-node>XPDR-A1-XPDR1</dest-node>
-      <dest-tp>XPDR1-NETWORK1</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">XPONDER-INPUT</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">XPDR-A1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP1-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX</link-id>
-    <source>
-      <source-node>ROADM-A1-DEG1</source-node>
-      <source-tp>DEG1-CTP-TXRX</source-tp>
-    </source>
-    <destination>
-      <dest-node>ROADM-A1-DEG2</dest-node>
-      <dest-tp>DEG2-CTP-TXRX</dest-tp>
-    </destination>
-    <link-type xmlns="http://org/openroadm/common/network">EXPRESS-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX</opposite-link>
-  </link>
-  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX</link-id>
+    <link-id>ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX
+    </link-id>
     <source>
       <source-node>ROADM-A1-SRG3</source-node>
       <source-tp>SRG3-CP-TXRX</source-tp>
     </source>
     <destination>
-      <dest-node>ROADM-A1-DEG1</dest-node>
       <dest-tp>DEG1-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-DEG1</dest-node>
     </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX
+    </opposite-link>
     <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX</opposite-link>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX</link-id>
+    <link-id>SPDR-SC1-XPDR2-XPDR2-NETWORK2toROADM-C1-SRG1-SRG1-PP3-TXRX
+    </link-id>
+    <source>
+      <source-node>SPDR-SC1-XPDR2</source-node>
+      <source-tp>XPDR2-NETWORK2</source-tp>
+    </source>
+    <destination>
+      <dest-tp>SRG1-PP3-TXRX</dest-tp>
+      <dest-node>ROADM-C1-SRG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-SRG1-SRG1-PP3-TXRXtoSPDR-SC1-XPDR2-XPDR2-NETWORK2
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-OUTPUT</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-SRG3</source-node>
+      <source-tp>SRG3-CP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>DEG2-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-DEG2</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-C1-SRG1-SRG1-PP4-TXRXtoSPDR-SC1-XPDR2-XPDR2-NETWORK3
+    </link-id>
+    <source>
+      <source-node>ROADM-C1-SRG1</source-node>
+      <source-tp>SRG1-PP4-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>XPDR2-NETWORK3</dest-tp>
+      <dest-node>SPDR-SC1-XPDR2</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">SPDR-SC1-XPDR2-XPDR2-NETWORK3toROADM-C1-SRG1-SRG1-PP4-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-INPUT</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX
+    </link-id>
     <source>
       <source-node>ROADM-A1-DEG1</source-node>
       <source-tp>DEG1-CTP-TXRX</source-tp>
     </source>
     <destination>
-      <dest-node>ROADM-A1-SRG1</dest-node>
-      <dest-tp>SRG1-CP-TXRX</dest-tp>
+      <dest-tp>SRG3-CP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-SRG3</dest-node>
     </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX
+    </opposite-link>
     <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX</opposite-link>
   </link>
   <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
-    <link-id>ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX</link-id>
+    <link-id>SPDR-SA1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP2-TXRX
+    </link-id>
+    <source>
+      <source-node>SPDR-SA1-XPDR1</source-node>
+      <source-tp>XPDR1-NETWORK1</source-tp>
+    </source>
+    <destination>
+      <dest-tp>SRG1-PP2-TXRX</dest-tp>
+      <dest-node>ROADM-A1-SRG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG1-SRG1-PP2-TXRXtoSPDR-SA1-XPDR1-XPDR1-NETWORK1
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-OUTPUT</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-SRG1-SRG1-PP2-TXRXtoSPDR-SA1-XPDR1-XPDR1-NETWORK1
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-SRG1</source-node>
+      <source-tp>SRG1-PP2-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>XPDR1-NETWORK1</dest-tp>
+      <dest-node>SPDR-SA1-XPDR1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">SPDR-SA1-XPDR1-XPDR1-NETWORK1toROADM-A1-SRG1-SRG1-PP2-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-INPUT</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-C1-DEG1-DEG1-TTP-TXRXtoROADM-A1-DEG2-DEG2-TTP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-C1-DEG1</source-node>
+      <source-tp>DEG1-TTP-TXRX</source-tp>
+    </source>
+    <OMS-attributes xmlns="http://org/openroadm/network/topology">
+      <opposite-link>ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX
+      </opposite-link>
+    </OMS-attributes>
+    <destination>
+      <dest-tp>DEG2-TTP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-DEG2</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG2-DEG2-TTP-TXRXtoROADM-C1-DEG1-DEG1-TTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-C1-DEG2</source-node>
+      <source-tp>DEG2-CTP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>DEG1-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-C1-DEG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">EXPRESS-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-C1-DEG2</source-node>
+      <source-tp>DEG2-CTP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>SRG1-CP-TXRX</dest-tp>
+      <dest-node>ROADM-C1-SRG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-DEG2</source-node>
+      <source-tp>DEG2-CTP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>SRG1-CP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-SRG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-C1-DEG1</source-node>
+      <source-tp>DEG1-CTP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>DEG2-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-C1-DEG2</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">EXPRESS-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>SPDR-SC1-XPDR2-XPDR2-NETWORK3toROADM-C1-SRG1-SRG1-PP4-TXRX
+    </link-id>
+    <source>
+      <source-node>SPDR-SC1-XPDR2</source-node>
+      <source-tp>XPDR2-NETWORK3</source-tp>
+    </source>
+    <destination>
+      <dest-tp>SRG1-PP4-TXRX</dest-tp>
+      <dest-node>ROADM-C1-SRG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-SRG1-SRG1-PP4-TXRXtoSPDR-SC1-XPDR2-XPDR2-NETWORK3
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-OUTPUT</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-DEG2</source-node>
+      <source-tp>DEG2-CTP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>DEG1-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-DEG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">EXPRESS-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-SRG1</source-node>
+      <source-tp>SRG1-CP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>DEG1-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-DEG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG3-SRG3-CP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-DEG2</source-node>
+      <source-tp>DEG2-CTP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>SRG3-CP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-SRG3</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG3-SRG3-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-SRG1</source-node>
+      <source-tp>SRG1-CP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>DEG2-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-DEG2</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>SPDR-SA1-XPDR2-XPDR2-NETWORK2toROADM-A1-SRG1-SRG1-PP3-TXRX
+    </link-id>
+    <source>
+      <source-node>SPDR-SA1-XPDR2</source-node>
+      <source-tp>XPDR2-NETWORK2</source-tp>
+    </source>
+    <destination>
+      <dest-tp>SRG1-PP3-TXRX</dest-tp>
+      <dest-node>ROADM-A1-SRG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG1-SRG1-PP3-TXRXtoSPDR-SA1-XPDR2-XPDR2-NETWORK2
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-OUTPUT</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-SRG1-SRG1-PP3-TXRXtoSPDR-SA1-XPDR2-XPDR2-NETWORK2
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-SRG1</source-node>
+      <source-tp>SRG1-PP3-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>XPDR2-NETWORK2</dest-tp>
+      <dest-node>SPDR-SA1-XPDR2</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">SPDR-SA1-XPDR2-XPDR2-NETWORK2toROADM-A1-SRG1-SRG1-PP3-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">XPONDER-INPUT</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG2-DEG2-CTP-TXRX
+    </link-id>
     <source>
       <source-node>ROADM-C1-SRG1</source-node>
       <source-tp>SRG1-CP-TXRX</source-tp>
     </source>
     <destination>
-      <dest-node>ROADM-C1-DEG1</dest-node>
-      <dest-tp>DEG1-CTP-TXRX</dest-tp>
+      <dest-tp>DEG2-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-C1-DEG2</dest-node>
     </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG2-DEG2-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX
+    </opposite-link>
     <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
-    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX</opposite-link>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-SRG1-SRG1-CP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-DEG1</source-node>
+      <source-tp>DEG1-CTP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>SRG1-CP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-SRG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-SRG1-SRG1-CP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">DROP-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-C1-SRG1-SRG1-CP-TXRXtoROADM-C1-DEG1-DEG1-CTP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-C1-SRG1</source-node>
+      <source-tp>SRG1-CP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>DEG1-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-C1-DEG1</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-C1-DEG1-DEG1-CTP-TXRXtoROADM-C1-SRG1-SRG1-CP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">ADD-LINK</link-type>
+  </link>
+  <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+    <link-id>ROADM-A1-DEG1-DEG1-CTP-TXRXtoROADM-A1-DEG2-DEG2-CTP-TXRX
+    </link-id>
+    <source>
+      <source-node>ROADM-A1-DEG1</source-node>
+      <source-tp>DEG1-CTP-TXRX</source-tp>
+    </source>
+    <destination>
+      <dest-tp>DEG2-CTP-TXRX</dest-tp>
+      <dest-node>ROADM-A1-DEG2</dest-node>
+    </destination>
+    <opposite-link xmlns="http://org/openroadm/common/network">ROADM-A1-DEG2-DEG2-CTP-TXRXtoROADM-A1-DEG1-DEG1-CTP-TXRX
+    </opposite-link>
+    <link-type xmlns="http://org/openroadm/common/network">EXPRESS-LINK</link-type>
   </link>
 </network>
 </networks>
