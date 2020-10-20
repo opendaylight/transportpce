@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67ce5905_f7af3ade",
+        "filename": "lighty/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-20T14:46:54Z",
+      "side": 1,
+      "message": "this is the recommended way with SpotBugs to import @suppressFBwarnings annotations\nhttps://stackoverflow.com/questions/39412365/what-to-import-to-use-suppressfbwarnings\n\n\u003d\u003e should be applied to other poms.",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "6386ccdfe3bbeceb190d85b08115273065c1cf96",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bea566bf_109089d8",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-20T14:46:54Z",
+      "side": 1,
+      "message": "BindingDOMCodecServices need was introduced for GNPy AL migration in\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/92403\n\nWith the actual Main.java, codec is null here - the codec can not easily retrieved with the actual MDSAL API\nI tried to use the (Constant)AdapterContext as a substitute but it is not satisfying, and it raises other difficulties, such as casting lightyControllerImpl and lightyController.\nA solution might be to review the GNPy API to try to pass a context instead of a BindingDOMcodec.",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 78
+      },
+      "revId": "6386ccdfe3bbeceb190d85b08115273065c1cf96",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
