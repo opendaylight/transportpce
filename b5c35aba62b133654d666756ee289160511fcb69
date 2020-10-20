@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "245d7705_315372c3",
+        "filename": "api/src/main/yang/transportpce-portmapping@2020-10-12.yang",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-20T04:35:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b52a9fdf_226878f7",
+      "range": {
+        "startLine": 28,
+        "startChar": 56,
+        "endLine": 28,
+        "endChar": 60
+      },
+      "revId": "b5c35aba62b133654d666756ee289160511fcb69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f46dea23_c904eede",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMapping710.java",
         "patchSetId": 2
@@ -94,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "18421e67_b95ae8e2",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-20T04:35:38Z",
+      "side": 1,
+      "message": "Sure, I\u0027m not very good with Java. I\u0027m open to suggestions and will be happy to work on the refactorizaton according to the comment/suggestions.",
+      "parentUuid": "f694a287_4e5da8aa",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 27
+      },
+      "revId": "b5c35aba62b133654d666756ee289160511fcb69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b66647c1_5c0ba753",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 2
@@ -105,6 +153,30 @@
       "writtenOn": "2020-10-19T11:20:10Z",
       "side": 1,
       "message": "has it been done ?",
+      "range": {
+        "startLine": 1035,
+        "startChar": 0,
+        "endLine": 1036,
+        "endChar": 10
+      },
+      "revId": "b5c35aba62b133654d666756ee289160511fcb69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be85862b_a94c29a3",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 8529
+      },
+      "writtenOn": "2020-10-20T04:35:38Z",
+      "side": 1,
+      "message": "yes, sorry forgot to remove the TODO comment",
+      "parentUuid": "b66647c1_5c0ba753",
       "range": {
         "startLine": 1035,
         "startChar": 0,
