@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.test.DataStoreContext;
 import org.opendaylight.transportpce.test.converter.XMLDataObjectConverter;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.Network;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInputBuilder;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -33,15 +34,18 @@ import org.slf4j.LoggerFactory;
 public final class TopologyDataUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(TopologyDataUtils.class);
-    public static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/openroadm-topology2.xml";
-    public static final String OTN_TOPOLOGY_FILE = "src/test/resources/otn-topology.xml";
+    public static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/get_openroadm-topology2.xml";
     public static final String OTN_TOPOLOGY_WITH_OTN_LINKS_FILE = "src/test/resources/otn-topology-with-otn-links.xml";
-    public static final String PORTMAPPING_FILE = "src/test/resources/portmapping-example.xml";
+    public static final String PORTMAPPING_FILE = "src/test/resources/get_portmapping.xml";
 
     public static GetTopologyDetailsInput buildGetTopologyDetailsInput(String topoName) {
         GetTopologyDetailsInputBuilder builtInput = new GetTopologyDetailsInputBuilder();
         builtInput.setTopologyIdOrName(topoName);
         return builtInput.build();
+    }
+
+    public static Node getOtnMuxNodeFromOtnTopology() {
+        return null;
     }
 
     public static <T> void writeTopologyFromFileToDatastore(DataStoreContext dataStoreContextUtil, String file,
