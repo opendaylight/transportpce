@@ -66,13 +66,6 @@
             <groupId>org.opendaylight.mdsal</groupId>
             <artifactId>mdsal-dom-inmemory-datastore</artifactId>
         </dependency>
-        <!-- Sodium bump: javax.annotation.Nullable and friends -->
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>org.opendaylight.transportpce</groupId>
             <artifactId>test-common</artifactId>
