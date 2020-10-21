@@ -210,6 +210,24 @@
     },
     {
       "key": {
+        "uuid": "14c82fc7_a776d853",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T13:04:32Z",
+      "side": 1,
+      "message": "- What are your criterias to define a \"giant commit\" ?\n- Here we don\u0027t have refactor.\n- About Gitlab, when you submit a merge request from a working branch to the target branch, the reviewer has the possibility to squash all the commits from the working branch to have only one commit in the target branch. Because in most of the case, the commit history of the working branch has no value for the target branch. \n- Here we don\u0027t have one patchset in a change but a list of patchset with a coherent perimeter and a description. So we have the description of the incremental work.",
+      "parentUuid": "7a66b60f_455f4b17",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91ad2802_da966e1f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
         "patchSetId": 9
