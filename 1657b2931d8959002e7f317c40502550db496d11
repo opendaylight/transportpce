@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "60e74acb_c37d8b8b",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T08:06:55Z",
+      "side": 1,
+      "message": "It related to Silicon migration and its switch to maven-modernizer-plugin. Without that build failed due to this plugin",
+      "parentUuid": "04ec3e44_86e102c0",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91ad2802_da966e1f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
         "patchSetId": 9
@@ -53,6 +71,24 @@
       "writtenOn": "2020-10-21T07:06:43Z",
       "side": 1,
       "message": "see previous remark on the same topic.",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f748617_ef730a39",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T08:06:55Z",
+      "side": 1,
+      "message": "see previous answer",
+      "parentUuid": "91ad2802_da966e1f",
       "revId": "1657b2931d8959002e7f317c40502550db496d11",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
@@ -93,6 +129,24 @@
       "writtenOn": "2020-10-21T07:06:43Z",
       "side": 1,
       "message": "see previous remark on the same topic",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0311119_fe953c7a",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/utils/PceTestUtils.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T08:06:55Z",
+      "side": 1,
+      "message": "see previous answer",
+      "parentUuid": "25c4584d_b8b41158",
       "revId": "1657b2931d8959002e7f317c40502550db496d11",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
