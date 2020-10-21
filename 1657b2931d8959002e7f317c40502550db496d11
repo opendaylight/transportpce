@@ -120,6 +120,24 @@
     },
     {
       "key": {
+        "uuid": "47319989_0450af7c",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T09:37:34Z",
+      "side": 1,
+      "message": "see previous remark on easying cherry-pick processes, which you already disagree.\nBut all the same, I am still interested in putting the improvements here in Stable/aluminium.\nIt addresses a Sonar issue too:\nhttps://rules.sonarsource.com/java/RSPEC-1943?search\u003dFileReader",
+      "parentUuid": "4e18e69e_e42933dd",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91ad2802_da966e1f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
         "patchSetId": 9
