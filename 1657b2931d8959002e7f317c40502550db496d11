@@ -228,6 +228,24 @@
     },
     {
       "key": {
+        "uuid": "2d8622c6_caf2bf9d",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T13:42:20Z",
+      "side": 1,
+      "message": "- \"giant commit\" is the terminology used in the openstack wiki page to describe the problem of commits containing too many things. Gerrit web page proposes a size estimation which is purely indicative. The openstack wiki page tries to explicit what should be done to evaluate this.\n\n- yes, properly spoken, this is not refactor,  but when reading the rest of the paragraph, the author applies it to other kinds of operations by explictly clearly the need to chery-pick those pieces of work.\n\n\"This helps reviewers and test suites validate that the refactoring has no unintentional functional changes. Even the newly written code can often be split up into multiple pieces that can be independently reviewed. For example, changes which add new internal APIs/classes, can be in self-contained commits. Again this leads to easier code review. It also allows other developers to cherry-pick small parts of the work, if the entire new feature is not immediately ready for merge. Addition of new public HTTP APIs or RPC interfaces should be done in commits separate from the actual internal implementation. This will encourage the author \u0026 reviewers to think about the generic API/RPC design, and not simply pick a design that is easier for their currently chosen internal implementation. If patch impacts a public HTTP, use the APIImpact flag\"\n\n- True but with PatchSets, the work is not explicitly split and cannot be cherry-picked easily.\nAs it is done there, each PatchSet creates a bigger commit whose increment cannot be cherry-picked out-of-the-box.\n\nPS: the mentionned Gitlab squash feature might be useful in some situations but we are in the completely reverse situation here. This change is on the working branch and we want to backport things in a stable/target branch. For this, we need to \"unsquash\" things.\nPS2: In an opensource context, I also strongly disagree with the assertion that the commit history of the working branch should have no value for the target branch, moreover with Gerrit because of the Change-Id tag. Though, there are environment where this can have an interest to distribute updates efficiently to productions devices (e.g. embedded low ressources systems).",
+      "parentUuid": "14c82fc7_a776d853",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91ad2802_da966e1f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
         "patchSetId": 9
