@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "b5bbc313_e5ccfb15",
+        "filename": "features/odl-transportpce/pom.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T09:23:45Z",
+      "side": 0,
+      "message": "I disagree. It\u0027s not a bug, so we don\u0027t have the obligation to backport this modification to previous branches. We could decide that this remove happens from Silicon version.",
+      "parentUuid": "0c7515d8_5445e423",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 17
+      },
+      "revId": "a0136e44a34e87726e92f832a32cb343cf9393c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7884dacb_8d3997c8",
         "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
         "patchSetId": 9
