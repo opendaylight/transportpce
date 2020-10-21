@@ -188,6 +188,24 @@
     },
     {
       "key": {
+        "uuid": "3f368ec3_6e734e86",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7085
+      },
+      "writtenOn": "2020-10-21T07:19:26Z",
+      "side": 1,
+      "message": "I agree with Gilles ans Emmanuelle. Keys in data structures is mandatory for Silicon and the bump to it. So it cannot be decoupled here in another change and be kept consistent in this change.",
+      "parentUuid": "f7e889a3_46328ebf",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "184cf2ae_1965fade",
         "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtilsTest.java",
         "patchSetId": 9
