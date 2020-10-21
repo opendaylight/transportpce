@@ -174,6 +174,24 @@
     },
     {
       "key": {
+        "uuid": "5824cc17_f7a81608",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T12:06:35Z",
+      "side": 1,
+      "message": "- All the modifications in this change are the minimal modifications to have a clean build, passed tests and running TPCE on Silicon.\n- This change contains multiple patchsets and each patchset has description and a coherent perimeter\n- None of the modifications implied by Silicon are critical for the other branches\n\nQuoting the link you provided \"If a code change can be split into a sequence of patches/commits, then it should be split. Less is not more. More is more.\" Please notice that patchses are mentioned and that the change follow the patchset split. As I mentionned: This change contains multiple patchsets and each patchset has description and a coherent perimeter",
+      "parentUuid": "688165c7_0dccf372",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91ad2802_da966e1f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
         "patchSetId": 9
