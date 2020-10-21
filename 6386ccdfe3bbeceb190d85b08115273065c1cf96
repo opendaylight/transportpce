@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "e498e562_0939c0f9",
+        "filename": "lighty/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T09:24:06Z",
+      "side": 1,
+      "message": "Thx for the feedback on odlparent. I started working on that at https://git.opendaylight.org/gerrit/c/transportpce/+/93226",
+      "parentUuid": "43862308_420456cf",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "6386ccdfe3bbeceb190d85b08115273065c1cf96",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bea566bf_109089d8",
         "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
         "patchSetId": 3
