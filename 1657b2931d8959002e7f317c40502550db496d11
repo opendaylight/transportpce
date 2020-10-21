@@ -65,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "d3755200_63025c62",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-10-21T07:00:46Z",
+      "side": 1,
+      "message": "I do not agree. The mandatory side of keys in data structures is fully part of silicon, hence, the addition of these protections.",
+      "parentUuid": "12a5e47d_777f3759",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "184cf2ae_1965fade",
         "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtilsTest.java",
         "patchSetId": 9
