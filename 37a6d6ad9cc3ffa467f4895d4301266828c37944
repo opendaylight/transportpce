@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "24946ff3_cdc7c160",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T11:21:57Z",
+      "side": 1,
+      "message": "I reopen it till it is fixed in a new PS",
+      "parentUuid": "a1ef9d6c_6998a54c",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "37a6d6ad9cc3ffa467f4895d4301266828c37944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31dec3b5_032d99da",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -93,6 +117,30 @@
       "revId": "37a6d6ad9cc3ffa467f4895d4301266828c37944",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aaef303a_52ac469c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T11:21:57Z",
+      "side": 1,
+      "message": "I reopen it till it is fixed in a new PS",
+      "parentUuid": "ca1d9f60_a1524751",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "37a6d6ad9cc3ffa467f4895d4301266828c37944",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     },
     {
       "key": {
