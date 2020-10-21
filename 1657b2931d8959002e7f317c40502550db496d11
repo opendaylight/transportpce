@@ -192,6 +192,24 @@
     },
     {
       "key": {
+        "uuid": "7a66b60f_455f4b17",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T12:35:58Z",
+      "side": 1,
+      "message": "if we had to decompose those PatchSets to backport the needed ones in stable/aluminium, it will be quite cumbersome...\nI guess there is a confusion between PS and patches here. If PatchSets are separate commits, they are not cascaded and do not separe the resulting code, what complicates many operations such as cherry-picks - stacking PS often results in a big giant commit. Indeed PatchSets should be more considered as a Gerrit commodity for the review to compare differences between the steps to create a same change or a same commit.\n\nQuoting the same page:\n\n\"Things to avoid when creating commits:\n[..]\n- Sending large new features in a single giant commit.\nIt may well be the case that the code for a new feature is only useful when all of it is present. This does not, however, imply that the entire feature should be provided in a single commit. New features often entail refactoring existing code. It is highly desirable that any refactoring is done in commits which are separate from those implementing the new feature. This helps reviewers and test suites validate that the refactoring has no unintentional functional changes.\"\n\nThen when looking at the given examples of \"git log\", there is no doubt that the intention of the author was not to apply this to PatchSets since they do not appear anymore in git history once merged.\nhttps://wiki.openstack.org/wiki/GitCommitMessages#Examples_of_bad_practice\nhttps://wiki.openstack.org/wiki/GitCommitMessages#Examples_of_good_practice\n\n( This guide was probably written in mind to be reused with GitLab and Github too, that\u0027s why the word \"PatchSet\"  is not used, but it would be probably a good thing to mention that)",
+      "parentUuid": "5824cc17_f7a81608",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91ad2802_da966e1f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
         "patchSetId": 9
