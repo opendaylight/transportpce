@@ -156,6 +156,24 @@
     },
     {
       "key": {
+        "uuid": "688165c7_0dccf372",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T10:02:07Z",
+      "side": 1,
+      "message": "I guess it is not activated because the ODL maintianers expected maven-modernizer-plugin to do the job, making this double check useless...\nPlease take a look at\nhttps://wiki.openstack.org/wiki/GitCommitMessages#Structural_split_of_changes\nI see at least 3 reasons to outsource this:\n- clarity of the contribution and easiness of the review\n- branch coherency to ease maintainability\n- Sonar audit (though the rule is not activated)",
+      "parentUuid": "6dd52ffb_e15e6f74",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91ad2802_da966e1f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
         "patchSetId": 9
