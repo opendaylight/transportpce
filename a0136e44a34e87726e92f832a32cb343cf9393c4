@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "7ce5e540_5f691447",
+        "filename": "features/odl-transportpce/pom.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T07:06:43Z",
+      "side": 0,
+      "message": "this is a good thing.\nI wonder whether this can be applied to Aluminium too.\nIf yes, it should be done in a separate change.",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 17
+      },
+      "revId": "a0136e44a34e87726e92f832a32cb343cf9393c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7884dacb_8d3997c8",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T07:06:43Z",
+      "side": 0,
+      "message": "is this obsoleted by Si bump ?\nOr should we remove it in a separate change ?",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "a0136e44a34e87726e92f832a32cb343cf9393c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0aff7670_8394deda",
         "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion121.java",
         "patchSetId": 9
