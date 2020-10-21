@@ -260,6 +260,24 @@
     },
     {
       "key": {
+        "uuid": "4a48e9b5_378097be",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T08:30:02Z",
+      "side": 1,
+      "message": "Got it but it\u0027s not explicitly said in the //FIXME or commit message that this addition is related to a NPE consecutive to the Si bump (only Yangtools check is mentioned).\nSince there are also charset fixes here, without this explanation, the reviewer is confused between what is absolutely necessary and what is not.",
+      "parentUuid": "3f368ec3_6e734e86",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "184cf2ae_1965fade",
         "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtilsTest.java",
         "patchSetId": 9
