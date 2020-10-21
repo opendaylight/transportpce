@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "f82e459e_e0b4a884",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T09:15:54Z",
+      "side": 1,
+      "message": "OK let\u0027s outsource that in another commit below this one and put this explanation in the commit message.",
+      "parentUuid": "60e74acb_c37d8b8b",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91ad2802_da966e1f",
         "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
         "patchSetId": 9
@@ -113,6 +131,24 @@
       "side": 1,
       "message": "see previous answer",
       "parentUuid": "91ad2802_da966e1f",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c2921a7_a446f1e7",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T09:15:54Z",
+      "side": 1,
+      "message": "seen, I let it opened for the moment.",
+      "parentUuid": "6f748617_ef730a39",
       "revId": "1657b2931d8959002e7f317c40502550db496d11",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
@@ -163,6 +199,30 @@
       "revId": "1657b2931d8959002e7f317c40502550db496d11",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ad3ebdf_20dfc1fa",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-21T09:15:54Z",
+      "side": 1,
+      "message": "Acked  since this is linked to the Charset issue already mentioned before.",
+      "parentUuid": "68f6b352_bfa4dc3c",
+      "range": {
+        "startLine": 69,
+        "startChar": 35,
+        "endLine": 69,
+        "endChar": 54
+      },
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
