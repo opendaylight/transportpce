@@ -116,6 +116,30 @@
       "revId": "a0136e44a34e87726e92f832a32cb343cf9393c4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04c818d8_903416cc",
+        "filename": "olm/src/main/java/org/opendaylight/transportpce/olm/power/PowerMgmtVersion121.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T08:56:41Z",
+      "side": 0,
+      "message": "Yes. It is mentionned in Silicon migration guide and related to JIRA MDSAL-577",
+      "parentUuid": "0aff7670_8394deda",
+      "range": {
+        "startLine": 162,
+        "startChar": 44,
+        "endLine": 164,
+        "endChar": 42
+      },
+      "revId": "a0136e44a34e87726e92f832a32cb343cf9393c4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }

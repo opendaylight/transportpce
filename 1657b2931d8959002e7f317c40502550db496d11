@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8cc148da_7bcd2c0f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T08:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "181b8822_80ce2a45",
+      "range": {
+        "startLine": 11,
+        "startChar": 2,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "04ec3e44_86e102c0",
         "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopologyTest.java",
         "patchSetId": 9
@@ -106,6 +130,30 @@
       "writtenOn": "2020-10-21T06:37:16Z",
       "side": 1,
       "message": "Why doing that?",
+      "range": {
+        "startLine": 69,
+        "startChar": 35,
+        "endLine": 69,
+        "endChar": 54
+      },
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68f6b352_bfa4dc3c",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T08:56:41Z",
+      "side": 1,
+      "message": "this exception is introduce by adding Charset type in FileReader.The charset is now mandatory due to maven-modernizer-plugin",
+      "parentUuid": "2209eff8_3c93047e",
       "range": {
         "startLine": 69,
         "startChar": 35,
@@ -278,6 +326,24 @@
     },
     {
       "key": {
+        "uuid": "cde0f207_3be38a8a",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T08:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f368ec3_6e734e86",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "184cf2ae_1965fade",
         "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtilsTest.java",
         "patchSetId": 9
@@ -338,6 +404,24 @@
       "revId": "1657b2931d8959002e7f317c40502550db496d11",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59448f2a_636629bf",
+        "filename": "test-common/src/main/java/org/opendaylight/transportpce/test/converter/AbstractDataObjectConverter.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T08:56:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38f665d1_64f33f7b",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
