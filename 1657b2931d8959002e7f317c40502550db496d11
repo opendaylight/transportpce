@@ -83,6 +83,24 @@
     },
     {
       "key": {
+        "uuid": "05757626_9d29c17e",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtils.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-21T07:01:50Z",
+      "side": 1,
+      "message": "It\u0027s related to Silicon bump because you cannot have empty key in Silicon and \"return service.build();\" from TPCE Aluminium source code does not work anymore and throw a NullPointerException in Silicon. So we have to managed it  while bumping to Silicon.",
+      "parentUuid": "12a5e47d_777f3759",
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "184cf2ae_1965fade",
         "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtilsTest.java",
         "patchSetId": 9
