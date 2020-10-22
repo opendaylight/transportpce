@@ -217,6 +217,30 @@
       "revId": "ce538472098c43f31568415acd2703baf78c9836",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c6b3063_96480ea8",
+        "filename": "servicehandler/src/main/java/org/opendaylight/transportpce/servicehandler/listeners/RendererListenerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-22T08:14:59Z",
+      "side": 1,
+      "message": "OK to add a LOG in sDS null check. I think the LOG.debug level is enough.\n\nI think too that the mutualization of the operationResut.isSuccess if-block will provide less usefull logs. So let\u0027s keep it as it is.",
+      "parentUuid": "34f9001a_150c73fa",
+      "range": {
+        "startLine": 113,
+        "startChar": 1,
+        "endLine": 132,
+        "endChar": 5
+      },
+      "revId": "ce538472098c43f31568415acd2703baf78c9836",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
