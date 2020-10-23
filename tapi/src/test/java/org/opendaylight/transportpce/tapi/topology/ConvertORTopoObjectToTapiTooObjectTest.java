@@ -13,6 +13,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import com.google.common.util.concurrent.FluentFuture;
 import java.nio.charset.Charset;
@@ -81,6 +82,7 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
     private static Node otnMuxA;
     private static Node otnMuxC;
     private static Node otnSwitch;
+    private static Node tpdr100G;
     private static List<org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
         .networks.network.Link> otnLinks;
     private static Uuid topologyUuid;
@@ -91,7 +93,7 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-            TopologyDataUtils.OTN_TOPOLOGY_WITH_OTN_LINKS_FILE, InstanceIdentifiers.OTN_NETWORK_II);
+            TopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil());
 
         KeyedInstanceIdentifier<Node, NodeKey> muxAIID = InstanceIdentifier.create(Networks.class)
@@ -112,9 +114,18 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
             .child(Node.class, new NodeKey(new NodeId("SPDR-SA1-XPDR2")));
         FluentFuture<Optional<Node>> switchFuture = dataBroker.newReadOnlyTransaction()
             .read(LogicalDatastoreType.CONFIGURATION, switchIID);
+
         otnMuxA = muxAFuture.get().get();
         otnMuxC = muxCFuture.get().get();
         otnSwitch = switchFuture.get().get();
+
+        KeyedInstanceIdentifier<Node, NodeKey> tpdrIID = InstanceIdentifier.create(Networks.class)
+            .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
+                .class, new NetworkKey(new NetworkId("otn-topology")))
+            .child(Node.class, new NodeKey(new NodeId("XPDR-A1-XPDR1")));
+        FluentFuture<Optional<Node>> tpdrFuture = dataBroker.newReadOnlyTransaction()
+            .read(LogicalDatastoreType.CONFIGURATION, tpdrIID);
+        tpdr100G = tpdrFuture.get().get();
 
         InstanceIdentifier<Network1> linksIID = InstanceIdentifier.create(Networks.class)
             .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network
@@ -127,6 +138,38 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
         topologyUuid = new Uuid(UUID.nameUUIDFromBytes("T0 - Multi-layer topology".getBytes(Charset.forName("UTF-8")))
             .toString());
         LOG.info("TEST SETUP READY");
+    }
+
+    @Test
+    public void convertNodeForTransponder100G() {
+        ConvertORTopoToTapiTopo tapiFactory = new ConvertORTopoToTapiTopo(topologyUuid);
+        List<String> networkPortList = new ArrayList<>();
+        for (TerminationPoint tp : tpdr100G.augmentation(Node1.class).getTerminationPoint().values()) {
+            if (tp.augmentation(TerminationPoint1.class).getTpType().equals(OpenroadmTpType.XPONDERNETWORK)) {
+                networkPortList.add(tp.getTpId().getValue());
+            }
+        }
+        tapiFactory.convertNode(tpdr100G, networkPortList);
+        List<org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node> tapiNodes
+            = tapiFactory.getTapiNodes().values().stream()
+            .sorted((n1, n2) -> n1.getUuid().getValue().compareTo(n2.getUuid().getValue()))
+            .collect(Collectors.toList());
+
+        assertEquals("Node list size should be 2", 2, tapiFactory.getTapiNodes().size());
+        assertEquals("Link list size should be 2", 2, tapiFactory.getTapiLinks().size());
+
+        Uuid dsrNodeUuid = new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+DSR".getBytes(Charset.forName("UTF-8")))
+            .toString());
+        checkDsrNode(tapiNodes.get(1), dsrNodeUuid, "tpdr", "XPDR-A1-XPDR1");
+        Uuid otsiNodeUuid = new Uuid(UUID.nameUUIDFromBytes("XPDR-A1-XPDR1+OTSi".getBytes(Charset.forName("UTF-8")))
+            .toString());
+        checkOtsiNode(tapiNodes.get(0), otsiNodeUuid, "tpdr", "XPDR-A1-XPDR1");
+
+        List<Link> tapiLinks = tapiFactory.getTapiLinks().values().stream()
+            .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
+            .collect(Collectors.toList());
+        checkTransitionalLink(tapiLinks.get(1), dsrNodeUuid, otsiNodeUuid,
+            "XPDR-A1-XPDR1+DSR+XPDR1-NETWORK1", "XPDR-A1-XPDR1+iOTSi+XPDR1-NETWORK1", "XPDR-A1-XPDR1");
     }
 
     @Test
@@ -146,10 +189,9 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
 
         assertEquals("Node list size should be 2", 2, tapiFactory.getTapiNodes().size());
         assertEquals("Link list size should be 1", 1, tapiFactory.getTapiLinks().size());
-
         Uuid dsrNodeUuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+DSR".getBytes(Charset.forName("UTF-8")))
             .toString());
-        checkDsrNode(tapiNodes.get(0), dsrNodeUuid, false, "SPDR-SA1-XPDR1");
+        checkDsrNode(tapiNodes.get(0), dsrNodeUuid, "mux", "SPDR-SA1-XPDR1");
         Uuid otsiNodeUuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+OTSi".getBytes(Charset.forName("UTF-8")))
             .toString());
         checkOtsiNode(tapiNodes.get(1), otsiNodeUuid, "mux", "SPDR-SA1-XPDR1");
@@ -181,7 +223,7 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
 
         Uuid dsrNodeUuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR2+DSR".getBytes(Charset.forName("UTF-8")))
             .toString());
-        checkDsrNode(tapiNodes.get(0), dsrNodeUuid, true, "SPDR-SA1-XPDR2");
+        checkDsrNode(tapiNodes.get(0), dsrNodeUuid, "switch", "SPDR-SA1-XPDR2");
         Uuid otsiNodeUuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR2+OTSi".getBytes(Charset.forName("UTF-8")))
             .toString());
         checkOtsiNode(tapiNodes.get(1), otsiNodeUuid, "switch", "SPDR-SA1-XPDR2");
@@ -300,7 +342,7 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
     }
 
     private void checkDsrNode(org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node node,
-        Uuid nodeUuid, boolean isSwitch, String nodeId) {
+        Uuid nodeUuid, String dsrNodeType, String nodeId) {
         assertEquals("incorrect node uuid", nodeUuid, node.getUuid());
         assertEquals("incorrect node name", nodeId, node.getName().get(new NameKey("dsr/odu node name")).getValue());
         assertEquals("administrative state should be UNLOCKED",
@@ -313,42 +355,83 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
             2, node.getLayerProtocolName().size());
         assertThat("dsr node should manage 2 protocol layers : dsr and odu",
             node.getLayerProtocolName(), hasItems(LayerProtocolName.DSR, LayerProtocolName.ODU));
-        List<OwnedNodeEdgePoint> neps = node.nonnullOwnedNodeEdgePoint().values().stream()
+        List<OwnedNodeEdgePoint> nepsN = node.nonnullOwnedNodeEdgePoint().values().stream()
+            .filter(n -> n.getName().containsKey(new NameKey("NodeEdgePoint_N")))
             .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
             .collect(Collectors.toList());
-        if (isSwitch) {
-            assertEquals("Switch-DSR node should have 8 NEPs", 8, neps.size());
-            OwnedNodeEdgePoint nep1 = neps.get(3);
-            Uuid client4NepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-CLIENT4").getBytes(Charset.forName("UTF-8")))
-                    .toString());
-            checkNepClient100G(nep1, client4NepUuid, "XPDR2-CLIENT4", "NodeEdgePoint_C4");
-            OwnedNodeEdgePoint nep2 = neps.get(4);
-            Uuid networkNepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8")))
-                    .toString());
-            checkNepNetworkODU4(nep2, networkNepUuid, "XPDR2-NETWORK1", "NodeEdgePoint_N1");
-            List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
-                .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
-                .collect(Collectors.toList());
-            checkNodeRuleGroupForSwitchDSR(nrgList, client4NepUuid, networkNepUuid, nodeUuid);
-        } else {
-            assertEquals("Mux-DSR node should have 5 NEPs", 5, neps.size());
-            OwnedNodeEdgePoint nep1 = neps.get(0);
-            Uuid client4NepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-CLIENT4").getBytes(Charset.forName("UTF-8")))
-                    .toString());
-            checkNepClient10G(nep1, client4NepUuid, "XPDR1-CLIENT4", "NodeEdgePoint_C4");
+        List<OwnedNodeEdgePoint> nepsC;
+        switch (dsrNodeType) {
+            case "switch":
+                nepsC = node.nonnullOwnedNodeEdgePoint().values().stream()
+                    .filter(n -> n.getName().containsKey(new NameKey("NodeEdgePoint_C")))
+                    .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
+                    .collect(Collectors.toList());
+                assertEquals("Switch-DSR node should have 4 NEPs network", 4, nepsN.size());
+                assertEquals("Switch-DSR node should have 4 NEPs client", 4, nepsC.size());
+                OwnedNodeEdgePoint nep1 = nepsC.get(2);
+                Uuid client4NepUuid = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-CLIENT4").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+                checkNepClient100GSwitch(nep1, client4NepUuid, "XPDR2-CLIENT4", "NodeEdgePoint_C");
+                OwnedNodeEdgePoint nep2 = nepsN.get(1);
+                Uuid networkNepUuid = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR2-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+                checkNepNetworkODU4(nep2, networkNepUuid, "XPDR2-NETWORK1", "NodeEdgePoint_N");
+                List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
+                    .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
+                    .collect(Collectors.toList());
+                checkNodeRuleGroupForSwitchDSR(nrgList, client4NepUuid, networkNepUuid, nodeUuid);
+                break;
+            case "mux":
+                nepsC = node.nonnullOwnedNodeEdgePoint().values().stream()
+                    .filter(n -> n.getName().containsKey(new NameKey("NodeEdgePoint_C")))
+                    .sorted((nep3, nep4) -> nep3.getUuid().getValue().compareTo(nep4.getUuid().getValue()))
+                    .collect(Collectors.toList());
+                assertEquals("Mux-DSR node should have 1 NEP network", 1, nepsN.size());
+                assertEquals("Mux-DSR node should have 4 NEPs client", 4, nepsC.size());
+                OwnedNodeEdgePoint nep3 = nepsC.get(2);
+                Uuid client3NepUuid = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-CLIENT3").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+                checkNepClient10G(nep3, client3NepUuid, "XPDR1-CLIENT3", "NodeEdgePoint_C");
 
-            OwnedNodeEdgePoint nep2 = neps.get(1);
-            Uuid networkNepUuid = new Uuid(
-                    UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
-                    .toString());
-            checkNepNetworkODU4(nep2, networkNepUuid, "XPDR1-NETWORK1", "NodeEdgePoint_N1");
-            List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
-                .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
-                .collect(Collectors.toList());
-            checkNodeRuleGroupForMuxDSR(nrgList, client4NepUuid, networkNepUuid, nodeUuid);
+                OwnedNodeEdgePoint nep4 = nepsN.get(0);
+                Uuid networkNepUuid2 = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+                checkNepNetworkODU4(nep4, networkNepUuid2, "XPDR1-NETWORK1", "NodeEdgePoint_N");
+                List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
+                    .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
+                    .collect(Collectors.toList());
+                checkNodeRuleGroupForMuxDSR(nrgList2, client3NepUuid, networkNepUuid2, nodeUuid);
+                break;
+            case "tpdr":
+                nepsC = node.nonnullOwnedNodeEdgePoint().values().stream()
+                    .filter(n -> n.getName().containsKey(new NameKey("100G-tpdr")))
+                    .sorted((nep5, nep6) -> nep5.getUuid().getValue().compareTo(nep6.getUuid().getValue()))
+                    .collect(Collectors.toList());
+                assertEquals("Tpdr-DSR node should have 2 NEPs network", 2, nepsN.size());
+                assertEquals("Tpdr-DSR node should have 2 NEPs client", 2, nepsC.size());
+                OwnedNodeEdgePoint nep5 = nepsC.get(0);
+                Uuid client1NepUuid = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-CLIENT1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+                checkNepClient100GTpdr(nep5, client1NepUuid, "XPDR1-CLIENT1", "100G-tpdr");
+
+                OwnedNodeEdgePoint nep6 = nepsN.get(0);
+                Uuid networkNepUuid3 = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+DSR+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+                checkNepNetworkODU4(nep6, networkNepUuid3, "XPDR1-NETWORK1", "NodeEdgePoint_N");
+                List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
+                    .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
+                    .collect(Collectors.toList());
+                checkNodeRuleGroupForTpdrDSR(nrgList3, client1NepUuid, networkNepUuid3, nodeUuid);
+                break;
+            default:
+                fail();
+                break;
         }
     }
 
@@ -367,43 +450,68 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
             1, node.getLayerProtocolName().size());
         assertEquals("otsi node should manage a single protocol layer : PHOTONIC_MEDIA",
             LayerProtocolName.PHOTONICMEDIA, node.getLayerProtocolName().get(0));
-        List<OwnedNodeEdgePoint> neps = node.nonnullOwnedNodeEdgePoint().values().stream()
+        List<OwnedNodeEdgePoint> nepsI = node.nonnullOwnedNodeEdgePoint().values().stream()
+            .filter(n -> n.getName().containsKey(new NameKey("iNodeEdgePoint")))
+            .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
+            .collect(Collectors.toList());
+        List<OwnedNodeEdgePoint> nepsE = node.nonnullOwnedNodeEdgePoint().values().stream()
+            .filter(n -> n.getName().containsKey(new NameKey("eNodeEdgePoint")))
             .sorted((nep1, nep2) -> nep1.getUuid().getValue().compareTo(nep2.getUuid().getValue()))
             .collect(Collectors.toList());
         switch (otsiNodeType) {
             case "switch":
-                assertEquals("Switch-OTSi node should have 8 NEPs", 8, neps.size());
-                OwnedNodeEdgePoint nep1 = neps.get(2);
+                assertEquals("Switch-OTSi node should have 4 eNEPs", 4, nepsE.size());
+                assertEquals("Switch-OTSi node should have 4 iNEPs", 4, nepsI.size());
+                OwnedNodeEdgePoint nep1 = nepsI.get(1);
                 Uuid inepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+iOTSi+XPDR2-NETWORK2").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep1, inepUuid, "XPDR2-NETWORK2", "iNodeEdgePoint_2");
-                OwnedNodeEdgePoint nep2 = neps.get(0);
+                checkNepOtsiNode(nep1, inepUuid, "XPDR2-NETWORK2", "iNodeEdgePoint");
+                OwnedNodeEdgePoint nep2 = nepsE.get(0);
                 Uuid enepUuid = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+eOTSi+XPDR2-NETWORK2").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep2, enepUuid, "XPDR2-NETWORK2", "eNodeEdgePoint_2");
+                checkNepOtsiNode(nep2, enepUuid, "XPDR2-NETWORK2", "eNodeEdgePoint");
                 List<NodeRuleGroup> nrgList = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
                 checkNodeRuleGroupForSwitchOTSi(nrgList, enepUuid, inepUuid, nodeUuid);
                 break;
             case "mux":
-                assertEquals("Mux-OTSi node should have 2 NEPs", 2, neps.size());
-                OwnedNodeEdgePoint nep3 = neps.get(0);
+                assertEquals("Mux-OTSi node should have 1 eNEP", 1, nepsE.size());
+                assertEquals("Mux-OTSi node should have 1 iNEPs", 1, nepsI.size());
+                OwnedNodeEdgePoint nep3 = nepsE.get(0);
                 Uuid enepUuid2 = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+eOTSi+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep3, enepUuid2, "XPDR1-NETWORK1", "eNodeEdgePoint_1");
-                OwnedNodeEdgePoint nep4 = neps.get(1);
+                checkNepOtsiNode(nep3, enepUuid2, "XPDR1-NETWORK1", "eNodeEdgePoint");
+                OwnedNodeEdgePoint nep4 = nepsI.get(0);
                 Uuid inepUuid2 = new Uuid(
                         UUID.nameUUIDFromBytes((nodeId + "+iOTSi+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
                         .toString());
-                checkNepOtsiNode(nep4, inepUuid2, "XPDR1-NETWORK1", "iNodeEdgePoint_1");
+                checkNepOtsiNode(nep4, inepUuid2, "XPDR1-NETWORK1", "iNodeEdgePoint");
                 List<NodeRuleGroup> nrgList2 = node.nonnullNodeRuleGroup().values().stream()
                     .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
                     .collect(Collectors.toList());
                 checkNodeRuleGroupForMuxOTSi(nrgList2, enepUuid2, inepUuid2, nodeUuid);
+                break;
+            case "tpdr":
+                assertEquals("Tpdr-OTSi node should have 2 eNEPs", 2, nepsE.size());
+                assertEquals("Tpdr-OTSi node should have 2 iNEPs", 2, nepsI.size());
+                OwnedNodeEdgePoint nep5 = nepsE.get(0);
+                Uuid enepUuid3 = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+eOTSi+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+                checkNepOtsiNode(nep5, enepUuid3, "XPDR1-NETWORK1", "eNodeEdgePoint");
+                OwnedNodeEdgePoint nep6 = nepsI.get(0);
+                Uuid inepUuid3 = new Uuid(
+                        UUID.nameUUIDFromBytes((nodeId + "+iOTSi+XPDR1-NETWORK1").getBytes(Charset.forName("UTF-8")))
+                        .toString());
+                checkNepOtsiNode(nep6, inepUuid3, "XPDR1-NETWORK1", "iNodeEdgePoint");
+                List<NodeRuleGroup> nrgList3 = node.nonnullNodeRuleGroup().values().stream()
+                    .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
+                    .collect(Collectors.toList());
+                checkNodeRuleGroupForTpdrOTSi(nrgList3, enepUuid3, inepUuid3, nodeUuid);
                 break;
             default:
                 Iterator<OwnedNodeEdgePoint> nepIterator = node.nonnullOwnedNodeEdgePoint().values().iterator();
@@ -455,6 +563,34 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
         checkCommonPartOfNep(nep, false);
     }
 
+    private void checkNodeRuleGroupForTpdrDSR(List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid,
+        Uuid nodeUuid) {
+        assertEquals("transponder DSR should contain 2 node rule group", 2, nrgList.size());
+        for (NodeRuleGroup nodeRuleGroup : nrgList) {
+            assertEquals("each node-rule-group should contain 2 NEP for transponder DSR",
+                2, nodeRuleGroup.getNodeEdgePoint().size());
+        }
+        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).nonnullNodeEdgePoint().values());
+        assertThat("node-rule-group nb 1 should be between nep-client1 and nep-network1",
+            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
+            either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
+        assertThat("node-rule-group nb 1 should be between nep-client1 and nep-network1",
+            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
+            either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
+        assertEquals("node-rule-group nb 1 should be between nep-client1 and nep-network1 of the same node",
+            nodeEdgePointList.get(0).getNodeUuid(), nodeUuid);
+        assertEquals("node-rule-group nb 1 should be between nep-client1 and nep-network1 of the same node",
+            nodeEdgePointList.get(1).getNodeUuid(), nodeUuid);
+        List<Rule> rule = new ArrayList<>(nrgList.get(1).nonnullRule().values());
+        assertEquals("node-rule-group nb 1 should contain a single rule", 1, rule.size());
+        assertEquals("local-id of the rule should be 'forward'",
+            "forward", rule.get(0).getLocalId());
+        assertEquals("the forwarding rule should be 'MAYFORWARDACROSSGROUP'",
+            ForwardingRule.MAYFORWARDACROSSGROUP, rule.get(0).getForwardingRule());
+        assertEquals("the rule type should be 'FORWARDING'",
+            RuleType.FORWARDING, rule.get(0).getRuleType());
+    }
+
     private void checkNodeRuleGroupForMuxDSR(List<NodeRuleGroup> nrgList, Uuid clientNepUuid, Uuid networkNepUuid,
         Uuid nodeUuid) {
         assertEquals("muxponder DSR should contain 4 node rule group", 4, nrgList.size());
@@ -464,7 +600,7 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
         }
         List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).nonnullNodeEdgePoint().values());
         assertThat("node-rule-group nb 2 should be between nep-client4 and nep-network1",
-            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
+            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
             either(containsString(networkNepUuid.getValue())).or(containsString(clientNepUuid.getValue())));
         assertThat("node-rule-group nb 2 should be between nep-client4 and nep-network1",
             nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
@@ -500,6 +636,31 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
         assertEquals("any item of the node-rule-group should have the same nodeUuid",
             nodeUuid, nrg.get(3).getNodeUuid());
         @Nullable
+        List<Rule> ruleList = new ArrayList<>(nrgList.get(0).nonnullRule().values());
+        assertEquals("node-rule-group should contain a single rule", 1, ruleList.size());
+        assertEquals("local-id of the rule should be 'forward'",
+            "forward", ruleList.get(0).getLocalId());
+        assertEquals("the forwarding rule should be 'MAYFORWARDACROSSGROUP'",
+            ForwardingRule.MAYFORWARDACROSSGROUP, ruleList.get(0).getForwardingRule());
+        assertEquals("the rule type should be 'FORWARDING'",
+            RuleType.FORWARDING, ruleList.get(0).getRuleType());
+    }
+
+    private void checkNodeRuleGroupForTpdrOTSi(List<NodeRuleGroup> nrgList, Uuid enepUuid, Uuid inepUuid,
+        Uuid nodeUuid) {
+        assertEquals("Tpdr-OTSi should contain two node rule groups", 2, nrgList.size());
+        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).getNodeEdgePoint().values());
+        assertEquals("Tpdr-OTSi node-rule-group should contain 2 NEP", 2, nodeEdgePointList.size());
+        assertThat("Tpdr-OTSi node-rule-group should be between eNEP and iNEP of XPDR1-NETWORK1",
+            nodeEdgePointList.get(0).getNodeEdgePointUuid().getValue(),
+            either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
+        assertThat("Tpdr-OTSi node-rule-group should be between eNEP and iNEP of XPDR1-NETWORK1",
+            nodeEdgePointList.get(1).getNodeEdgePointUuid().getValue(),
+            either(containsString(enepUuid.getValue())).or(containsString(inepUuid.getValue())));
+        assertEquals("any item of the node-rule-group should have the same nodeUuid",
+            nodeUuid, nodeEdgePointList.get(0).getNodeUuid());
+        assertEquals("any item of the node-rule-group should have the same nodeUuid",
+            nodeUuid, nodeEdgePointList.get(1).getNodeUuid());
         List<Rule> ruleList = new ArrayList<>(nrgList.get(0).nonnullRule().values());
         assertEquals("node-rule-group should contain a single rule", 1, ruleList.size());
         assertEquals("local-id of the rule should be 'forward'",
@@ -564,7 +725,7 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
             RuleType.FORWARDING, ruleList0.get(0).getRuleType());
     }
 
-    private void checkNepClient100G(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
+    private void checkNepClient100GSwitch(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
         assertEquals("bad uuid for " + portName, nepUuid, nep.getUuid());
         List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
         assertEquals("value of client nep should be '" + portName + "'",
@@ -576,6 +737,22 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
         assertThat("client nep should support 2 kind of cep",
             nep.getSupportedCepLayerProtocolQualifier(),
             hasItems(ODUTYPEODU4.class, DIGITALSIGNALTYPE100GigE.class));
+        assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
+        checkCommonPartOfNep(nep, false);
+    }
+
+    private void checkNepClient100GTpdr(OwnedNodeEdgePoint nep, Uuid nepUuid, String portName, String nepName) {
+        assertEquals("bad uuid for " + portName, nepUuid, nep.getUuid());
+        List<Name> nameList = new ArrayList<>(nep.nonnullName().values());
+        assertEquals("value of client nep should be '" + portName + "'",
+            portName, nameList.get(0).getValue());
+        assertEquals("value-name of client nep for '" + portName + "' should be 100G-tpdr'",
+            nepName, nameList.get(0).getValueName());
+        assertEquals("Client nep should support 1 kind of cep",
+            1, nep.getSupportedCepLayerProtocolQualifier().size());
+        assertThat("client nep should support 2 kind of cep",
+            nep.getSupportedCepLayerProtocolQualifier(),
+            hasItems(DIGITALSIGNALTYPE100GigE.class));
         assertEquals("client nep should be of ETH protocol type", LayerProtocolName.ETH, nep.getLayerProtocolName());
         checkCommonPartOfNep(nep, false);
     }
