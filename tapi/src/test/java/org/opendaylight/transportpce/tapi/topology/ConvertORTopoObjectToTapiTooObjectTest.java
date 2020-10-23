@@ -13,6 +13,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import com.google.common.util.concurrent.FluentFuture;
@@ -525,6 +526,10 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
                         "NodeEdgePoint name");
                     count++;
                 }
+                List<NodeRuleGroup> nrgList4 = node.nonnullNodeRuleGroup().values().stream()
+                    .sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
+                    .collect(Collectors.toList());
+                checkNodeRuleGroupForRdmInfra(nrgList4, count - 1);
                 break;
         }
     }
@@ -636,6 +641,25 @@ public class ConvertORTopoObjectToTapiTooObjectTest extends AbstractTest {
         assertEquals("any item of the node-rule-group should have the same nodeUuid",
             nodeUuid, nrg.get(3).getNodeUuid());
         @Nullable
+        List<Rule> ruleList = new ArrayList<>(nrgList.get(0).nonnullRule().values());
+        assertEquals("node-rule-group should contain a single rule", 1, ruleList.size());
+        assertEquals("local-id of the rule should be 'forward'",
+            "forward", ruleList.get(0).getLocalId());
+        assertEquals("the forwarding rule should be 'MAYFORWARDACROSSGROUP'",
+            ForwardingRule.MAYFORWARDACROSSGROUP, ruleList.get(0).getForwardingRule());
+        assertEquals("the rule type should be 'FORWARDING'",
+            RuleType.FORWARDING, ruleList.get(0).getRuleType());
+    }
+
+    private void checkNodeRuleGroupForRdmInfra(List<NodeRuleGroup> nrgList, int nbNeps) {
+        assertEquals("RDM infra node - OTSi should contain a single node rule groups", 1, nrgList.size());
+        if (nbNeps > 0) {
+            List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).getNodeEdgePoint().values());
+            assertEquals("RDM infra node -rule-group should contain " + nbNeps + " NEP",
+                nbNeps, nodeEdgePointList.size());
+        } else {
+            assertNull("RDM infra node -rule-group should contain no NEP", nrgList.get(0).getNodeEdgePoint());
+        }
         List<Rule> ruleList = new ArrayList<>(nrgList.get(0).nonnullRule().values());
         assertEquals("node-rule-group should contain a single rule", 1, ruleList.size());
         assertEquals("local-id of the rule should be 'forward'",
