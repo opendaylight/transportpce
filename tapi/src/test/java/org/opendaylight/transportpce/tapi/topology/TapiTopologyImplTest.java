@@ -26,10 +26,8 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
-import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.tapi.utils.TopologyDataUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.AdministrativeState;
@@ -40,12 +38,15 @@ import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Oper
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.Uuid;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.Name;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.common.rev181210.global._class.NameKey;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.ForwardingRule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutput;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.RuleType;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.get.topology.details.output.Topology;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.OwnedNodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.NodeRuleGroup;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.NodeEdgePoint;
+import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.node.rule.group.Rule;
 import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Link;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.topology.Node;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.Uint64;
 import org.slf4j.Logger;
@@ -71,9 +72,9 @@ public class TapiTopologyImplTest extends AbstractTest {
     }
 
     @Test
-    @Ignore
-    public void getTopologyDetailsForOpenroadmTopologyWhenSuccessful() throws ExecutionException, InterruptedException {
-        GetTopologyDetailsInput input = TopologyDataUtils.buildGetTopologyDetailsInput(NetworkUtils.OVERLAY_NETWORK_ID);
+    public void getTopologyDetailsForTransponder100GTopologyWhenSuccessful()
+            throws ExecutionException, InterruptedException {
+        GetTopologyDetailsInput input = TopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.TPDR_100G);
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker());
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
@@ -87,30 +88,38 @@ public class TapiTopologyImplTest extends AbstractTest {
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
         assertNotNull("Topology should not be null", topology);
-        assertEquals("Nodes list size should be 1", 1, topology.getNode().size());
-        List<Node> topologyNodeList = new ArrayList<>(topology.nonnullNode().values());
-        List<Node> nodeList = new ArrayList<>(topologyNodeList);
-        List<Name> nameList = new ArrayList<>(nodeList.get(0).nonnullName().values());
-        assertEquals("Node name should be TAPI Ethernet Node",
-            "TAPI Ethernet Node", nameList.get(0).getValue());
-        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes("Ethernet Topology".getBytes()).toString());
-        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes("TAPI Ethernet Node".getBytes()).toString());
+        Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes(TopologyUtils.TPDR_100G.getBytes(Charset.forName("UTF-8")))
+            .toString());
         assertEquals("incorrect topology uuid", topoUuid, topology.getUuid());
-        assertEquals("incorrect node uuid", nodeUuid, topologyNodeList.get(0).getUuid());
-        Uuid onep1Uuid = new Uuid(UUID.nameUUIDFromBytes("OwnedNodeEdgePoint 0".getBytes()).toString());
-        Uuid onep2Uuid = new Uuid(UUID.nameUUIDFromBytes("OwnedNodeEdgePoint 1".getBytes()).toString());
-        List<OwnedNodeEdgePoint> edgePointList = new ArrayList<>(topologyNodeList.get(0)
-                .nonnullOwnedNodeEdgePoint().values());
-        assertEquals("incorrect uuid for nep1",
-            onep1Uuid, edgePointList.get(1).getUuid());
-        assertEquals("incorrect uuid for nep1",
-            onep2Uuid, edgePointList.get(0).getUuid());
+        assertEquals("Node list size should be 1", 1, topology.getNode().size());
+        Name nodeName = topology.getNode().values().stream().findFirst().get().getName()
+            .get(new NameKey("Tpdr100g node name"));
+        assertEquals("Node name should be 'Tpdr100g over WDM node'", "Tpdr100g over WDM node", nodeName.getValue());
+        Uuid nodeUuid = new Uuid(UUID.nameUUIDFromBytes(nodeName.getValue().getBytes(Charset.forName("UTF-8")))
+            .toString());
+        assertEquals("incorrect node uuid", nodeUuid, topology.getNode().values().stream().findFirst().get().getUuid());
+        long nb = topology.getNode().values().stream().findFirst().get().getOwnedNodeEdgePoint().size();
+        assertEquals("'Transponder 100GE' node should have 2 neps", 2, nb);
+        List<NodeRuleGroup> nrgList = topology.getNode().values().stream().findFirst().get().nonnullNodeRuleGroup()
+            .values().stream().sorted((nrg1, nrg2) -> nrg1.getUuid().getValue().compareTo(nrg2.getUuid().getValue()))
+            .collect(Collectors.toList());
+        assertEquals("'Transponder 100GE' node should contain a single node rule groups", 1, nrgList.size());
+        List<NodeEdgePoint> nodeEdgePointList = new ArrayList<>(nrgList.get(0).getNodeEdgePoint().values());
+        assertEquals("'Transponder 100GE' node -rule-group should contain 2 NEPs", nb, nodeEdgePointList.size());
+        List<Rule> ruleList = new ArrayList<>(nrgList.get(0).nonnullRule().values());
+        assertEquals("node-rule-group should contain a single rule", 1, ruleList.size());
+        assertEquals("local-id of the rule should be 'forward'",
+            "forward", ruleList.get(0).getLocalId());
+        assertEquals("the forwarding rule should be 'MAYFORWARDACROSSGROUP'",
+            ForwardingRule.MAYFORWARDACROSSGROUP, ruleList.get(0).getForwardingRule());
+        assertEquals("the rule type should be 'FORWARDING'",
+            RuleType.FORWARDING, ruleList.get(0).getRuleType());
     }
 
     @Test
     public void getTopologyDetailsForOtnTopologyWithOtnLinksWhenSuccessful()
         throws ExecutionException, InterruptedException {
-        GetTopologyDetailsInput input = TopologyDataUtils.buildGetTopologyDetailsInput(NetworkUtils.OTN_NETWORK_ID);
+        GetTopologyDetailsInput input = TopologyDataUtils.buildGetTopologyDetailsInput(TopologyUtils.T0_MULTILAYER);
         TapiTopologyImpl tapiTopoImpl = new TapiTopologyImpl(getDataBroker());
         ListenableFuture<RpcResult<GetTopologyDetailsOutput>> result = tapiTopoImpl.getTopologyDetails(input);
         result.addListener(new Runnable() {
