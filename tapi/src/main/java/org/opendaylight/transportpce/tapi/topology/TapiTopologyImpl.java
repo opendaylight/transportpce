@@ -105,7 +105,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
     @Override
     public ListenableFuture<RpcResult<GetTopologyDetailsOutput>> getTopologyDetails(GetTopologyDetailsInput input) {
         try {
-            LOG.info("Building TAPI Topology abstraction from {}", input.getTopologyIdOrName());
+            LOG.info("Building TAPI Topology abstraction");
             Topology topology = null;
             switch (input.getTopologyIdOrName()) {
                 case NetworkUtils.OVERLAY_NETWORK_ID:
@@ -121,6 +121,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
             return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder().setTopology(topology).build())
                 .buildFuture();
         } catch (TapiTopologyException e) {
+            LOG.error("error building TAPI topology");
             return RpcResultBuilder.success(new GetTopologyDetailsOutputBuilder().build()).buildFuture();
         }
     }
@@ -223,11 +224,7 @@ public class TapiTopologyImpl implements TapiTopologyService {
                 .collect(Collectors.toList());
         // read otn-topology
         Network otnTopo = readTopology(InstanceIdentifiers.OTN_NETWORK_II);
-        Map<NodeId, Node> otnNodeMap = otnTopo.nonnullNode().values().stream().filter(nt -> nt.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
-            .getNodeType().equals(OpenroadmNodeType.SWITCH) || nt.augmentation(
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1.class)
-                .getNodeType().equals(OpenroadmNodeType.MUXPDR))
+        Map<NodeId, Node> otnNodeMap = otnTopo.nonnullNode().values().stream()
             .collect(Collectors.toMap(Node::getNodeId, node -> node));
 
         Map<String, List<String>> networkPortMap = new HashMap<>();
