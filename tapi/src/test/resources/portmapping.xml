@@ -7,7 +7,8 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>C1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <connection-map-lcp>XPDR1-NETWORK2</connection-map-lcp>
       <lcp-hash-val>fHpE8JbDyn4=</lcp-hash-val>
       <supporting-circuit-pack-name>1/0/2-PLUG-CLIENT
@@ -19,7 +20,8 @@
       <port-qual>xpdr-network</port-qual>
       <supporting-port>1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
       <connection-map-lcp>XPDR1-CLIENT2</connection-map-lcp>
       <lcp-hash-val>AJUlmCIYKpQh</lcp-hash-val>
       <supporting-circuit-pack-name>1/0/2-PLUG-NET
@@ -30,7 +32,8 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>C1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <connection-map-lcp>XPDR1-NETWORK1</connection-map-lcp>
       <lcp-hash-val>fHpE8JbDyn0=</lcp-hash-val>
       <supporting-circuit-pack-name>1/0/1-PLUG-CLIENT
@@ -42,7 +45,8 @@
       <port-qual>xpdr-network</port-qual>
       <supporting-port>1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
       <connection-map-lcp>XPDR1-CLIENT1</connection-map-lcp>
       <lcp-hash-val>AJUlmCIYKpQi</lcp-hash-val>
       <supporting-circuit-pack-name>1/0/1-PLUG-NET
@@ -126,8 +130,10 @@
       <port-qual>switch-client</port-qual>
       <supporting-port>CP2-QSFP3-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <lcp-hash-val>BVSiXSSYUCI=</lcp-hash-val>
       <supporting-circuit-pack-name>CP2-QSFP3
       </supporting-circuit-pack-name>
@@ -137,8 +143,10 @@
       <port-qual>switch-client</port-qual>
       <supporting-port>CP2-QSFP4-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <lcp-hash-val>BVSiXSSYUCU=</lcp-hash-val>
       <supporting-circuit-pack-name>CP2-QSFP4
       </supporting-circuit-pack-name>
@@ -148,8 +156,10 @@
       <port-qual>switch-client</port-qual>
       <supporting-port>CP2-QSFP1-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <lcp-hash-val>BVSiXSSYUCA=</lcp-hash-val>
       <supporting-circuit-pack-name>CP2-QSFP1
       </supporting-circuit-pack-name>
@@ -159,8 +169,10 @@
       <port-qual>switch-client</port-qual>
       <supporting-port>CP2-QSFP2-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <lcp-hash-val>BVSiXSSYUCM=</lcp-hash-val>
       <supporting-circuit-pack-name>CP2-QSFP2
       </supporting-circuit-pack-name>
@@ -170,9 +182,12 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>CP1-SFP3-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE</supported-interface-capability>
       <lcp-hash-val>L0PHYLgz3+E=</lcp-hash-val>
       <supporting-circuit-pack-name>CP1-SFP3
       </supporting-circuit-pack-name>
@@ -182,8 +197,10 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>CP1-SFP2-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
       <lcp-hash-val>L0PHYLgz3+A=</lcp-hash-val>
       <supporting-circuit-pack-name>CP1-SFP2
       </supporting-circuit-pack-name>
@@ -193,9 +210,12 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>CP1-SFP4-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE</supported-interface-capability>
       <lcp-hash-val>L0PHYLgz3+Y=</lcp-hash-val>
       <supporting-circuit-pack-name>CP1-SFP4
       </supporting-circuit-pack-name>
@@ -205,8 +225,10 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>CP1-SFP1-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
       <lcp-hash-val>L0PHYLgz3+M=</lcp-hash-val>
       <supporting-circuit-pack-name>CP1-SFP1
       </supporting-circuit-pack-name>
@@ -217,7 +239,8 @@
       <port-qual>switch-network</port-qual>
       <supporting-port>CP8-CFP-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>ALx70DYYfGTz</lcp-hash-val>
       <xponder-type>switch</xponder-type>
       <supporting-circuit-pack-name>CP8-CFP
@@ -229,7 +252,8 @@
       <port-qual>switch-network</port-qual>
       <supporting-port>CP7-CFP-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>ALx70DYYfGTy</lcp-hash-val>
       <xponder-type>switch</xponder-type>
       <supporting-circuit-pack-name>CP7-CFP
@@ -241,7 +265,8 @@
       <port-qual>switch-network</port-qual>
       <supporting-port>CP5-CFP-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>ALx70DYYfGT0</lcp-hash-val>
       <xponder-type>switch</xponder-type>
       <supporting-circuit-pack-name>CP5-CFP
@@ -253,7 +278,8 @@
       <port-qual>switch-network</port-qual>
       <supporting-port>CP6-CFP-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>ALx70DYYfGTx</lcp-hash-val>
       <xponder-type>switch</xponder-type>
       <supporting-circuit-pack-name>CP6-CFP
@@ -265,7 +291,8 @@
       <port-qual>xpdr-network</port-qual>
       <supporting-port>CP1-CFP0-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>fuYZwEO660g=</lcp-hash-val>
       <xponder-type>mpdr</xponder-type>
       <supporting-circuit-pack-name>CP1-CFP0
@@ -341,8 +368,10 @@
       <port-qual>switch-client</port-qual>
       <supporting-port>CP2-QSFP3-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <lcp-hash-val>AN/WSSRXne3s</lcp-hash-val>
       <supporting-circuit-pack-name>CP2-QSFP3
       </supporting-circuit-pack-name>
@@ -352,8 +381,10 @@
       <port-qual>switch-client</port-qual>
       <supporting-port>CP2-QSFP4-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <lcp-hash-val>AN/WSSRXne3r</lcp-hash-val>
       <supporting-circuit-pack-name>CP2-QSFP4
       </supporting-circuit-pack-name>
@@ -363,8 +394,10 @@
       <port-qual>switch-client</port-qual>
       <supporting-port>CP2-QSFP1-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <lcp-hash-val>AN/WSSRXne3u</lcp-hash-val>
       <supporting-circuit-pack-name>CP2-QSFP1
       </supporting-circuit-pack-name>
@@ -374,8 +407,10 @@
       <port-qual>switch-client</port-qual>
       <supporting-port>CP2-QSFP2-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <lcp-hash-val>AN/WSSRXne3t</lcp-hash-val>
       <supporting-circuit-pack-name>CP2-QSFP2
       </supporting-circuit-pack-name>
@@ -385,9 +420,12 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>CP1-SFP3-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE</supported-interface-capability>
       <lcp-hash-val>FqlcrxV7p38=</lcp-hash-val>
       <supporting-circuit-pack-name>CP1-SFP3
       </supporting-circuit-pack-name>
@@ -397,8 +435,10 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>CP1-SFP2-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
       <lcp-hash-val>FqlcrxV7p34=</lcp-hash-val>
       <supporting-circuit-pack-name>CP1-SFP2
       </supporting-circuit-pack-name>
@@ -408,9 +448,12 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>CP1-SFP4-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE</supported-interface-capability>
       <lcp-hash-val>FqlcrxV7p3g=</lcp-hash-val>
       <supporting-circuit-pack-name>CP1-SFP4
       </supporting-circuit-pack-name>
@@ -420,8 +463,10 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>CP1-SFP1-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-10GE-ODU2e</supported-interface-capability>
       <lcp-hash-val>FqlcrxV7p30=</lcp-hash-val>
       <supporting-circuit-pack-name>CP1-SFP1
       </supporting-circuit-pack-name>
@@ -432,7 +477,8 @@
       <port-qual>switch-network</port-qual>
       <supporting-port>CP8-CFP-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>exT821pFtOU=</lcp-hash-val>
       <xponder-type>switch</xponder-type>
       <supporting-circuit-pack-name>CP8-CFP
@@ -444,7 +490,8 @@
       <port-qual>switch-network</port-qual>
       <supporting-port>CP7-CFP-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>exT821pFtOQ=</lcp-hash-val>
       <xponder-type>switch</xponder-type>
       <supporting-circuit-pack-name>CP7-CFP
@@ -456,7 +503,8 @@
       <port-qual>switch-network</port-qual>
       <supporting-port>CP5-CFP-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>exT821pFtOI=</lcp-hash-val>
       <xponder-type>switch</xponder-type>
       <supporting-circuit-pack-name>CP5-CFP
@@ -468,7 +516,8 @@
       <port-qual>switch-network</port-qual>
       <supporting-port>CP6-CFP-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>exT821pFtOc=</lcp-hash-val>
       <xponder-type>switch</xponder-type>
       <supporting-circuit-pack-name>CP6-CFP
@@ -480,7 +529,8 @@
       <port-qual>xpdr-network</port-qual>
       <supporting-port>CP1-CFP0-P1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH-OTU4-ODU4</supported-interface-capability>
       <lcp-hash-val>Swfw02qXGyI=</lcp-hash-val>
       <xponder-type>mpdr</xponder-type>
       <supporting-circuit-pack-name>CP1-CFP0
@@ -494,7 +544,8 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>C1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <connection-map-lcp>XPDR1-NETWORK2</connection-map-lcp>
       <lcp-hash-val>AJUUr6I5fALg</lcp-hash-val>
       <supporting-circuit-pack-name>1/0/2-PLUG-CLIENT
@@ -506,7 +557,8 @@
       <port-qual>xpdr-network</port-qual>
       <supporting-port>1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
       <connection-map-lcp>XPDR1-CLIENT2</connection-map-lcp>
       <lcp-hash-val>AMkDwQ7xTmRL</lcp-hash-val>
       <supporting-circuit-pack-name>1/0/2-PLUG-NET
@@ -517,7 +569,8 @@
       <port-qual>xpdr-client</port-qual>
       <supporting-port>C1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-100GE</supported-interface-capability>
       <connection-map-lcp>XPDR1-NETWORK1</connection-map-lcp>
       <lcp-hash-val>AJUUr6I5fALj</lcp-hash-val>
       <supporting-circuit-pack-name>1/0/1-PLUG-CLIENT
@@ -529,7 +582,8 @@
       <port-qual>xpdr-network</port-qual>
       <supporting-port>1</supporting-port>
       <port-direction>bidirectional</port-direction>
-      <supported-interface-capability xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
+      <supported-interface-capability
+        xmlns:x="http://org/openroadm/port/types">x:if-OCH</supported-interface-capability>
       <connection-map-lcp>XPDR1-CLIENT1</connection-map-lcp>
       <lcp-hash-val>AMkDwQ7xTmRI</lcp-hash-val>
       <supporting-circuit-pack-name>1/0/1-PLUG-NET

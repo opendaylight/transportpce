@@ -65,7 +65,7 @@ public class TapiTopologyImplTest extends AbstractTest {
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
             TopologyDataUtils.OPENROADM_TOPOLOGY_FILE, InstanceIdentifiers.OVERLAY_NETWORK_II);
         TopologyDataUtils.writeTopologyFromFileToDatastore(getDataStoreContextUtil(),
-            TopologyDataUtils.OTN_TOPOLOGY_WITH_OTN_LINKS_FILE, InstanceIdentifiers.OTN_NETWORK_II);
+            TopologyDataUtils.OTN_TOPOLOGY_FILE, InstanceIdentifiers.OTN_NETWORK_II);
         TopologyDataUtils.writePortmappingFromFileToDatastore(getDataStoreContextUtil());
         LOG.info("setup done");
     }
@@ -107,7 +107,6 @@ public class TapiTopologyImplTest extends AbstractTest {
             onep2Uuid, edgePointList.get(0).getUuid());
     }
 
-
     @Test
     public void getTopologyDetailsForOtnTopologyWithOtnLinksWhenSuccessful()
         throws ExecutionException, InterruptedException {
@@ -125,8 +124,43 @@ public class TapiTopologyImplTest extends AbstractTest {
         @Nullable
         Topology topology = rpcResult.getResult().getTopology();
         assertNotNull("Topology should not be null", topology);
-        assertEquals("Node list size should be 9", 9, topology.getNode().size());
-        assertEquals("Link list size should be 14", 14, topology.getLink().size());
+        assertEquals("Node list size should be 13", 13, topology.getNode().size());
+        long nb1 = topology.getNode().values().stream()
+            .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("XPDR-A1-XPDR1"))
+            .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
+                .filter(nep -> nep.getName().containsKey(new NameKey("100G-tpdr"))))
+            .count();
+        assertEquals("XPDR-A1-XPDR1 should only have one client nep", 1, nb1);
+        long nb2 = topology.getNode().values().stream()
+            .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR1"))
+            .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
+                .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_C"))))
+            .count();
+        assertEquals("SPDR-SA1-XPDR1 (mux) should have 4 client neps", 4, nb2);
+        long nb3 = topology.getNode().values().stream()
+            .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR1"))
+            .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
+                .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_N"))))
+            .count();
+        assertEquals("SPDR-SA1-XPDR1 (mux) should have a single network nep", 1, nb3);
+        long nb4 = topology.getNode().values().stream()
+            .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR2"))
+            .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
+                .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_C"))))
+            .count();
+        assertEquals("SPDR-SA1-XPDR2 (switch) should have 4 client neps", 4, nb4);
+        long nb5 = topology.getNode().values().stream()
+            .filter(node -> node.getLayerProtocolName().contains(LayerProtocolName.DSR))
+            .filter(node -> node.getName().values().stream().findFirst().get().getValue().equals("SPDR-SA1-XPDR2"))
+            .flatMap(node -> node.getOwnedNodeEdgePoint().values().stream()
+                .filter(nep -> nep.getName().containsKey(new NameKey("NodeEdgePoint_N"))))
+            .count();
+        assertEquals("SPDR-SA1-XPDR2 (switch) should have 2 network neps", 2, nb5);
+        assertEquals("Link list size should be 18", 18, topology.getLink().size());
         Uuid topoUuid = new Uuid(UUID.nameUUIDFromBytes("T0 - Multi-layer topology".getBytes()).toString());
         assertEquals("incorrect topology uuid", topoUuid, topology.getUuid());
         assertEquals("topology name should be T0 - Multi-layer topology",
@@ -137,16 +171,16 @@ public class TapiTopologyImplTest extends AbstractTest {
             .filter(n -> n.getName().containsKey(new NameKey("dsr/odu node name"))).count();
         long nbPhotonicNodes = topology.nonnullNode().values().stream()
             .filter(n -> n.getName().containsKey(new NameKey("otsi node name"))).count();
-        assertEquals("Node list should contain 4 DSR-ODU nodes", 4, nbDsrOduNodes);
-        assertEquals("Node list should contain 5 Photonics nodes", 5, nbPhotonicNodes);
+        assertEquals("Node list should contain 6 DSR-ODU nodes", 6, nbDsrOduNodes);
+        assertEquals("Node list should contain 7 Photonics nodes", 7, nbPhotonicNodes);
         long nbTransititionalLinks = topology.getLink().values().stream()
             .filter(l -> l.getName().containsKey(new NameKey("transitional link name"))).count();
         long nbOmsLinks = topology.getLink().values().stream()
             .filter(l -> l.getName().containsKey(new NameKey("OMS link name"))).count();
         long nbOtnLinks = topology.getLink().values().stream()
             .filter(l -> l.getName().containsKey(new NameKey("otn link name"))).count();
-        assertEquals("Link list should contain 6 transitional links", 6, nbTransititionalLinks);
-        assertEquals("Link list should contain 6 transitional links", 6, nbOmsLinks);
+        assertEquals("Link list should contain 8 transitional links", 8, nbTransititionalLinks);
+        assertEquals("Link list should contain 8 transitional links", 8, nbOmsLinks);
         assertEquals("Link list should contain 2 OTN links", 2, nbOtnLinks);
 
         Uuid node1Uuid = new Uuid(UUID.nameUUIDFromBytes("SPDR-SA1-XPDR1+DSR".getBytes(Charset.forName("UTF-8")))
@@ -173,11 +207,12 @@ public class TapiTopologyImplTest extends AbstractTest {
                 .getBytes(Charset.forName("UTF-8"))).toString());
 
         List<Link> links = topology.nonnullLink().values().stream()
+            .filter(l -> l.getName().containsKey(new NameKey("otn link name")))
             .sorted((l1, l2) -> l1.getUuid().getValue().compareTo(l2.getUuid().getValue()))
             .collect(Collectors.toList());
-        checkOtnLink(links.get(4), topoUuid, node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link1Uuid,
+        checkOtnLink(links.get(0), topoUuid, node1Uuid, node2Uuid, tp1Uuid, tp2Uuid, link1Uuid,
             "ODU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
-        checkOtnLink(links.get(11), topoUuid, node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link2Uuid,
+        checkOtnLink(links.get(1), topoUuid, node3Uuid, node4Uuid, tp3Uuid, tp4Uuid, link2Uuid,
             "OTU4-SPDR-SA1-XPDR1-XPDR1-NETWORK1toSPDR-SC1-XPDR1-XPDR1-NETWORK1");
     }
 

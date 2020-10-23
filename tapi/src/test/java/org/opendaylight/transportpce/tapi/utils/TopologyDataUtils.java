@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory;
 public final class TopologyDataUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(TopologyDataUtils.class);
-    public static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/get_openroadm-topology2.xml";
-    public static final String OTN_TOPOLOGY_WITH_OTN_LINKS_FILE = "src/test/resources/otn-topology-with-otn-links.xml";
-    public static final String PORTMAPPING_FILE = "src/test/resources/get_portmapping.xml";
+    public static final String OPENROADM_TOPOLOGY_FILE = "src/test/resources/openroadm-topology.xml";
+    public static final String OTN_TOPOLOGY_FILE = "src/test/resources/otn-topology.xml";
+    public static final String PORTMAPPING_FILE = "src/test/resources/portmapping.xml";
 
     public static GetTopologyDetailsInput buildGetTopologyDetailsInput(String topoName) {
         GetTopologyDetailsInputBuilder builtInput = new GetTopologyDetailsInputBuilder();
