@@ -7,22 +7,12 @@
  */
 package org.opendaylight.transportpce.tapi.topology;
 
-import com.google.common.util.concurrent.ListenableFuture;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsInput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutput;
-import org.opendaylight.yang.gen.v1.urn.onf.otcc.yang.tapi.topology.rev181210.GetTopologyDetailsOutputBuilder;
-import org.opendaylight.yangtools.yang.common.RpcResult;
-import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
-
 public final class TopologyUtils {
 
     private TopologyUtils() {
     }
 
-    public static ListenableFuture<RpcResult<GetTopologyDetailsOutput>> createGetTopologyDetailsReply(
-        GetTopologyDetailsInput input) {
-        GetTopologyDetailsOutputBuilder output = new GetTopologyDetailsOutputBuilder().setTopology(null);
-        return RpcResultBuilder.success(output.build()).buildFuture();
-    }
+    public static final String T0_MULTILAYER = "T0 - Multi-layer topology";
+    public static final String TPDR_100G = "Transponder 100GE";
 
 }
