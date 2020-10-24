@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
@@ -34,12 +35,14 @@ public class PceSendingPceRPCsTest extends AbstractTest {
     @Mock
     private BindingDOMCodecServices bindingDOMCodecServices;
     private JerseyServer jerseyServer = new JerseyServer();
+    private DataBroker dataBroker;
 
 
     @Before
     public void setUp() {
-        networkTransaction = new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
-        PceTestUtils.writeNetworkInDataStore(this.getDataBroker());
+        this.dataBroker = getNewDataBroker();
+        networkTransaction = new NetworkTransactionImpl(new RequestProcessor(this.dataBroker));
+        PceTestUtils.writeNetworkInDataStore(this.dataBroker);
         pceSendingPceRPCs = new PceSendingPceRPCs(PceTestData.getPCE_test1_request_54(),
                         networkTransaction, bindingDOMCodecServices);
     }

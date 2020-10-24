@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
 import org.opendaylight.mdsal.binding.api.MountPointService;
 import org.opendaylight.transportpce.common.StringConstants;
@@ -42,7 +43,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 
 public class PowerMgmtTest extends AbstractTest {
-
     private MountPoint mountPoint;
     private MountPointService mountPointService;
     private DeviceTransactionManager deviceTransactionManager;
@@ -57,13 +57,15 @@ public class PowerMgmtTest extends AbstractTest {
     private OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl22;
     private PortMappingVersion221 portMappingVersion22;
     private PortMappingVersion121 portMappingVersion121;
+    private DataBroker dataBroker;
 
     @Before
     public void setUp() {
-        this.mountPoint = new MountPointStub(this.getDataBroker());
+        dataBroker = this.getNewDataBroker();
+        this.mountPoint = new MountPointStub(dataBroker);
         this.mountPointService = new MountPointServiceStub(mountPoint);
         // this.mappingUtils = new MappingUtilsImpl(getDataBroker());
-        this.mappingUtils = Mockito.spy(new MappingUtilsImpl(getDataBroker()));
+        this.mappingUtils = Mockito.spy(new MappingUtilsImpl(dataBroker));
         Mockito.doReturn(StringConstants.OPENROADM_DEVICE_VERSION_1_2_1).when(mappingUtils)
                 .getOpenRoadmVersion(Mockito.anyString());
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
@@ -77,13 +79,13 @@ public class PowerMgmtTest extends AbstractTest {
                 this.mappingUtils,this.openRoadmInterfacesImpl121,this.openRoadmInterfacesImpl22);
         this.openRoadmInterfaces = Mockito.spy(this.openRoadmInterfaces);
         this.portMappingVersion22 =
-                new PortMappingVersion221(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
+                new PortMappingVersion221(dataBroker, deviceTransactionManager, this.openRoadmInterfaces);
         this.portMappingVersion121 =
-                new PortMappingVersion121(getDataBroker(), deviceTransactionManager, this.openRoadmInterfaces);
-        this.portMapping = new PortMappingImpl(getDataBroker(),
+                new PortMappingVersion121(dataBroker, deviceTransactionManager, this.openRoadmInterfaces);
+        this.portMapping = new PortMappingImpl(dataBroker,
                 this.portMappingVersion22, this.portMappingVersion121);
         this.portMapping = Mockito.spy(this.portMapping);
-        this.powerMgmt = new PowerMgmtImpl(this.getDataBroker(), this.openRoadmInterfaces, this.crossConnect,
+        this.powerMgmt = new PowerMgmtImpl(this.dataBroker, this.openRoadmInterfaces, this.crossConnect,
                 this.deviceTransactionManager);
     }
 
@@ -147,7 +149,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void testSetPowerPresentNodes() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
-            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.getDataBroker(), null);
+            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.dataBroker, null);
             Thread.sleep(1000);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
@@ -159,7 +161,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void testSetPowerPresentNodes2() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
-            TransactionUtils.writeNodeTransaction2(nodeId.getValue(), this.getDataBroker(), null);
+            TransactionUtils.writeNodeTransaction2(nodeId.getValue(), this.dataBroker, null);
             Thread.sleep(500);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
@@ -171,7 +173,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void testSetPowerPresentNodes3() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
-            TransactionUtils.writeNodeTransaction3(nodeId.getValue(), this.getDataBroker(), null);
+            TransactionUtils.writeNodeTransaction3(nodeId.getValue(), this.dataBroker, null);
             Thread.sleep(500);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput();
@@ -195,7 +197,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void testSetPowerPresentNodes312() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
-            TransactionUtils.writeNodeTransaction3(nodeId.getValue(), this.getDataBroker(), "deg");
+            TransactionUtils.writeNodeTransaction3(nodeId.getValue(), this.dataBroker, "deg");
             Thread.sleep(500);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput4();
@@ -207,7 +209,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void testSetPowerPresentNodes32() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
-            TransactionUtils.writeNodeTransaction3(nodeId.getValue(), this.getDataBroker(), null);
+            TransactionUtils.writeNodeTransaction3(nodeId.getValue(), this.dataBroker, null);
             Thread.sleep(500);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput3();
@@ -219,7 +221,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void testSetPowerPresentNodes4() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
-            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.getDataBroker(), "network");
+            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.dataBroker, "network");
             Thread.sleep(500);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput2();
@@ -244,7 +246,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void testSetPowerPresentNodes42() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
-            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.getDataBroker(), "deg");
+            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.dataBroker, "deg");
             Thread.sleep(500);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput3();
@@ -256,7 +258,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void testSetPowerPresentNodes422() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
-            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.getDataBroker(), "deg");
+            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.dataBroker, "deg");
             Thread.sleep(500);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput4();
@@ -268,7 +270,7 @@ public class PowerMgmtTest extends AbstractTest {
     public void testSetPowerPresentNodes43() throws InterruptedException {
         List<NodeId> nodes = TransactionUtils.getNodeIds();
         for (NodeId nodeId : nodes) {
-            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.getDataBroker(), null);
+            TransactionUtils.writeNodeTransaction(nodeId.getValue(), this.dataBroker, null);
             Thread.sleep(500);
         }
         ServicePowerSetupInput input = OlmPowerServiceRpcImplUtil.getServicePowerSetupInput3();
