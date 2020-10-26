@@ -26,6 +26,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
@@ -129,7 +130,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     public void askNewPathFromGnpyNullResultTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
-                JsonUtil.getInstance().getBindingDOMCodecServices());
+                new ConstantAdapterContext(JsonUtil.getInstance().getBindingDOMCodecServices()));
         assertNull("No hard constraints should be available", gnpyUtilitiesImpl.askNewPathFromGnpy(null));
 
     }
@@ -138,7 +139,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     public void askNewPathFromGnpyTest() throws Exception {
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-3", "XPONDER-4"),
-                JsonUtil.getInstance().getBindingDOMCodecServices());
+                new ConstantAdapterContext(JsonUtil.getInstance().getBindingDOMCodecServices()));
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
@@ -156,7 +157,7 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
 
         gnpyUtilitiesImpl = new GnpyUtilitiesImpl(networkTransaction,
                 PceTestData.getGnpyPCERequest("XPONDER-1", "XPONDER-2"),
-                JsonUtil.getInstance().getBindingDOMCodecServices());
+                new ConstantAdapterContext(JsonUtil.getInstance().getBindingDOMCodecServices()));
         PceConstraintsCalc constraints = new PceConstraintsCalc(PceTestData.getPCE_simpletopology_test1_request(),
                 networkTransaction);
         PceConstraints pceHardConstraints = constraints.getPceHardConstraints();
