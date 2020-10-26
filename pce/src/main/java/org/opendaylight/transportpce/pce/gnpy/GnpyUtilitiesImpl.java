@@ -11,7 +11,7 @@ package org.opendaylight.transportpce.pce.gnpy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
+import org.opendaylight.mdsal.binding.dom.adapter.AdapterContext;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
@@ -48,18 +48,18 @@ public class GnpyUtilitiesImpl {
     private GnpyResult gnpyAtoZ;
     private GnpyResult gnpyZtoA;
     private Uint32 requestId;
-    private BindingDOMCodecServices bindingDOMCodecServices;
+    private AdapterContext adapterContext;
 
 
     public GnpyUtilitiesImpl(NetworkTransactionService networkTransaction, PathComputationRequestInput input,
-            BindingDOMCodecServices bindingDOMCodecServices)
+            AdapterContext adapterContext)
         throws GnpyException {
         this.gnpyTopo = new GnpyTopoImpl(networkTransaction);
         this.input = input;
         this.gnpyAtoZ = null;
         this.gnpyZtoA = null;
         this.requestId = Uint32.valueOf(0);
-        this.bindingDOMCodecServices = bindingDOMCodecServices;
+        this.adapterContext = adapterContext;
     }
 
     public boolean verifyComputationByGnpy(AToZDirection atoz, ZToADirection ztoa, PceConstraints pceHardConstraints)
@@ -98,7 +98,7 @@ public class GnpyUtilitiesImpl {
         if (gnpyResponse == null) {
             throw new GnpyException("In GnpyUtilities: no response from GNPy server");
         }
-        GnpyResult result = new GnpyResult(gnpyResponse, gnpyTopo, bindingDOMCodecServices);
+        GnpyResult result = new GnpyResult(gnpyResponse, gnpyTopo, adapterContext);
         result.analyzeResult();
         return result;
     }
@@ -139,7 +139,7 @@ public class GnpyUtilitiesImpl {
             .build();
         InstanceIdentifier<GnpyApi> idGnpyApi = InstanceIdentifier.builder(GnpyApi.class).build();
         String gnpyJson;
-        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(bindingDOMCodecServices);
+        ServiceDataStoreOperationsImpl sd = new ServiceDataStoreOperationsImpl(adapterContext);
         gnpyJson = sd.createJsonStringFromDataObject(idGnpyApi, gnpyApi);
         LOG.debug("GNPy Id: {} / json created : {}", idGnpyApi, gnpyJson);
         ConnectToGnpyServer connect = new ConnectToGnpyServer();

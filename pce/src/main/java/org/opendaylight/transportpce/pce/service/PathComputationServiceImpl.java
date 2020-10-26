@@ -17,6 +17,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
+import org.opendaylight.mdsal.binding.dom.adapter.AdapterContext;
+import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.PceComplianceCheck;
@@ -61,7 +63,7 @@ public class PathComputationServiceImpl implements PathComputationService {
     private NetworkTransactionService networkTransactionService;
     private final ListeningExecutorService executor;
     private ServicePathRpcResult notification = null;
-    private BindingDOMCodecServices bindingDOMCodecServices;
+    private AdapterContext adapterContext;
 
     public PathComputationServiceImpl(NetworkTransactionService networkTransactionService,
                                       NotificationPublishService notificationPublishService,
@@ -69,7 +71,7 @@ public class PathComputationServiceImpl implements PathComputationService {
         this.notificationPublishService = notificationPublishService;
         this.networkTransactionService = networkTransactionService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(5));
-        this.bindingDOMCodecServices = bindingDOMCodecServices;
+        this.adapterContext = new ConstantAdapterContext(bindingDOMCodecServices);
     }
 
     public void init() {
@@ -157,8 +159,7 @@ public class PathComputationServiceImpl implements PathComputationService {
                         RpcStatusEx.Pending, "Service compliant, submitting pathComputation Request ...", null);
                 String message = "";
                 String responseCode = "";
-                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, networkTransactionService,
-                        bindingDOMCodecServices);
+                PceSendingPceRPCs sendingPCE = new PceSendingPceRPCs(input, networkTransactionService, adapterContext);
                 sendingPCE.pathComputation();
                 message = sendingPCE.getMessage();
                 responseCode = sendingPCE.getResponseCode();
