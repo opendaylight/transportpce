@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.pce.gnpy;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.test.AbstractTest;
 
@@ -18,10 +19,11 @@ public class ServiceDataStoreOperationsImplTest extends AbstractTest {
 
     private ServiceDataStoreOperationsImpl serviceDataStoreOperations;
     private BindingDOMCodecServices bindingDOMCodecServices = Mockito.mock(BindingDOMCodecServices.class);
+    private final ConstantAdapterContext adapterContext = new ConstantAdapterContext(bindingDOMCodecServices);
 
     @Before
     public void setUp() throws GnpyException {
-        serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(bindingDOMCodecServices);
+        serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(adapterContext);
     }
 
     @Test

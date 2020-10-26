@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce;
 
+import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -60,11 +61,13 @@ public class PceSendingPceRPCs {
     private String message;
     private String responseCode;
     private BindingDOMCodecServices bindingDOMCodecServices;
+    private final ConstantAdapterContext adapterContext;
 
     public PceSendingPceRPCs() {
         setPathDescription(null);
         this.input = null;
         this.networkTransaction = null;
+        this.adapterContext = new ConstantAdapterContext();
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input,
@@ -75,6 +78,7 @@ public class PceSendingPceRPCs {
         this.input = input;
         this.networkTransaction = networkTransaction;
         this.bindingDOMCodecServices = bindingDOMCodecServices;
+        this.adapterContext = new ConstantAdapterContext(bindingDOMCodecServices);
     }
 
     public void cancelResourceReserve() {
@@ -157,8 +161,7 @@ public class PceSendingPceRPCs {
         try {
             ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
             if (connectToGnpy.isGnpyURLExist()) {
-                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input,
-                        bindingDOMCodecServices);
+                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input, adapterContext);
                 if (rc.getStatus() && gnpyToCheckFeasiblity(atoz,ztoa,gnpy)) {
                     setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
                     return;

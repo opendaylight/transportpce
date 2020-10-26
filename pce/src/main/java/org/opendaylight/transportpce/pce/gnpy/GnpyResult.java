@@ -25,8 +25,8 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
+import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.binding.dom.codec.api.BindingNormalizedNodeSerializer;
-import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.Result;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.explicit.route.hop.type.NumUnnumHop;
 import org.opendaylight.yang.gen.v1.gnpy.path.rev200909.generic.path.properties.path.properties.PathMetric;
@@ -79,10 +79,11 @@ public class GnpyResult {
     private Map<String, IpAddress> mapNodeRefIp = new HashMap<>();
     private EffectiveModelContext effectiveModelcontext;
 
+
     public GnpyResult(String gnpyResponseString, GnpyTopoImpl gnpyTopo,
-            BindingDOMCodecServices bindingDOMCodecServices) throws GnpyException {
+            ConstantAdapterContext adapterContext) throws GnpyException {
         this.mapNodeRefIp = gnpyTopo.getMapNodeRefIp();
-        effectiveModelcontext = bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext();
+        effectiveModelcontext = adapterContext.currentSerializer().getRuntimeContext().getEffectiveModelContext();
 
         // Create the data object
         QName pathQname = QName.create("gnpy:path", "2020-09-09", "result");
@@ -101,8 +102,8 @@ public class GnpyResult {
             throw new GnpyException("In GnpyResult: the Normalized Node is not present");
         }
         NormalizedNode<? extends PathArgument, ?> normalizedNode = transformIntoNormalizedNode.get();
-        Entry<InstanceIdentifier<?>, DataObject> fromNormalizedNode = bindingDOMCodecServices
-                .fromNormalizedNode(yangId, normalizedNode);
+        Entry<InstanceIdentifier<?>, DataObject> fromNormalizedNode =
+            adapterContext.currentSerializer().fromNormalizedNode(yangId, normalizedNode);
 
         if (fromNormalizedNode != null) {
             dataObject = fromNormalizedNode.getValue();
