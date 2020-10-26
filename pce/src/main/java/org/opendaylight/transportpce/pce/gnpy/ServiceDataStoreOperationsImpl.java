@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
 import org.opendaylight.mdsal.binding.spec.reflect.BindingReflections;
 import org.opendaylight.yang.gen.v1.gnpy.gnpy.api.rev190103.GnpyApi;
@@ -28,15 +29,20 @@ import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactory;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONCodecFactorySupplier;
 import org.opendaylight.yangtools.yang.data.codec.gson.JSONNormalizedNodeStreamWriter;
 import org.opendaylight.yangtools.yang.data.codec.gson.JsonWriterFactory;
+import org.opendaylight.yangtools.yang.model.api.EffectiveModelContext;
 import org.opendaylight.yangtools.yang.model.api.SchemaPath;
 
 public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperations {
 
     private static final JsonParser PARSER = new JsonParser();
     private BindingDOMCodecServices bindingDOMCodecServices;
+    private EffectiveModelContext effectiveModelcontext;
+    private final ConstantAdapterContext adapterContext;
 
     public ServiceDataStoreOperationsImpl(BindingDOMCodecServices bindingDOMCodecServices) throws GnpyException {
         this.bindingDOMCodecServices = bindingDOMCodecServices;
+        this.adapterContext = new ConstantAdapterContext(bindingDOMCodecServices);
+        this.effectiveModelcontext = adapterContext.currentSerializer().getRuntimeContext().getEffectiveModelContext();
     }
 
     @Override
@@ -52,13 +58,13 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
          */
 
         JSONCodecFactory codecFactory = JSONCodecFactorySupplier.DRAFT_LHOTKA_NETMOD_YANG_JSON_02
-                .getShared(bindingDOMCodecServices.getRuntimeContext().getEffectiveModelContext());
+                .getShared(effectiveModelcontext);
         try (Writer writer = new StringWriter();
                 JsonWriter jsonWriter = JsonWriterFactory.createJsonWriter(writer, 2);) {
             NormalizedNodeStreamWriter jsonStreamWriter = JSONNormalizedNodeStreamWriter.createExclusiveWriter(
                     codecFactory, scPath.getParent(), scPath.getLastComponent().getNamespace(), jsonWriter);
             try (NormalizedNodeWriter nodeWriter = NormalizedNodeWriter.forStreamWriter(jsonStreamWriter)) {
-                nodeWriter.write(bindingDOMCodecServices.toNormalizedNode(id, object).getValue());
+                nodeWriter.write(adapterContext.currentSerializer().toNormalizedNode(id, object).getValue());
                 nodeWriter.flush();
             }
             JsonObject asJsonObject = PARSER.parse(writer.toString()).getAsJsonObject();
