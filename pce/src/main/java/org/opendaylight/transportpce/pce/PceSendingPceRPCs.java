@@ -8,7 +8,8 @@
 
 package org.opendaylight.transportpce.pce;
 
-import org.opendaylight.mdsal.binding.dom.codec.spi.BindingDOMCodecServices;
+import org.opendaylight.mdsal.binding.dom.adapter.AdapterContext;
+import org.opendaylight.mdsal.binding.dom.adapter.ConstantAdapterContext;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
@@ -59,22 +60,23 @@ public class PceSendingPceRPCs {
     private Boolean success;
     private String message;
     private String responseCode;
-    private BindingDOMCodecServices bindingDOMCodecServices;
+    private AdapterContext adapterContext;
 
     public PceSendingPceRPCs() {
         setPathDescription(null);
         this.input = null;
         this.networkTransaction = null;
+        this.adapterContext = new ConstantAdapterContext();
     }
 
     public PceSendingPceRPCs(PathComputationRequestInput input,
-        NetworkTransactionService networkTransaction, BindingDOMCodecServices bindingDOMCodecServices) {
+        NetworkTransactionService networkTransaction, AdapterContext adapterContext) {
         setPathDescription(null);
 
         // TODO compliance check to check that input is not empty
         this.input = input;
         this.networkTransaction = networkTransaction;
-        this.bindingDOMCodecServices = bindingDOMCodecServices;
+        this.adapterContext = adapterContext;
     }
 
     public void cancelResourceReserve() {
@@ -157,8 +159,7 @@ public class PceSendingPceRPCs {
         try {
             ConnectToGnpyServer connectToGnpy = new ConnectToGnpyServer();
             if (connectToGnpy.isGnpyURLExist()) {
-                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input,
-                        bindingDOMCodecServices);
+                GnpyUtilitiesImpl gnpy = new GnpyUtilitiesImpl(networkTransaction, input, adapterContext);
                 if (rc.getStatus() && gnpyToCheckFeasiblity(atoz,ztoa,gnpy)) {
                     setPathDescription(new PathDescriptionBuilder().setAToZDirection(atoz).setZToADirection(ztoa));
                     return;
