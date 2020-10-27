@@ -117,6 +117,30 @@
       "revId": "6386ccdfe3bbeceb190d85b08115273065c1cf96",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26ba0b98_ad9e69e6",
+        "filename": "lighty/src/main/java/io/lighty/controllers/tpce/module/TransportPCEImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-27T10:04:02Z",
+      "side": 1,
+      "message": "a beginning of solution in the commit upon where this change is rebased\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/93396/\nbut still troubles at runtime",
+      "parentUuid": "bea566bf_109089d8",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 78
+      },
+      "revId": "6386ccdfe3bbeceb190d85b08115273065c1cf96",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
