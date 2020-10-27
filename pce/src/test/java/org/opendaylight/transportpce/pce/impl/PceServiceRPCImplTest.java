@@ -12,6 +12,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.concurrent.ExecutionException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
@@ -25,7 +26,7 @@ import org.opendaylight.transportpce.pce.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.CancelResourceReserveInputBuilder;
 
-
+@Ignore
 public class PceServiceRPCImplTest extends AbstractTest {
 
     private PathComputationService pathComputationService;

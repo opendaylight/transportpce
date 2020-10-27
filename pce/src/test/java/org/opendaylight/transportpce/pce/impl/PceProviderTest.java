@@ -12,6 +12,7 @@ import static org.mockito.ArgumentMatchers.eq;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
@@ -25,6 +26,7 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.TransportpcePceService;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
 
+@Ignore
 public class PceProviderTest extends AbstractTest {
 
     private RpcProviderService rpcService;
