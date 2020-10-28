@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e64836ae_34ea085e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "use interface instead of implementation",
+      "range": {
+        "startLine": 62,
+        "startChar": 18,
+        "endLine": 62,
+        "endChar": 40
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "009e67f1_b5995eb0",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/PceSendingPceRPCs.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "use interface instead of implementation",
+      "range": {
+        "startLine": 72,
+        "startChar": 54,
+        "endLine": 72,
+        "endChar": 76
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8a81013_7841d923",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyResult.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "use interface instead of implementation",
+      "range": {
+        "startLine": 84,
+        "startChar": 12,
+        "endLine": 84,
+        "endChar": 34
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1714628e_1e02b50c",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "use interface instead of implementation",
+      "range": {
+        "startLine": 51,
+        "startChar": 18,
+        "endLine": 51,
+        "endChar": 40
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03434ed5_504070c7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "use interface instead of implementation",
+      "range": {
+        "startLine": 55,
+        "startChar": 12,
+        "endLine": 55,
+        "endChar": 34
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0c4c687_d02624f2",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "use interface instead of implementation",
+      "range": {
+        "startLine": 38,
+        "startChar": 18,
+        "endLine": 38,
+        "endChar": 40
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97f8fcdd_ddf5dfc7",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "use interface instead of implementation",
+      "range": {
+        "startLine": 40,
+        "startChar": 42,
+        "endLine": 40,
+        "endChar": 64
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5ce2a6a_3dd98cba",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "redundant import with  line 21\nshould be after line 20",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 73
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bb638bf_19bb0c86",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "no more used. it has to be removed",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 60
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d652036a_71341c72",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "use interface instead of implementation",
+      "range": {
+        "startLine": 67,
+        "startChar": 18,
+        "endLine": 67,
+        "endChar": 40
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c24feff8_76d295ea",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/service/PathComputationServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "no more used. it has to be removed",
+      "range": {
+        "startLine": 75,
+        "startChar": 8,
+        "endLine": 75,
+        "endChar": 63
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "218143a0_3be7e8c3",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/GnpyUtilitiesImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "redundant import with line 31\nshould be after line 30",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 73
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86d3ea71_639ae6cc",
+        "filename": "pce/src/test/java/org/opendaylight/transportpce/pce/gnpy/ServiceDataStoreOperationsImplTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-10-28T10:39:59Z",
+      "side": 1,
+      "message": "use interface instead of implementation",
+      "range": {
+        "startLine": 24,
+        "startChar": 18,
+        "endLine": 24,
+        "endChar": 40
+      },
+      "revId": "c6abe36af42d3dd2559d5cd490ed336d9ee2ad43",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
