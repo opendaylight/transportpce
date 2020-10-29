@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bb8302d_5398051e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-10-29T13:35:12Z",
+      "side": 1,
+      "message": "not needed\n\"Bump to silicon\" or \"Silicon migration\" is enough, especially since this change does not concern only poms content",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 31
+      },
+      "revId": "6b6b5e53aefd8a3cc79dfeaa4e2b7d27d4601a16",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
