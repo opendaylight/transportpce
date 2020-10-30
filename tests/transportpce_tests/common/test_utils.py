@@ -31,7 +31,7 @@ SAMPLES_DIRECTORY = simulators.SAMPLES_DIRECTORY
 HONEYNODE_OK_START_MSG = "Netconf SSH endpoint started successfully at 0.0.0.0"
 KARAF_OK_START_MSG = re.escape(
     "Blueprint container for bundle org.opendaylight.netconf.restconf")+".* was successfully created"
-
+LIGHTY_OK_START_MSG = re.escape("lighty.io and RESTCONF-NETCONF started")
 
 RESTCONF_BASE_URL = "http://localhost:8181/restconf"
 ODL_LOGIN = "admin"
@@ -93,17 +93,18 @@ def start_tpce():
     print("starting OpenDaylight...")
     if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
         process = start_lighty()
-        # TODO: add some sort of health check similar to Karaf below
+        start_msg = LIGHTY_OK_START_MSG
     else:
         process = start_karaf()
-        if wait_until_log_contains(KARAF_LOG, KARAF_OK_START_MSG, time_to_wait=60):
-            print("OpenDaylight started !")
-        else:
-            print("OpenDaylight failed to start !")
-            shutdown_process(process)
-            for pid in process_list:
-                shutdown_process(pid)
-            sys.exit(1)
+        start_msg = KARAF_OK_START_MSG
+    if wait_until_log_contains(TPCE_LOG, start_msg , time_to_wait=60):
+        print("OpenDaylight started !")
+    else:
+        print("OpenDaylight failed to start !")
+        shutdown_process(process)
+        for pid in process_list:
+            shutdown_process(pid)
+        sys.exit(1)
     process_list.append(process)
     return process_list
 
