@@ -197,7 +197,7 @@ public final class TPCEUtils {
                     .getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.$YangModuleInfoImpl
                     .getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.$YangModuleInfoImpl
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.$YangModuleInfoImpl
                     .getInstance(),
             org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.device.renderer.rev200128
                     .$YangModuleInfoImpl.getInstance(),
@@ -210,7 +210,7 @@ public final class TPCEUtils {
             org.opendaylight.yang.gen.v1.gnpy.gnpy.eqpt.config.rev181119.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.gnpy.gnpy.network.topology.rev181214.$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.gnpy.path.rev200909.$YangModuleInfoImpl.getInstance(),
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827
+            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012
                     .$YangModuleInfoImpl.getInstance(),
             org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629
                     .$YangModuleInfoImpl.getInstance(),

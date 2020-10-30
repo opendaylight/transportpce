@@ -10,7 +10,7 @@ package org.opendaylight.transportpce.networkmodel.util;
 
 import com.google.common.collect.ImmutableMap;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.rev181130.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
