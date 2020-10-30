@@ -24,6 +24,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <dependencies>
     <dependency>
       <groupId>${project.groupId}.ordmodels</groupId>
+      <artifactId>transportpce-ordmodels-device</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.ordmodels</groupId>
       <artifactId>transportpce-ordmodels-common</artifactId>
       <version>${project.version}</version>
     </dependency>
