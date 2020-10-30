@@ -34,31 +34,31 @@ import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaceException;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfaces;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.Network;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.NetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.NodesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.NodesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.CpToDegree;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.CpToDegreeBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.CpToDegreeKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.MappingKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilities;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.McCapabilitiesKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo.OpenroadmVersion;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.SwitchingPoolLcp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.SwitchingPoolLcpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.SwitchingPoolLcpKey;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.switching.pool.lcp.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.switching.pool.lcp.NonBlockingListBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.switching.pool.lcp.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.Network;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.NetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.NodesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.NodesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.CpToDegree;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.CpToDegreeBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.CpToDegreeKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.McCapabilities;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.McCapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.McCapabilitiesKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo.OpenroadmVersion;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfoBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.SwitchingPoolLcp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.SwitchingPoolLcpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.SwitchingPoolLcpKey;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.switching.pool.lcp.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.switching.pool.lcp.NonBlockingListBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.switching.pool.lcp.NonBlockingListKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.Direction;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.PortQual;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.CircuitPack;
@@ -83,6 +83,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.open
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.org.openroadm.device.odu.switching.pools.non.blocking.list.PortList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.port.Interfaces;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.xponder.XpdrPort;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.InterfaceType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpenROADMOpticalMultiplex;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OpticalTransport;
@@ -90,6 +91,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev170626.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev181019.lldp.container.lldp.PortConfig;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181019.SupportedIfCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.switching.pool.types.rev191129.SwitchingPoolTypes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -474,12 +477,12 @@ public class PortMappingVersion221 {
                             .setInterconnectBandwidthUnit(nbl.getInterconnectBandwidthUnit())
                             .setLcpList(lcpList)
                             .build();
-                        nbMap.put(nonBlockingList.key(),nonBlockingList);
+                        nbMap.put(nonBlockingList.key(), nonBlockingList);
                     }
                 }
                 SwitchingPoolLcp splBldr = new SwitchingPoolLcpBuilder()
                     .setSwitchingPoolNumber(odp.getSwitchingPoolNumber())
-                    .setSwitchingPoolType(odp.getSwitchingPoolType())
+                    .setSwitchingPoolType(SwitchingPoolTypes.forValue(odp.getSwitchingPoolType().getIntValue()))
                     .setNonBlockingList(nbMap)
                     .build();
                 switchingPoolList.add(splBldr);
@@ -871,8 +874,10 @@ public class PortMappingVersion221 {
             .setMcNodeName(mcNodeName);
         if (degree.getMcCapabilities() != null) {
             mcCapabilitiesBuilder
-                .setCenterFreqGranularity(degree.getMcCapabilities().getCenterFreqGranularity())
-                .setSlotWidthGranularity(degree.getMcCapabilities().getSlotWidthGranularity());
+                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(degree.getMcCapabilities()
+                    .getCenterFreqGranularity().getValue().toString()))
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(degree.getMcCapabilities()
+                    .getSlotWidthGranularity().getValue().toString()));
         }
         else {
             LOG.warn("Media channel capabilities are not advertised for degree {} of {}", degree.getDegreeNumber(),
@@ -893,8 +898,10 @@ public class PortMappingVersion221 {
             .setMcNodeName(mcNodeName);
         if (srg.getMcCapabilities() != null) {
             mcCapabilitiesBuilder
-                .setCenterFreqGranularity(srg.getMcCapabilities().getCenterFreqGranularity())
-                .setSlotWidthGranularity(srg.getMcCapabilities().getSlotWidthGranularity());
+                .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance(srg.getMcCapabilities()
+                    .getCenterFreqGranularity().getValue().toString()))
+                .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance(srg.getMcCapabilities()
+                    .getSlotWidthGranularity().getValue().toString()));
         }
         else {
             LOG.warn("Media channel capabilities are not advertised for SRG {} of {}", srg.getSrgNumber(),
@@ -966,29 +973,36 @@ public class PortMappingVersion221 {
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
                 .setLcpHashVal(fnv(nodeIdLcp));
-
             if (port.getPortQual() != null) {
                 mpBldr.setPortQual(port.getPortQual().getName());
             }
-            if (port.getSupportedInterfaceCapability() != null) {
-                mpBldr.setSupportedInterfaceCapability(port.getSupportedInterfaceCapability());
-            }
             if (xpdrNodeType != null) {
-                mpBldr.setXponderType(xpdrNodeType);
+                mpBldr.setXponderType(
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129
+                        .XpdrNodeTypes.forValue(xpdrNodeType.getIntValue()));
             }
             if (partnerLcp != null) {
                 mpBldr.setPartnerLcp(partnerLcp);
+            }
+            if (port.getSupportedInterfaceCapability() != null) {
+                List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+                    .SupportedIfCapability>> supportedIntf = new ArrayList<>();
+                for (Class<? extends SupportedIfCapability> sup: port.getSupportedInterfaceCapability()) {
+                    Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+                        .SupportedIfCapability> sup1 = (Class<? extends org.opendaylight.yang.gen.v1
+                        .http.org.openroadm.port.types.rev200327.SupportedIfCapability>) sup;
+                    supportedIntf.add(sup1);
+                }
+                mpBldr.setSupportedInterfaceCapability(supportedIntf);
             }
         }
         return mpBldr.build();
     }
 
-
     private boolean createMcCapabilitiesList(String nodeId, Info deviceInfo, List<McCapabilities> mcCapabilitiesList) {
         List<Degree> degrees = getDegrees(nodeId, deviceInfo);
         List<SharedRiskGroup> srgs = getSrgs(nodeId, deviceInfo);
         mcCapabilitiesList.addAll(getMcCapabilitiesList(degrees, srgs, nodeId));
-
         return true;
     }
 
@@ -1133,7 +1147,8 @@ public class PortMappingVersion221 {
             return null;
         }
 
-        nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._221).setNodeType(deviceInfo.getNodeType());
+        nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._221).setNodeType(NodeTypes.forValue(deviceInfo
+            .getNodeType().getIntValue()));
         if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
             nodeInfoBldr.setNodeClli(deviceInfo.getClli());
         } else {
