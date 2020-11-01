@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.common.mapping;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_1_2_1;
 import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
+import static org.opendaylight.transportpce.common.StringConstants.OPENROADM_DEVICE_VERSION_7_1_0;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -37,26 +38,32 @@ public class PortMappingImpl implements PortMapping {
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingImpl.class);
 
     private final DataBroker dataBroker;
+    private final PortMappingVersion710 portMappingVersion710;
     private final PortMappingVersion221 portMappingVersion22;
     private final PortMappingVersion121 portMappingVersion121;
 
-    public PortMappingImpl(DataBroker dataBroker, PortMappingVersion221 portMappingVersion22,
-        PortMappingVersion121 portMappingVersion121) {
+    public PortMappingImpl(DataBroker dataBroker, PortMappingVersion710 portMappingVersion710,
+        PortMappingVersion221 portMappingVersion22, PortMappingVersion121 portMappingVersion121) {
 
         this.dataBroker = dataBroker;
+        this.portMappingVersion710 = portMappingVersion710;
         this.portMappingVersion22 = portMappingVersion22;
         this.portMappingVersion121 = portMappingVersion121;
     }
 
     @Override
     public boolean createMappingData(String nodeId, String nodeVersion) {
-        if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_1_2_1)) {
-            return portMappingVersion121.createMappingData(nodeId);
-        } else if (nodeVersion.equals(OPENROADM_DEVICE_VERSION_2_2_1)) {
-            return portMappingVersion22.createMappingData(nodeId);
+        switch (nodeVersion) {
+            case OPENROADM_DEVICE_VERSION_1_2_1:
+                return portMappingVersion121.createMappingData(nodeId);
+            case OPENROADM_DEVICE_VERSION_2_2_1:
+                return portMappingVersion22.createMappingData(nodeId);
+            case OPENROADM_DEVICE_VERSION_7_1_0:
+                return portMappingVersion710.createMappingData(nodeId);
+            default:
+                LOG.error("Unable to create mapping data for unmanaged openroadm device version");
+                return false;
         }
-        LOG.error("Unable to create mapping data for unmanaged openroadm device version");
-        return false;
     }
 
 
@@ -127,37 +134,65 @@ public class PortMappingImpl implements PortMapping {
 
     @Override
     public boolean updateMapping(String nodeId, Mapping oldMapping) {
-        OpenroadmVersion openROADMversion = this.getNode(nodeId).getNodeInfo().getOpenroadmVersion();
-        if (openROADMversion.getIntValue() == 1) {
-            return portMappingVersion121.updateMapping(nodeId,oldMapping);
-        } else if (openROADMversion.getIntValue() == 2) {
-            org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes
-                .MappingBuilder oldMapping2Bldr = new MappingBuilder().setLogicalConnectionPoint(oldMapping
-                .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
-            if (oldMapping.getConnectionMapLcp() != null) {
-                oldMapping2Bldr.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
-            }
-            if (oldMapping.getPartnerLcp() != null) {
-                oldMapping2Bldr.setPartnerLcp(oldMapping.getPartnerLcp());
-            }
-            if (oldMapping.getPortQual() != null) {
-                oldMapping2Bldr.setPortQual(oldMapping.getPortQual());
-            }
-            if (oldMapping.getSupportingCircuitPackName() != null) {
-                oldMapping2Bldr.setSupportingCircuitPackName(oldMapping.getSupportingCircuitPackName());
-            }
-            if (oldMapping.getSupportingOms() != null) {
-                oldMapping2Bldr.setSupportingOms(oldMapping.getSupportingOms());
-            }
-            if (oldMapping.getSupportingOts() != null) {
-                oldMapping2Bldr.setSupportingOts(oldMapping.getSupportingOts());
-            }
-            if (oldMapping.getSupportingPort() != null) {
-                oldMapping2Bldr.setSupportingPort(oldMapping.getSupportingPort());
-            }
-            return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr.build());
+        OpenroadmVersion openROADMversion = getNode(nodeId).getNodeInfo().getOpenroadmVersion();
+        switch (openROADMversion.getIntValue()) {
+            case 1:
+                return portMappingVersion121.updateMapping(nodeId, oldMapping);
+            case 2:
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes
+                    .MappingBuilder oldMapping2Bldr221 = new MappingBuilder().setLogicalConnectionPoint(oldMapping
+                    .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
+                if (oldMapping.getConnectionMapLcp() != null) {
+                    oldMapping2Bldr221.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
+                }
+                if (oldMapping.getPartnerLcp() != null) {
+                    oldMapping2Bldr221.setPartnerLcp(oldMapping.getPartnerLcp());
+                }
+                if (oldMapping.getPortQual() != null) {
+                    oldMapping2Bldr221.setPortQual(oldMapping.getPortQual());
+                }
+                if (oldMapping.getSupportingCircuitPackName() != null) {
+                    oldMapping2Bldr221.setSupportingCircuitPackName(oldMapping.getSupportingCircuitPackName());
+                }
+                if (oldMapping.getSupportingOms() != null) {
+                    oldMapping2Bldr221.setSupportingOms(oldMapping.getSupportingOms());
+                }
+                if (oldMapping.getSupportingOts() != null) {
+                    oldMapping2Bldr221.setSupportingOts(oldMapping.getSupportingOts());
+                }
+                if (oldMapping.getSupportingPort() != null) {
+                    oldMapping2Bldr221.setSupportingPort(oldMapping.getSupportingPort());
+                }
+                return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr221.build());
+            case 3:
+                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes
+                    .MappingBuilder oldMapping2Bldr710 = new MappingBuilder().setLogicalConnectionPoint(oldMapping
+                    .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
+                if (oldMapping.getConnectionMapLcp() != null) {
+                    oldMapping2Bldr710.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
+                }
+                if (oldMapping.getPartnerLcp() != null) {
+                    oldMapping2Bldr710.setPartnerLcp(oldMapping.getPartnerLcp());
+                }
+                if (oldMapping.getPortQual() != null) {
+                    oldMapping2Bldr710.setPortQual(oldMapping.getPortQual());
+                }
+                if (oldMapping.getSupportingCircuitPackName() != null) {
+                    oldMapping2Bldr710.setSupportingCircuitPackName(oldMapping.getSupportingCircuitPackName());
+                }
+                if (oldMapping.getSupportingOms() != null) {
+                    oldMapping2Bldr710.setSupportingOms(oldMapping.getSupportingOms());
+                }
+                if (oldMapping.getSupportingOts() != null) {
+                    oldMapping2Bldr710.setSupportingOts(oldMapping.getSupportingOts());
+                }
+                if (oldMapping.getSupportingPort() != null) {
+                    oldMapping2Bldr710.setSupportingPort(oldMapping.getSupportingPort());
+                }
+                return portMappingVersion710.updateMapping(nodeId, oldMapping2Bldr710.build());
+            default:
+                return false;
         }
-        return false;
     }
 
     @Override

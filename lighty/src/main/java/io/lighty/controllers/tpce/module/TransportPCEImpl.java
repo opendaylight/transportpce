@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.common.mapping.PortMapping;
 import org.opendaylight.transportpce.common.mapping.PortMappingImpl;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion121;
 import org.opendaylight.transportpce.common.mapping.PortMappingVersion221;
+import org.opendaylight.transportpce.common.mapping.PortMappingVersion710;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
@@ -29,6 +30,7 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
+import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
 import org.opendaylight.transportpce.networkmodel.NetConfTopologyListener;
 import org.opendaylight.transportpce.networkmodel.NetworkModelProvider;
 import org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl;
@@ -273,11 +275,14 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
      * @return PortMapping instance
      */
     private PortMapping initPortMapping(LightyServices lightyServices, OpenRoadmInterfaces openRoadmInterfaces) {
+        PortMappingVersion710 portMappingVersion710 = new PortMappingVersion710(lightyServices.getBindingDataBroker(),
+            deviceTransactionManager, openRoadmInterfaces);
         PortMappingVersion221 portMappingVersion221 = new PortMappingVersion221(lightyServices.getBindingDataBroker(),
                 deviceTransactionManager, openRoadmInterfaces);
         PortMappingVersion121 portMappingVersion121 = new PortMappingVersion121(lightyServices.getBindingDataBroker(),
                 deviceTransactionManager, openRoadmInterfaces);
-        return new PortMappingImpl(lightyServices.getBindingDataBroker(), portMappingVersion221, portMappingVersion121);
+        return new PortMappingImpl(lightyServices.getBindingDataBroker(), portMappingVersion710,
+            portMappingVersion221, portMappingVersion121);
     }
 
     /**
@@ -291,8 +296,10 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 deviceTransactionManager);
         OpenRoadmInterfacesImpl221 openRoadmInterfacesImpl221 = new OpenRoadmInterfacesImpl221(
                 deviceTransactionManager);
+        OpenRoadmInterfacesImpl710 openRoadmInterfacesImpl710 = new OpenRoadmInterfacesImpl710(
+            deviceTransactionManager);
         return new OpenRoadmInterfacesImpl(deviceTransactionManager, mappingUtils, openRoadmInterfacesImpl121,
-                openRoadmInterfacesImpl221);
+                openRoadmInterfacesImpl221, openRoadmInterfacesImpl710);
     }
 
     /**

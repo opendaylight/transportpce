@@ -32,14 +32,31 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="deviceTransactionManager" />
     </bean>
 
+    <bean id="openRoadmInterfaces710" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710" >
+        <argument ref="deviceTransactionManager" />
+    </bean>
+
     <bean id="openRoadmInterfaces" class="org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl" >
         <argument ref="deviceTransactionManager" />
         <argument ref="mappingUtils" />
         <argument ref="openRoadmInterfaces121" />
         <argument ref="openRoadmInterfaces221" />
+        <argument ref="openRoadmInterfaces710" />
+    </bean>
+
+    <bean id="portMapping121" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion121" >
+        <argument ref="dataBroker" />
+        <argument ref="deviceTransactionManager" />
+        <argument ref="openRoadmInterfaces" />
     </bean>
 
     <bean id="portMapping221" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion221" >
+        <argument ref="dataBroker" />
+        <argument ref="deviceTransactionManager" />
+        <argument ref="openRoadmInterfaces" />
+    </bean>
+
+    <bean id="portMapping710" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion710" >
         <argument ref="dataBroker" />
         <argument ref="deviceTransactionManager" />
         <argument ref="openRoadmInterfaces" />
@@ -53,16 +70,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
         <argument ref="requestProcessor" />
     </bean>
 
-    <bean id="portMapping121" class="org.opendaylight.transportpce.common.mapping.PortMappingVersion121" >
-        <argument ref="dataBroker" />
-        <argument ref="deviceTransactionManager" />
-        <argument ref="openRoadmInterfaces" />
-    </bean>
-
     <bean id="portMapping" class="org.opendaylight.transportpce.common.mapping.PortMappingImpl" >
         <argument ref="dataBroker" />
         <argument ref="portMapping221" />
         <argument ref="portMapping121" />
+        <argument ref="portMapping710" />
     </bean>
 
     <bean id="crossConnect121" class="org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121" >

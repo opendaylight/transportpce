@@ -40,6 +40,7 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 public class PortMappingImplTest {
 
     DataBroker dataBroker = null;
+    private PortMappingVersion710 portMappingVersion710;
     private PortMappingVersion221 portMappingVersion221;
     private PortMappingVersion121 portMappingVersion121;
     private PortMapping portMapping;
@@ -48,9 +49,11 @@ public class PortMappingImplTest {
     public void setUp() throws Exception {
         DataStoreContext dataStoreContext = new DataStoreContextImpl();
         dataBroker = dataStoreContext.getDataBroker();
+        portMappingVersion710 = mock(PortMappingVersion710.class);
         portMappingVersion221 = mock(PortMappingVersion221.class);
         portMappingVersion121 = mock(PortMappingVersion121.class);
-        portMapping = new PortMappingImpl(dataBroker, portMappingVersion221, portMappingVersion121);
+        portMapping = new PortMappingImpl(dataBroker, portMappingVersion710,
+            portMappingVersion221, portMappingVersion121);
     }
 
     @Test

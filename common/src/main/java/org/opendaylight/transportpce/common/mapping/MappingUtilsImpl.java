@@ -45,6 +45,8 @@ public class MappingUtilsImpl implements MappingUtils {
             if (nodeInfoObj.isPresent()) {
                 NodeInfo nodInfo = nodeInfoObj.get();
                 switch (nodInfo.getOpenroadmVersion()) {
+                    case _710:
+                        return StringConstants.OPENROADM_DEVICE_VERSION_7_1_0;
                     case _221:
                         return StringConstants.OPENROADM_DEVICE_VERSION_2_2_1;
                     case _121:
