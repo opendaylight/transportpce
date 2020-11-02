@@ -24,7 +24,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <name>OpenDaylight :: transportpce</name>
 
   <properties>
-    <controller.version>2.0.6</controller.version>
     <netconf.version>1.9.1-SNAPSHOT</netconf.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
@@ -97,13 +96,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.transportpce</groupId>
       <artifactId>transportpce-servicehandler</artifactId>
       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.controller</groupId>
-      <artifactId>odl-mdsal-broker</artifactId>
-      <version>${controller.version}</version>
-      <classifier>features</classifier>
-      <type>xml</type>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.netconf</groupId>
