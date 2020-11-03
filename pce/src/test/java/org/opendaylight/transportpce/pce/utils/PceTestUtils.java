@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -74,9 +75,11 @@ public final class PceTestUtils {
 
         try (
                 // load openroadm-network
-                Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json");
+                Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json",
+                        StandardCharsets.UTF_8);
                 // load openroadm-topology
-                Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json");
+                Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json",
+                        StandardCharsets.UTF_8);
                 JsonReader networkReader = new JsonReader(gnpyNetwork);
                 JsonReader topoReader = new JsonReader(gnpyTopo);
         ) {

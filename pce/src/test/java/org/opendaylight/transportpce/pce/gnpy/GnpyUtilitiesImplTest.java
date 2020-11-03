@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -63,21 +64,23 @@ public class GnpyUtilitiesImplTest extends AbstractTest {
     private NetworkTransactionImpl networkTransaction;
     private static HttpServer httpServer;
 
-    public GnpyUtilitiesImplTest() {
+    public GnpyUtilitiesImplTest() throws IOException {
         networkTransaction = new NetworkTransactionImpl(new RequestProcessor(this.getDataBroker()));
         JsonReader networkReader = null;
         JsonReader topoReader = null;
 
         try {
             // load openroadm-network
-            Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json");
+            Reader gnpyNetwork = new FileReader("src/test/resources/gnpy/gnpy_network.json",
+                    StandardCharsets.UTF_8);
 
             networkReader = new JsonReader(gnpyNetwork);
             Networks networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(networkReader,
                     QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
             saveOpenRoadmNetwork(networks.getNetwork().get(0), NetworkUtils.UNDERLAY_NETWORK_ID);
             // load openroadm-topology
-            Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json");
+            Reader gnpyTopo = new FileReader("src/test/resources/gnpy/gnpy_topology.json",
+                    StandardCharsets.UTF_8);
             topoReader = new JsonReader(gnpyTopo);
             networks = (Networks) JsonUtil.getInstance().getDataObjectFromJson(topoReader,
                     QName.create("urn:ietf:params:xml:ns:yang:ietf-network", "2018-02-26", "networks"));
