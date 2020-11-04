@@ -18,33 +18,32 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
+import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.MappingBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev181130.FiberPmd;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev181130.RatioDB;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.FiberPmd;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.Interface;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.interfaces.grp.InterfaceKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.org.openroadm.device.container.OrgOpenroadmDevice;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLinkKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.amplified.link.SectionElementBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.AmplifiedLinkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.SpanBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.SrgAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.SrgAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLink;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLinkKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.amplified.link.SectionElementBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenation;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.OMSAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.oms.attributes.AmplifiedLinkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.oms.attributes.SpanBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.DegreeAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.DegreeAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.SrgAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.SrgAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.CurrentPmListBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.group.CurrentPm;
@@ -56,7 +55,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.v
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.rev181019.current.pm.val.group.MeasurementKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.PmDataType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.pm.types.rev171215.Validity;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengths;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.NetworkBuilder;
@@ -137,19 +135,18 @@ public final class TransactionUtils {
 
         Map<AmplifiedLinkKey,AmplifiedLink>
                 amplifiedLinkValues = new HashMap<>();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
+        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLink al =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes
                         .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
-                        .setSectionElement(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130
+                        .setSectionElement(new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529
                                 .amplified.link.attributes.amplified.link.section.element.section.element
                                 .SpanBuilder()
                                 .setSpan(
-                                        new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified
+                                        new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified
                                                 .link.attributes.amplified.link.section.element.section
                                                 .element.span.SpanBuilder()
                                                 .setAdministrativeState(AdminStates.InService)
                                                 .setAutoSpanloss(true)
-                                                .setClfi("clfi")
                                                 .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
                                                 .setLinkConcatenation(linkConcentationValues)
                                                 .setSpanlossBase(new RatioDB(BigDecimal.ONE))
@@ -158,20 +155,19 @@ public final class TransactionUtils {
                                 .build())
                         .build())
                         .setSectionEltNumber(Uint16.valueOf(1)).build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes.AmplifiedLink al2 =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link.attributes
+        org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLink al2 =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes
                         .AmplifiedLinkBuilder().setSectionElement(new SectionElementBuilder()
                         .setSectionElement(
-                                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.amplified.link
+                                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link
                                         .attributes.amplified.link.section.element.section.element.SpanBuilder()
                                         .setSpan(
-                                                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130
+                                                new org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529
                                                         .amplified.link
                                                         .attributes.amplified.link.section.element.section.element.span
                                                         .SpanBuilder()
                                                         .setAdministrativeState(AdminStates.InService)
                                                         .setAutoSpanloss(true)
-                                                        .setClfi("clfi")
                                                         .setEngineeredSpanloss(new RatioDB(BigDecimal.ONE))
                                                         .setLinkConcatenation(linkConcentationValues)
                                                         .setSpanlossBase(new RatioDB(BigDecimal.ONE))
@@ -183,34 +179,26 @@ public final class TransactionUtils {
         amplifiedLinkValues.put(al.key(),al);
         amplifiedLinkValues.put(al2.key(),al2);
         Map<Class<? extends Augmentation<Link>>, Augmentation<Link>> map = Collections.emptyMap();
-        Augmentation<Link> aug11 = new Link1Builder().setAdministrativeGroup(Uint32.valueOf(123))
-                .setAdministrativeState(State.InService)
+        Augmentation<Link> aug11 = new Link1Builder()
                 .setAmplified(true)
-                .setLinkLatency(Uint32.valueOf(123))
-                .setLinkLength(BigDecimal.valueOf(123))
                 .setOMSAttributes(new OMSAttributesBuilder()
                         .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
-                        .setOppositeLink(new LinkId("link 1"))
                         .setSpan(new SpanBuilder().build())
-                        .setTEMetric(Uint32.valueOf(123)).build())
-                .setOperationalState(State.InService).build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 aug12 =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
+                        .build())
+                .build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1 aug12 =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder()
+                        .setOppositeLink(new LinkId("link 1"))
                         .setLinkType(OpenroadmLinkType.ROADMTOROADM).build();
         Augmentation<Link> aug21 = new Link1Builder()
-                .setAdministrativeGroup(Uint32.valueOf(123))
-                .setAdministrativeState(State.InService)
                 .setAmplified(true)
-                .setLinkLatency(Uint32.valueOf(123))
-                .setLinkLength(BigDecimal.valueOf(123))
                 .setOMSAttributes(new OMSAttributesBuilder()
                         .setAmplifiedLink(new AmplifiedLinkBuilder().setAmplifiedLink(amplifiedLinkValues).build())
-                        .setOppositeLink(new LinkId("link 1"))
                         .setSpan(new SpanBuilder().build())
-                        .setTEMetric(Uint32.valueOf(123)).build())
-                .setOperationalState(State.InService).build();
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 aug22 =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
+                        .build())
+                .build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1 aug22 =
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder()
                         .setLinkType(OpenroadmLinkType.ROADMTOROADM).build();
         // create the roadm-to-roadm link to be measured
         Link roadm2roadmLink = new LinkBuilder().setLinkId(new LinkId("ROADM-A1-to-ROADM-C1"))
@@ -304,48 +292,21 @@ public final class TransactionUtils {
     }
 
     private static org.opendaylight
-            .yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1 getNode1() {
-        return new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1Builder()
+            .yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1 getNode1() {
+        return new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1Builder()
                 .setSrgAttributes(getSrgAttributes())
                 .setDegreeAttributes(getDegAttributes())
                 .build();
     }
 
     private static DegreeAttributes getDegAttributes() {
-        org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengths
-            aval = new AvailableWavelengthsBuilder()
-                .setIndex(Uint32.valueOf(20L))
-                .build();
-        return (new DegreeAttributesBuilder())
-                .setAvailableWavelengths(Map.of(aval.key(),aval))
+        return new DegreeAttributesBuilder()
+                .setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available())
                 .build();
     }
 
     private static  SrgAttributes getSrgAttributes() {
-        return new SrgAttributesBuilder().setAvailableWavelengths(create96AvalWaveSrg()).build();
-    }
-
-    public static Map<org.opendaylight.yang.gen
-        .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengthsKey,org.opendaylight.yang.gen
-            .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengths> create96AvalWaveSrg() {
-
-        Map<org.opendaylight.yang.gen
-            .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengthsKey,org.opendaylight.yang.gen
-                .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengths>
-                waveMap = new HashMap<>();
-
-        for (int i = 1; i < 97; i++) {
-            org.opendaylight.yang.gen
-                    .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengthsBuilder
-                    avalBldr = new org.opendaylight.yang.gen
-                    .v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengthsBuilder()
-                    .setIndex(Uint32.valueOf(i))
-                    .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-                            .AvailableWavelengthsKey(Uint32.valueOf(i)));
-            AvailableWavelengths aval = avalBldr.build();
-            waveMap.put(aval.key(),aval);
-        }
-        return waveMap;
+        return new SrgAttributesBuilder().setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available()).build();
     }
 
 
