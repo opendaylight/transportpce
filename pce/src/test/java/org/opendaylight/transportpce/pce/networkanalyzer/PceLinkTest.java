@@ -16,16 +16,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev181130.RatioDB;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.oms.attributes.SpanBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenation;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.span.attributes.LinkConcatenationBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.OMSAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.link.oms.attributes.SpanBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -194,7 +194,6 @@ public class PceLinkTest extends AbstractTest {
                         .setDestTp(destTp);
         LinkId linkId = new LinkId(String.format(LINK_ID_FORMAT, srcNode, srcTp, destNode, destTp));
 
-        LinkId oppositeLinkId = new LinkId("opposite");
         //For setting up attributes for openRoadm augment
         LinkConcatenation linkConcatenation = new LinkConcatenationBuilder()
                 .setSRLGLength(Uint32.valueOf(20))
@@ -206,7 +205,7 @@ public class PceLinkTest extends AbstractTest {
                                 .setSpanlossCurrent(new RatioDB(new BigDecimal("55")))
                                 .setLinkConcatenation(Map.of(linkConcatenation.key(),
                                         linkConcatenation
-                                )).build()).setOppositeLink(oppositeLinkId);
+                                )).build());
 
 
         LinkBuilder linkBuilder = new LinkBuilder()
@@ -217,8 +216,8 @@ public class PceLinkTest extends AbstractTest {
 
         linkBuilder.addAugmentation(link1Builder.build());
 
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder linkBuilderNetworkLink
-                = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder linkBuilderNetworkLink
+                = new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder()
                 .setOMSAttributes(omsAttributesBuilder
                         .build());
 
