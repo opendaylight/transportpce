@@ -673,6 +673,30 @@
     },
     {
       "key": {
+        "uuid": "a787ea7e_70ae04b9",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtilsTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-04T16:55:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6f66c2fd_43a7cc3d",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 41
+      },
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9127b1d_abf737a7",
         "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtilsTest.java",
         "patchSetId": 9
@@ -717,6 +741,30 @@
       "revId": "1657b2931d8959002e7f317c40502550db496d11",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bdbcc55_9a993185",
+        "filename": "servicehandler/src/test/java/org/opendaylight/transportpce/servicehandler/ModelMappingUtilsTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-04T16:55:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "760bfbf8_99d34801",
+      "range": {
+        "startLine": 159,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 41
+      },
+      "revId": "1657b2931d8959002e7f317c40502550db496d11",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
