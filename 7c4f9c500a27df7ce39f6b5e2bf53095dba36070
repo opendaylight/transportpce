@@ -94,6 +94,52 @@
     },
     {
       "key": {
+        "uuid": "2ee23b06_ef37b10d",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-04T14:54:05Z",
+      "side": 1,
+      "message": "It\u0027s only related to InterruptedException.\nSo perhaps, ExecutionException should be managed in another catch.",
+      "range": {
+        "startLine": 183,
+        "startChar": 11,
+        "endLine": 183,
+        "endChar": 47
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66ec4338_f831a351",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-04T14:54:05Z",
+      "side": 1,
+      "message": "What do you think about this alternative  ?\nList\u003cLink\u003e linkList \u003d new ArrayList\u003c\u003e();\nif (openroadmTopo.augmentation(Network1.class) !\u003d null) {\n            linkList.addAll(openroadmTopo.augmentation(Network1.class).getLink().values());\n        }",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 9
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "26023922_a4ac97b4",
         "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
         "patchSetId": 3
@@ -110,6 +156,29 @@
         "startChar": 4,
         "endLine": 74,
         "endChar": 11
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7688cb1c_4117e243",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TopologyDataUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-04T14:54:05Z",
+      "side": 1,
+      "message": "as I\u0027m not an optical expert, could you please add a comment to explain why this method return null ?",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 20
       },
       "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
