@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edff1255_23e878a7",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-04T11:09:47Z",
+      "side": 1,
+      "message": "see next remark",
+      "range": {
+        "startLine": 264,
+        "startChar": 23,
+        "endLine": 264,
+        "endChar": 43
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b0daa79_1f18de94",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-04T11:09:47Z",
+      "side": 1,
+      "message": "OK\nthis typo fix should be at least mentioned in the commit message or better put in a separate commit.",
+      "range": {
+        "startLine": 281,
+        "startChar": 17,
+        "endLine": 281,
+        "endChar": 37
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ae08819_80f2dfd8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-04T11:09:47Z",
+      "side": 1,
+      "message": "should stay sticked.\nIf I am not mistaken, there is no real modification here and this is pure indentation improvements (IDE autoindent?). If so, it can be preferably addressed together with the typo fix in a separate change.",
+      "range": {
+        "startLine": 403,
+        "startChar": 82,
+        "endLine": 404,
+        "endChar": 38
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d7fb51d_10ba1115",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyException.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-04T11:09:47Z",
+      "side": 1,
+      "message": "2020",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26023922_a4ac97b4",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-04T11:09:47Z",
+      "side": 1,
+      "message": "Skipped Junit tests should be mentionned in the commit message (only disabled func tests are mentionned)",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 11
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "107a0c2d_bcfff089",
+        "filename": "tox.ini",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-04T11:09:47Z",
+      "side": 1,
+      "message": "or simply {tapi221} to disable it only on the gate",
+      "range": {
+        "startLine": 57,
+        "startChar": 2,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
