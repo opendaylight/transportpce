@@ -9,10 +9,8 @@ package io.lighty.controllers.tpce.module;
 
 import io.lighty.core.controller.api.AbstractLightyModule;
 import io.lighty.core.controller.api.LightyServices;
-
 import java.util.Arrays;
 import java.util.List;
-
 import org.opendaylight.transportpce.common.crossconnect.CrossConnect;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl;
 import org.opendaylight.transportpce.common.crossconnect.CrossConnectImpl121;
@@ -119,17 +117,6 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         RequestProcessor requestProcessor = new RequestProcessor(lightyServices.getBindingDataBroker());
         networkTransaction = new NetworkTransactionImpl(requestProcessor);
 
-        LOG.info("Creating PCE beans ...");
-        // TODO: pass those parameters through command line
-        GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://127.0.0.1:8008",
-                "gnpy", "gnpy", lightyServices.getAdapterContext().currentSerializer());
-        PathComputationService pathComputationService = new PathComputationServiceImpl(
-                networkTransaction,
-                lightyServices.getBindingNotificationPublishService(),
-                gnpyConsumer
-                );
-        pceProvider = new PceProvider(lightyServices.getRpcProviderService(), pathComputationService);
-
         LOG.info("Creating network-model beans ...");
         R2RLinkDiscovery linkDiscoveryImpl = new R2RLinkDiscovery(lightyServices.getBindingDataBroker(),
                 deviceTransactionManager, networkTransaction);
@@ -147,6 +134,21 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener,
                 lightyServices.getNotificationService(), networkModelWavelengthService);
+
+        LOG.info("Creating PCE beans ...");
+        // TODO: pass those parameters through command line
+        GnpyConsumer gnpyConsumer = new GnpyConsumerImpl("http://127.0.0.1:8008",
+                "gnpy", "gnpy", lightyServices.getAdapterContext().currentSerializer());
+        PathComputationService pathComputationService = new PathComputationServiceImpl(
+                networkTransaction,
+                lightyServices.getBindingNotificationPublishService(),
+                gnpyConsumer,
+                portMapping
+                );
+        pceProvider = new PceProvider(lightyServices.getRpcProviderService(), pathComputationService);
+
+
+
 
         LOG.info("Creating OLM beans ...");
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
@@ -182,13 +184,13 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         ServicehandlerImpl servicehandler = new ServicehandlerImpl(lightyServices.getBindingDataBroker(),
             pathComputationService, rendererServiceOperations, lightyServices.getBindingNotificationPublishService(),
-            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations);
+            pceListenerImpl, rendererListenerImpl, networkModelListenerImpl, serviceDataStoreOperations, "N/A");
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(),
                 serviceDataStoreOperations, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
                 servicehandler);
         tapiProvider = initTapi(lightyServices, servicehandler);
-        if(activateNbiNotification) {
+        if (activateNbiNotification) {
             LOG.info("Creating nbi-notifications beans ...");
             nbiNotificationsProvider = new NbiNotificationsProvider(
                     publisherTopicList, null, null, lightyServices.getRpcProviderService(),
