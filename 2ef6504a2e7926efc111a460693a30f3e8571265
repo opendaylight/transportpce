@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c8d9496_53e8cc78",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-04T11:15:42Z",
+      "side": 1,
+      "message": "Right, this looks more conform to the usage.\nOr maybe we don\u0027t need these env variables anymore! Do we?",
+      "revId": "2ef6504a2e7926efc111a460693a30f3e8571265",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
