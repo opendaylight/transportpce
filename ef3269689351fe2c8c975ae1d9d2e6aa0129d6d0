@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55b3f2e6_5e92ff2d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-04T10:46:21Z",
+      "side": 1,
+      "message": "OK but it\u0027s not very clear on how this is done.\nMore explanations on getNewDataBroker() vs getDataBroker() and on the rationalization of the DBcontext with the class variable this.databroker would be more concrete.\n\nAlso Maybe a JIRA ticket would be useful.\n\nOtherwise LGTM",
+      "revId": "ef3269689351fe2c8c975ae1d9d2e6aa0129d6d0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
