@@ -16,11 +16,11 @@ cd transportpce
 ```
 mvn clean install -s tests/odl_settings.xml -DskipTests -Dmaven.javadoc.skip=true -Dodlparent.spotbugs.skip -Dodlparent.checkstyle.skip
 ```
-2. compile __lighty-core/12.1.x__
+2. compile __lighty-core/master__
 ```
 git clone https://github.com/PantheonTechnologies/lighty-core.git
 cd lighty-core
-git checkout 12.1.x
+git checkout master
 mvn clean install -DskipTests -Dmaven.javadoc.skip=true
 ```
 #### Compile Lighty-TransportPCE
@@ -32,8 +32,8 @@ mvn clean install -Dmaven.javadoc.skip=true
 * After project build is done, use binary package to run the TransportPCE controller.
 ```
 cd  target
-unzip lighty-transportpce-12.1.0-SNAPSHOT-bin.zip
-cd lighty-transportpce-12.1.0-SNAPSHOT
+unzip tpce-bin.zip
+cd tpce
 ./start-controller.sh
 ```
 * The whole build process described here and in the previous section can be performed automatically by launching the script build.sh from lighty folder.
