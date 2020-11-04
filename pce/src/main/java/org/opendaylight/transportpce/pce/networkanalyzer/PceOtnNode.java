@@ -16,19 +16,19 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev181130.ODTU4TsAllocated;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.networks.network.node.SwitchingPools;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.If100GEODU4;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.If10GEODU2e;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.If1GEODU0;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev181130.IfOCHOTU4ODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.xpdr.tp.supported.interfaces.SupportedInterfaceCapability;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODTU4TsAllocated;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.networks.network.node.SwitchingPools;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If100GEODU4;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If10GEODU2e;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.If1GEODU0;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.IfOCHOTU4ODU4;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.TpId;
@@ -110,8 +110,8 @@ public class PceOtnNode implements PceNode {
 
         for (org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network
                 .node.TerminationPoint tp : allTps) {
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.@Nullable TerminationPoint1 ocnTp1
-                = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.@Nullable TerminationPoint1 ocnTp1
+                = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .TerminationPoint1.class);
             //TODO many nested if-structures below, this needs to be reworked
             if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType()) && this.otnServiceType.equals("ODU4")) {
@@ -302,9 +302,9 @@ public class PceOtnNode implements PceNode {
         if (this.nodeType != OpenroadmNodeType.TPDR) {
             return true;
         }
-        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1 node1 =
+        org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Node1 node1 =
             node.augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Node1.class);
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev200529.Node1.class);
         SwitchingPools sp = node1.getSwitchingPools();
         List<OduSwitchingPools> osp = new ArrayList<>(sp.nonnullOduSwitchingPools().values());
         for (OduSwitchingPools ospx : osp) {
@@ -347,7 +347,7 @@ public class PceOtnNode implements PceNode {
             .getTerminationPoint().values().stream()
             .filter(type -> type
                 .augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class)
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1.class)
                 .getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
             .collect(Collectors.toList());
 
@@ -371,7 +371,7 @@ public class PceOtnNode implements PceNode {
             .getTerminationPoint().values().stream()
             .filter(type -> type
                 .augmentation(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1.class)
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1.class)
                 .getTpType().equals(OpenroadmTpType.XPONDERNETWORK))
             .collect(Collectors.toList());
 
