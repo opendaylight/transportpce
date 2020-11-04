@@ -340,19 +340,25 @@ module org-openroadm-common-types {
   }
 
   // Removed sc-fec, rs-fec, and o-fec identities (differs from original MSA model) file.
-  identity scfec {
+  // Staircase FEC (duplications for backwards compatibility)
+  identity sc-fec {
+    status deprecated;
     base fec-identity;
     description
       "Staircase FEC identification";
   }
 
-  identity rsfec {
+  // Reed Solomon FEC (duplication for backwards compatibility)
+  identity rs-fec {
+    status deprecated;
     base fec-identity;
     description
       "Reed Solomon FEC identification";
   }
 
-  identity ofec {
+  // OpenROADM FEC (duplication for backwards compatibility)
+  identity o-fec {
+    status deprecated;
     base fec-identity;
     description
       "OpenROADM FEC identification";
