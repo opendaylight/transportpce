@@ -86,8 +86,8 @@ class TransportPCEtesting(unittest.TestCase):
         self.assertIn('node', res['network'][0])
         if 'node' in res['network'][0]:
             nbNode = len(res['network'][0]['node'])
-            self.assertEqual(nbNode, 2)
-            listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2']
+            self.assertEqual(nbNode, 3)
+            listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2', 'SPDR-SA1-XPDR3']
             for i in range(0, nbNode):
                 nodeType = res['network'][0]['node'][i]['org-openroadm-common-network:node-type']
                 nodeId = res['network'][0]['node'][i]['node-id']
@@ -110,7 +110,7 @@ class TransportPCEtesting(unittest.TestCase):
                     elif tpType == 'XPONDER-NETWORK':
                         network += 1
                 self.assertTrue(client == 0)
-                if nodeId == 'SPDR-SA1-XPDR1':
+                if nodeId == 'SPDR-SA1-XPDR1' or nodeId == 'SPDR-SA1-XPDR3':
                     self.assertTrue(network == 1)
                 else:
                     # elif nodeId == 'SPDR-SA1-XPDR2':
@@ -130,8 +130,8 @@ class TransportPCEtesting(unittest.TestCase):
         res = response.json()
         self.assertEqual(response.status_code, requests.codes.ok)
         nbNode = len(res['network'][0]['node'])
-        self.assertEqual(nbNode, 2)
-        listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2']
+        self.assertEqual(nbNode, 3)
+        listNode = ['SPDR-SA1-XPDR1', 'SPDR-SA1-XPDR2', 'SPDR-SA1-XPDR3']
         CHECK_LIST = {
             'SPDR-SA1-XPDR1': {
                 'node-type': 'MUXPDR',
@@ -220,7 +220,8 @@ class TransportPCEtesting(unittest.TestCase):
                         for tp in CHECK_LIST[nodeId]['tp-unchecklist']:
                             self.assertNotIn(tp, nbl['tp-list'])
             else:
-                self.assertFalse(True)
+                self.assertEqual('SPDR-SA1-XPDR3', nodeId)
+                listNode.remove(nodeId)
         self.assertEqual(len(listNode), 0)
 
     def test_08_disconnect_SPDR_SA1(self):
