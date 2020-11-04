@@ -1,27 +1,23 @@
-module org-openroadm-external-pluggable {
+module org-openroadm-degree {
   yang-version 1.1;
-  namespace "http://org/openroadm/external/pluggable";
-  prefix plg;
+  namespace "http://org/openroadm/degree";
+  prefix dgr;
 
-  import org-openroadm-common-equipment-types {
-    prefix org-openroadm-common-equipment-types;
-    revision-date 2018-11-30;
+  import org-openroadm-common-link-types {
+    prefix org-openroadm-common-link-types;
+    revision-date 2019-11-29;
   }
-  import org-openroadm-common-state-types {
-    prefix org-openroadm-common-state-types;
-    revision-date 2018-11-30;
-  }
-  import org-openroadm-common-optical-channel-types {
-    prefix org-openroadm-common-optical-channel-types;
-    revision-date 2018-11-30;
+  import org-openroadm-network-types {
+    prefix org-openroadm-network-types;
+    revision-date 2020-05-29;
   }
 
   organization
-    "OPEN ROADM MSA";
+    "Open ROADM MSA";
   contact
     "OpenROADM.org.";
   description
-    "YANG definitions for External Pluggable
+    "YANG definitions for a Degree in Network Model
 
 
      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
@@ -50,6 +46,30 @@ module org-openroadm-external-pluggable {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2020-05-29 {
+    description
+      "Version 7.1.0";
+  }
+  revision 2020-03-27 {
+    description
+      "Version 7.0.0";
+  }
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
+  revision 2019-09-27 {
+    description
+      "Version 6.0.0";
+  }
+  revision 2019-05-31 {
+    description
+      "Version 5.1.0";
+  }
+  revision 2019-03-29 {
+    description
+      "Version 5.0.0";
+  }
   revision 2018-11-30 {
     description
       "Version 4.1.0";
@@ -87,49 +107,45 @@ module org-openroadm-external-pluggable {
       "Version 1.2";
   }
 
-  grouping pluggable-node-attributes {
-    leaf pluggable-id {
-      type string;
-      description
-        "Network-wide unique identifier for a pluggable";
-    }
-    leaf customer-code {
-      type string;
-      description
-        "Owner of the pluggable";
-    }
-    container tail {
-      leaf client-equipment {
-        type string;
-      }
-      leaf client-equipment-id {
-        type string;
-      }
-      leaf clfi {
-        type string;
-      }
+  grouping degree-used-wavelengths {
+    description
+      "This list is created to accommodate fixed grid (1.2.1) as well as flex grid (2.0 above). In case of fixed grid
+       index number will refer to one of the 96 WL defined in the wavelength map file. In case of flex grid this
+       will hold list of used spectra";
+    list used-wavelengths {
+      key "index";
+      uses org-openroadm-network-types:wavelengths;
     }
   }
 
-  grouping pluggable-tp-attributes {
-    leaf rate {
-      type identityref {
-        base org-openroadm-common-optical-channel-types:och-rate-identity;
-      }
+  grouping degree-node-attributes {
+    description
+      "Defines the group of degree attributes";
+    leaf degree-number {
+      type uint16;
+    }
+    leaf max-wavelengths {
+      type uint32;
       description
-        "rate";
+        "maximum # of wavelengths";
     }
-    leaf modulation-format {
-      type org-openroadm-common-optical-channel-types:modulation-format;
-    }
-    leaf optic {
-      type org-openroadm-common-equipment-types:optic-types;
-    }
-    leaf state {
-      type org-openroadm-common-state-types:state;
+    leaf ingress-span-loss-aging-margin {
+      type org-openroadm-common-link-types:ratio-dB;
+      config true;
       description
-        "A xponder can be in one of the following
-               states";
+        "Span-loss margin extracted from corresponding device OTS interface container, optional";
+    }
+    leaf eol-max-load-pIn {
+      type org-openroadm-common-link-types:power-dBm;
+      config true;
+      description
+        "End Of Life Total input power at maximum load extracted from corresponding device OTS interface container";
+    }
+    leaf egress-average-channel-power {
+      type org-openroadm-common-link-types:power-dBm;
+      config true;
+      description
+        "Based upon the total max power across the 4.8 THz passband.";
     }
   }
 }
