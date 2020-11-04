@@ -14,9 +14,9 @@ import org.junit.Test;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.NodeInfoBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpAddress;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -38,7 +38,7 @@ public class ClliNetworkTest {
         assertNull("SupportingNode should be null", createdNode.getSupportingNode());
         assertEquals("Node key should be equals to NodeClliId ", new NodeKey(new NodeId("NodeClliId")),
             createdNode.key());
-        assertEquals("Expect org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.Node1 augmentation",
+        assertEquals("Expect org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.Node1 augmentation",
             clliAugmentation, createdNode.augmentation(Node1.class));
     }
 

@@ -16,9 +16,8 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.InitRoadmNodesInput;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -42,13 +41,9 @@ final class OrdLink {
 
         LinkId oppositeLinkId = LinkIdUtil.getRdm2RdmOppositeLinkId(input);
 
-        //For setting up attributes for openRoadm augment
-        OMSAttributesBuilder omsAttributesBuilder = new OMSAttributesBuilder().setOppositeLink(oppositeLinkId);
-        Link1Builder link1Builder = new Link1Builder().setOMSAttributes(omsAttributesBuilder.build());
-
         //For opposite link augment
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder oppsiteLinkBuilder =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
+        Link1Builder oppsiteLinkBuilder =
+            new Link1Builder()
                 .setOppositeLink(oppositeLinkId)
                 .setLinkType(OpenroadmLinkType.ROADMTOROADM);
         String srcNode = new StringBuilder(input.getRdmANode()).append("-DEG").append(input.getDegANum()).toString();
@@ -59,7 +54,7 @@ final class OrdLink {
         //IETF link builder
         LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null);
 
-        linkBuilder.addAugmentation(link1Builder.build());
+        linkBuilder.addAugmentation(new Link1Builder().setOppositeLink(oppositeLinkId).build());
         linkBuilder.addAugmentation(oppsiteLinkBuilder.build());
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, destNode, destTp);
 
