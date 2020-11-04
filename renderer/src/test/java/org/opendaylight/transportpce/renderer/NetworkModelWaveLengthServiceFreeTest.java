@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -24,57 +25,56 @@ import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.fixedflex.FixedFlexImpl;
+import org.opendaylight.transportpce.common.fixedflex.FixedGridConstant;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
 import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
 import org.opendaylight.transportpce.renderer.utils.WaveLengthServiceUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev181130.FrequencyGHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev181130.FrequencyTHz;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengths;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.used.wavelengths.UsedWavelengths;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.used.wavelengths.UsedWavelengthsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.used.wavelengths.UsedWavelengthsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.SrgAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.CpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.CtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.PpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.RxTtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.TxTtpAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrClientAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.XpdrPortAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.pp.attributes.UsedWavelength;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.termination.point.pp.attributes.UsedWavelengthBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev181130.xpdr.port.connection.attributes.WavelengthBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.DegreeAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.SrgAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.CpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.CtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.PpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.RxTtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.TxTtpAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrClientAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrNetworkAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.XpdrPortAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMaps;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsKey;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.port.connection.attributes.WavelengthBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.PathDescription;
-import org.opendaylight.yangtools.yang.common.Uint32;
+import org.opendaylight.yangtools.yang.common.Uint16;
 
 @Ignore
 @RunWith(Parameterized.class)
 public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
-    private static final Uint32 UI32_WAVE_LENGTH = Uint32.valueOf(20);
     private static final long WAVE_LENGTH = 20L;
     private NetworkModelWavelengthService networkModelWavelengthService;
     private DeviceTransactionManager deviceTransactionManager;
     private TerminationPoint1 terminationPoint1;
-    private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+    private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
         .TerminationPoint1 terminationPoint2;
     private PathDescription pathDescription;
     private Node1 node1;
-    private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 node2;
+    private org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 node2;
+    private final AvailFreqMapsKey freqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
 
     public NetworkModelWaveLengthServiceFreeTest(PathDescription pathDescription, TerminationPoint1 terminationPoint1,
         Node1 node1,
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1 terminationPoint2,
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 node2) {
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1 terminationPoint2,
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 node2) {
 
         this.pathDescription = pathDescription;
         this.terminationPoint1 = terminationPoint1;
@@ -93,39 +93,37 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
 
         FixedFlexImpl fixedFlex = new FixedFlexImpl();
         fixedFlex = fixedFlex.getFixedFlexWaveMapping(WAVE_LENGTH);
-        FrequencyGHz frequencyGHz = new FrequencyGHz(new BigDecimal(fixedFlex.getWavelength()));
-        FrequencyTHz frequencyTHz = new FrequencyTHz(new BigDecimal(fixedFlex.getCenterFrequency()));
 
-        UsedWavelength usedWaveLength = (new UsedWavelengthBuilder()).setIndex(UI32_WAVE_LENGTH).build();
-        UsedWavelengths usedWaveLengthDegree = (new UsedWavelengthsBuilder()).setIndex(UI32_WAVE_LENGTH).build();
-        Map<UsedWavelengthsKey, UsedWavelengths> usedWaveLengthDegreeMap =
-                Map.of(usedWaveLengthDegree.key(),usedWaveLengthDegree);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-            .networks.network.node.termination.point.cp.attributes.UsedWavelengths usedWaveLentgthCp =
-                (new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks
-                    .network.node.termination.point.cp.attributes.UsedWavelengthsBuilder())
-                        .setIndex(UI32_WAVE_LENGTH)
-                        .build();
+        byte[] byteArray = new byte[FixedGridConstant.NB_CHANNELS * FixedGridConstant.EFFECTIVE_BITS];
+        Arrays.fill(byteArray, (byte) GridConstant.USED_SLOT_VALUE);
+        for (int i = 152;i <= 159;i++) {
+            byteArray[i] = (byte) GridConstant.AVAILABLE_SLOT_VALUE;
+        }
+        Map<AvailFreqMapsKey, AvailFreqMaps> waveMap = new HashMap<>();
+        AvailFreqMaps availFreqMaps = new AvailFreqMapsBuilder().setMapName(GridConstant.C_BAND)
+                .setFreqMapGranularity(new FrequencyGHz(BigDecimal.valueOf(FixedGridConstant.GRANULARITY)))
+                .setStartEdgeFreq(new FrequencyTHz(BigDecimal.valueOf(FixedGridConstant.START_EDGE_FREQUENCY)))
+                .setEffectiveBits(Uint16.valueOf(FixedGridConstant.EFFECTIVE_BITS))
+                .setFreqMap(byteArray)
+                .build();
+        waveMap.put(availFreqMaps.key(), availFreqMaps);
+        FrequencyGHz frequencyGHz = new FrequencyGHz(BigDecimal.valueOf(fixedFlex.getWavelength()));
+        FrequencyTHz frequencyTHz = new FrequencyTHz(BigDecimal.valueOf(fixedFlex.getCenterFrequency()));
         TerminationPoint1Builder terminationPoint1Builder = new TerminationPoint1Builder()
             .setCtpAttributes((new CtpAttributesBuilder())
-                .setUsedWavelengths(
-                    usedWaveLengthDegreeMap)
+                    .setAvailFreqMaps(waveMap)
                 .build())
             .setCpAttributes((new CpAttributesBuilder())
-                .setUsedWavelengths(
-                    Map.of(usedWaveLentgthCp.key(),
-                        usedWaveLentgthCp))
+                    .setAvailFreqMaps(waveMap)
                 .build())
             .setTxTtpAttributes((new TxTtpAttributesBuilder())
-                .setUsedWavelengths(
-                    usedWaveLengthDegreeMap)
+                    .setAvailFreqMaps(waveMap)
                 .build())
             .setRxTtpAttributes((new RxTtpAttributesBuilder())
-                .setUsedWavelengths(
-                    usedWaveLengthDegreeMap)
+                    .setAvailFreqMaps(waveMap)
                 .build())
             .setPpAttributes((new PpAttributesBuilder())
-                .setUsedWavelength(Map.of(usedWaveLength.key(),usedWaveLength))
+                    .setAvailFreqMaps(waveMap)
                 .build())
             .setXpdrClientAttributes((new XpdrClientAttributesBuilder())
                 .setWavelength((new WavelengthBuilder())
@@ -147,15 +145,15 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
                 .build());
 
         Node1Builder node1Builder = new Node1Builder()
-            .setDegreeAttributes((new DegreeAttributesBuilder()).setAvailableWavelengths(Map.of()).build())
-            .setSrgAttributes((new SrgAttributesBuilder()).setAvailableWavelengths(Map.of()).build());
+            .setDegreeAttributes((new DegreeAttributesBuilder()).setAvailFreqMaps(Map.of()).build())
+            .setSrgAttributes((new SrgAttributesBuilder()).setAvailFreqMaps(Map.of()).build());
 
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder
             terminationPoint2Builder =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder();
+                new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder();
 
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder node2Builder =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder node2Builder =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder();
 
         for (OpenroadmNodeType nodeType : Arrays.asList(OpenroadmNodeType.XPONDER, OpenroadmNodeType.DEGREE,
             OpenroadmNodeType.SRG)) {
@@ -174,11 +172,8 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
         }
 
         node2Builder.setNodeType(OpenroadmNodeType.SRG);
-        node1Builder
-            .setDegreeAttributes((new DegreeAttributesBuilder())
-                .setAvailableWavelengths(Map.of())
-                .build())
-            .setSrgAttributes(null);
+        node1Builder.setDegreeAttributes((new DegreeAttributesBuilder()).setAvailFreqMaps(Map.of()).build())
+                .setSrgAttributes(null);
         terminationPoint2Builder.setTpType(OpenroadmTpType.DEGREETXTTP);
         parameters.add(new Object[] { pathDescription, terminationPoint1Builder.build(), node1Builder.build(),
             terminationPoint2Builder.build(), node2Builder.build() });
@@ -205,24 +200,22 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
         this.networkModelWavelengthService.freeWavelengths(this.pathDescription);
         Node1 updatedNode1 = WaveLengthServiceUtils.getNode1FromDatastore("node1" + StringConstants.TTP_TOKEN,
             this.deviceTransactionManager);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 updatedNode2 =
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 updatedNode2 =
             WaveLengthServiceUtils.getNode2FromDatastore("node1" + StringConstants.TTP_TOKEN,
             this.deviceTransactionManager);
         TerminationPoint1 updatedTerminationPoint1 =
             WaveLengthServiceUtils.getTerminationPoint1FromDatastore("node1" + StringConstants.TTP_TOKEN,
                 StringConstants.TTP_TOKEN, this.deviceTransactionManager);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
             .TerminationPoint1 updatedTerminationPoint2 = WaveLengthServiceUtils
             .getTerminationPoint2FromDatastore("node1" + StringConstants.TTP_TOKEN, StringConstants.TTP_TOKEN,
             this.deviceTransactionManager);
         switch (updatedTerminationPoint2.getTpType()) {
-        //switch (((org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1)
-        //        updatedTerminationPoint1).getTpType()) {
             case DEGREETXRXCTP:
             case DEGREETXCTP:
             case DEGREERXCTP:
                 Assert.assertNull(updatedTerminationPoint1.getCtpAttributes());
-                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getUsedWavelengths().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getAvailFreqMaps().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getTxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getRxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getPpAttributes().getUsedWavelength().isEmpty());
@@ -233,7 +226,7 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
             case SRGTXCP:
             case SRGRXCP:
             case SRGTXRXCP:
-                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getUsedWavelengths().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getAvailFreqMaps().isEmpty());
                 Assert.assertNull(updatedTerminationPoint1.getCpAttributes());
                 Assert.assertFalse(updatedTerminationPoint1.getTxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getRxTtpAttributes().getUsedWavelengths().isEmpty());
@@ -244,8 +237,8 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
                 break;
             case DEGREETXRXTTP:
             case DEGREETXTTP:
-                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getUsedWavelengths().isEmpty());
-                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getUsedWavelengths().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getAvailFreqMaps().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getAvailFreqMaps().isEmpty());
                 Assert.assertNull(updatedTerminationPoint1.getTxTtpAttributes());
                 Assert.assertFalse(updatedTerminationPoint1.getRxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getPpAttributes().getUsedWavelength().isEmpty());
@@ -254,8 +247,8 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
                 Assert.assertNotNull(updatedTerminationPoint1.getXpdrPortAttributes().getWavelength());
                 break;
             case DEGREERXTTP:
-                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getUsedWavelengths().isEmpty());
-                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getUsedWavelengths().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getAvailFreqMaps().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getAvailFreqMaps().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getTxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertNull(updatedTerminationPoint1.getRxTtpAttributes());
                 Assert.assertFalse(updatedTerminationPoint1.getPpAttributes().getUsedWavelength().isEmpty());
@@ -266,8 +259,8 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
             case SRGRXPP:
             case SRGTXPP:
             case SRGTXRXPP:
-                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getUsedWavelengths().isEmpty());
-                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getUsedWavelengths().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getAvailFreqMaps().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getAvailFreqMaps().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getTxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getRxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertNull(updatedTerminationPoint1.getPpAttributes());
@@ -276,8 +269,8 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
                 Assert.assertNotNull(updatedTerminationPoint1.getXpdrPortAttributes().getWavelength());
                 break;
             case XPONDERCLIENT:
-                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getUsedWavelengths().isEmpty());
-                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getUsedWavelengths().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getAvailFreqMaps().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getAvailFreqMaps().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getTxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getRxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getPpAttributes().getUsedWavelength().isEmpty());
@@ -286,8 +279,8 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
                 Assert.assertNotNull(updatedTerminationPoint1.getXpdrPortAttributes().getWavelength());
                 break;
             case XPONDERNETWORK:
-                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getUsedWavelengths().isEmpty());
-                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getUsedWavelengths().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getAvailFreqMaps().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getAvailFreqMaps().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getTxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getRxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getPpAttributes().getUsedWavelength().isEmpty());
@@ -296,8 +289,8 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
                 Assert.assertNotNull(updatedTerminationPoint1.getXpdrPortAttributes().getWavelength());
                 break;
             case XPONDERPORT:
-                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getUsedWavelengths().isEmpty());
-                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getUsedWavelengths().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getAvailFreqMaps().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getAvailFreqMaps().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getTxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getRxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getPpAttributes().getUsedWavelength().isEmpty());
@@ -306,8 +299,8 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
                 Assert.assertNull(updatedTerminationPoint1.getXpdrPortAttributes());
                 break;
             default:
-                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getUsedWavelengths().isEmpty());
-                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getUsedWavelengths().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCtpAttributes().getAvailFreqMaps().isEmpty());
+                Assert.assertFalse(updatedTerminationPoint1.getCpAttributes().getAvailFreqMaps().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getTxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getRxTtpAttributes().getUsedWavelengths().isEmpty());
                 Assert.assertFalse(updatedTerminationPoint1.getPpAttributes().getUsedWavelength().isEmpty());
@@ -316,29 +309,27 @@ public class NetworkModelWaveLengthServiceFreeTest extends AbstractTest {
                 Assert.assertNotNull(updatedTerminationPoint1.getXpdrPortAttributes().getWavelength());
                 break;
         }
-        List<AvailableWavelengths> availableWavelengths = new ArrayList<>(updatedNode1
-               .getDegreeAttributes().nonnullAvailableWavelengths().values());
-        List<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengths>
-            availableWavelengths4srg =
-                new ArrayList<>(updatedNode1.getSrgAttributes().getAvailableWavelengths().values());
+        AvailFreqMaps availFreqMaps4Srg = updatedNode1.getSrgAttributes().nonnullAvailFreqMaps().get(freqMapKey);
+        AvailFreqMaps availFreqMaps4Degree = updatedNode1.getDegreeAttributes().nonnullAvailFreqMaps().get(freqMapKey);
+        int effectiveBits = availFreqMaps4Srg.getEffectiveBits().intValue();
+        byte[] array = new byte[effectiveBits];
+        Arrays.fill(array, (byte) 1);
         switch (updatedNode2.getNodeType()) {
-        //switch (((org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1) updatedNode1)
-        //        .getNodeType()) {
             case DEGREE:
-                Assert.assertEquals(1, availableWavelengths.size());
-                Assert.assertEquals(UI32_WAVE_LENGTH,
-                    availableWavelengths.get(0).getIndex());
-                Assert.assertTrue(availableWavelengths4srg.isEmpty());
+                Assert.assertNotNull("FreqMap should not be null", availFreqMaps4Degree.getFreqMap());
+                Assert.assertTrue("Index 20 should be available",
+                        Arrays.equals(Arrays.copyOfRange(availFreqMaps4Degree.getFreqMap(), 152, 160), array));
+                Assert.assertNull(availFreqMaps4Srg);
                 break;
             case SRG:
-                Assert.assertEquals(1, availableWavelengths4srg.size());
-                Assert.assertEquals(UI32_WAVE_LENGTH,
-                    availableWavelengths4srg.get(0).getIndex());
-                Assert.assertTrue(availableWavelengths.isEmpty());
+                Assert.assertNotNull("FreqMap should not be null", availFreqMaps4Srg.getFreqMap());
+                Assert.assertTrue("Index 20 should be available",
+                        Arrays.equals(Arrays.copyOfRange(availFreqMaps4Srg.getFreqMap(), 152, 160), array));
+                Assert.assertNull(availFreqMaps4Degree);
                 break;
             default:
-                Assert.assertTrue(availableWavelengths.isEmpty());
-                Assert.assertTrue(availableWavelengths4srg.isEmpty());
+                Assert.assertNull(availFreqMaps4Degree);
+                Assert.assertNull(availFreqMaps4Srg);
                 break;
         }
     }
