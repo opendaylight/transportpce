@@ -13,7 +13,11 @@ module org-openroadm-network-topology-types {
   }
   import org-openroadm-switching-pool-types {
     prefix org-openroadm-switching-pool-types;
-    revision-date 2018-11-30;
+    revision-date 2019-11-29;
+  }
+  import org-openroadm-port-types {
+    prefix org-openroadm-port-types;
+    revision-date 2020-03-27;
   }
 
   organization
@@ -47,6 +51,14 @@ module org-openroadm-network-topology-types {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2020-03-27 {
+    description
+      "Version 7.0.0";
+  }
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
   revision 2018-11-30 {
     description
       "Version 4.1.0";
@@ -68,6 +80,33 @@ module org-openroadm-network-topology-types {
       leaf shared-bandwidth {
         type uint16;
         units "Gbps";
+      }
+      list possible-tp-config {
+        key "config-id";
+        leaf config-id {
+          type uint16;
+        }
+        list tp-if-type-config {
+          key "tp-name";
+          leaf tp-name {
+            type leafref {
+              path "/nd:networks/nd:network/nd:node/nwt:termination-point/nwt:tp-id";
+            }
+            description
+              "termination-point identifier";
+          }
+          leaf-list tp-if-type {
+            type identityref {
+              base org-openroadm-port-types:supported-if-capability;
+            }
+          }
+          leaf otsi-rate {
+            type uint16;
+            units "Gbps";
+            description
+              "Optical Tributary Signal (OTSi) rate in Gbps";
+          }
+        }
       }
     }
   }

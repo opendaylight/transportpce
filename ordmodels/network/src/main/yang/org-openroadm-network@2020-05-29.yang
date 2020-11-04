@@ -9,19 +9,19 @@ module org-openroadm-network {
   }
   import org-openroadm-network-types {
     prefix nt;
-    revision-date 2018-11-30;
+    revision-date 2020-05-29;
   }
   import org-openroadm-roadm {
     prefix roadm;
-    revision-date 2018-11-30;
+    revision-date 2019-11-29;
   }
   import org-openroadm-external-pluggable {
     prefix plg;
-    revision-date 2018-11-30;
+    revision-date 2020-05-29;
   }
   import org-openroadm-xponder {
     prefix xpdr;
-    revision-date 2018-11-30;
+    revision-date 2020-05-29;
   }
   import ietf-inet-types {
     prefix inet;
@@ -29,11 +29,11 @@ module org-openroadm-network {
   }
   import org-openroadm-common-types {
     prefix org-openroadm-common-types;
-    revision-date 2018-11-30;
+    revision-date 2020-05-29;
   }
   import org-openroadm-common-network {
     prefix cnet;
-    revision-date 2018-11-30;
+    revision-date 2020-05-29;
   }
 
   organization
@@ -67,6 +67,30 @@ module org-openroadm-network {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2020-05-29 {
+    description
+      "Version 7.1.0";
+  }
+  revision 2020-03-27 {
+    description
+      "Version 7.0.0";
+  }
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
+  revision 2019-09-27 {
+    description
+      "Version 6.0.0";
+  }
+  revision 2019-05-31 {
+    description
+      "Version 5.1.0";
+  }
+  revision 2019-03-29 {
+    description
+      "Version 5.0.0";
+  }
   revision 2018-11-30 {
     description
       "Version 4.1.0";
@@ -106,16 +130,16 @@ module org-openroadm-network {
 
   deviation "/nd:networks/nd:network/nd:node/cnet:node-type" {
     deviate add {
-      must
-        "(not /nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-network) or
-         (/nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-network and
-         (../cnet:node-type = 'ROADM' or ../cnet:node-type = 'XPONDER' or ../cnet:node-type = 'EXT-PLUGGABLE'))" {
-        error-message "Invalid node type for openroadm-network";
-        description
-          "The valid node types in the ROADM network are XPONDER, EXT-PLUGGABLE and ROADM.";
+      must "(not /nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-network) or
+            (/nd:network/nd:network-types/cnet:openroadm-common-network/openroadm-network and
+            (../cnet:node-type = 'ROADM' or ../cnet:node-type = 'XPONDER' or ../cnet:node-type = 'EXT-PLUGGABLE'))" {
+          error-message "Invalid node type for openroadm-network";
+          description
+            "The valid node types in the ROADM network are XPONDER, EXT-PLUGGABLE and ROADM.";
       }
     }
   }
+
   augment "/nd:networks/nd:network/nd:network-types/cnet:openroadm-common-network" {
     description
       "Introduce new network type for the Open ROADM optical network";
@@ -126,21 +150,11 @@ module org-openroadm-network {
          network";
     }
   }
+
   augment "/nd:networks/nd:network/nd:node" {
-    when "../nd:network-types/cnet:openroadm-common-network/openroadm-network";
+    when '../nd:network-types/cnet:openroadm-common-network/net:openroadm-network';
     description
       "Augment the generic network node with Open ROADM attributes.";
-    leaf node-type {
-      type nt:openroadm-node-type;
-      must "(../node-type = 'ROADM' or ../node-type = 'XPONDER' or ../node-type = 'EXT-PLUGGABLE')" {
-        error-message "Invalid node type for openroadm-network";
-      }
-      status deprecated;
-      description
-        "A component of the network topology.
-         Valid node types are XPONDER, EXT-PLUGGABLE and ROADM.
-         Once the node-type is configured, it should not be modified.";
-    }
     leaf software-version {
       type string;
       description
@@ -178,10 +192,6 @@ module org-openroadm-network {
     }
     leaf shelf {
       type string;
-    }
-    leaf node-status {
-      type nt:openroadm-node-status;
-      status deprecated;
     }
     leaf node-connection-status {
       type nt:openroadm-node-connection-status;
