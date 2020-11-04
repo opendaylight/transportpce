@@ -19,6 +19,8 @@ import static org.mockito.Mockito.when;
 
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -36,19 +38,21 @@ import org.mockito.stubbing.Answer;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.fixedflex.FixedGridConstant;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.transportpce.networkmodel.util.test.NetworkmodelTestUtil;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMaps;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -190,8 +194,8 @@ public class OpenRoadmTopologyTest {
         String srcTp = "DEG1-CTP-TXRX";
         String destTp = "SRG1-CP-TXRX";
         LinkId linkId = LinkIdUtil.buildLinkId(srcNode, srcTp, dstNode, destTp);
-        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1 link1 =
-            new Link1Builder().setAdministrativeState(State.InService).build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1 link1 =
+            new Link1Builder().build();
         Link link = new LinkBuilder()
             .setLinkId(linkId)
             .setSource(new SourceBuilder().setSourceNode(new NodeId(srcNode)).setSourceTp(srcTp).build())
@@ -268,11 +272,15 @@ public class OpenRoadmTopologyTest {
         assertEquals("ROADMA01", supportingNodes.get(1).getNodeRef().getValue());
         assertEquals(OpenroadmNodeType.DEGREE, node.augmentation(Node1.class).getNodeType());
         assertEquals(Uint16.valueOf(nodeNb), node.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1.class)
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1.class)
             .getDegreeAttributes().getDegreeNumber());
-        assertEquals(96, node.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1.class)
-            .getDegreeAttributes().getAvailableWavelengths().size());
+        List<AvailFreqMaps> availFreqMapsValues = new ArrayList<>(node.augmentation(
+            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1.class)
+            .getDegreeAttributes().getAvailFreqMaps().values());
+        assertEquals(FixedGridConstant.NB_CHANNELS, availFreqMapsValues.get(0).getFreqMap().length);
+        byte[] byteArray = new byte[FixedGridConstant.NB_CHANNELS];
+        Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
+        assertEquals(Arrays.toString(byteArray), Arrays.toString(availFreqMapsValues.get(0).getFreqMap()));
         List<TerminationPoint> tps = node.augmentation(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
             .nonnullTerminationPoint().values().stream()
@@ -296,9 +304,13 @@ public class OpenRoadmTopologyTest {
         assertEquals("openroadm-network", supportingNodes.get(1).getNetworkRef().getValue());
         assertEquals("ROADMA01", supportingNodes.get(1).getNodeRef().getValue());
         assertEquals(OpenroadmNodeType.SRG, node.augmentation(Node1.class).getNodeType());
-        assertEquals(96, node.augmentation(
-            org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1.class)
-            .getSrgAttributes().getAvailableWavelengths().size());
+        List<AvailFreqMaps> availFreqMapsValues = new ArrayList<>(node.augmentation(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1.class)
+                .getSrgAttributes().getAvailFreqMaps().values());
+        assertEquals(FixedGridConstant.NB_CHANNELS, availFreqMapsValues.get(0).getFreqMap().length);
+        byte[] byteArray = new byte[FixedGridConstant.NB_CHANNELS];
+        Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
+        assertEquals(Arrays.toString(byteArray), Arrays.toString(availFreqMapsValues.get(0).getFreqMap()));
         List<TerminationPoint> tps = node.augmentation(
             org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1.class)
             .nonnullTerminationPoint().values().stream()
@@ -331,12 +343,12 @@ public class OpenRoadmTopologyTest {
         assertEquals("XPDR1-CLIENT1", tps.get(0).getTpId().getValue());
         assertEquals(OpenroadmTpType.XPONDERCLIENT, tps.get(0).augmentation(TerminationPoint1.class).getTpType());
         assertEquals("XPDR1-NETWORK1", tps.get(0).augmentation(
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1.class)
+            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1.class)
             .getAssociatedConnectionMapPort());
         assertEquals("XPDR1-NETWORK1", tps.get(2).getTpId().getValue());
         assertEquals(OpenroadmTpType.XPONDERNETWORK, tps.get(2).augmentation(TerminationPoint1.class).getTpType());
         assertEquals("XPDR1-CLIENT1", tps.get(2).augmentation(
-            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1.class)
+            org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1.class)
             .getAssociatedConnectionMapPort());
     }
 

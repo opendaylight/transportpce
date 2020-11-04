@@ -14,9 +14,9 @@ import java.util.concurrent.TimeoutException;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.NetworkTypes1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev181130.networks.network.network.types.ClliNetworkBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.networks.network.network.types.OpenroadmCommonNetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.NetworkTypes1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.clli.network.rev191129.networks.network.network.types.ClliNetworkBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.networks.network.network.types.OpenroadmCommonNetworkBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.Network;
@@ -75,7 +75,7 @@ public class TpceNetwork {
             case NetworkUtils.OVERLAY_NETWORK_ID:
             case NetworkUtils.OTN_NETWORK_ID:
                 Augmentation<NetworkTypes> ordTopology = new org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                    .network.rev181130.NetworkTypes1Builder()
+                    .network.rev200529.NetworkTypes1Builder()
                     .setOpenroadmCommonNetwork(new OpenroadmCommonNetworkBuilder().build())
                     .build();
                 networkTypesBldr.addAugmentation(ordTopology);
