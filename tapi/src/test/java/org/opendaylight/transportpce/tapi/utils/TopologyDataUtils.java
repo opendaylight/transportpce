@@ -52,9 +52,8 @@ public final class TopologyDataUtils {
             InputStream targetStream;
             try {
                 targetStream = new FileInputStream(topoFile);
-                Optional<NormalizedNode<?, ?>> transformIntoNormalizedNode = null;
-                transformIntoNormalizedNode = XMLDataObjectConverter.createWithDataStoreUtil(dataStoreContextUtil)
-                    .transformIntoNormalizedNode(targetStream);
+                Optional<NormalizedNode<?, ?>> transformIntoNormalizedNode = XMLDataObjectConverter
+                        .createWithDataStoreUtil(dataStoreContextUtil).transformIntoNormalizedNode(targetStream);
                 if (!transformIntoNormalizedNode.isPresent()) {
                     throw new IllegalStateException(String.format(
                         "Could not transform the input %s into normalized nodes", fileName));
