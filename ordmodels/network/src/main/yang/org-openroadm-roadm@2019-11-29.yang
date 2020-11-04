@@ -1,23 +1,14 @@
-module org-openroadm-srg {
+module org-openroadm-roadm {
   yang-version 1.1;
-  namespace "http://org/openroadm/srg";
-  prefix srg;
-
-  import org-openroadm-network-types {
-    prefix org-openroadm-network-types;
-    revision-date 2018-11-30;
-  }
-  import org-openroadm-common-optical-channel-types {
-    prefix org-openroadm-common-optical-channel-types;
-    revision-date 2018-11-30;
-  }
+  namespace "http://org/openroadm/roadm";
+  prefix roadm;
 
   organization
     "OPEN ROADM MSA";
   contact
     "OpenROADM.org.";
   description
-    "YANG definitions for an Add/Drop group in Network Model
+    "YANG definitions for network view of a ROADM
 
      Copyright of the Members of the Open ROADM MSA Agreement dated (c) 2016,
      All other rights reserved.
@@ -45,21 +36,13 @@ module org-openroadm-srg {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
   revision 2018-11-30 {
     description
       "Version 4.1.0";
-  }
-  revision 2018-09-28 {
-    description
-      "Version 4.0.0";
-  }
-  revision 2018-05-30 {
-    description
-      "Version 3.1.0";
-  }
-  revision 2018-03-30 {
-    description
-      "Version 3.0.0";
   }
   revision 2017-12-15 {
     description
@@ -68,10 +51,6 @@ module org-openroadm-srg {
   revision 2017-09-29 {
     description
       "Version 2.1";
-  }
-  revision 2017-07-28 {
-    description
-      "Version 2.0.1 - added revision-date to imports";
   }
   revision 2017-06-26 {
     description
@@ -82,30 +61,26 @@ module org-openroadm-srg {
       "Version 1.2";
   }
 
-  grouping srg-node-attributes {
-    leaf srg-number {
+  grouping roadm-node-attributes {
+    leaf max-degrees {
       type uint16;
-    }
-    leaf max-pp {
-      type uint32;
       description
-        "Maximum number of add/drop port pairs in an SRG";
+        "Max no. of degrees supported by the node";
     }
-    leaf current-provisioned-pp {
-      type uint32;
+    leaf max-srgs {
+      type uint16;
       description
-        "current provisioned number of port pair in a given SRG";
+        "Max no. of SRGs supported by the node";
     }
-    list available-wavelengths {
-      key "index";
+    leaf current-degrees {
+      type uint16;
       description
-        "This list is created to accommodate fix grid (1.2.1) as well as flex grid (2.0 above). In case of fixed grid
-         index number will refer to one of the 96 WL defined in the wavelength map file. In case of flex grid this
-         will hold list of available spectra";
-      uses org-openroadm-network-types:wavelengths;
+        "Current no. of degrees supported by the node";
     }
-    leaf wavelength-duplication {
-      type org-openroadm-common-optical-channel-types:wavelength-duplication-type;
+    leaf current-srgs {
+      type uint16;
+      description
+        "Current no. of SRGs supported by the node";
     }
   }
 }

@@ -13,15 +13,15 @@ module org-openroadm-common-network {
   }
   import org-openroadm-network-types {
     prefix org-openroadm-network-types;
-    revision-date 2018-11-30;
+    revision-date 2020-05-29;
   }
   import org-openroadm-common-state-types {
     prefix org-openroadm-common-state-types;
-    revision-date 2018-11-30;
+    revision-date 2019-11-29;
   }
   import org-openroadm-equipment-states-types {
     prefix org-openroadm-equipment-states-types;
-    revision-date 2018-11-30;
+    revision-date 2019-11-29;
   }
 
   organization
@@ -55,6 +55,30 @@ module org-openroadm-common-network {
      ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
      POSSIBILITY OF SUCH DAMAGE.";
 
+  revision 2020-05-29 {
+    description
+      "Version 7.1.0";
+  }
+  revision 2020-03-27 {
+    description
+      "Version 7.0.0";
+  }
+  revision 2019-11-29 {
+    description
+      "Version 6.1.0";
+  }
+  revision 2019-09-27 {
+    description
+      "Version 6.0.0";
+  }
+  revision 2019-05-31 {
+    description
+      "Version 5.1.0";
+  }
+  revision 2019-03-29 {
+    description
+      "Version 5.0.0";
+  }
   revision 2018-11-30 {
     description
       "Version 4.1.0";
@@ -81,8 +105,9 @@ module org-openroadm-common-network {
         "The presence of the container node indicates Open ROADM common network";
     }
   }
+
   augment "/nd:networks/nd:network/nd:node" {
-    when "../nd:network-types/openroadm-common-network";
+    when '../nd:network-types/cnet:openroadm-common-network';
     description
       "Augment the generic network node with Open ROADM common attributes.";
     leaf node-type {
@@ -90,22 +115,43 @@ module org-openroadm-common-network {
       description
         "A component of the network topology. Once the node-type is configured, it should not be modified.";
     }
-    leaf node-status {
-      type org-openroadm-network-types:openroadm-node-status;
-      status deprecated;
-    }
     leaf lifecycle-state {
       type org-openroadm-common-state-types:lifecycle-state;
       description
         "Lifecycle State of a node. Whether it is planned, deployed, in maintenance, etc.";
     }
+    leaf operational-state {
+      type org-openroadm-common-state-types:state;
+    }
+    leaf administrative-state {
+      type org-openroadm-equipment-states-types:admin-states;
+    }
   }
+
   augment "/nd:networks/nd:network/nd:node/nwt:termination-point" {
-    when "../../nd:network-types/openroadm-common-network";
+    when '../../nd:network-types/cnet:openroadm-common-network';
     leaf tp-type {
       type org-openroadm-network-types:openroadm-tp-type;
       description
         "The type of a termination point in the ROADM topology.";
+    }
+    leaf physical-tp {
+      type boolean;
+      mandatory false;
+      description
+        "Applies to Termination Points that map to physical ports or slots on circuit packs.
+          Set to True when the termination point maps to ports of an existing circuit-pack,
+          False, when mapped to a slot (pluggable optics Holder) --> virtual tp.
+          This attribute is not present for other Termination Points.";
+    }
+    leaf-list associated-connection-map-tp {
+      type leafref {
+        path "/nd:networks/nd:network/nd:node/nwt:termination-point/nwt:tp-id";
+      }
+      description
+        "Used to identify relationships between client and network ports in transponders and
+          uni-directional regens. Provides the list of tps the tp is connected to, as defined
+          in the device connection map.";
     }
     leaf eqpt-srg-id {
       type uint32;
@@ -117,9 +163,16 @@ module org-openroadm-common-network {
       description
         "Lifecycle State of a termination point. Whether it is planned, deployed, in maintenance, etc.";
     }
+    leaf operational-state {
+      type org-openroadm-common-state-types:state;
+    }
+    leaf administrative-state {
+      type org-openroadm-equipment-states-types:admin-states;
+    }
   }
+
   augment "/nd:networks/nd:network/nwt:link" {
-    when "../nd:network-types/openroadm-common-network";
+    when '../nd:network-types/cnet:openroadm-common-network';
     description
       "This augmentation defines common link attributes in the Open ROADM common network";
     leaf link-type {
@@ -140,9 +193,11 @@ module org-openroadm-common-network {
       type decimal64 {
         fraction-digits 2;
       }
+      units "km";
     }
     leaf link-latency {
       type uint32;
+      units "ms";
       description
         "Latency of a link";
     }
