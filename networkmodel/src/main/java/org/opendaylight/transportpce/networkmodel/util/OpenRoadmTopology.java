@@ -19,27 +19,24 @@ import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengths;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.degree.rev181130.degree.node.attributes.AvailableWavelengthsKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.NodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Node1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.DegreeAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.SrgAttributes;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.node.SrgAttributesBuilder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmTpType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.DegreeAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.DegreeAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.SrgAttributes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.SrgAttributesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -65,7 +62,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier.InstanceIdentifierBuilder;
 import org.opendaylight.yangtools.yang.common.Uint16;
-import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -173,8 +169,8 @@ public final class OpenRoadmTopology {
     private static NodeBuilder createXpdr(String nodeId, String clli, Integer xpdrNb, List<Mapping> mappings,
         boolean isOtn) {
         // Create openroadm-network-topo augmentation to set node type to Xponder
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 ocnNode1 =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 ocnNode1 =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
             .setNodeType(OpenroadmNodeType.XPONDER).build();
         // Create ietf node setting supporting-node data
         NodeBuilder ietfNodeBldr = createTopoLayerNode(nodeId, clli);
@@ -191,13 +187,13 @@ public final class OpenRoadmTopology {
             if (!isOtn) {
                 ietfTpBldr = createTpBldr(m.getLogicalConnectionPoint());
                 // Add openroadm-network-topology tp augmentations
-                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                     .TerminationPoint1Builder ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm
-                    .common.network.rev181130.TerminationPoint1Builder();
+                    .common.network.rev200529.TerminationPoint1Builder();
                 if (m.getPortQual().equals("xpdr-network")) {
                     ocnTp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1 tpceTp1 =
-                        new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129
+                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1 tpceTp1 =
+                        new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019
                         .TerminationPoint1Builder().setAssociatedConnectionMapPort(m.getConnectionMapLcp()).build();
                     ietfTpBldr
                         .addAugmentation(ocnTp1Bldr.build())
@@ -206,8 +202,8 @@ public final class OpenRoadmTopology {
                     tpMap.put(ietfTp.key(),ietfTp);
                 } else if (m.getPortQual().equals("xpdr-client")) {
                     ocnTp1Bldr.setTpType(OpenroadmTpType.XPONDERCLIENT);
-                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.TerminationPoint1 tpceTp1 =
-                        new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129
+                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1 tpceTp1 =
+                        new org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019
                         .TerminationPoint1Builder().setAssociatedConnectionMapPort(m.getConnectionMapLcp()).build();
                     ietfTpBldr
                         .addAugmentation(ocnTp1Bldr.build())
@@ -218,9 +214,9 @@ public final class OpenRoadmTopology {
             } else {
                 if (m.getPortQual().equals("xpdr-network") || m.getPortQual().equals("switch-network")) {
                     ietfTpBldr = createTpBldr(m.getLogicalConnectionPoint());
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                    org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                         .TerminationPoint1Builder ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm
-                        .common.network.rev181130.TerminationPoint1Builder().setTpType(OpenroadmTpType.XPONDERNETWORK);
+                        .common.network.rev200529.TerminationPoint1Builder().setTpType(OpenroadmTpType.XPONDERNETWORK);
                     ietfTpBldr
                         .addAugmentation(ocnTp1Bldr.build());
                     TerminationPoint ietfTp = ietfTpBldr.build();
@@ -244,9 +240,9 @@ public final class OpenRoadmTopology {
         for (Mapping m : degListMap) {
             ietfTpBldr = createTpBldr(m.getLogicalConnectionPoint());
             // Add openroadm-common-network tp type augmentations
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .TerminationPoint1Builder ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                .network.rev181130.TerminationPoint1Builder();
+                .network.rev200529.TerminationPoint1Builder();
             switch (m.getPortDirection()) {
                 case "bidirectional":
                     ocnTp1Bldr.setTpType(OpenroadmTpType.DEGREETXRXTTP);
@@ -266,8 +262,8 @@ public final class OpenRoadmTopology {
         }
         // Add CTP to tp-list
         ietfTpBldr = createTpBldr(degNb + "-CTP-TXRX");
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1 ocnTp1 =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1 ocnTp1 =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder()
             .setTpType(OpenroadmTpType.DEGREETXRXCTP).build();
         ietfTpBldr.addAugmentation(ocnTp1);
         TerminationPoint ietfTp = ietfTpBldr.build();
@@ -275,7 +271,8 @@ public final class OpenRoadmTopology {
         // set degree-attributes
         DegreeAttributes degAtt = new DegreeAttributesBuilder()
             .setDegreeNumber(Uint16.valueOf(degNb.split("DEG")[1]))
-            .setAvailableWavelengths(create96AvalWaveDegree()).build();
+            .setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available())
+            .build();
         // Create ietf node augmentation to support ietf tp-list
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
             .Node1Builder ietfNode1 = new org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology
@@ -285,8 +282,8 @@ public final class OpenRoadmTopology {
         String nodeIdtopo = new StringBuilder().append(nodeId).append("-").append(degNb).toString();
         Node1 ontNode1 = new Node1Builder().setDegreeAttributes(degAtt).build();
         // Create openroadm-common-network augmentation to set node type to DEGREE
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 ocnNode1 =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 ocnNode1 =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
             .setNodeType(OpenroadmNodeType.DEGREE).build();
         // Create ietf node setting supporting-node data
         return createTopoLayerNode(nodeId, clli)
@@ -304,9 +301,9 @@ public final class OpenRoadmTopology {
         for (Mapping m : srgListMap) {
             ietfTpBldr = createTpBldr(m.getLogicalConnectionPoint());
             // Add openroadm-common-network tp type augmentations
-            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+            org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .TerminationPoint1Builder ocnTp1Bldr = new org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                .network.rev181130.TerminationPoint1Builder();
+                .network.rev200529.TerminationPoint1Builder();
             switch (m.getPortDirection()) {
                 case "bidirectional":
                     ocnTp1Bldr.setTpType(OpenroadmTpType.SRGTXRXPP);
@@ -326,18 +323,19 @@ public final class OpenRoadmTopology {
         }
         // Add CP to tp-list
         ietfTpBldr = createTpBldr(srgNb + "-CP-TXRX");
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
             .TerminationPoint1 ocnTp1 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network
-            .rev181130.TerminationPoint1Builder().setTpType(OpenroadmTpType.SRGTXRXCP).build();
+            .rev200529.TerminationPoint1Builder().setTpType(OpenroadmTpType.SRGTXRXCP).build();
         ietfTpBldr.addAugmentation(ocnTp1);
         TerminationPoint ietfTp = ietfTpBldr.build();
         tpMap.put(ietfTp.key(),ietfTp);
         // Create openroadm-common-network augmentation to set node type to SRG
-        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 ocnNode1 =
-            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 ocnNode1 =
+            new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
             .setNodeType(OpenroadmNodeType.SRG).build();
         // set srg-attributes
-        SrgAttributes srgAttr = new SrgAttributesBuilder().setAvailableWavelengths(create96AvalWaveSrg()).build();
+        SrgAttributes srgAttr = new SrgAttributesBuilder()
+                .setAvailFreqMaps(GridUtils.initFreqMaps4FixedGrid2Available()).build();
         Node1 ontNode1 = new Node1Builder().setSrgAttributes(srgAttr).build();
         // Create ietf node augmentation to support ietf tp-list
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
@@ -415,9 +413,9 @@ public final class OpenRoadmTopology {
                     .findFirst().get().getTpId().getValue();
                 Link1Builder ocnAzLinkBldr = new Link1Builder();
                 int srcNodeType = nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                    .network.rev181130.Node1.class).getNodeType().getIntValue();
+                    .network.rev200529.Node1.class).getNodeType().getIntValue();
                 int destNodeType = nodes.get(j).augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
-                    .network.rev181130.Node1.class).getNodeType().getIntValue();
+                    .network.rev200529.Node1.class).getNodeType().getIntValue();
                 if (srcNodeType == 11 && destNodeType == 11) {
                     ocnAzLinkBldr.setLinkType(OpenroadmLinkType.EXPRESSLINK);
                 } else if (srcNodeType == 11 && destNodeType == 12) {
@@ -477,11 +475,10 @@ public final class OpenRoadmTopology {
                     networkTransactionService.read(LogicalDatastoreType.CONFIGURATION,linkIID.build()).get();
             if (link.isPresent()) {
                 LinkBuilder linkBuilder = new LinkBuilder(link.get());
-                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder link1Builder =
-                    new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder(
-                    linkBuilder.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130
-                    .Link1.class))
-                    .setAdministrativeState(State.OutOfService);
+                org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder link1Builder =
+                    new org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Link1Builder(
+                    linkBuilder.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529
+                    .Link1.class));
                 linkBuilder.removeAugmentation(Link1.class)
                     .addAugmentation(link1Builder.build());
                 networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, linkIID.build(),
@@ -500,40 +497,4 @@ public final class OpenRoadmTopology {
         }
     }
 
-    private static Map<AvailableWavelengthsKey,AvailableWavelengths> create96AvalWaveDegree() {
-        Map<AvailableWavelengthsKey,AvailableWavelengths> waveMap = new HashMap<>();
-
-        for (int i = 1; i < 97; i++) {
-            AvailableWavelengthsBuilder avalBldr = new AvailableWavelengthsBuilder()
-                .setIndex(Uint32.valueOf(i))
-                .withKey(new AvailableWavelengthsKey(Uint32.valueOf(i)));
-            AvailableWavelengths aval = avalBldr.build();
-            waveMap.put(aval.key(),aval);
-        }
-
-        return waveMap;
-    }
-
-    private static Map<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-        .AvailableWavelengthsKey, org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-        .AvailableWavelengths> create96AvalWaveSrg() {
-
-        Map<org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-            .AvailableWavelengthsKey, org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-            .AvailableWavelengths> waveMap = new HashMap<>();
-
-        for (int i = 1; i < 97; i++) {
-            org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-                    .AvailableWavelengthsBuilder avalBldr =
-                new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-                        .AvailableWavelengthsBuilder()
-                    .setIndex(Uint32.valueOf(i))
-                    .withKey(new org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes
-                        .AvailableWavelengthsKey(Uint32.valueOf(i)));
-            org.opendaylight.yang.gen.v1.http.org.openroadm.srg.rev181130.srg.node.attributes.AvailableWavelengths
-                aval = avalBldr.build();
-            waveMap.put(aval.key(),aval);
-        }
-        return waveMap;
-    }
 }
