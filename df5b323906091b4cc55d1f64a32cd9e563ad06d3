@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec13bb0b_021f65f3",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-05T17:13:18Z",
+      "side": 1,
+      "message": "perhaps put this in a private function to improve readibility ?",
+      "range": {
+        "startLine": 140,
+        "startChar": 14,
+        "endLine": 164,
+        "endChar": 94
+      },
+      "revId": "df5b323906091b4cc55d1f64a32cd9e563ad06d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7683196a_20bf7c3c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-05T17:13:18Z",
+      "side": 1,
+      "message": "perhaps put this in a private function to improve readibility ?",
+      "range": {
+        "startLine": 166,
+        "startChar": 15,
+        "endLine": 192,
+        "endChar": 29
+      },
+      "revId": "df5b323906091b4cc55d1f64a32cd9e563ad06d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b76d9e7e_e12ece3a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-05T17:13:18Z",
+      "side": 1,
+      "message": "this is a very, very long method ;-) perhaps it should be easier de maintain and debug if it\u0027s split in shorter method ?",
+      "range": {
+        "startLine": 215,
+        "startChar": 3,
+        "endLine": 215,
+        "endChar": 42
+      },
+      "revId": "df5b323906091b4cc55d1f64a32cd9e563ad06d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a45ea78b_f0ae4509",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-05T17:13:18Z",
+      "side": 1,
+      "message": "this is a very, very long method ;-) perhaps it should be easier de maintain and debug if it\u0027s split in shorter method ?",
+      "range": {
+        "startLine": 1059,
+        "startChar": 3,
+        "endLine": 1059,
+        "endChar": 41
+      },
+      "revId": "df5b323906091b4cc55d1f64a32cd9e563ad06d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
