@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "589139fe_8b8592d8",
+        "filename": "ordmodels/device/NOTICE",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-05T18:04:48Z",
+      "side": 1,
+      "message": "I\u0027ve talked with bgpcep which has the same issues and Robert\u0027s feedback is that it should also be in the jar resources (\u003d ordmodels/device/src/main/resources here)",
+      "revId": "3a9d5f681ad9a6ee15c2fd8d5fb13a4927ca973f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8ef9284_c68a0f35",
+        "filename": "ordmodels/device/openconfig.LICENSE",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-05T18:04:48Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "3a9d5f681ad9a6ee15c2fd8d5fb13a4927ca973f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
