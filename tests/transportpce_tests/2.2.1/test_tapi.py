@@ -481,7 +481,6 @@ class TransportTapitesting(unittest.TestCase):
     def test_30_add_oms_attributes(self):
         # Config ROADMA-ROADMC oms-attributes
         data = {"span": {
-            "clfi": "fiber1",
             "auto-spanloss": "true",
             "spanloss-base": 11.4,
             "spanloss-current": 12,
@@ -495,7 +494,6 @@ class TransportTapitesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.created)
         # Config ROADMC-ROADMA oms-attributes
         data = {"span": {
-            "clfi": "fiber1",
             "auto-spanloss": "true",
             "spanloss-base": 11.4,
             "spanloss-current": 12,
