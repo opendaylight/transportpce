@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "10896820_40e6a82e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:27:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b0a034a_f40c0de1",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 42
+      },
+      "revId": "3c4096a31d35f2ad381f7b685b38ab6e3dc7f244",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2206ce8d_a378ad5c",
         "filename": "api/src/main/yang/transportpce-portmapping-common-oneandtwo@2020-10-13.yang",
         "patchSetId": 4
