@@ -11,22 +11,23 @@
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 
+import base64
 import time
 import unittest
 
 import requests
 from common import test_utils
+from common.test_utils import INDEX_1_USED_FREQ_MAP, INDEX_1_2_USED_FREQ_MAP, AVAILABLE_FREQ_MAP
 
 
 class TransportPCEFulltesting(unittest.TestCase):
-
     cr_serv_sample_data = {"input": {
         "sdnc-request-header": {
             "request-id": "e3028bae-a90f-4ddd-a83f-cf224eba0e58",
             "rpc-action": "service-create",
             "request-system-id": "appname",
             "notification-url":
-            "http://localhost:8585/NotificationServer/notify"
+                "http://localhost:8585/NotificationServer/notify"
         },
         "service-name": "service1",
         "common-id": "ASATT1234567",
@@ -36,40 +37,40 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDRA01",
             "service-format": "Ethernet",
             "clli": "SNJSCAMCJP8",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.3",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
+            "tx-direction": {
+                "port": {
+                    "port-device-name":
+                        "ROUTER_SNJSCAMCJP8_000000.00_00",
+                    "port-type": "router",
+                    "port-name": "Gigabit Ethernet_Tx.ge-5/0/0.0",
+                    "port-rack": "000000.00",
+                    "port-shelf": "00"
+                },
+                "lgx": {
+                    "lgx-device-name":
+                        "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                    "lgx-port-name": "LGX Back.3",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                }
+            },
             "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJP8_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJP8_000000.00_00",
-                            "lgx-port-name": "LGX Back.4",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
+                "port": {
+                    "port-device-name":
+                        "ROUTER_SNJSCAMCJP8_000000.00_00",
+                    "port-type": "router",
+                    "port-name": "Gigabit Ethernet_Rx.ge-5/0/0.0",
+                    "port-rack": "000000.00",
+                    "port-shelf": "00"
+                },
+                "lgx": {
+                    "lgx-device-name":
+                        "LGX Panel_SNJSCAMCJP8_000000.00_00",
+                    "lgx-port-name": "LGX Back.4",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                }
+            },
             "optic-type": "gray"
         },
         "service-z-end": {
@@ -77,40 +78,40 @@ class TransportPCEFulltesting(unittest.TestCase):
             "node-id": "XPDRC01",
             "service-format": "Ethernet",
             "clli": "SNJSCAMCJT4",
-                    "tx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.29",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
+            "tx-direction": {
+                "port": {
+                    "port-device-name":
+                        "ROUTER_SNJSCAMCJT4_000000.00_00",
+                    "port-type": "router",
+                    "port-name": "Gigabit Ethernet_Tx.ge-1/0/0.0",
+                    "port-rack": "000000.00",
+                    "port-shelf": "00"
+                },
+                "lgx": {
+                    "lgx-device-name":
+                        "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                    "lgx-port-name": "LGX Back.29",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                }
+            },
             "rx-direction": {
-                        "port": {
-                            "port-device-name":
-                                "ROUTER_SNJSCAMCJT4_000000.00_00",
-                            "port-type": "router",
-                            "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
-                            "port-rack": "000000.00",
-                            "port-shelf": "00"
-                        },
-                        "lgx": {
-                            "lgx-device-name":
-                                "LGX Panel_SNJSCAMCJT4_000000.00_00",
-                            "lgx-port-name": "LGX Back.30",
-                            "lgx-port-rack": "000000.00",
-                            "lgx-port-shelf": "00"
-                        }
-                    },
+                "port": {
+                    "port-device-name":
+                        "ROUTER_SNJSCAMCJT4_000000.00_00",
+                    "port-type": "router",
+                    "port-name": "Gigabit Ethernet_Rx.ge-1/0/0.0",
+                    "port-rack": "000000.00",
+                    "port-shelf": "00"
+                },
+                "lgx": {
+                    "lgx-device-name":
+                        "LGX Panel_SNJSCAMCJT4_000000.00_00",
+                    "lgx-port-name": "LGX Back.30",
+                    "lgx-port-rack": "000000.00",
+                    "lgx-port-shelf": "00"
+                }
+            },
             "optic-type": "gray"
         },
         "due-date": "2016-11-28T00:00:01Z",
@@ -191,7 +192,6 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_09_add_omsAttributes_ROADMA_ROADMC(self):
         # Config ROADMA-ROADMC oms-attributes
         data = {"span": {
-            "clfi": "fiber1",
             "auto-spanloss": "true",
             "spanloss-base": 11.4,
             "spanloss-current": 12,
@@ -207,7 +207,6 @@ class TransportPCEFulltesting(unittest.TestCase):
     def test_10_add_omsAttributes_ROADMC_ROADMA(self):
         # Config ROADMC-ROADMA oms-attributes
         data = {"span": {
-            "clfi": "fiber1",
             "auto-spanloss": "true",
             "spanloss-base": 11.4,
             "spanloss-current": 12,
@@ -313,10 +312,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertNotIn({u'index': 1},
-                         res['node'][0][
-                             u'org-openroadm-network-topology:srg-attributes'][
-                             'available-wavelengths'])
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
+        freq_map_array = [int(x) for x in freq_map]
+        self.assertEqual(freq_map_array[0:8], [0, 0, 0, 0, 0, 0, 0, 0], "Index 1 should not be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
@@ -332,18 +331,18 @@ class TransportPCEFulltesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/ROADMA01-DEG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertNotIn({u'index': 1},
-                         res['node'][0][
-                             u'org-openroadm-network-topology:'
-                             u'degree-attributes'][
-                             'available-wavelengths'])
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
+        freq_map_array = [int(x) for x in freq_map]
+        self.assertEqual(freq_map_array[0:8], [0, 0, 0, 0, 0, 0, 0, 0], "Index 1 should not be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG1-CTP-TXRX':
-                self.assertIn({u'index': 1, u'frequency': 196.1, u'width': 40},
+                self.assertIn({u'map-name': 'cband', u'freq-map-granularity': 6.25, u'start-edge-freq': 191.325,
+                               u'effective-bits': 8, u'freq-map': INDEX_1_USED_FREQ_MAP},
                               ele['org-openroadm-network-topology:'
                                   'ctp-attributes'][
-                                  'used-wavelengths'])
+                                  'avail-freq-maps'])
             if ele['tp-id'] == 'DEG1-TTP-TXRX':
                 self.assertIn({u'index': 1, u'frequency': 196.1, u'width': 40},
                               ele['org-openroadm-network-topology:'
@@ -419,10 +418,10 @@ class TransportPCEFulltesting(unittest.TestCase):
         # the following statement replaces self.assertDictContainsSubset deprecated in python 3.2
         self.assertDictEqual(
             dict({
-                 'connection-number': 'DEG1-TTP-TXRX-SRG1-PP2-TXRX-2',
-                 'wavelength-number': 2,
-                 'opticalControlMode': 'power'
-                 }, **res['roadm-connections'][0]),
+                'connection-number': 'DEG1-TTP-TXRX-SRG1-PP2-TXRX-2',
+                'wavelength-number': 2,
+                'opticalControlMode': 'power'
+            }, **res['roadm-connections'][0]),
             res['roadm-connections'][0]
         )
         self.assertDictEqual(
@@ -449,7 +448,7 @@ class TransportPCEFulltesting(unittest.TestCase):
                                      'xpdr-network-attributes'][
                                      'wavelength'])
             if ele['tp-id'] == 'XPDR1-CLIENT1' or \
-               ele['tp-id'] == 'XPDR1-CLIENT3':
+                    ele['tp-id'] == 'XPDR1-CLIENT3':
                 self.assertNotIn(
                     'org-openroadm-network-topology:xpdr-client-attributes',
                     dict.keys(ele))
@@ -459,12 +458,11 @@ class TransportPCEFulltesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertNotIn({u'index': 1}, res['node'][0][
-            u'org-openroadm-network-topology:srg-attributes'][
-            'available-wavelengths'])
-        self.assertNotIn({u'index': 2}, res['node'][0][
-            u'org-openroadm-network-topology:srg-attributes'][
-            'available-wavelengths'])
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
+        freq_map_array = [int(x) for x in freq_map]
+        self.assertEqual(freq_map_array[0:8], [0, 0, 0, 0, 0, 0, 0, 0], "Index 1 should not be available")
+        self.assertEqual(freq_map_array[8:16], [0, 0, 0, 0, 0, 0, 0, 0], "Index 2 should not be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
@@ -492,21 +490,19 @@ class TransportPCEFulltesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/ROADMA01-DEG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertNotIn({u'index': 1}, res['node'][0][
-            u'org-openroadm-network-topology:degree-attributes'][
-            'available-wavelengths'])
-        self.assertNotIn({u'index': 2}, res['node'][0][
-            u'org-openroadm-network-topology:degree-attributes'][
-            'available-wavelengths'])
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
+        freq_map_array = [int(x) for x in freq_map]
+        self.assertEqual(freq_map_array[0:8], [0, 0, 0, 0, 0, 0, 0, 0], "Index 1 should not be available")
+        self.assertEqual(freq_map_array[8:16], [0, 0, 0, 0, 0, 0, 0, 0], "Index 2 should not be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG1-CTP-TXRX':
-                self.assertIn({u'index': 1, u'frequency': 196.1, u'width': 40},
+                self.assertIn({u'map-name': 'cband', u'freq-map-granularity': 6.25, u'start-edge-freq': 191.325,
+                               u'effective-bits': 8, u'freq-map': INDEX_1_2_USED_FREQ_MAP},
                               ele['org-openroadm-network-topology:'
-                                  'ctp-attributes']['used-wavelengths'])
-                self.assertIn({u'index': 2, u'frequency': 196.05, u'width': 40},
-                              ele['org-openroadm-network-topology:'
-                                  'ctp-attributes']['used-wavelengths'])
+                                  'ctp-attributes'][
+                                  'avail-freq-maps'])
             if ele['tp-id'] == 'DEG1-TTP-TXRX':
                 self.assertIn({u'index': 1, u'frequency': 196.1, u'width': 40},
                               ele['org-openroadm-network-topology:'
@@ -577,8 +573,8 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ((ele[u'org-openroadm-common-network:tp-type'] ==
                  'XPONDER-CLIENT')
-                and (ele['tp-id'] == 'XPDR1-CLIENT1' or ele[
-                    'tp-id'] == 'XPDR1-CLIENT3')):
+                    and (ele['tp-id'] == 'XPDR1-CLIENT1' or ele[
+                        'tp-id'] == 'XPDR1-CLIENT3')):
                 self.assertNotIn(
                     'org-openroadm-network-topology:xpdr-client-attributes',
                     dict.keys(ele))
@@ -596,38 +592,26 @@ class TransportPCEFulltesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/ROADMA01-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn({u'index': 1}, res['node'][0][
-            u'org-openroadm-network-topology:srg-attributes'][
-            'available-wavelengths'])
-        self.assertIn({u'index': 2}, res['node'][0][
-            u'org-openroadm-network-topology:srg-attributes'][
-            'available-wavelengths'])
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
+        self.assertTrue(test_utils.check_freq_map(freq_map),"Index 1 and 2 should be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
-            if ele['tp-id'] == 'SRG1-PP1-TXRX' or \
-               ele['tp-id'] == 'SRG1-PP1-TXRX':
-                self.assertNotIn('org-openroadm-network-topology:pp-attributes',
-                                 dict.keys(ele))
-            else:
-                self.assertNotIn('org-openroadm-network-topology:pp-attributes',
-                                 dict.keys(ele))
+            self.assertNotIn('org-openroadm-network-topology:pp-attributes', dict.keys(ele))
         time.sleep(10)
 
     def test_35_check_topo_ROADMA_DEG1(self):
         response = test_utils.get_ordm_topo_request("node/ROADMA01-DEG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn({u'index': 1}, res['node'][0][
-            u'org-openroadm-network-topology:degree-attributes'][
-            'available-wavelengths'])
-        self.assertIn({u'index': 2}, res['node'][0][
-            u'org-openroadm-network-topology:degree-attributes'][
-            'available-wavelengths'])
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
+        self.assertTrue(test_utils.check_freq_map(freq_map),"Index 1 and 2 should be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG1-CTP-TXRX':
-                self.assertNotIn('org-openroadm-network-topology:'
-                                 'ctp-attributes', dict.keys(ele))
+                self.assertEqual(ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'],
+                                 AVAILABLE_FREQ_MAP)
             if ele['tp-id'] == 'DEG1-TTP-TXRX':
                 self.assertNotIn('org-openroadm-network-topology:'
                                  'tx-ttp-attributes', dict.keys(ele))
