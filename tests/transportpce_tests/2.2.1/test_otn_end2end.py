@@ -12,10 +12,12 @@
 # pylint: disable=no-member
 # pylint: disable=too-many-public-methods
 
+import base64
 import unittest
 import time
 import requests
 from common import test_utils
+from common.test_utils import INDEX_1_USED_FREQ_MAP, INDEX_1_2_USED_FREQ_MAP, AVAILABLE_FREQ_MAP
 
 
 class TransportPCEtesting(unittest.TestCase):
@@ -357,8 +359,10 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/ROADM-A1-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertNotIn({u'index': 1},
-                         res['node'][0][u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
+        freq_map_array = [int(x) for x in freq_map]
+        self.assertEqual(freq_map_array[0], 0, "Index 1 should not be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
@@ -373,14 +377,16 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/ROADM-A1-DEG2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertNotIn({u'index': 1},
-                         res['node'][0][u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
+        freq_map_array = [int(x) for x in freq_map]
+        self.assertEqual(freq_map_array[0], 0, "Index 1 should not be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
-                self.assertIn({u'index': 1, u'frequency': 196.1,
-                               u'width': 40},
-                              ele['org-openroadm-network-topology:ctp-attributes']['used-wavelengths'])
+                self.assertIn({u'map-name': 'cband', u'freq-map-granularity': 6.25, u'start-edge-freq': 191.325,
+                               u'effective-bits': 8, u'freq-map': INDEX_1_USED_FREQ_MAP},
+                              ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'])
             if ele['tp-id'] == 'DEG2-TTP-TXRX':
                 self.assertIn({u'index': 1, u'frequency': 196.1,
                                u'width': 40},
@@ -908,8 +914,10 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/ROADM-A1-SRG1")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn({u'index': 1},
-                      res['node'][0][u'org-openroadm-network-topology:srg-attributes']['available-wavelengths'])
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:srg-attributes']['avail-freq-maps'][0]['freq-map'])
+        freq_map_array = [int(x) for x in freq_map]
+        self.assertEqual(freq_map_array[0], 255, "Index 1 should be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'SRG1-PP1-TXRX':
@@ -920,12 +928,16 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/ROADM-A1-DEG2")
         self.assertEqual(response.status_code, requests.codes.ok)
         res = response.json()
-        self.assertIn({u'index': 1},
-                      res['node'][0][u'org-openroadm-network-topology:degree-attributes']['available-wavelengths'])
+        print(res)
+        freq_map = base64.b64decode(
+            res['node'][0]['org-openroadm-network-topology:degree-attributes']['avail-freq-maps'][0]['freq-map'])
+        freq_map_array = [int(x) for x in freq_map]
+        self.assertEqual(freq_map_array[0], 255, "Index 1 should be available")
         liste_tp = res['node'][0]['ietf-network-topology:termination-point']
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
-                self.assertNotIn('org-openroadm-network-topology:ctp-attributes', dict.keys(ele))
+                self.assertEqual(ele['org-openroadm-network-topology:ctp-attributes']['avail-freq-maps'][0]['freq-map'],
+                                 AVAILABLE_FREQ_MAP)
             if ele['tp-id'] == 'DEG2-TTP-TXRX':
                 self.assertNotIn('org-openroadm-network-topology:tx-ttp-attributes', dict.keys(ele))
         time.sleep(3)

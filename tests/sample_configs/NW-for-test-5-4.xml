@@ -7,16 +7,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>s>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli11</node-ref>    </supporting-node></node>
@@ -27,16 +25,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli11</node-ref>    </supporting-node></node>
@@ -46,34 +42,30 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-CTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-CTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
-  <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        </degree-attributes>
+    <degree-attributes xmlns="http://org/openroadm/network/topology">
+      <avail-freq-maps>
+        <map-name>cband</map-name>
+        <start-edge-freq>191.325</start-edge-freq>
+        <freq-map-granularity>6.25</freq-map-granularity>
+        <effective-bits>8</effective-bits>
+        <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        </freq-map>
+      </avail-freq-maps>
+    </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli11</node-ref>    </supporting-node></node>
 <node>   <node-id>OpenROADM-1-1-SRG1</node-id>     <node-type xmlns="http://org/openroadm/common/network">SRG</node-type>
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-1</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli11</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -138,16 +130,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli12</node-ref>    </supporting-node></node>
@@ -158,16 +148,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli12</node-ref>    </supporting-node></node>
@@ -178,16 +166,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli12</node-ref>    </supporting-node></node>
@@ -195,16 +181,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-2</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli12</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -269,16 +253,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli13</node-ref>    </supporting-node></node>
@@ -289,16 +271,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli13</node-ref>    </supporting-node></node>
@@ -309,16 +289,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli13</node-ref>    </supporting-node></node>
@@ -326,16 +304,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-3</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli13</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -400,16 +376,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli14</node-ref>    </supporting-node></node>
@@ -420,16 +394,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli14</node-ref>    </supporting-node></node>
@@ -440,16 +412,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli14</node-ref>    </supporting-node></node>
@@ -457,16 +427,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-1-4</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli14</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>1</index> </available-wavelengths>
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -531,10 +499,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
          </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli21</node-ref>    </supporting-node></node>
@@ -545,10 +517,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli21</node-ref>    </supporting-node></node>
@@ -559,10 +535,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli21</node-ref>    </supporting-node></node>
@@ -570,10 +550,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-1</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli21</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -638,10 +622,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli22</node-ref>    </supporting-node></node>
@@ -652,10 +640,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli22</node-ref>    </supporting-node></node>
@@ -666,10 +658,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli22</node-ref>    </supporting-node></node>
@@ -677,10 +673,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-2</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli22</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -745,10 +745,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli23</node-ref>    </supporting-node></node>
@@ -759,10 +763,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli23</node-ref>    </supporting-node></node>
@@ -773,10 +781,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli23</node-ref>    </supporting-node></node>
@@ -784,10 +796,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-3</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli23</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -852,10 +868,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli24</node-ref>    </supporting-node></node>
@@ -866,10 +886,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli24</node-ref>    </supporting-node></node>
@@ -880,10 +904,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli24</node-ref>    </supporting-node></node>
@@ -891,10 +919,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-2-4</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli24</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>2</index> </available-wavelengths>
-        <available-wavelengths> <index>3</index> </available-wavelengths>
-        <available-wavelengths> <index>4</index> </available-wavelengths>
-        <available-wavelengths> <index>5</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -959,14 +991,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli31</node-ref>    </supporting-node></node>
@@ -977,14 +1009,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-         <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli31</node-ref>    </supporting-node></node>
@@ -995,14 +1027,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli31</node-ref>    </supporting-node></node>
@@ -1010,14 +1042,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-1</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli31</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -1082,14 +1114,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli32</node-ref>    </supporting-node></node>
@@ -1100,14 +1132,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli32</node-ref>    </supporting-node></node>
@@ -1118,14 +1150,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli32</node-ref>    </supporting-node></node>
@@ -1133,14 +1165,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-2</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli32</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -1205,14 +1237,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli33</node-ref>    </supporting-node></node>
@@ -1223,14 +1255,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli33</node-ref>    </supporting-node></node>
@@ -1241,14 +1273,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli33</node-ref>    </supporting-node></node>
@@ -1256,14 +1288,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli33</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -1328,14 +1360,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli34</node-ref>    </supporting-node></node>
@@ -1346,14 +1378,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli34</node-ref>    </supporting-node></node>
@@ -1364,14 +1396,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli34</node-ref>    </supporting-node></node>
@@ -1379,14 +1411,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-3-4</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli34</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>5</index> </available-wavelengths>
-        <available-wavelengths> <index>6</index> </available-wavelengths>
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -1451,13 +1483,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli41</node-ref>    </supporting-node></node>
@@ -1468,13 +1501,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli41</node-ref>    </supporting-node></node>
@@ -1485,13 +1519,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli41</node-ref>    </supporting-node></node>
@@ -1499,13 +1534,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-1</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli41</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -1570,13 +1606,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli42</node-ref>    </supporting-node></node>
@@ -1587,13 +1624,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli42</node-ref>    </supporting-node></node>
@@ -1604,13 +1642,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli42</node-ref>    </supporting-node></node>
@@ -1618,13 +1657,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-2</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli42</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -1689,13 +1729,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli43</node-ref>    </supporting-node></node>
@@ -1706,13 +1747,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli43</node-ref>    </supporting-node></node>
@@ -1723,13 +1765,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli43</node-ref>    </supporting-node></node>
@@ -1737,13 +1780,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-3</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli43</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -1808,13 +1852,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli44</node-ref>    </supporting-node></node>
@@ -1825,13 +1870,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>s>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli44</node-ref>    </supporting-node></node>
@@ -1842,13 +1888,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli44</node-ref>    </supporting-node></node>
@@ -1856,13 +1903,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-4-4</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli44</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>7</index> </available-wavelengths>
-        <available-wavelengths> <index>8</index> </available-wavelengths>
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -1927,12 +1975,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli51</node-ref>    </supporting-node></node>
@@ -1943,12 +1993,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli51</node-ref>    </supporting-node></node>
@@ -1959,12 +2011,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-1</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli51</node-ref>    </supporting-node></node>
@@ -1972,12 +2026,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-1</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli51</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -2042,12 +2098,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli52</node-ref>    </supporting-node></node>
@@ -2058,12 +2116,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli52</node-ref>    </supporting-node></node>
@@ -2074,12 +2134,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-2</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli52</node-ref>    </supporting-node></node>
@@ -2087,12 +2149,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-2</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli52</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -2157,12 +2221,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli53</node-ref>    </supporting-node></node>
@@ -2173,12 +2239,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli53</node-ref>    </supporting-node></node>
@@ -2189,12 +2257,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-3</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli53</node-ref>    </supporting-node></node>
@@ -2202,12 +2272,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-3</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli53</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -2272,12 +2344,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG1-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli54</node-ref>    </supporting-node></node>
@@ -2288,12 +2362,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG2-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli54</node-ref>    </supporting-node></node>
@@ -2304,12 +2380,14 @@
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-RX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-RX-TTP</tp-type> </termination-point>
     <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology"> <tp-id>DEG3-TTP-TX</tp-id>  <tp-type xmlns="http://org/openroadm/common/network">DEGREE-TX-TTP</tp-type> </termination-point>
   <degree-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </degree-attributes>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-4</node-ref>    </supporting-node>
     <supporting-node><network-ref>clli-network</network-ref><node-ref>clli54</node-ref>    </supporting-node></node>
@@ -2317,12 +2395,14 @@
         <supporting-node><network-ref>openroadm-network</network-ref><node-ref>OpenROADM-5-4</node-ref>    </supporting-node>
         <supporting-node><network-ref>clli-network</network-ref><node-ref>clli54</node-ref>    </supporting-node>
         <srg-attributes xmlns="http://org/openroadm/network/topology">
-        <available-wavelengths> <index>9</index> </available-wavelengths>
-        <available-wavelengths> <index>10</index> </available-wavelengths>
-        <available-wavelengths> <index>11</index> </available-wavelengths>
-        <available-wavelengths> <index>12</index> </available-wavelengths>
-        <available-wavelengths> <index>13</index> </available-wavelengths>
-        <available-wavelengths> <index>14</index> </available-wavelengths>
+            <avail-freq-maps>
+                <map-name>cband</map-name>
+                <start-edge-freq>191.325</start-edge-freq>
+                <freq-map-granularity>6.25</freq-map-granularity>
+                <effective-bits>8</effective-bits>
+                <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                </freq-map>
+            </avail-freq-maps>
         </srg-attributes>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
         <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
@@ -2705,7 +2785,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-2-DEG1-to-OpenROADM-1-1-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1112</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -2729,7 +2809,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-1-DEG1-to-OpenROADM-1-2-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1211</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -2753,7 +2833,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1213</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -2775,7 +2855,7 @@
 <link xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
     <link-id>OpenROADM-1-3-DEG2-to-OpenROADM-1-2-DEG2</link-id>
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-2-DEG2-to-OpenROADM-1-3-DEG2</opposite-link>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <clfi xmlns="http://org/openroadm/common/network">fiber1312</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
@@ -2801,7 +2881,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-4-DEG1-to-OpenROADM-1-3-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1314</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -2825,7 +2905,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-3-DEG1-to-OpenROADM-1-4-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1413</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -2849,7 +2929,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-1-DEG2-to-OpenROADM-1-4-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1411</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -2873,7 +2953,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-4-DEG2-to-OpenROADM-1-1-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1114</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -3217,7 +3297,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-2-DEG1-to-OpenROADM-2-1-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2122</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -3241,7 +3321,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-1-DEG1-to-OpenROADM-2-2-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2221</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -3265,7 +3345,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-3-DEG2-to-OpenROADM-2-2-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2223</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -3289,7 +3369,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-2-DEG2-to-OpenROADM-2-3-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2322</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-3-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-2-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -3313,7 +3393,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-4-DEG1-to-OpenROADM-2-3-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2324</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -3337,7 +3417,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-3-DEG1-to-OpenROADM-2-4-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2423</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -3361,7 +3441,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-1-DEG2-to-OpenROADM-2-4-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2421</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -3385,7 +3465,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-4-DEG2-to-OpenROADM-2-1-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2124</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -3733,7 +3813,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-2-DEG1-to-OpenROADM-3-1-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3132</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -3757,7 +3837,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-1-DEG1-to-OpenROADM-3-2-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3231</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -3781,7 +3861,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-3-DEG2-to-OpenROADM-3-2-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3233</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -3805,7 +3885,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-2-DEG2-to-OpenROADM-3-3-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3332</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-3-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-2-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -3829,7 +3909,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-4-DEG1-to-OpenROADM-3-3-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3334</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -3853,7 +3933,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-3-DEG1-to-OpenROADM-3-4-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3433</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -3877,7 +3957,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-1-DEG2-to-OpenROADM-3-4-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3431</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -3901,7 +3981,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-4-DEG2-to-OpenROADM-3-1-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3431</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -4245,7 +4325,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-2-DEG1-to-OpenROADM-4-1-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4142</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -4269,7 +4349,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-1-DEG1-to-OpenROADM-4-2-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4241</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -4293,7 +4373,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-3-DEG2-to-OpenROADM-4-2-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4243</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -4317,7 +4397,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-2-DEG2-to-OpenROADM-4-3-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4342</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-3-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-2-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -4341,7 +4421,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-4-DEG1-to-OpenROADM-4-3-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4344</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -4365,7 +4445,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-3-DEG1-to-OpenROADM-4-4-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4443</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -4389,7 +4469,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-1-DEG2-to-OpenROADM-4-4-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4441</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -4413,7 +4493,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-4-DEG2-to-OpenROADM-4-1-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4144</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -4757,7 +4837,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-2-DEG1-to-OpenROADM-5-1-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5152</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-1-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-2-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -4781,7 +4861,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-1-DEG1-to-OpenROADM-5-2-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5251</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-2-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-1-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -4805,7 +4885,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-3-DEG2-to-OpenROADM-5-2-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5253</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-2-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-3-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -4829,7 +4909,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-2-DEG2-to-OpenROADM-5-3-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5352</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-3-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-2-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -4853,7 +4933,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-4-DEG1-to-OpenROADM-5-3-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5354</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-3-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-4-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -4877,7 +4957,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-3-DEG1-to-OpenROADM-5-4-DEG1</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5453</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-4-DEG1</source-node><source-tp>DEG1-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-3-DEG1</dest-node><dest-tp>DEG1-TTP-RX</dest-tp></destination>
@@ -4901,7 +4981,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-1-DEG2-to-OpenROADM-5-4-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5451</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-4-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-1-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -4925,7 +5005,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-4-DEG2-to-OpenROADM-5-1-DEG2</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5154</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-1-DEG2</source-node><source-tp>DEG2-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-4-DEG2</dest-node><dest-tp>DEG2-TTP-RX</dest-tp></destination>
@@ -4949,7 +5029,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-1-DEG3-to-OpenROADM-1-4-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1421</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -4973,7 +5053,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-4-DEG3-to-OpenROADM-2-1-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2114</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -4997,7 +5077,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-2-DEG3-to-OpenROADM-1-3-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1322</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5021,7 +5101,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-3-DEG3-to-OpenROADM-2-2-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2213</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5045,7 +5125,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-1-DEG3-to-OpenROADM-2-4-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2431</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5069,7 +5149,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-4-DEG3-to-OpenROADM-3-1-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3124</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5093,7 +5173,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-2-DEG3-to-OpenROADM-2-3-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber2332</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-2-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5117,7 +5197,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-2-3-DEG3-to-OpenROADM-3-2-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3223</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-2-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5141,7 +5221,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-1-DEG3-to-OpenROADM-3-4-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3441</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5165,7 +5245,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-4-DEG3-to-OpenROADM-4-1-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4134</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5189,7 +5269,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-2-DEG3-to-OpenROADM-3-3-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber3342</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-3-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5213,7 +5293,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-3-3-DEG3-to-OpenROADM-4-2-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4233</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-3-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5237,7 +5317,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-1-DEG3-to-OpenROADM-4-4-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4451</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5261,7 +5341,7 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-4-DEG3-to-OpenROADM-5-1-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5144</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
+
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5285,7 +5365,6 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-2-DEG3-to-OpenROADM-4-3-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber4352</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">10</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-4-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5309,7 +5388,6 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-4-3-DEG3-to-OpenROADM-5-2-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5243</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">10</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-4-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5333,7 +5411,6 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-1-DEG3-to-OpenROADM-5-4-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5411</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-4-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-1-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5357,7 +5434,6 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-4-DEG3-to-OpenROADM-1-1-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1154</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">1</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-1-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-4-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5381,7 +5457,6 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-1-2-DEG3-to-OpenROADM-5-3-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber5312</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">10</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-5-3-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-1-2-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
@@ -5405,7 +5480,6 @@
     <opposite-link xmlns="http://org/openroadm/common/network">OpenROADM-5-3-DEG3-to-OpenROADM-1-2-DEG3</opposite-link>
     <clfi xmlns="http://org/openroadm/common/network">fiber1253</clfi>
     <TE-metric xmlns="http://org/openroadm/common/network">10</TE-metric>
-    <link-latency xmlns="http://org/openroadm/network/topology">10</link-latency>
     <link-type xmlns="http://org/openroadm/common/network">ROADM-TO-ROADM</link-type>
     <source><source-node>OpenROADM-1-2-DEG3</source-node><source-tp>DEG3-TTP-TX</source-tp></source>
     <destination><dest-node>OpenROADM-5-3-DEG3</dest-node><dest-tp>DEG3-TTP-RX</dest-tp></destination>
