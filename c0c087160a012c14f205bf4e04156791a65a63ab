@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "521e04c6_2a745a6e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:55:07Z",
+      "side": 1,
+      "message": "more details on how this has been done would be helpful\nespecially for the review\n\nfor example:\n copied /pasted the portmapping221 class into a pm710 class and just make a few adaptations, declare 710 bean in blueprint, etc",
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "12ce131b_16704219",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
         "patchSetId": 6
@@ -94,6 +111,30 @@
     },
     {
       "key": {
+        "uuid": "e796360d_553cb031",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:55:07Z",
+      "side": 1,
+      "message": "I agree and I also noticed it applies to other methods here like you mentionned in line 1059.\nBut I don\u0027t see many differences with the same method in PortMappingVersion221,but this is also true for the whole class as stated in my comment on a previous version of this file\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/93065/2..5/common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java#95\n\nI assumed Bala has only copied/pasted our work at Orange on 2.2.1 devices and adapted it for 7.1.0 devices, which  is  fine in a first approach in my opinion.\n\nWhat about mutualizing in a util class all the common methods used in the various PortMapping versions classes first, and then split the ones that needs to ?\nThere are also a lot of nested if-structures that needs to be optimized here.\nIt\u0027s probably worth doing all this refactoring work in separate changes...",
+      "parentUuid": "9346b3bf_1295a68d",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 85
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8e45e19_af69780a",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 6
@@ -110,6 +151,69 @@
         "startChar": 4,
         "endLine": 1059,
         "endChar": 101
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9eb2fa5_3da2aaee",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/SortPort710ByName.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:55:07Z",
+      "side": 1,
+      "message": "ATT 2020 ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d321da8_18045bfd",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:55:07Z",
+      "side": 1,
+      "message": "switch/case would be probably more adapted than else/if-blocks here now",
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5489552_837a04d2",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:55:07Z",
+      "side": 1,
+      "message": "2020?",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 20
       },
       "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
