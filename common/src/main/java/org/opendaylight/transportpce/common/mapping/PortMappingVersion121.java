@@ -10,10 +10,7 @@ package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -82,18 +79,13 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PortMappingVersion121 {
+public class PortMappingVersion121 extends PortMappingCommon {
 
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion121.class);
 
     private final DataBroker dataBroker;
     private final DeviceTransactionManager deviceTransactionManager;
     private final OpenRoadmInterfaces openRoadmInterfaces;
-
-    //FNV1 64 bit hash constants
-    private static final BigInteger FNV_PRIME = new BigInteger("100000001b3", 16);
-    private static final BigInteger FNV_INIT = new BigInteger("cbf29ce484222325", 16);
-    private static final BigInteger FNV_MOD = new BigInteger("2").pow(64);
 
     public PortMappingVersion121(DataBroker dataBroker, DeviceTransactionManager deviceTransactionManager,
         OpenRoadmInterfaces openRoadmInterfaces) {
@@ -876,26 +868,5 @@ public class PortMappingVersion121 {
             return null;
         }
         return nodeInfoBldr.build();
-    }
-
-    /**
-     * Implements the FNV-1 64bit algorithm.
-     * FNV-1 128bit would be ideal for 16 bytes but we need an overhead for Base64 encoding.
-     * Otherwise, the hash cannot be stored in a UTF-8 string.
-     * https://www.wikiwand.com/en/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function#/FNV-1_hash
-     * https://github.com/pmdamora/fnv-cracker-app/blob/master/src/main/java/passwordcrack/cracking/HashChecker.java
-     * @param stringdata the String to be hashed
-     * @return the base64 formatted hash string
-     */
-    private String fnv(String stringdata) {
-        BigInteger hash = FNV_INIT;
-        byte[] data = stringdata.getBytes(StandardCharsets.UTF_8);
-
-        for (byte b : data) {
-            hash = hash.multiply(FNV_PRIME).mod(FNV_MOD);
-            hash = hash.xor(BigInteger.valueOf((int) b & 0xff));
-        }
-
-        return Base64.getEncoder().encodeToString(hash.toByteArray());
     }
 }
