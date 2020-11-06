@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "b79976bd_234648a0",
+        "filename": "common/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-06T17:59:22Z",
+      "side": 1,
+      "message": "I don\u0027t see why this dependency would be required.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 21
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "12ce131b_16704219",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
         "patchSetId": 6
@@ -35,6 +58,52 @@
         "startChar": 0,
         "endLine": 62,
         "endChar": 9
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4753af52_7d51bf9b",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-06T17:59:22Z",
+      "side": 1,
+      "message": "unless namesapce",
+      "range": {
+        "startLine": 140,
+        "startChar": 16,
+        "endLine": 141,
+        "endChar": 21
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f05affc_e45a1ab8",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-06T17:59:22Z",
+      "side": 1,
+      "message": "unless namesapce",
+      "range": {
+        "startLine": 166,
+        "startChar": 16,
+        "endLine": 167,
+        "endChar": 21
       },
       "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
@@ -128,6 +197,98 @@
         "startChar": 4,
         "endLine": 215,
         "endChar": 85
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe0a265c_347f8838",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-06T17:59:22Z",
+      "side": 1,
+      "message": "mc-capability-profile-name could be null. You should test it before invoking isEmpty() method to avoid generation of NPE.",
+      "range": {
+        "startLine": 897,
+        "startChar": 16,
+        "endLine": 897,
+        "endChar": 52
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0ed3d68_4906054c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-06T17:59:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 931,
+        "startChar": 16,
+        "endLine": 931,
+        "endChar": 49
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "767898e5_9956233c",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-06T17:59:22Z",
+      "side": 1,
+      "message": "In 7.1.0, a port has no longer supported-interface-capability data. This line should generate a NullPointerException. Should be removed and replaced by adequate processing.",
+      "range": {
+        "startLine": 1024,
+        "startChar": 1,
+        "endLine": 1026,
+        "endChar": 13
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aa40462_407dc3c6",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-06T17:59:22Z",
+      "side": 1,
+      "message": "As such, irrelevant for a port in 7.1.0.",
+      "range": {
+        "startLine": 1039,
+        "startChar": 0,
+        "endLine": 1046,
+        "endChar": 5
       },
       "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
