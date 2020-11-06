@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "25a7a2a5_9dd745a4",
+        "filename": "ordmodels/device/NOTICE",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:25:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "589139fe_8b8592d8",
+      "revId": "3a9d5f681ad9a6ee15c2fd8d5fb13a4927ca973f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8ef9284_c68a0f35",
         "filename": "ordmodels/device/openconfig.LICENSE",
         "patchSetId": 17
@@ -33,6 +51,24 @@
       "revId": "3a9d5f681ad9a6ee15c2fd8d5fb13a4927ca973f",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8f65757_c3853ba0",
+        "filename": "ordmodels/device/openconfig.LICENSE",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:25:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8ef9284_c68a0f35",
+      "revId": "3a9d5f681ad9a6ee15c2fd8d5fb13a4927ca973f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
