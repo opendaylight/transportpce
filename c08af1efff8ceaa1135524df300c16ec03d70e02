@@ -22,6 +22,52 @@
       "revId": "c08af1efff8ceaa1135524df300c16ec03d70e02",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31b3251f_32f32933",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-06T17:59:50Z",
+      "side": 1,
+      "message": "useless namespace",
+      "range": {
+        "startLine": 64,
+        "startChar": 25,
+        "endLine": 64,
+        "endChar": 95
+      },
+      "revId": "c08af1efff8ceaa1135524df300c16ec03d70e02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b026e10_4b75f01b",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-06T17:59:50Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 75,
+        "startChar": 25,
+        "endLine": 75,
+        "endChar": 95
+      },
+      "revId": "c08af1efff8ceaa1135524df300c16ec03d70e02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
