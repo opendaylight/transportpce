@@ -64,6 +64,44 @@ KARAF_LOG = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     "..", "..", "..", "karaf", "target", "assembly", "data", "log", "karaf.log")
 
+INDEX_1_USED_FREQ_MAP = 'AAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                        'AQEBAQEBAQEB'
+
+INDEX_1_2_USED_FREQ_MAP = 'AAAAAAAAAAAAAAAAAAAAAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE' \
+                          'BAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ' \
+                          'EBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBA' \
+                          'QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                          'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE' \
+                          'BAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ' \
+                          'EBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBA' \
+                          'QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB' \
+                          'AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE' \
+                          'BAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ' \
+                          'EBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBA' \
+                          'QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB'
+
+AVAILABLE_FREQ_MAP = "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ" \
+                     "EBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB" \
+                     "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ" \
+                     "EBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB" \
+                     "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ" \
+                     "EBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB" \
+                     "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ" \
+                     "EBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB" \
+                     "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ" \
+                     "EBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB" \
+                     "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB"
+
 process_list = []
 
 if "USE_LIGHTY" in os.environ and os.environ['USE_LIGHTY'] == 'True':
@@ -203,7 +241,7 @@ def delete_request(url):
 
 
 def mount_device(node_id, sim):
-    url = URL_CONFIG_NETCONF_TOPO+"node/"+node_id
+    url = URL_CONFIG_NETCONF_TOPO + "node/" + node_id
     body = {"node": [{
         "node-id": node_id,
         "netconf-node-topology:username": NODES_LOGIN,
@@ -213,10 +251,10 @@ def mount_device(node_id, sim):
         "netconf-node-topology:tcp-only": "false",
         "netconf-node-topology:pass-through": {}}]}
     response = put_request(url, body)
-    if wait_until_log_contains(TPCE_LOG, re.escape("Triggering notification stream NETCONF for node "+node_id), 60):
-        print("Node "+node_id+" correctly added to tpce topology", end='... ', flush=True)
+    if wait_until_log_contains(TPCE_LOG, re.escape("Triggering notification stream NETCONF for node " + node_id), 60):
+        print("Node " + node_id + " correctly added to tpce topology", end='... ', flush=True)
     else:
-        print("Node "+node_id+" still not added to tpce topology", end='... ', flush=True)
+        print("Node " + node_id + " still not added to tpce topology", end='... ', flush=True)
         if response.status_code == requests.codes.ok:
             print("It was probably loaded at start-up", end='... ', flush=True)
         # TODO an else-clause to abort test would probably be nice here
@@ -224,12 +262,12 @@ def mount_device(node_id, sim):
 
 
 def unmount_device(node_id):
-    url = URL_CONFIG_NETCONF_TOPO+"node/"+node_id
+    url = URL_CONFIG_NETCONF_TOPO + "node/" + node_id
     response = delete_request(url)
-    if wait_until_log_contains(TPCE_LOG, re.escape("onDeviceDisConnected: "+node_id), 60):
-        print("Node "+node_id+" correctly deleted from tpce topology", end='... ', flush=True)
+    if wait_until_log_contains(TPCE_LOG, re.escape("onDeviceDisConnected: " + node_id), 60):
+        print("Node " + node_id + " correctly deleted from tpce topology", end='... ', flush=True)
     else:
-        print("Node "+node_id+" still not deleted from tpce topology", end='... ', flush=True)
+        print("Node " + node_id + " still not deleted from tpce topology", end='... ', flush=True)
     return response
 
 
@@ -271,7 +309,7 @@ def connect_rdm_to_xpdr_request(xpdr_node: str, xpdr_num: str, network_num: str,
 
 def check_netconf_node_request(node: str, suffix: str):
     url = URL_CONFIG_NETCONF_TOPO + (
-        "node/" + node + "/yang-ext:mount/org-openroadm-device:org-openroadm-device/" + suffix
+            "node/" + node + "/yang-ext:mount/org-openroadm-device:org-openroadm-device/" + suffix
     )
     return get_request(url)
 
@@ -288,14 +326,14 @@ def get_ordm_topo_request(suffix: str):
 
 def add_oms_attr_request(link: str, attr):
     url = URL_CONFIG_ORDM_TOPO + (
-        "ietf-network-topology:link/" + link + "/org-openroadm-network-topology:OMS-attributes/span"
+            "ietf-network-topology:link/" + link + "/org-openroadm-network-topology:OMS-attributes/span"
     )
     return put_request(url, attr)
 
 
 def del_oms_attr_request(link: str):
     url = URL_CONFIG_ORDM_TOPO + (
-        "ietf-network-topology:link/" + link + "/org-openroadm-network-topology:OMS-attributes/span"
+            "ietf-network-topology:link/" + link + "/org-openroadm-network-topology:OMS-attributes/span"
     )
     return delete_request(url)
 
@@ -426,7 +464,7 @@ def wait_until_log_contains(log_file, regexp, time_to_wait=20):
             filelogs = open(log_file, 'r')
             filelogs.seek(0, 2)
             filefound = True
-            print("Searching for pattern '"+regexp+"' in "+os.path.basename(log_file), end='... ', flush=True)
+            print("Searching for pattern '" + regexp + "' in " + os.path.basename(log_file), end='... ', flush=True)
             compiled_regexp = re.compile(regexp)
             while True:
                 line = filelogs.readline()
@@ -437,7 +475,7 @@ def wait_until_log_contains(log_file, regexp, time_to_wait=20):
                 if not line:
                     time.sleep(0.1)
     except TimeoutError:
-        print("Pattern not found after "+str(time_to_wait), end=" seconds! ", flush=True)
+        print("Pattern not found after " + str(time_to_wait), end=" seconds! ", flush=True)
     except PermissionError:
         print("Permission Error when trying to access the log file", end=" ... ", flush=True)
     finally:
@@ -463,3 +501,8 @@ class TimeOut:
     def __exit__(self, type, value, traceback):
         # pylint: disable=W0622
         signal.alarm(0)
+
+
+def check_freq_map(freq_map):
+    freq_map_array = [int(x) for x in freq_map]
+    return freq_map_array[0:8] == [1, 1, 1, 1, 1, 1, 1, 1] and freq_map_array[8:16] == [1, 1, 1, 1, 1, 1, 1, 1]
