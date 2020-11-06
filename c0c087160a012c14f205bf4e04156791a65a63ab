@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12ce131b_16704219",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:34:12Z",
+      "side": 1,
+      "message": "switch/case is probably more indicated here too now that the number of supported versions is \u003e 2",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 9
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc80c763_2c6e7717",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:34:12Z",
+      "side": 1,
+      "message": "reporting Emmanuelle\u0027s Feedback in 93540:\nperhaps put this in a private function to improve readibility ?",
+      "range": {
+        "startLine": 139,
+        "startChar": 1,
+        "endLine": 192,
+        "endChar": 29
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cb05a1c_39c0f225",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:34:12Z",
+      "side": 1,
+      "message": "ATT 2020 ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9346b3bf_1295a68d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:34:12Z",
+      "side": 1,
+      "message": "Reporting Emmauelles\u0027s feedback in 93540:\nthis is a very, very long method ;-) perhaps it should be easier de maintain and debug if it\u0027s split in shorter method ?",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 85
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8e45e19_af69780a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:34:12Z",
+      "side": 1,
+      "message": "Reporting Emmauelles\u0027s feedback in 93540:\nthis is a very, very long method ;-) perhaps it should be easier de maintain and debug if it\u0027s split in shorter method ?",
+      "range": {
+        "startLine": 1059,
+        "startChar": 4,
+        "endLine": 1059,
+        "endChar": 101
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
