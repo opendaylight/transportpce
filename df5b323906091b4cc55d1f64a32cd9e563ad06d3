@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "dc7766d4_0b444fd1",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:18:50Z",
+      "side": 1,
+      "message": "switch/case is probably more indicated here too now that the number of supported versions is \u003e 2",
+      "range": {
+        "startLine": 56,
+        "startChar": 1,
+        "endLine": 64,
+        "endChar": 21
+      },
+      "revId": "df5b323906091b4cc55d1f64a32cd9e563ad06d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec13bb0b_021f65f3",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
         "patchSetId": 1
@@ -48,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "fedad30b_880b1110",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:18:50Z",
+      "side": 1,
+      "message": "ATT 2020 ?",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "df5b323906091b4cc55d1f64a32cd9e563ad06d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b76d9e7e_e12ece3a",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 1
@@ -59,6 +105,30 @@
       "writtenOn": "2020-11-05T17:13:18Z",
       "side": 1,
       "message": "this is a very, very long method ;-) perhaps it should be easier de maintain and debug if it\u0027s split in shorter method ?",
+      "range": {
+        "startLine": 215,
+        "startChar": 3,
+        "endLine": 215,
+        "endChar": 42
+      },
+      "revId": "df5b323906091b4cc55d1f64a32cd9e563ad06d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20d4ee19_47f80fda",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-06T09:18:50Z",
+      "side": 1,
+      "message": "I don\u0027t see many differences with the same method in PortMappingVersion221 as stated in this thread\n\nhttps://git.opendaylight.org/gerrit/c/transportpce/+/93065/2..5/common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java#95\n\nThe corresponding change have been closed and there is a new Change-ID here.\nBut most of the comments still applied.\nTo avoid reporting the comments already done, I will reactivate the old one and reuses its change-ID here to close the thread here before there are too many comments...",
+      "parentUuid": "b76d9e7e_e12ece3a",
       "range": {
         "startLine": 215,
         "startChar": 3,
