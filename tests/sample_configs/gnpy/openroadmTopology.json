@@ -520,9 +520,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber12",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG1",
                         "dest-tp": "DEG1-TTP-RX"
@@ -552,9 +549,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber13",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG1",
                         "dest-tp": "DEG1-TTP-RX"
@@ -584,9 +578,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber21",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG1",
                         "dest-tp": "DEG1-TTP-RX"
@@ -616,9 +607,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber23",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG2",
                         "dest-tp": "DEG2-TTP-RX"
@@ -648,9 +636,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber25",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG3",
                         "dest-tp": "DEG3-TTP-RX"
@@ -680,9 +665,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber31",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-1-DEG2",
                         "dest-tp": "DEG2-TTP-RX"
@@ -712,9 +694,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber32",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG2",
                         "dest-tp": "DEG2-TTP-RX"
@@ -744,9 +723,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber35",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG2",
                         "dest-tp": "DEG2-TTP-RX"
@@ -776,9 +752,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber34",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG2",
                         "dest-tp": "DEG2-TTP-RX"
@@ -808,9 +781,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber45",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-5-DEG1",
                         "dest-tp": "DEG1-TTP-RX"
@@ -840,9 +810,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber43",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG4",
                         "dest-tp": "DEG4-TTP-RX"
@@ -872,9 +839,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber54",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-4-DEG1",
                         "dest-tp": "DEG1-TTP-RX"
@@ -904,9 +868,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber53",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-3-DEG3",
                         "dest-tp": "DEG3-TTP-RX"
@@ -936,9 +897,6 @@
                         }
                     },
                     "org-openroadm-common-network:link-type": "ROADM-TO-ROADM",
-                    "org-openroadm-common-network:clfi": "fiber52",
-                    "org-openroadm-common-network:TE-metric": 10,
-                    "org-openroadm-network-topology:link-latency": 1,
                     "destination": {
                         "dest-node": "OpenROADM-2-DEG3",
                         "dest-tp": "DEG3-TTP-RX"
@@ -1364,36 +1322,13 @@
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -1431,36 +1366,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":1,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -1498,36 +1410,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":2,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -1596,36 +1485,13 @@
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -1663,36 +1529,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":1,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -1730,36 +1573,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":2,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -1797,36 +1617,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":3,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -1895,36 +1692,13 @@
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -1962,36 +1736,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":1,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2029,36 +1780,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":2,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2096,36 +1824,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":3,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2163,36 +1868,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":4,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2261,36 +1943,13 @@
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2328,36 +1987,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":1,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2395,36 +2031,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":2,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2493,36 +2106,13 @@
                         }
                     ],
                     "org-openroadm-network-topology:srg-attributes": {
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2560,36 +2150,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":1,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2627,36 +2194,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":2,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
@@ -2694,36 +2238,13 @@
                     ],
                     "org-openroadm-network-topology:degree-attributes": {
                         "degree-number":3,
-                        "available-wavelengths": [
+                        "avail-freq-maps": [
                             {
-                                "index": 10
-                            },
-                            {
-                                "index": 9
-                            },
-                            {
-                                "index": 6
-                            },
-                            {
-                                "index": 5
-                            },
-                            {
-                                "index": 8
-                            },
-                            {
-                                "index": 7
-                            },
-                            {
-                                "index": 2
-                            },
-                            {
-                                "index": 1
-                            },
-                            {
-                                "index": 4
-                            },
-                            {
-                                "index": 3
+                                "map-name": "cband",
+                                "start-edge-freq": 191.325,
+                                "freq-map-granularity": 6.25,
+                                "effective-bits": 8,
+                                "freq-map":"AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
                     },
