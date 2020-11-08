@@ -179,7 +179,7 @@ public class ConvertORTopoObjectToTapiTopoObject {
         if (layerProtocols.contains(LayerProtocolName.DSR)) {
             nodeUuid = getNodeUuid4Dsr(onepl, nodeRuleGroupList, ruleList);
         } else if (layerProtocols.contains(LayerProtocolName.PHOTONICMEDIA)) {
-            nodeUuid = getNodeUuid4Phonic(onepl, nodeRuleGroupList, ruleList);
+            nodeUuid = getNodeUuid4Photonic(onepl, nodeRuleGroupList, ruleList);
         } else {
             LOG.error("Undefined LayerProtocolName for {} node {}", nodeNames.get(nodeNames.keySet().iterator().next())
                 .getValueName(), nodeNames.get(nodeNames.keySet().iterator().next()).getValue());
@@ -199,7 +199,7 @@ public class ConvertORTopoObjectToTapiTopoObject {
                 .build();
     }
 
-    private Uuid getNodeUuid4Phonic(Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl,
+    private Uuid getNodeUuid4Photonic(Map<OwnedNodeEdgePointKey, OwnedNodeEdgePoint> onepl,
         Map<NodeRuleGroupKey, NodeRuleGroup> nodeRuleGroupList, Map<RuleKey, Rule> ruleList) {
         Uuid nodeUuid;
         nodeUuid = this.uuidMap.get(String.join("+", this.ietfNodeId, OTSI));
