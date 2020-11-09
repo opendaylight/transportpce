@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a4803dc9_e542f293",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:31:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edff1255_23e878a7",
+      "range": {
+        "startLine": 264,
+        "startChar": 23,
+        "endLine": 264,
+        "endChar": 43
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b0daa79_1f18de94",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61a8938b_f69a85a9",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:31:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b0daa79_1f18de94",
+      "range": {
+        "startLine": 281,
+        "startChar": 17,
+        "endLine": 281,
+        "endChar": 37
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "be8f42af_d2b72b59",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:31:31Z",
+      "side": 1,
+      "message": "No you\u0027re wrong. Look well, there is a new predicate that explains this indentation change",
+      "parentUuid": "6ae08819_80f2dfd8",
+      "range": {
+        "startLine": 403,
+        "startChar": 82,
+        "endLine": 404,
+        "endChar": 38
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d7fb51d_10ba1115",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyException.java",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "777b9d86_2dacfe8c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyException.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:31:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d7fb51d_10ba1115",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "aa92f21a_4ace23e8",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:31:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ee23b06_ef37b10d",
+      "range": {
+        "startLine": 183,
+        "startChar": 11,
+        "endLine": 183,
+        "endChar": 47
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66ec4338_f831a351",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
         "patchSetId": 3
@@ -137,6 +257,30 @@
       "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4f48be2_169954dd",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:31:31Z",
+      "side": 1,
+      "message": "Thanks for these alternative which is indeed much better",
+      "parentUuid": "66ec4338_f831a351",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 9
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "274e9b3f_d0762b16",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/topology/TapiTopologyImplTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:31:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26023922_a4ac97b4",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 11
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7688cb1c_4117e243",
         "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TopologyDataUtils.java",
         "patchSetId": 3
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "03876877_8cf62851",
+        "filename": "tapi/src/test/java/org/opendaylight/transportpce/tapi/utils/TopologyDataUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:31:31Z",
+      "side": 1,
+      "message": "Well seen. An expected usage thought at a moment but that has finally not been useful...",
+      "parentUuid": "7688cb1c_4117e243",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 20
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "107a0c2d_bcfff089",
         "filename": "tox.ini",
         "patchSetId": 3
@@ -197,6 +389,30 @@
       "writtenOn": "2020-11-04T11:09:47Z",
       "side": 1,
       "message": "or simply {tapi221} to disable it only on the gate",
+      "range": {
+        "startLine": 57,
+        "startChar": 2,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "53068fbe_061f3446",
+        "filename": "tox.ini",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:31:31Z",
+      "side": 1,
+      "message": "??",
+      "parentUuid": "107a0c2d_bcfff089",
       "range": {
         "startLine": 57,
         "startChar": 2,
