@@ -16,6 +16,24 @@
       "revId": "2ef6504a2e7926efc111a460693a30f3e8571265",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7c4f37d_55ef93dd",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T09:35:05Z",
+      "side": 1,
+      "message": "Oddly, before you force the usage of lighty, these two lines were not necessary...",
+      "parentUuid": "9c8d9496_53e8cc78",
+      "revId": "2ef6504a2e7926efc111a460693a30f3e8571265",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
