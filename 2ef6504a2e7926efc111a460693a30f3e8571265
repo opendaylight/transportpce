@@ -34,6 +34,24 @@
       "revId": "2ef6504a2e7926efc111a460693a30f3e8571265",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c3f47cba_6ad19a6d",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-09T10:27:53Z",
+      "side": 1,
+      "message": "you mean \u0027were necessary\u0027 ?\n\nI think they are only necessary with karaf since lighty gets memory parameters from its start scripts.\nsee https://git.opendaylight.org/gerrit/c/transportpce/+/93508/1/lighty/src/main/assembly/resources/clean-start-controller.sh",
+      "parentUuid": "e7c4f37d_55ef93dd",
+      "revId": "2ef6504a2e7926efc111a460693a30f3e8571265",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
