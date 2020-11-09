@@ -422,6 +422,30 @@
       "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f4b17453_ce595126",
+        "filename": "tox.ini",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-09T10:21:50Z",
+      "side": 1,
+      "message": "If you need to rework this functest locally, it\u0027s not necessary to remove it completelety from tox.\nYou an only disable it on the gate by removing the py3 profile from this line since\nonly py3 profile operations are performed on the gate.",
+      "parentUuid": "53068fbe_061f3446",
+      "range": {
+        "startLine": 57,
+        "startChar": 2,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "7c4f9c500a27df7ce39f6b5e2bf53095dba36070",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
