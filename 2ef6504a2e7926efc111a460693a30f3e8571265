@@ -52,6 +52,24 @@
       "revId": "2ef6504a2e7926efc111a460693a30f3e8571265",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4f61fa70_f96495c5",
+        "filename": "tests/transportpce_tests/2.2.1/test_tapi.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-09T10:35:20Z",
+      "side": 1,
+      "message": "I can\u0027t explain, but during the development step (based on change 93120), this issues seemed to be solved and I didn\u0027t need these two lines. I have been forced to reintroduce them after my rebase on the last stable/aluminium version (change 93516)",
+      "parentUuid": "c3f47cba_6ad19a6d",
+      "revId": "2ef6504a2e7926efc111a460693a30f3e8571265",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
