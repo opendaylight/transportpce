@@ -71,6 +71,98 @@
     },
     {
       "key": {
+        "uuid": "1516e95e_57dfb16f",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1368,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-11-10T18:32:31Z",
+      "side": 1,
+      "message": "why again?",
+      "range": {
+        "startLine": 1368,
+        "startChar": 0,
+        "endLine": 1368,
+        "endChar": 5
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74982506_52b1be05",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-11-10T18:32:31Z",
+      "side": 1,
+      "message": "Suggestion : In other words, only client/network ports that are undirectly/directly connected to the ROADM insfrastructure are considered for the abstraction.",
+      "range": {
+        "startLine": 1369,
+        "startChar": 62,
+        "endLine": 1371,
+        "endChar": 31
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b2a3c24_58f5a261",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-11-10T18:32:31Z",
+      "side": 1,
+      "message": "unidirectional",
+      "range": {
+        "startLine": 1375,
+        "startChar": 27,
+        "endLine": 1375,
+        "endChar": 39
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "651a28f5_1cf91060",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-11-10T18:32:31Z",
+      "side": 1,
+      "message": "kinds, ..... \"T0 multi-layer topology\"?",
+      "range": {
+        "startLine": 1379,
+        "startChar": 8,
+        "endLine": 1379,
+        "endChar": 9
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "410ce0f7_742d762e",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 1
@@ -87,6 +179,121 @@
         "startChar": 87,
         "endLine": 1381,
         "endChar": 93
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ff7574a_4b034b1c",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-11-10T18:32:31Z",
+      "side": 1,
+      "message": "same  \"Transponder 100GE\"?  ...... That",
+      "range": {
+        "startLine": 1383,
+        "startChar": 1,
+        "endLine": 1383,
+        "endChar": 77
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76648ce5_5e297bd1",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1384,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-11-10T18:32:31Z",
+      "side": 1,
+      "message": "simpler",
+      "range": {
+        "startLine": 1384,
+        "startChar": 18,
+        "endLine": 1384,
+        "endChar": 29
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2446f63a_e03dba16",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-11-10T18:32:31Z",
+      "side": 1,
+      "message": "bottom",
+      "range": {
+        "startLine": 1397,
+        "startChar": 22,
+        "endLine": 1397,
+        "endChar": 29
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d78005d_f7dcf3a1",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-11-10T18:32:31Z",
+      "side": 1,
+      "message": "100G Transponders",
+      "range": {
+        "startLine": 1425,
+        "startChar": 75,
+        "endLine": 1425,
+        "endChar": 90
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2faeffa_ca310a71",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 7217
+      },
+      "writtenOn": "2020-11-10T18:32:31Z",
+      "side": 1,
+      "message": "point-to-point 100GE service running over a wavelength",
+      "range": {
+        "startLine": 1426,
+        "startChar": 33,
+        "endLine": 1426,
+        "endChar": 79
       },
       "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
