@@ -1340,6 +1340,106 @@ Checking 10GE/ODU2e service connectivity
     here, the <otn-node-id> corresponds to the node-id as appearing in "otn-topology" layer
 
 
+odl-transportpce-tapi
+---------------------
+
+This feature allows TransportPCE application to expose at its northband interface other APIs than
+those defined by the OpenROADM MSA. With this feature, TransportPCE provides part of the Transport-API
+specified by the Open Networking Fondation. More specifically, part of the Topology Service component
+is implemented, allowing to expose to higher level applications an abstraction of its OpenROADM
+topologies in the form of topologies respecting the T-API modelling. The current version of TransportPCE
+implements the *tapi-topology.yang* mddel in the revision 2018-12-10 (T-API v2.1.2).
+
+
+-  RPC call
+
+   -  get-topology-details
+
+As in IETF or OpenROADM topologies, T-API topologies are composed of lists of nodes and links that
+abstracts a set of network resources. T-API specifies the *T0 - Multi-layer topology* which is, as
+indicated by its name, a single topology that collapses network logical abstraction for all network
+layers. Thus, an OpenROADM device as, for example, an OTN xponder that manages the following network
+layers ETH, ODU, OTU, Optical wavelength, will be represented in T-API T0 topology by two nodes:
+one *DSR/ODU* node and one *Photonic Media* node. Each of them are linked together through one or
+several *transitional links* depending on the number of network/line ports on the device.
+
+Aluminium SR2 provides a complete refactoring of this module, handling the same way multi-layer
+abstraction of any Xponder terminal device, whether it is a 100G transponder, an OTN muxponder or
+again an OTN switch. For all these devices, the implementation manages the fact that only relevant
+ports must appear in the resulting TAPI topology abstraction. In other words, only client and/or
+network ports for which their associated network ports are connected to the ROADM insfrastructure are
+considered for the abstraction.
+Morevoer, the whole ROADM infrastructure of the network is also abstracted towards a single photonic
+node. Therefore, a pair of unidirectional xponder-output/xpondr-input links present in *openroadm-topology*
+is represented by a bidirectional *OMS* link in TAPI topology.
+In the same way, a pair of unidirection OTN links (OTU4, ODU4) present in *otn-topology* is also
+represented by a bidirectional OTN link in TAPI topology, while retaining their available bandwidth
+characteristics.
+
+Two kind of topologies are currenlty implemented. The first one is the T0 multi-layer topology defined
+in the reference implementation of T-API. This topology gives an abstraction from data coming from
+openroadm-topology and otn-topology. Such topology may be rather complex since most of device are
+represented through several nodes and links.
+Another topology, named *Transponder 100GE*, is also implemented. that latter provides a higher level
+abstraction, much more simple, for the specific case of 100GE transponder, in the form of a single
+DSR node.
+
+The figure below shows an example of TAPI abstractions as performed by TransportPCE in Aluminium SR2.
+
+.. figure:: ./images/TransportPCE-tapi-abstraction.jpg
+   :alt: Example of T0-multi-layer TAPI abstraction in TransportPCE
+
+In this specific case, as far as the "A" side is concerned, we connect TransportPCE to two xponder
+terminal devices at the netconf level :
+- XPDR-A1 is a 100GE transponder and is represented by XPDR-A1-XPDR1 node in *otn-topology*
+- SPDR-SA1 is an otn xponder that actually contains in its device configuration datastore two otn
+xponder nodes (the otn muxponder 10GE=>100G SPDR-SA1-XPDR1 and the otn switch 4x100GE => 4x100G SPDR-SA1-XPDR2)
+As represented on the bootom part of the figure, only one network port of XPDR-A1-XPDR1 is connected
+to the ROADM insfrastructure, and only network port of the otn muxponder is also attached to the
+ROADM infrastructure.
+Such network configuration will result in the TAPI *T0 - Multi-layer topology* abstraction as
+represented in the center of the figure. Let's notice that the otn switch (SPDR-SA1-XPDR2), not
+being attached to the ROADM infrastructure, is not abstracted.
+Moreover, 100GE transponder being connected, the TAPI *Transponder 100GE* topology will result in a
+single layer DSR node with only the two Owned Node Edge Ports representing the two 100GE client ports
+of respectively XPDR-A1-XPDR1 and XPDR-C1-XPDR1...
+
+
+**REST API** : *POST /restconf/operations/tapi-topology:get-topology-details*
+
+This request builds the TAPI *T0 - Multi-layer topology* abstraction with regard to the current
+state of *openroadm-topology* and *otn-topology* topologies stored in OpenDaylight datastores.
+
+**Sample JSON Data**
+
+.. code:: json
+
+    {
+      "tapi-topology:input": {
+        "tapi-topology:topology-id-or-name": "T0 - Multi-layer topology"
+       }
+    }
+
+This request builds the TAPI *Transponder 100GE* abstraction with regard to the current state of
+*openroadm-topology* and *otn-topology* topologies stored in OpenDaylight datastores.
+Its main interest is to simply and directly retreive 100GE client ports of 100Transponders that may
+be connected together, through a point-to-point 100GE over a wavelength service.
+
+.. code:: json
+
+    {
+      "tapi-topology:input": {
+        "tapi-topology:topology-id-or-name": "Transponder 100GE"
+        }
+    }
+
+
+.. note::
+
+    As for the *T0 multi-layer* topology, only 100GE client port whose their associated 100G line
+    port is connected to Add/Drop nodes of the ROADM infrastructure are retreived in order to
+    abstract only relevant information.
+
 Help
 ----
 
