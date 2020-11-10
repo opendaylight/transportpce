@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e016ea4_19919bb5",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-10T14:11:06Z",
+      "side": 1,
+      "message": "northbound ?",
+      "range": {
+        "startLine": 1346,
+        "startChar": 62,
+        "endLine": 1346,
+        "endChar": 72
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2661b1b_7eb53067",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-10T14:11:06Z",
+      "side": 1,
+      "message": "model",
+      "range": {
+        "startLine": 1351,
+        "startChar": 35,
+        "endLine": 1351,
+        "endChar": 41
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa34769e_78d214af",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-10T14:11:06Z",
+      "side": 1,
+      "message": "abstract",
+      "range": {
+        "startLine": 1359,
+        "startChar": 0,
+        "endLine": 1359,
+        "endChar": 10
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "410ce0f7_742d762e",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-10T14:11:06Z",
+      "side": 1,
+      "message": "devices",
+      "range": {
+        "startLine": 1381,
+        "startChar": 87,
+        "endLine": 1381,
+        "endChar": 93
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
