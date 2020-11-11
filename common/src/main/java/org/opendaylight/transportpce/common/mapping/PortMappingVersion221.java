@@ -418,31 +418,33 @@ public class PortMappingVersion221 {
             }
         }
 
-        if (device.getConnectionMap() != null) {
+        if (device.getConnectionMap() == null) {
+            LOG.warn("No connection-map inside device configuration");
+        } else {
             Collection<ConnectionMap> connectionMap = deviceObject.get().nonnullConnectionMap().values();
-            String slcp = null;
-            String dlcp = null;
             for (ConnectionMap cm : connectionMap) {
+                String slcp = null;
+                String dlcp = null;
                 String skey = cm.getSource().getCircuitPackName() + "+" + cm.getSource().getPortName();
                 if (lcpMap.containsKey(skey)) {
                     slcp = lcpMap.get(skey);
                 }
                 Destination destination0 = cm.nonnullDestination().values().iterator().next();
                 String dkey = destination0.getCircuitPackName() + "+" + destination0.getPortName();
+                if (slcp == null) {
+                    LOG.error("Error in connection-map analysis for source {} and destination (circuitpack+port) {}",
+                        skey, dkey);
+                    continue;
+                }
                 if (lcpMap.containsKey(dkey)) {
                     dlcp = lcpMap.get(dkey);
                 }
-                if (slcp != null) {
-                    Mapping mapping = mappingMap.get(slcp);
-                    mappingMap.remove(slcp);
-                    portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping, dlcp, null));
-                } else {
-                    LOG.error("Error in connection-map analysis");
-                }
+                Mapping mapping = mappingMap.get(slcp);
+                mappingMap.remove(slcp);
+                portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping, dlcp, null));
             }
-        } else {
-            LOG.warn("No connection-map inside device configuration");
         }
+
         if (device.getOduSwitchingPools() != null) {
             Collection<OduSwitchingPools> oduSwithcingPools = device.nonnullOduSwitchingPools().values();
             List<SwitchingPoolLcp> switchingPoolList = new ArrayList<>();
