@@ -444,8 +444,12 @@ public class PortMappingVersion221 {
                     mappingMap.remove(slcp);
                     portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping, dlcp, null));
                 } else {
-                    LOG.error("Error in connection-map analysis");
+                    LOG.error("Error in connection-map analysis for source {} and "
+                        + "destination (circuitpack+port) {}", skey, dkey);
                 }
+                // Reassign slcp and lcp to null
+                slcp = null;
+                dlcp = null;
             }
         } else {
             LOG.warn("No connection-map inside device configuration");
