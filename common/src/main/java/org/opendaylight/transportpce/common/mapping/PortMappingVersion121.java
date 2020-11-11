@@ -294,10 +294,11 @@ public class PortMappingVersion121 {
                 }
             }
         }
+
         Collection<ConnectionMap> connectionMap = deviceObject.get().nonnullConnectionMap().values();
-        String slcp = null;
-        String dlcp = null;
         for (ConnectionMap cm : connectionMap) {
+            String slcp = null;
+            String dlcp = null;
             String skey = cm.getSource().getCircuitPackName() + "+" + cm.getSource().getPortName();
             if (lcpMap.containsKey(skey)) {
                 slcp = lcpMap.get(skey);
@@ -307,14 +308,16 @@ public class PortMappingVersion121 {
             if (lcpMap.containsKey(dkey)) {
                 dlcp = lcpMap.get(dkey);
             }
-            if (slcp != null) {
-                Mapping mapping = mappingMap.get(slcp);
-                mappingMap.remove(slcp);
-                portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping, dlcp));
-            } else {
-                LOG.error("Error in connection-map analysis");
+            if (slcp == null) {
+                LOG.error("Error in connection-map analysis for source {} and destination (circuitpack+port) {}",
+                    skey, dkey);
+                continue;
             }
+            Mapping mapping = mappingMap.get(slcp);
+            mappingMap.remove(slcp);
+            portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping, dlcp));
         }
+
         if (!mappingMap.isEmpty()) {
             for (Mapping m : mappingMap.values()) {
                 portMapList.add(m);
