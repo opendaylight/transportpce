@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0c72f7b7_aff6087f",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-12T14:35:12Z",
+      "side": 1,
+      "message": "this is the representation of a byte array encoding in base64 for a freq map with only first wavelength used (INDEX_1_USED_FREQ_MAP), first and second wavelength used ((INDEX_1_2_USED_FREQ_MAP) and all wavelength are available (AVAILABLE_FREQ_MAP). I thought that the name of the constants were enough for people from optical domain.",
+      "parentUuid": "43d2b96b_e94b132c",
+      "range": {
+        "startLine": 67,
+        "startChar": 1,
+        "endLine": 103,
+        "endChar": 107
+      },
+      "revId": "33fc334a392cea91abde2d28be9ce5f6a5af5780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8e8ecfa7_3f297515",
         "filename": "tests/transportpce_tests/common/test_utils.py",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2020-11-12T14:12:38Z",
       "side": 1,
       "message": "I am not sure this is useful for this test ?",
+      "range": {
+        "startLine": 157,
+        "startChar": 39,
+        "endLine": 157,
+        "endChar": 48
+      },
+      "revId": "33fc334a392cea91abde2d28be9ce5f6a5af5780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3250d58b_4d2e16f6",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-12T14:35:12Z",
+      "side": 1,
+      "message": "I forgot to remove it after my test. I will remove it.",
+      "parentUuid": "8e8ecfa7_3f297515",
       "range": {
         "startLine": 157,
         "startChar": 39,
