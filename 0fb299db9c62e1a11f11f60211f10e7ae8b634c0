@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bda14271_2d71e98c",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-12T16:14:34Z",
+      "side": 1,
+      "message": "Is this Link1Builder really necessary?",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 87
+      },
+      "revId": "0fb299db9c62e1a11f11f60211f10e7ae8b634c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "549ca00a_4575c9dd",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-12T16:14:34Z",
+      "side": 1,
+      "message": "Is it really necessary?",
+      "range": {
+        "startLine": 141,
+        "startChar": 8,
+        "endLine": 141,
+        "endChar": 51
+      },
+      "revId": "0fb299db9c62e1a11f11f60211f10e7ae8b634c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13c453bf_b083b935",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-12T16:14:34Z",
+      "side": 1,
+      "message": "Is it really necessary?",
+      "range": {
+        "startLine": 147,
+        "startChar": 12,
+        "endLine": 147,
+        "endChar": 46
+      },
+      "revId": "0fb299db9c62e1a11f11f60211f10e7ae8b634c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
