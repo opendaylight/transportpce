@@ -34,6 +34,24 @@
       "revId": "f3b8ea437e102ec3f6a9657831b2447ec82ddeb4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab308d52_144f68dd",
+        "filename": "ordmodels/common/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/pm/types/rev200327/PmDataTypeBuilder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-12T15:02:25Z",
+      "side": 1,
+      "message": "I just follow the existing pattern ;-) I will remove it",
+      "parentUuid": "330a2f16_b459e0c4",
+      "revId": "f3b8ea437e102ec3f6a9657831b2447ec82ddeb4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
