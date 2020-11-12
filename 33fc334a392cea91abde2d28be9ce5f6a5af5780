@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43d2b96b_e94b132c",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-12T14:12:38Z",
+      "side": 1,
+      "message": "Is it random data used for padding? Or does it have any real meaning ?\nMore explanations in the commit message or in a comment here would help.",
+      "range": {
+        "startLine": 67,
+        "startChar": 1,
+        "endLine": 103,
+        "endChar": 107
+      },
+      "revId": "33fc334a392cea91abde2d28be9ce5f6a5af5780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e8ecfa7_3f297515",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-12T14:12:38Z",
+      "side": 1,
+      "message": "I am not sure this is useful for this test ?",
+      "range": {
+        "startLine": 157,
+        "startChar": 39,
+        "endLine": 157,
+        "endChar": 48
+      },
+      "revId": "33fc334a392cea91abde2d28be9ce5f6a5af5780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed4446e2_29445444",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-12T14:12:38Z",
+      "side": 1,
+      "message": "It makes sense.\nI am surprised this is not reported by the current pylint profile config.",
+      "range": {
+        "startLine": 255,
+        "startChar": 21,
+        "endLine": 255,
+        "endChar": 24
+      },
+      "revId": "33fc334a392cea91abde2d28be9ce5f6a5af5780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
