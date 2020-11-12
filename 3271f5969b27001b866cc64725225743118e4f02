@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75bde41c_f7d5c75f",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-types@2020-05-29.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-12T14:21:08Z",
+      "side": 1,
+      "message": "If I understant well, this restores the original version of the file and \nthis is comment is no more true.\nAnyway, it is worth mentionning that modification in the comit message.",
+      "range": {
+        "startLine": 342,
+        "startChar": 2,
+        "endLine": 342,
+        "endChar": 89
+      },
+      "revId": "3271f5969b27001b866cc64725225743118e4f02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
