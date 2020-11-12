@@ -99,6 +99,8 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// FIXME: many common pieces of code between PortMapping Versions 121 and 221 and 710
+// some mutualization would be helpful
 public class PortMappingVersion710 {
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion710.class);
 
@@ -128,7 +130,7 @@ public class PortMappingVersion710 {
             return false;
         }
         deviceInfo = deviceInfoOptional.get();
-        nodeInfo = createNodeInfo(deviceInfo, nodeId);
+        nodeInfo = createNodeInfo(deviceInfo);
         if (nodeInfo == null) {
             return false;
         }
@@ -1179,15 +1181,17 @@ public class PortMappingVersion710 {
         return true;
     }
 
-    private NodeInfo createNodeInfo(Info deviceInfo, String nodeId) {
-        NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder();
+    private NodeInfo createNodeInfo(Info deviceInfo) {
         if (deviceInfo.getNodeType() == null) {
             // TODO make mandatory in yang
             LOG.error("Node type field is missing");
             return null;
         }
 
-        nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._710).setNodeType(deviceInfo.getNodeType());
+        NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder()
+                .setOpenroadmVersion(OpenroadmVersion._710)
+                .setNodeType(deviceInfo.getNodeType());
+        // TODO: 221 versions expects an int value - need to check whether it is bug or an evolution here
         if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
             nodeInfoBldr.setNodeClli(deviceInfo.getClli());
         } else {

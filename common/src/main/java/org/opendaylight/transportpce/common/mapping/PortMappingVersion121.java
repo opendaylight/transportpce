@@ -79,6 +79,8 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// FIXME: many common pieces of code between PortMapping Versions 121 and 221 and 710
+// some mutualization would be helpful
 public class PortMappingVersion121 {
 
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion121.class);
@@ -150,33 +152,32 @@ public class PortMappingVersion121 {
         InstanceIdentifier<Ports> portIId = InstanceIdentifier.create(OrgOpenroadmDevice.class)
             .child(CircuitPacks.class, new CircuitPacksKey(oldMapping.getSupportingCircuitPackName()))
             .child(Ports.class, new PortsKey(oldMapping.getSupportingPort()));
-        if ((oldMapping != null) && (nodeId != null)) {
-            try {
-                Optional<Ports> portObject = deviceTransactionManager.getDataFromDevice(nodeId,
-                    LogicalDatastoreType.OPERATIONAL, portIId, Timeouts.DEVICE_READ_TIMEOUT,
-                    Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                if (portObject.isPresent()) {
-                    Ports port = portObject.get();
-                    Mapping newMapping = createMappingObject(nodeId, port, oldMapping.getSupportingCircuitPackName(),
-                        oldMapping.getLogicalConnectionPoint());
-                    LOG.info("Updating old mapping Data {} for {} of {} by new mapping data {}", oldMapping,
-                        oldMapping.getLogicalConnectionPoint(), nodeId, newMapping);
-                    final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
-                    InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
-                        .child(Nodes.class, new NodesKey(nodeId))
-                        .child(Mapping.class, new MappingKey(oldMapping.getLogicalConnectionPoint()));
-                    writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, mapIID, newMapping);
-                    FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
-                    commit.get();
-                    return true;
-                }
-                return false;
-            } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Error updating Mapping {} for node {}", oldMapping.getLogicalConnectionPoint(), nodeId, e);
+        if ((oldMapping == null) || (nodeId == null)) {
+            LOG.error("Impossible to update mapping");
+            return false;
+        }
+        try {
+            Optional<Ports> portObject = deviceTransactionManager.getDataFromDevice(nodeId,
+                LogicalDatastoreType.OPERATIONAL, portIId, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            if (!portObject.isPresent()) {
                 return false;
             }
-        } else {
-            LOG.error("Impossible to update mapping");
+            Ports port = portObject.get();
+            Mapping newMapping = createMappingObject(nodeId, port, oldMapping.getSupportingCircuitPackName(),
+                oldMapping.getLogicalConnectionPoint());
+            LOG.info("Updating old mapping Data {} for {} of {} by new mapping data {}", oldMapping,
+                oldMapping.getLogicalConnectionPoint(), nodeId, newMapping);
+            final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
+            InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
+                .child(Nodes.class, new NodesKey(nodeId))
+                .child(Mapping.class, new MappingKey(oldMapping.getLogicalConnectionPoint()));
+            writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, mapIID, newMapping);
+            FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
+            commit.get();
+            return true;
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Error updating Mapping {} for node {}", oldMapping.getLogicalConnectionPoint(), nodeId, e);
             return false;
         }
     }
@@ -838,35 +839,42 @@ public class PortMappingVersion121 {
     }
 
     private NodeInfo createNodeInfo(Info deviceInfo) {
-        NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder();
-        if (deviceInfo.getNodeType() != null) {
-            nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._121);
-            if (deviceInfo.getNodeType().getIntValue() == 1) {
-                nodeInfoBldr.setNodeType(NodeTypes.Rdm);
-            } else if (deviceInfo.getNodeType().getIntValue() == 2) {
-                nodeInfoBldr.setNodeType(NodeTypes.Xpdr);
-            } else {
-                LOG.error("Error with node-type of {}", deviceInfo.getNodeId());
-            }
-            if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
-                nodeInfoBldr.setNodeClli(deviceInfo.getClli());
-            } else {
-                nodeInfoBldr.setNodeClli("defaultCLLI");
-            }
-            if (deviceInfo.getModel() != null) {
-                nodeInfoBldr.setNodeModel(deviceInfo.getModel());
-            }
-            if (deviceInfo.getVendor() != null) {
-                nodeInfoBldr.setNodeVendor(deviceInfo.getVendor());
-            }
-            if (deviceInfo.getIpAddress() != null) {
-                nodeInfoBldr.setNodeIpAddress(deviceInfo.getIpAddress());
-            }
-        } else {
-         // TODO make mandatory in yang
+        if (deviceInfo.getNodeType() == null) {
+            // TODO make mandatory in yang
             LOG.error("Node type field is missing");
             return null;
         }
+
+        NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder()
+                .setOpenroadmVersion(OpenroadmVersion._121);
+        switch (deviceInfo.getNodeType().getIntValue()) {
+            case 1:
+            case 2:
+                nodeInfoBldr.setNodeType(NodeTypes.forValue(deviceInfo.getNodeType().getIntValue()));
+                break;
+            default:
+                LOG.error("Error with node-type of {}", deviceInfo.getNodeId());
+                // TODO: is this protection useful ? it is not present in Portmapping 221
+        }
+        if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
+            nodeInfoBldr.setNodeClli(deviceInfo.getClli());
+        } else {
+            nodeInfoBldr.setNodeClli("defaultCLLI");
+        }
+
+        if (deviceInfo.getModel() != null) {
+            nodeInfoBldr.setNodeModel(deviceInfo.getModel());
+        }
+
+        if (deviceInfo.getVendor() != null) {
+            nodeInfoBldr.setNodeVendor(deviceInfo.getVendor());
+        }
+
+        if (deviceInfo.getIpAddress() != null) {
+            nodeInfoBldr.setNodeIpAddress(deviceInfo.getIpAddress());
+        }
+
         return nodeInfoBldr.build();
     }
+
 }
