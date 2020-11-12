@@ -96,6 +96,8 @@ import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// FIXME: many common pieces of code between PortMapping Versions 121 and 221 and 710
+// some mutualization would be helpful
 public class PortMappingVersion221 {
     private static final Logger LOG = LoggerFactory.getLogger(PortMappingVersion221.class);
 
@@ -118,14 +120,12 @@ public class PortMappingVersion221 {
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(
                 nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        Info deviceInfo;
-        NodeInfo nodeInfo;
         if (!deviceInfoOptional.isPresent()) {
             LOG.warn("Device info subtree is absent for {}", nodeId);
             return false;
         }
-        deviceInfo = deviceInfoOptional.get();
-        nodeInfo = createNodeInfo(deviceInfo, nodeId);
+        Info deviceInfo = deviceInfoOptional.get();
+        NodeInfo nodeInfo = createNodeInfo(deviceInfo);
         if (nodeInfo == null) {
             return false;
         }
@@ -208,25 +208,22 @@ public class PortMappingVersion221 {
         Optional<OrgOpenroadmDevice> deviceObject = deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, deviceIID,
             Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        OrgOpenroadmDevice device = null;
         if (!deviceObject.isPresent()) {
             LOG.error("Impossible to get device configuration for node {}", nodeId);
             return false;
         }
-        device = deviceObject.get();
+        OrgOpenroadmDevice device = deviceObject.get();
+        if (device.getCircuitPacks() == null) {
+            LOG.warn("Circuit Packs are not present for {}", nodeId);
+            return false;
+        }
         // Variable to keep track of number of line ports
         int line = 1;
         // Variable to keep track of number of client ports
         int client = 1;
         Map<String, String> lcpMap = new HashMap<>();
         Map<String, Mapping> mappingMap = new HashMap<>();
-
-        List<CircuitPacks> circuitPackList = null;
-        if (device.getCircuitPacks() == null) {
-            LOG.warn("Circuit Packs are not present for {}", nodeId);
-            return false;
-        }
-        circuitPackList = new ArrayList<>(deviceObject.get().nonnullCircuitPacks().values());
+        List<CircuitPacks> circuitPackList = new ArrayList<>(device.nonnullCircuitPacks().values());
         circuitPackList.sort(Comparator.comparing(CircuitPack::getCircuitPackName));
 
         if (device.getXponder() == null) {
@@ -834,11 +831,10 @@ public class PortMappingVersion221 {
         Nodes nodes = nodesBldr.build();
         nodesList.put(nodes.key(),nodes);
 
-        NetworkBuilder nwBldr = new NetworkBuilder().setNodes(nodesList);
+        Network network = new NetworkBuilder().setNodes(nodesList).build();
 
         final WriteTransaction writeTransaction = dataBroker.newWriteOnlyTransaction();
         InstanceIdentifier<Network> nodesIID = InstanceIdentifier.builder(Network.class).build();
-        Network network = nwBldr.build();
         writeTransaction.merge(LogicalDatastoreType.CONFIGURATION, nodesIID, network);
         FluentFuture<? extends @NonNull CommitInfo> commit = writeTransaction.commit();
         try {
@@ -909,11 +905,14 @@ public class PortMappingVersion221 {
     }
 
     private Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
-        String logicalConnectionPoint) {
-        MappingBuilder mpBldr = new MappingBuilder();
-        mpBldr.withKey(new MappingKey(logicalConnectionPoint)).setLogicalConnectionPoint(logicalConnectionPoint)
-            .setSupportingCircuitPackName(circuitPackName).setSupportingPort(port.getPortName())
-            .setPortDirection(port.getPortDirection().getName());
+            String logicalConnectionPoint) {
+
+        MappingBuilder mpBldr = new MappingBuilder()
+                .withKey(new MappingKey(logicalConnectionPoint))
+                .setLogicalConnectionPoint(logicalConnectionPoint)
+                .setSupportingCircuitPackName(circuitPackName)
+                .setSupportingPort(port.getPortName())
+                .setPortDirection(port.getPortDirection().getName());
 
         // Get OMS and OTS interface provisioned on the TTP's
         if ((logicalConnectionPoint.contains(StringConstants.TTP_TOKEN)
@@ -952,42 +951,42 @@ public class PortMappingVersion221 {
     private Mapping createXpdrMappingObject(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint, String partnerLcp, Mapping mapping, String connectionMapLcp,
             XpdrNodeTypes xpdrNodeType) {
-        MappingBuilder mpBldr;
+
         if (mapping != null && connectionMapLcp != null) {
             // update existing mapping
-            mpBldr = new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp);
-        } else {
-            // create a new mapping
-            String nodeIdLcp = nodeId + "-" + logicalConnectionPoint;
-            mpBldr = new MappingBuilder()
+            return new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp).build();
+        }
+
+        // create a new mapping
+        String nodeIdLcp = nodeId + "-" + logicalConnectionPoint;
+        MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
                 .setSupportingCircuitPackName(circuitPackName)
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName())
                 .setLcpHashVal(FnvUtils.fnv1_64(nodeIdLcp));
-            if (port.getPortQual() != null) {
-                mpBldr.setPortQual(port.getPortQual().getName());
-            }
-            if (xpdrNodeType != null) {
-                mpBldr.setXponderType(
-                    org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129
-                        .XpdrNodeTypes.forValue(xpdrNodeType.getIntValue()));
-            }
-            if (partnerLcp != null) {
-                mpBldr.setPartnerLcp(partnerLcp);
-            }
-            if (port.getSupportedInterfaceCapability() != null) {
-                List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
-                    .SupportedIfCapability>> supportedIntf = new ArrayList<>();
-                for (Class<? extends SupportedIfCapability> sup: port.getSupportedInterfaceCapability()) {
-                    Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
-                        .SupportedIfCapability> sup1 = (Class<? extends org.opendaylight.yang.gen.v1
+        if (port.getPortQual() != null) {
+            mpBldr.setPortQual(port.getPortQual().getName());
+        }
+        if (xpdrNodeType != null) {
+            mpBldr.setXponderType(
+                org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129
+                    .XpdrNodeTypes.forValue(xpdrNodeType.getIntValue()));
+        }
+        if (partnerLcp != null) {
+            mpBldr.setPartnerLcp(partnerLcp);
+        }
+        if (port.getSupportedInterfaceCapability() != null) {
+            List<Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+                .SupportedIfCapability>> supportedIntf = new ArrayList<>();
+            for (Class<? extends SupportedIfCapability> sup: port.getSupportedInterfaceCapability()) {
+                Class<? extends org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327
+                    .SupportedIfCapability> sup1 = (Class<? extends org.opendaylight.yang.gen.v1
                         .http.org.openroadm.port.types.rev200327.SupportedIfCapability>) sup;
-                    supportedIntf.add(sup1);
-                }
-                mpBldr.setSupportedInterfaceCapability(supportedIntf);
+                supportedIntf.add(sup1);
             }
+            mpBldr.setSupportedInterfaceCapability(supportedIntf);
         }
         return mpBldr.build();
     }
@@ -1132,30 +1131,28 @@ public class PortMappingVersion221 {
         return true;
     }
 
-    private NodeInfo createNodeInfo(Info deviceInfo, String nodeId) {
-        NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder();
+    private NodeInfo createNodeInfo(Info deviceInfo) {
+
         if (deviceInfo.getNodeType() == null) {
             // TODO make mandatory in yang
             LOG.error("Node type field is missing");
             return null;
         }
 
-        nodeInfoBldr.setOpenroadmVersion(OpenroadmVersion._221).setNodeType(NodeTypes.forValue(deviceInfo
-            .getNodeType().getIntValue()));
+        NodeInfoBuilder nodeInfoBldr = new NodeInfoBuilder()
+                .setOpenroadmVersion(OpenroadmVersion._221)
+                .setNodeType(NodeTypes.forValue(deviceInfo.getNodeType().getIntValue()));
         if (deviceInfo.getClli() != null && !deviceInfo.getClli().isEmpty()) {
             nodeInfoBldr.setNodeClli(deviceInfo.getClli());
         } else {
             nodeInfoBldr.setNodeClli("defaultCLLI");
         }
-
         if (deviceInfo.getModel() != null) {
             nodeInfoBldr.setNodeModel(deviceInfo.getModel());
         }
-
         if (deviceInfo.getVendor() != null) {
             nodeInfoBldr.setNodeVendor(deviceInfo.getVendor());
         }
-
         if (deviceInfo.getIpAddress() != null) {
             nodeInfoBldr.setNodeIpAddress(deviceInfo.getIpAddress());
         }
