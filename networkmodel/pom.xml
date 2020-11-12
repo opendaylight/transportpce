@@ -41,6 +41,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <version>${project.version}</version>
     </dependency>
 
+    <!-- Dependency for NETCONF event handling -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+
     <!-- Sodium bump: javax.annotation.Nullable and friends -->
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
