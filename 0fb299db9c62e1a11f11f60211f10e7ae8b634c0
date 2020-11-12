@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d023e3c9_c5fffc3a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/OrdLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-12T18:12:13Z",
+      "side": 1,
+      "message": "I dismissed the variable and put new Link1Builder().setOppositeLink(oppositeLinkId); directly in line 57",
+      "parentUuid": "bda14271_2d71e98c",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 87
+      },
+      "revId": "0fb299db9c62e1a11f11f60211f10e7ae8b634c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "549ca00a_4575c9dd",
         "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
         "patchSetId": 1
@@ -59,6 +83,30 @@
       "writtenOn": "2020-11-12T16:14:34Z",
       "side": 1,
       "message": "Is it really necessary?",
+      "range": {
+        "startLine": 147,
+        "startChar": 12,
+        "endLine": 147,
+        "endChar": 46
+      },
+      "revId": "0fb299db9c62e1a11f11f60211f10e7ae8b634c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "324978cf_5885092a",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-12T18:12:13Z",
+      "side": 1,
+      "message": "I don\u0027t know. It\u0027s a more a functional question than a software question :-) Do we really need to add augmentation of an empty link ? I you can answer it would be great and I will be able to update the code :-)",
+      "parentUuid": "13c453bf_b083b935",
       "range": {
         "startLine": 147,
         "startChar": 12,
