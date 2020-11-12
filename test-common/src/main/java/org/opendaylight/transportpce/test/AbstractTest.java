@@ -16,9 +16,13 @@ import org.opendaylight.transportpce.common.DataStoreContextImpl;
 
 public abstract class AbstractTest {
 
-    private static DataStoreContext dataStoreContextUtil = new DataStoreContextImpl();
+    private final DataStoreContext dataStoreContextUtil;
 
-    public static DataBroker getDataBroker() {
+    protected AbstractTest() {
+        dataStoreContextUtil = new DataStoreContextImpl();
+    }
+
+    public DataBroker getDataBroker() {
         return dataStoreContextUtil.getDataBroker();
     }
 
@@ -31,7 +35,7 @@ public abstract class AbstractTest {
         return dataStoreContextUtil.getDOMDataBroker();
     }
 
-    public static DataStoreContext getDataStoreContextUtil() {
+    public DataStoreContext getDataStoreContextUtil() {
         return dataStoreContextUtil;
     }
 
