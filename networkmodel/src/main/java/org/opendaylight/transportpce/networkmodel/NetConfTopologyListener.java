@@ -106,7 +106,7 @@ public class NetConfTopologyListener implements DataTreeChangeListener<Node> {
                 notificationService.get().registerNotificationListener(deOperationsListener);
 
             final OrgOpenroadmDeviceListener deviceListener = new DeviceListener(this.deviceTransactionManager,
-                    nodeId);
+                    nodeId, this.networkModelService);
             LOG.info("Registering notification listener on OrgOpenroadmDeviceListener for node: {}", nodeId);
             final ListenerRegistration<OrgOpenroadmDeviceListener> accessDeviceNotificationListenerRegistration =
                 notificationService.get().registerNotificationListener(deviceListener);
