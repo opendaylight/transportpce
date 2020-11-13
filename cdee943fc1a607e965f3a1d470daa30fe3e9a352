@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "499a5247_dfd127f0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-13T12:16:41Z",
+      "side": 1,
+      "message": "This issue should not appear in version 1.2.1 since xponder list does not exist in the device model",
+      "parentUuid": "90f72768_a3823a45",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 15
+      },
+      "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9578ca9_122ba39a",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 1
