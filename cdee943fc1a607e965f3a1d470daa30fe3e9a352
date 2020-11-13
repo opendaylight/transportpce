@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47e53d9a_a32242f0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-13T08:28:37Z",
+      "side": 1,
+      "message": ": is useless here",
+      "range": {
+        "startLine": 7,
+        "startChar": 25,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3666da_b9dd71f9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-13T08:28:37Z",
+      "side": 1,
+      "message": "The title is not wrong but I think it would make more sense to turn it differently.\nFrom what I understood, it is more question here of adding a protection for buggy equipment that causes unexpected behaviors, than fixing a real problem in the controller itself.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90f72768_a3823a45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-13T08:28:37Z",
+      "side": 1,
+      "message": "PortMapping 2.2.1\nI think the same protection is wishable in 1.2.1 (line 305)",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 15
+      },
+      "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9578ca9_122ba39a",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-13T08:28:37Z",
+      "side": 1,
+      "message": "Looks OK but I think it can be improved a little. What about this?\n\n        if (device.getConnectionMap() \u003d\u003d null) {\n            LOG.warn(\"No connection-map inside device configuration\");\n        } else {\n            Collection\u003cConnectionMap\u003e connectionMap \u003d deviceObject.get().nonnullConnectionMap().values();\n            for (ConnectionMap cm : connectionMap) {\n                String slcp \u003d null;\n                String dlcp \u003d null;\n                String skey \u003d cm.getSource().getCircuitPackName() + \"+\" + cm.getSource().getPortName();\n                if (lcpMap.containsKey(skey)) {\n                    slcp \u003d lcpMap.get(skey);\n                }\n                Destination destination0 \u003d cm.nonnullDestination().values().iterator().next();\n                String dkey \u003d destination0.getCircuitPackName() + \"+\" + destination0.getPortName();\n                if (slcp \u003d\u003d null) {\n                    LOG.error(\"Error in connection-map analysis for source {} and destination (circuitpack+port) {}\",\n                    skey, dkey);\n                    continue;\n                }\n                if (lcpMap.containsKey(dkey)) {\n                    dlcp \u003d lcpMap.get(dkey);\n                }\n                Mapping mapping \u003d mappingMap.get(slcp);\n                mappingMap.remove(slcp);\n                portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping, dlcp, null));\n            }\n        }",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 456,
+        "endChar": 9
+      },
+      "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
