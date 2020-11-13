@@ -2,10 +2,6 @@ module gnpy-network-topology {
   yang-version 1;
   namespace "gnpy:gnpy-network-topology";
   prefix gnpynt;
-
-  import gnpy-eqpt-config {
-    prefix geqpt;
-  }
   import ietf-inet-types {
     prefix inet;
   }
