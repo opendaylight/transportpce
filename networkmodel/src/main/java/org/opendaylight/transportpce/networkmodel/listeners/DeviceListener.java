@@ -102,8 +102,7 @@ public class DeviceListener implements OrgOpenroadmDeviceListener {
                                     LOG.info("Component {} configuration: {}", getCircuitPacks().getCircuitPackName(),
                                             getCircuitPacks());
                                     // 3. Update openroadm-topology
-                                    // TODO
-                                    // networkModelService.updateOpenRoadmNode(nodeId, getCircuitPacks());
+                                    networkModelService.updateOpenRoadmNetworkTopology(nodeId, getCircuitPacks());
                                 } else {
                                     LOG.error("Couldnt read from device datastore");
                                 }
