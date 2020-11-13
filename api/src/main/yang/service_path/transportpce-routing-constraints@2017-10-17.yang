@@ -37,14 +37,13 @@ module transportpce-routing-constraints {
       POSSIBILITY OF SUCH DAMAGE";
 
   revision 2017-10-17 {
-      description
-        "Version 1.6";
+    description
+      "Version 1.6";
   }
   revision 2017-04-26 {
     description
       "Version 1.5";
   }
-
 
   grouping common-constraints-sp {
     leaf-list SRLG {

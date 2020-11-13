@@ -56,7 +56,6 @@ module transportpce-renderer {
     description
       "Version 1.6.1";
   }
-
   revision 2017-10-17 {
     description
       "Version 1.6";

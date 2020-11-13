@@ -7,10 +7,6 @@ module tapi {
     prefix tapi-topology;
     revision-date 2018-12-10;
   }
-  import org-openroadm-service {
-    prefix oor-service;
-    revision-date 2019-05-31;
-  }
   import tapi-common {
     prefix tapi-common;
     revision-date 2018-12-10;

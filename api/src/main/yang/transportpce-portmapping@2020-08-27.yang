@@ -31,8 +31,8 @@ module transportpce-portmapping {
 
   revision 2020-08-27 {
     description
-    "Add support to differentiate flexible and fixed
-     grid capabilities with mc-capabilities";
+      "Add support to differentiate flexible and fixed
+       grid capabilities with mc-capabilities";
   }
   revision 2020-04-29 {
     description
@@ -189,32 +189,32 @@ module transportpce-portmapping {
           type string;
           description
             "Hash value generated from node-id and lcp. This value will be used to map-
-            back SAPI and DAPI resource";
+             back SAPI and DAPI resource";
         }
       }
       list mc-capabilities {
-          key mc-node-name;
-          when "../node-info/node-type = 'rdm'";
+        when "../node-info/node-type = 'rdm'";
+        key "mc-node-name";
+        description
+          "Capabilities of the media channel associated with a degree or a SRG.";
+        leaf mc-node-name {
+          type string;
           description
-            "Capabilities of the media channel associated with a degree or a SRG.";
-          leaf mc-node-name {
-            type string;
-            description
-              "Name of the node, it has the format of DEGi-TTP or SRGj-PP
-              Where i, and j are the degree and SRG numbers respectively";
-          }
-          leaf slot-width-granularity {
-            type org-openroadm-common-types:frequency-GHz;
-            default "50";
-            description
-              "Width of a slot measured in GHz.";
-          }
-          leaf center-freq-granularity {
-            type org-openroadm-common-types:frequency-GHz;
-            default "50";
-            description
-              "Width of a slot measured in GHz.";
-          }
+            "Name of the node, it has the format of DEGi-TTP or SRGj-PP
+             Where i, and j are the degree and SRG numbers respectively";
+        }
+        leaf slot-width-granularity {
+          type org-openroadm-common-types:frequency-GHz;
+          default "50";
+          description
+            "Width of a slot measured in GHz.";
+        }
+        leaf center-freq-granularity {
+          type org-openroadm-common-types:frequency-GHz;
+          default "50";
+          description
+            "Width of a slot measured in GHz.";
+        }
       }
       list cp-to-degree {
         key "circuit-pack-name";
