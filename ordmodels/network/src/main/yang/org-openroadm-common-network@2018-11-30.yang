@@ -99,6 +99,12 @@ module org-openroadm-common-network {
       description
         "Lifecycle State of a node. Whether it is planned, deployed, in maintenance, etc.";
     }
+    leaf operational-state {
+      type org-openroadm-common-state-types:state;
+    }
+    leaf administrative-state {
+      type org-openroadm-equipment-states-types:admin-states;
+    }
   }
   augment "/nd:networks/nd:network/nd:node/nwt:termination-point" {
     when "../../nd:network-types/openroadm-common-network";
@@ -116,6 +122,12 @@ module org-openroadm-common-network {
       type org-openroadm-common-state-types:lifecycle-state;
       description
         "Lifecycle State of a termination point. Whether it is planned, deployed, in maintenance, etc.";
+    }
+    leaf operational-state {
+      type org-openroadm-common-state-types:state;
+    }
+    leaf administrative-state {
+      type org-openroadm-equipment-states-types:admin-states;
     }
   }
   augment "/nd:networks/nd:network/nwt:link" {
