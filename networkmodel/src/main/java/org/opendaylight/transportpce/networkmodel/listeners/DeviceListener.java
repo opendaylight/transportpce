@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.ChangeNotification;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OrgOpenroadmDeviceListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.OtdrScanResult;
@@ -33,10 +34,13 @@ public class DeviceListener implements OrgOpenroadmDeviceListener {
     private static final TimeUnit MAX_DURATION_TO_SUBMIT_TIMEUNIT = TimeUnit.MILLISECONDS;
     private final DeviceTransactionManager deviceTransactionManager;
     private final String nodeId;
+    private final NetworkModelService networkModelService;
 
-    public DeviceListener(DeviceTransactionManager deviceTransactionManager, String nodeId) {
+    public DeviceListener(DeviceTransactionManager deviceTransactionManager, String nodeId,
+                          NetworkModelService networkModelService) {
         this.deviceTransactionManager = deviceTransactionManager;
         this.nodeId = nodeId;
+        this.networkModelService = networkModelService;
     }
 
     /**
@@ -118,8 +122,7 @@ public class DeviceListener implements OrgOpenroadmDeviceListener {
                         LOG.info("Component {} configuration: {}", getCircuitPacks().getCircuitPackName(),
                                 getCircuitPacks());
                         // 3. Update openroadm-topology
-                        // TODO
-                        // networkModelService.updateOpenRoadmNode(nodeId, getCircuitPacks());
+                        networkModelService.updateOpenRoadmNetworkTopology(nodeId, getCircuitPacks());
                     }
                 };
                 Thread thread = new Thread(handlenetconfEvent);
