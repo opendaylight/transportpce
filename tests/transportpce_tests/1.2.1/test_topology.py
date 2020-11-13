@@ -25,40 +25,68 @@ class TransportPCETopologyTesting(unittest.TestCase):
     CHECK_DICT1 = {
         'ROADMA01-SRG1': {
             'node_type': 'SRG',
-            'checks_tp': [({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'}),
-                          ({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'})]
+            'checks_tp': [({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP',
+                            'org-openroadm-common-network:operational-state': 'inService'}),
+                          ({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP',
+                            'org-openroadm-common-network:operational-state': 'inService'})]
         },
         'ROADMA01-SRG3': {
             'node_type': 'SRG',
-            'checks_tp': [({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'}),
-                          ({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'})]
+            'checks_tp': [({'tp-id': 'SRG3-CP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP',
+                            'org-openroadm-common-network:operational-state': 'inService'}),
+                          ({'tp-id': 'SRG3-PP1-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP',
+                            'org-openroadm-common-network:operational-state': 'inService'})]
         },
         'ROADMA01-DEG1': {
             'node_type': 'DEGREE',
-            'checks_tp': [({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'}),
-                          ({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'})]
+            'checks_tp': [({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP',
+                            'org-openroadm-common-network:operational-state': 'inService'}),
+                          ({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP',
+                            'org-openroadm-common-network:operational-state': 'inService'})]
         },
         'ROADMA01-DEG2': {
             'node_type': 'DEGREE',
-            'checks_tp': [({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'}),
-                          ({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'})]
+            'checks_tp': [({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP',
+                            'org-openroadm-common-network:operational-state': 'inService'}),
+                          ({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP',
+                            'org-openroadm-common-network:operational-state': 'inService'})]
         }
     }
     CHECK_DICT2 = {
         'ROADMC01-SRG1': {
             'node_type': 'SRG',
-            'checks_tp': [({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP'}),
-                          ({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP'})]
+            'checks_tp': [({'tp-id': 'SRG1-CP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'SRG-TXRX-CP',
+                            'org-openroadm-common-network:operational-state': 'inService'}),
+                          ({'tp-id': 'SRG1-PP1-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'SRG-TXRX-PP',
+                            'org-openroadm-common-network:operational-state': 'inService'})]
         },
         'ROADMC01-DEG1': {
             'node_type': 'DEGREE',
-            'checks_tp': [({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'}),
-                          ({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'})]
+            'checks_tp': [({'tp-id': 'DEG1-TTP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP',
+                            'org-openroadm-common-network:operational-state': 'inService'}),
+                          ({'tp-id': 'DEG1-CTP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP',
+                            'org-openroadm-common-network:operational-state': 'inService'})]
         },
         'ROADMC01-DEG2': {
             'node_type': 'DEGREE',
-            'checks_tp': [({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP'}),
-                          ({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP'})]
+            'checks_tp': [({'tp-id': 'DEG2-TTP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-TTP',
+                            'org-openroadm-common-network:operational-state': 'inService'}),
+                          ({'tp-id': 'DEG2-CTP-TXRX', 'org-openroadm-common-network:administrative-state': 'inService',
+                            'org-openroadm-common-network:tp-type': 'DEGREE-TXRX-CTP',
+                            'org-openroadm-common-network:operational-state': 'inService'})]
         }
     }
 
