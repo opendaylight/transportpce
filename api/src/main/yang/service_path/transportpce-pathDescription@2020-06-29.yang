@@ -38,18 +38,17 @@ module transportpce-pathDescription {
       POSSIBILITY OF SUCH DAMAGE";
 
   revision 2020-06-29 {
-        description
-          "Version 1.6.1. To manage otn services";
+    description
+      "Version 1.6.1. To manage otn services";
   }
   revision 2017-10-17 {
-      description
-        "Version 1.6";
+    description
+      "Version 1.6";
   }
   revision 2017-04-26 {
     description
       "Version 1.5";
   }
-
 
   grouping PCE-resource {
     description
