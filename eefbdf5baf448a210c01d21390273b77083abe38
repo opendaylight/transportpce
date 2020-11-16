@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c95d0ac1_2b706f05",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-16T09:32:31Z",
+      "side": 1,
+      "message": "Moreover",
+      "range": {
+        "startLine": 1371,
+        "startChar": 0,
+        "endLine": 1371,
+        "endChar": 8
+      },
+      "revId": "eefbdf5baf448a210c01d21390273b77083abe38",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47466a74_09805fbf",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-16T09:32:31Z",
+      "side": 1,
+      "message": "currently",
+      "range": {
+        "startLine": 1378,
+        "startChar": 28,
+        "endLine": 1378,
+        "endChar": 38
+      },
+      "revId": "eefbdf5baf448a210c01d21390273b77083abe38",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1086e35_31d03d73",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-16T09:32:31Z",
+      "side": 1,
+      "message": "infrastructure",
+      "range": {
+        "startLine": 1397,
+        "startChar": 13,
+        "endLine": 1397,
+        "endChar": 28
+      },
+      "revId": "eefbdf5baf448a210c01d21390273b77083abe38",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2effd701_d02e16ed",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 1439,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-16T09:32:31Z",
+      "side": 1,
+      "message": "retrieved",
+      "range": {
+        "startLine": 1439,
+        "startChar": 72,
+        "endLine": 1439,
+        "endChar": 81
+      },
+      "revId": "eefbdf5baf448a210c01d21390273b77083abe38",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
