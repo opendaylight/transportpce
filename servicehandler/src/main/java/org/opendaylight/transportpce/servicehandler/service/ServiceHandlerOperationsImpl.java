@@ -15,6 +15,7 @@ import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
@@ -34,9 +35,11 @@ public class ServiceHandlerOperationsImpl implements ServiceHandlerOperations {
     public ServiceHandlerOperationsImpl(DataBroker databroker, PathComputationService pathComputationService,
         RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
         PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
+        NetworkModelListenerImpl networkModelListenerImpl,
         NetworkModelWavelengthService networkModelWavelengthService) {
         this.serviceHandler = new ServicehandlerImpl(databroker, pathComputationService, rendererServiceOperations,
-            notificationPublishService, pceListenerImpl, rendererListenerImpl,networkModelWavelengthService);
+            notificationPublishService, pceListenerImpl, rendererListenerImpl, networkModelListenerImpl,
+                networkModelWavelengthService);
     }
 
     @Override

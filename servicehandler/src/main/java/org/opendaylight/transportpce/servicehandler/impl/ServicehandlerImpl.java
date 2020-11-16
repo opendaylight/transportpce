@@ -22,6 +22,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOpe
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
@@ -106,12 +107,14 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
     private RendererServiceWrapper rendererServiceWrapper;
     private PceListenerImpl pceListenerImpl;
     private RendererListenerImpl rendererListenerImpl;
+    private NetworkModelListenerImpl networkModelListenerImpl;
 
     //TODO: remove private request fields as they are in global scope
 
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
             PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
+            NetworkModelListenerImpl networkModelListenerImpl,
             NetworkModelWavelengthService networkModelWavelengthService) {
         this.db = databroker;
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
@@ -120,6 +123,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererServiceWrapper = new RendererServiceWrapper(rendererServiceOperations, notificationPublishService);
         this.pceListenerImpl = pceListenerImpl;
         this.rendererListenerImpl = rendererListenerImpl;
+        this.networkModelListenerImpl = networkModelListenerImpl;
     }
 
 
@@ -174,6 +178,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
+        this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         LOG.debug(SERVICE_CREATE_MSG, LogMessages.PCE_CALLING);
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
         if (output == null) {
