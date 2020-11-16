@@ -61,6 +61,7 @@ import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOpe
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperationsImpl;
 import org.opendaylight.transportpce.renderer.rpcs.DeviceRendererRPCImpl;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerProvider;
+import org.opendaylight.transportpce.servicehandler.listeners.NetworkModelListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
@@ -212,9 +213,13 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingDataBroker());
         PceListenerImpl pceListenerImpl = new PceListenerImpl(rendererServiceOperations, pathComputationService,
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
+        NetworkModelListenerImpl networkModelListenerImpl =
+                new NetworkModelListenerImpl(lightyServices.getBindingNotificationPublishService(),
+                        serviceDataStoreOperations);
         ServiceHandlerOperations serviceHandlerOperations = new ServiceHandlerOperationsImpl(
                 lightyServices.getBindingDataBroker(), pathComputationService, rendererServiceOperations,
-                lightyServices.getBindingNotificationPublishService(), pceListenerImpl, rendererListenerImpl);
+                lightyServices.getBindingNotificationPublishService(), pceListenerImpl, rendererListenerImpl,
+                networkModelListenerImpl);
         return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
                 serviceHandlerOperations, new TapiListener());
     }

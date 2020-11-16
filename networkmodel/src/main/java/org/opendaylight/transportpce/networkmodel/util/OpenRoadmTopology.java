@@ -26,7 +26,6 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmappi
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.NodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
@@ -475,11 +474,13 @@ public final class OpenRoadmTopology {
                 State srcTpState = nodes.get(i).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                         .ietf.network.topology.rev180226.Node1.class).getTerminationPoint().values().stream()
                     .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
-                    .findFirst().get().augmentation(TerminationPoint1.class).getOperationalState();
+                    .findFirst().get().augmentation(org.opendaylight.yang.gen.v1.http
+                            .org.openroadm.common.network.rev200529.TerminationPoint1.class).getOperationalState();
                 State destTpState = nodes.get(j).augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang
                         .ietf.network.topology.rev180226.Node1.class).getTerminationPoint().values().stream()
                     .filter(tp -> tp.getTpId().getValue().contains("CP") || tp.getTpId().getValue().contains("CTP"))
-                    .findFirst().get().augmentation(TerminationPoint1.class).getOperationalState();
+                    .findFirst().get().augmentation(org.opendaylight.yang.gen.v1.http
+                            .org.openroadm.common.network.rev200529.TerminationPoint1.class).getOperationalState();
                 if (State.InService.equals(srcTpState) && State.InService.equals(destTpState)) {
                     ocnAzLinkBldr.setAdministrativeState(AdminStates.InService)
                             .setOperationalState(State.InService);

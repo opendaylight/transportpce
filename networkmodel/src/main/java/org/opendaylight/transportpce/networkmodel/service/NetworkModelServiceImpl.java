@@ -794,7 +794,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                             .setTerminationPoint(updatedTpMap).build()).build();
                         InstanceIdentifier<Node> iiOpenRoadmTopologyNode = InstanceIdentifier.builder(
                             Networks.class).child(Network.class, new NetworkKey(
-                            new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(Node.class, node.key())
+                                    new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(Node.class, node.key())
                             .build();
                         networkTransactionService.merge(LogicalDatastoreType.CONFIGURATION, iiOpenRoadmTopologyNode,
                             updNode);
