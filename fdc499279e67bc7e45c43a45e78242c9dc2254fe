@@ -261,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "86eed428_6778983a",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-17T08:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5f392a2_f993931f",
+      "range": {
+        "startLine": 1366,
+        "startChar": 10,
+        "endLine": 1366,
+        "endChar": 13
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1516e95e_57dfb16f",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 1
@@ -649,6 +673,30 @@
       "side": 1,
       "message": "what about \"starting from Al SR2\" ?",
       "parentUuid": "cec7f453_81a9c892",
+      "range": {
+        "startLine": 1387,
+        "startChar": 97,
+        "endLine": 1387,
+        "endChar": 100
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d19571bf_97067b8f",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-17T08:51:42Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "bd9d975f_ce925b21",
       "range": {
         "startLine": 1387,
         "startChar": 97,
