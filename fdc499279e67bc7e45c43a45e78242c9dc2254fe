@@ -332,6 +332,30 @@
     },
     {
       "key": {
+        "uuid": "9a57d08b_e7179aa9",
+        "filename": "docs/developer-guide.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1368,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-17T09:06:15Z",
+      "side": 1,
+      "message": "@Olivier: is it OK to keep it like that ?",
+      "parentUuid": "74adc739_3caa1c70",
+      "range": {
+        "startLine": 1368,
+        "startChar": 0,
+        "endLine": 1368,
+        "endChar": 5
+      },
+      "revId": "fdc499279e67bc7e45c43a45e78242c9dc2254fe",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "74982506_52b1be05",
         "filename": "docs/developer-guide.rst",
         "patchSetId": 1
