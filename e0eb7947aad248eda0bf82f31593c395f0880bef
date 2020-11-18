@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58705276_6388c42e",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-18T15:10:50Z",
+      "side": 1,
+      "message": "not sure this is what expected here ?",
+      "range": {
+        "startLine": 405,
+        "startChar": 18,
+        "endLine": 405,
+        "endChar": 146
+      },
+      "revId": "e0eb7947aad248eda0bf82f31593c395f0880bef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
