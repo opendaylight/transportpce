@@ -121,7 +121,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         OpenRoadmInterfaces openRoadmInterfaces = initOpenRoadmInterfaces(mappingUtils);
         PortMapping portMapping = initPortMapping(lightyServices, openRoadmInterfaces);
         NetworkModelService networkModelService = new NetworkModelServiceImpl(networkTransaction, linkDiscoveryImpl,
-                portMapping);
+                portMapping, lightyServices.getBindingNotificationPublishService());
         FrequenciesService networkModelWavelengthService =
                 new FrequenciesServiceImpl(lightyServices.getBindingDataBroker());
         NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
