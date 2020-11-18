@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59f54e47_0b99e52f",
+        "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-18T12:04:18Z",
+      "side": 1,
+      "message": "rev191129 ?",
+      "range": {
+        "startLine": 41,
+        "startChar": 90,
+        "endLine": 41,
+        "endChar": 99
+      },
+      "revId": "f4e539064e6c25e6a778bbf0c146ad1e448596f7",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
