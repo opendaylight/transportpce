@@ -13,11 +13,13 @@
     <reference id="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
     <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
     <reference id="notificationService" interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
+    <reference id="notificationPublishService" interface="org.opendaylight.mdsal.binding.api.NotificationPublishService"/>
 
     <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
         <argument ref="networkTransactionImpl" />
         <argument ref="linkDiscoveryImpl" />
         <argument ref="portMapping" />
+        <argument ref="notificationPublishService" />
     </bean>
 
     <bean id="provider" class="org.opendaylight.transportpce.networkmodel.NetworkModelProvider"
