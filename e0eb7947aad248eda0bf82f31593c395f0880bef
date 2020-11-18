@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "6617e1e4_48964e7c",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-18T17:16:03Z",
+      "side": 1,
+      "message": "I wonder if the effective-bits here should not be 1 for freq-map-granularity of 6.25...",
+      "range": {
+        "startLine": 42,
+        "startChar": 24,
+        "endLine": 42,
+        "endChar": 25
+      },
+      "revId": "e0eb7947aad248eda0bf82f31593c395f0880bef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58705276_6388c42e",
         "filename": "tapi/src/test/resources/openroadm-topology.xml",
         "patchSetId": 8
