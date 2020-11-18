@@ -22,6 +22,8 @@ import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.TopologyUtils;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.links.input.grouping.LinksInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.TerminationPoint1;
@@ -64,8 +66,10 @@ final class Rdm2XpdrLink {
         String destTp = linksInput.getTerminationPointNum();
         // update tail-equipment-id for tp of link
         TerminationPoint xpdrTp = getTpofNode(srcNode, srcTp, dataBroker);
+        TerminationPoint rdmTp = getTpofNode(destNode, destTp, dataBroker);
 
-        Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, false, xpdrTp).build();
+        Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, false, xpdrTp,
+                rdmTp).build();
         InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID = InstanceIdentifier.builder(Networks.class)
             .child(Network.class, new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
         WriteTransaction wrtx = dataBroker.newWriteOnlyTransaction();
@@ -92,8 +96,10 @@ final class Rdm2XpdrLink {
         String destTp = new StringBuilder("XPDR").append(linksInput.getXpdrNum()).append("-NETWORK")
             .append(linksInput.getNetworkNum()).toString();
         TerminationPoint xpdrTp = getTpofNode(destNode, destTp, dataBroker);
+        TerminationPoint rdmTp = getTpofNode(srcNode, srcTp, dataBroker);
 
-        Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, true, xpdrTp).build();
+        Network topoNetowkLayer = createNetworkBuilder(srcNode, srcTp, destNode, destTp, true, xpdrTp,
+                rdmTp).build();
         InstanceIdentifier.InstanceIdentifierBuilder<Network> nwIID =
             InstanceIdentifier.builder(Networks.class).child(Network.class,
             new NetworkKey(new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)));
@@ -112,7 +118,7 @@ final class Rdm2XpdrLink {
     }
 
     private static NetworkBuilder createNetworkBuilder(String srcNode, String srcTp, String destNode, String destTp,
-        boolean isXponderInput, TerminationPoint xpdrTp) {
+        boolean isXponderInput, TerminationPoint xpdrTp, TerminationPoint rdmTp) {
         //update tp of nodes
         TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder(xpdrTp);
         if (xpdrTpBldr.augmentation(TerminationPoint1.class) != null) {
@@ -143,6 +149,15 @@ final class Rdm2XpdrLink {
             = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder()
                 .setLinkType(isXponderInput ? OpenroadmLinkType.XPONDERINPUT : OpenroadmLinkType.XPONDEROUTPUT)
                 .setOppositeLink(LinkIdUtil.getOppositeLinkId(srcNode, srcTp, destNode, destTp));
+        // If both TPs of the Xpdr2Rdm link are inService --> link inService. Otherwise outOfService
+        if (State.InService.equals(xpdrTp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common
+                .network.rev181130.TerminationPoint1.class).getOperationalState()) && State.InService.equals(rdmTp
+                .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                        .TerminationPoint1.class).getOperationalState())) {
+            lnk2bldr.setOperationalState(State.InService).setAdministrativeState(AdminStates.InService);
+        } else {
+            lnk2bldr.setOperationalState(State.OutOfService).setAdministrativeState(AdminStates.OutOfService);
+        }
         LinkBuilder linkBuilder = TopologyUtils.createLink(srcNode, destNode, srcTp, destTp, null)
             .addAugmentation(lnk1bldr.build())
             .addAugmentation(lnk2bldr.build());

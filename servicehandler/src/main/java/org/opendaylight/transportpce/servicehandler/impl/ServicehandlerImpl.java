@@ -229,6 +229,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
+        this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
                 .ServiceDeleteInput serviceDeleteInput =
             ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
@@ -270,6 +271,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
+        this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         LOG.debug(SERVICE_FEASABILITY_CHECK_MSG, LogMessages.PCE_CALLING);
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
         if (output == null) {
@@ -309,6 +311,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
+        this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
                 .ServiceDeleteInput serviceDeleteInput =
                         ModelMappingUtils.createServiceDeleteInput(new ServiceInput(input));
@@ -389,6 +392,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(serviceInput);
         this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
             .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
                     new ServiceInput(deleteInputBldr.build()));
@@ -455,6 +459,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.pceListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(serviceInput);
         this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520
             .ServiceDeleteInput serviceDeleteInput = ModelMappingUtils.createServiceDeleteInput(
                     new ServiceInput(deleteInputBldr.build()));
@@ -532,6 +537,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl.setserviceDataStoreOperations(this.serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         this.rendererListenerImpl.setTempService(true);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput output =
                 this.rendererServiceWrapper.performRenderer(input, ServiceNotificationTypes.ServiceDeleteResult);
         if (output == null) {
@@ -569,6 +575,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
         this.rendererListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         this.rendererListenerImpl.setServiceInput(new ServiceInput(input));
         this.rendererListenerImpl.setTempService(true);
+        this.networkModelListenerImpl.setserviceDataStoreOperations(serviceDataStoreOperations);
         PathComputationRequestOutput output = this.pceServiceWrapper.performPCE(input, true);
         if (output == null) {
             LOG.warn(TEMP_SERVICE_CREATE_MSG, LogMessages.ABORT_PCE_FAILED);

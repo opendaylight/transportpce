@@ -8,6 +8,7 @@
 package org.opendaylight.transportpce.networkmodel.service;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.mapping.PortMapping;
@@ -30,6 +32,11 @@ import org.opendaylight.transportpce.networkmodel.util.LinkIdUtil;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmNetwork;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmOtnTopology;
 import org.opendaylight.transportpce.networkmodel.util.OpenRoadmTopology;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResult;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.TopologyUpdateResultBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChanges;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChangesBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkmodel.rev201116.topology.update.result.OrdTopologyChangesKey;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.NodeInfo.OpenroadmVersion;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
@@ -41,6 +48,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev170206.circuit.
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.network.topology.rev181130.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.d._interface.ord.topology.types.rev201116.TopologyNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.transportpce.topology.rev200129.OtnLinkType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.Networks;
@@ -80,9 +88,14 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     // Maps that include topology component changed with its new operational state <id, state>
     private Map<String, State> linksChanged;
     private Map<String, State> terminationPointsChanged;
+    // Variables for creating and sending topology update notification
+    private final NotificationPublishService notificationPublishService;
+    private Map<OrdTopologyChangesKey, OrdTopologyChanges> topologyChanges;
+    private TopologyUpdateResult notification = null;
 
     public NetworkModelServiceImpl(final NetworkTransactionService networkTransactionService,
-                                   final R2RLinkDiscovery linkDiscovery, PortMapping portMapping) {
+                                   final R2RLinkDiscovery linkDiscovery, PortMapping portMapping,
+                                   final NotificationPublishService notificationPublishService) {
 
         this.networkTransactionService = networkTransactionService;
         this.linkDiscovery = linkDiscovery;
@@ -91,6 +104,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         this.otnTopologyShardMountedDevice = new HashMap<String, TopologyShard>();
         this.linksChanged = new HashMap<String, State>();
         this.terminationPointsChanged = new HashMap<String, State>();
+        this.notificationPublishService = notificationPublishService;
+        this.topologyChanges = new HashMap<OrdTopologyChangesKey, OrdTopologyChanges>();
     }
 
     public void init() {
@@ -268,6 +283,7 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         // Clear maps for each NETCONF notification received
         this.linksChanged.clear();
         this.terminationPointsChanged.clear();
+        this.topologyChanges.clear();
         // 1. Get the list links and nodes of the current openroadm network topology
         List<Link> linkList = null;
         List<Node> nodesList = null;
@@ -315,7 +331,8 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                 updateOpenRoadmNetworkTopologyTPs(nodesList, nodeId);
                 // 4. Update the links of the topology affected by the changes on TPs (if any)
                 updateOpenRoadmNetworkTopologyLinks(linkList, nodesList);
-                // TODO: send notification to service handler
+                // Send notification to service handler
+                sendNotification(TopologyNotificationTypes.OpenroadmTopologyUpdate, this.topologyChanges);
                 break;
             case "port":
                 LOG.info("port circuit pack modified");
@@ -777,14 +794,20 @@ public class NetworkModelServiceImpl implements NetworkModelService {
                                 newTpOperationalState = State.InService;
                                 // Add TP and state inService to the links Map
                                 this.linksChanged.put(tpId, State.InService);
-                                // TODO: update change list for service handler notification
+                                // Update topology change list for service handler notification
+                                this.topologyChanges.put(new OrdTopologyChangesKey(node.getNodeId()
+                                        .getValue() + "-" + tpId), new OrdTopologyChangesBuilder().setId(node
+                                        .getNodeId().getValue() + "-" + tpId).setState(newTpOperationalState).build());
                                 break;
                             case OutOfService:
                                 newTpAdminState = AdminStates.OutOfService;
                                 newTpOperationalState = State.OutOfService;
                                 // Add TP and state outOfService to the links Map
                                 this.linksChanged.put(tpId, State.OutOfService);
-                                // TODO: update change list for service handler notification
+                                // Update topology change list for service handler notification
+                                this.topologyChanges.put(new OrdTopologyChangesKey(node.getNodeId()
+                                        .getValue() + "-" + tpId), new OrdTopologyChangesBuilder().setId(node
+                                        .getNodeId().getValue() + "-" + tpId).setState(newTpOperationalState).build());
                                 break;
                             case Degraded:
                                 LOG.warn("Operational state Degraded not handled");
@@ -913,7 +936,9 @@ public class NetworkModelServiceImpl implements NetworkModelService {
     }
 
     private void updateLinkStates(Link link, State state, AdminStates adminStates) {
-        // TODO: add change to list of changes
+        // Update topology change list
+        this.topologyChanges.put(new OrdTopologyChangesKey(link.getLinkId().getValue()),
+                new OrdTopologyChangesBuilder().setId(link.getLinkId().getValue()).setState(state).build());
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1 link1 = new Link1Builder()
                 .setOperationalState(state).setAdministrativeState(adminStates).build();
         Link updLink = new LinkBuilder().withKey(link.key()).addAugmentation(link1).build();
@@ -929,5 +954,25 @@ public class NetworkModelServiceImpl implements NetworkModelService {
         } catch (ExecutionException e) {
             LOG.error("Couldnt commit changed to openroadm topology. Error={}", e.getMessage());
         }
+    }
+
+    @SuppressFBWarnings(
+            value = "UPM_UNCALLED_PRIVATE_METHOD",
+            justification = "false positive, this method is used by public updateopenroadmnode")
+    private void sendNotification(TopologyNotificationTypes notificationType,
+                                  Map<OrdTopologyChangesKey, OrdTopologyChanges> topologyChangesMap) {
+        if (!topologyChangesMap.isEmpty()) {
+            TopologyUpdateResultBuilder topologyUpdateResultBuilder = new TopologyUpdateResultBuilder()
+                    .setNotificationType(notificationType).setOrdTopologyChanges(topologyChangesMap);
+            this.notification = topologyUpdateResultBuilder.build();
+            try {
+                notificationPublishService.putNotification(this.notification);
+            } catch (InterruptedException e) {
+                LOG.error("Notification offer rejected. Error={}", e.getMessage());
+            }
+        } else {
+            LOG.warn("Empty Topology Change map. Bug in code?");
+        }
+
     }
 }
