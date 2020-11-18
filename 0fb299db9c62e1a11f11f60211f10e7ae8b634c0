@@ -116,6 +116,30 @@
       "revId": "0fb299db9c62e1a11f11f60211f10e7ae8b634c0",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4ac1f6d_44791a80",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-18T09:22:54Z",
+      "side": 1,
+      "message": "Since lnk1bldr and lnk2bldr are now of the same type \"*common.network.rev200529*\", only one is necessary to set the different attributes. For me, adding an empty augmentation is equivalent to do nothing. I think you can remove it.",
+      "parentUuid": "324978cf_5885092a",
+      "range": {
+        "startLine": 147,
+        "startChar": 12,
+        "endLine": 147,
+        "endChar": 46
+      },
+      "revId": "0fb299db9c62e1a11f11f60211f10e7ae8b634c0",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
