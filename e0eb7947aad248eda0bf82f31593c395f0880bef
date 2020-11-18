@@ -22,6 +22,30 @@
       "revId": "e0eb7947aad248eda0bf82f31593c395f0880bef",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "968ec674_cc5638a1",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-18T15:46:55Z",
+      "side": 1,
+      "message": "this is the str representation of a byte array with length of 96 and filling with 255 (available wavelenght value)\n\u003e\u003e\u003e import base64\n\u003e\u003e\u003e d\u003dbytearray(b\u0027\\xFF\u0027* 96)\n\u003e\u003e\u003e encoded\u003dbase64.b64encode(d)\n\u003e\u003e\u003e print(encoded)\nb\u0027////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\u0027\n\u003e\u003e\u003e print(encoded.decode(\u0027utf-8\u0027))\n////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////",
+      "parentUuid": "58705276_6388c42e",
+      "range": {
+        "startLine": 405,
+        "startChar": 18,
+        "endLine": 405,
+        "endChar": 146
+      },
+      "revId": "e0eb7947aad248eda0bf82f31593c395f0880bef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
