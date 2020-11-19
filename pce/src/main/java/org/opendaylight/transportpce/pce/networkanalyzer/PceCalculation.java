@@ -23,7 +23,9 @@ import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
@@ -342,6 +344,7 @@ public class PceCalculation {
         NodeId destId = link.getDestination().getDestNode();
         PceNode source = allPceNodes.get(sourceId);
         PceNode dest = allPceNodes.get(destId);
+        State state = link.augmentation(Link1.class).getOperationalState();
 
         if (source == null) {
             LOG.debug("validateLink: Link is ignored due source node is rejected by node validation - {}",
@@ -351,6 +354,12 @@ public class PceCalculation {
         if (dest == null) {
             LOG.debug("validateLink: Link is ignored due dest node is rejected by node validation - {}",
                 link.getDestination().getDestNode().getValue());
+            return false;
+        }
+
+        if (State.OutOfService.equals(state)) {
+            LOG.debug("validateLink: Link is ignored due operational state - {}",
+                    state.getName());
             return false;
         }
 
@@ -470,6 +479,11 @@ public class PceCalculation {
         Node1 node1 = node.augmentation(Node1.class);
         if (node1 == null) {
             LOG.error("getNodeType: no Node1 (type) Augmentation for node: [{}]. Node is ignored", node.getNodeId());
+            return false;
+        }
+        if (State.OutOfService.equals(node1.getOperationalState())) {
+            LOG.error("getNodeType: node is ignored due to operational state - {}", node1.getOperationalState()
+                    .getName());
             return false;
         }
         OpenroadmNodeType nodeType = node1.getNodeType();
