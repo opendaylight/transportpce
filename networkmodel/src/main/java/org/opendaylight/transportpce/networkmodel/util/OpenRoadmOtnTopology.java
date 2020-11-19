@@ -20,7 +20,9 @@ import org.opendaylight.transportpce.networkmodel.dto.OtnTopoNode;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
@@ -244,8 +246,10 @@ public final class OpenRoadmOtnTopology {
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder(
                         ietfLinkAZBldr.augmentation(
                             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class))
-                    .setLinkType(OpenroadmLinkType.OTNLINK)
-                    .build());
+                        .setLinkType(OpenroadmLinkType.OTNLINK)
+                        .setOperationalState(State.InService)
+                        .setAdministrativeState(AdminStates.InService)
+                        .build());
         links.add(ietfLinkAZBldr.build());
         // create link Z-A
         LinkBuilder ietfLinkZABldr = TopologyUtils.createLink(nodeZTopo, nodeATopo, tpZ, tpA, linkIdPrefix);
@@ -256,8 +260,10 @@ public final class OpenRoadmOtnTopology {
                 new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder(
                         ietfLinkZABldr.augmentation(
                             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1.class))
-                    .setLinkType(OpenroadmLinkType.OTNLINK)
-                    .build());
+                        .setLinkType(OpenroadmLinkType.OTNLINK)
+                        .setOperationalState(State.InService)
+                        .setAdministrativeState(AdminStates.InService)
+                        .build());
         links.add(ietfLinkZABldr.build());
         return links;
     }
@@ -405,7 +411,10 @@ public final class OpenRoadmOtnTopology {
             .build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 ocnNodeAug =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
-            .setNodeType(OpenroadmNodeType.TPDR).build();
+                    .setNodeType(OpenroadmNodeType.TPDR)
+                    .setOperationalState(State.InService)
+                    .setAdministrativeState(AdminStates.InService)
+                    .build();
         // create ietf node augmentation to add TP list
         Map<TerminationPointKey,TerminationPoint> tpMap = new HashMap<>();
         // creation of tps
@@ -466,7 +475,10 @@ public final class OpenRoadmOtnTopology {
             .build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 ocnNodeAug =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
-            .setNodeType(OpenroadmNodeType.MUXPDR).build();
+                    .setNodeType(OpenroadmNodeType.MUXPDR)
+                    .setAdministrativeState(AdminStates.InService)
+                    .setOperationalState(State.InService)
+                    .build();
 
         // create ietf node augmentation to add TP list
         Map<TerminationPointKey, TerminationPoint> tpMap = new HashMap<>();
@@ -533,7 +545,10 @@ public final class OpenRoadmOtnTopology {
             .build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 ocnNodeAug =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
-            .setNodeType(OpenroadmNodeType.SWITCH).build();
+                    .setNodeType(OpenroadmNodeType.SWITCH)
+                    .setOperationalState(State.InService)
+                    .setAdministrativeState(AdminStates.InService)
+                    .build();
 
         // create ietf node augmentation to add TP list
         Map<TerminationPointKey, TerminationPoint> tpMap = new HashMap<>();
@@ -664,7 +679,10 @@ public final class OpenRoadmOtnTopology {
         }
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1 ocnTp =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder()
-            .setTpType(tpType).build();
+                    .setTpType(tpType)
+                    .setAdministrativeState(AdminStates.InService)
+                    .setOperationalState(State.InService)
+                    .build();
 
         ietfTpBldr.setTpId(tpId)
             .withKey(new TerminationPointKey(tpId))
