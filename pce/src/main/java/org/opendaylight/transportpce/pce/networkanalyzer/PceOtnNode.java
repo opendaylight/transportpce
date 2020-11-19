@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev181130.OpenroadmNodeType;
@@ -53,6 +55,9 @@ public class PceOtnNode implements PceNode {
     private final String pceNodeType;
     private final String otnServiceType;
     private String modeType;
+    // TODO: not adding state check in this class as otn topology has not been modified
+    private final AdminStates adminStates;
+    private final State state;
 
     private Map<String, List<Uint16>> tpAvailableTribPort = new TreeMap<>();
     private Map<String, List<Uint16>> tpAvailableTribSlot = new TreeMap<>();
@@ -80,6 +85,10 @@ public class PceOtnNode implements PceNode {
         this.usedXpdrClientTps.clear();
         this.availableXpdrClientTps = new ArrayList<>();
         this.usableXpdrClientTps = new ArrayList<>();
+        this.adminStates = node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                .Node1.class).getAdministrativeState();
+        this.state = node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130
+                .Node1.class).getOperationalState();
         this.tpAvailableTribPort.clear();
         checkAvailableTribPort();
         this.tpAvailableTribSlot.clear();
@@ -454,6 +463,16 @@ public class PceOtnNode implements PceNode {
     @Override
     public List<PceLink> getOutgoingLinks() {
         return outgoingLinks;
+    }
+
+    @Override
+    public AdminStates getAdminStates() {
+        return adminStates;
+    }
+
+    @Override
+    public State getState() {
+        return state;
     }
 
     @Override
