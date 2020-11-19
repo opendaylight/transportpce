@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation.FiberType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationKey;
@@ -58,6 +60,8 @@ public class PceLink implements Serializable {
     private final String sourceCLLI;
     private final String destCLLI;
     private final LinkId oppositeLink;
+    private final AdminStates adminStates;
+    private final State state;
     private final Long latency;
     private final Long availableBandwidth;
     private final Long usedBandwidth;
@@ -91,6 +95,9 @@ public class PceLink implements Serializable {
         this.linkType = MapUtils.calcType(link);
 
         this.oppositeLink = calcOpposite(link);
+
+        this.adminStates = link.augmentation(Link1.class).getAdministrativeState();
+        this.state = link.augmentation(Link1.class).getOperationalState();
 
         if (this.linkType == OpenroadmLinkType.ROADMTOROADM) {
             this.omsAttributesSpan = MapUtils.getOmsAttributesSpan(link);
@@ -208,6 +215,14 @@ public class PceLink implements Serializable {
 
     public LinkId getOppositeLink() {
         return oppositeLink;
+    }
+
+    public AdminStates getAdminStates() {
+        return adminStates;
+    }
+
+    public State getState() {
+        return state;
     }
 
     public Object getSourceTP() {
@@ -357,6 +372,10 @@ public class PceLink implements Serializable {
     private boolean checkParams() {
         if ((this.linkId == null) || (this.linkType == null) || (this.oppositeLink == null)) {
             LOG.error("PceLink: No Link type or opposite link is available. Link is ignored {}", linkId);
+            return false;
+        }
+        if ((this.adminStates == null) || (this.state == null)) {
+            LOG.error("PceLink: Link is not available. Link is ignored {}", linkId);
             return false;
         }
         if ((this.sourceId == null) || (this.destId == null) || (this.sourceTP == null) || (this.destTP == null)) {
