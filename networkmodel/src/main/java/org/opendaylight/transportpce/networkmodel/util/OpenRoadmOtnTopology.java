@@ -20,7 +20,9 @@ import org.opendaylight.transportpce.networkmodel.dto.OtnTopoNode;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.Nodes;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev200827.network.nodes.Mapping;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPoolsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev181130.xpdr.odu.switching.pools.OduSwitchingPoolsKey;
@@ -245,6 +247,8 @@ public final class OpenRoadmOtnTopology {
                         ietfLinkAZBldr.augmentation(
                             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class))
                     .setLinkType(OpenroadmLinkType.OTNLINK)
+                    .setAdministrativeState(AdminStates.InService)
+                    .setOperationalState(State.InService)
                     .build());
         links.add(ietfLinkAZBldr.build());
         // create link Z-A
@@ -257,6 +261,8 @@ public final class OpenRoadmOtnTopology {
                         ietfLinkZABldr.augmentation(
                             org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1.class))
                     .setLinkType(OpenroadmLinkType.OTNLINK)
+                    .setAdministrativeState(AdminStates.InService)
+                    .setOperationalState(State.InService)
                     .build());
         links.add(ietfLinkZABldr.build());
         return links;
@@ -405,7 +411,10 @@ public final class OpenRoadmOtnTopology {
             .build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 ocnNodeAug =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
-            .setNodeType(OpenroadmNodeType.TPDR).build();
+            .setNodeType(OpenroadmNodeType.TPDR)
+            .setAdministrativeState(AdminStates.InService)
+            .setOperationalState(State.InService)
+            .build();
         // create ietf node augmentation to add TP list
         Map<TerminationPointKey,TerminationPoint> tpMap = new HashMap<>();
         // creation of tps
@@ -466,7 +475,10 @@ public final class OpenRoadmOtnTopology {
             .build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 ocnNodeAug =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
-            .setNodeType(OpenroadmNodeType.MUXPDR).build();
+            .setNodeType(OpenroadmNodeType.MUXPDR)
+            .setAdministrativeState(AdminStates.InService)
+            .setOperationalState(State.InService)
+            .build();
 
         // create ietf node augmentation to add TP list
         Map<TerminationPointKey, TerminationPoint> tpMap = new HashMap<>();
@@ -533,7 +545,10 @@ public final class OpenRoadmOtnTopology {
             .build();
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 ocnNodeAug =
             new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
-            .setNodeType(OpenroadmNodeType.SWITCH).build();
+            .setNodeType(OpenroadmNodeType.SWITCH)
+            .setAdministrativeState(AdminStates.InService)
+            .setOperationalState(State.InService)
+            .build();
 
         // create ietf node augmentation to add TP list
         Map<TerminationPointKey, TerminationPoint> tpMap = new HashMap<>();
