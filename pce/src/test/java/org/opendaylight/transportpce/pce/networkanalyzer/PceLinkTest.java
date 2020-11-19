@@ -19,6 +19,8 @@ import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev181130.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Link1Builder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenation;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev181130.span.attributes.LinkConcatenationBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev181130.networks.network.link.OMSAttributesBuilder;
@@ -168,7 +170,9 @@ public class PceLinkTest extends AbstractTest {
 
     private static LinkBuilder createOTNLink(String srcNode, String destNode, String srcTp, String destTp) {
         Link1Builder link1Builder = new Link1Builder()
-                .setLinkType(OpenroadmLinkType.OTNLINK);
+                .setLinkType(OpenroadmLinkType.OTNLINK)
+                .setOperationalState(State.InService)
+                .setAdministrativeState(AdminStates.InService);
 
         //create source link
         return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
@@ -177,7 +181,9 @@ public class PceLinkTest extends AbstractTest {
 
     private static LinkBuilder createXponderLink(String srcNode, String destNode, String srcTp, String destTp) {
         Link1Builder link1Builder = new Link1Builder()
-                .setLinkType(OpenroadmLinkType.XPONDERINPUT);
+                .setLinkType(OpenroadmLinkType.XPONDERINPUT)
+                .setAdministrativeState(AdminStates.InService)
+                .setOperationalState(State.InService);
 
         //create source link
         return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
@@ -231,6 +237,8 @@ public class PceLinkTest extends AbstractTest {
     private static LinkBuilder createRoadmToRoadm(String srcNode, String destNode, String srcTp, String destTp) {
         Link1Builder link1Builder = new Link1Builder()
                 .setLinkLatency(Uint32.valueOf(100))
+                .setAdministrativeState(AdminStates.InService)
+                .setOperationalState(State.InService)
                 .setLinkType(OpenroadmLinkType.ROADMTOROADM);
         return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
 
@@ -269,17 +277,22 @@ public class PceLinkTest extends AbstractTest {
         TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder();
         TerminationPoint1Builder tp1Bldr = new TerminationPoint1Builder();
 
-        tp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
+        tp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK).setAdministrativeState(AdminStates.InService)
+                .setOperationalState(State.InService);
         xpdrTpBldr.addAugmentation(tp1Bldr.build());
         TerminationPoint xpdr = xpdrTpBldr.build();
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1 =
                 new Node1Builder().setTerminationPoint(Map.of(xpdr.key(),xpdr)).build();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1 node11 = new org.opendaylight
+                .yang.gen.v1.http.org.openroadm.common.network.rev181130.Node1Builder()
+                .setOperationalState(State.InService).setAdministrativeState(AdminStates.InService).build();
 
 
         return new NodeBuilder()
                 .setNodeId(new NodeId("node 1"))
                 .withKey(new NodeKey(new NodeId("node 1")))
                 .addAugmentation(node1)
+                .addAugmentation(node11)
                 .setSupportingNode(supportingNodes1);
     }
 
