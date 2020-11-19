@@ -18,7 +18,9 @@ import org.opendaylight.transportpce.common.fixedflex.GridUtils;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.FiberPmd;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLink;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.link.rev200529.amplified.link.attributes.AmplifiedLinkKey;
@@ -114,7 +116,9 @@ public class NodeUtils {
     public static LinkBuilder createRoadmToRoadm(String srcNode, String destNode, String srcTp, String destTp) {
         Link1Builder link1Builder = new Link1Builder()
                 .setLinkLatency(Uint32.valueOf(30))
-                .setLinkType(OpenroadmLinkType.ROADMTOROADM);
+                .setLinkType(OpenroadmLinkType.ROADMTOROADM)
+                .setAdministrativeState(AdminStates.InService)
+                .setOperationalState(State.InService);
         return createLinkBuilder(srcNode, destNode, srcTp, destTp, link1Builder);
 
     }
@@ -144,18 +148,27 @@ public class NodeUtils {
         TerminationPointBuilder xpdrTpBldr = new TerminationPointBuilder()
                 .withKey(new TerminationPointKey(new TpId("xpdr")));
         TerminationPoint1Builder tp1Bldr = new TerminationPoint1Builder();
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
+                .TerminationPoint1Builder tp11Bldr = new org.opendaylight.yang.gen.v1.http
+                .org.openroadm.common.network.rev200529.TerminationPoint1Builder()
+                .setAdministrativeState(AdminStates.InService)
+                .setOperationalState(State.InService);
 
         tp1Bldr.setTpType(OpenroadmTpType.XPONDERNETWORK);
         xpdrTpBldr.addAugmentation(tp1Bldr.build());
+        xpdrTpBldr.addAugmentation(tp11Bldr.build());
         TerminationPoint xpdr = xpdrTpBldr.build();
         org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Node1 node1 =
                 new Node1Builder().setTerminationPoint(Map.of(xpdr.key(),xpdr)).build();
+        Node1 node11 = new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1Builder()
+                .setAdministrativeState(AdminStates.InService).setOperationalState(State.InService).build();
 
 
         return new NodeBuilder()
                 .setNodeId(new NodeId("node 1"))
                 .withKey(new NodeKey(new NodeId("node 1")))
                 .addAugmentation(node1)
+                .addAugmentation(node11)
                 .setSupportingNode(supportingNodes1);
     }
 
@@ -233,6 +246,8 @@ public class NodeUtils {
                                 .setSpan(new SpanBuilder().build())
                                 .build())
                         .build();
+        Augmentation<Link> aug111 = new Link1Builder().setAdministrativeState(AdminStates.InService)
+                .setOperationalState(State.InService).build();
 
         TransactionUtils.getNetworkForSpanLoss();
         return new LinkBuilder()
@@ -246,6 +261,7 @@ public class NodeUtils {
                                 .setDestNode(new NodeId("OpenROADM-3-1-DEG1"))
                                 .setDestTp("DEG1-TTP-RX").build())
                 .addAugmentation(aug11)
+                .addAugmentation(aug111)
                 .build();
 
 
@@ -434,6 +450,8 @@ public class NodeUtils {
             .TerminationPoint1Builder createAnother2TerminationPoint(OpenroadmTpType openroadmTpType) {
         return new org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .TerminationPoint1Builder()
+                .setOperationalState(State.InService)
+                .setAdministrativeState(AdminStates.InService)
                 .setTpType(openroadmTpType);
     }
 
