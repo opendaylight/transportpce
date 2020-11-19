@@ -18,6 +18,8 @@ import org.opendaylight.transportpce.common.fixedflex.FixedGridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.pce.SortPortsByName;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.pp.attributes.UsedWavelength;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
@@ -40,6 +42,8 @@ public class PceOpticalNode implements PceNode {
     private final OpenroadmNodeType nodeType;
     private final ServiceFormat serviceFormat;
     private final String pceNodeType;
+    private AdminStates adminStates;
+    private State state;
 
     // wavelength calculation per node type
     private List<Long> availableWLindex = new ArrayList<>();
@@ -57,9 +61,15 @@ public class PceOpticalNode implements PceNode {
         this.nodeType = nodeType;
         this.serviceFormat = serviceFormat;
         this.pceNodeType = pceNodeType;
+        if (node != null) {
+            this.adminStates = node.augmentation(org.opendaylight.yang.gen.v1.http
+                    .org.openroadm.common.network.rev200529.Node1.class).getAdministrativeState();
+            this.state = node.augmentation(org.opendaylight.yang.gen.v1.http
+                    .org.openroadm.common.network.rev200529.Node1.class).getOperationalState();
+        }
 
-        if ((node == null) || (nodeId == null) || (nodeType == null)) {
-            LOG.error("PceNode: one of parameters is not populated : nodeId, node type");
+        if ((node == null) || (nodeId == null) || (nodeType == null) || (adminStates == null) || state == null) {
+            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, adminstate, state");
             this.valid = false;
         }
     }
@@ -94,8 +104,10 @@ public class PceOpticalNode implements PceNode {
                 case SRGTXRXCP:
                 case SRGRXCP:
                 case SRGTXCP:
-                    LOG.info("initSrgTpList: adding SRG-CP tp = {} ", tp.getTpId().getValue());
-                    this.availableSrgCp.put(tp.getTpId().getValue(), cntp1.getTpType());
+                    if (State.InService.equals(cntp1.getOperationalState())) {
+                        LOG.info("initSrgTpList: adding SRG-CP tp = {} ", tp.getTpId().getValue());
+                        this.availableSrgCp.put(tp.getTpId().getValue(), cntp1.getTpType());
+                    }
                     break;
                 case SRGRXPP:
                 case SRGTXPP:
@@ -113,8 +125,10 @@ public class PceOpticalNode implements PceNode {
                         used = false;
                     }
                     if (!used) {
-                        LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
-                        this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
+                        if (State.InService.equals(cntp1.getOperationalState())) {
+                            LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
+                            this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
+                        }
                     } else {
                         LOG.warn("initSrgTpList: SRG-PP tp = {} found is busy !!", tp.getTpId().getValue());
                     }
@@ -138,10 +152,18 @@ public class PceOpticalNode implements PceNode {
             return;
         }
         Node1 node1 = this.node.augmentation(Node1.class);
+        org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 node11 =
+                this.node.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1
+                        .class);
         byte[] freqMap;
 
         switch (this.nodeType) {
             case SRG :
+                if (!State.InService.equals(node11.getOperationalState())) {
+                    this.valid = false;
+                    LOG.error("initWLlist: SRG node {} is OOS/degraded", this);
+                    return;
+                }
                 if (!node1.getSrgAttributes().nonnullAvailFreqMaps().containsKey(freqMapKey)) {
                     LOG.error("initWLlist: SRG no cband available freq maps for node  {}", this);
                     this.valid = false;
@@ -151,6 +173,11 @@ public class PceOpticalNode implements PceNode {
                 updateAvailableWlIndex(freqMap);
                 break;
             case DEGREE :
+                if (!State.InService.equals(node11.getOperationalState())) {
+                    this.valid = false;
+                    LOG.error("initWLlist: Degree node {} is OOS/degraded", this);
+                    return;
+                }
                 if (!node1.getDegreeAttributes().nonnullAvailFreqMaps().containsKey(freqMapKey)) {
                     LOG.error("initWLlist: DEG no cband available freq maps for node  {}", this);
                     this.valid = false;
@@ -160,6 +187,11 @@ public class PceOpticalNode implements PceNode {
                 updateAvailableWlIndex(freqMap);
                 break;
             case XPONDER :
+                if (!State.InService.equals(node11.getOperationalState())) {
+                    this.valid = false;
+                    LOG.error("initWLlist: XPDR node {} is OOS/degraded", this);
+                    return;
+                }
                 // HARD CODED 96
                 for (long i = 1; i <= FixedGridConstant.NB_CHANNELS; i++) {
                     this.availableWLindex.add(i);
@@ -199,31 +231,30 @@ public class PceOpticalNode implements PceNode {
                 .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529
                 .TerminationPoint1.class);
             if (cntp1.getTpType() == OpenroadmTpType.XPONDERNETWORK) {
-                if (nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
-                    this.usedXpndrNWTps.add(tp.getTpId().getValue());
-                    LOG.info("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
-                } else {
-                    this.valid = true;
-                }
-                // find Client of this network TP
-                String client;
-                org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1 tpceTp1 =
-                    tp.augmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019
-                        .TerminationPoint1.class);
-                if (tpceTp1 != null) {
-                    client = tpceTp1.getAssociatedConnectionMapPort();
-                    if (client != null) {
-                        this.clientPerNwTp.put(tp.getTpId().getValue(), client);
-                        this.valid = true;
+                if (State.InService.equals(cntp1.getOperationalState())) {
+                    if (nttp1 != null && nttp1.getXpdrNetworkAttributes().getWavelength() != null) {
+                        this.usedXpndrNWTps.add(tp.getTpId().getValue());
+                        LOG.info("initXndrTps: XPONDER tp = {} is used", tp.getTpId().getValue());
                     } else {
-                        LOG.error("initXndrTps: XPONDER {} NW TP doesn't have defined Client {}",
-                            this, tp.getTpId().getValue());
+                        this.valid = true;
                     }
-                } else if (ServiceFormat.OTU.equals(this.serviceFormat)) {
-                    LOG.info("Infrastructure OTU4 connection");
-                    this.valid = true;
+                    // find Client of this network TP
+                    String client;
+                    org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019.TerminationPoint1 tpceTp1 =
+                            tp.augmentation(org.opendaylight.yang.gen.v1.http.transportpce.topology.rev201019
+                                    .TerminationPoint1.class);
+                    if (tpceTp1 != null) {
+                        client = tpceTp1.getAssociatedConnectionMapPort();
+                        if (client != null) {
+                            this.clientPerNwTp.put(tp.getTpId().getValue(), client);
+                            this.valid = true;
+                        } else {
+                            LOG.error("Service Format {} not managed yet", this.serviceFormat.getName());
+                        }
+                    }
                 } else {
-                    LOG.error("Service Format {} not managed yet", this.serviceFormat.getName());
+                    LOG.warn("initXndrTps: XPONDER tp = {} is OOS/degraded", tp.getTpId().getValue());
+                    this.valid = false;
                 }
             }
         }
@@ -308,8 +339,9 @@ public class PceOpticalNode implements PceNode {
 
     public boolean isValid() {
         if (node == null || nodeId == null || nodeType == null || this.getSupNetworkNodeId() == null
-            || this.getSupClliNodeId() == null) {
-            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId");
+            || this.getSupClliNodeId() == null || adminStates == null || state == null) {
+            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, supporting nodeId, "
+                    + "admin state, operational state");
             valid = false;
         }
         return valid;
@@ -318,6 +350,16 @@ public class PceOpticalNode implements PceNode {
     @Override
     public List<PceLink> getOutgoingLinks() {
         return outgoingLinks;
+    }
+
+    @Override
+    public AdminStates getAdminStates() {
+        return adminStates;
+    }
+
+    @Override
+    public State getState() {
+        return state;
     }
 
     @Override
