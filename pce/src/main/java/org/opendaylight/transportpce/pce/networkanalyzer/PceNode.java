@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev191129.State;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev191129.AdminStates;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yangtools.yang.common.Uint16;
 
@@ -31,6 +33,10 @@ public interface PceNode {
     boolean checkTP(String tp);
 
     List<PceLink> getOutgoingLinks();
+
+    AdminStates getAdminStates();
+
+    State getState();
 
     NodeId getNodeId();
 
