@@ -23,6 +23,7 @@ import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult.LocalCause;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,8 +176,10 @@ public class PceGraph {
         Iterator<Map.Entry<NodeId, PceNode>> nodes = allPceNodes.entrySet().iterator();
         while (nodes.hasNext()) {
             Map.Entry<NodeId, PceNode> node = nodes.next();
-            weightedGraph.addVertex(node.getValue().getNodeId().getValue());
-            LOG.debug("In populateWithNodes in node :  {}", node.getValue());
+            if (State.InService.equals(node.getValue().getState())) {
+                weightedGraph.addVertex(node.getValue().getNodeId().getValue());
+                LOG.debug("In populateWithNodes in node :  {}", node.getValue());
+            }
         }
     }
 
@@ -198,11 +201,12 @@ public class PceGraph {
                 if (!validateLinkforGraph(link)) {
                     continue;
                 }
+                if (State.InService.equals(link.getState())) {
+                    PceGraphEdge graphLink = new PceGraphEdge(link);
+                    weightedGraph.addEdge(link.getSourceId().getValue(), link.getDestId().getValue(), graphLink);
 
-                PceGraphEdge graphLink = new PceGraphEdge(link);
-                weightedGraph.addEdge(link.getSourceId().getValue(), link.getDestId().getValue(), graphLink);
-
-                weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
+                    weightedGraph.setEdgeWeight(graphLink, chooseWeight(link));
+                }
             }
         }
         return true;
