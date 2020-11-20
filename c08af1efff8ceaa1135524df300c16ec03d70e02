@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d9b46ed_a1150cf4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T14:51:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a94da81_047d5f08",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "c08af1efff8ceaa1135524df300c16ec03d70e02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31b3251f_32f32933",
         "filename": "networkmodel/src/test/java/org/opendaylight/transportpce/networkmodel/util/ClliNetworkTest.java",
         "patchSetId": 2
