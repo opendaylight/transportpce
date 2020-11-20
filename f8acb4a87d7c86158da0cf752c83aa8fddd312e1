@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e687ea6_74bcf694",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T10:48:53Z",
+      "side": 1,
+      "message": "should stay sticked",
+      "range": {
+        "startLine": 991,
+        "startChar": 74,
+        "endLine": 992,
+        "endChar": 34
+      },
+      "revId": "f8acb4a87d7c86158da0cf752c83aa8fddd312e1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
