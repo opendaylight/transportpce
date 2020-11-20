@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "36903574_876e0968",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T16:06:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47e53d9a_a32242f0",
+      "range": {
+        "startLine": 7,
+        "startChar": 25,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "30ddab8e_cd8d33c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T16:06:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db3666da_b9dd71f9",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90f72768_a3823a45",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "c4ffce13_332e6ac7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T16:06:11Z",
+      "side": 1,
+      "message": "I\u0027ve rebased and synced the 3 portmapping versions.\nIn my opinion, the protection added here does not affect the treatment.\nAnd I suspect it might be useful in other cases with buggy devices implementations, not only xponder.",
+      "parentUuid": "499a5247_dfd127f0",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 15
+      },
+      "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9578ca9_122ba39a",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
         "patchSetId": 1
@@ -115,6 +187,30 @@
       "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f784a704_0732772d",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T16:06:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e9578ca9_122ba39a",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 456,
+        "endChar": 9
+      },
+      "revId": "cdee943fc1a607e965f3a1d470daa30fe3e9a352",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
