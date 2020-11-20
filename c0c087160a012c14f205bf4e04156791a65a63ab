@@ -294,6 +294,30 @@
     },
     {
       "key": {
+        "uuid": "78ed50a5_e31cc633",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T15:01:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e796360d_553cb031",
+      "range": {
+        "startLine": 215,
+        "startChar": 4,
+        "endLine": 215,
+        "endChar": 85
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe0a265c_347f8838",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 6
