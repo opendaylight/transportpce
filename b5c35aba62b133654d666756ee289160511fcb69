@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "0b29f7d4_7ef7f349",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T14:59:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "18421e67_b95ae8e2",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 27
+      },
+      "revId": "b5c35aba62b133654d666756ee289160511fcb69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b66647c1_5c0ba753",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 2
@@ -284,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "83b5b181_f93f73e3",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/SortPort710ByName.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T14:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c8deaba_549f4c91",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 2,
+        "endChar": 27
+      },
+      "revId": "b5c35aba62b133654d666756ee289160511fcb69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2eab5240_b65185b4",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl.java",
         "patchSetId": 2
@@ -307,6 +355,30 @@
     },
     {
       "key": {
+        "uuid": "fcb92132_522f17b9",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T14:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2eab5240_b65185b4",
+      "range": {
+        "startLine": 61,
+        "startChar": 102,
+        "endLine": 62,
+        "endChar": 33
+      },
+      "revId": "b5c35aba62b133654d666756ee289160511fcb69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f90626b_ed3e28c3",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl.java",
         "patchSetId": 2
@@ -327,6 +399,30 @@
       "revId": "b5c35aba62b133654d666756ee289160511fcb69",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02cef4d7_1b6005f4",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/openroadminterfaces/OpenRoadmInterfacesImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-20T14:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f90626b_ed3e28c3",
+      "range": {
+        "startLine": 133,
+        "startChar": 65,
+        "endLine": 134,
+        "endChar": 33
+      },
+      "revId": "b5c35aba62b133654d666756ee289160511fcb69",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
