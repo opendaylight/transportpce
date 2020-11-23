@@ -2,6 +2,11 @@ module transportpce-pathDescription {
   namespace "http://org/transportpce/B-C-interface/pathDescription";
   prefix transportpce-pathDescription;
 
+  import org-openroadm-common-state-types {
+    prefix org-openroadm-common-state-types;
+    revision-date 2018-11-30;
+  }
+
   organization
     "transportPCE";
   contact
@@ -80,6 +85,11 @@ module transportpce-pathDescription {
             // to be clarified with topology model
           }
         }
+      }
+      leaf state {
+        type org-openroadm-common-state-types:state;
+        mandatory true;
+        description "Operational state of pce-resource";
       }
     }
   }

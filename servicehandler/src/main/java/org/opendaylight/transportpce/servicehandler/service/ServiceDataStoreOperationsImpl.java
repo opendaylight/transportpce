@@ -35,8 +35,10 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempSer
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.ServicesKey;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescription;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePaths;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.service.path.list.ServicePathsKey;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
@@ -53,11 +55,13 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
 
         public static final String SUCCESSFUL_MESSAGE;
         public static final String SERVICE_NOT_FOUND;
+        public static final String SERVICE_PATH_NOT_FOUND;
 
         // Static blocks are generated once and spare memory.
         static {
             SUCCESSFUL_MESSAGE = "Successful";
             SERVICE_NOT_FOUND = "Service not found";
+            SERVICE_PATH_NOT_FOUND = "Service path not found";
         }
 
         public static String failedTo(String action, String serviceName) {
@@ -271,6 +275,36 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
     }
 
     @Override
+    public Optional<ServicePathList> getServicePaths() {
+        LOG.debug("Retrieving list of ServicePath...");
+        try {
+            ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();
+            InstanceIdentifier<ServicePathList> servicePathListIID = InstanceIdentifier.create(ServicePathList.class);
+            Future<java.util.Optional<ServicePathList>> future = readTx.read(LogicalDatastoreType.OPERATIONAL,
+                    servicePathListIID);
+            return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.error("Reading service path list failed. Error={}", e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    private Optional<ServicePaths> getServicePath(String serviceName) {
+        LOG.debug("Retrieving service path of service {}", serviceName);
+        try {
+            ReadTransaction readTx = this.dataBroker.newReadOnlyTransaction();
+            InstanceIdentifier<ServicePaths> servicePathsIID = InstanceIdentifier.create(ServicePathList.class)
+                    .child(ServicePaths.class, new ServicePathsKey(serviceName));
+            Future<java.util.Optional<ServicePaths>> future = readTx.read(LogicalDatastoreType.OPERATIONAL,
+                    servicePathsIID);
+            return future.get(Timeouts.DATASTORE_READ, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.error("Reading service path failed. Error={}", e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public OperationResult createServicePath(ServiceInput serviceInput, PathComputationRequestOutput outputFromPce) {
         LOG.debug("Writing '{}' ServicePath ", serviceInput.getServiceName());
         try {
@@ -285,6 +319,43 @@ public class ServiceDataStoreOperationsImpl implements ServiceDataStoreOperation
             LOG.warn("createServicePath : {}",
                     LogMessages.failedTo("create servicePath", serviceInput.getCommonId()), e);
             return OperationResult.failed(LogMessages.failedTo("create servicePath", serviceInput.getCommonId()));
+        }
+    }
+
+    @Override
+    public OperationResult modifyServicePath(PathDescription pathDescription, String serviceName) {
+        LOG.debug("Updating servicePath because of a change in the openroadm-topology");
+        Optional<ServicePaths> readServicePath = getServicePath(serviceName);
+        if (!readServicePath.isPresent()) {
+            LOG.warn("modifyServicePath: {}", LogMessages.SERVICE_PATH_NOT_FOUND);
+            return OperationResult.failed(LogMessages.SERVICE_PATH_NOT_FOUND);
+        }
+        try {
+            WriteTransaction writeTx = this.dataBroker.newWriteOnlyTransaction();
+            InstanceIdentifier<ServicePaths> iid = InstanceIdentifier.create(ServicePathList.class)
+                    .child(ServicePaths.class, new ServicePathsKey(serviceName));
+            ServicePaths servicePaths = new ServicePathsBuilder()
+                    .setServiceAEnd(readServicePath.get().getServiceAEnd())
+                    .setServiceHandlerHeader(readServicePath.get().getServiceHandlerHeader())
+                    .setServicePathName(readServicePath.get().getServicePathName())
+                    .setServiceZEnd(readServicePath.get().getServiceZEnd())
+                    .setSupportingServiceName(readServicePath.get().getSupportingServiceName())
+                    .setEquipmentSrgs(readServicePath.get().getEquipmentSrgs())
+                    .setFiberSpanSrlgs(readServicePath.get().getFiberSpanSrlgs())
+                    .setHardConstraints(readServicePath.get().getHardConstraints())
+                    .setLatency(readServicePath.get().getLatency())
+                    .setLocallyProtectedLinks(readServicePath.get().isLocallyProtectedLinks())
+                    .setPathDescription(pathDescription)
+                    .setPceMetric(readServicePath.get().getPceMetric())
+                    .setSoftConstraints(readServicePath.get().getSoftConstraints())
+                    .build();
+
+            writeTx.merge(LogicalDatastoreType.OPERATIONAL, iid, servicePaths);
+            writeTx.commit().get(Timeouts.DATASTORE_WRITE, TimeUnit.MILLISECONDS);
+            return OperationResult.ok(LogMessages.SUCCESSFUL_MESSAGE);
+        } catch (TimeoutException | InterruptedException | ExecutionException e) {
+            LOG.warn("modifyServicePath : {}", LogMessages.failedTo("modify service path", serviceName), e);
+            return OperationResult.failed(LogMessages.failedTo("modify service path", serviceName));
         }
     }
 
