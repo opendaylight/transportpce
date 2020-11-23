@@ -16,6 +16,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.re
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.ServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.TempServiceCreateInput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.rev190531.service.list.Services;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.service.path.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.servicepath.rev171017.ServicePathList;
 
 /**
  * OpenROADM Service operations API providing basic operations on services.
@@ -114,6 +116,10 @@ public interface ServiceDataStoreOperations {
      * @return result of createTempService operation
      */
     OperationResult createTempService(TempServiceCreateInput tempServiceCreateInput);
+
+    Optional<ServicePathList> getServicePaths();
+
+    OperationResult modifyServicePath(PathDescription pathDescription, String serviceName);
 
     /**
      * deleteServicePath by name.

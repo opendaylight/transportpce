@@ -129,6 +129,7 @@ public class PceSendingPceRPCs {
         }
         LOG.info("PcePathDescription ...");
         PcePathDescription description = new PcePathDescription(graph.getPathAtoZ(), nwAnalizer.getAllPceLinks(), rc);
+        // As the check of state has been already done, we can derive that all elements at this stage are in service
         description.buildDescriptions();
         rc = description.getReturnStructure();
         if (!rc.getStatus()) {
