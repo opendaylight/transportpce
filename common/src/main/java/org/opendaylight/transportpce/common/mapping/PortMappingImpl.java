@@ -137,9 +137,9 @@ public class PortMappingImpl implements PortMapping {
             case 1:
                 return portMappingVersion121.updateMapping(nodeId, oldMapping);
             case 2:
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes
-                    .MappingBuilder oldMapping2Bldr221 = new MappingBuilder().setLogicalConnectionPoint(oldMapping
-                    .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
+                MappingBuilder oldMapping2Bldr221 = new MappingBuilder()
+                        .setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
+                        .setPortDirection(oldMapping.getPortDirection());
                 if (oldMapping.getConnectionMapLcp() != null) {
                     oldMapping2Bldr221.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
                 }
@@ -163,9 +163,9 @@ public class PortMappingImpl implements PortMapping {
                 }
                 return portMappingVersion22.updateMapping(nodeId, oldMapping2Bldr221.build());
             case 3:
-                org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes
-                    .MappingBuilder oldMapping2Bldr710 = new MappingBuilder().setLogicalConnectionPoint(oldMapping
-                    .getLogicalConnectionPoint()).setPortDirection(oldMapping.getPortDirection());
+                MappingBuilder oldMapping2Bldr710 = new MappingBuilder()
+                        .setLogicalConnectionPoint(oldMapping.getLogicalConnectionPoint())
+                        .setPortDirection(oldMapping.getPortDirection());
                 if (oldMapping.getConnectionMapLcp() != null) {
                     oldMapping2Bldr710.setConnectionMapLcp(oldMapping.getConnectionMapLcp());
                 }

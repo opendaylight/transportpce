@@ -89,10 +89,12 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.interfaces.rev191129.OtnO
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.Protocols1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.lldp.container.Lldp;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.lldp.rev200529.lldp.container.lldp.PortConfig;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.Ports1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities.SupportedInterfaceCapability;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities.SupportedInterfaceCapabilityKey;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.Ports1;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities
+//.SupportedInterfaceCapability;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.capability.rev200529.port.capability.grp.port.capabilities
+//.SupportedInterfaceCapabilityKey;
+//import org.opendaylight.yang.gen.v1.http.org.openroadm.port.types.rev200327.SupportedIfCapability;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.Uint16;
 import org.opendaylight.yangtools.yang.common.Uint32;
@@ -880,24 +882,12 @@ public class PortMappingVersion710 {
     }
 
     private List<McCapabilities> createMcCapDegreeObject(List<Degree> degrees,
-        Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfileMap, String nodeId) {
+            Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfileMap, String nodeId) {
+
         List<McCapabilities> mcCapabilitiesList = new ArrayList<>();
         for (Degree degree : degrees) {
-            if (!degree.getMcCapabilityProfileName().isEmpty()) {
-                for (String mcCapabilityProfileName : degree.getMcCapabilityProfileName()) {
-                    McCapabilityProfileKey mcKey = new McCapabilityProfileKey(mcCapabilityProfileName);
-                    McCapabilityProfile mcCapabilityProfile = mcCapabilityProfileMap.get(mcKey);
-                    String mcNodeName = "DEG" + degree.getDegreeNumber().toString() + "-TTP-" + mcCapabilityProfile;
-                    McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
-                        .withKey(new McCapabilitiesKey(mcNodeName))
-                        .setMcNodeName(mcNodeName);
-                    mcCapabilitiesBuilder
-                        .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
-                        .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
-                    mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
-                } // end for
-            }
-            else {
+
+            if ((degree.getMcCapabilityProfileName() == null) || (degree.getMcCapabilityProfileName().isEmpty())) {
                 LOG.warn("No MC profiles are found for  node {} on degree {}", nodeId, degree.getDegreeNumber());
                 LOG.warn("Assuming the fixed grid capabilities for degree {}", degree.getDegreeNumber());
                 LOG.warn("Assuming a default MC profile-name for degree {}", degree.getDegreeNumber());
@@ -908,30 +898,34 @@ public class PortMappingVersion710 {
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
                     .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
+                mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
+                continue;
             }
+
+            for (String mcCapabilityProfileName : degree.getMcCapabilityProfileName()) {
+                McCapabilityProfileKey mcKey = new McCapabilityProfileKey(mcCapabilityProfileName);
+                McCapabilityProfile mcCapabilityProfile = mcCapabilityProfileMap.get(mcKey);
+                String mcNodeName = "DEG" + degree.getDegreeNumber().toString() + "-TTP-" + mcCapabilityProfile;
+                McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
+                    .withKey(new McCapabilitiesKey(mcNodeName))
+                    .setMcNodeName(mcNodeName);
+                mcCapabilitiesBuilder
+                    .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
+                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
+                mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
+            }
+
         }
         return mcCapabilitiesList;
     }
 
     private List<McCapabilities> createMcCapSrgObject(List<SharedRiskGroup> srgs,
-        Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfileMap, String nodeId) {
+            Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfileMap, String nodeId) {
+
         List<McCapabilities> mcCapabilitiesList = new ArrayList<>();
         for (SharedRiskGroup srg : srgs) {
-            if (!srg.getMcCapabilityProfileName().isEmpty()) {
-                for (String mcCapabilityProfileName : srg.getMcCapabilityProfileName()) {
-                    McCapabilityProfileKey mcKey = new McCapabilityProfileKey(mcCapabilityProfileName);
-                    McCapabilityProfile mcCapabilityProfile = mcCapabilityProfileMap.get(mcKey);
-                    String mcNodeName = "SRG" + srg.getSrgNumber().toString() + "-PP-" + mcCapabilityProfile;
-                    McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
-                        .withKey(new McCapabilitiesKey(mcNodeName))
-                        .setMcNodeName(mcNodeName);
-                    mcCapabilitiesBuilder
-                        .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
-                        .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
-                    mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
-                } // end for
-            }
-            else {
+
+            if ((srg.getMcCapabilityProfileName() == null) || (srg.getMcCapabilityProfileName().isEmpty())) {
                 LOG.warn("No MC profiles are found for  node {} on SRG {}", nodeId, srg.getSrgNumber());
                 LOG.warn("Assuming the fixed grid capabilities for SRG {}", srg.getSrgNumber());
                 LOG.warn("Assuming a default MC profile-name for SRG {}", srg.getSrgNumber());
@@ -942,6 +936,21 @@ public class PortMappingVersion710 {
                 mcCapabilitiesBuilder
                     .setCenterFreqGranularity(FrequencyGHz.getDefaultInstance("50"))
                     .setSlotWidthGranularity(FrequencyGHz.getDefaultInstance("50"));
+                mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
+                continue;
+            }
+
+            for (String mcCapabilityProfileName : srg.getMcCapabilityProfileName()) {
+                McCapabilityProfileKey mcKey = new McCapabilityProfileKey(mcCapabilityProfileName);
+                McCapabilityProfile mcCapabilityProfile = mcCapabilityProfileMap.get(mcKey);
+                String mcNodeName = "SRG" + srg.getSrgNumber().toString() + "-PP-" + mcCapabilityProfile;
+                McCapabilitiesBuilder mcCapabilitiesBuilder = new McCapabilitiesBuilder()
+                    .withKey(new McCapabilitiesKey(mcNodeName))
+                    .setMcNodeName(mcNodeName);
+                mcCapabilitiesBuilder
+                    .setCenterFreqGranularity(mcCapabilityProfile.getCenterFreqGranularity())
+                    .setSlotWidthGranularity(mcCapabilityProfile.getSlotWidthGranularity());
+                mcCapabilitiesList.add(mcCapabilitiesBuilder.build());
             }
         }
         return mcCapabilitiesList;
@@ -1012,9 +1021,13 @@ public class PortMappingVersion710 {
         if (ports.getPortQual() != null) {
             mpBldr.setPortQual(ports.getPortQual().getName());
         }
+        // FIXME In 7.1.0, a port has no longer supported-interface-capability data.
+        // This check would generate a NPE. It should be removed and replaced by the adequate processing.
+        /*
         if (ports.augmentation(Ports1.class).getPortCapabilities().getSupportedInterfaceCapability() != null) {
             mpBldr.setSupportedInterfaceCapability(getSupportedIfCapability(ports));
         }
+        */
         if (xpdrNodeType != null) {
             mpBldr.setXponderType(xpdrNodeType);
         }
@@ -1024,7 +1037,9 @@ public class PortMappingVersion710 {
         return mpBldr.build();
     }
 
-
+    // FIXME In 7.1.0, a port has no longer supported-interface-capability data.
+    // This should be removed and replaced by the adequate processing.
+    /*
     private List<Class<? extends SupportedIfCapability>> getSupportedIfCapability(Ports ports) {
         Map<SupportedInterfaceCapabilityKey, SupportedInterfaceCapability> supportedInterfaceCapabilityMap =
             ports.augmentation(Ports1.class).getPortCapabilities().getSupportedInterfaceCapability();
@@ -1033,6 +1048,7 @@ public class PortMappingVersion710 {
         supportedInterfaceCapabilityMap.forEach((k, v) -> supportedInterfaceCapabilityList.add(k.getIfCapType()));
         return supportedInterfaceCapabilityList;
     }
+    */
 
     private boolean createMcCapabilitiesList(String nodeId, Info deviceInfo, List<McCapabilities> mcCapabilitiesList) {
         List<Degree> degrees = getDegrees(nodeId, deviceInfo);

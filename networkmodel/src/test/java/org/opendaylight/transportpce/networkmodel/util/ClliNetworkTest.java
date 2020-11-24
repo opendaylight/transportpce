@@ -61,8 +61,7 @@ public class ClliNetworkTest {
             .setNodeClli("NodeClliId")
             .setNodeModel("NodeModel")
             .setNodeIpAddress(new IpAddress(new Ipv4Address("127.0.0.1")))
-            .setNodeType(org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129
-                .NodeTypes.forValue(NodeTypes.Xpdr.getIntValue()))
+            .setNodeType(NodeTypes.forValue(NodeTypes.Xpdr.getIntValue()))
             .setNodeVendor("VendorA")
             .setOpenroadmVersion(OpenroadmVersion._121);
         return nodeBldr;
@@ -72,8 +71,7 @@ public class ClliNetworkTest {
         NodeInfoBuilder nodeBldr = new NodeInfoBuilder()
             .setNodeModel("NodeModel")
             .setNodeIpAddress(new IpAddress(new Ipv4Address("127.0.0.1")))
-            .setNodeType(org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129
-                .NodeTypes.forValue(NodeTypes.Xpdr.getIntValue()))
+            .setNodeType(NodeTypes.forValue(NodeTypes.Xpdr.getIntValue()))
             .setNodeVendor("VendorA")
             .setOpenroadmVersion(OpenroadmVersion._121);
         return nodeBldr;
