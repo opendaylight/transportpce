@@ -154,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "90f9a6a5_8071dbaa",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-24T12:11:48Z",
+      "side": 1,
+      "message": "Ack\nfixed in https://git.opendaylight.org/gerrit/c/transportpce/+/93917",
+      "parentUuid": "4753af52_7d51bf9b",
+      "range": {
+        "startLine": 140,
+        "startChar": 16,
+        "endLine": 141,
+        "endChar": 21
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f05affc_e45a1ab8",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
         "patchSetId": 6
@@ -174,6 +198,30 @@
       "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa903d55_8688c002",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-24T12:11:48Z",
+      "side": 1,
+      "message": "Ack\nfixed in https://git.opendaylight.org/gerrit/c/transportpce/+/93917",
+      "parentUuid": "9f05affc_e45a1ab8",
+      "range": {
+        "startLine": 166,
+        "startChar": 16,
+        "endLine": 167,
+        "endChar": 21
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -365,6 +413,30 @@
     },
     {
       "key": {
+        "uuid": "e4f92050_9a5961f6",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-24T12:11:48Z",
+      "side": 1,
+      "message": "Ack\nfixed in https://git.opendaylight.org/gerrit/c/transportpce/+/93917",
+      "parentUuid": "fe0a265c_347f8838",
+      "range": {
+        "startLine": 897,
+        "startChar": 16,
+        "endLine": 897,
+        "endChar": 52
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4dc691d4_caa7a16b",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 6
@@ -385,6 +457,30 @@
       "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "810333ea_bb10c8b2",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-24T12:11:48Z",
+      "side": 1,
+      "message": "Ack\nfixed in https://git.opendaylight.org/gerrit/c/transportpce/+/93917",
+      "parentUuid": "4dc691d4_caa7a16b",
+      "range": {
+        "startLine": 921,
+        "startChar": 2,
+        "endLine": 922,
+        "endChar": 13
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -411,6 +507,30 @@
     },
     {
       "key": {
+        "uuid": "7708aa68_a53a2c12",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-24T12:11:48Z",
+      "side": 1,
+      "message": "Ack\nfixed in https://git.opendaylight.org/gerrit/c/transportpce/+/93917",
+      "parentUuid": "b0ed3d68_4906054c",
+      "range": {
+        "startLine": 931,
+        "startChar": 16,
+        "endLine": 931,
+        "endChar": 49
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0cac37fd_f75ab57c",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 6
@@ -431,6 +551,30 @@
       "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d913d7f6_b1485edf",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-24T12:11:48Z",
+      "side": 1,
+      "message": "Ack\nfixed in https://git.opendaylight.org/gerrit/c/transportpce/+/93917",
+      "parentUuid": "0cac37fd_f75ab57c",
+      "range": {
+        "startLine": 955,
+        "startChar": 2,
+        "endLine": 955,
+        "endChar": 84
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
@@ -457,6 +601,30 @@
     },
     {
       "key": {
+        "uuid": "db5ec5f4_98918865",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-24T12:11:48Z",
+      "side": 1,
+      "message": "Ack\ncommented out with a FIXME  in https://git.opendaylight.org/gerrit/c/transportpce/+/93917",
+      "parentUuid": "767898e5_9956233c",
+      "range": {
+        "startLine": 1024,
+        "startChar": 1,
+        "endLine": 1026,
+        "endChar": 13
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4aa40462_407dc3c6",
         "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
         "patchSetId": 6
@@ -477,6 +645,30 @@
       "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70f771e9_7d7ea606",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-24T12:11:48Z",
+      "side": 1,
+      "message": "Ack\ncommented out with a FIXME  in https://git.opendaylight.org/gerrit/c/transportpce/+/93917",
+      "parentUuid": "4aa40462_407dc3c6",
+      "range": {
+        "startLine": 1039,
+        "startChar": 0,
+        "endLine": 1046,
+        "endChar": 5
+      },
+      "revId": "c0c087160a012c14f205bf4e04156791a65a63ab",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     },
     {
       "key": {
