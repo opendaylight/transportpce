@@ -25,7 +25,6 @@ import org.opendaylight.transportpce.pce.utils.NodeUtils;
 import org.opendaylight.transportpce.pce.utils.PceTestData;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeBuilder;
@@ -50,13 +49,11 @@ public class PcePathDescriptionTests extends AbstractTest {
         //  Link link=genereateLinkBuilder();
 
         NodeBuilder node1Builder = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes());
-        node = node1Builder.build();
+        node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG, new NodeId("OpenROADM-3-2-DEG1"), ServiceFormat.Ethernet,
-                "DEGREE");
+                OpenroadmNodeType.SRG);
         PceOpticalNode pceOpticalNode2 = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG, new NodeId("OpenROADM-3-1-DEG1"), ServiceFormat.Ethernet,
-                "DEGREE");
+                OpenroadmNodeType.SRG);
 
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
         pceLink.setClient("XPONDER-CLIENT");
