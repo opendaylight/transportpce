@@ -474,9 +474,8 @@ public class PceCalculation {
         }
         OpenroadmNodeType nodeType = node1.getNodeType();
 
-        PceOpticalNode pceNode = new PceOpticalNode(node, nodeType, node.getNodeId(),
-            input.getServiceAEnd().getServiceFormat(), "optical");
-        pceNode.validateAZxponder(anodeId, znodeId);
+        PceOpticalNode pceNode = new PceOpticalNode(node, nodeType);
+        pceNode.validateAZxponder(anodeId, znodeId, input.getServiceAEnd().getServiceFormat());
         pceNode.initWLlist();
 
         if (!pceNode.isValid()) {
@@ -616,7 +615,7 @@ public class PceCalculation {
                 this.azSrgs.add(nodeId);
                 break;
             case XPONDER:
-                pceNode.initXndrTps();
+                pceNode.initXndrTps(input.getServiceAEnd().getServiceFormat());
                 break;
             default:
                 LOG.warn("endPceNode: Node {} is not SRG or XPONDER !", nodeId);
