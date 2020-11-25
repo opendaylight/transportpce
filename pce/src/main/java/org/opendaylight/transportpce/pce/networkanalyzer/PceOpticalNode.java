@@ -19,7 +19,6 @@ import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.pce.SortPortsByName;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.termination.point.pp.attributes.UsedWavelength;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsKey;
@@ -35,11 +34,9 @@ public class PceOpticalNode implements PceNode {
 
     private boolean valid = true;
 
-    private final Node node;
-    private final NodeId nodeId;
-    private final OpenroadmNodeType nodeType;
-    private final ServiceFormat serviceFormat;
-    private final String pceNodeType;
+    private Node node;
+    private NodeId nodeId;
+    private OpenroadmNodeType nodeType;
 
     // wavelength calculation per node type
     private List<Long> availableWLindex = new ArrayList<>();
@@ -50,15 +47,12 @@ public class PceOpticalNode implements PceNode {
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private final AvailFreqMapsKey freqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
 
-    public PceOpticalNode(Node node, OpenroadmNodeType nodeType, NodeId nodeId, ServiceFormat serviceFormat,
-        String pceNodeType) {
-        this.node = node;
-        this.nodeId = nodeId;
-        this.nodeType = nodeType;
-        this.serviceFormat = serviceFormat;
-        this.pceNodeType = pceNodeType;
-
-        if ((node == null) || (nodeId == null) || (nodeType == null)) {
+    public PceOpticalNode(Node node, OpenroadmNodeType nodeType) {
+        if (node != null && node.getNodeId() != null && nodeType != null) {
+            this.node = node;
+            this.nodeId = node.getNodeId();
+            this.nodeType = nodeType;
+        } else {
             LOG.error("PceNode: one of parameters is not populated : nodeId, node type");
             this.valid = false;
         }
@@ -100,19 +94,11 @@ public class PceOpticalNode implements PceNode {
                 case SRGRXPP:
                 case SRGTXPP:
                 case SRGTXRXPP:
-                    boolean used = true;
+                    boolean used = nttp1 == null || nttp1.getPpAttributes() == null
+                            || nttp1.getPpAttributes().getUsedWavelength() == null
+                            || nttp1.getPpAttributes().getUsedWavelength().values().isEmpty();
                     LOG.info("initSrgTpList: SRG-PP tp = {} found", tp.getTpId().getValue());
-                    try {
-                        List<UsedWavelength> usedWavelengths =
-                            new ArrayList<>(nttp1.getPpAttributes().getUsedWavelength().values());
-                        if (usedWavelengths.isEmpty()) {
-                            used = false;
-                        }
-                    } catch (NullPointerException e) {
-                        LOG.warn("initSrgTpList: 'usedWavelengths' for tp={} is null !", tp.getTpId().getValue());
-                        used = false;
-                    }
-                    if (!used) {
+                    if (used) {
                         LOG.info("initSrgTpList: adding SRG-PP tp '{}'", tp.getTpId().getValue());
                         this.availableSrgPp.put(tp.getTpId().getValue(), cntp1.getTpType());
                     } else {
@@ -176,7 +162,7 @@ public class PceOpticalNode implements PceNode {
         LOG.debug("initWLlist: availableWLindex size = {} in {}", this.availableWLindex.size(), this);
     }
 
-    public void initXndrTps() {
+    public void initXndrTps(ServiceFormat serviceFormat) {
         LOG.info("PceNod: initXndrTps for node : {}", this.nodeId);
         if (!isValid()) {
             return;
@@ -219,11 +205,11 @@ public class PceOpticalNode implements PceNode {
                         LOG.error("initXndrTps: XPONDER {} NW TP doesn't have defined Client {}",
                             this, tp.getTpId().getValue());
                     }
-                } else if (ServiceFormat.OTU.equals(this.serviceFormat)) {
+                } else if (ServiceFormat.OTU.equals(serviceFormat)) {
                     LOG.info("Infrastructure OTU4 connection");
                     this.valid = true;
                 } else {
-                    LOG.error("Service Format {} not managed yet", this.serviceFormat.getName());
+                    LOG.error("Service Format {} not managed yet", serviceFormat.getName());
                 }
             }
         }
@@ -279,7 +265,7 @@ public class PceOpticalNode implements PceNode {
     }
 
 
-    public void validateAZxponder(String anodeId, String znodeId) {
+    public void validateAZxponder(String anodeId, String znodeId, ServiceFormat serviceFormat) {
         if (!isValid()) {
             return;
         }
@@ -289,7 +275,7 @@ public class PceOpticalNode implements PceNode {
         // Detect A and Z
         if (this.getSupNetworkNodeId().equals(anodeId) || (this.getSupNetworkNodeId().equals(znodeId))) {
             LOG.info("validateAZxponder: A or Z node detected == {}", nodeId.getValue());
-            initXndrTps();
+            initXndrTps(serviceFormat);
             return;
         }
         LOG.debug("validateAZxponder: XPONDER is ignored == {}", nodeId.getValue());
@@ -332,7 +318,7 @@ public class PceOpticalNode implements PceNode {
 
     @Override
     public String getPceNodeType() {
-        return this.pceNodeType;
+        return "optical";
     }
 
     @Override

@@ -28,6 +28,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.routing.constraints.rev171017.RoutingConstraintsSp;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.NodeKey;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 
 public class PceGraphTest {
@@ -50,17 +51,19 @@ public class PceGraphTest {
                 "OpenROADM-3-1-DEG1",
                 "DEG1-TTP-TX", "DEG1-TTP-RX").build();
 
-        node = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes()).build();
-
+        NodeId nodeId = new NodeId("OpenROADM-3-2-DEG1");
+        node = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes())
+                .setNodeId(nodeId).withKey(new NodeKey(nodeId))
+                .build();
         pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG, new NodeId("OpenROADM-3-2-DEG1"), ServiceFormat.Ethernet,
-                "DEGREE");
+                OpenroadmNodeType.DEGREE);
         pceOpticalNode.checkWL(1);
         pceOpticalNode.checkWL(2);
-
-        pceOpticalNode2 = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG, new NodeId("OpenROADM-3-1-DEG1"), ServiceFormat.Ethernet,
-                "DEGREE");
+        NodeId nodeId2 = new NodeId("OpenROADM-3-1-DEG1");
+        Node node2 = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes())
+                .setNodeId(nodeId2).withKey(new NodeKey(nodeId2)).build();
+        pceOpticalNode2 = new PceOpticalNode(node2,
+                OpenroadmNodeType.DEGREE);
         pceOpticalNode2.checkWL(1);
         pceOpticalNode2.checkWL(2);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
@@ -72,8 +75,8 @@ public class PceGraphTest {
         // init PceHardContraints
         pceHardConstraints = new PceConstraints();
         // pceHardConstraints.setp
-        allPceNodes = Map.of(new NodeId("OpenROADM-3-2-DEG1"), pceOpticalNode,
-                new NodeId("OpenROADM-3-1-DEG1"), pceOpticalNode2);
+        allPceNodes = Map.of(nodeId, pceOpticalNode,
+                nodeId2, pceOpticalNode2);
         rc = new PceResult();
         pceGraph = new PceGraph(pceOpticalNode, pceOpticalNode2, allPceNodes,
                 pceHardConstraints,
