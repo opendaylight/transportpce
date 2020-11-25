@@ -488,11 +488,37 @@ public class PceCalculation {
             return false;
         }
         if ((pceNode.getSupNetworkNodeId().equals(anodeId) && (this.aendPceNode == null))
-            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
+            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))
+            && "Ethernet".equals(this.serviceFormatA)) {
             this.aendPceNode = pceNode;
         }
         if ((pceNode.getSupNetworkNodeId().equals(znodeId) && (this.zendPceNode == null))
-            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
+            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))
+            && "Ethernet".equals(this.serviceFormatZ)) {
+            this.zendPceNode = pceNode;
+        }
+        if ((pceNode.getSupNetworkNodeId().equals(anodeId) && (this.aendPceNode == null))
+            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))
+            && "OC".equals(this.serviceFormatA)) {
+            this.aendPceNode = pceNode;
+        }
+        if ((pceNode.getSupNetworkNodeId().equals(znodeId) && (this.zendPceNode == null))
+            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))
+            && "OC".equals(this.serviceFormatZ)) {
+            this.zendPceNode = pceNode;
+        }
+        if (this.aendPceNode == null
+            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))
+            && "OTU".equals(this.serviceFormatA)
+            && pceNode.getNodeId().getValue()
+                .equals(this.input.getServiceAEnd().getRxDirection().getPort().getPortDeviceName())) {
+            this.aendPceNode = pceNode;
+        }
+        if (this.zendPceNode == null
+            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))
+            && "OTU".equals(this.serviceFormatZ)
+            && pceNode.getNodeId().getValue()
+                .equals(this.input.getServiceZEnd().getRxDirection().getPort().getPortDeviceName())) {
             this.zendPceNode = pceNode;
         }
 
