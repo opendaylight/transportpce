@@ -7,7 +7,9 @@
  */
 package org.opendaylight.transportpce.networkmodel.dto;
 
+import java.util.List;
 import java.util.Map;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.portmapping.rev201012.network.nodes.Mapping;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.device.types.rev191129.XpdrNodeTypes;
 
 public class OtnTopoNode {
@@ -17,9 +19,12 @@ public class OtnTopoNode {
     private int xpdrNb;
     private Map<String, String> xpdrNetConnectionMap;
     private Map<String, String> xpdrCliConnectionMap;
+    private List<Mapping> xpdrClMappings;
+    private List<Mapping> xpdrNetMappings;
 
     public OtnTopoNode(String nodeid, String clli, int xpdrNb, XpdrNodeTypes xpdrNodeTypes,
-        Map<String, String> xpdrNetConnectionMap, Map<String, String> xpdrCliConnectionMap) {
+        Map<String, String> xpdrNetConnectionMap, Map<String, String> xpdrCliConnectionMap, List<Mapping> xpdrNetMaps,
+        List<Mapping> xpdrClMaps) {
         super();
         this.nodeId = nodeid;
         this.clli = clli;
@@ -27,6 +32,8 @@ public class OtnTopoNode {
         this.xpdrNb = xpdrNb;
         this.xpdrNetConnectionMap = xpdrNetConnectionMap;
         this.xpdrCliConnectionMap = xpdrCliConnectionMap;
+        this.xpdrNetMappings = xpdrNetMaps;
+        this.xpdrClMappings = xpdrClMaps;
     }
 
     public String getNodeId() {
@@ -59,5 +66,13 @@ public class OtnTopoNode {
 
     public Map<String, String> getXpdrCliConnectionMap() {
         return xpdrCliConnectionMap;
+    }
+
+    public List<Mapping> getXpdrClMappings() {
+        return xpdrClMappings;
+    }
+
+    public List<Mapping> getXpdrNetMappings() {
+        return xpdrNetMappings;
     }
 }
