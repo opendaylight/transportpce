@@ -63,15 +63,13 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Before
     public void setUp() {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.SRGTXRXPP);
-        node = node1Builder.build();
+        node = node1Builder.setNodeId(new NodeId("test")).build();
     }
 
     @Test
     public void isValidTest() {
         OpenroadmNodeType nodeType = OpenroadmNodeType.ROADM;
-        ServiceFormat serviceFormat = ServiceFormat.Ethernet;
-        String pceNodeType = "pceNodeType";
-        pceOpticalNode = new PceOpticalNode(node, nodeType, new NodeId("node_test"), serviceFormat, pceNodeType);
+        pceOpticalNode = new PceOpticalNode(node, nodeType);
         Assert.assertTrue(pceOpticalNode.isValid());
     }
 
@@ -79,9 +77,9 @@ public class PceOpticalNodeTest extends AbstractTest {
     public void testInitSrgTps() {
 
         pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.ROADM);
         pceOpticalNode.initSrgTps();
-        pceOpticalNode.initXndrTps();
+        pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         pceOpticalNode.initWLlist();
         Assert.assertFalse(pceOpticalNode.isValid());
         Assert.assertFalse(pceOpticalNode.checkWL(12));
@@ -96,7 +94,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.XPONDERNETWORK);
         Node specificNode = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(specificNode,
-                OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.SRG);
         pceOpticalNode.initWLlist();
         Assert.assertTrue(pceOpticalNode.isValid());
         Assert.assertTrue(pceOpticalNode.checkWL(12));
@@ -106,7 +104,7 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testInitXndrTpDegTypes() {
         pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.DEGREE, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.DEGREE);
         pceOpticalNode.initWLlist();
         Assert.assertTrue(pceOpticalNode.isValid());
         Assert.assertFalse(pceOpticalNode.checkWL(12));
@@ -116,7 +114,7 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testInitXndrTpXpondrTypes() {
         pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.XPONDER, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.XPONDER);
         pceOpticalNode.initWLlist();
         Assert.assertTrue(pceOpticalNode.isValid());
         Assert.assertTrue(pceOpticalNode.checkWL(12));
@@ -126,8 +124,8 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testInitWLlist() {
         pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
-        pceOpticalNode.initXndrTps();
+                OpenroadmNodeType.ROADM);
+        pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         pceOpticalNode.initWLlist();
         Assert.assertFalse(pceOpticalNode.isValid());
         Assert.assertFalse(pceOpticalNode.checkWL(12));
@@ -137,7 +135,7 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testGetRdmSrgClient() {
         pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.ROADM);
         pceOpticalNode.initSrgTps();
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("7"));
         Assert.assertFalse(pceOpticalNode.isValid());
@@ -148,12 +146,12 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testGetRdmSrgClientEmpty() {
         NodeBuilder node1Builder = getNodeBuilderEmpty(geSupportingNodes(), OpenroadmTpType.SRGTXRXPP);
-        Node specificNode = node1Builder.build();
+        Node specificNode = node1Builder.setNodeId(new NodeId("test")).build();
         pceOpticalNode = new PceOpticalNode(specificNode,
-                OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.ROADM);
         pceOpticalNode.initSrgTps();
         pceOpticalNode.initWLlist();
-        pceOpticalNode.initXndrTps();
+        pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("7"));
         Assert.assertFalse(pceOpticalNode.isValid());
         Assert.assertFalse(pceOpticalNode.checkWL(12));
@@ -163,7 +161,7 @@ public class PceOpticalNodeTest extends AbstractTest {
     @Test
     public void testGetRdmSrgClientDeg() {
         pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.DEGREE, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.DEGREE);
         pceOpticalNode.initSrgTps();
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("7"));
         Assert.assertFalse(pceOpticalNode.isValid());
@@ -176,7 +174,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.SRGTXCP);
         Node specificNode = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(specificNode,
-                OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.ROADM);
         pceOpticalNode.initSrgTps();
         Assert.assertFalse(pceOpticalNode.isValid());
         Assert.assertFalse(pceOpticalNode.checkWL(12));
@@ -189,7 +187,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.DEGREERXTTP);
         node = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.ROADM, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.ROADM);
         pceOpticalNode.initSrgTps();
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("2"));
         Assert.assertFalse(pceOpticalNode.isValid());
