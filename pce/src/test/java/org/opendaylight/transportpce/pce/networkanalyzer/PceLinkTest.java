@@ -26,7 +26,6 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev20052
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmLinkType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmTpType;
-import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NetworkId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network.Node;
@@ -63,12 +62,10 @@ public class PceLinkTest extends AbstractTest {
         Link link = createRoadmToRoadm("srcNode",
                 "destNode",
                 "srcTp", "destTp").build();
-
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
-
+        Node node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.SRG);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
     }
 
@@ -79,10 +76,9 @@ public class PceLinkTest extends AbstractTest {
                 "srcTp", "destTp").build();
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
-
+        Node node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.SRG);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
     }
 
@@ -93,10 +89,9 @@ public class PceLinkTest extends AbstractTest {
                 "srcTp", "destTp").build();
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
-
+        Node node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.SRG);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
 
     }
@@ -108,10 +103,9 @@ public class PceLinkTest extends AbstractTest {
                 "srcTp", "destTp").build();
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
-
+        Node node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.SRG);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
     }
 
@@ -122,10 +116,9 @@ public class PceLinkTest extends AbstractTest {
                 "srcTp", "destTp").build();
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
-        Node node = node1Builder.build();
-
+        Node node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG, new NodeId("optical"), ServiceFormat.OMS, "test");
+                OpenroadmNodeType.SRG);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
         Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
         Assert.assertNotNull(pceLink.calcSpanOSNR());
