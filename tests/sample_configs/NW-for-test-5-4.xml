@@ -67,16 +67,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-1-1</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-1-1</node-ref>    </supporting-node>
@@ -190,16 +221,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-1-2</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-1-2</node-ref>    </supporting-node>
@@ -313,16 +375,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-1-3</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-1-3</node-ref>    </supporting-node>
@@ -436,16 +529,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-1-4</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-1-4</node-ref>    </supporting-node>
@@ -559,16 +683,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-2-1</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-2-1</node-ref>    </supporting-node>
@@ -682,16 +837,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-2-2</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-2-2</node-ref>    </supporting-node>
@@ -805,16 +991,47 @@
                 </freq-map>
             </avail-freq-maps>>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-2-3</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-2-3</node-ref>    </supporting-node>
@@ -928,16 +1145,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-2-4</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-2-4</node-ref>    </supporting-node>
@@ -1051,16 +1299,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-3-1</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-3-1</node-ref>    </supporting-node>
@@ -1174,16 +1453,47 @@
                 </freq-map>
             </avail-freq-maps>>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-3-2</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-3-2</node-ref>    </supporting-node>
@@ -1297,16 +1607,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-3-3</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-3-3</node-ref>    </supporting-node>
@@ -1420,16 +1761,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-3-4</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-3-4</node-ref>    </supporting-node>
@@ -1543,16 +1915,47 @@
                 </freq-map>
             </avail-freq-maps>>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-4-1</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-4-1</node-ref>    </supporting-node>
@@ -1666,16 +2069,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-4-2</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-4-2</node-ref>    </supporting-node>
@@ -1789,16 +2223,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-4-3</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-4-3</node-ref>    </supporting-node>
@@ -1912,16 +2377,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-4-4</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-4-4</node-ref>    </supporting-node>
@@ -2035,16 +2531,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-5-1</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-5-1</node-ref>    </supporting-node>
@@ -2158,16 +2685,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-5-2</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-5-2</node-ref>    </supporting-node>
@@ -2281,16 +2839,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-5-3</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-5-3</node-ref>    </supporting-node>
@@ -2404,16 +2993,47 @@
                 </freq-map>
             </avail-freq-maps>
         </srg-attributes>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-RX</tp-id>               </termination-point>
-        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">               <tp-id>SRG1-CP-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP1-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP1-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP2-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP2-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP3-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP3-TX</tp-id>               </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">            <tp-id>SRG1-PP4-RX</tp-id>        </termination-point>
-<termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">                   <tp-id>SRG1-PP4-TX</tp-id>               </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-CP-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-CP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP1-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP2-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP3-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-RX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-RX-PP</tp-type>
+        </termination-point>
+        <termination-point xmlns="urn:ietf:params:xml:ns:yang:ietf-network-topology">
+            <tp-id>SRG1-PP4-TX</tp-id>
+            <tp-type xmlns="http://org/openroadm/common/network">SRG-TX-PP</tp-type>
+        </termination-point>
+
 </node>
 <node>        <node-id>XPONDER-5-4</node-id>
     <supporting-node><network-ref>openroadm-network</network-ref><node-ref>XPONDER-5-4</node-ref>    </supporting-node>

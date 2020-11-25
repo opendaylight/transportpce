@@ -483,16 +483,15 @@ public class PceCalculation {
             LOG.warn(" validateNode: Node is ignored");
             return false;
         }
-
         if (validateNodeConstraints(pceNode).equals(ConstraintTypes.HARD_EXCLUDE)) {
             return false;
         }
-        if ((pceNode.getSupNetworkNodeId().equals(anodeId) && (this.aendPceNode == null))
-            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
+        if (endPceNode(nodeType, pceNode.getNodeId(), pceNode) && this.aendPceNode == null
+            && isAZendPceNode(this.serviceFormatA, pceNode, anodeId, "A")) {
             this.aendPceNode = pceNode;
         }
-        if ((pceNode.getSupNetworkNodeId().equals(znodeId) && (this.zendPceNode == null))
-            && (Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode)))) {
+        if (endPceNode(nodeType, pceNode.getNodeId(), pceNode) && this.zendPceNode == null
+            && isAZendPceNode(this.serviceFormatZ, pceNode, znodeId, "Z")) {
             this.zendPceNode = pceNode;
         }
 
@@ -501,8 +500,31 @@ public class PceCalculation {
         return true;
     }
 
-    private boolean validateOtnNode(Node node) {
+    private boolean isAZendPceNode(String serviceFormat, PceOpticalNode pceNode, String azNodeId, String azEndPoint) {
+        switch (serviceFormat) {
+            case "Ethernet":
+            case "OC":
+                if (pceNode.getSupNetworkNodeId().equals(azNodeId)) {
+                    return true;
+                }
+                return false;
+            case "OTU":
+                if ("A".equals(azEndPoint) && pceNode.getNodeId().getValue()
+                    .equals(this.input.getServiceAEnd().getRxDirection().getPort().getPortDeviceName())) {
+                    return true;
+                }
+                if ("Z".equals(azEndPoint) && pceNode.getNodeId().getValue()
+                    .equals(this.input.getServiceZEnd().getRxDirection().getPort().getPortDeviceName())) {
+                    return true;
+                }
+                return false;
+            default:
+                LOG.debug("Unsupported service Format {} for node {}", serviceFormat, pceNode.getNodeId().getValue());
+                return false;
+        }
+    }
 
+    private boolean validateOtnNode(Node node) {
         LOG.info("validateOtnNode: {} ", node.getNodeId().getValue());
         // PceOtnNode will be used in Graph algorithm
         if (node.augmentation(Node1.class) != null) {
