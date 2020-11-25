@@ -136,7 +136,8 @@ class TransportPCEtesting(unittest.TestCase):
             'SPDR-SA1-XPDR1': {
                 'node-type': 'MUXPDR',
                 'xpdr-number': 1,
-                'port-types': 'org-openroadm-port-types:if-10GE-ODU2e',
+                'port-types': ['org-openroadm-port-types:if-10GE-ODU2', 'org-openroadm-port-types:if-10GE-ODU2e',
+                               'org-openroadm-port-types:if-10GE'],
                 'otn-common-types': 'org-openroadm-otn-common-types:ODU2e',
                 'network_nb': 1,
                 'nbl_nb': 4,
@@ -178,14 +179,16 @@ class TransportPCEtesting(unittest.TestCase):
                     tpId = res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]['tp-id']
                     if tpType == 'XPONDER-CLIENT':
                         client += 1
-                        self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                        print("tpId = {}".format(tpId))
+                        print("tp= {}".format(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]))
+                        nbIfCapType = len(res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
+                                 ['org-openroadm-otn-network-topology:tp-supported-interfaces']
+                                 ['supported-interface-capability'][0])
+                        for k in range(0, nbIfCapType):
+                            self.assertIn((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
                                              ['org-openroadm-otn-network-topology:tp-supported-interfaces']
                                              ['supported-interface-capability'][0]['if-cap-type']),
-                                         CHECK_LIST[nodeId]['port-types'])
-                        self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
-                                             ['org-openroadm-otn-network-topology:xpdr-tp-port-connection-attributes']
-                                             ['rate']),
-                                         CHECK_LIST[nodeId]['otn-common-types'])
+                                           CHECK_LIST[nodeId]['port-types'])
                     elif tpType == 'XPONDER-NETWORK':
                         network += 1
                         self.assertEqual((res['network'][0]['node'][i]['ietf-network-topology:termination-point'][j]
