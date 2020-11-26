@@ -22,6 +22,30 @@
       "revId": "4b14c868c22c83000af85e9c5fb7b6eaeaa92231",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb5a8511_aa9309e7",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion710.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-26T09:24:51Z",
+      "side": 1,
+      "message": "Yes it can be removed.\nI thought that it was more coherent to leave them commented out\nsince I didn\u0027t remove the associated code about supported-interface-capability.\nDo you think we should remove the java code ?\n\nAnyway, I should probably have at least let a FIXME comment here too about that decision.",
+      "parentUuid": "5bf255ad_1c05fece",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 100
+      },
+      "revId": "4b14c868c22c83000af85e9c5fb7b6eaeaa92231",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
