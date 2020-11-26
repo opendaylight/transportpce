@@ -9,13 +9,13 @@
 package org.opendaylight.transportpce.common.mapping;
 
 import com.google.common.util.concurrent.FluentFuture;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -702,7 +702,6 @@ public class PortMappingVersion121 {
 
     // some LOG messages are too long
     @SuppressWarnings("checkstyle:linelength")
-    @SuppressFBWarnings("DM_CONVERT_CASE")
     private boolean createTtpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for degree TTP's
         List<Degree> degrees = getDegrees(nodeId, deviceInfo);
@@ -800,15 +799,21 @@ public class PortMappingVersion121 {
                                 && port1.getPartnerPort().getPortName().equals(port2.getPortName())
                                 && port2.getPartnerPort().getCircuitPackName().equals(cp1Name)
                                 && port2.getPartnerPort().getPortName().equals(port1.getPortName()))) {
-                            String logicalConnectionPoint1 = new StringBuilder("DEG").append(cpMapEntry.getKey())
-                                .append("-TTP-").append(port1.getPortDirection().getName().toUpperCase()).toString();
+                            String logicalConnectionPoint1 = new StringBuilder("DEG")
+                                .append(cpMapEntry.getKey())
+                                .append("-TTP-")
+                                .append(port1.getPortDirection().getName().toUpperCase(Locale.getDefault()))
+                                .toString();
                             LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
                                 connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
                                 port1.getPortName(), logicalConnectionPoint1);
                             portMapList.add(createMappingObject(nodeId, port1, connectionPortMap
                                 .get(cpMapEntry.getKey()).get(0).getCircuitPackName(), logicalConnectionPoint1));
-                            String logicalConnectionPoint2 = new StringBuilder("DEG").append(cpMapEntry.getKey())
-                                .append("-TTP-").append(port2.getPortDirection().getName().toUpperCase()).toString();
+                            String logicalConnectionPoint2 = new StringBuilder("DEG")
+                                .append(cpMapEntry.getKey())
+                                .append("-TTP-")
+                                .append(port2.getPortDirection().getName().toUpperCase(Locale.getDefault()))
+                                .toString();
                             LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
                                 connectionPortMap.get(cpMapEntry.getKey()).get(1).getCircuitPackName(),
                                 port2.getPortName(), logicalConnectionPoint2);
