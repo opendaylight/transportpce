@@ -117,8 +117,8 @@ public class PortMappingVersion710 {
         List<McCapabilities> mcCapabilitiesList = new ArrayList<>();
         InstanceIdentifier<Info> infoIID = InstanceIdentifier.create(OrgOpenroadmDevice.class).child(Info.class);
         Optional<Info> deviceInfoOptional = this.deviceTransactionManager.getDataFromDevice(
-            nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
-            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                nodeId, LogicalDatastoreType.OPERATIONAL, infoIID,
+                Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
         if (!deviceInfoOptional.isPresent()) {
             LOG.warn("Device info subtree is absent for {}", nodeId);
             return false;
@@ -186,7 +186,7 @@ public class PortMappingVersion710 {
             Mapping newMapping = createMappingObject(nodeId, port, oldMapping.getSupportingCircuitPackName(),
                 oldMapping.getLogicalConnectionPoint());
             LOG.info("Updating old mapping Data {} for {} of {} by new mapping data {}",
-                oldMapping, oldMapping.getLogicalConnectionPoint(), nodeId, newMapping);
+                    oldMapping, oldMapping.getLogicalConnectionPoint(), nodeId, newMapping);
             final WriteTransaction writeTransaction = this.dataBroker.newWriteOnlyTransaction();
             InstanceIdentifier<Mapping> mapIID = InstanceIdentifier.create(Network.class)
                 .child(Nodes.class, new NodesKey(nodeId))
@@ -216,17 +216,18 @@ public class PortMappingVersion710 {
             LOG.warn("Circuit Packs are not present for {}", nodeId);
             return false;
         }
-        // Variable to keep track of number of line ports
-        int line = 1;
-        // Variable to keep track of number of client ports
-        int client = 1;
+
         Map<String, String> lcpMap = new HashMap<>();
         Map<String, Mapping> mappingMap = new HashMap<>();
         List<CircuitPacks> circuitPackList = new ArrayList<>(device.nonnullCircuitPacks().values());
         circuitPackList.sort(Comparator.comparing(CircuitPack::getCircuitPackName));
-
         if (device.getXponder() == null) {
             LOG.warn("{} configuration does not contain a list of xponders", nodeId);
+            // Variables to keep track of number of line ports and client ports
+            int line = 1;
+            int client = 1;
+            // TODO the treatment here inside the 2 nested for-loop is very similar to the one
+            //     when device.getXponder() != null. Some code mutualization must be considered.
             for (CircuitPacks cp : circuitPackList) {
                 String circuitPackName = cp.getCircuitPackName();
                 if (cp.getPorts() == null) {
@@ -241,76 +242,100 @@ public class PortMappingVersion710 {
                             circuitPackName);
                         continue;
                     }
-                    if (PortQual.XpdrNetwork.getIntValue() == port.getPortQual().getIntValue()
-                        && port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
-                        String lcp = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
-                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
-                        mappingMap.put(lcp, createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
-                            null, null));
-                        line++;
-                    } else if (PortQual.XpdrNetwork.getIntValue() == port.getPortQual().getIntValue()
-                        && port.getPortDirection().getIntValue() != Direction.Bidirectional.getIntValue()
-                        && port.getPartnerPort() != null
-                        && port.getPartnerPort().getCircuitPackName() != null
-                        && port.getPartnerPort().getPortName() != null) {
-                        if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
-                            continue;
-                        }
-                        String lcp1 = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
-                        Optional<CircuitPacks> cpOpt = circuitPackList.stream()
-                            .filter(cP -> cP.getCircuitPackName().equals(port.getPartnerPort().getCircuitPackName()))
-                            .findFirst();
-                        if (cpOpt.isPresent()) {
+
+                    switch (port.getPortQual()) {
+
+                        case XpdrClient:
+                            String lcp0 = "XPDR1-" + StringConstants.CLIENT_TOKEN + client;
+                            lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
+                            mappingMap.put(lcp0,
+                                createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null, null));
+                            client++;
+                            //continue;
+                            break;
+
+                        case XpdrNetwork:
+                            if (port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
+                                String lcp = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
+                                lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
+                                mappingMap.put(lcp,
+                                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null, null)
+                                );
+                                line++;
+                                continue;
+                            }
+                            // TODO PortDirection treatment here is similar to the one in createPpPortMapping.
+                            //      Some code alignment must be considered.
+
+                            if (port.getPartnerPort() == null
+                                || port.getPartnerPort().getCircuitPackName() == null
+                                || port.getPartnerPort().getPortName() == null) {
+                                LOG.warn("Error in the configuration of port {} of {} for {}",
+                                    port.getPortName(), circuitPackName, nodeId);
+                                continue;
+                            }
+
+                            if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
+                                continue;
+                            }
+                            Optional<CircuitPacks> cpOpt = circuitPackList.stream()
+                                .filter(
+                                    cP -> cP.getCircuitPackName().equals(port.getPartnerPort().getCircuitPackName()))
+                                .findFirst();
+                            if (!cpOpt.isPresent()) {
+                                LOG.error("Error fetching circuit-pack {} for {}",
+                                    port.getPartnerPort().getCircuitPackName(), nodeId);
+                                continue;
+                            }
                             Optional<Ports> poOpt = cpOpt.get().nonnullPorts().values().stream()
                                 .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName().toString()))
                                 .findFirst();
-                            if (poOpt.isPresent()) {
-                                Ports port2 = poOpt.get();
-                                if (checkPartnerPort(circuitPackName, port, port2)) {
-                                    String lcp2 = new StringBuilder("XPDR1-").append(StringConstants.NETWORK_TOKEN)
-                                        .append(line + 1).toString();
-                                    if (!lcpMap.containsKey(lcp1) && !lcpMap.containsKey(lcp2)) {
-                                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
-                                        lcpMap.put(cpOpt.get().getCircuitPackName() + '+' + port2.getPortName(), lcp2);
-                                        mappingMap.put(lcp1, createXpdrMappingObject(nodeId, port, circuitPackName,
-                                            lcp1, lcp2, null, null, null));
-                                        mappingMap.put(lcp2, createXpdrMappingObject(nodeId, port2, cpOpt.get()
-                                            .getCircuitPackName(), lcp2, lcp1, null, null, null));
-                                    } else {
-                                        LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
-                                    }
-                                    line += 2;
-                                } else {
-                                    LOG.error("port {} on {} is not a correct partner port of {} on  {}",
-                                        port2.getPortName(), cpOpt.get().getCircuitPackName(), port.getPortName(),
-                                        circuitPackName);
-                                }
-                            } else {
+                            if (!poOpt.isPresent()) {
                                 LOG.error("Error fetching port {} on {} for {}", port.getPartnerPort().getPortName(),
                                     port.getPartnerPort().getCircuitPackName(), nodeId);
+                                continue;
                             }
-                        } else {
-                            LOG.error("Error fetching circuit-pack {} for {}", port.getPartnerPort()
-                                .getCircuitPackName(), nodeId);
-                        }
-                    } else if (PortQual.XpdrClient.getIntValue() == port.getPortQual().getIntValue()) {
-                        String lcp = "XPDR1-" + StringConstants.CLIENT_TOKEN + client;
-                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
-                        mappingMap.put(lcp, createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null,
-                            null, null));
-                        client++;
-                    } else {
-                        LOG.warn("Error in the configuration of port {} of {} for {}", port.getPortName(),
-                            circuitPackName,
-                            nodeId);
+                            Ports port2 = poOpt.get();
+                            if (!checkPartnerPort(circuitPackName, port, port2)) {
+                                LOG.error("port {} on {} is not a correct partner port of {} on  {}",
+                                    port2.getPortName(), cpOpt.get().getCircuitPackName(), port.getPortName(),
+                                    circuitPackName);
+                                continue;
+                            }
+                            String lcp1 = "XPDR1-" + StringConstants.NETWORK_TOKEN + line;
+                            String lcp2 = new StringBuilder("XPDR1-")
+                                .append(StringConstants.NETWORK_TOKEN)
+                                .append(line + 1)
+                                .toString();
+                            if (lcpMap.containsKey(lcp1) || lcpMap.containsKey(lcp2)) {
+                                LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
+                                line += 2;
+                                continue;
+                            }
+                            lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
+                            lcpMap.put(cpOpt.get().getCircuitPackName() + '+' + port2.getPortName(), lcp2);
+                            mappingMap.put(lcp1,
+                                createXpdrMappingObject(nodeId, port, circuitPackName,
+                                    lcp1, lcp2, null, null, null));
+                            mappingMap.put(lcp2,
+                                createXpdrMappingObject(nodeId, port2, cpOpt.get().getCircuitPackName(),
+                                    lcp2, lcp1, null, null, null));
+                            line += 2;
+                            break;
+
+                        default:
+                            LOG.warn(
+                                "Error in the configuration of port {} of {} for {} - unsupported PortQual {}",
+                                port.getPortName(), circuitPackName, nodeId, port.getPortQual().getIntValue());
                     }
                 }
             }
         } else {
             LOG.info("{} configuration contains a list of xponders", nodeId);
-            for (Xponder xponder:deviceObject.get().nonnullXponder().values()) {
-                line = 1;
-                client = 1;
+            for (Xponder xponder : deviceObject.get().nonnullXponder().values()) {
+                // Variables to keep track of number of line ports and client ports
+                int line = 1;
+                int client = 1;
                 Integer xponderNb = xponder.getXpdrNumber().toJava();
                 XpdrNodeTypes xponderType = xponder.getXpdrType();
                 for (XpdrPort xpdrPort : xponder.nonnullXpdrPort().values()) {
@@ -319,99 +344,122 @@ public class PortMappingVersion710 {
                     // If there xponder-subtree has missing circuit-packs or ports,
                     // This gives a null-pointer expection,
                     if (device.nonnullCircuitPacks().values().stream()
-                        .filter(cp -> cp.getCircuitPackName().equals(circuitPackName))
-                        .findFirst().isEmpty()) {
-                        LOG.warn("Circuit-pack {} is missing in the device", circuitPackName);
-                        LOG.warn("Port-mapping will continue ignoring this circuit-pack {}", circuitPackName);
-                        continue;
-                    }
-                    if (device.nonnullCircuitPacks().values().stream()
-                        .filter(cp -> cp.getCircuitPackName().equals(circuitPackName))
-                        .findFirst().get().nonnullPorts().values().stream()
-                        .filter(p -> p.getPortName().equals(portName))
-                        .findFirst().isEmpty()) {
-                        LOG.warn("Port {} associated with CP {} is missing in the device", portName, circuitPackName);
-                        LOG.warn("Port-mapping will continue ignoring this port {}", portName);
-                        continue;
-                    }
-                    Ports port = device.nonnullCircuitPacks().values().stream()
-                        .filter(cp -> cp.getCircuitPackName().equals(circuitPackName))
-                        .findFirst().get().nonnullPorts().values().stream()
-                        .filter(p -> p.getPortName().equals(portName))
-                        .findFirst().get();
-                    if (port.getPortQual() == null) {
-                        LOG.warn("PortQual was not found for port {} on circuit pack: {}", port.getPortName(),
+                            .filter(cp -> cp.getCircuitPackName().equals(circuitPackName))
+                            .findFirst().isEmpty()) {
+                        LOG.warn("Circuit-pack {} is missing in the device - ignoring it in port-mapping",
                             circuitPackName);
                         continue;
                     }
-                    if ((PortQual.XpdrNetwork.getIntValue() == port.getPortQual().getIntValue()
-                        || PortQual.SwitchNetwork.getIntValue() == port.getPortQual().getIntValue())
-                        && port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
-                        String lcp = "XPDR" + xponderNb + "-" + StringConstants.NETWORK_TOKEN + line;
-                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
-                        mappingMap.put(lcp, createXpdrMappingObject(nodeId, port, circuitPackName, lcp,
-                            null, null, null, xponderType));
-                        line++;
-                    } else if ((PortQual.XpdrNetwork.getIntValue() == port.getPortQual().getIntValue()
-                        || PortQual.SwitchNetwork.getIntValue() == port.getPortQual().getIntValue())
-                        && port.getPortDirection().getIntValue() != Direction.Bidirectional.getIntValue()
-                        && port.getPartnerPort() != null
-                        && port.getPartnerPort().getCircuitPackName() != null
-                        && port.getPartnerPort().getPortName() != null) {
-                        if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
-                            continue;
-                        }
-                        String lcp1 = "XPDR" + xponderNb + "-" + StringConstants.NETWORK_TOKEN + line;
+                    if (device.nonnullCircuitPacks().values().stream()
+                            .filter(cp -> cp.getCircuitPackName().equals(circuitPackName))
+                            .findFirst().get().nonnullPorts().values().stream()
+                            .filter(p -> p.getPortName().equals(portName))
+                            .findFirst().isEmpty()) {
+                        LOG.warn("Port {} associated with CP {} is missing in the device - ignoring it in port-mapping",
+                            portName, circuitPackName);
+                        continue;
+                    }
+                    Ports port = device.nonnullCircuitPacks().values().stream()
+                            .filter(cp -> cp.getCircuitPackName().equals(circuitPackName))
+                            .findFirst().get().nonnullPorts().values().stream()
+                            .filter(p -> p.getPortName().equals(portName))
+                            .findFirst().get();
+                    if (port.getPortQual() == null) {
+                        LOG.warn("PortQual was not found for port {} on circuit pack: {}",
+                            port.getPortName(), circuitPackName);
+                        continue;
+                    }
 
-                        Optional<CircuitPacks> cpOpt = circuitPackList.stream()
-                            .filter(cP -> cP.getCircuitPackName().equals(port.getPartnerPort().getCircuitPackName()))
-                            .findFirst();
-                        if (cpOpt.isPresent()) {
+                    switch (port.getPortQual()) {
+
+                        case XpdrClient:
+                        case SwitchClient:
+                            String lcp0 = "XPDR" + xponderNb + "-" + StringConstants.CLIENT_TOKEN + client;
+                            lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp0);
+                            mappingMap.put(lcp0,
+                                createXpdrMappingObject(nodeId, port, circuitPackName, lcp0, null, null, null, null));
+                            client++;
+                            //continue;
+                            break;
+
+                        case XpdrNetwork:
+                        case SwitchNetwork:
+                            if (port.getPortDirection().getIntValue() == Direction.Bidirectional.getIntValue()) {
+                                String lcp = "XPDR" + xponderNb + "-" + StringConstants.NETWORK_TOKEN + line;
+                                lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
+                                mappingMap.put(lcp,
+                                    createXpdrMappingObject(nodeId, port, circuitPackName, lcp, null, null, null,
+                                        xponderType));
+                                line++;
+                                continue;
+                            }
+                            // TODO PortDirection treatment here is similar to the one in createPpPortMapping.
+                            //      Some code alignment must be considered.
+
+                            if (port.getPartnerPort() == null
+                                || port.getPartnerPort().getCircuitPackName() == null
+                                || port.getPartnerPort().getPortName() == null) {
+                                LOG.warn("Error in the configuration of port {} of {} for {}",
+                                    port.getPortName(), circuitPackName, nodeId);
+                                continue;
+                            }
+
+                            if (lcpMap.containsKey(circuitPackName + '+' + port.getPortName())) {
+                                continue;
+                            }
+
+                            Optional<CircuitPacks> cpOpt = circuitPackList.stream()
+                                .filter(
+                                    cP -> cP.getCircuitPackName().equals(port.getPartnerPort().getCircuitPackName()))
+                                .findFirst();
+                            if (!cpOpt.isPresent()) {
+                                LOG.error("Error fetching circuit-pack {} for {}",
+                                    port.getPartnerPort().getCircuitPackName(), nodeId);
+                                continue;
+                            }
+
                             Optional<Ports> poOpt = cpOpt.get().nonnullPorts().values().stream()
                                 .filter(p -> p.getPortName().equals(port.getPartnerPort().getPortName().toString()))
                                 .findFirst();
-                            if (poOpt.isPresent()) {
-                                Ports port2 = poOpt.get();
-                                if (checkPartnerPort(circuitPackName, port, port2)) {
-                                    String lcp2 = new StringBuilder("XPDR").append(xponderNb).append("-").append(
-                                        StringConstants.NETWORK_TOKEN).append(line + 1).toString();
-                                    if (!lcpMap.containsKey(lcp1) && !lcpMap.containsKey(lcp2)) {
-                                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
-                                        lcpMap.put(cpOpt.get().getCircuitPackName() + '+' + port2.getPortName(),
-                                            lcp2);
-                                        mappingMap.put(lcp1, createXpdrMappingObject(nodeId, port, circuitPackName,
-                                            lcp1, lcp2, null, null, xponderType));
-                                        mappingMap.put(lcp2, createXpdrMappingObject(nodeId, port2, cpOpt.get()
-                                                .getCircuitPackName(), lcp2, lcp1, null, null,
-                                            xponderType));
-                                    } else {
-                                        LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
-                                    }
-                                    line += 2;
-                                } else {
-                                    LOG.error("port {} on {} is not a correct partner port of {} on  {}", port2
-                                            .getPortName(), cpOpt.get().getCircuitPackName(), port.getPortName(),
-                                        circuitPackName);
-                                }
-                            } else {
-                                LOG.error("Error fetching port {} on {} for {}",
-                                    port.getPartnerPort().getPortName(),
+                            if (!poOpt.isPresent()) {
+                                LOG.error("Error fetching port {} on {} for {}", port.getPartnerPort().getPortName(),
                                     port.getPartnerPort().getCircuitPackName(), nodeId);
+                                continue;
                             }
-                        } else {
-                            LOG.error("Error fetching circuit-pack {} for {}", port.getPartnerPort()
-                                .getCircuitPackName(), nodeId);
-                        }
-                    } else if (PortQual.XpdrClient.getIntValue() == port.getPortQual().getIntValue()
-                        || PortQual.SwitchClient.getIntValue() == port.getPortQual().getIntValue()) {
-                        String lcp = "XPDR" + xponderNb + "-" + StringConstants.CLIENT_TOKEN + client;
-                        lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp);
-                        mappingMap.put(lcp, createXpdrMappingObject(nodeId, port, circuitPackName, lcp,
-                            null, null, null, null));
-                        client++;
-                    } else {
-                        LOG.warn("Error in the configuration of port {} of {} for {}", port.getPortName(),
-                            circuitPackName, nodeId);
+                            Ports port2 = poOpt.get();
+                            if (!checkPartnerPort(circuitPackName, port, port2)) {
+                                LOG.error("port {} on {} is not a correct partner port of {} on  {}",
+                                    port2.getPortName(), cpOpt.get().getCircuitPackName(), port.getPortName(),
+                                    circuitPackName);
+                                continue;
+                            }
+                            String lcp1 = "XPDR" + xponderNb + "-" + StringConstants.NETWORK_TOKEN + line;
+                            String lcp2 = new StringBuilder("XPDR")
+                                .append(xponderNb)
+                                .append("-")
+                                .append(StringConstants.NETWORK_TOKEN)
+                                .append(line + 1)
+                                .toString();
+                            if (lcpMap.containsKey(lcp1) || lcpMap.containsKey(lcp2)) {
+                                LOG.warn("mapping already exists for {} or {}", lcp1, lcp2);
+                                line += 2;
+                                continue;
+                            }
+                            lcpMap.put(circuitPackName + '+' + port.getPortName(), lcp1);
+                            lcpMap.put(cpOpt.get().getCircuitPackName() + '+' + port2.getPortName(), lcp2);
+                            mappingMap.put(lcp1,
+                                createXpdrMappingObject(nodeId, port, circuitPackName,
+                                    lcp1, lcp2, null, null, xponderType));
+                            mappingMap.put(lcp2,
+                                createXpdrMappingObject(nodeId, port2, cpOpt.get().getCircuitPackName(),
+                                    lcp2, lcp1, null, null, xponderType));
+                            line += 2;
+                            break;
+
+                        default:
+                            LOG.warn(
+                                "Error in the configuration of port {} of {} for {} - unsupported PortQual {}",
+                                port.getPortName(), circuitPackName, nodeId, port.getPortQual().getIntValue());
                     }
                 }
             }
@@ -445,29 +493,31 @@ public class PortMappingVersion710 {
                 Map<NonBlockingListKey,NonBlockingList> nbMap = new HashMap<>();
                 for (org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.org.openroadm.device.container.org
                     .openroadm.device.odu.switching.pools.NonBlockingList nbl : odp.nonnullNonBlockingList().values()) {
-                    List<String> lcpList = new ArrayList<>();
-                    if (nbl.getPortList() != null) {
-                        for (PortList item : nbl.nonnullPortList().values()) {
-                            String key = item.getCircuitPackName() + "+" + item.getPortName();
-                            if (lcpMap.containsKey(key)) {
-                                lcpList.add(lcpMap.get(key));
-                            } else {
-                                LOG.error("error : port {} of {} is not associated to a logical connection point",
-                                    item.getPortName(), item.getCircuitPackName());
-                            }
-                        }
-                        NonBlockingList nonBlockingList = new NonBlockingListBuilder()
-                            .setNblNumber(nbl.getNblNumber())
-                            .setInterconnectBandwidth(nbl.getInterconnectBandwidth())
-                            .setInterconnectBandwidthUnit(nbl.getInterconnectBandwidthUnit())
-                            .setLcpList(lcpList)
-                            .build();
-                        nbMap.put(nonBlockingList.key(),nonBlockingList);
+                    if (nbl.getPortList() == null) {
+                        continue;
                     }
+                    List<String> lcpList = new ArrayList<>();
+                    for (PortList item : nbl.nonnullPortList().values()) {
+                        String key = item.getCircuitPackName() + "+" + item.getPortName();
+                        if (!lcpMap.containsKey(key)) {
+                            LOG.error("error : port {} of {} is not associated to a logical connection point",
+                                item.getPortName(), item.getCircuitPackName());
+                            continue;
+                        }
+                        lcpList.add(lcpMap.get(key));
+                    }
+                    NonBlockingList nonBlockingList = new NonBlockingListBuilder()
+                        .setNblNumber(nbl.getNblNumber())
+                        .setInterconnectBandwidth(nbl.getInterconnectBandwidth())
+                        .setInterconnectBandwidthUnit(nbl.getInterconnectBandwidthUnit())
+                        .setLcpList(lcpList)
+                        .build();
+                    nbMap.put(nonBlockingList.key(), nonBlockingList);
                 }
                 SwitchingPoolLcp splBldr = new SwitchingPoolLcpBuilder()
                     .setSwitchingPoolNumber(odp.getSwitchingPoolNumber())
                     .setSwitchingPoolType(odp.getSwitchingPoolType())
+                    //TODO differs from 2.2.1 SwitchingPoolTypes.forValue(odp.getSwitchingPoolType().getIntValue()
                     .setNonBlockingList(nbMap)
                     .build();
                 switchingPoolList.add(splBldr);
@@ -482,30 +532,24 @@ public class PortMappingVersion710 {
     }
 
     private boolean checkPartnerPort(String circuitPackName, Ports port1, Ports port2) {
-        if ((Direction.Rx.getIntValue() == port1.getPortDirection().getIntValue()
-            && Direction.Tx.getIntValue() == port2.getPortDirection().getIntValue()
-            && port2.getPartnerPort() != null
-            && port2.getPartnerPort().getCircuitPackName() != null
-            && port2.getPartnerPort().getPortName() != null
-            && port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
-            && port2.getPartnerPort().getPortName().equals(port1.getPortName()))
-            ||
-            (Direction.Tx.getIntValue() == port1.getPortDirection().getIntValue()
-                && Direction.Rx.getIntValue() == port2.getPortDirection().getIntValue()
-                && port2.getPartnerPort() != null
-                && port2.getPartnerPort().getCircuitPackName() != null
-                && port2.getPartnerPort().getPortName() != null
-                && port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
-                && port2.getPartnerPort().getPortName().equals(port1.getPortName()))) {
-            return true;
-        } else {
+        if (port2.getPartnerPort() == null
+            || port2.getPartnerPort().getCircuitPackName() == null
+            || port2.getPartnerPort().getPortName() == null
+            || !port2.getPartnerPort().getCircuitPackName().equals(circuitPackName)
+            || !port2.getPartnerPort().getPortName().equals(port1.getPortName())
+            || ((Direction.Rx.getIntValue() != port1.getPortDirection().getIntValue()
+                    || Direction.Tx.getIntValue() != port2.getPortDirection().getIntValue())
+                &&
+                (Direction.Tx.getIntValue() != port1.getPortDirection().getIntValue()
+                    || Direction.Rx.getIntValue() != port2.getPortDirection().getIntValue()))) {
             return false;
         }
+        return true;
     }
 
 
     private HashMap<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.srg
-        .CircuitPacks>> getSrgCps(String deviceId, Info ordmInfo) {
+            .CircuitPacks>> getSrgCps(String deviceId, Info ordmInfo) {
         HashMap<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.srg
             .CircuitPacks>> cpPerSrg = new HashMap<>();
         // Get value for max Srg from info subtree, required for iteration
@@ -529,13 +573,12 @@ public class PortMappingVersion710 {
         return cpPerSrg;
     }
 
-    //last LOG info message in this method is too long
-    @SuppressWarnings("checkstyle:linelength")
     private boolean createPpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for SRG's PP
         HashMap<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.srg.CircuitPacks>> srgCps
             = getSrgCps(nodeId, deviceInfo);
-        for (Entry<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.srg.CircuitPacks>> srgCpEntry : srgCps.entrySet()) {
+        for (Entry<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.srg.CircuitPacks>>
+                srgCpEntry : srgCps.entrySet()) {
             List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev200529.srg.CircuitPacks> cpList =
                 srgCps.get(srgCpEntry.getKey());
             List<String> keys = new ArrayList<>();
@@ -558,59 +601,82 @@ public class PortMappingVersion710 {
                     String currentKey = circuitPackName + "-" + port.getPortName();
                     if (port.getPortQual() == null) {
                         continue;
-                    } else if (PortQual.RoadmExternal.getIntValue() == port.getPortQual().getIntValue()
-                        && Direction.Bidirectional.getIntValue() == port.getPortDirection().getIntValue()
-                        && !keys.contains(currentKey)) {
-                        String logicalConnectionPoint = createLogicalConnectionPort(port, srgCpEntry.getKey(), portIndex);
-                        LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId, circuitPackName,
-                            port.getPortName(), logicalConnectionPoint);
-                        portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                            logicalConnectionPoint));
-                        portIndex++;
-                        keys.add(currentKey);
-                    } else if (PortQual.RoadmExternal.getIntValue() == port.getPortQual().getIntValue()
-                        && (Direction.Rx.getIntValue() == port.getPortDirection().getIntValue()
-                        || Direction.Tx.getIntValue() == port.getPortDirection().getIntValue())
-                        && !keys.contains(currentKey)
-                        && port.getPartnerPort() != null) {
-                        String logicalConnectionPoint1 = createLogicalConnectionPort(port, srgCpEntry.getKey(), portIndex);
-                        LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId, circuitPackName,
-                            port.getPortName(), logicalConnectionPoint1);
-                        InstanceIdentifier<Ports> port2ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                            .child(CircuitPacks.class, new CircuitPacksKey(port.getPartnerPort().getCircuitPackName()))
-                            .child(Ports.class, new PortsKey(port.getPartnerPort().getPortName().toString()));
-                        Optional<Ports> port2Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
-                            LogicalDatastoreType.OPERATIONAL, port2ID,
-                            Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                        if (port2Object.isPresent()
-                            && port2Object.get().getPortQual().getIntValue()
-                            == PortQual.RoadmExternal.getIntValue()) {
+                    }
+
+                    if (PortQual.RoadmExternal.getIntValue() != port.getPortQual().getIntValue()) {
+                        LOG.info("{} : port {} on {} is not roadm-external - cannot assign logicalConnectionPoint.",
+                            nodeId, port.getPortName(), circuitPackName);
+                        continue;
+                    }
+
+                    if (keys.contains(currentKey)) {
+                        LOG.info("{} : port {} on {} has already been handled - cannot assign logicalConnectionPoint.",
+                            nodeId, port.getPortName(), circuitPackName);
+                        continue;
+                    }
+
+                    switch (port.getPortDirection()) {
+
+                        case Bidirectional:
+                            String lcp = createLogicalConnectionPort(port, srgCpEntry.getKey(), portIndex);
+                            LOG.info("{} : Logical Connection Point for {} {} is {}",
+                                nodeId, circuitPackName, port.getPortName(), lcp);
+                            portMapList.add(createMappingObject(nodeId, port, circuitPackName, lcp));
+                            portIndex++;
+                            keys.add(currentKey);
+                            break;
+
+                        case Rx:
+                        case Tx:
+                            if (port.getPartnerPort() == null) {
+                                LOG.info("{} : port {} on {} is unidirectional but has no partnerPort"
+                                    + " - cannot assign  logicalConnectionPoint.",
+                                    nodeId, port.getPortName(), circuitPackName);
+                                continue;
+                            }
+
+                            String lcp1 = createLogicalConnectionPort(port, srgCpEntry.getKey(), portIndex);
+                            LOG.info("{} : Logical Connection Point for {} {} is {}",
+                                nodeId, circuitPackName, port.getPortName(), lcp1);
+                            InstanceIdentifier<Ports> port2ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                                .child(CircuitPacks.class,
+                                    new CircuitPacksKey(port.getPartnerPort().getCircuitPackName()))
+                                .child(Ports.class, new PortsKey(port.getPartnerPort().getPortName().toString()));
+                            Optional<Ports> port2Object = this.deviceTransactionManager
+                                .getDataFromDevice(nodeId, LogicalDatastoreType.OPERATIONAL, port2ID,
+                                    Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+                            if (!port2Object.isPresent()
+                                || port2Object.get().getPortQual().getIntValue()
+                                    != PortQual.RoadmExternal.getIntValue()) {
+                                LOG.error("error getting partner port {} of  {} - {}",
+                                    port.getPartnerPort().getPortName().toString(),
+                                    port.getPartnerPort().getCircuitPackName(), nodeId);
+                                continue;
+                            }
+
                             Ports port2 = port2Object.get();
-                            if (checkPartnerPort(circuitPackName, port, port2)) {
-                                String logicalConnectionPoint2 = createLogicalConnectionPort(port2, srgCpEntry.getKey(), portIndex);
-                                LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId, circuitPackName,
-                                    port2.getPortName(), logicalConnectionPoint2);
-                                portMapList.add(createMappingObject(nodeId, port, circuitPackName,
-                                    logicalConnectionPoint1));
-                                portMapList.add(createMappingObject(nodeId,port2,
-                                    port.getPartnerPort().getCircuitPackName(), logicalConnectionPoint2));
-                                portIndex++;
-                                keys.add(currentKey);
-                                keys.add(port.getPartnerPort().getCircuitPackName() + "-" + port2.getPortName());
-                            } else {
+                            if (!checkPartnerPort(circuitPackName, port, port2)) {
                                 LOG.error("Error with partner port configuration for port {} of  {} - {}",
                                     port.getPortName(), circuitPackName, nodeId);
                                 portIndex++;
+                                continue;
                             }
-                        } else {
-                            LOG.error("error getting partner port {} of  {} - {}",
-                                port.getPartnerPort().getPortName().toString(),
-                                port.getPartnerPort().getCircuitPackName(), nodeId);
-                            continue;
-                        }
-                    } else {
-                        LOG.info("{} : port {} on {} is not roadm-external or has already been handled. No logicalConnectionPoint assignment for this port.",
-                            nodeId, port.getPortName(), circuitPackName);
+                            String lcp2 = createLogicalConnectionPort(port2, srgCpEntry.getKey(),portIndex);
+                            LOG.info("{} : Logical Connection Point for {} {} is {}",
+                                nodeId, circuitPackName, port2.getPortName(), lcp2);
+                            portMapList.add(createMappingObject(nodeId, port, circuitPackName, lcp1));
+                            portMapList.add(
+                                createMappingObject(nodeId ,port2, port.getPartnerPort().getCircuitPackName(), lcp2));
+                            portIndex++;
+                            keys.add(currentKey);
+                            keys.add(port.getPartnerPort().getCircuitPackName() + "-" + port2.getPortName());
+                            break;
+
+                        default:
+                            LOG.info("{} : port {} on {} - unsupported Direction"
+                                    + " - cannot assign  logicalConnectionPoint.",
+                                nodeId, port.getPortName(), circuitPackName);
+
                     }
                 }
             }
@@ -708,7 +774,7 @@ public class PortMappingVersion710 {
                 Timeouts.DEVICE_READ_TIMEOUT, Timeouts.DEVICE_READ_TIMEOUT_UNIT);
             if (ordmDegreeObject.isPresent()) {
                 conPortMap.put(degreeCounter, new ArrayList<>(ordmDegreeObject.get()
-                    .nonnullConnectionPorts().values()));
+                        .nonnullConnectionPorts().values()));
             }
         }
         LOG.info("Device {} has {} degree", deviceId, conPortMap.size());
@@ -717,65 +783,70 @@ public class PortMappingVersion710 {
 
     private Map<String, String> getEthInterfaceList(String nodeId) {
         LOG.info("It is calling get ethernet interface");
-        Map<String, String> cpToInterfaceMap = new HashMap<>();
         InstanceIdentifier<Protocols> protocoliid = InstanceIdentifier.create(OrgOpenroadmDevice.class)
             .child(Protocols.class);
         Optional<Protocols> protocolObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
             LogicalDatastoreType.OPERATIONAL, protocoliid, Timeouts.DEVICE_READ_TIMEOUT,
             Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-        if (protocolObject.isPresent() && protocolObject.get().augmentation(Protocols1.class).getLldp() != null) {
-            Lldp lldp = protocolObject.get().augmentation(Protocols1.class).getLldp();
-            for (PortConfig portConfig : lldp.nonnullPortConfig().values()) {
-                if (portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
-                    InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                        .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
-                    Optional<Interface> interfaceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
-                        LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
-                        Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                    if (interfaceObject.isPresent() && (interfaceObject.get().getSupportingCircuitPackName() != null)) {
-                        String supportingCircuitPackName = interfaceObject.get().getSupportingCircuitPackName();
-                        cpToInterfaceMap.put(supportingCircuitPackName, portConfig.getIfName());
-                        InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier
-                            .create(OrgOpenroadmDevice.class)
-                            .child(CircuitPacks.class, new CircuitPacksKey(supportingCircuitPackName));
-                        Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(
-                            nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, Timeouts.DEVICE_READ_TIMEOUT,
-                            Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                        if (circuitPackObject.isPresent() && (circuitPackObject.get().getParentCircuitPack() != null)) {
-                            cpToInterfaceMap.put(circuitPackObject.get().getParentCircuitPack().getCircuitPackName(),
-                                portConfig.getIfName());
-                        }
-                    }
-                }
+        if (!protocolObject.isPresent() || protocolObject.get().augmentation(Protocols1.class).getLldp() == null) {
+            LOG.warn("Couldnt find port config under LLDP for Node : {} - Processiong is done.. now returning..",
+                nodeId);
+            return new HashMap<>();
+        }
+        Map<String, String> cpToInterfaceMap = new HashMap<>();
+        Lldp lldp = protocolObject.get().augmentation(Protocols1.class).getLldp();
+        for (PortConfig portConfig : lldp.nonnullPortConfig().values()) {
+            if (!portConfig.getAdminStatus().equals(PortConfig.AdminStatus.Txandrx)) {
+                continue;
             }
-        } else {
-            LOG.warn("Couldnt find port config under LLDP for Node : {}", nodeId);
+            InstanceIdentifier<Interface> interfaceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(Interface.class, new InterfaceKey(portConfig.getIfName()));
+            Optional<Interface> interfaceObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
+                LogicalDatastoreType.OPERATIONAL, interfaceIID, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            if (!interfaceObject.isPresent() || (interfaceObject.get().getSupportingCircuitPackName() == null)) {
+                continue;
+            }
+            String supportingCircuitPackName = interfaceObject.get().getSupportingCircuitPackName();
+            cpToInterfaceMap.put(supportingCircuitPackName, portConfig.getIfName());
+            InstanceIdentifier<CircuitPacks> circuitPacksIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
+                .child(CircuitPacks.class, new CircuitPacksKey(supportingCircuitPackName));
+            Optional<CircuitPacks> circuitPackObject = this.deviceTransactionManager.getDataFromDevice(
+                nodeId, LogicalDatastoreType.OPERATIONAL, circuitPacksIID, Timeouts.DEVICE_READ_TIMEOUT,
+                Timeouts.DEVICE_READ_TIMEOUT_UNIT);
+            if (!circuitPackObject.isPresent() || (circuitPackObject.get().getParentCircuitPack() == null)) {
+                continue;
+            }
+            cpToInterfaceMap.put(circuitPackObject.get().getParentCircuitPack().getCircuitPackName(),
+                portConfig.getIfName());
         }
         LOG.info("Processiong is done.. now returning..");
         return cpToInterfaceMap;
     }
 
     private List<CpToDegree> getCpToDegreeList(List<Degree> degrees, String nodeId,
-        Map<String, String> interfaceList) {
+            Map<String, String> interfaceList) {
         List<CpToDegree> cpToDegreeList = new ArrayList<>();
         for (Degree degree : degrees) {
-            if (degree.getCircuitPacks() != null) {
-                LOG.info("Inside CP to degree list");
-                cpToDegreeList.addAll(degree.nonnullCircuitPacks().values().stream()
-                    .map(cp -> createCpToDegreeObject(cp.getCircuitPackName(),
-                        degree.getDegreeNumber().toString(), nodeId, interfaceList))
-                    .collect(Collectors.toList()));
+            if (degree.getCircuitPacks() == null) {
+                continue;
             }
+            LOG.info("Inside CP to degree list");
+            cpToDegreeList.addAll(degree.nonnullCircuitPacks().values().stream()
+                .map(cp -> createCpToDegreeObject(cp.getCircuitPackName(),
+                    degree.getDegreeNumber().toString(), nodeId, interfaceList))
+                .collect(Collectors.toList()));
         }
         return cpToDegreeList;
     }
 
     private List<McCapabilities> getMcCapabilitiesList(List<Degree> degrees, List<SharedRiskGroup> srgs,
-        Info deviceInfo, String nodeId) {
+            Info deviceInfo, String nodeId) {
+        //TODO some divergences with 2.2.1 here
         LOG.info("Getting the MC capabilities for degrees of node {}", nodeId);
         //Get all the mc-capability profiles from the device
-        Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfiles = getMcCapabilityProfiles(nodeId,
-            deviceInfo);
+        Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfiles =
+            getMcCapabilityProfiles(nodeId, deviceInfo);
         // Add the DEG mc-capabilities
         List<McCapabilities> mcCapabilitiesList = createMcCapDegreeObject(degrees, mcCapabilityProfiles, nodeId);
         // Add the SRG mc-capabilities
@@ -786,7 +857,7 @@ public class PortMappingVersion710 {
     }
 
     private boolean postPortMapping(String nodeId, NodeInfo nodeInfo, List<Mapping> portMapList,
-        List<CpToDegree> cp2DegreeList, List<SwitchingPoolLcp> splList, List<McCapabilities> mcCapList) {
+            List<CpToDegree> cp2DegreeList, List<SwitchingPoolLcp> splList, List<McCapabilities> mcCapList) {
         NodesBuilder nodesBldr = new NodesBuilder().withKey(new NodesKey(nodeId)).setNodeId(nodeId);
         if (nodeInfo != null) {
             nodesBldr.setNodeInfo(nodeInfo);
@@ -794,18 +865,20 @@ public class PortMappingVersion710 {
         if (portMapList != null) {
             Map<MappingKey, Mapping> mappingMap = new HashMap<>();
             for (Mapping mapping: portMapList) {
-                if (mapping != null) {
-                    mappingMap.put(mapping.key(), mapping);
+                if (mapping == null) {
+                    continue;
                 }
+                mappingMap.put(mapping.key(), mapping);
             }
             nodesBldr.setMapping(mappingMap);
         }
         if (cp2DegreeList != null) {
             Map<CpToDegreeKey, CpToDegree> cpToDegreeMap = new HashMap<>();
             for (CpToDegree cp2Degree: cp2DegreeList) {
-                if (cp2Degree != null) {
-                    cpToDegreeMap.put(cp2Degree.key(), cp2Degree);
+                if (cp2Degree == null) {
+                    continue;
                 }
+                cpToDegreeMap.put(cp2Degree.key(), cp2Degree);
             }
             nodesBldr.setCpToDegree(cpToDegreeMap);
         }
@@ -813,9 +886,10 @@ public class PortMappingVersion710 {
         if (splList != null) {
             Map<SwitchingPoolLcpKey,SwitchingPoolLcp> splMap = new HashMap<>();
             for (SwitchingPoolLcp spl: splList) {
-                if (spl != null) {
-                    splMap.put(spl.key(), spl);
+                if (spl == null) {
+                    continue;
                 }
+                splMap.put(spl.key(), spl);
             }
             nodesBldr.setSwitchingPoolLcp(splMap);
         }
@@ -842,18 +916,17 @@ public class PortMappingVersion710 {
     }
 
     private CpToDegree createCpToDegreeObject(String circuitPackName, String degreeNumber, String nodeId,
-        Map<String, String> interfaceList) {
-        String interfaceName = null;
-        if (interfaceList.get(circuitPackName) != null) {
-            interfaceName = interfaceList.get(circuitPackName);
-        }
-        return new CpToDegreeBuilder().withKey(new CpToDegreeKey(circuitPackName)).setCircuitPackName(circuitPackName)
-            .setDegreeNumber(Uint32.valueOf(degreeNumber)).setInterfaceName(interfaceName).build();
+            Map<String, String> interfaceList) {
+        return new CpToDegreeBuilder()
+            .withKey(new CpToDegreeKey(circuitPackName))
+            .setCircuitPackName(circuitPackName)
+            .setDegreeNumber(Uint32.valueOf(degreeNumber))
+            .setInterfaceName(interfaceList.get(circuitPackName)).build();
     }
 
     private List<McCapabilities> createMcCapDegreeObject(List<Degree> degrees,
             Map<McCapabilityProfileKey, McCapabilityProfile> mcCapabilityProfileMap, String nodeId) {
-
+        //TODO some divergences here with 2.2.1
         List<McCapabilities> mcCapabilitiesList = new ArrayList<>();
         for (Degree degree : degrees) {
 
@@ -928,7 +1001,6 @@ public class PortMappingVersion710 {
 
     private Mapping createMappingObject(String nodeId, Ports port, String circuitPackName,
             String logicalConnectionPoint) {
-
         MappingBuilder mpBldr = new MappingBuilder()
                 .withKey(new MappingKey(logicalConnectionPoint))
                 .setLogicalConnectionPoint(logicalConnectionPoint)
@@ -936,35 +1008,37 @@ public class PortMappingVersion710 {
                 .setSupportingPort(port.getPortName())
                 .setPortDirection(port.getPortDirection().getName());
 
+        if ((port.getInterfaces() == null)
+            || (!logicalConnectionPoint.contains(StringConstants.TTP_TOKEN)
+                && !logicalConnectionPoint.contains(StringConstants.NETWORK_TOKEN))) {
+            return mpBldr.build();
+        }
         // Get OMS and OTS interface provisioned on the TTP's
-        if ((logicalConnectionPoint.contains(StringConstants.TTP_TOKEN)
-            || logicalConnectionPoint.contains(StringConstants.NETWORK_TOKEN)) && (port.getInterfaces() != null)) {
-            for (Interfaces interfaces : port.getInterfaces()) {
-                try {
-                    Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
-                        interfaces.getInterfaceName());
-                    if (openRoadmInterface.isPresent()) {
-                        LOG.info("interface get from device is {} and of type {}", openRoadmInterface.get().getName(),
-                            openRoadmInterface.get().getType());
-                        Class<? extends InterfaceType> interfaceType
-                            = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
-                        // Check if interface type is OMS or OTS
-                        if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
-                            mpBldr.setSupportingOms(interfaces.getInterfaceName());
-                        }
-                        if (interfaceType.equals(OpticalTransport.class)) {
-                            mpBldr.setSupportingOts(interfaces.getInterfaceName());
-                        }
-                        if (interfaceType.equals(OtnOdu.class)) {
-                            mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
-                        }
-                    } else {
-                        LOG.warn("Interface {} from node {} was null!", interfaces.getInterfaceName(), nodeId);
-                    }
-                } catch (OpenRoadmInterfaceException ex) {
-                    LOG.warn("Error while getting interface {} from node {}!", interfaces.getInterfaceName(), nodeId,
-                        ex);
+        for (Interfaces interfaces : port.getInterfaces()) {
+            try {
+                Optional<Interface> openRoadmInterface = this.openRoadmInterfaces.getInterface(nodeId,
+                    interfaces.getInterfaceName());
+                if (!openRoadmInterface.isPresent()) {
+                    LOG.warn("Interface {} from node {} was null!", interfaces.getInterfaceName(), nodeId);
+                    continue;
                 }
+                LOG.info("interface get from device is {} and of type {}",
+                    openRoadmInterface.get().getName(), openRoadmInterface.get().getType());
+                Class<? extends InterfaceType> interfaceType
+                    = (Class<? extends InterfaceType>) openRoadmInterface.get().getType();
+                // Check if interface type is OMS or OTS
+                if (interfaceType.equals(OpenROADMOpticalMultiplex.class)) {
+                    mpBldr.setSupportingOms(interfaces.getInterfaceName());
+                }
+                if (interfaceType.equals(OpticalTransport.class)) {
+                    mpBldr.setSupportingOts(interfaces.getInterfaceName());
+                }
+                if (interfaceType.equals(OtnOdu.class)) {
+                    mpBldr.setSupportingOdu4(interfaces.getInterfaceName());
+                }
+            } catch (OpenRoadmInterfaceException ex) {
+                LOG.warn("Error while getting interface {} from node {}!",
+                    interfaces.getInterfaceName(), nodeId, ex);
             }
         }
         return mpBldr.build();
@@ -974,6 +1048,7 @@ public class PortMappingVersion710 {
             String logicalConnectionPoint, String partnerLcp, Mapping mapping, String connectionMapLcp,
             XpdrNodeTypes xpdrNodeType) {
 
+        //TODO some divergens here with 2.2.1
         if (mapping != null && connectionMapLcp != null) {
             // update existing mapping
             return new MappingBuilder(mapping).setConnectionMapLcp(connectionMapLcp).build();
@@ -1004,12 +1079,9 @@ public class PortMappingVersion710 {
         List<Degree> degrees = getDegrees(nodeId, deviceInfo);
         List<SharedRiskGroup> srgs = getSrgs(nodeId, deviceInfo);
         mcCapabilitiesList.addAll(getMcCapabilitiesList(degrees, srgs, deviceInfo, nodeId));
-
         return true;
     }
 
-    //some LOG messages are too long
-    @SuppressWarnings("checkstyle:linelength")
     private boolean createTtpPortMapping(String nodeId, Info deviceInfo, List<Mapping> portMapList) {
         // Creating mapping data for degree TTP's
         List<Degree> degrees = getDegrees(nodeId, deviceInfo);
@@ -1024,41 +1096,44 @@ public class PortMappingVersion710 {
                 case 1:
                     // port is bidirectional
                     InstanceIdentifier<Ports> portID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
-                        .child(CircuitPacks.class, new CircuitPacksKey(connectionPortMap.get(cpMapEntry.getKey()).get(0)
-                            .getCircuitPackName()))
-                        .child(Ports.class, new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0)
-                            .getPortName().toString()));
-                    LOG.info("Fetching connection-port {} at circuit pack {}", connectionPortMap.get(cpMapEntry.getKey()).get(0)
-                        .getPortName().toString(), connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName());
+                        .child(CircuitPacks.class,
+                            new CircuitPacksKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName()))
+                        .child(Ports.class,
+                            new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName().toString()));
+                    LOG.info("Fetching connection-port {} at circuit pack {}",
+                        connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName().toString(),
+                        connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName());
                     Optional<Ports> portObject = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, portID, Timeouts.DEVICE_READ_TIMEOUT,
                         Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                    if (portObject.isPresent()) {
-                        Ports port = portObject.get();
-                        if (port.getPortQual() == null) {
-                            continue;
-                        } else if (PortQual.RoadmExternal.getIntValue() == port.getPortQual().getIntValue()
-                            && Direction.Bidirectional.getIntValue() == port.getPortDirection().getIntValue()) {
-                            String logicalConnectionPoint = new StringBuilder("DEG").append(cpMapEntry.getKey()).append("-TTP-TXRX")
-                                .toString();
-                            LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
-                                connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(), port.getPortName(),
-                                logicalConnectionPoint);
-                            portMapList.add(createMappingObject(nodeId, port,
-                                connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
-                                logicalConnectionPoint));
-                        } else {
-                            LOG.error(
-                                "Impossible to create logical connection point for port {} of {} on node {}"
-                                    + "- Error in configuration with port-qual or port-direction",
-                                port.getPortName(), connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(), nodeId);
-                        }
-                    } else {
+                    if (!portObject.isPresent()) {
                         LOG.error("No port {} on circuit pack {} for node {}",
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName().toString(),
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(), nodeId);
                         return false;
                     }
+                    Ports port = portObject.get();
+                    if (port.getPortQual() == null) {
+                        continue;
+                    }
+                    if (PortQual.RoadmExternal.getIntValue() != port.getPortQual().getIntValue()
+                        || Direction.Bidirectional.getIntValue() != port.getPortDirection().getIntValue()) {
+                        LOG.error("Impossible to create logical connection point for port {} of {} on node {}"
+                                + "- Error in configuration with port-qual or port-direction",
+                            port.getPortName(),
+                            connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(), nodeId);
+                        continue;
+                    }
+                    String logicalConnectionPoint = new StringBuilder("DEG")
+                        .append(cpMapEntry.getKey())
+                        .append("-TTP-TXRX")
+                        .toString();
+                    LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
+                        connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(), port.getPortName(),
+                        logicalConnectionPoint);
+                    portMapList.add(createMappingObject(nodeId, port,
+                        connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
+                        logicalConnectionPoint));
                     break;
                 case 2:
                     // ports are unidirectionals
@@ -1066,77 +1141,74 @@ public class PortMappingVersion710 {
                     String cp2Name = connectionPortMap.get(cpMapEntry.getKey()).get(1).getCircuitPackName();
                     InstanceIdentifier<Ports> port1ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                         .child(CircuitPacks.class, new CircuitPacksKey(cp1Name))
-                        .child(Ports.class, new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName().toString()));
-                    LOG.info("Fetching connection-port {} at circuit pack {}", connectionPortMap.get(cpMapEntry.getKey()).get(0)
-                        .getPortName().toString(), cp1Name);
+                        .child(Ports.class,
+                            new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName().toString()));
+                    LOG.info("Fetching connection-port {} at circuit pack {}",
+                        connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName().toString(),
+                        cp1Name);
                     Optional<Ports> port1Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, port1ID, Timeouts.DEVICE_READ_TIMEOUT,
                         Timeouts.DEVICE_READ_TIMEOUT_UNIT);
                     InstanceIdentifier<Ports> port2ID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                         .child(CircuitPacks.class, new CircuitPacksKey(cp2Name))
-                        .child(Ports.class, new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName().toString()));
+                        .child(Ports.class,
+                            new PortsKey(connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName().toString()));
                     LOG.info("Fetching connection-port {} at circuit pack {}",
                         connectionPortMap.get(cpMapEntry.getKey()).get(1).getPortName().toString(), cp2Name);
                     Optional<Ports> port2Object = this.deviceTransactionManager.getDataFromDevice(nodeId,
                         LogicalDatastoreType.OPERATIONAL, port2ID, Timeouts.DEVICE_READ_TIMEOUT,
                         Timeouts.DEVICE_READ_TIMEOUT_UNIT);
-                    if (port1Object.isPresent() && port2Object.isPresent()) {
-                        Ports port1 = port1Object.get();
-                        Ports port2 = port2Object.get();
-                        if (port1.getPortQual() == null || port2.getPortQual() == null) {
-                            continue;
-                        } else if ((PortQual.RoadmExternal.getIntValue() == port1.getPortQual().getIntValue()
-                            && PortQual.RoadmExternal.getIntValue() == port2.getPortQual().getIntValue()
-                            && Direction.Rx.getIntValue() == port1.getPortDirection().getIntValue()
-                            && Direction.Tx.getIntValue() == port2.getPortDirection().getIntValue()
-                            && port1.getPartnerPort() != null && port2.getPartnerPort() != null
-                            && port1.getPartnerPort().getCircuitPackName().equals(cp2Name)
-                            && port1.getPartnerPort().getPortName().equals(port2.getPortName())
-                            && port2.getPartnerPort().getCircuitPackName().equals(cp1Name)
-                            && port2.getPartnerPort().getPortName().equals(port1.getPortName()))
-                            ||
-                            (PortQual.RoadmExternal.getIntValue() == port1.getPortQual().getIntValue()
-                                && PortQual.RoadmExternal.getIntValue() == port2.getPortQual().getIntValue()
-                                && Direction.Rx.getIntValue() == port2.getPortDirection().getIntValue()
-                                && Direction.Tx.getIntValue() == port1.getPortDirection().getIntValue()
-                                && port1.getPartnerPort() != null && port2.getPartnerPort() != null
-                                && port1.getPartnerPort().getCircuitPackName().equals(cp2Name)
-                                && port1.getPartnerPort().getPortName().equals(port2.getPortName())
-                                && port2.getPartnerPort().getCircuitPackName().equals(cp1Name)
-                                && port2.getPartnerPort().getPortName().equals(port1.getPortName()))) {
-                            String logicalConnectionPoint1 = new StringBuilder("DEG")
-                                .append(cpMapEntry.getKey())
-                                .append("-TTP-")
-                                .append(port1.getPortDirection().getName().toUpperCase(Locale.getDefault()))
-                                .toString();
-                            LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
-                                connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(), port1.getPortName(),
-                                logicalConnectionPoint1);
-                            portMapList.add(createMappingObject(nodeId, port1, connectionPortMap.get(cpMapEntry.getKey()).get(0)
-                                .getCircuitPackName(), logicalConnectionPoint1));
-                            String logicalConnectionPoint2 = new StringBuilder("DEG")
-                                .append(cpMapEntry.getKey())
-                                .append("-TTP-")
-                                .append(port2.getPortDirection().getName().toUpperCase(Locale.getDefault()))
-                                .toString();
-                            LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
-                                connectionPortMap.get(cpMapEntry.getKey()).get(1).getCircuitPackName(), port2.getPortName(),
-                                logicalConnectionPoint2);
-                            portMapList.add(createMappingObject(nodeId, port2, connectionPortMap.get(cpMapEntry.getKey()).get(1)
-                                .getCircuitPackName(), logicalConnectionPoint2));
-                        } else {
-                            LOG.error(
-                                "impossible to create logical connection point for port {} or port {} on node {} - "
-                                    + "Error in configuration with port-qual, port-direction or partner-port configuration",
-                                port1.getPortName(), port2.getPortName(), nodeId);
-                        }
-                    } else {
+                    if (!port1Object.isPresent() || !port2Object.isPresent()) {
                         LOG.error("No port {} on circuit pack {} for node {}",
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getPortName().toString(),
                             connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(), nodeId);
                         return false;
                     }
 
+                    Ports port1 = port1Object.get();
+                    Ports port2 = port2Object.get();
+                    if (port1.getPortQual() == null || port2.getPortQual() == null) {
+                        continue;
+                    }
+                    if (PortQual.RoadmExternal.getIntValue() != port1.getPortQual().getIntValue()
+                        || PortQual.RoadmExternal.getIntValue() != port2.getPortQual().getIntValue()
+                        || port1.getPartnerPort() == null
+                        || port2.getPartnerPort() == null
+                        || !port1.getPartnerPort().getCircuitPackName().equals(cp2Name)
+                        || !port1.getPartnerPort().getPortName().equals(port2.getPortName())
+                        || !port2.getPartnerPort().getCircuitPackName().equals(cp1Name)
+                        || !port2.getPartnerPort().getPortName().equals(port1.getPortName())
+                        || ((Direction.Rx.getIntValue() != port1.getPortDirection().getIntValue()
+                                || Direction.Tx.getIntValue() != port2.getPortDirection().getIntValue())
+                            && (Direction.Rx.getIntValue() != port2.getPortDirection().getIntValue()
+                                || Direction.Tx.getIntValue() != port1.getPortDirection().getIntValue()))) {
+                        LOG.error("Impossible to create logical connection point for port {} or port {} on node {} - "
+                                + "Error in configuration with port-qual, port-direction or partner-port configuration",
+                            port1.getPortName(), port2.getPortName(), nodeId);
+                        continue;
+                    }
+                    String logicalConnectionPoint1 = new StringBuilder("DEG")
+                        .append(cpMapEntry.getKey())
+                        .append("-TTP-")
+                        .append(port1.getPortDirection().getName().toUpperCase(Locale.getDefault()))
+                        .toString();
+                    LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
+                        connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
+                        port1.getPortName(), logicalConnectionPoint1);
+                    portMapList.add(createMappingObject(nodeId, port1,
+                            connectionPortMap.get(cpMapEntry.getKey()).get(0).getCircuitPackName(),
+                            logicalConnectionPoint1));
+                    String logicalConnectionPoint2 = new StringBuilder("DEG")
+                        .append(cpMapEntry.getKey())
+                        .append("-TTP-")
+                        .append(port2.getPortDirection().getName().toUpperCase(Locale.getDefault()))
+                        .toString();
+                    LOG.info("{} : Logical Connection Point for {} {} is {}", nodeId,
+                        connectionPortMap.get(cpMapEntry.getKey()).get(1).getCircuitPackName(),
+                        port2.getPortName(), logicalConnectionPoint2);
+                    portMapList.add(createMappingObject(nodeId, port2,
+                            connectionPortMap.get(cpMapEntry.getKey()).get(1).getCircuitPackName(),
+                            logicalConnectionPoint2));
                     break;
                 default:
                     LOG.error("Number of connection port for DEG{} on {} is incorrect", cpMapEntry.getKey(), nodeId);
@@ -1175,4 +1247,5 @@ public class PortMappingVersion710 {
 
         return nodeInfoBldr.build();
     }
+
 }
