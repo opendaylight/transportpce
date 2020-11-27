@@ -52,6 +52,24 @@
       "revId": "f3b8ea437e102ec3f6a9657831b2447ec82ddeb4",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56bcf795_da92c404",
+        "filename": "ordmodels/common/src/main/java/org/opendaylight/yang/gen/v1/http/org/openroadm/pm/types/rev200327/PmDataTypeBuilder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-27T09:25:55Z",
+      "side": 1,
+      "message": "Solved after rebase on change 93812",
+      "parentUuid": "ab308d52_144f68dd",
+      "revId": "f3b8ea437e102ec3f6a9657831b2447ec82ddeb4",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
