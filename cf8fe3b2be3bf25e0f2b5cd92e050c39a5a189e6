@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "50393d26_d5114e71",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-27T14:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0094f8c_466e1ad6",
+      "revId": "cf8fe3b2be3bf25e0f2b5cd92e050c39a5a189e6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48bcbdcd_c39bb3f7",
         "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
         "patchSetId": 9
@@ -39,6 +57,30 @@
       "revId": "cf8fe3b2be3bf25e0f2b5cd92e050c39a5a189e6",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94a27592_bd66938c",
+        "filename": "tapi/src/main/java/org/opendaylight/transportpce/tapi/topology/ConvertORTopoToTapiTopo.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-27T14:45:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48bcbdcd_c39bb3f7",
+      "range": {
+        "startLine": 569,
+        "startChar": 62,
+        "endLine": 570,
+        "endChar": 43
+      },
+      "revId": "cf8fe3b2be3bf25e0f2b5cd92e050c39a5a189e6",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
