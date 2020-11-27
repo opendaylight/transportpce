@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "057f1888_07ec5724",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-27T13:34:44Z",
+      "side": 1,
+      "message": "sample files changes description should be developped in the commit message",
+      "revId": "86ac378b49e5211f989948d8fe9aa4e8fa667907",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4952edf3_d592aaa9",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyTopoImpl.java",
         "patchSetId": 9
