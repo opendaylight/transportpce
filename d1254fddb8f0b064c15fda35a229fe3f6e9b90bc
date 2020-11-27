@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "936ac5f5_6de9a9f0",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-27T14:11:02Z",
+      "side": 1,
+      "message": "ternary can make code more difficult to read",
+      "parentUuid": "6be21bf5_0a02ea1f",
+      "range": {
+        "startLine": 581,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 25
+      },
+      "revId": "d1254fddb8f0b064c15fda35a229fe3f6e9b90bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f82a1d_c011761d",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
         "patchSetId": 7
@@ -94,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "61bc82b8_f0361c01",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-27T14:11:02Z",
+      "side": 1,
+      "message": "ternary can make code more difficult to read",
+      "parentUuid": "55f82a1d_c011761d",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 599,
+        "endChar": 25
+      },
+      "revId": "d1254fddb8f0b064c15fda35a229fe3f6e9b90bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5aa05165_9134a84f",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
         "patchSetId": 7
@@ -105,6 +153,30 @@
       "writtenOn": "2020-11-27T13:28:20Z",
       "side": 1,
       "message": "maybe a ternary operator use would be more indicated here.",
+      "range": {
+        "startLine": 637,
+        "startChar": 0,
+        "endLine": 640,
+        "endChar": 9
+      },
+      "revId": "d1254fddb8f0b064c15fda35a229fe3f6e9b90bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0d59718_74a46384",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-27T14:11:02Z",
+      "side": 1,
+      "message": "ternary can make code more difficult to read",
+      "parentUuid": "5aa05165_9134a84f",
       "range": {
         "startLine": 637,
         "startChar": 0,
