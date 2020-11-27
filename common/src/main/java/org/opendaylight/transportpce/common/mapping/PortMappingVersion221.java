@@ -423,12 +423,8 @@ public class PortMappingVersion221 {
         } else {
             Collection<ConnectionMap> connectionMap = deviceObject.get().nonnullConnectionMap().values();
             for (ConnectionMap cm : connectionMap) {
-                String slcp = null;
-                String dlcp = null;
                 String skey = cm.getSource().getCircuitPackName() + "+" + cm.getSource().getPortName();
-                if (lcpMap.containsKey(skey)) {
-                    slcp = lcpMap.get(skey);
-                }
+                String slcp = lcpMap.containsKey(skey) ? lcpMap.get(skey) : null;
                 Destination destination0 = cm.nonnullDestination().values().iterator().next();
                 String dkey = destination0.getCircuitPackName() + "+" + destination0.getPortName();
                 if (slcp == null) {
@@ -436,9 +432,7 @@ public class PortMappingVersion221 {
                         skey, dkey);
                     continue;
                 }
-                if (lcpMap.containsKey(dkey)) {
-                    dlcp = lcpMap.get(dkey);
-                }
+                String dlcp = lcpMap.containsKey(dkey) ? lcpMap.get(dkey) : null;
                 Mapping mapping = mappingMap.get(slcp);
                 mappingMap.remove(slcp);
                 portMapList.add(createXpdrMappingObject(nodeId, null, null, null, null, mapping, dlcp, null));
@@ -515,14 +509,9 @@ public class PortMappingVersion221 {
         .CircuitPacks>> getSrgCps(String deviceId, Info ordmInfo) {
         HashMap<Integer, List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.srg
             .CircuitPacks>> cpPerSrg = new HashMap<>();
-        Integer maxSrg;
         // Get value for max Srg from info subtree, required for iteration
         // if not present assume to be 20 (temporary)
-        if (ordmInfo.getMaxSrgs() != null) {
-            maxSrg = ordmInfo.getMaxSrgs().toJava();
-        } else {
-            maxSrg = 20;
-        }
+        Integer maxSrg = ordmInfo.getMaxSrgs() == null ? 20 : ordmInfo.getMaxSrgs().toJava();
         for (int srgCounter = 1; srgCounter <= maxSrg; srgCounter++) {
             List<org.opendaylight.yang.gen.v1.http.org.openroadm.device.rev181019.srg.CircuitPacks> srgCps
                 = new ArrayList<>();
@@ -650,15 +639,10 @@ public class PortMappingVersion221 {
 
     private List<Degree> getDegrees(String deviceId, Info ordmInfo) {
         List<Degree> degrees = new ArrayList<>();
-        Integer maxDegree;
 
         // Get value for max degree from info subtree, required for iteration
         // if not present assume to be 20 (temporary)
-        if (ordmInfo.getMaxDegrees() != null) {
-            maxDegree = ordmInfo.getMaxDegrees().toJava();
-        } else {
-            maxDegree = 20;
-        }
+        Integer maxDegree = ordmInfo.getMaxDegrees() == null ? 20 : ordmInfo.getMaxDegrees().toJava();
 
         for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
             LOG.info("Getting Connection ports for Degree Number {}", degreeCounter);
@@ -678,14 +662,9 @@ public class PortMappingVersion221 {
     private List<SharedRiskGroup> getSrgs(String deviceId, Info ordmInfo) {
         List<SharedRiskGroup> srgs = new ArrayList<>();
 
-        Integer maxSrg;
         // Get value for max Srg from info subtree, required for iteration
         // if not present assume to be 20 (temporary)
-        if (ordmInfo.getMaxSrgs() != null) {
-            maxSrg = ordmInfo.getMaxSrgs().toJava();
-        } else {
-            maxSrg = 20;
-        }
+        Integer maxSrg = ordmInfo.getMaxSrgs() == null ? 20 : ordmInfo.getMaxSrgs().toJava();
         for (int srgCounter = 1; srgCounter <= maxSrg; srgCounter++) {
             InstanceIdentifier<SharedRiskGroup> srgIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
                 .child(SharedRiskGroup.class, new SharedRiskGroupKey(Uint16.valueOf(srgCounter)));
@@ -702,13 +681,8 @@ public class PortMappingVersion221 {
 
     private Map<Integer, List<ConnectionPorts>> getPerDegreePorts(String deviceId, Info ordmInfo) {
         Map<Integer, List<ConnectionPorts>> conPortMap = new HashMap<>();
-        Integer maxDegree;
+        Integer maxDegree = ordmInfo.getMaxDegrees() == null ? 20 : ordmInfo.getMaxDegrees().toJava();
 
-        if (ordmInfo.getMaxDegrees() != null) {
-            maxDegree = ordmInfo.getMaxDegrees().toJava();
-        } else {
-            maxDegree = 20;
-        }
         for (int degreeCounter = 1; degreeCounter <= maxDegree; degreeCounter++) {
             LOG.info("Getting Connection ports for Degree Number {}", degreeCounter);
             InstanceIdentifier<Degree> deviceIID = InstanceIdentifier.create(OrgOpenroadmDevice.class)
