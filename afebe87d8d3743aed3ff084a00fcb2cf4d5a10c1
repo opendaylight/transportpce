@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a5fefb1_4daabd24",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-27T13:15:15Z",
+      "side": 1,
+      "message": "maybe more details on the constants introduced here would be welcome.\notherwise LGTM",
+      "revId": "afebe87d8d3743aed3ff084a00fcb2cf4d5a10c1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
