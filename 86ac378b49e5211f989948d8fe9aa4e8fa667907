@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a5438d4_4e7a0488",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-27T14:45:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "057f1888_07ec5724",
+      "revId": "86ac378b49e5211f989948d8fe9aa4e8fa667907",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4952edf3_d592aaa9",
         "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyTopoImpl.java",
         "patchSetId": 9
@@ -39,6 +57,30 @@
       "revId": "86ac378b49e5211f989948d8fe9aa4e8fa667907",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c07aae21_ccec6088",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/gnpy/GnpyTopoImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-11-27T14:45:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4952edf3_d592aaa9",
+      "range": {
+        "startLine": 249,
+        "startChar": 100,
+        "endLine": 250,
+        "endChar": 53
+      },
+      "revId": "86ac378b49e5211f989948d8fe9aa4e8fa667907",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
