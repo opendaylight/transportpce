@@ -22,6 +22,30 @@
       "revId": "3271f5969b27001b866cc64725225743118e4f02",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e739461_6e61691f",
+        "filename": "ordmodels/common/src/main/yang/org-openroadm-common-types@2020-05-29.yang",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-27T09:23:51Z",
+      "side": 1,
+      "message": "Solved with rebase on portmapping update (PS4)",
+      "parentUuid": "75bde41c_f7d5c75f",
+      "range": {
+        "startLine": 342,
+        "startChar": 2,
+        "endLine": 342,
+        "endChar": 89
+      },
+      "revId": "3271f5969b27001b866cc64725225743118e4f02",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
