@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "f77d7dc8_8da8bbb9",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-27T13:44:23Z",
+      "side": 1,
+      "message": "Yes but I don\u0027t see any explanation in the commit message nor in the comments here.\nThere should be a minimal explanation here about the representation details.\nIt should be understandable by non optical and non OpenROADM base64/binary-representations experts.\nWe cannot reasonnably assume that reviewers have both competencies.",
+      "parentUuid": "625de543_e056af6b",
+      "range": {
+        "startLine": 67,
+        "startChar": 1,
+        "endLine": 103,
+        "endChar": 107
+      },
+      "revId": "33fc334a392cea91abde2d28be9ce5f6a5af5780",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8e8ecfa7_3f297515",
         "filename": "tests/transportpce_tests/common/test_utils.py",
         "patchSetId": 2
