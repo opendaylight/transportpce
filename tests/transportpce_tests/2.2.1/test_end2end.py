@@ -317,7 +317,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 self.assertIn({u'map-name': 'cband', u'freq-map-granularity': 6.25, u'start-edge-freq': 191.325,
-                               u'effective-bits': 8, u'freq-map': INDEX_1_USED_FREQ_MAP},
+                               u'effective-bits': 768, u'freq-map': INDEX_1_USED_FREQ_MAP},
                               ele['org-openroadm-network-topology:'
                                   'ctp-attributes'][
                                   'avail-freq-maps'])
@@ -461,7 +461,7 @@ class TransportPCEFulltesting(unittest.TestCase):
         for ele in liste_tp:
             if ele['tp-id'] == 'DEG2-CTP-TXRX':
                 self.assertIn({u'map-name': 'cband', u'freq-map-granularity': 6.25, u'start-edge-freq': 191.325,
-                               u'effective-bits': 8, u'freq-map': INDEX_1_2_USED_FREQ_MAP},
+                               u'effective-bits': 768, u'freq-map': INDEX_1_2_USED_FREQ_MAP},
                               ele['org-openroadm-network-topology:'
                                   'ctp-attributes'][
                                   'avail-freq-maps'])
