@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebeebeb0_a81a6599",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-30T16:28:19Z",
+      "side": 1,
+      "message": "trailing blank",
+      "range": {
+        "startLine": 45,
+        "startChar": 22,
+        "endLine": 45,
+        "endChar": 23
+      },
+      "revId": "3eed73aedb3c37eb8103d107d9343f8b3e3c015b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "028fb19d_1768a2bb",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-30T16:28:19Z",
+      "side": 1,
+      "message": "trailing blank",
+      "range": {
+        "startLine": 407,
+        "startChar": 22,
+        "endLine": 407,
+        "endChar": 23
+      },
+      "revId": "3eed73aedb3c37eb8103d107d9343f8b3e3c015b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}

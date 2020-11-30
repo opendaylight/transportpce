@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e6c46e93_5cb1bb9f",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-30T16:28:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6617e1e4_48964e7c",
+      "range": {
+        "startLine": 42,
+        "startChar": 24,
+        "endLine": 42,
+        "endChar": 25
+      },
+      "revId": "e0eb7947aad248eda0bf82f31593c395f0880bef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "58705276_6388c42e",
         "filename": "tapi/src/test/resources/openroadm-topology.xml",
         "patchSetId": 8
@@ -69,6 +93,30 @@
       "revId": "e0eb7947aad248eda0bf82f31593c395f0880bef",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "149a61e8_ecfa15e7",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-30T16:28:19Z",
+      "side": 1,
+      "message": "OK\nthis is developed in the commit message.",
+      "parentUuid": "968ec674_cc5638a1",
+      "range": {
+        "startLine": 405,
+        "startChar": 18,
+        "endLine": 405,
+        "endChar": 146
+      },
+      "revId": "e0eb7947aad248eda0bf82f31593c395f0880bef",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
