@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "0e6d3ccd_b09a8b52",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-30T16:17:00Z",
+      "side": 1,
+      "message": "They can. But this is mostly true with complex conditions (not to mention nested ternary operators).\nReadability is of course quite subjective.\nThough, it is quite admitted that simple case such as this one allows to reduce the number of lines and the level of nested structures, what improves maintenance and readability.",
+      "parentUuid": "936ac5f5_6de9a9f0",
+      "range": {
+        "startLine": 581,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 25
+      },
+      "revId": "d1254fddb8f0b064c15fda35a229fe3f6e9b90bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f82a1d_c011761d",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
         "patchSetId": 7
