@@ -1327,7 +1327,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1371,7 +1371,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1415,7 +1415,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1490,7 +1490,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1534,7 +1534,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1578,7 +1578,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1622,7 +1622,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1697,7 +1697,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1741,7 +1741,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1785,7 +1785,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1829,7 +1829,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1873,7 +1873,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1948,7 +1948,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -1992,7 +1992,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -2036,7 +2036,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -2111,7 +2111,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -2155,7 +2155,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -2199,7 +2199,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]
@@ -2243,7 +2243,7 @@
                                 "map-name": "cband",
                                 "start-edge-freq": 191.325,
                                 "freq-map-granularity": 6.25,
-                                "effective-bits": 8,
+                                "effective-bits": 768,
                                 "freq-map":"/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                             }
                         ]

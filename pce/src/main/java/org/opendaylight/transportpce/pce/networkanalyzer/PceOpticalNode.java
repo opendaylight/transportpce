@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
-import org.opendaylight.transportpce.common.fixedflex.FixedGridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.pce.SortPortsByName;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.TerminationPoint1;
@@ -147,7 +146,7 @@ public class PceOpticalNode implements PceNode {
                 break;
             case XPONDER :
                 // HARD CODED 96
-                for (long i = 1; i <= FixedGridConstant.NB_CHANNELS; i++) {
+                for (long i = 1; i <= GridConstant.NB_OCTECTS; i++) {
                     this.availableWLindex.add(i);
                 }
                 break;

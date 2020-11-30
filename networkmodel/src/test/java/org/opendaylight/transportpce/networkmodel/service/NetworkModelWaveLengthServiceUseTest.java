@@ -24,7 +24,6 @@ import org.junit.runners.Parameterized;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
-import org.opendaylight.transportpce.common.fixedflex.FixedGridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.networkmodel.util.WaveLengthServiceUtils;
 import org.opendaylight.transportpce.networkmodel.util.test.PathDescriptionUtils;
@@ -103,16 +102,14 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
             .setXpdrNetworkAttributes((new XpdrNetworkAttributesBuilder()).build())
             .setXpdrPortAttributes((new XpdrPortAttributesBuilder()).build());
 
-        byte[] byteArray = new byte[FixedGridConstant.NB_CHANNELS * FixedGridConstant.EFFECTIVE_BITS];
+        byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(byteArray, (byte) GridConstant.USED_SLOT_VALUE);
-        for (int i = 152;i <= 159;i++) {
-            byteArray[i] = (byte) GridConstant.AVAILABLE_SLOT_VALUE;
-        }
+        byteArray[19] = (byte) GridConstant.AVAILABLE_SLOT_VALUE;
         Map<AvailFreqMapsKey, AvailFreqMaps> waveMap = new HashMap<>();
         AvailFreqMaps availFreqMaps = new AvailFreqMapsBuilder().setMapName(GridConstant.C_BAND)
-                .setFreqMapGranularity(new FrequencyGHz(BigDecimal.valueOf(FixedGridConstant.GRANULARITY)))
-                .setStartEdgeFreq(new FrequencyTHz(BigDecimal.valueOf(FixedGridConstant.START_EDGE_FREQUENCY)))
-                .setEffectiveBits(Uint16.valueOf(FixedGridConstant.EFFECTIVE_BITS))
+                .setFreqMapGranularity(new FrequencyGHz(BigDecimal.valueOf(GridConstant.GRANULARITY)))
+                .setStartEdgeFreq(new FrequencyTHz(BigDecimal.valueOf(GridConstant.START_EDGE_FREQUENCY)))
+                .setEffectiveBits(Uint16.valueOf(GridConstant.EFFECTIVE_BITS))
                 .setFreqMap(byteArray)
                 .build();
         waveMap.put(availFreqMaps.key(), availFreqMaps);

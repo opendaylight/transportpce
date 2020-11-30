@@ -38,7 +38,6 @@ import org.mockito.stubbing.Answer;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
-import org.opendaylight.transportpce.common.fixedflex.FixedGridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.networkmodel.dto.TopologyShard;
@@ -277,8 +276,8 @@ public class OpenRoadmTopologyTest {
         List<AvailFreqMaps> availFreqMapsValues = new ArrayList<>(node.augmentation(
             org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1.class)
             .getDegreeAttributes().getAvailFreqMaps().values());
-        assertEquals(FixedGridConstant.NB_CHANNELS, availFreqMapsValues.get(0).getFreqMap().length);
-        byte[] byteArray = new byte[FixedGridConstant.NB_CHANNELS];
+        assertEquals(GridConstant.NB_OCTECTS, availFreqMapsValues.get(0).getFreqMap().length);
+        byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         assertEquals(Arrays.toString(byteArray), Arrays.toString(availFreqMapsValues.get(0).getFreqMap()));
         List<TerminationPoint> tps = node.augmentation(
@@ -307,8 +306,8 @@ public class OpenRoadmTopologyTest {
         List<AvailFreqMaps> availFreqMapsValues = new ArrayList<>(node.augmentation(
                 org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1.class)
                 .getSrgAttributes().getAvailFreqMaps().values());
-        assertEquals(FixedGridConstant.NB_CHANNELS, availFreqMapsValues.get(0).getFreqMap().length);
-        byte[] byteArray = new byte[FixedGridConstant.NB_CHANNELS];
+        assertEquals(GridConstant.NB_OCTECTS, availFreqMapsValues.get(0).getFreqMap().length);
+        byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         assertEquals(Arrays.toString(byteArray), Arrays.toString(availFreqMapsValues.get(0).getFreqMap()));
         List<TerminationPoint> tps = node.augmentation(
