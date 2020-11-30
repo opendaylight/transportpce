@@ -70,6 +70,30 @@
       "revId": "7f18ab45e1da9e1f4918349ac4c391cc4dd33404",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b1dd233_03c9ebbd",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-30T15:50:40Z",
+      "side": 1,
+      "message": "associated methods can be put at the top of the classes.\nBy wirting that, I realized this is only used by 4 tests and should probably better be put in a dedicated class.",
+      "parentUuid": "f4625bf1_d674339a",
+      "range": {
+        "startLine": 479,
+        "startChar": 0,
+        "endLine": 484,
+        "endChar": 78
+      },
+      "revId": "7f18ab45e1da9e1f4918349ac4c391cc4dd33404",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
