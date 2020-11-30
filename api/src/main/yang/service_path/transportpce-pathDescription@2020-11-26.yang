@@ -2,6 +2,11 @@ module transportpce-pathDescription {
   namespace "http://org/transportpce/B-C-interface/pathDescription";
   prefix transportpce-pathDescription;
 
+  import org-openroadm-common-optical-channel-types {
+    prefix org-openroadm-common-optical-channel-types;
+    revision-date 2020-05-29;
+  }
+
   organization
     "transportPCE";
   contact
@@ -36,6 +41,11 @@ module transportpce-pathDescription {
       WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
+
+  revision 2020-11-26 {
+        description
+          "Version 1.6.2. To manage flexgrid";
+  }
 
   revision 2020-06-29 {
     description
@@ -94,6 +104,16 @@ module transportpce-pathDescription {
       leaf aToZ-wavelength-number {
         type uint32;
       }
+      leaf aToZ-min-frequency {
+         type org-openroadm-common-optical-channel-types:frequency-THz;
+         description
+         "Minimum frequency in THz.";
+      }
+      leaf aToZ-max-frequency {
+           type org-openroadm-common-optical-channel-types:frequency-THz;
+         description
+         "Maximum frequency in THz.";
+      }
       leaf trib-port-number {
         type uint16;
       }
@@ -121,6 +141,16 @@ module transportpce-pathDescription {
     container zToA-direction {
       leaf zToA-wavelength-number {
         type uint32;
+      }
+      leaf zToA-min-frequency {
+         type org-openroadm-common-optical-channel-types:frequency-THz;
+         description
+         "Minimum frequency in THz.";
+      }
+      leaf zToA-max-frequency {
+           type org-openroadm-common-optical-channel-types:frequency-THz;
+         description
+         "Maximum frequency in THz.";
       }
       leaf trib-port-number {
         type uint16;
