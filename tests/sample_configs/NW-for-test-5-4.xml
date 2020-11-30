@@ -11,7 +11,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>s>
@@ -29,7 +29,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -47,7 +47,7 @@
         <map-name>cband</map-name>
         <start-edge-freq>191.325</start-edge-freq>
         <freq-map-granularity>6.25</freq-map-granularity>
-        <effective-bits>8</effective-bits>
+        <effective-bits>768</effective-bits>
         <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         </freq-map>
       </avail-freq-maps>
@@ -62,7 +62,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -165,7 +165,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -183,7 +183,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -201,7 +201,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -216,7 +216,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -319,7 +319,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -337,7 +337,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -355,7 +355,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -370,7 +370,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -473,7 +473,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -491,7 +491,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -509,7 +509,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -524,7 +524,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -627,7 +627,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -645,7 +645,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -663,7 +663,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -678,7 +678,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -781,7 +781,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -799,7 +799,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -817,7 +817,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -832,7 +832,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -935,7 +935,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -953,7 +953,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -971,7 +971,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>>
@@ -986,7 +986,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>>
@@ -1089,7 +1089,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1107,7 +1107,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1125,7 +1125,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1140,7 +1140,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AP////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1243,7 +1243,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1261,7 +1261,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1279,7 +1279,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1294,7 +1294,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1397,7 +1397,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1415,7 +1415,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1433,7 +1433,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1448,7 +1448,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>>
@@ -1551,7 +1551,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1569,7 +1569,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1587,7 +1587,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1602,7 +1602,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1705,7 +1705,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1723,7 +1723,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1741,7 +1741,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1756,7 +1756,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAP//////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1859,7 +1859,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1877,7 +1877,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1895,7 +1895,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -1910,7 +1910,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>>
@@ -2013,7 +2013,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2031,7 +2031,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2049,7 +2049,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2064,7 +2064,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2167,7 +2167,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2185,7 +2185,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>>
@@ -2203,7 +2203,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2218,7 +2218,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2321,7 +2321,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2339,7 +2339,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>s>
@@ -2357,7 +2357,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2372,7 +2372,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAA/////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2475,7 +2475,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2493,7 +2493,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2511,7 +2511,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2526,7 +2526,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2629,7 +2629,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2647,7 +2647,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2665,7 +2665,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2680,7 +2680,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2783,7 +2783,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2801,7 +2801,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2819,7 +2819,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2834,7 +2834,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2937,7 +2937,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2955,7 +2955,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2973,7 +2973,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
@@ -2988,7 +2988,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>AAAAAAAAAAD///////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 </freq-map>
             </avail-freq-maps>
