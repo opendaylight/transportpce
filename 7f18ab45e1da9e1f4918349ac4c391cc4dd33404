@@ -46,6 +46,30 @@
       "revId": "7f18ab45e1da9e1f4918349ac4c391cc4dd33404",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4625bf1_d674339a",
+        "filename": "tests/transportpce_tests/common/test_utils.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-11-30T09:43:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "554d6a53_6a1e0786",
+      "range": {
+        "startLine": 479,
+        "startChar": 0,
+        "endLine": 484,
+        "endChar": 78
+      },
+      "revId": "7f18ab45e1da9e1f4918349ac4c391cc4dd33404",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
