@@ -130,4 +130,12 @@ public class RequestProcessor {
         rwTx = dataBroker.newReadWriteTransaction();
         return rwTx;
     }
+
+    /**
+     * Return the dataBroker related to RequestProcessor.
+     * @return the dataBroker
+     */
+    public DataBroker getDataBroker() {
+        return dataBroker;
+    }
 }
