@@ -11,6 +11,7 @@ package org.opendaylight.transportpce.common.network;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -58,6 +59,16 @@ public class NetworkTransactionImpl implements NetworkTransactionService {
     public <T extends DataObject> void merge(LogicalDatastoreType store,
         InstanceIdentifier<T> path, T data) {
         requestProcessor.merge(store, path, data);
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.common.network.NetworkTransactionService#getDataBroker()
+    */
+    @Override
+    public DataBroker getDataBroker() {
+        return requestProcessor.getDataBroker();
     }
 
 
