@@ -12,6 +12,7 @@ import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNull;
+import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yangtools.yang.binding.DataObject;
@@ -33,4 +34,10 @@ public interface NetworkTransactionService {
     FluentFuture<? extends @NonNull CommitInfo> commit();
 
     void close();
+
+    /**
+     * the Databroker related to NetworkTransactionService.
+     * @return the Databroker related to NetworkTransactionService.
+     */
+    DataBroker getDataBroker();
 }
