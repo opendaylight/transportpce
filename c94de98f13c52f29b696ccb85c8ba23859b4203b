@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fddf5ce9_98884eb7",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-11-30T16:32:46Z",
+      "side": 1,
+      "message": "whitespace rather ?",
+      "range": {
+        "startLine": 577,
+        "startChar": 86,
+        "endLine": 577,
+        "endChar": 91
+      },
+      "revId": "c94de98f13c52f29b696ccb85c8ba23859b4203b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
