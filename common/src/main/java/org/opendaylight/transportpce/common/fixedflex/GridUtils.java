@@ -29,13 +29,13 @@ public final class GridUtils {
     }
 
     public static Map<AvailFreqMapsKey, AvailFreqMaps> initFreqMaps4FixedGrid2Available() {
-        byte[] byteArray = new byte[FixedGridConstant.NB_CHANNELS];
+        byte[] byteArray = new byte[GridConstant.NB_OCTECTS];
         Arrays.fill(byteArray, (byte) GridConstant.AVAILABLE_SLOT_VALUE);
         Map<AvailFreqMapsKey, AvailFreqMaps> waveMap = new HashMap<>();
         AvailFreqMaps availFreqMaps = new AvailFreqMapsBuilder().setMapName(GridConstant.C_BAND)
-                .setFreqMapGranularity(new FrequencyGHz(BigDecimal.valueOf(FixedGridConstant.GRANULARITY)))
-                .setStartEdgeFreq(new FrequencyTHz(BigDecimal.valueOf(FixedGridConstant.START_EDGE_FREQUENCY)))
-                .setEffectiveBits(Uint16.valueOf(FixedGridConstant.EFFECTIVE_BITS))
+                .setFreqMapGranularity(new FrequencyGHz(BigDecimal.valueOf(GridConstant.GRANULARITY)))
+                .setStartEdgeFreq(new FrequencyTHz(BigDecimal.valueOf(GridConstant.START_EDGE_FREQUENCY)))
+                .setEffectiveBits(Uint16.valueOf(GridConstant.EFFECTIVE_BITS))
                 .setFreqMap(byteArray)
                 .build();
         waveMap.put(availFreqMaps.key(), availFreqMaps);
