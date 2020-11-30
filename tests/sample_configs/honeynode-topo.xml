@@ -354,7 +354,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 </freq-map>
             </avail-freq-maps>s>
@@ -386,7 +386,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 </freq-map>
             </avail-freq-maps>s>
@@ -417,7 +417,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 </freq-map>
             </avail-freq-maps>s>
@@ -506,7 +506,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 </freq-map>
             </avail-freq-maps>s>
@@ -570,7 +570,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 </freq-map>
             </avail-freq-maps>s>
@@ -633,7 +633,7 @@
                 <map-name>cband</map-name>
                 <start-edge-freq>191.325</start-edge-freq>
                 <freq-map-granularity>6.25</freq-map-granularity>
-                <effective-bits>8</effective-bits>
+                <effective-bits>768</effective-bits>
                 <freq-map>////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 </freq-map>
             </avail-freq-maps>s>
