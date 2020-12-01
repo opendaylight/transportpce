@@ -42,4 +42,24 @@ public final class GridUtils {
         return waveMap;
     }
 
+    /**
+     * Compute the wavelength index from Spectrum assignment stop index.
+     * Only for fix grid and device 1.2.1.
+     * @param stopIndex int
+     * @return the wavelength number.
+     */
+    public static long getWaveLengthIndexFromSpectrumAssigment(int stopIndex) {
+        return (stopIndex + 1) / GridConstant.NB_SLOTS_100G;
+    }
+
+    /**
+     * Compute the frequency in TGz for the given index.
+     * @param index int
+     * @return the frequency in THz for the provided index.
+     */
+    public static BigDecimal getFrequencyFromIndex(int index) {
+        int nvalue = index - 284;
+        return BigDecimal.valueOf(GridConstant.CENTRAL_FREQUENCY + (nvalue * GridConstant.GRANULARITY / 1000));
+    }
+
 }
