@@ -21,6 +21,9 @@ public final class GridConstant {
     public static final int EFFECTIVE_BITS = 768;
     public static final double START_EDGE_FREQUENCY = 191.325;
     public static final int NB_OCTECTS = 96;
+    public static final double CENTRAL_FREQUENCY = 193.1;
+    public static final int NB_SLOTS_100G = 8;
+    public static final int NB_SLOTS_400G = 14;
 
     private GridConstant() {
     }
