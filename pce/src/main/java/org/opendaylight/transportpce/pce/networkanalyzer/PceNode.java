@@ -37,4 +37,10 @@ public interface PceNode {
     Map<String, List<Uint16>> getAvailableTribPorts();
 
     Map<String, List<Uint16>> getAvailableTribSlots();
+
+    /**
+     * Get the version of node.
+     * @return the OpenROADM yang release supported by the node.
+     */
+    String getVersion();
 }
