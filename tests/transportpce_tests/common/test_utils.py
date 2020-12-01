@@ -52,6 +52,7 @@ URL_SERVICE_PATH = "{}/operations/transportpce-device-renderer:service-path"
 URL_OTN_SERVICE_PATH = "{}/operations/transportpce-device-renderer:otn-service-path"
 URL_CREATE_OTS_OMS = "{}/operations/transportpce-device-renderer:create-ots-oms"
 URL_PATH_COMPUTATION_REQUEST = "{}/operations/transportpce-pce:path-computation-request"
+URL_FULL_PORTMAPPING = "{}/config/transportpce-portmapping:network"
 
 TYPE_APPLICATION_JSON = {'Content-Type': 'application/json', 'Accept': 'application/json'}
 TYPE_APPLICATION_XML = {'Content-Type': 'application/xml', 'Accept': 'application/xml'}
@@ -191,6 +192,13 @@ def put_xmlrequest(url, data):
 def rawput_request(url, data):
     return requests.request(
         "PUT", url.format(RESTCONF_BASE_URL),
+        data=data,
+        headers=TYPE_APPLICATION_JSON,
+        auth=(ODL_LOGIN, ODL_PWD))
+
+def rawpost_request(url, data):
+    return requests.request(
+        "POST", url.format(RESTCONF_BASE_URL),
         data=data,
         headers=TYPE_APPLICATION_JSON,
         auth=(ODL_LOGIN, ODL_PWD))

@@ -45,14 +45,16 @@ public class PceOpticalNode implements PceNode {
     private List<PceLink> outgoingLinks = new ArrayList<>();
     private Map<String, String> clientPerNwTp = new HashMap<>();
     private final AvailFreqMapsKey freqMapKey = new AvailFreqMapsKey(GridConstant.C_BAND);
+    private String version;
 
-    public PceOpticalNode(Node node, OpenroadmNodeType nodeType) {
-        if (node != null && node.getNodeId() != null && nodeType != null) {
+    public PceOpticalNode(Node node, OpenroadmNodeType nodeType, String version) {
+        if (node != null && node.getNodeId() != null && nodeType != null && version != null) {
             this.node = node;
             this.nodeId = node.getNodeId();
             this.nodeType = nodeType;
+            this.version = version;
         } else {
-            LOG.error("PceNode: one of parameters is not populated : nodeId, node type");
+            LOG.error("PceNode: one of parameters is not populated : nodeId, node type, version");
             this.valid = false;
         }
     }
@@ -368,5 +370,15 @@ public class PceOpticalNode implements PceNode {
             }
             wlIndex++;
         }
+    }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getVersion()
+    */
+    @Override
+    public String getVersion() {
+        return this.version;
     }
 }
