@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5f1eaf3b_089ebf5f",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-01T17:12:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebeebeb0_a81a6599",
+      "range": {
+        "startLine": 45,
+        "startChar": 22,
+        "endLine": 45,
+        "endChar": 23
+      },
+      "revId": "3eed73aedb3c37eb8103d107d9343f8b3e3c015b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "028fb19d_1768a2bb",
         "filename": "tapi/src/test/resources/openroadm-topology.xml",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "3eed73aedb3c37eb8103d107d9343f8b3e3c015b",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c8762ab_5479e82a",
+        "filename": "tapi/src/test/resources/openroadm-topology.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2020-12-01T17:12:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "028fb19d_1768a2bb",
+      "range": {
+        "startLine": 407,
+        "startChar": 22,
+        "endLine": 407,
+        "endChar": 23
+      },
+      "revId": "3eed73aedb3c37eb8103d107d9343f8b3e3c015b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
