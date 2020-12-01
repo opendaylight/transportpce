@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.mapping.MappingUtils;
+import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.PathComputationRequestInput;
@@ -79,6 +81,8 @@ public class PceCalculation {
         NONE, HARD_EXCLUDE, HARD_INCLUDE, HARD_DIVERSITY, SOFT_EXCLUDE, SOFT_INCLUDE, SOFT_DIVERSITY;
     }
 
+    private MappingUtils mappingUtils;
+
     public PceCalculation(PathComputationRequestInput input, NetworkTransactionService networkTransactionService,
             PceConstraints pceHardConstraints, PceConstraints pceSoftConstraints, PceResult rc) {
         this.input = input;
@@ -86,6 +90,7 @@ public class PceCalculation {
         this.returnStructure = rc;
 
         this.pceHardConstraints = pceHardConstraints;
+        this.mappingUtils = new MappingUtilsImpl(networkTransactionService.getDataBroker());
         parseInput();
     }
 
@@ -465,7 +470,6 @@ public class PceCalculation {
 
     private boolean validateNode(Node node) {
         LOG.debug("validateNode: node {} ", node);
-
         // PceNode will be used in Graph algorithm
         Node1 node1 = node.augmentation(Node1.class);
         if (node1 == null) {
@@ -473,8 +477,14 @@ public class PceCalculation {
             return false;
         }
         OpenroadmNodeType nodeType = node1.getNodeType();
-
-        PceOpticalNode pceNode = new PceOpticalNode(node, nodeType);
+        String deviceNodeId = MapUtils.getSupNetworkNode(node);
+        // Should never happen but because of existing topology test files
+        // we have to manage this case
+        if (deviceNodeId == null || deviceNodeId.isBlank()) {
+            deviceNodeId = node.getNodeId().getValue();
+        }
+        LOG.info("Device node id {} for {}", deviceNodeId, node);
+        PceOpticalNode pceNode = new PceOpticalNode(node, nodeType, mappingUtils.getOpenRoadmVersion(deviceNodeId));
         pceNode.validateAZxponder(anodeId, znodeId, input.getServiceAEnd().getServiceFormat());
         pceNode.initWLlist();
 
