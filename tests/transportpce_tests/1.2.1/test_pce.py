@@ -24,6 +24,7 @@ class TransportPCEtesting(unittest.TestCase):
     simple_topo_bi_dir_data = None
     simple_topo_uni_dir_data = None
     complex_topo_uni_dir_data = None
+    port_mapping_data = None
     processes = None
 
     @classmethod
@@ -46,6 +47,10 @@ class TransportPCEtesting(unittest.TestCase):
                                                      "..", "..", "sample_configs", "NW-for-test-5-4.xml")
             with open(TOPO_UNI_DIR_COMPLEX_FILE, 'r') as topo_uni_dir_complex:
                 cls.complex_topo_uni_dir_data = topo_uni_dir_complex.read()
+            PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                                     "..", "..", "sample_configs", "pce_portmapping_121.json")
+            with open(PORT_MAPPING_FILE, 'r') as port_mapping:
+                cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
         except PermissionError as err:
             print("Permission Error when trying to read sample files\n", err)
@@ -71,6 +76,12 @@ class TransportPCEtesting(unittest.TestCase):
 
     def setUp(self):  # instruction executed before each test method
         time.sleep(1)
+
+     # Load port mapping
+    def test_00_load_port_mapping(self):
+        response = test_utils.rawpost_request(test_utils.URL_FULL_PORTMAPPING, self.port_mapping_data)
+        self.assertEqual(response.status_code, requests.codes.no_content)
+        time.sleep(2)
 
      # Load simple bidirectional topology
     def test_01_load_simple_topology_bi(self):
@@ -393,6 +404,12 @@ class TransportPCEtesting(unittest.TestCase):
         response = test_utils.get_ordm_topo_request("node/XPONDER-3-2")
         self.assertEqual(response.status_code, requests.codes.conflict)
         time.sleep(1)
+
+    # Delete portmapping
+    def test_26_delete_port_mapping(self):
+        response = test_utils.delete_request(test_utils.URL_FULL_PORTMAPPING)
+        self.assertEqual(response.status_code, requests.codes.ok)
+        time.sleep(2)
 
 
 if __name__ == "__main__":

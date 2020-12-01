@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
@@ -56,14 +57,14 @@ public class PceGraphTest {
                 .setNodeId(nodeId).withKey(new NodeKey(nodeId))
                 .build();
         pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.DEGREE);
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceOpticalNode.checkWL(1);
         pceOpticalNode.checkWL(2);
         NodeId nodeId2 = new NodeId("OpenROADM-3-1-DEG1");
         Node node2 = NodeUtils.getNodeBuilder(NodeUtils.geSupportingNodes())
                 .setNodeId(nodeId2).withKey(new NodeKey(nodeId2)).build();
         pceOpticalNode2 = new PceOpticalNode(node2,
-                OpenroadmNodeType.DEGREE);
+                OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceOpticalNode2.checkWL(1);
         pceOpticalNode2.checkWL(2);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode2);
