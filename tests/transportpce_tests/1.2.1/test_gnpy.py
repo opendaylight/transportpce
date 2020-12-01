@@ -25,6 +25,7 @@ class TransportGNPYtesting(unittest.TestCase):
     topo_cllinet_data = None
     topo_ordnet_data = None
     topo_ordtopo_data = None
+    port_mapping_data = None
     processes = None
 
     @classmethod
@@ -46,6 +47,10 @@ class TransportGNPYtesting(unittest.TestCase):
                                              "..", "..", "sample_configs", "gnpy", "openroadmTopology.json")
             with open(TOPO_ORDTOPO_FILE, 'r') as topo_ordtopo:
                 cls.topo_ordtopo_data = topo_ordtopo.read()
+            PORT_MAPPING_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                                     "..", "..", "sample_configs", "gnpy", "gnpy_portmapping_121.json")
+            with open(PORT_MAPPING_FILE, 'r') as port_mapping:
+                cls.port_mapping_data = port_mapping.read()
             sample_files_parsed = True
         except PermissionError as err:
             print("Permission Error when trying to read sample files\n", err)
@@ -70,6 +75,12 @@ class TransportGNPYtesting(unittest.TestCase):
         print("all processes killed")
 
     def setUp(self):
+        time.sleep(2)
+
+     # Load port mapping
+    def test_00_load_port_mapping(self):
+        response = test_utils.rawpost_request(test_utils.URL_FULL_PORTMAPPING, self.port_mapping_data)
+        self.assertEqual(response.status_code, requests.codes.no_content)
         time.sleep(2)
 
     # Mount the different topologies
@@ -204,6 +215,11 @@ class TransportGNPYtesting(unittest.TestCase):
         self.assertEqual(response.status_code, requests.codes.ok)
         time.sleep(3)
 
+    # Delete portmapping
+    def test_11_delete_port_mapping(self):
+        response = test_utils.delete_request(test_utils.URL_FULL_PORTMAPPING)
+        self.assertEqual(response.status_code, requests.codes.ok)
+        time.sleep(2)
 
 if __name__ == "__main__":
     # logging.basicConfig(filename='./transportpce_tests/log/response.log',filemode='w',level=logging.DEBUG)

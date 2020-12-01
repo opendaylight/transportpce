@@ -15,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.transportpce.common.NetworkUtils;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.link.types.rev191129.RatioDB;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Link1Builder;
@@ -64,7 +65,8 @@ public class PceLinkTest extends AbstractTest {
                 "srcTp", "destTp").build();
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node, OpenroadmNodeType.SRG);
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
     }
 
@@ -76,7 +78,8 @@ public class PceLinkTest extends AbstractTest {
 
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
-        PceOpticalNode pceOpticalNode = new PceOpticalNode(node, OpenroadmNodeType.SRG);
+        PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
     }
 
@@ -89,7 +92,7 @@ public class PceLinkTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG);
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
 
     }
@@ -103,7 +106,7 @@ public class PceLinkTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG);
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
     }
 
@@ -116,7 +119,7 @@ public class PceLinkTest extends AbstractTest {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes());
         Node node = node1Builder.setNodeId(new NodeId("test")).build();
         PceOpticalNode pceOpticalNode = new PceOpticalNode(node,
-                OpenroadmNodeType.SRG);
+                OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceLink = new PceLink(link, pceOpticalNode, pceOpticalNode);
         Assert.assertNotNull(MapUtils.getOmsAttributesSpan(link));
         Assert.assertNotNull(pceLink.calcSpanOSNR());

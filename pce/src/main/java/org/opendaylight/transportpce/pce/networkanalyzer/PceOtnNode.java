@@ -522,4 +522,15 @@ public class PceOtnNode implements PceNode {
     public boolean checkWL(long index) {
         return false;
     }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see org.opendaylight.transportpce.pce.networkanalyzer.PceNode#getVersion()
+    */
+    @Override
+    public String getVersion() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
