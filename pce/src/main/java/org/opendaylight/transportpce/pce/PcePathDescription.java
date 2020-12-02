@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceResult;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.AToZDirectionBuilder;
@@ -84,10 +85,12 @@ public class PcePathDescription {
         AToZDirectionBuilder atoZDirectionBldr = new AToZDirectionBuilder()
             .setRate(Uint32.valueOf(rc.getRate()))
             .setAToZ(atozMap);
-        if ("100GE".equals(rc.getServiceType()) || "OTU4".equals(rc.getServiceType())) {
+        if (StringConstants.SERVICE_TYPE_100GE.equals(rc.getServiceType())
+                || StringConstants.SERVICE_TYPE_OTU4.equals(rc.getServiceType())) {
             atoZDirectionBldr.setAToZWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
-        } else if ("10GE".equals(rc.getServiceType()) || "1GE".equals(rc.getServiceType())
-            || "ODU4".equals(rc.getServiceType())) {
+        } else if (StringConstants.SERVICE_TYPE_10GE.equals(rc.getServiceType())
+                || StringConstants.SERVICE_TYPE_1GE.equals(rc.getServiceType())
+            || StringConstants.SERVICE_TYPE_ODU4.equals(rc.getServiceType())) {
             if (rc.getResultTribSlot() != null && rc.getResultTribPort() != null) {
                 @SuppressWarnings("unchecked")
                 List<Uint16> tribSlotList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
@@ -111,10 +114,12 @@ public class PcePathDescription {
         ZToADirectionBuilder ztoADirectionBldr = new ZToADirectionBuilder()
             .setRate(Uint32.valueOf(rc.getRate()))
             .setZToA(ztoaMap);
-        if ("100GE".equals(rc.getServiceType()) || "OTU4".equals(rc.getServiceType())) {
+        if (StringConstants.SERVICE_TYPE_100GE.equals(rc.getServiceType())
+                || StringConstants.SERVICE_TYPE_OTU4.equals(rc.getServiceType())) {
             ztoADirectionBldr.setZToAWavelengthNumber(Uint32.valueOf(rc.getResultWavelength()));
-        } else if ("10GE".equals(rc.getServiceType()) || "1GE".equals(rc.getServiceType())
-            || "ODU4".equals(rc.getServiceType())) {
+        } else if (StringConstants.SERVICE_TYPE_10GE.equals(rc.getServiceType())
+                || StringConstants.SERVICE_TYPE_1GE.equals(rc.getServiceType())
+            || StringConstants.SERVICE_TYPE_ODU4.equals(rc.getServiceType())) {
             if (rc.getResultTribSlot() != null && rc.getResultTribPort() != null) {
                 @SuppressWarnings("unchecked")
                 List<Uint16> tribSlotList = (List<Uint16>) rc.getResultTribSlot().values().toArray()[0];
