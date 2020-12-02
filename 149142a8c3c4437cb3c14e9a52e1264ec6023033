@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb13b3b6_fc033686",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-02T10:17:35Z",
+      "side": 1,
+      "message": "linelength \u003e 72 char",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 73
+      },
+      "revId": "149142a8c3c4437cb3c14e9a52e1264ec6023033",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddf38e70_2f338965",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceCalculation.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-02T10:17:35Z",
+      "side": 1,
+      "message": "multiple identical checks such as (pceNode.getSupNetworkNodeId().equals(anodeId) \u0026\u0026 (this.aendPceNode \u003d\u003d null).\nsome factorization is possible.\nMaybe some protection would be welcome here if we add a new serviceFormat on the future.\n\n(Boolean.TRUE.equals(endPceNode(nodeType, pceNode.getNodeId(), pceNode))\nmight be replaced simply by (endPceNode(nodeType, pceNode.getNodeId(), pceNode) ?",
+      "range": {
+        "startLine": 490,
+        "startChar": 0,
+        "endLine": 522,
+        "endChar": 39
+      },
+      "revId": "149142a8c3c4437cb3c14e9a52e1264ec6023033",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
