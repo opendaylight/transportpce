@@ -82,7 +82,7 @@ public class PceGraphTest {
         pceGraph = new PceGraph(pceOpticalNode, pceOpticalNode2, allPceNodes,
                 pceHardConstraints,
                 null, rc,
-                "ODU4");
+                StringConstants.SERVICE_TYPE_ODU4);
     }
 
     @Test
@@ -108,20 +108,20 @@ public class PceGraphTest {
         pceGraph = new PceGraph(pceOpticalNode, pceOpticalNode2, allPceNodes,
                 pceHardConstraints,
                 null, rc,
-                "100GE");
+                StringConstants.SERVICE_TYPE_100GE);
 
         Assert.assertEquals(pceGraph.calcPath(), false);
     }
 
     @Test(expected = Exception.class)
     public void clacPath10GE2() {
-        pceGraph = getOtnPceGraph("10GE");
+        pceGraph = getOtnPceGraph(StringConstants.SERVICE_TYPE_10GE);
         Assert.assertEquals(pceGraph.calcPath(), false);
     }
 
     @Test(expected = Exception.class)
     public void clacPath1GE() {
-        pceGraph = getOtnPceGraph("1GE");
+        pceGraph = getOtnPceGraph(StringConstants.SERVICE_TYPE_1GE);
         Assert.assertEquals(pceGraph.calcPath(), false);
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import org.jgrapht.GraphPath;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints.ResourcePair;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
@@ -53,8 +54,8 @@ public class PostAlgoPathValidator {
         //variable to deal with 1GE (Nb=1) and 10GE (Nb=10) cases
         switch (serviceType) {
 
-            case "100GE":
-            case "OTU4":
+            case StringConstants.SERVICE_TYPE_100GE:
+            case StringConstants.SERVICE_TYPE_OTU4:
                 // choose wavelength available in all nodes of the path
                 Long waveL = chooseWavelength(path, allPceNodes);
                 pceResult.setServiceType(serviceType);
@@ -96,10 +97,10 @@ public class PostAlgoPathValidator {
 
                 break;
 
-            case "10GE":
+            case StringConstants.SERVICE_TYPE_10GE:
                 tribSlotNb = 8;
             //fallthrough
-            case "1GE":
+            case StringConstants.SERVICE_TYPE_1GE:
                 pceResult.setRC(ResponseCodes.RESPONSE_FAILED);
                 pceResult.setServiceType(serviceType);
                 Map<String, Uint16> tribPort = chooseTribPort(path, allPceNodes);
@@ -115,7 +116,7 @@ public class PostAlgoPathValidator {
                 }
                 break;
 
-            case "ODU4":
+            case StringConstants.SERVICE_TYPE_ODU4:
                 pceResult.setRC(ResponseCodes.RESPONSE_OK);
                 LOG.info("In PostAlgoPathValidator: ODU4 path found {}", path);
                 break;
