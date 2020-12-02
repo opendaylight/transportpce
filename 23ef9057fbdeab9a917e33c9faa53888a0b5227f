@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "23f41a39_63f7dc12",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-SPDRA.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-02T09:43:17Z",
+      "side": 1,
+      "message": "tab here",
+      "range": {
+        "startLine": 1722,
+        "startChar": 1,
+        "endLine": 1722,
+        "endChar": 3
+      },
+      "revId": "23ef9057fbdeab9a917e33c9faa53888a0b5227f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ef63155_9cf72f33",
+        "filename": "tests/sample_configs/openroadm/2.2.1/oper-SPDRA.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-02T09:43:17Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "23ef9057fbdeab9a917e33c9faa53888a0b5227f",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d596a1d_7ebb48d7",
         "filename": "tests/sample_configs/openroadm/2.2.1/oper-SPDRC.xml",
         "patchSetId": 3
