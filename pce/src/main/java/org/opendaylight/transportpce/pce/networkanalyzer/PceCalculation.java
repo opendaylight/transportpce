@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.mapping.MappingUtils;
 import org.opendaylight.transportpce.common.mapping.MappingUtilsImpl;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
@@ -38,7 +39,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.top
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.Network1;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226.networks.network.Link;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-//import org.opendaylight.yangtools.yang.common.Decimal64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,13 +131,13 @@ public class PceCalculation {
             switch (serviceFormatA) {
                 case "Ethernet":
                 case "OC":
-                    serviceType = "100GE";
+                    serviceType = StringConstants.SERVICE_TYPE_100GE;
                     break;
                 case "OTU":
-                    serviceType = "OTU4";
+                    serviceType = StringConstants.SERVICE_TYPE_OTU4;
                     break;
                 case "ODU":
-                    serviceType = "ODU4";
+                    serviceType = StringConstants.SERVICE_TYPE_ODU4;
                     break;
                 default:
                     LOG.debug("parseInput: unsupported service type: Format {} Rate 100L", serviceFormatA);
@@ -151,9 +151,9 @@ public class PceCalculation {
         } else if ("Ethernet".equals(serviceFormatA)) {
         //only rate 100L is currently supported except in Ethernet
             if (serviceRate == 10L) {
-                serviceType = "10GE";
+                serviceType = StringConstants.SERVICE_TYPE_10GE;
             } else if (serviceRate == 1L) {
-                serviceType = "1GE";
+                serviceType = StringConstants.SERVICE_TYPE_1GE;
             } else {
                 LOG.debug("parseInput: unsupported service type: Format Ethernet Rate {}", serviceRate);
             }
@@ -161,7 +161,9 @@ public class PceCalculation {
             LOG.debug("parseInput: unsupported service type: Format {} Rate {}",
                 serviceFormatA, serviceRate);
         }
-        if ("ODU4".equals(serviceType) || "10GE".equals(serviceType)  || "1GE".equals(serviceType)) {
+        if (StringConstants.SERVICE_TYPE_ODU4.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_10GE.equals(serviceType)
+                || StringConstants.SERVICE_TYPE_1GE.equals(serviceType)) {
             anodeId = input.getServiceAEnd().getTxDirection().getPort().getPortDeviceName();
             znodeId = input.getServiceZEnd().getTxDirection().getPort().getPortDeviceName();
         } else {
@@ -244,7 +246,8 @@ public class PceCalculation {
 
         LOG.debug("analyzeNw: allNodes size {}, allLinks size {}", allNodes.size(), allLinks.size());
 
-        if (("100GE".equals(serviceType)) || ("OTU4".equals(serviceType))) {
+        if ((StringConstants.SERVICE_TYPE_100GE.equals(serviceType))
+                || (StringConstants.SERVICE_TYPE_OTU4.equals(serviceType))) {
             // 100GE service and OTU4 service are handled at the openroadm-topology layer
             for (Node node : allNodes) {
                 validateNode(node);
@@ -359,7 +362,8 @@ public class PceCalculation {
             return false;
         }
 
-        if (("100GE".equals(serviceType)) || ("OTU4".equals(serviceType))) {
+        if ((StringConstants.SERVICE_TYPE_100GE.equals(serviceType))
+                || (StringConstants.SERVICE_TYPE_OTU4.equals(serviceType))) {
             // 100GE or OTU4 services are handled at WDM Layer
             PceLink pcelink = new PceLink(link, source, dest);
             if (!pcelink.isValid()) {
@@ -429,7 +433,9 @@ public class PceCalculation {
             }
             return true;
 
-        } else if (("ODU4".equals(serviceType)) || ("10GE".equals(serviceType)) || ("1GE".equals(serviceType))) {
+        } else if ((StringConstants.SERVICE_TYPE_ODU4.equals(serviceType))
+                || (StringConstants.SERVICE_TYPE_10GE.equals(serviceType))
+                || (StringConstants.SERVICE_TYPE_1GE.equals(serviceType))) {
             // ODU4, 1GE and 10GE services relying on ODU2, ODU2e or ODU0 services are handled at OTN layer
             PceLink pceOtnLink = new PceLink(link, source, dest);
 
@@ -562,15 +568,6 @@ public class PceCalculation {
             LOG.error("ValidateOtnNode: no node-type augmentation. Node {} is ignored", node.getNodeId().getValue());
             return false;
         }
-
-//        if (mode == "AZ") {
-//            pceOtnNode.validateAZxponder(anodeId, znodeId);
-//        } else if (mode == "intermediate") {
-//            pceOtnNode.validateIntermediateSwitch();
-//        } else {
-//            LOG.error("validateOtnNode: unproper mode passed to the method : {} not supported", mode);
-//            return null;
-//        }
     }
 
     private ConstraintTypes validateNodeConstraints(PceNode pcenode) {
