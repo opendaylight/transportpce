@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7596ab34_c574b3c4",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_end2end.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-02T10:53:02Z",
+      "side": 1,
+      "message": "some linelength \u003e 120.\nyou can use \u0027tox -e autopep8\u0027 to reformat them automatically.",
+      "revId": "c2a052b51fd0d5c47d93a2d69d9415a7e54b39ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4ff9bf6e_364b40f3",
         "filename": "tests/transportpce_tests/2.2.1/test_otn_end2end.py",
         "patchSetId": 3
@@ -18,6 +35,53 @@
         "startChar": 22,
         "endLine": 1373,
         "endChar": 38
+      },
+      "revId": "c2a052b51fd0d5c47d93a2d69d9415a7e54b39ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2011f1ed_16cb2bd2",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_end2end.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-02T10:53:02Z",
+      "side": 1,
+      "message": "yes it is not conform to the snake case (pylint default) because of capital letters.\nThough, network acronyms are difficult to read without capital letters and we have plenty of similar functions name.\nI have updated the default regexp in our tox pylint profile in order to accept them.\nIs this function name reported by our pylint profile too ?",
+      "parentUuid": "4ff9bf6e_364b40f3",
+      "range": {
+        "startLine": 1373,
+        "startChar": 22,
+        "endLine": 1373,
+        "endChar": 38
+      },
+      "revId": "c2a052b51fd0d5c47d93a2d69d9415a7e54b39ea",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52478b83_d9d168d5",
+        "filename": "tests/transportpce_tests/2.2.1/test_otn_end2end.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-02T10:53:02Z",
+      "side": 1,
+      "message": "trailing blank ? not sure - this is weirdly displayed in Gerrit...",
+      "range": {
+        "startLine": 1387,
+        "startChar": 0,
+        "endLine": 1387,
+        "endChar": 1
       },
       "revId": "c2a052b51fd0d5c47d93a2d69d9415a7e54b39ea",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
