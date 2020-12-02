@@ -18,6 +18,7 @@ import org.jgrapht.alg.shortestpath.KShortestSimplePaths;
 import org.jgrapht.alg.shortestpath.PathValidator;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.pce.constraints.PceConstraints;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceLink;
 import org.opendaylight.transportpce.pce.networkanalyzer.PceNode;
@@ -106,7 +107,8 @@ public class PceGraph {
             }
 
             shortestPathAtoZ = new ArrayList<>(pathAtoZ);
-            if (("100GE".equals(serviceType)) || ("OTU4".equals(serviceType))) {
+            if ((StringConstants.SERVICE_TYPE_100GE.equals(serviceType))
+                    || (StringConstants.SERVICE_TYPE_OTU4.equals(serviceType))) {
                 LOG.info("In calcPath Path FOUND path for wl [{}], hops {}, distance per metrics {}, path AtoZ {}",
                         pceResult.getResultWavelength(), pathAtoZ.size(), path.getWeight(), pathAtoZ);
                 break;

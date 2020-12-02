@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.Nullable;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.OduSwitchingPools;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.types.rev200327.xpdr.odu.switching.pools.odu.switching.pools.NonBlockingList;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.OpenroadmNodeType;
@@ -114,7 +115,8 @@ public class PceOtnNode implements PceNode {
                 = tp.augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
                 .TerminationPoint1.class);
             //TODO many nested if-structures below, this needs to be reworked
-            if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType()) && this.otnServiceType.equals("ODU4")) {
+            if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType())
+                    && StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType)) {
                 TerminationPoint1 ontTp1;
                 if (tp.augmentation(TerminationPoint1.class) != null) {
                     ontTp1 = tp.augmentation(TerminationPoint1.class);
@@ -129,22 +131,25 @@ public class PceOtnNode implements PceNode {
                         node.getNodeId().getValue());
                 }
             } else if (OpenroadmTpType.XPONDERNETWORK.equals(ocnTp1.getTpType())
-                && (this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))) {
+                && (this.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
+                        || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))) {
                 TerminationPoint1 ontTp1;
                 if (tp.augmentation(TerminationPoint1.class) != null) {
                     ontTp1 = tp.augmentation(TerminationPoint1.class);
                 } else {
                     continue;
                 }
-                if ("10GE".equals(otnServiceType) && checkOdtuTTPforLoOduCreation(ontTp1, 10)
-                    || "1GE".equals(otnServiceType) && checkOdtuTTPforLoOduCreation(ontTp1, 1)) {
+                if (StringConstants.SERVICE_TYPE_10GE.equals(otnServiceType)
+                        && checkOdtuTTPforLoOduCreation(ontTp1, 10)
+                    || StringConstants.SERVICE_TYPE_1GE.equals(otnServiceType)
+                    && checkOdtuTTPforLoOduCreation(ontTp1, 1)) {
                     LOG.info("TP {} of XPONDER {} is validated", tp.getTpId(), node.getNodeId().getValue());
                     this.availableXpdrNWTps.add(tp.getTpId());
                 } else {
-                    if ("10GE".equals(otnServiceType)) {
+                    if (StringConstants.SERVICE_TYPE_10GE.equals(otnServiceType)) {
                         LOG.error("TP {} of {} does not allow OD2e termination creation", tp.getTpId().getValue(),
                             node.getNodeId().getValue());
-                    } else if ("1GE".equals(otnServiceType)) {
+                    } else if (StringConstants.SERVICE_TYPE_1GE.equals(otnServiceType)) {
                         LOG.error("TP {} of {} does not allow ODU0 termination creation", tp.getTpId().getValue(),
                             node.getNodeId().getValue());
                     } else {
@@ -153,7 +158,8 @@ public class PceOtnNode implements PceNode {
                     }
                 }
             } else if (OpenroadmTpType.XPONDERCLIENT.equals(ocnTp1.getTpType())
-                && (this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))) {
+                && (StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
+                        || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))) {
                 TerminationPoint1 ontTp1;
                 if (tp.augmentation(TerminationPoint1.class) != null) {
                     ontTp1 = tp.augmentation(TerminationPoint1.class);
@@ -170,8 +176,9 @@ public class PceOtnNode implements PceNode {
             }
         }
 
-        if ((this.otnServiceType.equals("ODU4") && mode.equals("AZ"))
-            || ((this.otnServiceType.equals("10GE") || this.otnServiceType.equals("1GE"))
+        if ((StringConstants.SERVICE_TYPE_ODU4.equals(this.otnServiceType) && mode.equals("AZ"))
+            || ((StringConstants.SERVICE_TYPE_10GE.equals(this.otnServiceType)
+                    || StringConstants.SERVICE_TYPE_1GE.equals(this.otnServiceType))
                 && ((mode.equals("AZ") && checkSwPool(availableXpdrClientTps, availableXpdrNWTps, 1, 1))
                      || (mode.equals("intermediate") && checkSwPool(null, availableXpdrNWTps, 0, 2)))
                )) {
@@ -255,18 +262,18 @@ public class PceOtnNode implements PceNode {
                 .values()) {
             LOG.debug("in checkTpForOduTermination - sic = {}", sic.getIfCapType());
             switch (otnServiceType) {
-                case "1GE":
+                case StringConstants.SERVICE_TYPE_1GE:
                 // we could also check the administrative status of the tp
                     if (sic.getIfCapType().equals(If1GEODU0.class)) {
                         return true;
                     }
                     break;
-                case "10GE":
+                case StringConstants.SERVICE_TYPE_10GE:
                     if (sic.getIfCapType().equals(If10GEODU2e.class)) {
                         return true;
                     }
                     break;
-                case "100GE":
+                case StringConstants.SERVICE_TYPE_100GE:
                     if (sic.getIfCapType().equals(If100GEODU4.class)) {
                         return true;
                     }
@@ -418,11 +425,13 @@ public class PceOtnNode implements PceNode {
         }
 
         //Todo refactor Strings (mode and otnServiceType ) to enums
-        if ((pceOtnNode.otnServiceType.equals("ODU4") && pceOtnNode.modeType.equals("AZ"))) {
+        if ((pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_ODU4)
+                && pceOtnNode.modeType.equals("AZ"))) {
             return true;
         }
 
-        if ((pceOtnNode.otnServiceType.equals("10GE") || pceOtnNode.otnServiceType.equals("1GE"))
+        if ((pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_10GE)
+                || pceOtnNode.otnServiceType.equals(StringConstants.SERVICE_TYPE_1GE))
                 && (isAz(pceOtnNode) || isIntermediate(pceOtnNode))) {
             return true;
         }

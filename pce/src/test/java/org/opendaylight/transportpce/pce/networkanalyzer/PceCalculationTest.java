@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.network.NetworkTransactionImpl;
 import org.opendaylight.transportpce.common.network.RequestProcessor;
 import org.opendaylight.transportpce.pce.constraints.PceConstraintsCalc;
@@ -48,7 +49,7 @@ public class PceCalculationTest extends AbstractTest {
     public void testPceCalculationValues() {
 
         pceCalculation.retrievePceNetwork();
-        Assert.assertEquals("100GE", pceCalculation.getServiceType());
+        Assert.assertEquals(StringConstants.SERVICE_TYPE_100GE, pceCalculation.getServiceType());
         Assert.assertNotNull(pceCalculation.getReturnStructure());
 
         Assert.assertNull(pceCalculation.getaendPceNode());
@@ -65,7 +66,7 @@ public class PceCalculationTest extends AbstractTest {
                 pceConstraintsCalc.getPceSoftConstraints(),
                 pceResult);
         pceCalculation.retrievePceNetwork();
-        Assert.assertEquals("100GE", pceCalculation.getServiceType());
+        Assert.assertEquals(StringConstants.SERVICE_TYPE_100GE, pceCalculation.getServiceType());
         Assert.assertNotNull(pceCalculation.getReturnStructure());
 
         Assert.assertNull(pceCalculation.getaendPceNode());
@@ -87,7 +88,7 @@ public class PceCalculationTest extends AbstractTest {
                 pceResult);
 
         pceCalculation.retrievePceNetwork();
-//        Assert.assertEquals("100GE", pceCalculation.getServiceType());
+//        Assert.assertEquals(StringConstants.SERVICE_TYPE_100GE, pceCalculation.getServiceType());
         Assert.assertNotNull(pceCalculation.getReturnStructure());
 
         Assert.assertNull(pceCalculation.getaendPceNode());
