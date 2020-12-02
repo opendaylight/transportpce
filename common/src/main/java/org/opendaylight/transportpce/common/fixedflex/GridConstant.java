@@ -8,6 +8,9 @@
 
 package org.opendaylight.transportpce.common.fixedflex;
 
+import java.util.Map;
+import org.opendaylight.transportpce.common.StringConstants;
+
 /**
  * Constant class common to fixed grid and flex grid.
  *
@@ -24,6 +27,10 @@ public final class GridConstant {
     public static final double CENTRAL_FREQUENCY = 193.1;
     public static final int NB_SLOTS_100G = 8;
     public static final int NB_SLOTS_400G = 14;
+    public static final Map<String, Integer> SPECTRAL_WIDTH_SLOT_NUMBER_MAP = Map.of(
+            StringConstants.SERVICE_TYPE_100GE, NB_SLOTS_100G,
+            StringConstants.SERVICE_TYPE_400GE, NB_SLOTS_400G,
+            StringConstants.SERVICE_TYPE_OTU4, NB_SLOTS_100G);
 
     private GridConstant() {
     }
