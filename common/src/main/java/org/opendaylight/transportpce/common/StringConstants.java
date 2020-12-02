@@ -25,6 +25,18 @@ public final class StringConstants {
 
     public static final String PP_TOKEN = "PP";
 
+    public static final String SERVICE_TYPE_100GE = "100GE";
+
+    public static final String SERVICE_TYPE_OTU4 = "OTU4";
+
+    public static final String SERVICE_TYPE_400GE = "400GE";
+
+    public static final String SERVICE_TYPE_10GE = "10GE";
+
+    public static final String SERVICE_TYPE_1GE = "1GE";
+
+    public static final String SERVICE_TYPE_ODU4 = "ODU4";
+
     private StringConstants() {
         // hiding the default constructor
     }
