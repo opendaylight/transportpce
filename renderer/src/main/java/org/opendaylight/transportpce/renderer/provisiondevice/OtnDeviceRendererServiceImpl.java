@@ -376,7 +376,10 @@ public class OtnDeviceRendererServiceImpl implements OtnDeviceRendererService {
 
     private void createODU4TtpInterface(OtnServicePathInput input, List<NodeInterface> nodeInterfaces,
         CopyOnWriteArrayList<Nodes> otnNodesProvisioned) throws OpenRoadmInterfaceException {
-
+        if (input.getNodes() == null) {
+            return;
+        }
+        LOG.info("Creation of ODU4 tp interface {}", input);
         for (int i = 0; i < input.getNodes().size(); i++) {
             Nodes node = input.getNodes().get(i);
             String supportingOtuInterface = node.getNetworkTp() + "-OTU";

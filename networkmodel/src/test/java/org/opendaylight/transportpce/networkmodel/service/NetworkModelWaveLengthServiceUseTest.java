@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.renderer;
+package org.opendaylight.transportpce.networkmodel.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,11 +26,11 @@ import org.opendaylight.transportpce.common.device.DeviceTransactionManager;
 import org.opendaylight.transportpce.common.device.DeviceTransactionManagerImpl;
 import org.opendaylight.transportpce.common.fixedflex.FixedGridConstant;
 import org.opendaylight.transportpce.common.fixedflex.GridConstant;
-import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
-import org.opendaylight.transportpce.renderer.stub.MountPointStub;
-import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
-import org.opendaylight.transportpce.renderer.utils.WaveLengthServiceUtils;
+import org.opendaylight.transportpce.networkmodel.util.WaveLengthServiceUtils;
+import org.opendaylight.transportpce.networkmodel.util.test.PathDescriptionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.test.stub.MountPointServiceStub;
+import org.opendaylight.transportpce.test.stub.MountPointStub;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1;
@@ -70,9 +70,9 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
 
     @Before
     public void setMountPoint() {
-        MountPointServiceStub mountPointService = new MountPointServiceStub(new MountPointStub(this.getDataBroker()));
+        MountPointServiceStub mountPointService = new MountPointServiceStub(new MountPointStub(getDataBroker()));
         this.deviceTransactionManager = new DeviceTransactionManagerImpl(mountPointService, 3000);
-        networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(this.getDataBroker());
+        networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(getDataBroker());
     }
 
     public NetworkModelWaveLengthServiceUseTest(PathDescription pathDescription, TerminationPoint1 terminationPoint1,
@@ -91,7 +91,7 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
         List<Object[]> parameters = new ArrayList<>();
 
         PathDescription pathDescription =
-            ServiceDeleteDataUtils.createTransactionPathDescription(StringConstants.TTP_TOKEN);
+            PathDescriptionUtils.createTransactionPathDescription(StringConstants.TTP_TOKEN);
 
         TerminationPoint1Builder terminationPoint1Builder = new TerminationPoint1Builder()
             .setCtpAttributes((new CtpAttributesBuilder()).setAvailFreqMaps(Map.of()).build())
@@ -154,12 +154,12 @@ public class NetworkModelWaveLengthServiceUseTest extends AbstractTest {
         WaveLengthServiceUtils.putTerminationPoint1ToDatastore("node1" + StringConstants.TTP_TOKEN,
             StringConstants.TTP_TOKEN, this.terminationPoint1, this.deviceTransactionManager);
         WaveLengthServiceUtils.putTerminationPoint2ToDatastore("node1" + StringConstants.TTP_TOKEN,
-            StringConstants.TTP_TOKEN, this.terminatPoint2, this.deviceTransactionManager);
+            StringConstants.TTP_TOKEN, this.terminatPoint2);
         WaveLengthServiceUtils.putNode1ToDatastore("node1" + StringConstants.TTP_TOKEN, this.node1,
             this.deviceTransactionManager);
-        WaveLengthServiceUtils.putNode2ToDatastore("node1" + StringConstants.TTP_TOKEN, this.node2,
-            this.deviceTransactionManager);
-        this.networkModelWavelengthService.useWavelengths(this.pathDescription);
+        WaveLengthServiceUtils.putNode2ToDatastore("node1" + StringConstants.TTP_TOKEN, this.node2);
+        this.networkModelWavelengthService.useWavelengths(this.pathDescription.getAToZDirection(),
+                this.pathDescription.getZToADirection());
         Node1 updatedNode1 = WaveLengthServiceUtils.getNode1FromDatastore("node1" + StringConstants.TTP_TOKEN,
             this.deviceTransactionManager);
         org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529.Node1 updatedNode2 =

@@ -13,7 +13,6 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.RendererListenerImpl;
@@ -38,7 +37,6 @@ public class ServicehandlerProvider {
     private final DataBroker dataBroker;
     private final RpcProviderService rpcService;
     private final NotificationService notificationService;
-    private final NetworkModelWavelengthService networkModelWavelengthService;
     private final NotificationPublishService notificationPublishService;
     private ListenerRegistration<TransportpcePceListener> pcelistenerRegistration;
     private ListenerRegistration<TransportpceRendererListener> rendererlistenerRegistration;
@@ -49,14 +47,12 @@ public class ServicehandlerProvider {
     public ServicehandlerProvider(final DataBroker dataBroker, RpcProviderService rpcProviderService,
             NotificationService notificationService, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations,
-            NetworkModelWavelengthService networkModelWavelengthService,
             NotificationPublishService notificationPublishService) {
         this.dataBroker = dataBroker;
         this.rpcService = rpcProviderService;
         this.notificationService = notificationService;
         this.pathComputationService = pathComputationService;
         this.rendererServiceOperations = rendererServiceOperations;
-        this.networkModelWavelengthService = networkModelWavelengthService;
         this.notificationPublishService = notificationPublishService;
     }
 
@@ -72,8 +68,7 @@ public class ServicehandlerProvider {
         pcelistenerRegistration = notificationService.registerNotificationListener(pceListenerImpl);
         rendererlistenerRegistration = notificationService.registerNotificationListener(rendererListenerImpl);
         final ServicehandlerImpl servicehandler = new ServicehandlerImpl(dataBroker, pathComputationService,
-                rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl,
-                networkModelWavelengthService);
+                rendererServiceOperations, notificationPublishService, pceListenerImpl, rendererListenerImpl);
         rpcRegistration =
             rpcService.registerRpcImplementation(OrgOpenroadmServiceService.class, servicehandler);
     }
