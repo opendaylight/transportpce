@@ -13,9 +13,9 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.service.rpc.result.sp.PathTopologyBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.renderer.rpc.result.sp.PathTopologyBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.RpcStatusEx;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service.types.rev200128.ServicePathNotificationTypes;
 import org.opendaylight.yangtools.yang.binding.Notification;
@@ -42,7 +42,7 @@ public final class MockedNotificationServiceWrapper {
             assertTrue(Notification.class.isAssignableFrom(notif.getClass()));
             if (this.rendererFailed) {
                 LOG.info("putting failed renderer notification");
-                ServiceRpcResultSp serviceRpcResultSp = new ServiceRpcResultSpBuilder()
+                RendererRpcResultSp serviceRpcResultSp = new RendererRpcResultSpBuilder()
                         .setNotificationType(ServicePathNotificationTypes.ServiceImplementationRequest)
                         .setServiceName("service 1").setStatus(RpcStatusEx.Failed).setStatusMessage("Renderer Failed")
                         .setPathTopology(new PathTopologyBuilder().build()).build();
