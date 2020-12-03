@@ -12,6 +12,7 @@
     <reference id="portMapping" interface="org.opendaylight.transportpce.common.mapping.PortMapping" />
     <reference id="networkTransactionImpl" interface="org.opendaylight.transportpce.common.network.NetworkTransactionService" />
     <reference id="mappingUtils" interface="org.opendaylight.transportpce.common.mapping.MappingUtils" />
+    <reference id="notificationService" interface="org.opendaylight.mdsal.binding.api.NotificationService"/>
 
     <bean id="networkModelService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl">
         <argument ref="networkTransactionImpl" />
@@ -26,6 +27,8 @@
         <argument ref="rpcProviderService" />
         <argument ref="networkutilsServiceImpl" />
         <argument ref="netconfTopologyListener" />
+        <argument ref="notificationService" />
+        <argument ref="networkModelWavelengthService" />
     </bean>
 
     <bean id="netconfTopologyListener" class="org.opendaylight.transportpce.networkmodel.NetConfTopologyListener">
@@ -44,6 +47,12 @@
         <argument ref="networkTransactionImpl" />
    </bean>
 
+    <bean id="networkModelWavelengthService" class="org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthServiceImpl">
+        <argument ref="dataBroker" />
+    </bean>
+
     <service ref="networkModelService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelService" />
+
+    <service ref="networkModelWavelengthService" interface="org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthService" />
 
 </blueprint>
