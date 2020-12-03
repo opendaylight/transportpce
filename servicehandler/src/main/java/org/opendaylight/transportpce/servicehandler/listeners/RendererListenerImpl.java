@@ -16,6 +16,8 @@ import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.TransportpceRendererListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
@@ -37,12 +39,14 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     private ServiceInput input;
     private PCEServiceWrapper pceServiceWrapper;
     private Boolean tempService;
+    private NotificationPublishService notificationPublishService;
 
     public RendererListenerImpl(PathComputationService pathComputationService,
             NotificationPublishService notificationPublishService) {
         this.pceServiceWrapper = new PCEServiceWrapper(pathComputationService, notificationPublishService);
         setServiceInput(null);
         setTempService(false);
+        this.notificationPublishService = notificationPublishService;
     }
 
     @Override
@@ -52,18 +56,17 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             return;
         }
         serviceRpcResultSp = notification;
-        String serviceName = serviceRpcResultSp.getServiceName();
         int notifType = serviceRpcResultSp.getNotificationType().getIntValue();
         LOG.info("Renderer '{}' Notification received : {}", serviceRpcResultSp.getNotificationType().getName(),
                 notification);
         switch (notifType) {
             /* service-implementation-request. */
             case 3 :
-                onServiceImplementationResult(serviceName);
+                onServiceImplementationResult(notification);
                 break;
             /* service-delete. */
             case 4 :
-                onServiceDeleteResult(serviceName);
+                onServiceDeleteResult(notification);
                 break;
             default:
                 break;
@@ -72,9 +75,9 @@ public class RendererListenerImpl implements TransportpceRendererListener {
 
     /**
      * Process service delete result for serviceName.
-     * @param serviceName String
+     * @param notification RendererRpcResultSp
      */
-    private void onServiceDeleteResult(String serviceName) {
+    private void onServiceDeleteResult(RendererRpcResultSp notification) {
         if (serviceRpcResultSp.getStatus() == RpcStatusEx.Failed) {
             LOG.error("Renderer service delete failed !");
             return;
@@ -85,7 +88,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
             LOG.error("Renderer service delete returned an unknown RpcStatusEx code!");
             return;
         }
-        LOG.info("Service '{}' deleted !", serviceName);
+        LOG.info("Service '{}' deleted !", notification.getServiceName());
         if (this.input == null) {
             LOG.error("ServiceInput parameter is null !");
             return;
@@ -93,18 +96,18 @@ public class RendererListenerImpl implements TransportpceRendererListener {
         LOG.info("sending PCE cancel resource reserve for '{}'",  this.input.getServiceName());
         this.pceServiceWrapper.cancelPCEResource(this.input.getServiceName(),
                 ServiceNotificationTypes.ServiceDeleteResult);
+        sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceDeleteResult);
     }
 
     /**
      * Process service implementation result for serviceName.
-     * @param serviceName String
-     * @param serviceName String
+     * @param notification RendererRpcResultSp
      */
-    private void onServiceImplementationResult(String serviceName) {
+    private void onServiceImplementationResult(RendererRpcResultSp notification) {
         if (serviceRpcResultSp.getStatus() == RpcStatusEx.Successful) {
-            onSuccededServiceImplementation();
+            onSuccededServiceImplementation(notification);
         } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Failed) {
-            onFailedServiceImplementation(serviceName);
+            onFailedServiceImplementation(notification.getServiceName());
         } else if (serviceRpcResultSp.getStatus() == RpcStatusEx.Pending) {
             LOG.warn("Service Implementation still pending according to RpcStatusEx");
         } else {
@@ -115,8 +118,9 @@ public class RendererListenerImpl implements TransportpceRendererListener {
 
     /**
      * Process succeeded service implementation for service.
+     * @param notification RendererRpcResultSp
      */
-    private void onSuccededServiceImplementation() {
+    private void onSuccededServiceImplementation(RendererRpcResultSp notification) {
         LOG.info("Service implemented !");
         if (serviceDataStoreOperations == null) {
             LOG.debug("serviceDataStoreOperations is null");
@@ -136,7 +140,34 @@ public class RendererListenerImpl implements TransportpceRendererListener {
                     AdminStates.InService);
             if (!operationResult.isSuccess()) {
                 LOG.warn("Service status not updated in datastore !");
+            } else {
+                sendServiceHandlerNotification(notification, ServiceNotificationTypes.ServiceCreateResult);
             }
+        }
+    }
+
+    /**
+     * Create and send service handler notification.
+     * @param notification RendererRpcResultSp
+     * @param type ServiceNotificationTypes
+     */
+    private void sendServiceHandlerNotification(RendererRpcResultSp notification, ServiceNotificationTypes type) {
+        try {
+            ServiceRpcResultSh serviceHandlerNotification = new ServiceRpcResultShBuilder()
+                    .setAToZDirection(notification.getAToZDirection())
+                    .setZToADirection(notification.getZToADirection())
+                    .setServiceName(notification.getServiceName())
+                    .setStatus(notification.getStatus())
+                    .setStatusMessage(notification.getStatusMessage())
+                    .setNotificationType(type)
+                    .build();
+            LOG.debug("Service update in datastore OK, sending notification {}", serviceHandlerNotification);
+            notificationPublishService.putNotification(
+                    serviceHandlerNotification);
+        } catch (InterruptedException e) {
+            LOG.warn("Something went wrong while sending notification for sevice {}",
+                    serviceRpcResultSp.getServiceName(), e);
+            Thread.currentThread().interrupt();
         }
     }
 
