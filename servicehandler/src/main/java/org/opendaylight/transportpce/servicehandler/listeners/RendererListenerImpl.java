@@ -14,8 +14,8 @@ import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.servicehandler.ServiceInput;
 import org.opendaylight.transportpce.servicehandler.service.PCEServiceWrapper;
 import org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperations;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.TransportpceRendererListener;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.TransportpceRendererListener;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ServiceNotificationTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.state.types.rev181130.State;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.equipment.states.types.rev181130.AdminStates;
@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class RendererListenerImpl implements TransportpceRendererListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(RendererListenerImpl.class);
-    private ServiceRpcResultSp serviceRpcResultSp;
+    private RendererRpcResultSp serviceRpcResultSp;
     private ServiceDataStoreOperations serviceDataStoreOperations;
     private ServiceInput input;
     private PCEServiceWrapper pceServiceWrapper;
@@ -46,7 +46,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     }
 
     @Override
-    public void onServiceRpcResultSp(ServiceRpcResultSp notification) {
+    public void onRendererRpcResultSp(RendererRpcResultSp notification) {
         if (compareServiceRpcResultSp(notification)) {
             LOG.warn("ServiceRpcResultSp already wired !");
             return;
@@ -169,7 +169,7 @@ public class RendererListenerImpl implements TransportpceRendererListener {
     @SuppressFBWarnings(
         value = "ES_COMPARING_STRINGS_WITH_EQ",
         justification = "false positives, not strings but real object references comparisons")
-    private Boolean compareServiceRpcResultSp(ServiceRpcResultSp notification) {
+    private Boolean compareServiceRpcResultSp(RendererRpcResultSp notification) {
         if (serviceRpcResultSp == null) {
             return false;
         }
