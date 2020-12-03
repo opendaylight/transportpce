@@ -12,7 +12,6 @@ import java.util.concurrent.ExecutionException;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.impl.ServicehandlerImpl;
 import org.opendaylight.transportpce.servicehandler.listeners.PceListenerImpl;
@@ -33,10 +32,9 @@ public class ServiceHandlerOperationsImpl implements ServiceHandlerOperations {
 
     public ServiceHandlerOperationsImpl(DataBroker databroker, PathComputationService pathComputationService,
         RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
-        PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-        NetworkModelWavelengthService networkModelWavelengthService) {
+        PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl) {
         this.serviceHandler = new ServicehandlerImpl(databroker, pathComputationService, rendererServiceOperations,
-            notificationPublishService, pceListenerImpl, rendererListenerImpl,networkModelWavelengthService);
+            notificationPublishService, pceListenerImpl, rendererListenerImpl);
     }
 
     @Override

@@ -6,35 +6,21 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.networkmodel.stub;
+package org.opendaylight.transportpce.test.stub;
 
 import java.util.Optional;
 import javax.annotation.Nonnull;
-import org.eclipse.jdt.annotation.NonNull;
 import org.opendaylight.mdsal.binding.api.BindingService;
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.MountPoint;
-import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcConsumerRegistry;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.NotificationListener;
-
 
 public class MountPointStub implements MountPoint {
 
     private DataBroker dataBroker;
 
     private RpcConsumerRegistry rpcConsumerRegistry;
-
-
-    private NotificationService notificationService = new NotificationService() {
-        @Override
-        public @NonNull <T extends NotificationListener> ListenerRegistration<T>
-        registerNotificationListener(@NonNull T listener) {
-            return null;
-        }
-    };
 
     public MountPointStub(DataBroker dataBroker) {
         this.dataBroker = dataBroker;
@@ -53,9 +39,6 @@ public class MountPointStub implements MountPoint {
         }
         if (service.isInstance(rpcConsumerRegistry)) {
             return Optional.ofNullable((T) rpcConsumerRegistry);
-        }
-        if (service.isInstance(notificationService)) {
-            return Optional.ofNullable((T) notificationService);
         }
         return Optional.empty();
     }
