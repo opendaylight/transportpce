@@ -9,13 +9,17 @@ package org.opendaylight.transportpce.networkmodel;
 
 import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
+import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.transportpce.common.InstanceIdentifiers;
 import org.opendaylight.transportpce.common.NetworkUtils;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.networkmodel.listeners.ServiceHandlerListener;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.networkmodel.util.TpceNetwork;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.TransportpceServicehandlerListener;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.concepts.ObjectRegistration;
@@ -33,15 +37,21 @@ public class NetworkModelProvider {
     private ListenerRegistration<NetConfTopologyListener> dataTreeChangeListenerRegistration;
     private ObjectRegistration<TransportpceNetworkutilsService> networkutilsServiceRpcRegistration;
     private TpceNetwork tpceNetwork;
+    private ListenerRegistration<TransportpceServicehandlerListener> serviceHandlerListenerRegistration;
+    private NotificationService notificationService;
+    private NetworkModelWavelengthService networkModelWavelengthService;
 
     public NetworkModelProvider(NetworkTransactionService networkTransactionService, final DataBroker dataBroker,
         final RpcProviderService rpcProviderService, final TransportpceNetworkutilsService networkutilsService,
-        final NetConfTopologyListener topologyListener) {
+        final NetConfTopologyListener topologyListener, NotificationService notificationService,
+        NetworkModelWavelengthService networkModelWavelengthService) {
         this.dataBroker = dataBroker;
         this.rpcProviderService = rpcProviderService;
         this.networkutilsService = networkutilsService;
         this.topologyListener = topologyListener;
         this.tpceNetwork = new TpceNetwork(networkTransactionService);
+        this.notificationService = notificationService;
+        this.networkModelWavelengthService = networkModelWavelengthService;
     }
 
     /**
@@ -58,6 +68,9 @@ public class NetworkModelProvider {
                 InstanceIdentifiers.NETCONF_TOPOLOGY_II.child(Node.class)), topologyListener);
         networkutilsServiceRpcRegistration =
             rpcProviderService.registerRpcImplementation(TransportpceNetworkutilsService.class, networkutilsService);
+        TransportpceServicehandlerListener serviceHandlerListner =
+                new ServiceHandlerListener(networkModelWavelengthService);
+        serviceHandlerListenerRegistration = notificationService.registerNotificationListener(serviceHandlerListner);
     }
 
         /**
@@ -71,5 +84,6 @@ public class NetworkModelProvider {
         if (networkutilsServiceRpcRegistration != null) {
             networkutilsServiceRpcRegistration.close();
         }
+        serviceHandlerListenerRegistration.close();
     }
 }

@@ -17,7 +17,6 @@ import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.servicehandler.DowngradeConstraints;
 import org.opendaylight.transportpce.servicehandler.ModelMappingUtils;
@@ -111,8 +110,7 @@ public class ServicehandlerImpl implements OrgOpenroadmServiceService {
 
     public ServicehandlerImpl(DataBroker databroker, PathComputationService pathComputationService,
             RendererServiceOperations rendererServiceOperations, NotificationPublishService notificationPublishService,
-            PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl,
-            NetworkModelWavelengthService networkModelWavelengthService) {
+            PceListenerImpl pceListenerImpl, RendererListenerImpl rendererListenerImpl) {
         this.db = databroker;
         this.serviceDataStoreOperations = new ServiceDataStoreOperationsImpl(this.db);
         this.serviceDataStoreOperations.initialize();
