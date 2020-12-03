@@ -46,19 +46,17 @@ import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfa
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl121;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl221;
 import org.opendaylight.transportpce.common.openroadminterfaces.OpenRoadmInterfacesImpl710;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthServiceImpl;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface221;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterfaceFactory;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmOtnInterface221;
-import org.opendaylight.transportpce.renderer.stub.MountPointServiceStub;
-import org.opendaylight.transportpce.renderer.stub.MountPointStub;
 import org.opendaylight.transportpce.renderer.stub.OlmServiceStub;
 import org.opendaylight.transportpce.renderer.utils.NotificationPublishServiceMock;
 import org.opendaylight.transportpce.renderer.utils.ServiceDeleteDataUtils;
 import org.opendaylight.transportpce.renderer.utils.TransactionUtils;
 import org.opendaylight.transportpce.test.AbstractTest;
+import org.opendaylight.transportpce.test.stub.MountPointServiceStub;
+import org.opendaylight.transportpce.test.stub.MountPointStub;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownOutputBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteInputBuilder;
@@ -88,7 +86,6 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
     private DeviceRendererService deviceRenderer;
     private PortMapping portMapping;
     private CrossConnect crossConnect;
-    private NetworkModelWavelengthService networkModelWavelengthService;
     private TransportpceOlmService olmService;
     private MappingUtils mappingUtils;
     private OpenRoadmInterfacesImpl121 openRoadmInterfacesImpl121;
@@ -149,11 +146,9 @@ public class RendererServiceOperationsImplDeleteTest extends AbstractTest {
         this.olmService = Mockito.spy(this.olmService);
         ListeningExecutorService executor =
             MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
-        this.networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(getDataBroker());
         NotificationPublishService notificationPublishService = new NotificationPublishServiceMock();
         this.rendererServiceOperations =  new RendererServiceOperationsImpl(this.deviceRenderer,
-            this.otnDeviceRendererService, olmService, getDataBroker(), this.networkModelWavelengthService,
-            notificationPublishService);
+            this.otnDeviceRendererService, olmService, getDataBroker(), notificationPublishService);
 
     }
 

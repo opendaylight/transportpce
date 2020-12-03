@@ -19,9 +19,11 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.opendaylight.mdsal.binding.api.NotificationService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.mdsal.common.api.CommitInfo;
 import org.opendaylight.transportpce.common.network.NetworkTransactionService;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.test.AbstractTest;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.networkutils.rev170818.TransportpceNetworkutilsService;
 
@@ -35,12 +37,17 @@ public class NetworkModelProviderTest extends AbstractTest {
     TransportpceNetworkutilsService networkutilsService;
     @Mock
     NetConfTopologyListener topologyListener;
+    @Mock
+    private NotificationService notificationService;
+    @Mock
+    private NetworkModelWavelengthService networkModelWavelengthService;
 
 
     @Test
     public void networkmodelProviderInitTest() {
         NetworkModelProvider provider = new NetworkModelProvider(networkTransactionService, getDataBroker(),
-            rpcProviderService, networkutilsService, topologyListener);
+            rpcProviderService, networkutilsService, topologyListener, notificationService,
+            networkModelWavelengthService);
         Answer<FluentFuture<CommitInfo>> answer = new Answer<FluentFuture<CommitInfo>>() {
 
             @Override
