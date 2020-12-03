@@ -31,9 +31,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
     <reference id="rendererServiceOperations"
              interface="org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations" />
 
-    <reference id="networkModelWavelengthService"
-           interface="org.opendaylight.transportpce.renderer.NetworkModelWavelengthService" />
-
     <bean id="serviceDatastoreOperation" class="org.opendaylight.transportpce.servicehandler.service.ServiceDataStoreOperationsImpl">
         <argument ref="dataBroker"/>
       </bean>
@@ -55,7 +52,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="pathComputationService" />
         <argument ref="notificationPublishService" />
         <argument ref="rendererServiceOperations" />
-        <argument ref="networkModelWavelengthService" />
         <argument ref="pceListener" />
         <argument ref="rendererListener" />
     </bean>
@@ -69,7 +65,6 @@ Author: Martial Coulibaly <martial.coulibaly@gfi.com> on behalf of Orange
         <argument ref="notificationPublishService" />
         <argument ref="pathComputationService" />
         <argument ref="rendererServiceOperations" />
-        <argument ref="networkModelWavelengthService" />
     </bean>
 
     <service ref="serviceHandlerImpl"
