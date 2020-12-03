@@ -52,6 +52,11 @@ module transportpce-renderer {
       ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
       POSSIBILITY OF SUCH DAMAGE";
 
+  revision 2020-11-25 {
+    description
+      "Version 1.6.2";
+  }
+
   revision 2020-05-20 {
     description
       "Version 1.6.1";
@@ -109,15 +114,16 @@ module transportpce-renderer {
     }
   }
 
-  notification service-rpc-result-sp {
+  notification renderer-rpc-result-sp {
     description
-      "This Notification indicates result of  service RPC and provides the topology";
+      "This Notification indicates result of renderer RPC and provides the topology";
     leaf notification-type {
       type transportpce-common-service-path-types:service-path-notification-types;
     }
     container path-topology {
       uses org-openroadm-topology:topology;
     }
+    uses transportpce-pathDescription:path-description;
     uses transportpce-common-service-path-types:rpc-response-status-ex;
     uses org-openroadm-common-service-types:service-notification-result;
   }
