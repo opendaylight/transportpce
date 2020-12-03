@@ -37,6 +37,8 @@ import org.opendaylight.transportpce.networkmodel.NetworkUtilsImpl;
 import org.opendaylight.transportpce.networkmodel.R2RLinkDiscovery;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelService;
 import org.opendaylight.transportpce.networkmodel.service.NetworkModelServiceImpl;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthService;
+import org.opendaylight.transportpce.networkmodel.service.NetworkModelWavelengthServiceImpl;
 import org.opendaylight.transportpce.olm.OlmPowerServiceRpcImpl;
 import org.opendaylight.transportpce.olm.OlmProvider;
 import org.opendaylight.transportpce.olm.power.PowerMgmt;
@@ -46,8 +48,6 @@ import org.opendaylight.transportpce.olm.service.OlmPowerServiceImpl;
 import org.opendaylight.transportpce.pce.impl.PceProvider;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
 import org.opendaylight.transportpce.pce.service.PathComputationServiceImpl;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthServiceImpl;
 import org.opendaylight.transportpce.renderer.RendererProvider;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface121;
 import org.opendaylight.transportpce.renderer.openroadminterface.OpenRoadmInterface221;
@@ -123,10 +123,13 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
         PortMapping portMapping = initPortMapping(lightyServices, openRoadmInterfaces);
         NetworkModelService networkModelService = new NetworkModelServiceImpl(networkTransaction, linkDiscoveryImpl,
                 portMapping);
+        NetworkModelWavelengthService networkModelWavelengthService =
+                new NetworkModelWavelengthServiceImpl(lightyServices.getBindingDataBroker());
         NetConfTopologyListener netConfTopologyListener = new NetConfTopologyListener(networkModelService,
                 lightyServices.getBindingDataBroker(), deviceTransactionManager);
         networkModelProvider = new NetworkModelProvider(networkTransaction, lightyServices.getBindingDataBroker(),
-                lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener);
+                lightyServices.getRpcProviderService(), networkutilsServiceImpl, netConfTopologyListener,
+                lightyServices.getNotificationService(), networkModelWavelengthService);
 
         LOG.info("Creating OLM beans ...");
         CrossConnect crossConnect = initCrossConnect(mappingUtils);
@@ -145,21 +148,17 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 openRoadmInterfaces, crossConnect, portMapping, networkModelService);
         OtnDeviceRendererService otnDeviceRendererService = new OtnDeviceRendererServiceImpl(openRoadmInterfaceFactory,
                 crossConnect, openRoadmInterfaces, deviceTransactionManager, networkModelService);
-        NetworkModelWavelengthService networkModelWavelengthService = new NetworkModelWavelengthServiceImpl(
-                lightyServices.getBindingDataBroker());
-        rendererProvider = initRenderer(lightyServices, olmPowerServiceRpc, networkModelWavelengthService,
-                deviceRendererService, otnDeviceRendererService);
+        rendererProvider = initRenderer(lightyServices, olmPowerServiceRpc, deviceRendererService,
+                otnDeviceRendererService);
 
         LOG.info("Creating service-handler beans ...");
         RendererServiceOperations rendererServiceOperations = new RendererServiceOperationsImpl(deviceRendererService,
                 otnDeviceRendererService, olmPowerServiceRpc, lightyServices.getBindingDataBroker(),
-                networkModelWavelengthService, lightyServices.getBindingNotificationPublishService());
+                lightyServices.getBindingNotificationPublishService());
         servicehandlerProvider = new ServicehandlerProvider(lightyServices.getBindingDataBroker(),
                 lightyServices.getRpcProviderService(), lightyServices.getNotificationService(), pathComputationService,
-                rendererServiceOperations, networkModelWavelengthService,
-                lightyServices.getBindingNotificationPublishService());
-        tapiProvider = initTapi(lightyServices, rendererServiceOperations, networkModelWavelengthService,
-                pathComputationService);
+                rendererServiceOperations, lightyServices.getBindingNotificationPublishService());
+        tapiProvider = initTapi(lightyServices, rendererServiceOperations, pathComputationService);
     }
 
     @Override
@@ -205,11 +204,9 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
      *
      * @param lightyServices LightyServices
      * @param rendererServiceOperations RendererServiceOperations
-     * @param networkModelWavelengthService NetworkModelWavelengthService
      * @return TapiProvider instance
      */
     private TapiProvider initTapi(LightyServices lightyServices, RendererServiceOperations rendererServiceOperations,
-            NetworkModelWavelengthService networkModelWavelengthService,
             PathComputationService pathComputationService) {
         RendererListenerImpl rendererListenerImpl = new RendererListenerImpl(pathComputationService,
                 lightyServices.getBindingNotificationPublishService());
@@ -219,8 +216,7 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
                 lightyServices.getBindingNotificationPublishService(), serviceDataStoreOperations);
         ServiceHandlerOperations serviceHandlerOperations = new ServiceHandlerOperationsImpl(
                 lightyServices.getBindingDataBroker(), pathComputationService, rendererServiceOperations,
-                lightyServices.getBindingNotificationPublishService(), pceListenerImpl, rendererListenerImpl,
-                networkModelWavelengthService);
+                lightyServices.getBindingNotificationPublishService(), pceListenerImpl, rendererListenerImpl);
         return new TapiProvider(lightyServices.getBindingDataBroker(), lightyServices.getRpcProviderService(),
                 serviceHandlerOperations, new TapiListener());
     }
@@ -230,20 +226,17 @@ public class TransportPCEImpl extends AbstractLightyModule implements TransportP
      *
      * @param lightyServices LightyServices
      * @param olmPowerServiceRpc TransportpceOlmService
-     * @param networkModelWavelengthService NetworkModelWavelengthService
      * @param deviceRendererService DeviceRendererService
      * @param otnDeviceRendererService OtnDeviceRendererService
      * @return RendererProvider instance
      */
     private RendererProvider initRenderer(LightyServices lightyServices, TransportpceOlmService olmPowerServiceRpc,
-            NetworkModelWavelengthService networkModelWavelengthService, DeviceRendererService deviceRendererService,
-            OtnDeviceRendererService otnDeviceRendererService) {
+            DeviceRendererService deviceRendererService, OtnDeviceRendererService otnDeviceRendererService) {
         DeviceRendererRPCImpl deviceRendererRPC = new DeviceRendererRPCImpl(deviceRendererService,
                 otnDeviceRendererService);
         RendererServiceOperationsImpl rendererServiceOperations = new RendererServiceOperationsImpl(
                 deviceRendererService, otnDeviceRendererService, olmPowerServiceRpc,
-                lightyServices.getBindingDataBroker(), networkModelWavelengthService,
-                lightyServices.getBindingNotificationPublishService());
+                lightyServices.getBindingDataBroker(), lightyServices.getBindingNotificationPublishService());
         return new RendererProvider(lightyServices.getRpcProviderService(), deviceRendererRPC,
                 rendererServiceOperations);
     }
