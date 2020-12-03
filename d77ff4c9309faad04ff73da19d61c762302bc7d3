@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e1fa40a_387b9568",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-03T14:42:30Z",
+      "side": 1,
+      "message": "see step 1 remarks",
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80405d0e_5d94449e",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmOtnTopology.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-03T14:42:30Z",
+      "side": 1,
+      "message": "indentation + 1 setter per line\n\netc",
+      "range": {
+        "startLine": 250,
+        "startChar": 24,
+        "endLine": 250,
+        "endChar": 107
+      },
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9efb50d_b4d00e50",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-03T14:42:30Z",
+      "side": 1,
+      "message": "should stay sticked",
+      "range": {
+        "startLine": 61,
+        "startChar": 83,
+        "endLine": 62,
+        "endChar": 30
+      },
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0b995ad_2f1d2c0e",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-03T14:42:30Z",
+      "side": 1,
+      "message": "reversing the logic would ease indentation  here\n\netc",
+      "range": {
+        "startLine": 170,
+        "startChar": 17,
+        "endLine": 174,
+        "endChar": 17
+      },
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77d0ec72_5e2e9f2a",
+        "filename": "pce/src/main/java/org/opendaylight/transportpce/pce/networkanalyzer/PceOpticalNode.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-03T14:42:30Z",
+      "side": 1,
+      "message": "many nested if-blocks here",
+      "revId": "d77ff4c9309faad04ff73da19d61c762302bc7d3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
