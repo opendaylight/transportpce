@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79adc359_81e74a38",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-03T14:33:46Z",
+      "side": 1,
+      "message": "see step 1 remarks",
+      "revId": "967008a4690d23f3e54391223cd946ee2c10c15b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dafe387e_6fd481d7",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/Rdm2XpdrLink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-03T14:33:46Z",
+      "side": 1,
+      "message": "should stay sticked",
+      "range": {
+        "startLine": 153,
+        "startChar": 89,
+        "endLine": 154,
+        "endChar": 34
+      },
+      "revId": "967008a4690d23f3e54391223cd946ee2c10c15b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d0fbcf9_ddb724ec",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/service/NetworkModelServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-03T14:33:46Z",
+      "side": 1,
+      "message": "reversing the logic would ease the indentation\n\n if (topologyChangesMap.isEmpty()) {\n    LOG.warn(\"Empty Topology Change map. Bug in code?\");\n    return;\n }\n\n[code]",
+      "range": {
+        "startLine": 964,
+        "startChar": 7,
+        "endLine": 964,
+        "endChar": 44
+      },
+      "revId": "967008a4690d23f3e54391223cd946ee2c10c15b",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
