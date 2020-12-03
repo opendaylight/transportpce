@@ -47,12 +47,12 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev17
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.ServicePowerTurndownOutput;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.TransportpceOlmService;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.olm.rev170418.get.pm.output.Measurements;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceDeleteOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestInput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceImplementationRequestOutput;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSp;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev200520.ServiceRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSp;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSpBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceDeleteOutput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestInput;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.ServiceImplementationRequestOutput;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.ODU4;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.otn.common.types.rev200327.OTU4;
@@ -97,7 +97,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private final NotificationPublishService notificationPublishService;
     private ListeningExecutorService executor;
     private NetworkModelWavelengthService networkModelWavelengthService;
-    private ServiceRpcResultSp notification = null;
+    private RendererRpcResultSp notification = null;
 
     public RendererServiceOperationsImpl(DeviceRendererService deviceRenderer,
             OtnDeviceRendererService otnDeviceRenderer, TransportpceOlmService olmService,
@@ -114,7 +114,7 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
 
     private void sendNotifications(ServicePathNotificationTypes servicePathNotificationTypes, String serviceName,
             RpcStatusEx rpcStatusEx, String message) {
-        this.notification = new ServiceRpcResultSpBuilder()
+        this.notification = new RendererRpcResultSpBuilder()
                 .setNotificationType(servicePathNotificationTypes)
                 .setServiceName(serviceName)
                 .setStatus(rpcStatusEx)
