@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.transportpce.renderer;
+package org.opendaylight.transportpce.networkmodel.service;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -64,7 +64,8 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.a
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.port.connection.attributes.Wavelength;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.xponder.rev200529.xpdr.port.connection.attributes.WavelengthBuilder;
-import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.PathDescription;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.AToZDirection;
+import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ZToADirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.atoz.direction.AToZ;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.path.description.ztoa.direction.ZToA;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev200629.pce.resource.resource.resource.TerminationPoint;
@@ -92,35 +93,49 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
     }
 
     @Override
-    public void useWavelengths(PathDescription pathDescription) {
-        List<NodeIdPair> atozTpIds = getAToZTpList(pathDescription);
-        atozTpIds.removeIf(Objects::isNull);
-        deleteAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava());
-        List<NodeIdPair> ztoaTpIds = getZToATpList(pathDescription);
-        ztoaTpIds.removeIf(Objects::isNull);
-        deleteAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                pathDescription.getZToADirection().getZToAWavelengthNumber().toJava());
-        addUsedWL(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava(), atozTpIds);
-        addUsedWL(pathDescription.getZToADirection().getZToAWavelengthNumber().toJava(), ztoaTpIds);
+    public void useWavelengths(AToZDirection atoZDirection, ZToADirection ztoADirection) {
+        if (atoZDirection != null && atoZDirection.getAToZWavelengthNumber() != null) {
+            LOG.info("Update wavelength for a to z direction {}", atoZDirection);
+            List<NodeIdPair> atozTpIds = getAToZTpList(atoZDirection);
+            atozTpIds.removeIf(Objects::isNull);
+            deleteAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
+                    atoZDirection.getAToZWavelengthNumber().toJava());
+            addUsedWL(atoZDirection.getAToZWavelengthNumber().toJava(), atozTpIds);
+        }
+        if (ztoADirection != null && ztoADirection.getZToAWavelengthNumber() != null) {
+            LOG.info("Update wavelength for z to a direction {}", ztoADirection);
+            List<NodeIdPair> ztoaTpIds = getZToATpList(ztoADirection);
+            ztoaTpIds.removeIf(Objects::isNull);
+            deleteAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
+                    ztoADirection.getZToAWavelengthNumber().toJava());
+
+            addUsedWL(ztoADirection.getZToAWavelengthNumber().toJava(), ztoaTpIds);
+        }
     }
+
 
     @Override
-    public void freeWavelengths(PathDescription pathDescription) {
-        List<NodeIdPair> atozTpIds = getAToZTpList(pathDescription);
-        List<NodeIdPair> ztoaTpIds = getZToATpList(pathDescription);
-        atozTpIds.removeIf(Objects::isNull);
-        ztoaTpIds.removeIf(Objects::isNull);
-        deleteUsedWL(pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava(), atozTpIds);
-        deleteUsedWL(pathDescription.getZToADirection().getZToAWavelengthNumber().toJava(), ztoaTpIds);
-        addAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                pathDescription.getAToZDirection().getAToZWavelengthNumber().toJava());
-        addAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
-                pathDescription.getZToADirection().getZToAWavelengthNumber().toJava());
+    public void freeWavelengths(AToZDirection atoZDirection, ZToADirection ztoADirection) {
+        if (atoZDirection != null && atoZDirection.getAToZWavelengthNumber() != null) {
+            LOG.info("Free wavelength for a to z direction {}", atoZDirection);
+            List<NodeIdPair> atozTpIds = getAToZTpList(atoZDirection);
+            atozTpIds.removeIf(Objects::isNull);
+            deleteUsedWL(atoZDirection.getAToZWavelengthNumber().toJava(), atozTpIds);
+            addAvailableWL(atozTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
+                    atoZDirection.getAToZWavelengthNumber().toJava());
+        }
+        if (ztoADirection != null && ztoADirection.getZToAWavelengthNumber() != null) {
+            LOG.info("Free wave length for z to a direction {}", ztoADirection);
+            List<NodeIdPair> ztoaTpIds = getZToATpList(ztoADirection);
+            ztoaTpIds.removeIf(Objects::isNull);
+            deleteUsedWL(ztoADirection.getZToAWavelengthNumber().toJava(), ztoaTpIds);
+            addAvailableWL(ztoaTpIds.stream().map(NodeIdPair::getNodeID).distinct().collect(Collectors.toList()),
+                    ztoADirection.getZToAWavelengthNumber().toJava());
+        }
     }
 
-    private List<NodeIdPair> getAToZTpList(PathDescription pathDescription) {
-        Collection<AToZ> atozList = pathDescription.getAToZDirection().nonnullAToZ().values();
+    private List<NodeIdPair> getAToZTpList(AToZDirection atoZDirection) {
+        Collection<AToZ> atozList = atoZDirection.nonnullAToZ().values();
         return atozList.stream()
                 .filter(aToZ -> {
                     if ((aToZ.getResource() == null) || (aToZ.getResource().getResource() == null)) {
@@ -139,8 +154,8 @@ public class NetworkModelWavelengthServiceImpl implements NetworkModelWavelength
                 }).collect(Collectors.toList());
     }
 
-    private List<NodeIdPair> getZToATpList(PathDescription pathDescription) {
-        Collection<ZToA> ztoaList = pathDescription.getZToADirection().nonnullZToA().values();
+    private List<NodeIdPair> getZToATpList(ZToADirection ztoADirection) {
+        Collection<ZToA> ztoaList = ztoADirection.nonnullZToA().values();
         return ztoaList.stream()
                 .filter(zToA -> {
                     if ((zToA.getResource() == null) || (zToA.getResource().getResource() == null)) {
