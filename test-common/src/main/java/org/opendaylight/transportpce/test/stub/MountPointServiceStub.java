@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.opendaylight.transportpce.networkmodel.stub;
+package org.opendaylight.transportpce.test.stub;
 
 import java.util.Optional;
 import org.opendaylight.mdsal.binding.api.MountPoint;

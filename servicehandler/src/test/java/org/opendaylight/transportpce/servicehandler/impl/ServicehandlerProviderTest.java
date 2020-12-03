@@ -18,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.RpcProviderService;
 import org.opendaylight.transportpce.pce.service.PathComputationService;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.provisiondevice.RendererServiceOperations;
 import org.opendaylight.transportpce.test.AbstractTest;
 
@@ -36,9 +35,6 @@ public class ServicehandlerProviderTest  extends AbstractTest {
     @Mock
     RpcProviderService rpcProviderRegistry;
 
-    @Mock
-    NetworkModelWavelengthService networkModelWavelengthService;
-
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
@@ -50,8 +46,7 @@ public class ServicehandlerProviderTest  extends AbstractTest {
         ServicehandlerProvider provider =  new ServicehandlerProvider(
                 getDataBroker(), rpcProviderRegistry,
                 getNotificationService() , pathComputationService,
-                rendererServiceOperations, networkModelWavelengthService,
-                notificationPublishService);
+                rendererServiceOperations, notificationPublishService);
 
         provider.init();
 

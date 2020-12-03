@@ -24,12 +24,10 @@ import org.opendaylight.mdsal.binding.api.DataBroker;
 import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.ReadTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
-import org.opendaylight.transportpce.common.OperationResult;
 import org.opendaylight.transportpce.common.ResponseCodes;
 import org.opendaylight.transportpce.common.StringConstants;
 import org.opendaylight.transportpce.common.Timeouts;
 import org.opendaylight.transportpce.renderer.ModelMappingUtils;
-import org.opendaylight.transportpce.renderer.NetworkModelWavelengthService;
 import org.opendaylight.transportpce.renderer.ServicePathInputData;
 import org.opendaylight.transportpce.renderer.provisiondevice.servicepath.ServicePathDirection;
 import org.opendaylight.transportpce.renderer.provisiondevice.tasks.DeviceRenderingRollbackTask;
@@ -69,6 +67,7 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.service
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.get.pm.input.ResourceIdentifierBuilder;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.common.types.rev200615.olm.renderer.input.Nodes;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.Notification;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.Uint32;
 import org.slf4j.Logger;
@@ -96,35 +95,16 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
     private final DataBroker dataBroker;
     private final NotificationPublishService notificationPublishService;
     private ListeningExecutorService executor;
-    private NetworkModelWavelengthService networkModelWavelengthService;
-    private RendererRpcResultSp notification = null;
 
     public RendererServiceOperationsImpl(DeviceRendererService deviceRenderer,
             OtnDeviceRendererService otnDeviceRenderer, TransportpceOlmService olmService,
-            DataBroker dataBroker, NetworkModelWavelengthService networkModelWavelengthService,
-            NotificationPublishService notificationPublishService) {
+            DataBroker dataBroker, NotificationPublishService notificationPublishService) {
         this.deviceRenderer = deviceRenderer;
         this.otnDeviceRenderer = otnDeviceRenderer;
         this.olmService = olmService;
         this.dataBroker = dataBroker;
-        this.networkModelWavelengthService = networkModelWavelengthService;
         this.notificationPublishService = notificationPublishService;
         this.executor = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NUMBER_OF_THREADS));
-    }
-
-    private void sendNotifications(ServicePathNotificationTypes servicePathNotificationTypes, String serviceName,
-            RpcStatusEx rpcStatusEx, String message) {
-        this.notification = new RendererRpcResultSpBuilder()
-                .setNotificationType(servicePathNotificationTypes)
-                .setServiceName(serviceName)
-                .setStatus(rpcStatusEx)
-                .setStatusMessage(message)
-                .build();
-        try {
-            notificationPublishService.putNotification(this.notification);
-        } catch (InterruptedException e) {
-            LOG.info("notification offer rejected: ", e);
-        }
     }
 
     @Override
@@ -178,8 +158,6 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                                     OPERATION_FAILED);
                             }
                             LOG.info("OTN rendering result size {}", otnRenderingResults.size());
-                            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
                         }
                         break;
                     case Infrastructure:
@@ -224,43 +202,19 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                                     OPERATION_FAILED);
                             }
                             LOG.info("OTN rendering result size {}", otnRenderingResults.size());
-                            sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-                                input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
                         }
                         break;
                     default:
                         LOG.warn("Unsupported connection type {}", input.getConnectionType());
                 }
+                sendNotificationsWithPathDescription(
+                        ServicePathNotificationTypes.ServiceImplementationRequest,
+                        input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL,
+                        input.getPathDescription());
                 return ModelMappingUtils.createServiceImplResponse(ResponseCodes.RESPONSE_OK,
                     OPERATION_SUCCESSFUL);
             }
         });
-    }
-
-    @Override
-    @SuppressWarnings("checkstyle:IllegalCatch")
-    public OperationResult reserveResource(PathDescription pathDescription) {
-
-        try {
-            LOG.info("Reserving resources in network model");
-            networkModelWavelengthService.useWavelengths(pathDescription);
-        } catch (Exception e) {
-            LOG.warn("Reserving resources in network model failed");
-            return OperationResult.failed("Resources reserve failed in network model");
-        }
-        return OperationResult.ok("Resources reserved successfully in network model");
-    }
-
-    @Override
-    @SuppressWarnings("checkstyle:IllegalCatch")
-    public OperationResult freeResource(PathDescription pathDescription) {
-
-        try {
-            networkModelWavelengthService.freeWavelengths(pathDescription);
-        } catch (Exception e) {
-            return OperationResult.failed("Resources reserve failed in network model");
-        }
-        return OperationResult.ok("Resources reserved successfully in network model");
     }
 
     @Override
@@ -626,10 +580,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 "Service activation test failed.");
             return false;
         }
-        // If Service activation is success update Network ModelMappingUtils
-        networkModelWavelengthService.useWavelengths(input.getPathDescription());
-        sendNotifications(ServicePathNotificationTypes.ServiceImplementationRequest,
-            input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL);
+        sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceImplementationRequest,
+            input.getServiceName(), RpcStatusEx.Successful, OPERATION_SUCCESSFUL, input.getPathDescription());
         return true;
     }
 
@@ -675,9 +627,8 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 "Deleting service path via renderer");
         deviceRenderer.deleteServicePath(servicePathInputDataAtoZ.getServicePathInput());
         deviceRenderer.deleteServicePath(servicePathInputDataZtoA.getServicePathInput());
-        networkModelWavelengthService.freeWavelengths(pathDescription);
-        sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Successful,
-                OPERATION_SUCCESSFUL);
+        sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceDelete,
+                serviceName, RpcStatusEx.Successful, OPERATION_SUCCESSFUL,pathDescription);
         return true;
     }
 
@@ -700,11 +651,75 @@ public class RendererServiceOperationsImpl implements RendererServiceOperations 
                 "Deleting otn-service path via renderer");
         OtnServicePathOutput result = otnDeviceRenderer.deleteOtnServicePath(ospi);
         if (result.isSuccess()) {
-            sendNotifications(ServicePathNotificationTypes.ServiceDelete, serviceName, RpcStatusEx.Successful,
-                OPERATION_SUCCESSFUL);
+            sendNotificationsWithPathDescription(ServicePathNotificationTypes.ServiceDelete,
+                    serviceName, RpcStatusEx.Successful, OPERATION_SUCCESSFUL, pathDescription);
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Send renderer notification.
+     * @param servicePathNotificationTypes ServicePathNotificationTypes
+     * @param serviceName String
+     * @param rpcStatusEx RpcStatusEx
+     * @param message String
+     */
+    private void sendNotifications(ServicePathNotificationTypes servicePathNotificationTypes, String serviceName,
+            RpcStatusEx rpcStatusEx, String message) {
+        Notification notification = buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
+                null);
+        send(notification);
+    }
+
+    /**
+     * Send renderer notification with path description information.
+     * @param servicePathNotificationTypes ServicePathNotificationTypes
+     * @param serviceName String
+     * @param rpcStatusEx RpcStatusEx
+     * @param message String
+     * @param pathDescription PathDescription
+     */
+    private void sendNotificationsWithPathDescription(ServicePathNotificationTypes servicePathNotificationTypes,
+            String serviceName, RpcStatusEx rpcStatusEx, String message, PathDescription pathDescription) {
+        Notification notification = buildNotification(servicePathNotificationTypes, serviceName, rpcStatusEx, message,
+                pathDescription);
+        send(notification);
+    }
+
+    /**
+     * Build notification containing path description information.
+     * @param servicePathNotificationTypes ServicePathNotificationTypes
+     * @param serviceName String
+     * @param rpcStatusEx RpcStatusEx
+     * @param message String
+     * @param pathDescription PathDescription
+     * @return notification with RendererRpcResultSp type.
+     */
+    private RendererRpcResultSp buildNotification(ServicePathNotificationTypes servicePathNotificationTypes,
+            String serviceName, RpcStatusEx rpcStatusEx, String message, PathDescription pathDescription) {
+        RendererRpcResultSpBuilder builder = new RendererRpcResultSpBuilder()
+                .setNotificationType(servicePathNotificationTypes).setServiceName(serviceName).setStatus(rpcStatusEx)
+                .setStatusMessage(message);
+        if (pathDescription != null) {
+            builder.setAToZDirection(pathDescription.getAToZDirection())
+                    .setZToADirection(pathDescription.getZToADirection());
+        }
+        return builder.build();
+    }
+
+    /**
+     * Send renderer notification.
+     * @param notification Notification
+     */
+    private void send(Notification notification) {
+        try {
+            LOG.info("Sending notification {}", notification);
+            notificationPublishService.putNotification(notification);
+        } catch (InterruptedException e) {
+            LOG.info("notification offer rejected: ", e);
+            Thread.currentThread().interrupt();
         }
     }
 
