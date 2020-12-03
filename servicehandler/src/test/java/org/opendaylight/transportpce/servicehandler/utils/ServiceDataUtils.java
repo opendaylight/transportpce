@@ -25,8 +25,8 @@ import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev20
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.pce.rev200128.service.path.rpc.result.PathDescriptionBuilder;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSp;
 import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.renderer.rev201125.RendererRpcResultSpBuilder;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev171017.ServiceRpcResultSh;
-import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev171017.ServiceRpcResultShBuilder;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultSh;
+import org.opendaylight.yang.gen.v1.http.org.opendaylight.transportpce.servicehandler.rev201125.ServiceRpcResultShBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.node.types.rev181130.NodeIdType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.ConnectionType;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.service.types.rev190531.RpcActions;
