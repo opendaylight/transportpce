@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "15b83d96_ddd2bbd2",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-04T08:43:34Z",
+      "side": 1,
+      "message": "reopen",
+      "parentUuid": "40a10513_5549ebcb",
+      "range": {
+        "startLine": 581,
+        "startChar": 0,
+        "endLine": 586,
+        "endChar": 25
+      },
+      "revId": "d1254fddb8f0b064c15fda35a229fe3f6e9b90bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f82a1d_c011761d",
         "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
         "patchSetId": 7
@@ -378,6 +402,30 @@
       "revId": "d1254fddb8f0b064c15fda35a229fe3f6e9b90bc",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32c4b233_346ff869",
+        "filename": "renderer/src/main/java/org/opendaylight/transportpce/renderer/NetworkModelWavelengthServiceImpl.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-04T08:43:34Z",
+      "side": 1,
+      "message": "reopen",
+      "parentUuid": "243394cf_a34a7ec0",
+      "range": {
+        "startLine": 637,
+        "startChar": 0,
+        "endLine": 640,
+        "endChar": 9
+      },
+      "revId": "d1254fddb8f0b064c15fda35a229fe3f6e9b90bc",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
     }
   ]
 }
