@@ -116,6 +116,30 @@
       "revId": "43fd57904e0c4389ae6f3b68cecdca1ab58967e3",
       "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80a1c3c3_58060601",
+        "filename": "networkmodel/src/main/java/org/opendaylight/transportpce/networkmodel/util/OpenRoadmTopology.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 8630
+      },
+      "writtenOn": "2020-12-04T09:42:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57f267ed_71449774",
+      "range": {
+        "startLine": 328,
+        "startChar": 78,
+        "endLine": 329,
+        "endChar": 22
+      },
+      "revId": "43fd57904e0c4389ae6f3b68cecdca1ab58967e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
     }
   ]
 }
