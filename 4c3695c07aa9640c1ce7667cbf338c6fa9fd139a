@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7257e0c7_937a68a8",
+        "filename": "common/src/main/java/org/opendaylight/transportpce/common/mapping/PortMappingVersion221.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 6731
+      },
+      "writtenOn": "2020-12-04T15:11:20Z",
+      "side": 1,
+      "message": "looks like checkPartnerPort",
+      "range": {
+        "startLine": 1132,
+        "startChar": 20,
+        "endLine": 1143,
+        "endChar": 108
+      },
+      "revId": "4c3695c07aa9640c1ce7667cbf338c6fa9fd139a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": true
+    }
+  ]
+}
