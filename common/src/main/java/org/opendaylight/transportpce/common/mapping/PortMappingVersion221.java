@@ -1130,22 +1130,24 @@ public class PortMappingVersion221 {
                         continue;
                     }
                     if (PortQual.RoadmExternal.getIntValue() != port1.getPortQual().getIntValue()
-                        || PortQual.RoadmExternal.getIntValue() != port2.getPortQual().getIntValue()
-                        || port1.getPartnerPort() == null
-                        || port2.getPartnerPort() == null
-                        || !port1.getPartnerPort().getCircuitPackName().equals(cp2Name)
-                        || !port1.getPartnerPort().getPortName().equals(port2.getPortName())
-                        || !port2.getPartnerPort().getCircuitPackName().equals(cp1Name)
-                        || !port2.getPartnerPort().getPortName().equals(port1.getPortName())
-                        || ((Direction.Rx.getIntValue() != port1.getPortDirection().getIntValue()
-                                || Direction.Tx.getIntValue() != port2.getPortDirection().getIntValue())
-                            && (Direction.Rx.getIntValue() != port2.getPortDirection().getIntValue()
-                                || Direction.Tx.getIntValue() != port1.getPortDirection().getIntValue()))) {
-                        LOG.error("Impossible to create logical connection point for port {} or port {} on node {} - "
-                                + "Error in configuration with port-qual, port-direction or partner-port configuration",
+                        || PortQual.RoadmExternal.getIntValue() != port2.getPortQual().getIntValue()) {
+                        LOG.error("Impossible to create logical connection point for port {} or port {} on node {}"
+                                + " - Error in configuration with port-qual",
                             port1.getPortName(), port2.getPortName(), nodeId);
                         continue;
                     }
+                    if (!checkPartnerPort(cp1Name, port1, port2)) {
+                        LOG.error("port {} on {} is not a correct partner port of {} on  {}",
+                            port2.getPortName(), cp2Name, port1.getPortName(), cp1Name);
+                        continue;
+                    }
+                    // TODO this second checkPartnerPort call has overlap checkings with the first one (Directions)
+                    if (!checkPartnerPort(cp2Name, port2, port1)) {
+                        LOG.error("port {} on {} is not a correct partner port of {} on  {}",
+                            port1.getPortName(), cp1Name, port2.getPortName(), cp2Name);
+                        continue;
+                    }
+
                     String logicalConnectionPoint1 = new StringBuilder("DEG")
                         .append(cpMapEntry.getKey())
                         .append("-TTP-")
