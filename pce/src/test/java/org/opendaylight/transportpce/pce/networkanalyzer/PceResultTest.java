@@ -44,9 +44,9 @@ public class PceResultTest extends AbstractTest {
 
     @Test
     public void waveLengthTest() {
-        Assert.assertEquals(pceResult.getResultWavelength(), -1);
+        Assert.assertEquals(0, pceResult.getResultWavelength());
         pceResult.setResultWavelength(12);
-        Assert.assertEquals(pceResult.getResultWavelength(), 12);
+        Assert.assertEquals(12, pceResult.getResultWavelength());
     }
 
     @Test
