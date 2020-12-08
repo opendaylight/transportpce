@@ -10,6 +10,7 @@ package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
@@ -59,11 +60,14 @@ public class PceOpticalNodeTest extends AbstractTest {
 
     private PceOpticalNode pceOpticalNode;
     private Node node;
+    private BitSet usedBitSet = new BitSet(8);
+    private BitSet availableBitSet = new BitSet(8);
 
     @Before
     public void setUp() {
         NodeBuilder node1Builder = getNodeBuilder(geSupportingNodes(), OpenroadmTpType.SRGTXRXPP);
         node = node1Builder.setNodeId(new NodeId("test")).build();
+        availableBitSet.set(0,8);
     }
 
     @Test
@@ -80,9 +84,9 @@ public class PceOpticalNodeTest extends AbstractTest {
                 OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceOpticalNode.initSrgTps();
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
-        pceOpticalNode.initWLlist();
+        pceOpticalNode.initFrequenciesBitSet();
         Assert.assertFalse(pceOpticalNode.isValid());
-        Assert.assertFalse(pceOpticalNode.checkWL(12));
+        Assert.assertNull(pceOpticalNode.getBitSetData());
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
         Assert.assertNull(pceOpticalNode.getAvailableTribPorts());
         Assert.assertNull(pceOpticalNode.getAvailableTribPorts());
@@ -95,9 +99,9 @@ public class PceOpticalNodeTest extends AbstractTest {
         Node specificNode = node1Builder.build();
         pceOpticalNode = new PceOpticalNode(specificNode,
                 OpenroadmNodeType.SRG, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
-        pceOpticalNode.initWLlist();
+        pceOpticalNode.initFrequenciesBitSet();
         Assert.assertTrue(pceOpticalNode.isValid());
-        Assert.assertTrue(pceOpticalNode.checkWL(12));
+        Assert.assertEquals(availableBitSet, pceOpticalNode.getBitSetData().get(88,96));
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
     }
 
@@ -105,9 +109,9 @@ public class PceOpticalNodeTest extends AbstractTest {
     public void testInitXndrTpDegTypes() {
         pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.DEGREE, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
-        pceOpticalNode.initWLlist();
+        pceOpticalNode.initFrequenciesBitSet();
         Assert.assertTrue(pceOpticalNode.isValid());
-        Assert.assertFalse(pceOpticalNode.checkWL(12));
+        Assert.assertEquals(usedBitSet,pceOpticalNode.getBitSetData().get(88,96));
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
     }
 
@@ -115,20 +119,20 @@ public class PceOpticalNodeTest extends AbstractTest {
     public void testInitXndrTpXpondrTypes() {
         pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.XPONDER, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
-        pceOpticalNode.initWLlist();
+        pceOpticalNode.initFrequenciesBitSet();
         Assert.assertTrue(pceOpticalNode.isValid());
-        Assert.assertTrue(pceOpticalNode.checkWL(12));
+        Assert.assertEquals(availableBitSet, pceOpticalNode.getBitSetData().get(88,96));
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
     }
 
     @Test
-    public void testInitWLlist() {
+    public void testinitFrequenciesBitSet() {
         pceOpticalNode = new PceOpticalNode(node,
                 OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
-        pceOpticalNode.initWLlist();
+        pceOpticalNode.initFrequenciesBitSet();
         Assert.assertFalse(pceOpticalNode.isValid());
-        Assert.assertFalse(pceOpticalNode.checkWL(12));
+        Assert.assertNull(pceOpticalNode.getBitSetData());
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
     }
 
@@ -139,7 +143,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode.initSrgTps();
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("7"));
         Assert.assertFalse(pceOpticalNode.isValid());
-        Assert.assertFalse(pceOpticalNode.checkWL(12));
+        Assert.assertNull(pceOpticalNode.getBitSetData());
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
     }
 
@@ -150,11 +154,11 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode = new PceOpticalNode(specificNode,
                 OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceOpticalNode.initSrgTps();
-        pceOpticalNode.initWLlist();
+        pceOpticalNode.initFrequenciesBitSet();
         pceOpticalNode.initXndrTps(ServiceFormat.OMS);
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("7"));
         Assert.assertFalse(pceOpticalNode.isValid());
-        Assert.assertFalse(pceOpticalNode.checkWL(12));
+        Assert.assertNull(pceOpticalNode.getBitSetData());
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
     }
 
@@ -165,7 +169,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode.initSrgTps();
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("7"));
         Assert.assertFalse(pceOpticalNode.isValid());
-        Assert.assertFalse(pceOpticalNode.checkWL(12));
+        Assert.assertNull(pceOpticalNode.getBitSetData());
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
     }
 
@@ -177,7 +181,7 @@ public class PceOpticalNodeTest extends AbstractTest {
                 OpenroadmNodeType.ROADM, StringConstants.OPENROADM_DEVICE_VERSION_2_2_1);
         pceOpticalNode.initSrgTps();
         Assert.assertFalse(pceOpticalNode.isValid());
-        Assert.assertFalse(pceOpticalNode.checkWL(12));
+        Assert.assertNull(pceOpticalNode.getBitSetData());
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("5"));
     }
@@ -191,7 +195,7 @@ public class PceOpticalNodeTest extends AbstractTest {
         pceOpticalNode.initSrgTps();
         Assert.assertNull(pceOpticalNode.getRdmSrgClient("2"));
         Assert.assertFalse(pceOpticalNode.isValid());
-        Assert.assertFalse(pceOpticalNode.checkWL(12));
+        Assert.assertNull(pceOpticalNode.getBitSetData());
         Assert.assertTrue(pceOpticalNode.checkTP("testTP"));
     }
 

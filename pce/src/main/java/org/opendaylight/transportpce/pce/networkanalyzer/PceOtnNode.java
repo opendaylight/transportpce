@@ -9,6 +9,7 @@
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -527,11 +528,6 @@ public class PceOtnNode implements PceNode {
         return false;
     }
 
-    @Override
-    public boolean checkWL(long index) {
-        return false;
-    }
-
     /*
     * (non-Javadoc)
     *
@@ -539,6 +535,12 @@ public class PceOtnNode implements PceNode {
     */
     @Override
     public String getVersion() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BitSet getBitSetData() {
         // TODO Auto-generated method stub
         return null;
     }
