@@ -63,7 +63,7 @@ public class ServiceHandlerListener implements TransportpceServicehandlerListene
     private void onServiceCreation(ServiceRpcResultSh notification) {
         if (notification.getAToZDirection() != null || notification.getZToADirection() != null) {
             LOG.info("Update topology with used frequency by service {}", notification.getServiceName());
-            service.useWavelengths(notification.getAToZDirection(), notification.getZToADirection());
+            service.allocateFrequencies(notification.getAToZDirection(), notification.getZToADirection());
         }
     }
 
@@ -75,7 +75,7 @@ public class ServiceHandlerListener implements TransportpceServicehandlerListene
         if (notification.getAToZDirection() != null || notification.getZToADirection() != null) {
             LOG.info("Update topology with no more used frequency by deleted service {}",
                     notification.getServiceName());
-            service.freeWavelengths(notification.getAToZDirection(), notification.getZToADirection());
+            service.releaseFrequencies(notification.getAToZDirection(), notification.getZToADirection());
         }
     }
 

@@ -8,9 +8,11 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.transportpce.common.ResponseCodes;
+import org.opendaylight.transportpce.common.fixedflex.GridConstant;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.service.format.rev190531.ServiceFormat;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.AToZDirection;
 import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdescription.rev201126.path.description.ZToADirection;
@@ -23,11 +25,13 @@ public class PceResult {
     private String calcMessage = "503 Calculator Unavailable";
     private boolean calcStatus = false;
     private String responseCode = ResponseCodes.RESPONSE_FAILED;
-    private long resultWavelength = -1;
+    private long resultWavelength = GridConstant.IRRELEVANT_WAVELENGTH_NUMBER;
     private Map<String, Uint16> resultTribPort;
     private Map<String, List<Uint16>> resultTribSlot;
     private Integer resultTribSlotNb = -1;
     private String serviceType = "";
+    private BigDecimal minFreq;
+    private BigDecimal maxFreq;
 
     // for now it is constant returned as received from A-end
     private long rate = -1;
@@ -41,9 +45,6 @@ public class PceResult {
 
     private AToZDirection atozdirection = null;
     private ZToADirection ztoadirection = null;
-
-    public PceResult() {
-    }
 
     public void setRC(String rc) {
         switch (rc) {
@@ -161,6 +162,38 @@ public class PceResult {
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
+    }
+
+    /**
+     * Get the minimal frequency.
+     * @return the minFreq.
+     */
+    public BigDecimal getMinFreq() {
+        return minFreq;
+    }
+
+    /**
+     * Set the minimal frequency.
+     * @param minFreq the minFreq to set.
+     */
+    public void setMinFreq(BigDecimal minFreq) {
+        this.minFreq = minFreq;
+    }
+
+    /**
+     * Get the maximal frequency.
+     * @return the maxFreq.
+     */
+    public BigDecimal getMaxFreq() {
+        return maxFreq;
+    }
+
+    /**
+     * Set the maximal frequency.
+     * @param maxFreq the maxFreq to set.
+     */
+    public void setMaxFreq(BigDecimal maxFreq) {
+        this.maxFreq = maxFreq;
     }
 
 }
