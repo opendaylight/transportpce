@@ -30,6 +30,7 @@ import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.No
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.XpdrNodeTypes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.Node1Builder;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.TerminationPoint1;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.DegreeAttributes;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.DegreeAttributesBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.topology.rev200529.networks.network.node.SrgAttributes;
@@ -499,4 +500,68 @@ public final class OpenRoadmTopology {
         }
     }
 
+    /**
+     * Get a builder for instance identifier related to common network termination point.
+     * @param nodeId String
+     * @param tpId String
+     * @return InstanceIdentifierBuilder
+     */
+    public static InstanceIdentifierBuilder<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
+        .TerminationPoint1> createCommonNetworkTerminationPointIIDBuilder(String nodeId, String tpId) {
+        return InstanceIdentifier
+            .builder(Networks.class).child(Network.class, new NetworkKey(
+            new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml
+            .ns.yang.ietf.network.rev180226.networks.network.Node.class, new NodeKey(new NodeId(nodeId)))
+            .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+            .Node1.class).child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology
+            .rev180226.networks.network.node.TerminationPoint.class, new TerminationPointKey(new TpId(tpId)))
+            .augmentation(org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
+                .TerminationPoint1.class);
+    }
+
+    /**
+     * Get a builder for instance identifier related to network termination point.
+     * @param nodeId String
+     * @param tpId String
+     * @return InstanceIdentifierBuilder
+     */
+    public static InstanceIdentifierBuilder<TerminationPoint1> createNetworkTerminationPointIIDBuilder(String nodeId,
+            String tpId) {
+        return InstanceIdentifier
+                .builder(Networks.class).child(Network.class, new NetworkKey(
+                new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID))).child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml
+                .ns.yang.ietf.network.rev180226.networks.network.Node.class, new NodeKey(new NodeId(nodeId)))
+                .augmentation(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology.rev180226
+                .Node1.class).child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.topology
+                .rev180226.networks.network.node.TerminationPoint.class, new TerminationPointKey(new TpId(tpId)))
+                .augmentation(TerminationPoint1.class);
+    }
+
+    /**
+     * Get an instance identifier related to network node.
+     * @param nodeId String
+     * @return InstanceIdentifier
+     */
+    public static InstanceIdentifier<Node1> createNetworkNodeIID(String nodeId) {
+        return InstanceIdentifier
+                .builder(Networks.class).child(Network.class, new NetworkKey(
+                new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+                .Node.class, new NodeKey(new NodeId(nodeId))).augmentation(Node1.class).build();
+    }
+
+    /**
+     * Get an instance identifier related to common network node.
+     * @param nodeId String
+     * @return InstanceIdentifier
+     */
+    public static InstanceIdentifier<org.opendaylight.yang.gen.v1.http.org.openroadm.common.network.rev200529
+        .Node1> createCommonNetworkNodeIID(String nodeId) {
+        return InstanceIdentifier
+                .builder(Networks.class).child(Network.class, new NetworkKey(
+                new NetworkId(NetworkUtils.OVERLAY_NETWORK_ID)))
+                .child(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.networks.network
+                .Node.class, new NodeKey(new NodeId(nodeId))).augmentation(org.opendaylight.yang.gen.v1.http.org
+                .openroadm.common.network.rev200529.Node1.class).build();
+    }
 }

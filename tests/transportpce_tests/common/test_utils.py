@@ -472,21 +472,3 @@ class TimeOut:
     def __exit__(self, type, value, traceback):
         # pylint: disable=W0622
         signal.alarm(0)
-
-
-def check_freq_map(freq_map):
-    freq_map_array = [int(x) for x in freq_map]
-    return freq_map_array[0] == 255 and freq_map_array[1] == 255
-
-
-def set_used_index_for_freq_map(freq_map, index):
-    freq_map[index] = 0
-    return freq_map
-
-
-INDEX_1_USED_FREQ_MAP = base64.b64encode(set_used_index_for_freq_map(bytearray(b'\xFF' * 96), 0)).decode('UTF-8')
-
-INDEX_1_2_USED_FREQ_MAP = base64.b64encode(set_used_index_for_freq_map(
-    set_used_index_for_freq_map(bytearray(b'\xFF' * 96), 0), 1)).decode('utf-8')
-
-AVAILABLE_FREQ_MAP = base64.b64encode(bytearray(b'\xFF' * 96)).decode('UTF-8')
