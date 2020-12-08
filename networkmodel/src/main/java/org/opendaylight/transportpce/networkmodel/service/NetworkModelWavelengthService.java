@@ -13,19 +13,19 @@ import org.opendaylight.yang.gen.v1.http.org.transportpce.b.c._interface.pathdes
 public interface NetworkModelWavelengthService {
 
     /**
-     * Remove wavelength from available and add it to used wavelength list.
+     * Allocate frequency in network topology.
      *
      * @param atoZDirection AToZDirection: a to z path
      * @param ztoADirection ZToADirection: z to a path
      */
-    void useWavelengths(AToZDirection atoZDirection, ZToADirection ztoADirection);
+    void allocateFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection);
 
     /**
-     * Remove wavelength from used and add it to available wavelength list.
+     * Release frequency in network topology.
      *
      * @param atoZDirection AToZDirection: a to z path
      * @param ztoADirection ZToADirection: z to a path
      */
-    void freeWavelengths(AToZDirection atoZDirection, ZToADirection ztoADirection);
+    void releaseFrequencies(AToZDirection atoZDirection, ZToADirection ztoADirection);
 
 }
