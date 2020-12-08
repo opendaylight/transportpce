@@ -492,7 +492,7 @@ public class PceCalculation {
         LOG.info("Device node id {} for {}", deviceNodeId, node);
         PceOpticalNode pceNode = new PceOpticalNode(node, nodeType, mappingUtils.getOpenRoadmVersion(deviceNodeId));
         pceNode.validateAZxponder(anodeId, znodeId, input.getServiceAEnd().getServiceFormat());
-        pceNode.initWLlist();
+        pceNode.initFrequenciesBitSet();
 
         if (!pceNode.isValid()) {
             LOG.warn(" validateNode: Node is ignored");
