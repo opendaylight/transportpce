@@ -76,7 +76,6 @@ public class PceOtnNodeTest extends AbstractTest {
         pceOtnNode.checkAvailableTribPort();
         pceOtnNode.checkAvailableTribSlot();
         Assert.assertTrue("valid otn service type " , pceOtnNode.isValid());
-        Assert.assertFalse("checkWl returns by default false" , pceOtnNode.checkWL(5L));
         Assert.assertNotNull("tpAvailableTribPort isn't null !" , pceOtnNode.getAvailableTribPorts());
     }
 
