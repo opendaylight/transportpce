@@ -8,6 +8,7 @@
 
 package org.opendaylight.transportpce.pce.networkanalyzer;
 
+import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.network.rev180226.NodeId;
@@ -32,8 +33,6 @@ public interface PceNode {
 
     NodeId getNodeId();
 
-    boolean checkWL(long index);
-
     Map<String, List<Uint16>> getAvailableTribPorts();
 
     Map<String, List<Uint16>> getAvailableTribSlots();
@@ -43,4 +42,10 @@ public interface PceNode {
      * @return the OpenROADM yang release supported by the node.
      */
     String getVersion();
+
+    /**
+     * For optical node, the spectrumOccupation of the node.
+     * @return BitSet.
+     */
+    BitSet getBitSetData();
 }
