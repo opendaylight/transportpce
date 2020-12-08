@@ -14,16 +14,25 @@ import java.util.HashMap;
 import java.util.Map;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyGHz;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.common.optical.channel.types.rev200529.FrequencyTHz;
+import org.opendaylight.yang.gen.v1.http.org.openroadm.common.types.rev181019.ModulationFormat;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMaps;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsBuilder;
 import org.opendaylight.yang.gen.v1.http.org.openroadm.network.types.rev200529.available.freq.map.AvailFreqMapsKey;
 import org.opendaylight.yangtools.yang.common.Uint16;
+import org.opendaylight.yangtools.yang.common.Uint32;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Util class for grid.
+ * Thoses methods are used for pce spectrum assignment and topology update.
+ * They use maximal precision of BigDecimal
+ * For device configuration which needs precision (4 digits), dedicated methods are
+ * located in FixedFlex and FrexGrid classes.
  *
  */
 public final class GridUtils {
+    private static final Logger LOG = LoggerFactory.getLogger(GridUtils.class);
 
     private GridUtils() {
     }
@@ -43,23 +52,75 @@ public final class GridUtils {
     }
 
     /**
-     * Compute the wavelength index from Spectrum assignment stop index.
+     * Compute the wavelength index from Spectrum assignment begin index.
      * Only for fix grid and device 1.2.1.
-     * @param stopIndex int
+     * @param index int
      * @return the wavelength number.
      */
-    public static long getWaveLengthIndexFromSpectrumAssigment(int stopIndex) {
-        return (stopIndex + 1) / GridConstant.NB_SLOTS_100G;
+    public static long getWaveLengthIndexFromSpectrumAssigment(int index) {
+        return (GridConstant.EFFECTIVE_BITS - index) / GridConstant.NB_SLOTS_100G;
     }
 
     /**
-     * Compute the frequency in TGz for the given index.
+     * Compute the start frequency in TGz for the given index.
      * @param index int
-     * @return the frequency in THz for the provided index.
+     * @return the start frequency in THz for the provided index.
      */
-    public static BigDecimal getFrequencyFromIndex(int index) {
+    public static BigDecimal getStartFrequencyFromIndex(int index) {
         int nvalue = index - 284;
         return BigDecimal.valueOf(GridConstant.CENTRAL_FREQUENCY + (nvalue * GridConstant.GRANULARITY / 1000));
+    }
+
+    /**
+     * Compute the stop frequency in TGz for the given index.
+     * @param index int
+     * @return the stop frequency in THz for the provided index.
+     */
+    public static BigDecimal getStopFrequencyFromIndex(int index) {
+        return getStartFrequencyFromIndex(index).add(BigDecimal.valueOf(GridConstant.GRANULARITY / 1000));
+    }
+
+    /**
+     * Get the bit index for the frequency.
+     *
+     * @param frequency BigDecimal
+     * @return the bit index of the frequency. Throw IllegalArgumentException if
+     *         index not in range of 0 GridConstant.EFFECTIVE_BITS
+     */
+    public static int getIndexFromFrequency(BigDecimal frequency) {
+        double nvalue = (frequency.doubleValue() - GridConstant.CENTRAL_FREQUENCY) * (1000 / GridConstant.GRANULARITY);
+        int index =  (int) Math.round(nvalue + 284);
+        if (index < 0 || index > GridConstant.EFFECTIVE_BITS) {
+            throw new IllegalArgumentException("Frequency not in range " + frequency);
+        }
+        return index;
+    }
+
+    /**
+     * Get the spectrum width for rate and modulation format.
+     * @param rate Uint32
+     * @param modulationFormat ModulationFormat
+     * @return spectrum width in GHz
+     */
+    public static FrequencyGHz getWidthFromRateAndModulationFormat(Uint32 rate, ModulationFormat modulationFormat) {
+        String width = GridConstant.FREQUENCY_WIDTH_TABLE.get(rate, modulationFormat);
+        if (width == null) {
+            LOG.warn("No width found for service rate {} and modulation format {}, set width to 40", rate,
+                    modulationFormat);
+            width = "40";
+        }
+        return FrequencyGHz.getDefaultInstance(width);
+    }
+
+    /**
+     * Get central frequency of spectrum.
+     * @param minFrequency BigDecimal
+     * @param maxFrequency BigDecimal
+     * @return central frequency in THz
+     */
+    public static FrequencyTHz getCentralFrequency(BigDecimal minFrequency, BigDecimal maxFrequency) {
+        return new FrequencyTHz(minFrequency.add(maxFrequency).divide(BigDecimal.valueOf(2)));
+
     }
 
 }
